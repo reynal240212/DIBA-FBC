@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Jugadores por Categoría - DIBA FBC</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" 
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <!-- Animate.css para animaciones -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    /* ===============================
+       RESETEO Y VARIABLES
+    =============================== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      scroll-behavior: smooth;
+    }
+    :root {
+      --azul-turquesa: #004D73;
+      --grana: #800020;
+      --amarillo: #FFD700;
+      --texto-claro: #ffffff;
+      --texto-oscuro: #333333;
+      --fondo-gris: #f4f4f4;
+      --sombra: rgba(0, 0, 0, 0.3);
+    }
+    body {
+      font-family: 'Lato', sans-serif;
+      background: var(--fondo-gris);
+      color: var(--texto-oscuro);
+      padding-top: 70px; /* espacio para navbar fijo */
+    }
+    a {
+      text-decoration: none;
+      color: inherit;
+      transition: color 0.3s ease;
+    }
+    a:hover {
+      color: var(--amarillo);
+    }
+    /* ===============================
+       HEADER Y NAVBAR
+    =============================== */
+    header {
+      margin-bottom: 2rem;
+    }
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
+      transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    }
+    .navbar.transparent {
+      background-color: transparent !important;
+      box-shadow: none;
+    }
+    .navbar.solid {
+      background-color: var(--azul-turquesa) !important;
+      box-shadow: 0 2px 6px var(--sombra);
+    }
+    .navbar-brand img {
+      width: 60px;
+      transition: transform 0.3s ease;
+    }
+    .navbar-brand img:hover {
+      transform: scale(1.1);
+    }
+    .navbar-nav .nav-link {
+      font-weight: bold;
+      transition: color 0.3s ease;
+    }
+    .navbar-nav .nav-link:hover {
+      color: var(--amarillo);
+    }
+    /* ===============================
+       HERO (PARALLAX)
+    =============================== */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      background: url('fondo.jpg') center/cover no-repeat fixed;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      color: var(--texto-claro);
+    }
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.4);
+    }
+    .hero .container {
+      position: relative;
+      z-index: 1;
+    }
+    .hero h1 {
+      font-size: 3.5rem;
+      font-family: 'Dancing Script', cursive;
+      color: var(--amarillo);
+      text-shadow: 2px 2px 5px var(--sombra);
+      margin-bottom: 1rem;
+    }
+    .hero p {
+      font-size: 1.5rem;
+      text-shadow: 1px 1px 3px var(--sombra);
+    }
+    .hero .btn {
+      margin-top: 1.5rem;
+      font-weight: bold;
+      box-shadow: 0 2px 6px var(--sombra);
+    }
+    /* ===============================
+       SECCIÓN: JUGADORES POR CATEGORÍA
+    =============================== */
+    .category-section {
+      padding: 2rem 0;
+      background: var(--fondo-gris);
+    }
+    .category-section h1 {
+      text-align: center;
+      margin-bottom: 2rem;
+      color: var(--grana);
+      font-weight: bold;
+    }
+    .category-buttons {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    .category-buttons .btn {
+      margin: 0 0.5rem;
+      transition: transform 0.3s, background-color 0.3s;
+    }
+    .category-buttons .btn:hover {
+      transform: scale(1.05);
+    }
+    .category-buttons .btn.active {
+      background-color: var(--grana);
+      color: var(--texto-claro);
+    }
+    .category-container {
+      display: none;
+    }
+    .category-container.active {
+      display: block;
+    }
+
+    /* ===============================
+       TARJETAS DE JUGADOR (ESTILO VERDE+ROJO HEXAGONAL)
+    =============================== */
+    .player-card {
+      background-color: #090057; /* Verde */
+      text-align: center;
+      padding: 20px;
+      position: relative;
+      color: #fff;
+      font-family: 'Lato', sans-serif;
+      border-radius: 0 0 8px 8px; 
+    }
+    .position-tag {
+      background-color: #d39b00; /* Rojo */
+      color: #fff;
+      font-weight: bold;
+      padding: 5px 15px;
+      position: absolute;
+      top: -15px;
+      left: 50%;
+      transform: translateX(-50%);
+      white-space: nowrap;
+      border: 2px solid #fff;
+      /* Forma hexagonal */
+      clip-path: polygon(15% 0, 85% 0, 100% 50%, 85% 100%, 15% 100%, 0 50%);
+    }
+    .player-name {
+      font-size: 20px;
+      font-weight: bold;
+      margin-top: 20px;
+    }
+
+    /* ===============================
+       FOOTER
+    =============================== */
+    footer {
+      background: var(--azul-turquesa);
+      color: var(--texto-claro);
+      padding: 2rem 1rem;
+      margin-top: 2rem;
+    }
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+      justify-content: center;
+    }
+    .footer-col {
+      flex: 1 1 200px;
+    }
+    .footer-col h4 {
+      margin-bottom: 0.5rem;
+      font-weight: bold;
+      color: var(--amarillo);
+    }
+    .footer-col ul {
+      list-style: none;
+      padding: 0;
+    }
+    .footer-col li {
+      margin-bottom: 0.5rem;
+    }
+    .footer-col a {
+      color: var(--texto-claro);
+      transition: text-decoration 0.3s;
+    }
+    .footer-col a:hover {
+      text-decoration: underline;
+    }
+    /* ===============================
+       RESPONSIVO
+    =============================== */
+    @media (max-width: 768px) {
+      .hero h1 {
+        font-size: 2.5rem;
+      }
+      .hero p {
+        font-size: 1.2rem;
+      }
+      .footer-content {
+        flex-direction: column;
+        align-items: center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Botón Volver Arriba -->
+  <button id="btnBackToTop" title="Volver arriba" style="display:none; position:fixed; bottom:30px; right:30px; z-index:9999; background:var(--azul-turquesa); color:var(--texto-claro); border:none; border-radius:50%; width:45px; height:45px; font-size:1.2rem; cursor:pointer; box-shadow:0 4px 8px var(--sombra); transition:opacity 0.3s;">
+    <i class="fas fa-arrow-up"></i>
+  </button>
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg transparent">
+    <div class="container">
+      <a class="navbar-brand" href="#">
+        <img src="ESCUDO.png" alt="Escudo DIBA FBC" />
+        DIBA FBC
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
+              aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse justify-content-end" id="navbarContent">
+        <ul class="navbar-nav">
+          <li class="nav-item"><a class="nav-link" href="index.html">Inicio</a></li>
+          <li class="nav-item"><a class="nav-link" href="Historia.html">Historia</a></li>
+          <li class="nav-item"><a class="nav-link" href="#servicios">Servicios</a></li>
+          <li class="nav-item"><a class="nav-link" href="#equipo">Equipo</a></li>
+          <li class="nav-item"><a class="nav-link" href="#contacto">Contacto</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section (Parallax) -->
+  <header id="inicio" class="hero animate__animated animate__fadeIn">
+    <div class="container">
+      <h1 class="animate__animated animate__slideInDown">PLANTILLA DIBA FBC</h1>
+      <p class="animate__animated animate__fadeInUp">FUERZA Y LEALTAD</p>
+      <a href="#contacto" class="btn btn-light btn-lg mt-3 animate__animated animate__fadeInUp">Contáctanos</a>
+    </div>
+  </header>
+
+  <!-- Sección Jugadores por Categoría -->
+  <section class="category-section">
+    <div class="container">
+      <h1>Jugadores por Categoría</h1>
+      <div class="category-buttons">
+        <button class="btn btn-outline-danger active" data-category="cat1">2010/11</button>
+        <button class="btn btn-outline-danger" data-category="cat2">2012/13</button>
+        <button class="btn btn-outline-danger" data-category="cat3">2014/15/16</button>
+      </div>
+    </div>
+
+    <!-- Categoría 2010/11 -->
+    <div id="cat1" class="category-container active animate__animated animate__fadeIn">
+      <div class="container">
+        <h2 class="mb-4">Jugadores 2010/11</h2>
+        <div class="row">
+          <!-- Tarjeta 1: Juan José Vergara Ortiz -->
+          <div class="col-md-3 mb-4">
+            <div class="card h-100 animate__animated animate__zoomIn">
+              <img src="placeholder.png" class="card-img-top" alt="Juan José Vergara Ortiz">
+              <div class="card-body text-center">
+                <h5 class="card-title">Juan José Vergara Ortiz</h5>
+                <p class="card-text">Edad: 13<br>Nac.: 25/8/2011</p>
+              </div>
+            </div>
+          </div>
+          <!-- Tarjeta 2: Breiner Vargas Diaz -->
+          <div class="col-md-3 mb-4">
+            <div class="card h-100 animate__animated animate__zoomIn" style="animation-delay: 0.1s;">
+              <img src="placeholder.png" class="card-img-top" alt="Breiner Vargas Diaz">
+              <div class="card-body text-center">
+                <h5 class="card-title">Breiner Vargas Diaz</h5>
+                <p class="card-text">Edad: 14<br>Nac.: 26/10/2010</p>
+              </div>
+            </div>
+          </div>
+          <!-- Tarjeta 3: Leonardo Fabio Vargas Fuenmayor -->
+          <div class="col-md-3 mb-4">
+            <div class="card h-100 animate__animated animate__zoomIn" style="animation-delay: 0.2s;">
+              <img src="placeholder.png" class="card-img-top" alt="Leonardo Fabio Vargas Fuenmayor">
+              <div class="card-body text-center">
+                <h5 class="card-title">Leonardo Fabio Vargas Fuenmayor</h5>
+                <p class="card-text">Edad: 14<br>Nac.: 3/8/2010</p>
+              </div>
+            </div>
+          </div>
+          <!-- Tarjeta 4: Luis Jose Moreno Sánchez -->
+          <div class="col-md-3 mb-4">
+            <div class="card h-100 animate__animated animate__zoomIn" style="animation-delay: 0.3s;">
+              <img src="placeholder.png" class="card-img-top" alt="Luis Jose Moreno Sánchez">
+              <div class="card-body text-center">
+                <h5 class="card-title">Luis Jose Moreno Sánchez</h5>
+                <p class="card-text">Edad: 14<br>Nac.: 8/2/2011</p>
+              </div>
+            </div>
+          </div>
+          <!-- Tarjeta 5: Jarveis Jose Garcia Tirado -->
+          <div class="col-md-3 mb-4">
+            <div class="card h-100 animate__animated animate__zoomIn" style="animation-delay: 0.4s;">
+              <img src="placeholder.png" class="card-img-top" alt="Jarveis Jose Garcia Tirado">
+              <div class="card-body text-center">
+                <h5 class="card-title">Jarveis Jose Garcia Tirado</h5>
+                <p class="card-text">Edad: 13<br>Nac.: 2/11/2011</p>
+              </div>
+            </div>
+          </div>
+          <!-- Tarjeta 6: Cristopher Germán Buelvas Barrios -->
+          <div class="col-md-3 mb-4">
+            <div class="card h-100 animate__animated animate__zoomIn" style="animation-delay: 0.5s;">
+              <img src="placeholder.png" class="card-img-top" alt="Cristopher Germán Buelvas Barrios">
+              <div class="card-body text-center">
+                <h5 class="card-title">Cristopher Germán Buelvas Barrios</h5>
+                <p class="card-text">Edad: 14<br>Nac.: 29/7/2010</p>
+              </div>
+            </div>
+          </div>
+          <!-- Tarjeta 7: Karles David Silgado Viloria -->
+          <div class="col-md-3 mb-4">
+            <div class="card h-100 animate__animated animate__zoomIn" style="animation-delay: 0.6s;">
+              <img src="placeholder.png" class="card-img-top" alt="Karles David Silgado Viloria">
+              <div class="card-body text-center">
+                <h5 class="card-title">Karles David Silgado Viloria</h5>
+                <p class="card-text">Edad: 14<br>Nac.: 13/1/2011</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Categoría 2012/13 -->
+    <div id="cat2" class="category-container animate__animated animate__fadeIn">
+      <div class="container">
+        <h2 class="mb-4">Jugadores 2012/13</h2>
+        <div class="row">
+          <!-- Tarjeta 1: Santiago Andrés Mendoza Colmenarez -->
+          <div class="col-md-3 mb-4">
+            <div class="card h-100 animate__animated animate__zoomIn">
+              <img src="placeholder.png" class="card-img-top" alt="Santiago Andrés Mendoza Colmenarez">
+              <div class="card-body text-center">
+                <h5 class="card-title">Santiago Andrés Mendoza Colmenarez</h5>
+                <p class="card-text">Edad: 12<br>Nac.: 9/6/2012</p>
+              </div>
+            </div>
+          </div>
+          <!-- Tarjeta 2: Oscar David López García -->
+          <div class="col-md-3 mb-4">
+            <div class="card h-100 animate__animated animate__zoomIn" style="animation-delay: 0.1s;">
+              <img src="placeholder.png" class="card-img-top" alt="Oscar David López García">
+              <div class="card-body text-center">
+                <h5 class="card-title">Oscar David López García</h5>
+                <p class="card-text">Edad: 12<br>Nac.: 3/8/2012</p>
+              </div>
+            </div>
+          </div>
+          <!-- Tarjeta 3: Miguel Angel Aldana Charris -->
+          <div class="col-md-3 mb-4">
+            <div class="card h-100 animate__animated animate__zoomIn" style="animation-delay: 0.2s;">
+              <img src="placeholder.png" class="card-img-top" alt="Miguel Angel Aldana Charris">
+              <div class="card-body text-center">
+                <h5 class="card-title">Miguel Angel Aldana Charris</h5>
+                <p class="card-text">Edad: 13<br>Nac.: 19/1/2012</p>
+              </div>
+            </div>
+          </div>
+          <!-- Tarjeta 4: Dylan Alejandro Sanchez Cespedes -->
+          <div class="col-md-3 mb-4">
+            <div class="card h-100 animate__animated animate__zoomIn" style="animation-delay: 0.3s;">
+              <img src="placeholder.png" class="card-img-top" alt="Dylan Alejandro Sanchez Cespedes">
+              <div class="card-body text-center">
+                <h5 class="card-title">Dylan Alejandro Sanchez Cespedes</h5>
+                <p class="card-text">Edad: 12<br>Nac.: 28/12/2012</p>
+              </div>
+            </div>
+          </div>
+          <!-- Tarjeta 5: Mateo De Jesús Boscan Gelvez -->
+          <div class="col-md-3 mb-4">
+            <div class="card h-100 animate__animated animate__zoomIn" style="animation-delay: 0.4s;">
+              <img src="placeholder.png" class="card-img-top" alt="Mateo De Jesús Boscan Gelvez">
+              <div class="card-body text-center">
+                <h5 class="card-title">Mateo De Jesús Boscan Gelvez</h5>
+                <p class="card-text">Edad: 11<br>Nac.: 10/9/2013</p>
+              </div>
+            </div>
+          </div>
+          <!-- Tarjeta 6: Daniel Isaac Rodriguez Cantilllo -->
+          <div class="col-md-3 mb-4">
+            <div class="card h-100 animate__animated animate__zoomIn" style="animation-delay: 0.5s;">
+              <img src="placeholder.png" class="card-img-top" alt="Daniel Isaac Rodriguez Cantilllo">
+              <div class="card-body text-center">
+                <h5 class="card-title">Daniel Isaac Rodriguez Cantilllo</h5>
+                <p class="card-text">Edad: 12<br>Nac.: 5/6/2012</p>
+              </div>
+            </div>
+          </div>
+          <!-- Tarjeta 7: Ángel David Hernández Hillembrand -->
+          <div class="col-md-3 mb-4">
+            <div class="card h-100 animate__animated animate__zoomIn" style="animation-delay: 0.6s;">
+              <img src="placeholder.png" class="card-img-top" alt="Ángel David Hernández Hillembrand">
+              <div class="card-body text-center">
+                <h5 class="card-title">Ángel David Hernández Hillembrand</h5>
+                <p class="card-text">Edad: 10<br>Nac.: 3/5/2013</p>
+              </div>
+            </div>
+          </div>
+          <!-- Tarjeta 8: Nelson Enrique Pauline Escorcia -->
+          <div class="col-md-3 mb-4">
+            <div class="card h-100 animate__animated animate__zoomIn" style="animation-delay: 0.7s;">
+              <img src="placeholder.png" class="card-img-top" alt="Nelson Enrique Pauline Escorcia">
+              <div class="card-body text-center">
+                <h5 class="card-title">Nelson Enrique Pauline Escorcia</h5>
+                <p class="card-text">Edad: 11<br>Nac.: 26/7/2013</p>
+              </div>
+            </div>
+          </div>
+          <!-- Tarjeta 9: Juan José Tobias Bornachera -->
+          <div class="col-md-3 mb-4">
+            <div class="card h-100 animate__animated animate__zoomIn" style="animation-delay: 0.8s;">
+              <img src="placeholder.png" class="card-img-top" alt="Juan José Tobias Bornachera">
+              <div class="card-body text-center">
+                <h5 class="card-title">Juan José Tobias Bornachera</h5>
+                <p class="card-text">Edad: 11<br>Nac.: 25/9/2013</p>
+              </div>
+            </div>
+          </div>
+          <!-- Tarjeta 10: jesus herrera -->
+          <div class="col-md-3 mb-4">
+            <div class="card h-100 animate__animated animate__zoomIn" style="animation-delay: 0.9s;">
+              <img src="placeholder.png" class="card-img-top" alt="jesus herrera">
+              <div class="card-body text-center">
+                <h5 class="card-title">jesus herrera</h5>
+                <p class="card-text">Edad: 11<br>Nac.: 6/8/2013</p>
+              </div>
+            </div>
+          </div>
+          <!-- Tarjeta 11: Yojainer Jesús Vera Villalobos -->
+          <div class="col-md-3 mb-4">
+            <div class="card h-100 animate__animated animate__zoomIn" style="animation-delay: 1s;">
+              <img src="placeholder.png" class="card-img-top" alt="Yojainer Jesús Vera Villalobos">
+              <div class="card-body text-center">
+                <h5 class="card-title">Yojainer Jesús Vera Villalobos</h5>
+                <p class="card-text">Edad: 12<br>Nac.: 30/3/2012</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Categoría 2014/15/16 -->
+    <div id="cat3" class="category-container animate__animated animate__fadeIn">
+      <div class="container">
+        <h2 class="mb-4">Jugadores 2014/15/16</h2>
+        <div class="row">
+          <!-- Tarjeta: Mario Perez (Ejemplo con player-card) -->
+          <div class="col-md-3 mb-4">
+            <div class="card h-100 animate__animated animate__zoomIn">
+              <img src="images/MArio.png" class="card-img-top" alt="MARIO PEREZ">
+              <!-- Bloque verde con etiqueta roja hexagonal -->
+              <div class="player-card">
+                <div class="position-tag">Volante</div>
+                <div class="player-name">MARIO DE JESUS PEREZ NAVAS</div>
+              </div>
+            </div>
+          </div>
+          <!-- Tarjeta: Eliuth David Meza Madera -->
+          <div class="col-md-3 mb-4">
+            <div class="card h-100 animate__animated animate__zoomIn" style="animation-delay: 0.1s;">
+              <img src="placeholder.png" class="card-img-top" alt="Eliuth David Meza Madera">
+              <div class="card-body text-center">
+                <h5 class="card-title">Eliuth David Meza Madera</h5>
+                <p class="card-text">Edad: 10<br>Nac.: 22/2/2014</p>
+              </div>
+            </div>
+          </div>
+          <!-- Tarjeta: Santiago Hernandez Garcia -->
+          <div class="col-md-3 mb-4">
+            <div class="card h-100 animate__animated animate__zoomIn" style="animation-delay: 0.2s;">
+              <img src="placeholder.png" class="card-img-top" alt="Santiago Hernandez Garcia">
+              <div class="card-body text-center">
+                <h5 class="card-title">Santiago Hernandez Garcia</h5>
+                <p class="card-text">Edad: 10<br>Nac.: 10/10/2014</p>
+              </div>
+            </div>
+          </div>
+          <!-- Tarjeta: Juan Andrés Martínez Álvarez -->
+          <div class="col-md-3 mb-4">
+            <div class="card h-100 animate__animated animate__zoomIn" style="animation-delay: 0.3s;">
+              <img src="placeholder.png" class="card-img-top" alt="Juan Andrés Martínez Álvarez">
+              <div class="card-body text-center">
+                <h5 class="card-title">Juan Andrés Martínez Álvarez</h5>
+                <p class="card-text">Edad: 8<br>Nac.: 18/3/2016</p>
+              </div>
+            </div>
+          </div>
+          <!-- Tarjeta: KEINER DAVID ESCORCIA GARCIA -->
+          <div class="col-md-3 mb-4">
+            <div class="card h-100 animate__animated animate__zoomIn" style="animation-delay: 0.4s;">
+              <img src="placeholder.png" class="card-img-top" alt="KEINER DAVID ESCORCIA GARCIA">
+              <div class="card-body text-center">
+                <h5 class="card-title">KEINER DAVID ESCORCIA GARCIA</h5>
+                <p class="card-text">Edad: 9<br>Nac.: 7/3/2015</p>
+              </div>
+            </div>
+          </div>
+          <!-- Tarjeta: NAYARETH CELIN CARPIO -->
+          <div class="col-md-3 mb-4">
+            <div class="card h-100 animate__animated animate__zoomIn" style="animation-delay: 0.5s;">
+              <img src="placeholder.png" class="card-img-top" alt="NAYARETH CELIN CARPIO">
+              <div class="card-body text-center">
+                <h5 class="card-title">NAYARETH CELIN CARPIO</h5>
+                <p class="card-text">Edad: 10<br>Nac.: 16/8/2014</p>
+              </div>
+            </div>
+          </div>
+           <!-- Tarjeta: Mario Perez (Ejemplo con player-card) -->
+           <div class="col-md-3 mb-4">
+            <div class="card h-100 animate__animated animate__zoomIn">
+              <img src="images/ZAID.png" class="card-img-top" alt="MARIO PEREZ">
+              <!-- Bloque verde con etiqueta roja hexagonal -->
+              <div class="player-card">
+                <div class="position-tag">Volante</div>
+                <div class="player-name">ZAID RICARDO</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="animate__animated animate__fadeInUp py-4">
+    <div class="container">
+      <div class="row text-center text-md-start align-items-center">
+        <!-- Columna: Marca / Logo -->
+        <div class="col-md-3 footer-brand mb-3 mb-md-0">
+          <!-- Ajusta el tamaño del logo con "max-width" si deseas -->
+          <img src="/images/ESCUDO.png" alt="Escudo DIBA FBC" loading="lazy" style="max-width: 150px;">
+          <p class="mt-2">&copy; 2025 DIBA FBC. Todos los derechos reservados.</p>
+        </div>
+        
+        <!-- Columna: Sobre el Club -->
+        <div class="col-md-3 mb-3 mb-md-0">
+          <h4>Sobre el Club</h4>
+          <ul class="list-unstyled">
+            <li><a href="Historia.html">Historia</a></li>
+          </ul>
+        </div>
+        
+        <!-- Columna: Redes Sociales -->
+        <div class="col-md-3 mb-3 mb-md-0">
+          <h4>Redes Sociales</h4>
+          <ul class="list-unstyled">
+            <li>
+              <a href="https://www.facebook.com/profile.php?id=100071991100146" target="_blank">
+                <i class="fab fa-facebook"></i> Facebook
+              </a>
+            </li>
+            <li>
+              <a href="https://www.instagram.com/diba_fbc_oficial" target="_blank">
+                <i class="fab fa-instagram"></i> Instagram
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Bootstrap JS Bundle -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Script para alternar categorías -->
+  <script>
+    const btns = document.querySelectorAll('.category-buttons .btn');
+    const containers = document.querySelectorAll('.category-container');
+    btns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        btns.forEach(b => b.classList.remove('active'));
+        containers.forEach(cont => cont.classList.remove('active'));
+        btn.classList.add('active');
+        const id = btn.getAttribute('data-category');
+        document.getElementById(id).classList.add('active', 'animate__animated', 'animate__fadeIn');
+      });
+    });
+
+    // Navbar cambio de color al scroll
+    const navbar = document.querySelector('.navbar');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 50) {
+        navbar.classList.remove('transparent');
+        navbar.classList.add('solid', 'navbar-dark');
+      } else {
+        navbar.classList.add('transparent');
+        navbar.classList.remove('solid', 'navbar-dark');
+      }
+    });
+
+    // Botón "Volver arriba"
+    const btnBackToTop = document.getElementById('btnBackToTop');
+    window.addEventListener('scroll', () => {
+      btnBackToTop.style.display = (window.scrollY > 300) ? 'block' : 'none';
+    });
+    btnBackToTop.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  </script>
+</body>
+</html>

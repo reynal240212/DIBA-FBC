@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Uniforme de Fútbol - DIBA FBC</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      background-color: #f4f4f4;
+      font-family: Arial, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+    }
+    .jersey-container {
+      text-align: center;
+    }
+    .jersey-container h2 {
+      margin-bottom: 1rem;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+  <div class="jersey-container">
+    <h2>Diseño de Uniforme DIBA FBC</h2>
+    <!-- SVG del uniforme -->
+    <svg width="200" height="300" viewBox="0 0 200 300" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <!-- Degradado vertical: de azul (#003399) a grana (#a50044) -->
+        <linearGradient id="jerseyGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" style="stop-color:#003399;stop-opacity:1" />
+          <stop offset="100%" style="stop-color:#a50044;stop-opacity:1" />
+        </linearGradient>
+      </defs>
+      <!-- Forma estilizada de la camiseta -->
+      <path d="M50,20 
+               C30,20 20,50 20,80 
+               L20,150 
+               C20,180 30,220 50,240 
+               L50,280 
+               L150,280 
+               L150,240 
+               C170,220 180,180 180,150 
+               L180,80 
+               C180,50 170,20 150,20 
+               Z" 
+            fill="url(#jerseyGradient)" stroke="#fff" stroke-width="3" />
+      <!-- Detalle en el pecho: un círculo amarillo que simula un logo -->
+      <circle cx="100" cy="60" r="10" fill="#ffd700" />
+    </svg>
+  </div>
+</body>
+</html>

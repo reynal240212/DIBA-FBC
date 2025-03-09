@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Crear Perfil - DIBA FBC</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Animate.css (opcional) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+
+  <style>
+    /* Fondo deportivo */
+    body {
+      background: url('https://cdn.britannica.com/51/190751-050-147B93F7/soccer-ball-goal.jpg') no-repeat center center fixed;
+      background-size: cover;
+      font-family: Arial, sans-serif;
+      padding: 1rem;
+      position: relative;
+    }
+    /* Overlay oscuro para legibilidad */
+    body::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.55);
+      z-index: 0;
+    }
+    /* Contenedor principal */
+    .profile-container {
+      position: relative;
+      z-index: 1;
+    }
+    /* Tarjeta para el formulario */
+    .profile-card {
+      max-width: 500px;
+      width: 100%;
+      margin: 0 auto;
+      border: none;
+      border-radius: 10px;
+      overflow: hidden;
+      background: #fff;
+    }
+    .profile-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 16px rgba(0,0,0,0.25);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .animate__animated {
+      animation-duration: 1s;
+    }
+  </style>
+</head>
+<body>
+  <div class="container profile-container d-flex align-items-center justify-content-center min-vh-100">
+    <div class="card profile-card shadow-sm p-4 animate__animated animate__fadeInUp">
+      <h2 class="h4 text-center mb-4">Completa tu Perfil</h2>
+
+      <!-- Formulario para completar/actualizar el perfil -->
+      <form id="profile-form">
+        <div class="mb-3">
+          <label for="full_name" class="form-label">Nombre Completo</label>
+          <input type="text" class="form-control" id="full_name" name="full_name" placeholder="Tu nombre completo" required>
+        </div>
+        <div class="mb-3">
+          <label for="username" class="form-label">Nombre de Usuario</label>
+          <input type="text" class="form-control" id="username" name="username" placeholder="Nombre de usuario" required>
+        </div>
+        <div class="mb-3">
+          <label for="bio" class="form-label">Biografía</label>
+          <textarea class="form-control" id="bio" name="bio" rows="3" placeholder="Cuéntanos algo sobre ti"></textarea>
+        </div>
+        <button type="submit" class="btn btn-success w-100">Guardar Perfil</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS Bundle -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Supabase JS (versión 2.x) -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script>
+    // Configura tu Supabase
+    const SUPABASE_URL = 'https://nwxdshisfyenkylgqxgz.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im53eGRzaGlzZnllbmt5bGdxeGd6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzkwNTQzMDgsImV4cCI6MjA1NDYzMDMwOH0.QoIiNo5pFA1_MVfE2ugLgyz4HeET-WhA0C_sNOkWv9g';
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    // Verifica si el usuario está autenticado al cargar la página
+    document.addEventListener('DOMContentLoaded', async () => {
+      const { data: { session } } = await supabaseClient.auth.getSession();
+      if (!session) {
+        // Si no hay sesión, redirige al login
+        window.location.href = 'login.html';
+      } else {
+        // Si el usuario está logueado, intenta cargar su perfil (opcional)
+        await loadProfile(session.user.id);
+      }
+    });
+
+    // Función para cargar el perfil existente (si lo hay)
+    async function loadProfile(userId) {
+      const { data: profileData, error } = await supabaseClient
+        .from('profiles')
+        .select('*')
+        .eq('id', userId)
+        .single();
+      if (error) {
+        console.log('No se encontró perfil. El usuario puede crear uno nuevo.');
+        return;
+      }
+      document.getElementById('full_name').value = profileData.full_name || '';
+      document.getElementById('username').value = profileData.username || '';
+      document.getElementById('bio').value = profileData.bio || '';
+    }
+
+    // Maneja el submit del formulario para insertar o actualizar el perfil
+    const profileForm = document.getElementById('profile-form');
+    profileForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      // Obtén los valores del formulario
+      const full_name = document.getElementById('full_name').value;
+      const username = document.getElementById('username').value;
+      const bio = document.getElementById('bio').value;
+
+      // Verifica la sesión actual
+      const { data: { session } } = await supabaseClient.auth.getSession();
+      if (!session) {
+        alert('No hay usuario autenticado. Por favor, inicia sesión.');
+        return;
+      }
+      const userId = session.user.id;
+
+      // Inserta o actualiza el perfil en la tabla "profiles"
+      const { error } = await supabaseClient
+        .from('profiles')
+        .upsert({
+          id: userId,
+          full_name,
+          username,
+          bio
+        });
+      if (error) {
+        alert('Error al guardar el perfil: ' + error.message);
+        console.error(error);
+      } else {
+        alert('Perfil guardado exitosamente.');
+        // Redirige a index.html
+        window.location.href = 'index.html';
+      }
+    });
+  </script>
+</body>
+</html>
