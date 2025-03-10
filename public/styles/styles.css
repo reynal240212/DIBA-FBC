@@ -1,277 +1,340 @@
-/* VARIABLES */
-:root {
-  --blue: #00338D;
-  --white: #ffffff;
-  --yellow: #FFCC00;
-  --gray-bg: #f2f2f2;
-  --text-dark: #000;
-}
+ /* ================================
+       Variables de Colores
+    =================================*/
+    :root {
+      --azul:   #003399; /* Azul oscuro */
+      --grana:  #0b0281; /* Grana intenso */
+      --amarillo: #ffd700; /* Amarillo dorado */
+      --fondo: #f4f4f4;
+      --blanco: #ffffff;
+      --sombra: rgba(0, 0, 0, 0.2);
+    }
 
-/* ESTILOS GENERALES */
-body {
-  font-family: Arial, sans-serif;
-  background-color: var(--white);
-  color: var(--text-dark);
-}
+    /* ================================
+       Reset y Estilos Generales
+    =================================*/
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      scroll-behavior: smooth;
+    }
+    body {
+      font-family: 'Lato', sans-serif;
+      background-color: var(--fondo);
+      color: var(--azul);
+      padding-top: 70px; /* espacio para el navbar fijo */
+    }
+    a {
+      text-decoration: none;
+      color: var(--azul);
+      transition: color 0.3s ease;
+    }
+    a:hover {
+      color: var(--amarillo);
+    }
 
-/* BOTÓN "VOLVER ARRIBA" */
-#btnBackToTop {
-  position: fixed;
-  bottom: 30px;
-  right: 30px;
-  display: none;
-  background-color: var(--blue);
-  color: var(--white);
-  border: none;
-  border-radius: 50%;
-  width: 50px;
-  height: 50px;
-  cursor: pointer;
-  z-index: 999;
-}
+    /* ================================
+       Navbar Fija
+    =================================*/
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
+      transition: background-color 0.3s, box-shadow 0.3s;
+    }
+    .navbar.scrolled {
+      background-color: var(--azul) !important;
+      box-shadow: 0 4px 8px var(--sombra);
+    }
+    .navbar-brand img {
+      width: 50px;
+      transition: transform 0.3s;
+    }
+    .navbar-brand img:hover {
+      transform: scale(1.1);
+    }
+    .nav-link {
+      font-weight: 600;
+    }
 
-#btnBackToTop i {
-  font-size: 18px;
-}
+    /* ================================
+       Hero Section (Parallax)
+    =================================*/
+    .hero {
+      position: relative;
+      background: url('fondo.jpg') center/cover no-repeat fixed;
+      min-height: 60vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      color: var(--blanco);
+    }
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.4);
+    }
+    .hero .hero-content {
+      position: relative;
+      z-index: 2;
+      padding: 2rem;
+    }
+    .hero .hero-title {
+      font-family: 'Dancing Script', cursive;
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      color: var(--amarillo);
+      text-shadow: 2px 2px 5px var(--sombra);
+    }
+    .hero .hero-subtitle {
+      font-size: 1.2rem;
+      max-width: 700px;
+      margin: auto;
+    }
+    .hero .btn {
+      margin-top: 1.5rem;
+      font-weight: bold;
+      box-shadow: 0 2px 6px var(--sombra);
+    }
 
-/* NAVBAR */
-.navbar {
-  transition: background-color 0.3s ease;
-  background-color: var(--blue);
-}
+    /* CSS personalizado para la sección */
+    #resumen-historia {
+      padding: 2rem 0;
+      background-color: #f9f9f9;
+    }
+    #resumen-historia h2 {
+      color: #004D73;
+      font-weight: bold;
+      text-transform: uppercase;
+    }
+    #resumen-historia p {
+      font-size: 1rem;
+      color: #333;
+      line-height: 1.6;
+    }
 
-.navbar-brand img {
-  max-height: 50px;
-  margin-right: 8px;
-}
+    /* ================================
+       Sección Servicios
+    =================================*/
+    #servicios {
+      padding: 60px 20px;
+    }
+    #servicios h2 {
+      text-align: center;
+      margin-bottom: 2rem;
+      font-weight: bold;
+    }
+    .card {
+      border: none;
+      border-radius: 8px;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 4px 10px var(--sombra);
+    }
+    .card-title {
+      color: var(--azul);
+      font-weight: bold;
+    }
+ /* Tarjetas de partidos */
+    .match-card {
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      max-width: 320px; /* Limita el ancho máximo de la tarjeta */
+      margin: 0 auto;   /* Centra la tarjeta en su columna */
+    }
+    .match-card-top {
+      background: var(--grana);
+      color: var(--texto-claro);
+      padding: 1rem;
+      text-align: center;
+      position: relative;
+    }
+    .match-card-top img {
+      width: 70px; /* Escudos más grandes */
+      margin: 0 0.5rem;
+    }
+    .match-card-body {
+      padding: 1rem;
+      text-align: center;
+    }
+    .match-card-body .btn {
+      margin: 0.25rem;
+    }
 
-.navbar .nav-link {
-  color: var(--white) !important;
-}
+    /* Encabezado opcional */
+    .header {
+      background: var(--amarillo);
+      color: var(--amarillo);
+      padding: 1rem;
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+    .header h1 {
+      margin: 0;
+    }
+    /* ================================
+       Sección Equipo
+    =================================*/
+    #equipo {
+      padding: 60px 20px;
+      background: #f8f9fa;
+    }
+    #equipo h2 {
+      text-align: center;
+      margin-bottom: 2rem;
+      font-weight: bold;
+    }
+    #equipo img {
+      width: 180px;
+      height: 180px;
+      object-fit: cover;
+      box-shadow: 0 2px 6px var(--sombra);
+      transition: transform 0.3s;
+    }
+    #equipo img:hover {
+      transform: scale(1.05);
+    }
+    #equipo h5 {
+      margin-top: 1rem;
+      font-weight: bold;
+    }
 
-.navbar .nav-link.active,
-.navbar .nav-link:hover {
-  color: var(--yellow) !important;
-}
+    /* ================================
+       Sección Contacto
+    =================================*/
+    #contacto {
+      padding: 60px 20px;
+    }
+    #contacto h2 {
+      text-align: center;
+      margin-bottom: 2rem;
+      font-weight: bold;
+    }
+    #contacto .form-control:focus {
+      box-shadow: 0 0 0 0.2rem rgba(0,77,152,0.25);
+      border-color: var(--azul);
+    }
+    #contacto button {
+      background: var(--azul);
+      border: none;
+      transition: background 0.3s;
+    }
+    #contacto button:hover {
+      background: var(--amarillo);
+      color: var(--texto-blanco);
+    }
 
-.navbar.scrolled {
-  background-color: var(--blue);
-}
+    /* ================================
+       Sección Patrocinadores
+    =================================*/
+    #patrocinadores {
+      text-align: center;
+      padding: 50px 0;
+      background-color: var(--fondo);
+    }
+    #patrocinadores h2 {
+      margin-bottom: 2rem;
+      font-weight: bold;
+      color: var(--azul);
+    }
+    #patrocinadores .patrocinador {
+      margin: 1rem;
+    }
+    #patrocinadores .patrocinador img {
+      width: 150px;
+      height: auto;
+      transition: transform 0.3s;
+    }
+    #patrocinadores .patrocinador img:hover {
+      transform: scale(1.05);
+    }
+    #patrocinadores .patrocinador p {
+      margin-top: 0.5rem;
+      font-weight: bold;
+      color: var(--azul);
+    }
+/* Estilos para la sección Fundación */
+#fundacion {
+      padding: 60px 20px;
+      background-color: #fff;
+    }
+    #fundacion h2 {
+      color: var(--azul);
+      margin-bottom: 20px;
+    }
+    #fundacion p {
+      font-size: 1rem;
+      line-height: 1.6;
+      color: #333;
+    }
+    #fundacion .btn {
+      background-color: var(--amarillo);
+      border: none;
+      color: var(--azul);
+      transition: background-color 0.3s ease;
+    }
+    #fundacion .btn:hover {
+      background-color: #e6b800;
+    }
+    #fundacion img {
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    
+    /* ================================
+       Footer
+    =================================*/
+    footer {
+      background: var(--azul);
+      color: var(--amarillo);
+      padding: 2rem 1rem;
+      text-align: center;
+    }
+    footer p {
+      margin: 0;
+    }
+    footer a {
+      color: var(--amarillo);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+    footer a:hover {
+      color: var(--azul);
+      text-decoration: underline;
+    }
+    .footer-brand {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+    .footer-brand img {
+      width: 60px;
+      margin-bottom: 0.5rem;
+    }
 
-/* HERO SECTION */
-.hero {
-  background: var(--blue);
-  min-height: 80vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  color: var(--white);
-}
+    /* ================================
+       Responsivo
+    =================================*/
+    @media (max-width: 768px) {
+      .hero .hero-title {
+        font-size: 2.5rem;
+      }
+      .hero .hero-subtitle {
+        font-size: 1rem;
+      }
+      #equipo img {
+        width: 150px;
+        height: 150px;
+      }
+    }
 
-.hero-content {
-  max-width: 700px;
-  padding: 40px 20px;
-}
-
-.hero-title {
-  font-size: 3rem;
-  font-weight: bold;
-  margin-bottom: 1rem;
-  color: var(--yellow);
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
-}
-
-.hero-subtitle {
-  font-size: 1.25rem;
-  font-weight: 300;
-}
-
-/* SECCIÓN HISTORIA - PARTIDOS */
-.historia-section {
-  padding: 60px 0;
-}
-
-.historia-section h2 {
-  color: var(--blue);
-  margin-bottom: 40px;
-  font-weight: bold;
-}
-
-/* TARJETAS DE PARTIDOS */
-.match-card {
-  background-color: var(--white);
-  border-radius: 5px;
-  overflow: hidden;
-  border: 2px solid var(--blue);
-  transition: box-shadow 0.3s ease;
-  margin-bottom: 1rem;
-}
-
-.match-card:hover {
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-}
-
-.match-card-top {
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  padding: 15px;
-  background-color: var(--blue);
-  color: var(--white);
-}
-
-.match-card-top img {
-  width: 50px;
-  height: 50px;
-  object-fit: contain;
-}
-
-.match-card-body {
-  padding: 20px;
-  text-align: center;
-}
-
-.match-card-body h4 {
-  font-size: 1.2rem;
-  margin-bottom: 1rem;
-  color: var(--blue);
-  font-weight: bold;
-}
-
-.match-result {
-  margin: 10px 0;
-  color: var(--blue);
-  font-weight: bold;
-}
-
-.btn-resultado {
-  background-color: var(--yellow);
-  color: #000;
-  border: none;
-}
-
-.btn-resultado:hover {
-  background-color: #e6b800;
-  color: #fff;
-}
-
-/* SECCIÓN CUERPO TÉCNICO */
-#cuerpo-tecnico {
-  padding: 60px 0;
-}
-
-#cuerpo-tecnico h2 {
-  color: var(--blue);
-  margin-bottom: 40px;
-  font-weight: bold;
-}
-
-#cuerpo-tecnico .col-md-4,
-#cuerpo-tecnico .col-md-6 {
-  text-align: center;
-}
-
-#cuerpo-tecnico img {
-  border: 3px solid var(--blue);
-  max-width: 150px;
-  height: 150px;
-  object-fit: cover;
-}
-
-#cuerpo-tecnico h5 {
-  color: var(--blue);
-  font-weight: bold;
-}
-
-/* SECCIÓN CONTACTO */
-#contacto {
-  padding: 60px 0;
-}
-
-#contacto h2 {
-  color: var(--blue);
-  margin-bottom: 40px;
-  font-weight: bold;
-}
-
-#contacto .form-label {
-  font-weight: bold;
-  color: var(--blue);
-}
-
-#contacto .btn-primary {
-  background-color: var(--blue);
-  border: none;
-}
-
-#contacto .btn-primary:hover {
-  background-color: var(--yellow);
-  color: #000;
-}
-
-/* SECCIÓN PATROCINADORES */
-#patrocinadores {
-  background-color: var(--gray-bg);
-  padding: 60px 0;
-  text-align: center;
-}
-
-#patrocinadores h2 {
-  color: var(--blue);
-  margin-bottom: 30px;
-  font-weight: bold;
-}
-
-#patrocinadores p {
-  color: var(--blue);
-  font-weight: bold;
-}
-
-/* FOOTER */
-footer {
-  background-color: var(--blue);
-  padding: 20px 0;
-  text-align: center;
-  color: var(--white);
-}
-
-.footer-brand img {
-  width: 80px;
-  height: 80px;
-  object-fit: cover;
-}
-
-footer a {
-  color: var(--white);
-  text-decoration: none;
-}
-
-footer a:hover {
-  color: var(--yellow);
-}
-
-/* RESPONSIVE DESIGN */
-@media (max-width: 768px) {
-  .hero-title {
-    font-size: 2.5rem;
-  }
-
-  .hero-subtitle {
-    font-size: 1rem;
-  }
-
-  .match-card-top {
-    flex-direction: column;
-    text-align: center;
-  }
-
-  #btnBackToTop {
-    width: 40px;
-    height: 40px;
-  }
-
-  #btnBackToTop i {
-    font-size: 16px;
-  }
-}
