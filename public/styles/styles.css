@@ -65,7 +65,7 @@
     =================================*/
     .hero {
       position: relative;
-      background: url('fondo.jpg') center/cover no-repeat fixed;
+      background: url('images/fondo.jpg') center/cover no-repeat fixed;
       min-height: 60vh;
       display: flex;
       align-items: center;
