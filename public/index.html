@@ -11,14 +11,26 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
 
   <!-- Font Awesome -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+  />
 
   <!-- Animate.css -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+  />
 
-  <!-- AOS para efectos de scroll (opcional) -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" />
+  <!-- AOS (opcional) -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css"
+  />
 
+  <!-- Tus estilos globales -->
   <link rel="stylesheet" href="styles/styles.css" />
 
   <style>
@@ -27,12 +39,13 @@
     ==============================*/
     :root {
       --color-primario: #002a40;  /* Azul oscuro */
-      --color-secundario: #004D73;  /* Azul turquesa */
+      --color-secundario: #004D73;/* Azul turquesa */
       --color-blanco: #ffffff;
       --color-dorado: #FFD700;
       --color-oscuro: #333333;
       --sombra: rgba(0,0,0,0.3);
     }
+
     /*==============================
       RESETEO BÁSICO
     ==============================*/
@@ -46,8 +59,9 @@
       font-family: 'Lato', sans-serif;
       background: #f4f4f4;
       color: var(--color-oscuro);
-      padding-top: 70px;
+      padding-top: 70px; /* espacio para navbar fijo */
     }
+
     /*==============================
       NAVBAR
     ==============================*/
@@ -70,14 +84,16 @@
     .navbar-brand img {
       width: 60px;
     }
+
     /*==============================
       HERO
     ==============================*/
     .hero {
       position: relative;
       min-height: 100vh;
+      /* Ajusta la ruta de fondo.jpg si está en public/images/fondo.jpg */
       background: linear-gradient(135deg, var(--color-primario), var(--color-secundario)),
-                  url('fondo.jpg') center/cover no-repeat fixed;
+                  url('images/fondo.jpg') center/cover no-repeat fixed;
       background-blend-mode: multiply;
       display: flex;
       align-items: center;
@@ -92,7 +108,7 @@
       background: rgba(0,0,0,0.3);
     }
     .hero .container {
-      position: relative;
+      position: relative; /* Para que el contenido esté por encima del overlay */
       z-index: 1;
     }
     .hero h1 {
@@ -104,6 +120,7 @@
       margin-top: 0.5rem;
       text-shadow: 1px 1px 2px rgba(0,0,0,0.4);
     }
+
     /*==============================
       FOOTER
     ==============================*/
@@ -123,66 +140,30 @@
     .footer-brand img {
       max-width: 150px;
     }
+
     /*==============================
       BOTÓN VOLVER ARRIBA
     ==============================*/
     #btnBackToTop {
-      display: none;
-      position: fixed;
-      bottom: 30px;
-      right: 30px;
-      z-index: 9999;
-      background: var(--color-secundario);
-      color: var(--color-blanco);
-      border: none;
-      border-radius: 50%;
-      width: 45px;
-      height: 45px;
-      font-size: 1.2rem;
-      cursor: pointer;
-      box-shadow: 0 4px 8px var(--sombra);
-      transition: opacity 0.3s;
+      display:none;
+      position:fixed;
+      bottom:30px;
+      right:30px;
+      z-index:9999;
+      background:var(--color-secundario);
+      color:var(--color-blanco);
+      border:none;
+      border-radius:50%;
+      width:45px;
+      height:45px;
+      font-size:1.2rem;
+      cursor:pointer;
+      box-shadow:0 4px 8px var(--sombra);
+      transition:opacity 0.3s;
     }
+
     /*==============================
-      TARJETAS DE JUGADOR (Estilo Azul+Hexágono)
-    ==============================*/
-    .empty-photo {
-      height: 200px;
-      background-color: #e9ecef;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #6c757d;
-      font-size: 1.2rem;
-    }
-    .player-card {
-      background-color: #090057;
-      text-align: center;
-      padding: 20px;
-      position: relative;
-      color: #fff;
-      border-radius: 0 0 8px 8px;
-    }
-    .position-tag {
-      background-color: #d39b00;
-      color: #fff;
-      font-weight: bold;
-      padding: 5px 15px;
-      position: absolute;
-      top: -15px;
-      left: 50%;
-      transform: translateX(-50%);
-      white-space: nowrap;
-      border: 2px solid #fff;
-      clip-path: polygon(15% 0, 85% 0, 100% 50%, 85% 100%, 15% 100%, 0 50%);
-    }
-    .player-name {
-      font-size: 20px;
-      font-weight: bold;
-      margin-top: 20px;
-    }
-    /*==============================
-      SECCIÓN: CATEGORÍAS
+      SECCIÓN: CATEGORÍAS (si se usa)
     ==============================*/
     .category-section {
       padding: 2rem 0;
@@ -214,25 +195,33 @@
     .category-container.active {
       display: block;
     }
+
     /*==============================
       MODALES DE LOGIN Y REGISTRO
     ==============================*/
-    .modal-header {
-      background: var(--color-primario);
-      color: var(--color-blanco);
+    .modal-header.bg-dark {
+      background: #000 !important;
     }
-    .modal-footer {
-      background: var(--color-secundario);
+    .modal-header.bg-dark.text-white .btn-close {
+      filter: invert(1);
     }
+
     /*==============================
-      FILLER LINES (simulando extensión del código)
+      TARJETAS EJEMPLO (partidos, etc.)
     ==============================*/
+    .match-card-top .team-logo {
+      width: 60px;
+      height: 60px;
+      object-fit: cover;
+    }
+
+    /*==============================
+      FILLER LINES
+    ==============================*/
+    /* Filler lines to simulate a large file, if needed */
     /* Filler Line 1 */
     /* Filler Line 2 */
-    /* Filler Line 3 */
-    /* Filler Line 4 */
-    /* Filler Line 5 */
-    /* ... (Continúa hasta alcanzar las 1000 líneas según necesites) */
+    /* ... (Continúa hasta que necesites) */
   </style>
 </head>
 <body>
@@ -249,10 +238,10 @@
         <img src="images/ESCUDO.png" alt="Logo DIBA FBC" />
         DIBA FBC
       </a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavMain">
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
         <span class="navbar-toggler-icon"></span>
       </button>
-      <div class="collapse navbar-collapse justify-content-end" id="navbarNavMain">
+      <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
         <!-- Menú principal -->
         <ul class="navbar-nav me-auto">
           <li class="nav-item"><a class="nav-link" href="index.html">Inicio</a></li>
@@ -262,11 +251,13 @@
           <li class="nav-item"><a class="nav-link" href="NormasyReglamentos.html">Normas y Reglamentos</a></li>
           <li class="nav-item"><a class="nav-link" href="contacto.html">Contacto</a></li>
         </ul>
-        <!-- Botones para Login y Registro (enlaces con href="#" para evitar navegación) -->
+        <!-- Sección de Login y Registro (modal triggers) -->
         <div class="d-flex">
+          <!-- Login Modal Trigger -->
           <a href="#" class="btn btn-outline-light me-2" data-bs-toggle="modal" data-bs-target="#modalLogin">
             Iniciar Sesión
           </a>
+          <!-- Registro Modal Trigger -->
           <a href="#" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#modalRegistro">
             Registro
           </a>
@@ -343,9 +334,144 @@
     </div>
   </section>
 
-  <!-- (Sección de contenido adicional omitida para brevedad: partidos, equipo, fundación, patrocinadores, etc.) -->
+  <!-- Ejemplo de partidos (match-card) -->
+  <div class="container my-5">
+    <div class="row g-4">
+      <!-- Tarjeta 1 -->
+      <div class="col-12 col-sm-6 col-lg-4">
+        <div class="match-card p-3 text-center border rounded shadow-sm">
+          <div class="match-card-top d-flex justify-content-center align-items-center gap-3">
+            <img src="images/ESCUDO.png" alt="DIBA FBC" class="team-logo">
+            <img src="https://escuelabarranquillera.com/wp-content/uploads/2019/07/logo-escuela-barranquilla-2.png" alt="Escuela Barranquillera de Fútbol" class="team-logo">
+          </div>
+          <div class="mt-2">
+            <strong>Amistoso 2014-2015-2016</strong>
+          </div>
+          <div class="match-card-body mt-3">
+            <h4 class="mb-2">Domingo, 09 de Marzo 2025 - 09:00 AM</h4>
+            <p class="text-muted mb-1">Estadio: Parque de los Sueños</p>
+            <p class="text-muted mb-1">Valor: $ 4000</p>
+            <button class="btn btn-warning" data-bs-toggle="collapse" data-bs-target="#resultado1">Resultado</button>
+          </div>
+          <div id="resultado1" class="collapse mt-3">
+            <h5>Resultado: <strong>DIBA FBC 1 - 1 Barranquillera</strong></h5>
+            <p>Goles: ZAID RICARDO (1)</p>
+            <iframe width="100%" height="200" src="https://www.youtube.com/embed/VIDEO_ID" frameborder="0" allowfullscreen></iframe>
+          </div>
+        </div>
+      </div>
+      <!-- Tarjeta 2 -->
+      <div class="col-12 col-sm-6 col-lg-4">
+        <div class="match-card p-3 text-center border rounded shadow-sm">
+          <div class="match-card-top d-flex justify-content-center align-items-center gap-3">
+            <img src="images/ESCUDO.png" alt="DIBA FBC" class="team-logo">
+            <img src="https://scontent.ftkd1-1.fna.fbcdn.net/.../logoQuiroz.jpg" alt="Quiroz FC" class="team-logo">
+          </div>
+          <div class="mt-2">
+            <strong>Amistoso 2012-2013</strong>
+          </div>
+          <div class="match-card-body mt-3">
+            <h4 class="mb-2">Domingo, 09 de Marzo 2025 - 09:00 AM</h4>
+            <p class="text-muted mb-1">Lugar: Parque de los Sueños</p>
+            <button class="btn btn-warning" data-bs-toggle="collapse" data-bs-target="#resultado2">Resultado</button>
+          </div>
+          <div id="resultado2" class="collapse mt-3">
+            <h5>Resultado: <strong>DIBA FBC 3 - 2 Quiroz FC</strong></h5>
+            <p>Goles: DILAN SANCHEZ (2), OSCAR LOPEZ (1)</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
-  <!-- MODAL DE LOGIN -->
+  <!-- Sección Equipo (Cuerpo Técnico) -->
+  <section id="equipo" class="container my-5 animate__animated animate__fadeInUp">
+    <h2 class="text-center">CUERPO TECNICO</h2>
+    <div class="row text-center mt-4">
+      <div class="col-md-4 mb-4">
+        <img src="profesor.jpg" class="rounded-circle mb-3" alt="Entrenador DIBA FBC" loading="lazy">
+        <h5>Reinaldo Perez</h5>
+        <p>Director Técnico</p>
+      </div>
+      <div class="col-md-4 mb-4">
+        <img src="asistente.jpg" class="rounded-circle mb-3" alt="Asistente Técnico" loading="lazy">
+        <h5>Reinaldo Perez Navas</h5>
+        <p>Técnico</p>
+      </div>
+      <div class="col-md-4 mb-4">
+        <img src="fisioterapeuta.jpg" class="rounded-circle mb-3" alt="Fisioterapeuta DIBA FBC" loading="lazy">
+        <h5>Aldo Espinoza</h5>
+        <p>Técnico</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Sección Fundación -->
+  <section id="fundacion" class="container my-5">
+    <div class="row align-items-center">
+      <div class="col-md-6 mb-4 mb-md-0">
+        <a href="unnamed.jpg" target="_blank">
+          <img 
+            src="unnamed.jpg" 
+            alt="Fundación Tierra que Emana Leche y Miel" 
+            class="img-fluid w-100 rounded shadow"
+          >
+        </a>
+      </div>
+      <div class="col-md-6">
+        <h2 class="mb-4">
+          <i class="fas fa-hand-holding-heart me-2"></i>
+          Fundación Tierra que Emana Leche y Miel
+        </h2>
+        <p>
+          La <strong>Fundación Tierra que Emana Leche y Miel</strong> (FUNTILEMI) es una entidad sin ánimo de lucro registrada en la Cámara de Comercio de Barranquilla.
+        </p>
+        <p>
+          Fundada el <strong>28 de marzo de 2016</strong>, tiene su sede en <strong>Carrera 30A, Carrera 1B #245, Apartamento 701, Urbanización Villa Campestre, Barranquilla, Atlántico</strong>.
+        </p>
+        <p>
+          El nombre evoca una expresión bíblica que describe una tierra de abundancia, simbolizando el compromiso con el bienestar y desarrollo de la comunidad.
+        </p>
+        <div class="mt-4">
+          <a href="https://colombiapymes.com/empresas/fundacion-tierra-que-emana-leche-y-miel-sigla-funtilemi_id_EF8E1398F2821C3F" target="_blank" class="btn btn-warning">
+            <i class="fas fa-external-link-alt me-1"></i> Más Información
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Sección Patrocinadores -->
+  <section id="patrocinadores" class="animate__animated animate__fadeInUp" style="text-align: center; padding: 50px 0; background-color: #fff;">
+    <div class="container">
+      <h2>Nuestros Patrocinadores</h2>
+      <div style="display: flex; justify-content: center; align-items: center; gap: 50px; flex-wrap: wrap; padding: 20px;">
+        <!-- Okey Sport -->
+        <div class="patrocinador">
+          <a href="https://okeysport.com/" target="_blank">
+            <img src="https://okeysport.com/cdn/shop/files/Logo_OKEY.svg?v=1721155737&width=100" alt="Logo de Okey Sport" style="width: 150px; height: auto;">
+          </a>
+          <p>Okey Sport</p>
+        </div>
+        <!-- Chiro Deportes Funtilemi -->
+        <div class="patrocinador">
+          <a href="https://www.facebook.com/chirodeportes/" target="_blank">
+            <img src="https://tse3.mm.bing.net/th?id=OIP.2pbPD48ADuuuNSlSKtgEpwHaHa&pid=Api" alt="Logo de Chiro Deportes" style="width: 150px; height: auto;">
+          </a>
+          <p>Chiro Deportes</p>
+        </div>
+        <!-- Calzado Orpis -->
+        <div class="patrocinador">
+          <a href="https://www.instagram.com/calzadoorpis/" target="_blank">
+            <img src="https://i.pinimg.com/originals/2d/36/e1/2d36e15e7ad8ab91b41f3db0eff0f7ac.png" alt="Logo de Calzado Orpis" style="width: 150px; height: auto;">
+          </a>
+          <p>Calzado Orpis</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MODAL: LOGIN -->
   <div class="modal fade" id="modalLogin" tabindex="-1" aria-labelledby="modalLoginLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -370,7 +496,7 @@
     </div>
   </div>
 
-  <!-- MODAL DE REGISTRO -->
+  <!-- MODAL: REGISTRO -->
   <div class="modal fade" id="modalRegistro" tabindex="-1" aria-labelledby="modalRegistroLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -404,7 +530,7 @@
   </div>
 
   <!-- FOOTER -->
-  <footer class="animate__animated animate__fadeInUp">
+  <footer class="animate__animated animate__fadeInUp py-4">
     <div class="container">
       <div class="footer-brand">
         <img src="images/ESCUDO.png" alt="Escudo DIBA FBC" loading="lazy">
@@ -446,21 +572,8 @@
 
   <!-- Bootstrap JS Bundle -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <!-- Script para alternar categorías (si se usa) -->
+  <!-- Scripts de animaciones y lógica extra (opcional) -->
   <script>
-    const btns = document.querySelectorAll('.category-buttons .btn');
-    const containers = document.querySelectorAll('.category-container');
-    btns.forEach(btn => {
-      btn.addEventListener('click', () => {
-        btns.forEach(b => b.classList.remove('active'));
-        containers.forEach(cont => cont.classList.remove('active'));
-        btn.classList.add('active');
-        const id = btn.getAttribute('data-category');
-        document.getElementById(id).classList.add('active', 'animate__animated', 'animate__fadeIn');
-      });
-    });
-  
     // Navbar: cambia de fondo al hacer scroll
     const navbar = document.querySelector('.navbar');
     window.addEventListener('scroll', () => {
@@ -472,7 +585,7 @@
         navbar.classList.remove('solid', 'navbar-dark');
       }
     });
-  
+
     // Botón "Volver arriba"
     const btnBackToTop = document.getElementById('btnBackToTop');
     window.addEventListener('scroll', () => {
@@ -481,63 +594,79 @@
     btnBackToTop.addEventListener('click', () => {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     });
-  </script>
-  
-  <!-- Scripts para Login y Registro -->
-  <script>
-    // Funcionalidad del Login usando Vercel Functions
-    document.getElementById('formLogin').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const correo = document.getElementById('loginCorreo').value.trim();
-      const clave = document.getElementById('loginClave').value;
-      try {
-        const response = await fetch('/api/login', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ correo, password: clave })
-        });
-        const result = await response.json();
-        if (response.ok) {
-          alert('Bienvenido, ' + result.user.nombre);
-          localStorage.setItem('loggedUser', JSON.stringify(result.user));
-          window.location.href = 'profile.html';
-        } else {
-          alert('Error: ' + result.error);
-        }
-      } catch (error) {
-        console.error('Error en el login:', error);
-        alert('Error al iniciar sesión. Inténtalo de nuevo.');
-      }
+
+    // (Opcional) Si usas categorías con .category-buttons .btn
+    const btns = document.querySelectorAll('.category-buttons .btn');
+    const containers = document.querySelectorAll('.category-container');
+    btns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        btns.forEach(b => b.classList.remove('active'));
+        containers.forEach(cont => cont.classList.remove('active'));
+        btn.classList.add('active');
+        const id = btn.getAttribute('data-category');
+        document.getElementById(id).classList.add('active', 'animate__animated', 'animate__fadeIn');
+      });
     });
-  
-    // Funcionalidad del Registro usando Vercel Functions
-    document.getElementById('formRegistro').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const nombre = document.getElementById('regNombre').value.trim();
-      const correo = document.getElementById('regCorreo').value.trim();
-      const password = document.getElementById('regPassword').value;
-      const fechaNac = document.getElementById('regFechaNac').value;
-      try {
-        const response = await fetch('/api/register', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ nombre, correo, password, fechaNac })
-        });
-        const result = await response.json();
-        if (response.ok) {
-          alert(result.message);
-          // Cerrar modal de registro
-          var modalRegistro = bootstrap.Modal.getInstance(document.getElementById('modalRegistro'));
-          modalRegistro.hide();
-          window.location.href = 'login.html';
-        } else {
-          alert('Error: ' + result.error);
+
+    // Funcionalidad del Login (Vercel Functions)
+    const formLogin = document.getElementById('formLogin');
+    if (formLogin) {
+      formLogin.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const correo = document.getElementById('loginCorreo').value.trim();
+        const clave = document.getElementById('loginClave').value;
+        try {
+          const response = await fetch('/api/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ correo, password: clave })
+          });
+          const result = await response.json();
+          if (response.ok) {
+            alert('Bienvenido, ' + result.user.nombre);
+            localStorage.setItem('loggedUser', JSON.stringify(result.user));
+            window.location.href = 'profile.html';
+          } else {
+            alert('Error: ' + result.error);
+          }
+        } catch (error) {
+          console.error('Error en el login:', error);
+          alert('Error al iniciar sesión. Inténtalo de nuevo.');
         }
-      } catch (error) {
-        console.error('Error en el registro:', error);
-        alert('Error al registrar usuario. Inténtalo de nuevo.');
-      }
-    });
+      });
+    }
+
+    // Funcionalidad del Registro (Vercel Functions)
+    const formRegistro = document.getElementById('formRegistro');
+    if (formRegistro) {
+      formRegistro.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const nombre = document.getElementById('regNombre').value.trim();
+        const correo = document.getElementById('regCorreo').value.trim();
+        const password = document.getElementById('regPassword').value;
+        const fechaNac = document.getElementById('regFechaNac').value;
+        try {
+          const response = await fetch('/api/register', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ nombre, correo, password, fechaNac })
+          });
+          const result = await response.json();
+          if (response.ok) {
+            alert(result.message);
+            // Cerrar modal de registro
+            const modalRegistro = bootstrap.Modal.getInstance(document.getElementById('modalRegistro'));
+            modalRegistro.hide();
+            window.location.href = 'login.html'; // O a profile.html, como prefieras
+          } else {
+            alert('Error: ' + result.error);
+          }
+        } catch (error) {
+          console.error('Error en el registro:', error);
+          alert('Error al registrar usuario. Inténtalo de nuevo.');
+        }
+      });
+    }
   </script>
 </body>
 </html>
