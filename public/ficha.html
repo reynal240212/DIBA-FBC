@@ -1,33 +1,64 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>Jugadores por Categoría - DIBA FBC</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8" />
+  <title>Inicio - DIBA FBC</title>
+  <link rel="icon" href="images/ESCUDO.ico" type="image/x-icon">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Conoce la historia y los momentos más destacados de DIBA FBC, un recorrido lleno de pasión y logros deportivos." />
 
-  <!-- Bootstrap CSS -->
-  <link
-    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
-    rel="stylesheet"
-  />
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+
   <!-- Font Awesome -->
-  <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
-    crossorigin="anonymous"
-    referrerpolicy="no-referrer"
-  />
-  <!-- Animate.css -->
-  <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
-  />
-  <!-- Google Fonts -->
-  <link
-    href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap"
-    rel="stylesheet"
-  />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
+  <!-- Animate.css -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+
+  <!-- AOS para efectos de scroll (opcional) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" />
+
+  <link rel="stylesheet" href="styles/styles.css" />
+</head>
+<body>
+  <!-- Botón Volver Arriba -->
+  <button id="btnBackToTop" title="Volver arriba">
+    <i class="fas fa-arrow-up"></i>
+  </button>
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark fixed-top transparent">
+    <div class="container">
+      <a class="navbar-brand" href="index.html">
+        <img src="images/ESCUDO.png" alt="Logo DIBA FBC" />
+        DIBA FBC
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item"><a class="nav-link" href="index.html">Inicio</a></li>
+          <li class="nav-item"><a class="nav-link active" href="Historia.html">Historia</a></li>
+          <li class="nav-item"><a class="nav-link" href="ficha.html">Ficha Técnica</a></li>
+          <li class="nav-item"><a class="nav-link" href="planillas.html">Planillas</a></li>
+          <li class="nav-item"><a class="nav-link" href="NormasyReglamentos.html">Normas y Reglamentos</a></li>
+          <li class="nav-item"><a class="nav-link" href="#contacto">Contacto</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero animate__animated animate__fadeInDown">
+    <div class="container hero-content">
+      <h1 class="hero-title">JUGADORES</h1>
+      <p class="hero-subtitle lead">
+       PLANTILLA.
+      </p>
+    </div>
+  </section>
   <!-- Tus estilos globales (si los tienes en un .css externo, puedes enlazarlo) -->
   <style>
     /*==============================
@@ -613,43 +644,46 @@
       </div>
     </section>
 
-  <!-- FOOTER -->
-  <footer class="animate__animated animate__fadeInUp py-4">
-    <div class="container">
-      <div class="row text-center text-md-start align-items-center">
-        <!-- Columna: Marca / Logo -->
-        <div class="col-md-3 footer-brand mb-3 mb-md-0">
-          <img src="/images/ESCUDO.png" alt="Escudo DIBA FBC" loading="lazy" style="max-width: 150px;">
+    <!-- FOOTER (copiado del snippet) -->
+    <footer class="animate__animated animate__fadeInUp">
+      <div class="container">
+        <div class="footer-brand">
+          <img src="images/ESCUDO.png" alt="Escudo DIBA FBC" loading="lazy">
           <p class="mt-2">&copy; 2025 DIBA FBC. Todos los derechos reservados.</p>
         </div>
-
-        <!-- Columna: Sobre el Club -->
-        <div class="col-md-3 mb-3 mb-md-0">
-          <h4>Sobre el Club</h4>
-          <ul class="list-unstyled">
-            <li><a href="Historia.html">Historia</a></li>
-          </ul>
-        </div>
-
-        <!-- Columna: Redes Sociales -->
-        <div class="col-md-3 mb-3 mb-md-0">
-          <h4>Redes Sociales</h4>
-          <ul class="list-unstyled">
-            <li>
-              <a href="https://www.facebook.com/profile.php?id=100071991100146" target="_blank">
-                <i class="fab fa-facebook"></i> Facebook
-              </a>
-            </li>
-            <li>
-              <a href="https://www.instagram.com/diba_fbc_oficial" target="_blank">
-                <i class="fab fa-instagram"></i> Instagram
-              </a>
-            </li>
-          </ul>
+        <div class="row text-center mt-4">
+          <div class="col-md-4 mb-3 mb-md-0">
+            <h4>Sobre el Club</h4>
+            <ul class="list-unstyled">
+              <li><a href="#">Historia</a></li>
+            </ul>
+          </div>
+          <div class="col-md-4 mb-3 mb-md-0">
+            <h4>Redes Sociales</h4>
+            <ul class="list-unstyled">
+              <li>
+                <a href="https://www.facebook.com/profile.php?id=100071991100146" target="_blank">
+                  <i class="fab fa-facebook"></i> Facebook
+                </a>
+              </li>
+              <li>
+                <a href="https://www.instagram.com/diba_fbc_oficial" target="_blank">
+                  <i class="fab fa-instagram"></i> Instagram
+                </a>
+              </li>
+            </ul>
+          </div>
+          <div class="col-md-4">
+            <h4>Contacto</h4>
+            <ul class="list-unstyled">
+              <li><a href="#">Atención al Cliente</a></li>
+              <li><a href="#">Prensa</a></li>
+              <li><a href="#">Oficinas</a></li>
+            </ul>
+          </div>
         </div>
       </div>
-    </div>
-  </footer>
+    </footer>
 
   <!-- Bootstrap JS Bundle -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
