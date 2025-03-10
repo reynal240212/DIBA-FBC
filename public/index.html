@@ -372,5 +372,62 @@
       window.scrollTo({ top: 0, behavior: 'smooth' });
     });
   </script>
+  <!-- Modal de Login -->
+<div class="modal fade" id="modalLogin" tabindex="-1" aria-labelledby="modalLoginLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header bg-dark text-white">
+        <h5 class="modal-title" id="modalLoginLabel">Iniciar Sesión</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+      <div class="modal-body">
+        <form id="formLogin">
+          <div class="mb-3">
+            <label for="loginCorreo" class="form-label">Correo Electrónico</label>
+            <input type="email" class="form-control" id="loginCorreo" placeholder="tuemail@ejemplo.com" required>
+          </div>
+          <div class="mb-3">
+            <label for="loginClave" class="form-label">Contraseña</label>
+            <input type="password" class="form-control" id="loginClave" placeholder="********" required>
+          </div>
+          <button type="submit" class="btn btn-primary w-100">Ingresar</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal de Registro -->
+<div class="modal fade" id="modalRegistro" tabindex="-1" aria-labelledby="modalRegistroLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header bg-dark text-white">
+        <h5 class="modal-title" id="modalRegistroLabel">Registro de Nuevo Jugador</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+      <div class="modal-body">
+        <form id="formRegistro">
+          <div class="mb-3">
+            <label for="regNombre" class="form-label">Nombre Completo</label>
+            <input type="text" class="form-control" id="regNombre" placeholder="Tu nombre" required>
+          </div>
+          <div class="mb-3">
+            <label for="regCorreo" class="form-label">Correo Electrónico</label>
+            <input type="email" class="form-control" id="regCorreo" placeholder="tucorreo@ejemplo.com" required>
+          </div>
+          <div class="mb-3">
+            <label for="regPassword" class="form-label">Contraseña</label>
+            <input type="password" class="form-control" id="regPassword" placeholder="********" required>
+          </div>
+          <div class="mb-3">
+            <label for="regFechaNac" class="form-label">Fecha de Nacimiento</label>
+            <input type="date" class="form-control" id="regFechaNac" required>
+          </div>
+          <button type="submit" class="btn btn-warning w-100">Registrarse</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
 </body>
 </html>
