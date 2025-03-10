@@ -1,123 +1,45 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>Registrarse - DIBA FBC</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <!-- Bootstrap CSS CDN -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <!-- Font Awesome (sin atributo integrity) -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
-  <!-- Animate.css para animaciones -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
-  <style>
-    body {
-      background: url('https://cdn.britannica.com/51/190751-050-147B93F7/soccer-ball-goal.jpg') no-repeat center center fixed;
-      background-size: cover;
-      font-family: Arial, sans-serif;
-      padding: 1rem;
-      position: relative;
-    }
-    body::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: rgba(0,0,0,0.55);
-      z-index: 0;
-    }
-    .signup-container {
-      position: relative;
-      z-index: 1;
-    }
-    .signup-card {
-      max-width: 400px;
-      width: 100%;
-      border: none;
-      border-radius: 10px;
-      overflow: hidden;
-      background: #fff;
-    }
-    .signup-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 8px 16px rgba(0,0,0,0.25);
-      transition: transform 0.3s, box-shadow 0.3s;
-    }
-    .signup-logo {
-      max-width: 100px;
-    }
-    .tagline {
-      font-style: italic;
-      color: #6c757d;
-      font-size: 0.9rem;
-    }
-    .animate__animated {
-      animation-duration: 1s;
-    }
-  </style>
+  <meta charset="UTF-8" />
+  <title>Registro - DIBA FBC</title>
+  <!-- Head global: Bootstrap, etc. -->
 </head>
 <body>
-  <div class="container signup-container d-flex align-items-center justify-content-center min-vh-100">
-    <div class="card signup-card shadow-sm p-4 animate__animated animate__fadeInUp">
-      <!-- Logo y tagline -->
-      <div class="text-center mb-3">
-        <img src="ESCUDO.png" alt="Logo DIBA FBC" class="signup-logo img-fluid">
-        <p class="tagline">Fuerza y Lealtad</p>
+  <!-- Navbar -->
+
+  <section class="container my-5" style="margin-top: 100px;">
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+        <div class="card p-4 shadow">
+          <h2 class="mb-4 text-center">Registro de Nuevo Jugador</h2>
+          <form>
+            <div class="mb-3">
+              <label for="nombre" class="form-label">Nombre Completo</label>
+              <input type="text" class="form-control" id="nombre" placeholder="Tu nombre">
+            </div>
+            <div class="mb-3">
+              <label for="email" class="form-label">Correo Electrónico</label>
+              <input type="email" class="form-control" id="email" placeholder="tucorreo@ejemplo.com">
+            </div>
+            <div class="mb-3">
+              <label for="password" class="form-label">Contraseña</label>
+              <input type="password" class="form-control" id="password" placeholder="********">
+            </div>
+            <div class="mb-3">
+              <label for="fechaNac" class="form-label">Fecha de Nacimiento</label>
+              <input type="date" class="form-control" id="fechaNac">
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Registrarse</button>
+          </form>
+          <div class="mt-3 text-center">
+            <a href="login.html">¿Ya tienes cuenta? Inicia Sesión</a>
+          </div>
+        </div>
       </div>
-      <h2 class="h4 text-center mb-4">Regístrate</h2>
-      <!-- Formulario de registro -->
-      <form id="signup-form">
-        <div class="mb-3">
-          <label for="email" class="form-label">Correo electrónico</label>
-          <input type="email" class="form-control" id="email" name="email" placeholder="correo@ejemplo.com" required>
-        </div>
-        <div class="mb-3">
-          <label for="password" class="form-label">Contraseña</label>
-          <input type="password" class="form-control" id="password" name="password" placeholder="Contraseña" required>
-        </div>
-        <button type="submit" class="btn btn-primary w-100">Crear Cuenta</button>
-      </form>
     </div>
-  </div>
+  </section>
 
-  <!-- Bootstrap JS Bundle -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <!-- Supabase JS (versión 2.x) -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-  <script>
-    console.log("Script cargado");
-
-    const SUPABASE_URL = 'https://nwxdshisfyenkylgqxgz.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im53eGRzaGlzZnllbmt5bGdxeGd6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzkwNTQzMDgsImV4cCI6MjA1NDYzMDMwOH0.QoIiNo5pFA1_MVfE2ugLgyz4HeET-WhA0C_sNOkWv9g';
-
-    // Crear el cliente de Supabase
-    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-    console.log("Cliente Supabase creado:", supabaseClient);
-
-    const signupForm = document.getElementById('signup-form');
-    if(signupForm) {
-      console.log("Evento submit agregado al formulario");
-      signupForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        console.log("Evento submit disparado");
-
-        const email = document.getElementById('email').value;
-        const password = document.getElementById('password').value;
-        console.log("Email:", email, "Password:", password);
-
-        const { data, error } = await supabaseClient.auth.signUp({ email, password });
-        console.log("Resultado de signUp:", data, error);
-
-        if (error) {
-          alert('Error al registrarse: ' + error.message);
-          console.error(error);
-        } else {
-          alert('Registro exitoso. Revisa tu correo para confirmar el registro (si aplica) o serás redirigido a crear tu perfil.');
-          window.location.href = 'profile.html';
-        }
-      });
-    } else {
-      console.error("No se encontró el formulario de registro");
-    }
-  </script>
+  <!-- Footer, Scripts, etc. -->
 </body>
 </html>
