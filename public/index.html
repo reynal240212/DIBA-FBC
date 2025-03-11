@@ -7,7 +7,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="Conoce la historia y los momentos más destacados de DIBA FBC, un recorrido lleno de pasión y logros deportivos." />
   <script src="//code.tidio.co/jckoszxyxvs7izkxulr9bk5cbcspdjtj.js" async></script>
-  
   <!-- Bootstrap 5 CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
 
@@ -33,11 +32,239 @@
 
   <!-- Tus estilos globales -->
   <link rel="stylesheet" href="styles/styles.css" />
+
+  <style>
+    /*==============================
+      VARIABLES DE COLOR
+    ==============================*/
+    :root {
+      --color-primario: #002a40;  /* Azul oscuro */
+      --color-secundario: #001b72;/* Azul turquesa */
+      --color-blanco: #ffffff;
+      --color-dorado: #FFD700;
+      --color-oscuro: #333333;
+      --sombra: rgba(0,0,0,0.3);
+    }
+
+    /*==============================
+      RESETEO BÁSICO
+    ==============================*/
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      scroll-behavior: smooth;
+    }
+    body {
+      font-family: 'Lato', sans-serif;
+      background: #f4f4f4;
+      color: var(--color-oscuro);
+      padding-top: 70px; /* espacio para navbar fijo */
+    }
+
+    /*==============================
+      NAVBAR
+    ==============================*/
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
+      transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    }
+    .navbar.transparent {
+      background-color: transparent !important;
+      box-shadow: none;
+    }
+    .navbar.solid {
+      background: linear-gradient(135deg, var(--color-primario), var(--color-secundario)) !important;
+      box-shadow: 0 2px 6px var(--sombra);
+    }
+    .navbar-brand img {
+      width: 60px;
+    }
+
+    /*==============================
+      HERO
+    ==============================*/
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      /* Ajusta la ruta de fondo.jpg si está en public/images/fondo.jpg */
+      background: linear-gradient(135deg, var(--color-primario), var(--color-secundario)),
+                  url('images/fondo.jpg') center/cover no-repeat fixed;
+      background-blend-mode: multiply;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      color: var(--color-blanco);
+    }
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.3);
+    }
+    .hero .container {
+      position: relative; /* Para que el contenido esté por encima del overlay */
+      z-index: 1;
+    }
+    .hero h1 {
+      font-size: 3rem;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+    }
+    .hero p {
+      font-size: 1.5rem;
+      margin-top: 0.5rem;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.4);
+    }
+
+    /*==============================
+      FOOTER
+    ==============================*/
+    footer {
+      background: linear-gradient(135deg, var(--color-primario), var(--color-secundario));
+      color: var(--color-blanco);
+      padding: 2rem 1rem;
+      margin-top: 2rem;
+    }
+    footer a {
+      color: var(--color-blanco);
+      transition: color 0.3s;
+    }
+    footer a:hover {
+      text-decoration: underline;
+    }
+    .footer-brand img {
+      max-width: 150px;
+    }
+
+    /*==============================
+      BOTÓN VOLVER ARRIBA
+    ==============================*/
+    #btnBackToTop {
+      display:none;
+      position:fixed;
+      bottom:30px;
+      right:30px;
+      z-index:9999;
+      background:var(--color-secundario);
+      color:var(--color-blanco);
+      border:none;
+      border-radius:50%;
+      width:45px;
+      height:45px;
+      font-size:1.2rem;
+      cursor:pointer;
+      box-shadow:0 4px 8px var(--sombra);
+      transition:opacity 0.3s;
+    }
+
+    /*==============================
+      SECCIÓN: CATEGORÍAS (si se usa)
+    ==============================*/
+    .category-section {
+      padding: 2rem 0;
+    }
+    .category-section h1 {
+      text-align: center;
+      margin-bottom: 2rem;
+      color: #800020;
+      font-weight: bold;
+    }
+    .category-buttons {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    .category-buttons .btn {
+      margin: 0 0.5rem;
+      transition: transform 0.3s, background-color 0.3s;
+    }
+    .category-buttons .btn:hover {
+      transform: scale(1.05);
+    }
+    .category-buttons .btn.active {
+      background-color: #800020;
+      color: #fff;
+    }
+    .category-container {
+      display: none;
+    }
+    .category-container.active {
+      display: block;
+    }
+
+    /*==============================
+      MODALES DE LOGIN Y REGISTRO
+    ==============================*/
+    .modal-header.bg-dark {
+      background: #000 !important;
+    }
+    .modal-header.bg-dark.text-white .btn-close {
+      filter: invert(1);
+    }
+
+    /*==============================
+      TARJETAS EJEMPLO (partidos, etc.)
+    ==============================*/
+    .match-card-top .team-logo {
+      width: 60px;
+      height: 60px;
+      object-fit: cover;
+    }
+
+    /*==============================
+      FILLER LINES
+    ==============================*/
+    /* Filler lines to simulate a large file, if needed */
+    /* Filler Line 1 */
+    /* Filler Line 2 */
+    /* ... (Continúa hasta que necesites) */
+  </style>
 </head>
 <body>
 
-  <!-- Contenedor para el Navbar (se cargará desde layout/navbar.html) -->
-  <div id="navbar-container"></div>
+  <!-- Botón Volver Arriba -->
+  <button id="btnBackToTop" title="Volver arriba">
+    <i class="fas fa-arrow-up"></i>
+  </button>
+
+  <!-- NAVBAR -->
+  <nav class="navbar navbar-expand-lg navbar-dark fixed-top transparent">
+    <div class="container">
+      <a class="navbar-brand" href="index.html">
+        <img src="images/ESCUDO.png" alt="Logo DIBA FBC" />
+        DIBA FBC
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+        <!-- Menú principal -->
+        <ul class="navbar-nav me-auto">
+          <li class="nav-item"><a class="nav-link" href="index.html">Inicio</a></li>
+          <li class="nav-item"><a class="nav-link" href="Historia.html">Historia</a></li>
+          <li class="nav-item"><a class="nav-link" href="ficha.html">Ficha Técnica</a></li>
+          <li class="nav-item"><a class="nav-link" href="planillas.html">Planillas</a></li>
+          <li class="nav-item"><a class="nav-link" href="NormasyReglamentos.html">Normas y Reglamentos</a></li>
+          <li class="nav-item"><a class="nav-link" href="contacto.html">Contacto</a></li>
+        </ul>
+        <!-- Sección de Login y Registro (modal triggers) -->
+        <div class="d-flex">
+          <!-- Login Modal Trigger -->
+          <a href="#" class="btn btn-outline-light me-2" data-bs-toggle="modal" data-bs-target="#modalLogin">
+            Iniciar Sesión
+          </a>
+          <!-- Registro Modal Trigger -->
+          <a href="#" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#modalRegistro">
+            Registro
+          </a>
+        </div>
+      </div>
+    </div>
+  </nav>
 
   <!-- HERO SECTION -->
   <header id="inicio" class="hero animate__animated animate__fadeInDown">
@@ -302,14 +529,144 @@
     </div>
   </div>
 
-  <!-- Contenedor para el FOOTER (cargado con fetch) -->
-  <div id="footer-container"></div>
+  <!-- FOOTER -->
+  <footer class="animate__animated animate__fadeInUp py-4">
+    <div class="container">
+      <div class="footer-brand">
+        <img src="images/ESCUDO.png" alt="Escudo DIBA FBC" loading="lazy">
+        <p class="mt-2">&copy; 2025 DIBA FBC. Todos los derechos reservados.</p>
+      </div>
+      <div class="row text-center mt-4">
+        <div class="col-md-4 mb-3 mb-md-0">
+          <h4>Sobre el Club</h4>
+          <ul class="list-unstyled">
+            <li><a href="Historia.html" style="color: #fff;">Historia</a></li>
+          </ul>
+        </div>
+        <div class="col-md-4 mb-3 mb-md-0">
+          <h4>Redes Sociales</h4>
+          <ul class="list-unstyled">
+            <li>
+              <a href="https://www.facebook.com/profile.php?id=100071991100146" target="_blank" style="color: #fff;">
+                <i class="fab fa-facebook"></i> Facebook
+              </a>
+            </li>
+            <li>
+              <a href="https://www.instagram.com/diba_fbc_oficial" target="_blank" style="color: #fff;">
+                <i class="fab fa-instagram"></i> Instagram
+              </a>
+            </li>
+          </ul>
+        </div>
+        <div class="col-md-4">
+          <h4>Contacto</h4>
+          <ul class="list-unstyled">
+            <li><a href="contacto.html" style="color: #fff;">Atención al Cliente</a></li>
+            <li><a href="#" style="color: #fff;">Prensa</a></li>
+            <li><a href="#" style="color: #fff;">Oficinas</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </footer>
 
   <!-- Bootstrap JS Bundle -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-  <!-- Script para cargar componentes externos (Navbar y Footer) -->
-  <script src="scripts/loadComponents.js"></script>
-  <!-- Script principal (funciones y animaciones) -->
-  <script src="scripts/main.js"></script>
+  <!-- Scripts de animaciones y lógica extra (opcional) -->
+  <script>
+    // Navbar: cambia de fondo al hacer scroll
+    const navbar = document.querySelector('.navbar');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 50) {
+        navbar.classList.remove('transparent');
+        navbar.classList.add('solid', 'navbar-dark');
+      } else {
+        navbar.classList.add('transparent');
+        navbar.classList.remove('solid', 'navbar-dark');
+      }
+    });
+
+    // Botón "Volver arriba"
+    const btnBackToTop = document.getElementById('btnBackToTop');
+    window.addEventListener('scroll', () => {
+      btnBackToTop.style.display = (window.scrollY > 300) ? 'block' : 'none';
+    });
+    btnBackToTop.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    // (Opcional) Si usas categorías con .category-buttons .btn
+    const btns = document.querySelectorAll('.category-buttons .btn');
+    const containers = document.querySelectorAll('.category-container');
+    btns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        btns.forEach(b => b.classList.remove('active'));
+        containers.forEach(cont => cont.classList.remove('active'));
+        btn.classList.add('active');
+        const id = btn.getAttribute('data-category');
+        document.getElementById(id).classList.add('active', 'animate__animated', 'animate__fadeIn');
+      });
+    });
+
+    // Funcionalidad del Login (Vercel Functions)
+    const formLogin = document.getElementById('formLogin');
+    if (formLogin) {
+      formLogin.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const correo = document.getElementById('loginCorreo').value.trim();
+        const clave = document.getElementById('loginClave').value;
+        try {
+          const response = await fetch('/api/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ correo, password: clave })
+          });
+          const result = await response.json();
+          if (response.ok) {
+            alert('Bienvenido, ' + result.user.nombre);
+            localStorage.setItem('loggedUser', JSON.stringify(result.user));
+            window.location.href = 'profile.html';
+          } else {
+            alert('Error: ' + result.error);
+          }
+        } catch (error) {
+          console.error('Error en el login:', error);
+          alert('Error al iniciar sesión. Inténtalo de nuevo.');
+        }
+      });
+    }
+
+    // Funcionalidad del Registro (Vercel Functions)
+    const formRegistro = document.getElementById('formRegistro');
+    if (formRegistro) {
+      formRegistro.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const nombre = document.getElementById('regNombre').value.trim();
+        const correo = document.getElementById('regCorreo').value.trim();
+        const password = document.getElementById('regPassword').value;
+        const fechaNac = document.getElementById('regFechaNac').value;
+        try {
+          const response = await fetch('/api/register', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ nombre, correo, password, fechaNac })
+          });
+          const result = await response.json();
+          if (response.ok) {
+            alert(result.message);
+            // Cerrar modal de registro
+            const modalRegistro = bootstrap.Modal.getInstance(document.getElementById('modalRegistro'));
+            modalRegistro.hide();
+            window.location.href = 'login.html'; // O a profile.html, como prefieras
+          } else {
+            alert('Error: ' + result.error);
+          }
+        } catch (error) {
+          console.error('Error en el registro:', error);
+          alert('Error al registrar usuario. Inténtalo de nuevo.');
+        }
+      });
+    }
+  </script>
 </body>
 </html>
