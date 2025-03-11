@@ -104,3 +104,18 @@ if (formRegistro) {
     }
   });
 }
+// Script para alternar categorías y otros efectos 
+
+  // Alternar categorías
+  const btns = document.querySelectorAll('.category-buttons .btn');
+  const containers = document.querySelectorAll('.category-container');
+
+  btns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      btns.forEach(b => b.classList.remove('active'));
+      containers.forEach(cont => cont.classList.remove('active'));
+      btn.classList.add('active');
+      const id = btn.getAttribute('data-category');
+      document.getElementById(id).classList.add('active', 'animate__animated', 'animate__fadeIn');
+    });
+  });
