@@ -446,9 +446,27 @@ Estilos para pagona de ficha tecnica
       font-weight: bold;
       margin-top: 20px;
     }
-/* ======================================
-       TARJETAS DE JUGADOR (Ejemplo con estilo Hexágono)
-    ====================================== */
+    .swipe-carousel {
+      --rm-swipe-carousel-bg-color: transparent;
+      --rm-swipe-carousel-height-default: auto;
+      --rm-swipe-carousel-content-align: flex-start;
+      /* Otras variables que maneje tu plugin */
+      position: relative;
+      user-select: none;
+      -webkit-user-drag: none;
+      -webkit-tap-highlight-color: rgba(0,0,0,0);
+      touch-action: pan-y;
+    }
+    
+    .swipe-carousel__content {
+      display: flex;
+      flex-direction: row;
+      gap: var(--rm-swipe-carousel-gap);
+      align-items: var(--rm-swipe-carousel-content-align);
+      width: max-content;
+      transition: var(--rm-swipe-carousel-content-transition, transform .3s ease-in-out);
+      scroll-padding-inline: var(--rm-swipe-carousel-scroll-padding-inline-default, 1.5rem);
+    }
     .empty-photo {
       height: 200px;
       background-color: #e9ecef;
@@ -484,6 +502,7 @@ Estilos para pagona de ficha tecnica
       font-weight: bold;
       margin-top: 20px;
     }
+        
 
     /* ======================================
        SECCIÓN: CATEGORÍAS
