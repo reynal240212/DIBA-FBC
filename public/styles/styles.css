@@ -2,29 +2,12 @@
    VARIABLES DE COLOR
 ====================================== */
 :root {
-  --color-primario: #002a40;    /* Azul oscuro */
-  --color-secundario: #001b72;    /* Azul más intenso */
-  --color-blanco: #ffffff;
-  --color-dorado: #FFD700;
-  --color-oscuro: #333333;
-  --sombra: rgba(0, 0, 0, 0.3);
-}
-
-/* ======================================
-   RESETEO BÁSICO Y ESTILOS GLOBALES
-====================================== */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  scroll-behavior: smooth;
-}
-
-body {
-  font-family: 'Lato', sans-serif;
-  background: #f4f4f4;
-  color: var(--color-oscuro);
-  padding-top: 70px; /* Espacio para navbar fijo */
+  --primary: #002a40;      /* Azul oscuro */
+  --secondary: #001b72;    /* Azul intenso */
+  --white: #ffffff;
+  --gold: #FFD700;         /* Dorado */
+  --dark: #333333;
+  --shadow: rgba(0, 0, 0, 0.3);
 }
 
 /* ======================================
@@ -37,34 +20,102 @@ body {
   width: 100%;
   z-index: 1000;
   transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  background: transparent;
+  padding: 0.75rem 1rem;
 }
 
-/* Estado transparente */
-.navbar.transparent {
-  background-color: transparent !important;
-  box-shadow: none;
-}
-
-/* Estado sólido con gradiente */
 .navbar.solid {
-  background: linear-gradient(135deg, var(--color-primario), var(--color-secundario)) !important;
-  box-shadow: 0 2px 6px var(--sombra);
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  box-shadow: 0 2px 6px var(--shadow);
 }
 
 .navbar-brand img {
-  width: 50px;
+  max-width: 50px;
   height: auto;
   margin-right: 0.5rem;
 }
 
 .navbar-nav .nav-link {
-  color: var(--color-blanco) !important;
+  color: var(--white) !important;
   margin: 0 0.5rem;
   transition: color 0.3s;
+  font-weight: 500;
 }
 
 .navbar-nav .nav-link:hover {
-  color: var(--color-dorado) !important;
+  color: var(--gold) !important;
+}
+
+/* ======================================
+   FOOTER
+====================================== */
+footer {
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  color: var(--white);
+  padding: 2rem 1rem;
+  margin-top: 2rem;
+  text-align: center;
+  font-size: 0.9rem;
+}
+
+footer .container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2rem;
+}
+
+.footer-brand {
+  flex: 1 1 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.footer-brand img {
+  max-width: 120px;
+  height: auto;
+  margin-bottom: 0.5rem;
+}
+
+footer h4 {
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+footer ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+footer li {
+  margin: 0.3rem 0;
+}
+
+footer a {
+  color: var(--white);
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+footer a:hover {
+  text-decoration: underline;
+  color: var(--gold);
+}
+
+/* ======================================
+   RESPONSIVIDAD
+====================================== */
+@media (max-width: 768px) {
+  .navbar-nav {
+    text-align: center;
+  }
+  footer {
+    padding: 1.5rem 1rem;
+  }
 }
 
 /* ======================================
@@ -106,81 +157,6 @@ body {
   margin-top: 0.5rem;
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4);
 }
-
-/* Responsividad para el hero */
-@media (max-width: 768px) {
-  .hero h1 {
-    font-size: 2.5rem;
-  }
-  .hero p {
-    font-size: 1.2rem;
-  }
-}
-
-/* ======================================
-   FOOTER
-====================================== */
-footer {
-  background: linear-gradient(135deg, var(--color-primario), var(--color-secundario));
-  color: var(--color-blanco);
-  padding: 2rem 1rem;
-  margin-top: 2rem;
-  text-align: center;
-}
-
-/* Estructura interna del footer */
-footer .container {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 2rem;
-}
-
-.footer-brand {
-  flex: 1 1 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-bottom: 1rem;
-}
-
-.footer-brand img {
-  max-width: 120px;
-  height: auto;
-  margin-bottom: 0.5rem;
-}
-
-footer p {
-  margin: 0;
-  font-size: 0.9rem;
-}
-
-footer h4 {
-  margin-bottom: 1rem;
-  font-size: 1.1rem;
-}
-
-footer ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-footer li {
-  margin: 0.3rem 0;
-}
-
-footer a {
-  color: var(--color-blanco);
-  text-decoration: none;
-  transition: color 0.3s;
-}
-
-footer a:hover {
-  text-decoration: underline;
-  color: var(--color-dorado);
-}
-
 /* ======================================
    BOTÓN VOLVER ARRIBA
 ====================================== */
