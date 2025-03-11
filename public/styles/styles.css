@@ -66,15 +66,15 @@
 .hero {
   position: relative;
   min-height: 100vh;
-  background:
-    linear-gradient(135deg, var(--primary), var(--secondary)),
+  background: 
+    linear-gradient(135deg, #002a40, #001b72),
     url('images/fondo.jpg') center/cover no-repeat fixed;
   background-blend-mode: multiply;
   display: flex;
   align-items: center;
   justify-content: center;
   text-align: center;
-  color: var(--azul --grana);
+  color: #ffffff;
 }
 
 /* Parallax solo en pantallas grandes */
