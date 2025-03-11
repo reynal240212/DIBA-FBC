@@ -34,32 +34,46 @@
       color: var(--amarillo);
     }
 
-    /* ================================
-       Navbar Fija
-    =================================*/
-    .navbar {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      z-index: 1000;
-      transition: background-color 0.3s, box-shadow 0.3s;
-    }
-    .navbar.scrolled {
-      background-color: var(--azul) !important;
-      box-shadow: 0 4px 8px var(--sombra);
-    }
-    .navbar-brand img {
-      width: 50px;
-      transition: transform 0.3s;
-    }
-    .navbar-brand img:hover {
-      transform: scale(1.1);
-    }
-    .nav-link {
-      font-weight: 600;
-    }
+   /* ======================================
+   NAVBAR FIJA CON CONTRASTE
+====================================== */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+  background: transparent;
+  padding: 0.75rem 1rem;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
 
+/* Estado cuando se hace scroll (fondo sólido con gradiente) */
+.navbar.scrolled {
+  background: linear-gradient(135deg, var(--azul), var(--azul-intenso)) !important;
+  box-shadow: 0 4px 8px var(--sombra);
+}
+
+/* Logo del navbar */
+.navbar-brand img {
+  width: 50px;
+  height: auto;
+  transition: transform 0.3s;
+}
+.navbar-brand img:hover {
+  transform: scale(1.1);
+}
+
+/* Enlaces del navbar */
+.nav-link {
+  font-weight: 600;
+  color: var(--blanco) !important;
+  margin: 0 0.5rem;
+  transition: color 0.3s;
+}
+.nav-link:hover {
+  color: var(--dorado) !important;
+}
    /* ================================
        Hero Section (Parallax)
 ================================= */
