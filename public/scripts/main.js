@@ -11,17 +11,17 @@ document.getElementById("btnBackToTop").addEventListener("click", function () {
   window.scrollTo({ top: 0, behavior: "smooth" });
 });
 
-// Navbar: cambia de fondo al hacer scroll
-const navbar = document.querySelector('.navbar');
-window.addEventListener('scroll', () => {
-  if (window.scrollY > 50) {
-    navbar.classList.remove('transparent');
-    navbar.classList.add('solid', 'navbar-dark');
-  } else {
-    navbar.classList.add('transparent');
-    navbar.classList.remove('solid', 'navbar-dark');
-  }
-});
+// (Eliminado: Funcionalidad de cambio de fondo del navbar al hacer scroll)
+// const navbar = document.querySelector('.navbar');
+// window.addEventListener('scroll', () => {
+//   if (window.scrollY > 50) {
+//     navbar.classList.remove('transparent');
+//     navbar.classList.add('solid', 'navbar-dark');
+//   } else {
+//     navbar.classList.add('transparent');
+//     navbar.classList.remove('solid', 'navbar-dark');
+//   }
+// });
 
 // Botón "Volver arriba" (segunda vez; puedes eliminar duplicados)
 const btnBackToTop = document.getElementById('btnBackToTop');
@@ -94,7 +94,7 @@ if (formRegistro) {
         // Cerrar modal de registro
         const modalRegistro = bootstrap.Modal.getInstance(document.getElementById('modalRegistro'));
         modalRegistro.hide();
-        window.location.href = 'login.html'; // O a profile.html, como prefieras
+        window.location.href = 'login.html'; // O a profile.html, según prefieras
       } else {
         alert('Error: ' + result.error);
       }
