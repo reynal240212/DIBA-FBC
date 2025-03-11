@@ -25,6 +25,8 @@ body {
   background: #f4f4f4;
   color: var(--dark);
   padding-top: 70px; /* Espacio para el navbar fijo */
+  box-sizing: border-box;
+  
 }
 
 /* ======================================
@@ -33,10 +35,11 @@ body {
 .navbar {
   position: fixed;
   top: 0;
+  left: 0;
   width: 100%;
   z-index: 1000;
-  transition: background-color 0.3s, box-shadow 0.3s;
-  background: transparent;
+  background: transparent; /* O un color/gradiente si lo prefieres */
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
   padding: 0.75rem 1rem;
 }
 
