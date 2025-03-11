@@ -104,7 +104,7 @@ if (formRegistro) {
     }
   });
 }
-// Script para alternar categorías y otros efectos 
+// Script para alternar categorías y otros efectos //
 
   // Alternar categorías
   const btns = document.querySelectorAll('.category-buttons .btn');
