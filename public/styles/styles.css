@@ -68,7 +68,7 @@
   min-height: 100vh;
   background:
     linear-gradient(135deg, var(--primary), var(--secondary)),
-    url('https://source.unsplash.com/featured/?soccer') center/cover no-repeat fixed;
+    url('images/fondo.jpg') center/cover no-repeat fixed;
   background-blend-mode: multiply;
   display: flex;
   align-items: center;
