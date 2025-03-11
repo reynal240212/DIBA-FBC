@@ -48,11 +48,11 @@
   transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-/* Estado cuando se hace scroll (fondo sólido con gradiente) */
+/* Estado cuando se hace scroll (fondo sólido con gradiente)
 .navbar.scrolled {
   background: linear-gradient(135deg, var(--azul), var(--azul-intenso)) !important;
   box-shadow: 0 4px 8px var(--sombra);
-}
+} */
 
 /* Logo del navbar */
 .navbar-brand img {
