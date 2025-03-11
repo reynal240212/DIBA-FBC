@@ -65,13 +65,16 @@
 ================================= */
 .hero {
   position: relative;
-  background: url('images/fondo.jpg') center/cover no-repeat;
-  min-height: 60vh;
+  min-height: 100vh;
+  background:
+    linear-gradient(135deg, var(--primary), var(--secondary)),
+    url('https://source.unsplash.com/featured/?soccer') center/cover no-repeat fixed;
+  background-blend-mode: multiply;
   display: flex;
   align-items: center;
   justify-content: center;
   text-align: center;
-  color: var(--blanco);
+  color: var(--azul --grana);
 }
 
 /* Parallax solo en pantallas grandes */
