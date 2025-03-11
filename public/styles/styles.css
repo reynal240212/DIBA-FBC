@@ -1,40 +1,44 @@
- /* ================================
-       Variables de Colores
-    =================================*/
-    :root {
-      --azul:   #003399; /* Azul oscuro */
-      --grana:  #0b0281; /* Grana intenso */
-      --amarillo: #ffd700; /* Amarillo dorado */
-      --fondo: #f4f4f4;
-      --blanco: #ffffff;
-      --sombra: rgba(0, 0, 0, 0.2);
-    }
+/* ======================================
+   VARIABLES DE COLOR (CORREGIDAS)
+====================================== */
+:root {
+  --azul:         #003399;  /* Azul oscuro */
+  --azul-intenso: #001b72;  /* Azul intenso (para gradientes si lo deseas) */
+  --grana:        #0b0281;  /* Grana intenso */
+  --amarillo:     #ffd700;  /* Amarillo dorado */
+  --dorado:       #ffd700;  /* Mismo valor que --amarillo, por consistencia */
+  --fondo:        #f4f4f4;  /* Fondo gris claro */
+  --fondo-gris:   #f4f4f4;  /* Usado en category-section */
+  --blanco:       #ffffff;  
+  --texto-claro:  #ffffff;  /* Para textos sobre fondos oscuros */
+  --sombra:       rgba(0, 0, 0, 0.2);
+}
 
-    /* ================================
-       Reset y Estilos Generales
-    =================================*/
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      scroll-behavior: smooth;
-    }
-    body {
-      font-family: 'Lato', sans-serif;
-      background-color: var(--fondo);
-      color: var(--azul);
-      padding-top: 70px; /* espacio para el navbar fijo */
-    }
-    a {
-      text-decoration: none;
-      color: var(--azul);
-      transition: color 0.3s ease;
-    }
-    a:hover {
-      color: var(--amarillo);
-    }
+/* ======================================
+   RESET Y ESTILOS GENERALES
+====================================== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  scroll-behavior: smooth;
+}
+body {
+  font-family: 'Lato', sans-serif;
+  background-color: var(--fondo);
+  color: var(--azul);
+  padding-top: 70px; /* espacio para navbar fijo */
+}
+a {
+  text-decoration: none;
+  color: var(--azul);
+  transition: color 0.3s ease;
+}
+a:hover {
+  color: var(--amarillo);
+}
 
-   /* ======================================
+/* ======================================
    NAVBAR FIJA CON CONTRASTE
 ====================================== */
 .navbar {
@@ -47,8 +51,7 @@
   padding: 0.75rem 1rem;
   transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
-
-/* Estado cuando se hace scroll (fondo sólido con gradiente)
+/* Si quisieras un gradiente al hacer scroll (opcional):
 .navbar.scrolled {
   background: linear-gradient(135deg, var(--azul), var(--azul-intenso)) !important;
   box-shadow: 0 4px 8px var(--sombra);
@@ -74,9 +77,10 @@
 .nav-link:hover {
   color: var(--dorado) !important;
 }
-   /* ================================
-       Hero Section (Parallax)
-================================= */
+
+/* ======================================
+   HERO (PARALLAX)
+====================================== */
 .hero {
   position: relative;
   min-height: 100vh;
@@ -90,328 +94,325 @@
   text-align: center;
   color: #ffffff;
 }
-
-/* Parallax solo en pantallas grandes */
 @media (min-width: 768px) {
   .hero {
     background-attachment: fixed;
   }
 }
-
-/* Overlay para mejorar legibilidad */
 .hero::before {
   content: "";
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.5); /* Mayor opacidad para mejor contraste */
+  background: rgba(0, 0, 0, 0.5);
 }
-
-/* Contenido por encima del overlay */
 .hero .hero-content {
   position: relative;
   z-index: 2;
   padding: 2rem;
 }
-
-/* Estilos del título */
 .hero .hero-title {
   font-family: 'Dancing Script', cursive;
   font-size: 3rem;
   margin-bottom: 1rem;
   color: var(--amarillo);
-  text-shadow: 3px 3px 8px rgba(0, 0, 0, 0.5); /* Mejora en sombras */
+  text-shadow: 3px 3px 8px rgba(0, 0, 0, 0.5);
 }
-
-/* Subtítulo */
 .hero .hero-subtitle {
   font-size: 1.2rem;
   max-width: 700px;
   margin: auto;
 }
-
-/* Botón */
 .hero .btn {
   margin-top: 1.5rem;
   font-weight: bold;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
 }
 
+/* ======================================
+   SECCIÓN: RESUMEN HISTORIA
+====================================== */
+#resumen-historia {
+  padding: 2rem 0;
+  background-color: #f9f9f9;
+}
+#resumen-historia h2 {
+  color: #004D73;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+#resumen-historia p {
+  font-size: 1rem;
+  color: #333;
+  line-height: 1.6;
+}
 
-    /* CSS personalizado para la sección */
-    #resumen-historia {
-      padding: 2rem 0;
-      background-color: #f9f9f9;
-    }
-    #resumen-historia h2 {
-      color: #004D73;
-      font-weight: bold;
-      text-transform: uppercase;
-    }
-    #resumen-historia p {
-      font-size: 1rem;
-      color: #333;
-      line-height: 1.6;
-    }
+/* ======================================
+   SECCIÓN SERVICIOS
+====================================== */
+#servicios {
+  padding: 60px 20px;
+}
+#servicios h2 {
+  text-align: center;
+  margin-bottom: 2rem;
+  font-weight: bold;
+}
+.card {
+  border: none;
+  border-radius: 8px;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 10px var(--sombra);
+}
+.card-title {
+  color: var(--azul);
+  font-weight: bold;
+}
 
-    /* ================================
-       Sección Servicios
-    =================================*/
-    #servicios {
-      padding: 60px 20px;
-    }
-    #servicios h2 {
-      text-align: center;
-      margin-bottom: 2rem;
-      font-weight: bold;
-    }
-    .card {
-      border: none;
-      border-radius: 8px;
-      transition: transform 0.3s, box-shadow 0.3s;
-    }
-    .card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 4px 10px var(--sombra);
-    }
-    .card-title {
-      color: var(--azul);
-      font-weight: bold;
-    }
- /* Tarjetas de partidos */
-    .match-card {
-      background: white;
-      border-radius: 12px;
-      overflow: hidden;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-      max-width: 320px; /* Limita el ancho máximo de la tarjeta */
-      margin: 0 auto;   /* Centra la tarjeta en su columna */
-    }
-    .match-card-top {
-      background: var(--grana);
-      color: var(--texto-claro);
-      padding: 1rem;
-      text-align: center;
-      position: relative;
-    }
-    .match-card-top img {
-      width: 70px; /* Escudos más grandes */
-      margin: 0 0.5rem;
-    }
-    .match-card-body {
-      padding: 1rem;
-      text-align: center;
-    }
-    .match-card-body .btn {
-      margin: 0.25rem;
-    }
+/* ======================================
+   TARJETAS DE PARTIDOS
+====================================== */
+.match-card {
+  background: var(--blanco);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  max-width: 320px;
+  margin: 0 auto;
+}
+.match-card-top {
+  background: var(--grana);
+  color: var(--texto-claro);
+  padding: 1rem;
+  text-align: center;
+  position: relative;
+}
+.match-card-top img {
+  width: 70px;
+  margin: 0 0.5rem;
+}
+.match-card-body {
+  padding: 1rem;
+  text-align: center;
+}
+.match-card-body .btn {
+  margin: 0.25rem;
+}
 
-    /* Encabezado opcional */
-    .header {
-      background: var(--amarillo);
-      color: var(--amarillo);
-      padding: 1rem;
-      text-align: center;
-      margin-bottom: 1rem;
-    }
-    .header h1 {
-      margin: 0;
-    }
-    /* ================================
-       Sección Equipo
-    =================================*/
-    #equipo {
-      padding: 60px 20px;
-      background: #f8f9fa;
-    }
-    #equipo h2 {
-      text-align: center;
-      margin-bottom: 2rem;
-      font-weight: bold;
-    }
-    #equipo img {
-      width: 180px;
-      height: 180px;
-      object-fit: cover;
-      box-shadow: 0 2px 6px var(--sombra);
-      transition: transform 0.3s;
-    }
-    #equipo img:hover {
-      transform: scale(1.05);
-    }
-    #equipo h5 {
-      margin-top: 1rem;
-      font-weight: bold;
-    }
+/* ======================================
+   ENCABEZADO OPCIONAL
+====================================== */
+.header {
+  background: var(--amarillo);
+  color: var(--amarillo);
+  padding: 1rem;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+.header h1 {
+  margin: 0;
+}
 
-    /* ================================
-       Sección Contacto
-    =================================*/
-    #contacto {
-      padding: 60px 20px;
-    }
-    #contacto h2 {
-      text-align: center;
-      margin-bottom: 2rem;
-      font-weight: bold;
-    }
-    #contacto .form-control:focus {
-      box-shadow: 0 0 0 0.2rem rgba(0,77,152,0.25);
-      border-color: var(--azul);
-    }
-    #contacto button {
-      background: var(--azul);
-      border: none;
-      transition: background 0.3s;
-    }
-    #contacto button:hover {
-      background: var(--amarillo);
-      color: var(--texto-blanco);
-    }
+/* ======================================
+   SECCIÓN EQUIPO
+====================================== */
+#equipo {
+  padding: 60px 20px;
+  background: #f8f9fa;
+}
+#equipo h2 {
+  text-align: center;
+  margin-bottom: 2rem;
+  font-weight: bold;
+}
+#equipo img {
+  width: 180px;
+  height: 180px;
+  object-fit: cover;
+  box-shadow: 0 2px 6px var(--sombra);
+  transition: transform 0.3s;
+}
+#equipo img:hover {
+  transform: scale(1.05);
+}
+#equipo h5 {
+  margin-top: 1rem;
+  font-weight: bold;
+}
 
-    /* ================================
-       Sección Patrocinadores
-    =================================*/
-    #patrocinadores {
-      text-align: center;
-      padding: 50px 0;
-      background-color: var(--fondo);
-    }
-    #patrocinadores h2 {
-      margin-bottom: 2rem;
-      font-weight: bold;
-      color: var(--azul);
-    }
-    #patrocinadores .patrocinador {
-      margin: 1rem;
-    }
-    #patrocinadores .patrocinador img {
-      width: 150px;
-      height: auto;
-      transition: transform 0.3s;
-    }
-    #patrocinadores .patrocinador img:hover {
-      transform: scale(1.05);
-    }
-    #patrocinadores .patrocinador p {
-      margin-top: 0.5rem;
-      font-weight: bold;
-      color: var(--azul);
-    }
-/* Estilos para la sección Fundación */
+/* ======================================
+   SECCIÓN CONTACTO
+====================================== */
+#contacto {
+  padding: 60px 20px;
+}
+#contacto h2 {
+  text-align: center;
+  margin-bottom: 2rem;
+  font-weight: bold;
+}
+#contacto .form-control:focus {
+  box-shadow: 0 0 0 0.2rem rgba(0,77,152,0.25);
+  border-color: var(--azul);
+}
+#contacto button {
+  background: var(--azul);
+  border: none;
+  transition: background 0.3s;
+}
+#contacto button:hover {
+  background: var(--amarillo);
+  color: var(--blanco);
+}
+
+/* ======================================
+   SECCIÓN PATROCINADORES
+====================================== */
+#patrocinadores {
+  text-align: center;
+  padding: 50px 0;
+  background-color: var(--fondo);
+}
+#patrocinadores h2 {
+  margin-bottom: 2rem;
+  font-weight: bold;
+  color: var(--azul);
+}
+#patrocinadores .patrocinador {
+  margin: 1rem;
+}
+#patrocinadores .patrocinador img {
+  width: 150px;
+  height: auto;
+  transition: transform 0.3s;
+}
+#patrocinadores .patrocinador img:hover {
+  transform: scale(1.05);
+}
+#patrocinadores .patrocinador p {
+  margin-top: 0.5rem;
+  font-weight: bold;
+  color: var(--azul);
+}
+
+/* ======================================
+   SECCIÓN FUNDACIÓN
+====================================== */
 #fundacion {
-      padding: 60px 20px;
-      background-color: #fff;
-    }
-    #fundacion h2 {
-      color: var(--azul);
-      margin-bottom: 20px;
-    }
-    #fundacion p {
-      font-size: 1rem;
-      line-height: 1.6;
-      color: #333;
-    }
-    #fundacion .btn {
-      background-color: var(--amarillo);
-      border: none;
-      color: var(--azul);
-      transition: background-color 0.3s ease;
-    }
-    #fundacion .btn:hover {
-      background-color: #e6b800;
-    }
-    #fundacion img {
-      border-radius: 8px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    }
-    
-    /* ================================
-       Footer
-    =================================*/
-    footer {
-      background: var(--azul);
-      color: var(--amarillo);
-      padding: 2rem 1rem;
-      text-align: center;
-    }
-    footer p {
-      margin: 0;
-    }
-    footer a {
-      color: var(--amarillo);
-      text-decoration: none;
-      transition: color 0.3s;
-    }
-    footer a:hover {
-      color: var(--azul);
-      text-decoration: underline;
-    }
-    .footer-brand {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      margin-bottom: 1rem;
-    }
-    .footer-brand img {
-      width: 60px;
-      margin-bottom: 0.5rem;
-    }
+  padding: 60px 20px;
+  background-color: var(--blanco);
+}
+#fundacion h2 {
+  color: var(--azul);
+  margin-bottom: 20px;
+}
+#fundacion p {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #333;
+}
+#fundacion .btn {
+  background-color: var(--amarillo);
+  border: none;
+  color: var(--azul);
+  transition: background-color 0.3s ease;
+}
+#fundacion .btn:hover {
+  background-color: #e6b800;
+}
+#fundacion img {
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
 
-    /* ================================
-       Responsivo
-    =================================*/
-    @media (max-width: 768px) {
-      .hero .hero-title {
-        font-size: 2.5rem;
-      }
-      .hero .hero-subtitle {
-        font-size: 1rem;
-      }
-      #equipo img {
-        width: 150px;
-        height: 150px;
-      }
-    }
-/*==================================
-Estilos para pagona de ficha tecnica
-==================================*/
- /* ===============================
-       SECCIÓN: JUGADORES POR CATEGORÍA
-    =============================== */
-    .category-section {
-      padding: 2rem 0;
-      background: var(--fondo-gris);
-    }
-    .category-section h1 {
-      text-align: center;
-      margin-bottom: 2rem;
-      color: var(--grana);
-      font-weight: bold;
-    }
-    .category-buttons {
-      text-align: center;
-      margin-bottom: 2rem;
-    }
-    .category-buttons .btn {
-      margin: 0 0.5rem;
-      transition: transform 0.3s, background-color 0.3s;
-    }
-    .category-buttons .btn:hover {
-      transform: scale(1.05);
-    }
-    .category-buttons .btn.active {
-      background-color: var(--grana);
-      color: var(--texto-claro);
-    }
-    .category-container {
-      display: none;
-    }
-    .category-container.active {
-      display: block;
-    }
+/* ======================================
+   FOOTER
+====================================== */
+footer {
+  background: var(--azul);
+  color: var(--amarillo);
+  padding: 2rem 1rem;
+  text-align: center;
+}
+footer p {
+  margin: 0;
+}
+footer a {
+  color: var(--amarillo);
+  text-decoration: none;
+  transition: color 0.3s;
+}
+footer a:hover {
+  color: var(--azul);
+  text-decoration: underline;
+}
+.footer-brand {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+.footer-brand img {
+  width: 60px;
+  margin-bottom: 0.5rem;
+}
+
+/* ======================================
+   RESPONSIVIDAD
+====================================== */
+@media (max-width: 768px) {
+  .hero .hero-title {
+    font-size: 2.5rem;
+  }
+  .hero .hero-subtitle {
+    font-size: 1rem;
+  }
+  #equipo img {
+    width: 150px;
+    height: 150px;
+  }
+}
+
+/* ======================================
+   SECCIÓN: JUGADORES POR CATEGORÍA
+====================================== */
+.category-section {
+  padding: 2rem 0;
+  background: var(--fondo-gris);
+}
+.category-section h1 {
+  text-align: center;
+  margin-bottom: 2rem;
+  color: var(--grana);
+  font-weight: bold;
+}
+.category-buttons {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+.category-buttons .btn {
+  margin: 0 0.5rem;
+  transition: transform 0.3s, background-color 0.3s;
+}
+.category-buttons .btn:hover {
+  transform: scale(1.05);
+}
+.category-buttons .btn.active {
+  background-color: var(--grana);
+  color: var(--texto-claro);
+}
+.category-container {
+  display: none;
+}
+.category-container.active {
+  display: block;
+}
+
 /* Estilo para el espacio vacío destinado a subir fotos */
 .empty-photo {
-  height: 200px; /* Altura ajustable */
+  height: 200px;
   background-color: #e9ecef;
   display: flex;
   align-items: center;
@@ -419,121 +420,54 @@ Estilos para pagona de ficha tecnica
   color: #6c757d;
   font-size: 1.2rem;
 }
-    /* Tarjetas de jugador extra */
-    .player-card {
-      background-color: #090057; /* Fondo de la parte inferior de la tarjeta */
-      text-align: center;
-      padding: 20px;
-      position: relative;
-      color: #fff;
-      border-radius: 0 0 8px 8px; 
-    }
-    .position-tag {
-      background-color: #d39b00; 
-      color: #fff;
-      font-weight: bold;
-      padding: 5px 15px;
-      position: absolute;
-      top: -15px;
-      left: 50%;
-      transform: translateX(-50%);
-      white-space: nowrap;
-      border: 2px solid #fff;
-      clip-path: polygon(15% 0, 85% 0, 100% 50%, 85% 100%, 15% 100%, 0 50%);
-    }
-    .player-name {
-      font-size: 20px;
-      font-weight: bold;
-      margin-top: 20px;
-    }
-    .swipe-carousel {
-      --rm-swipe-carousel-bg-color: transparent;
-      --rm-swipe-carousel-height-default: auto;
-      --rm-swipe-carousel-content-align: flex-start;
-      /* Otras variables que maneje tu plugin */
-      position: relative;
-      user-select: none;
-      -webkit-user-drag: none;
-      -webkit-tap-highlight-color: rgba(0,0,0,0);
-      touch-action: pan-y;
-    }
-    
-    .swipe-carousel__content {
-      display: flex;
-      flex-direction: row;
-      gap: var(--rm-swipe-carousel-gap);
-      align-items: var(--rm-swipe-carousel-content-align);
-      width: max-content;
-      transition: var(--rm-swipe-carousel-content-transition, transform .3s ease-in-out);
-      scroll-padding-inline: var(--rm-swipe-carousel-scroll-padding-inline-default, 1.5rem);
-    }
-    .empty-photo {
-      height: 200px;
-      background-color: #e9ecef;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #6c757d;
-      font-size: 1.2rem;
-    }
-    .player-card {
-      background-color: #090057; /* Azul oscuro */
-      text-align: center;
-      padding: 20px;
-      position: relative;
-      color: #fff;
-      border-radius: 0 0 8px 8px;
-    }
-    .position-tag {
-      background-color: var(--color-dorado); /* Dorado */
-      color: #fff;
-      font-weight: bold;
-      padding: 5px 15px;
-      position: absolute;
-      top: -15px;
-      left: 50%;
-      transform: translateX(-50%);
-      white-space: nowrap;
-      border: 2px solid #fff;
-      clip-path: polygon(15% 0, 85% 0, 100% 50%, 85% 100%, 15% 100%, 0 50%);
-    }
-    .player-name {
-      font-size: 20px;
-      font-weight: bold;
-      margin-top: 20px;
-    }
-        
 
-    /* ======================================
-       SECCIÓN: CATEGORÍAS
-    ====================================== */
-    .category-section {
-      padding: 2rem 0;
-    }
-    .category-section h1 {
-      text-align: center;
-      margin-bottom: 2rem;
-      color: #800020;
-      font-weight: bold;
-    }
-    .category-buttons {
-      text-align: center;
-      margin-bottom: 2rem;
-    }
-    .category-buttons .btn {
-      margin: 0 0.5rem;
-      transition: transform 0.3s, background-color 0.3s;
-    }
-    .category-buttons .btn:hover {
-      transform: scale(1.05);
-    }
-    .category-buttons .btn.active {
-      background-color: #800020;
-      color: #fff;
-    }
-    .category-container {
-      display: none;
-    }
-    .category-container.active {
-      display: block;
-    }
+/* Tarjetas de jugador extra (Hexágono) */
+.player-card {
+  background-color: #090057; /* Azul oscuro */
+  text-align: center;
+  padding: 20px;
+  position: relative;
+  color: #fff;
+  border-radius: 0 0 8px 8px; 
+}
+.position-tag {
+  background-color: var(--dorado); /* Dorado */
+  color: #fff;
+  font-weight: bold;
+  padding: 5px 15px;
+  position: absolute;
+  top: -15px;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  border: 2px solid #fff;
+  clip-path: polygon(15% 0, 85% 0, 100% 50%, 85% 100%, 15% 100%, 0 50%);
+}
+.player-name {
+  font-size: 20px;
+  font-weight: bold;
+  margin-top: 20px;
+}
+
+/* ======================================
+   SWIPE CAROUSEL
+====================================== */
+.swipe-carousel {
+  --rm-swipe-carousel-bg-color: transparent;
+  --rm-swipe-carousel-height-default: auto;
+  --rm-swipe-carousel-content-align: flex-start;
+  position: relative;
+  user-select: none;
+  -webkit-user-drag: none;
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
+  touch-action: pan-y;
+}
+.swipe-carousel__content {
+  display: flex;
+  flex-direction: row;
+  gap: var(--rm-swipe-carousel-gap);
+  align-items: var(--rm-swipe-carousel-content-align);
+  width: max-content;
+  transition: var(--rm-swipe-carousel-content-transition, transform .3s ease-in-out);
+  scroll-padding-inline: var(--rm-swipe-carousel-scroll-padding-inline-default, 1.5rem);
+}
