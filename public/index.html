@@ -11,334 +11,54 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
 
   <!-- Font Awesome -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+  />
 
   <!-- Animate.css -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+  />
 
-  <!-- AOS para efectos de scroll (opcional) -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" />
+  <!-- AOS (opcional) -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css"
+  />
 
+  <!-- Tus estilos (puedes usar styles.css o un bloque <style>) -->
   <link rel="stylesheet" href="styles/styles.css" />
-  <script src="//code.tidio.co/jckoszxyxvs7izkxulr9bk5cbcspdjtj.js" async></script>
 </head>
 <body>
-  <!-- Botón Volver Arriba -->
-  <button id="btnBackToTop" title="Volver arriba">
-    <i class="fas fa-arrow-up"></i>
-  </button>
+  <!-- Contenedor para el Navbar -->
+  <div id="navbar-container"></div>
 
-  <!-- Hero Section -->
-  <section class="hero animate__animated animate__fadeInDown">
+  <!-- HERO SECTION (ejemplo) -->
+  <header id="inicio" class="hero animate__animated animate__fadeInDown">
     <div class="container hero-content">
       <h1 class="hero-title">Explora Nuestro Mundo</h1>
       <p class="hero-subtitle lead">
         Descubre los momentos históricos y logros que han definido a DIBA FBC. Un recorrido lleno de pasión y victorias.
       </p>
     </div>
-  </section>
+  </header>
 
-  <!-- Sección Resumen de Historia en Index -->
-<section id="resumen-historia" class="container my-5">
-  <div class="row align-items-center">
-    <!-- Imagen (puedes reemplazarla por una tuya) -->
-    <div class="col-md-6 mb-4 mb-md-0">
-      <img src="images/ESCUDO.png" alt="DIBA FBC - Historia" class="img-fluid rounded shadow">
-    </div>
-    <!-- Texto Resumen -->
-    <div class="col-md-6">
-      <h2 class="mb-3">Nuestra Historia</h2>
-      <p>
-        Fundado en <strong>2012</strong>, <strong>DIBA FBC</strong> ha forjado una trayectoria llena de éxitos y superación. 
-        El club se caracteriza por formar talentos y promover valores como la disciplina, el respeto y el trabajo en equipo.
-      </p>
-      <p>
-        A lo largo de los años, hemos competido en torneos locales, dejando huella en cada temporada 
-        y construyendo un legado que trasciende más allá de las canchas.
-      </p>
-      <!-- Botón que dirige a la página completa de Historia -->
-      <a href="Historia.html" class="btn btn-primary mt-3">
-        Conoce más
-      </a>
-    </div>
-  </div>
-</section>
+  <!-- ... Resto del contenido de tu página ... -->
 
-  <!-- Sección Servicios -->
-  <section id="servicios" class="container my-5 animate__animated animate__fadeInUp">
-    <h2 class="text-center">Nuestros Servicios</h2>
-    <div class="row g-4 mt-4">
-      <div class="col-md-4">
-        <div class="card shadow h-100">
-          <div class="card-body">
-            <h5 class="card-title">Entrenamiento</h5>
-            <p class="card-text">
-              Potenciamos la técnica y táctica de cada jugador, preparándolos para competir al más alto nivel.
-            </p>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-4">
-        <div class="card shadow h-100">
-          <div class="card-body">
-            <h5 class="card-title">Participación en Torneos</h5>
-            <p class="card-text">
-              Representamos a nuestra comunidad en torneos locales, demostrando competitividad y espíritu deportivo en cada desafío.
-            </p>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-4">
-        <div class="card shadow h-100">
-          <div class="card-body">
-            <h5 class="card-title">Desarrollo Integral</h5>
-            <p class="card-text">
-              Fomentamos el desarrollo personal de nuestros jugadores, inculcando valores y liderazgo dentro y fuera del campo.
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
- <!-- Contenedor principal -->
-<div class="container my-5">
-  <!-- Fila responsive: 3 col en grande, 2 en mediano, 1 en móvil -->
-  <div class="row g-4">
-    
-    <!-- Tarjeta 1: DIBA FBC vs Barranquillera -->
-    <div class="col-12 col-sm-6 col-lg-4">
-      <div class="match-card p-3 text-center border rounded shadow-sm">
-        <div class="match-card-top d-flex justify-content-center align-items-center gap-3">
-          <img src="images/ESCUDO.png" alt="DIBA FBC" class="team-logo">
-          <img src="https://escuelabarranquillera.com/wp-content/uploads/2019/07/logo-escuela-barranquilla-2.png" alt="Escuela Barranquillera de Fútbol" class="team-logo">
-        </div>
-        <div class="mt-2">
-          <strong>Amistoso 2014-2015-2016</strong>
-        </div>
-        <div class="match-card-body mt-3">
-          <h4 class="mb-2">Domingo, 09 de Marzo 2025 - 09:00 AM</h4>
-          <p class="text-muted mb-1">Estadio: Parque de los Sueños</p>
-          <p class="text-muted mb-1">Valor: $ 4000</p>
-          <button class="btn btn-warning" data-bs-toggle="collapse" data-bs-target="#resultado1">Resultado</button>
-        </div>
-        <!-- Contenido colapsable -->
-        <div id="resultado1" class="collapse mt-3">
-          <h5>Resultado: <strong>DIBA FBC 1 - 1 Barranquillera</strong></h5>
-          <p>Goles: ZAID RICARDO (1)</p>
-          <iframe width="100%" height="200" src="https://www.youtube.com/embed/VIDEO_ID" frameborder="0" allowfullscreen></iframe>
-        </div>
-      </div>
-    </div>
-
-    <!-- Tarjeta 2: DIBA FBC vs Quiroz FC -->
-    <div class="col-12 col-sm-6 col-lg-4">
-      <div class="match-card p-3 text-center border rounded shadow-sm">
-        <div class="match-card-top d-flex justify-content-center align-items-center gap-3">
-          <img src="images/ESCUDO.png" alt="DIBA FBC" class="team-logo">
-          <img src="https://scontent.ftkd1-1.fna.fbcdn.net/v/t39.30808-1/294902630_526417012584396_3725388142398526323_n.jpg?stp=dst-jpg_p200x200_tt6&_nc_cat=102&ccb=1-7&_nc_sid=f907e8&_nc_ohc=GsYocxBYQ6YQ7kNvgHcqJK_&_nc_oc=AdiM9-4Yc5Ir3jXx8OvAiYBhwmt_vHPpYXP7lElyEcVNxjJ1PJD5tT3hHD8zlDZgZBs&_nc_zt=24&_nc_ht=scontent.ftkd1-1.fna&_nc_gid=AB1Voij-pfXXuP7rhiCLOT5&oh=00_AYHgsM7A-QIb2NZ2K2ZA5u4-8gd_7dwWSm3IEVwMmGzmXQ&oe=67D4D8FA" alt="Quiroz FC" class="team-logo">
-        </div>
-        <div class="mt-2">
-          <strong>Amistoso 2012-2013</strong>
-        </div>
-        <div class="match-card-body mt-3">
-          <h4 class="mb-2">Domingo, 09 de Marzo 2025 - 09:00 AM</h4>
-          <p class="text-muted mb-1">Lugar: Parque de los Sueños</p>
-          <button class="btn btn-warning" data-bs-toggle="collapse" data-bs-target="#resultado2">Resultado</button>
-        </div>
-        <!-- Contenido colapsable -->
-        <div id="resultado2" class="collapse mt-3">
-          <h5>Resultado: <strong>DIBA FBC 3 - 2 Quiroz FC</strong></h5>
-          <p>Goles: DILAN SANCHEZ (2), OSCAR LOPEZ (1)</p>
-          <div id="detalle1" class="detalle">
-            <p><strong>Resumen:</strong> Un partido emocionante con un gol en los últimos minutos.</p>
-            <blockquote class="instagram-media" data-instgrm-captioned data-instgrm-permalink="https://www.instagram.com/reel/DG_4cDzuOM9/?utm_source=ig_embed&amp;utm_campaign=loading" data-instgrm-version="14" style="background:#FFF; border:0; border-radius:3px; box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15); margin: 1px; max-width:540px; min-width:326px; padding:0; width:99.375%; width:-webkit-calc(100% - 2px); width:calc(100% - 2px);">
-            </blockquote>
-        </div>
-    
-        <script async src="//www.instagram.com/embed.js"></script>
-        <script>
-            function toggleDetalle(id) {
-                var detalle = document.getElementById(id);
-                if (detalle.style.display === "none" || detalle.style.display === "") {
-                    detalle.style.display = "block";
-                } else {
-                    detalle.style.display = "none";
-                }
-            }
-        </script>
-        </div>
-      </div>
-    </div>
-
-  </div>
-</div>
-
-  </div> <!-- fin row -->
-</div> <!-- fin container -->
-  <!-- Sección Equipo -->
-  <section id="equipo" class="container my-5 animate__animated animate__fadeInUp">
-    <h2 class="text-center">CUERPO TECNICO</h2>
-    <div class="row text-center mt-4">
-      <div class="col-md-4 mb-4">
-        <img src="profesor.jpg" class="rounded-circle mb-3" alt="Entrenador DIBA FBC" loading="lazy">
-        <h5>Reinaldo Perez</h5>
-        <p>Director Técnico</p>
-      </div>
-      <div class="col-md-4 mb-4">
-        <img src="asistente.jpg" class="rounded-circle mb-3" alt="Asistente Técnico" loading="lazy">
-        <h5>Reinaldo Perez Navas</h5>
-        <p>Técnico</p>
-      </div>
-      <div class="col-md-4 mb-4">
-        <img src="fisioterapeuta.jpg" class="rounded-circle mb-3" alt="Fisioterapeuta DIBA FBC" loading="lazy">
-        <h5>Aldo Espinoza</h5>
-        <p>Técnico</p>
-      </div>
-    </div>
-  </section>
-<!-- Sección Fundación -->
-<section id="fundacion" class="container my-5">
-  <div class="row align-items-center">
-    <!-- Imagen representativa de la fundación -->
-    <div class="col-md-6 mb-4 mb-md-0">
-      <!-- Si deseas que la imagen se abra en una pestaña nueva al hacer clic -->
-      <a href="unnamed.jpg" target="_blank">
-        <img 
-          src="unnamed.jpg" 
-          alt="Fundación Tierra que Emana Leche y Miel" 
-          class="img-fluid w-100 rounded shadow"
-        >
-      </a>
-    </div>
-      <!-- Información de la fundación -->
-      <div class="col-md-6">
-        <h2 class="mb-4">
-          <i class="fas fa-hand-holding-heart me-2"></i>
-          Fundación Tierra que Emana Leche y Miel
-        </h2>
-        <p>
-          La <strong>Fundación Tierra que Emana Leche y Miel</strong> (FUNTILEMI) es una entidad sin ánimo de lucro registrada en la Cámara de Comercio de Barranquilla. Su actividad se enmarca en “actividades de otras asociaciones n.c.p.”
-        </p>
-        <p>
-          Fundada el <strong>28 de marzo de 2016</strong>, tiene su sede en <strong>Carrera 30A, Carrera 1B #245, Apartamento 701, Urbanización Villa Campestre, Barranquilla, Atlántico</strong>. Su representante legal es <strong>Alba Marina Orozco</strong>.
-        </p>
-        <p>
-          El nombre evoca una expresión bíblica que describe una tierra de abundancia, simbolizando el compromiso con el bienestar y desarrollo de la comunidad.
-        </p>
-        <div class="mt-4">
-          <a href="https://colombiapymes.com/empresas/fundacion-tierra-que-emana-leche-y-miel-sigla-funtilemi_id_EF8E1398F2821C3F" target="_blank" class="btn btn-warning">
-            <i class="fas fa-external-link-alt me-1"></i> Más Información
-          </a>
-        </div>
-      </div>
-    </div>
-  </section>
-  <!-- Sección Patrocinadores -->
-  <section id="patrocinadores" class="animate__animated animate__fadeInUp" style="text-align: center; padding: 50px 0; background-color: var(--fondo);">
-    <div class="container">
-      <h2>Nuestros Patrocinadores</h2>
-      <div style="display: flex; justify-content: center; align-items: center; gap: 50px; flex-wrap: wrap; padding: 20px;">
-        <!-- Okey Sport -->
-        <div class="patrocinador">
-          <a href="https://okeysport.com/" target="_blank">
-            <img src="https://okeysport.com/cdn/shop/files/Logo_OKEY.svg?v=1721155737&width=100" alt="Logo de Okey Sport" style="width: 150px; height: auto;">
-          </a>
-          <p>Okey Sport</p>
-        </div>
-        <!-- Chiro Deportes Funtilemi -->
-        <div class="patrocinador">
-          <a href="https://www.facebook.com/chirodeportes/" target="_blank">
-            <img src="https://tse3.mm.bing.net/th?id=OIP.2pbPD48ADuuuNSlSKtgEpwHaHa&pid=Api" alt="Logo de Chiro Deportes" style="width: 150px; height: auto;">
-          </a>
-          <p>Chiro Deportes</p>
-        </div>
-        <!-- Calzado Orpis -->
-        <div class="patrocinador">
-          <a href="https://www.instagram.com/calzadoorpis/" target="_blank">
-            <img src="https://i.pinimg.com/originals/2d/36/e1/2d36e15e7ad8ab91b41f3db0eff0f7ac.png" alt="Logo de Calzado Orpis" style="width: 150px; height: auto;">
-          </a>
-          <p>Calzado Orpis</p>
-        </div>
-      </div>
-    </div>
-  
-  <!-- Footer -->
-  <footer class="animate__animated animate__fadeInUp">
-    <div class="container">
-      <div class="footer-brand">
-        <img src="images/ESCUDO.png" alt="Escudo DIBA FBC" loading="lazy">
-        <p class="mt-2">&copy; 2025 DIBA FBC. Todos los derechos reservados.</p>
-      </div>
-      <div class="row text-center mt-4">
-        <div class="col-md-4 mb-3 mb-md-0">
-          <h4>Sobre el Club</h4>
-          <ul class="list-unstyled">
-            <li><a href="#">Historia</a></li>
-          </ul>
-        </div>
-        <div class="col-md-4 mb-3 mb-md-0">
-          <h4>Redes Sociales</h4>
-          <ul class="list-unstyled">
-            <li>
-              <a href="https://www.facebook.com/profile.php?id=100071991100146" target="_blank">
-                <i class="fab fa-facebook"></i> Facebook
-              </a>
-            </li>
-            <li>
-              <a href="https://www.instagram.com/diba_fbc_oficial" target="_blank">
-                <i class="fab fa-instagram"></i> Instagram
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div class="col-md-4">
-          <h4>Contacto</h4>
-          <ul class="list-unstyled">
-            <li><a href="#">Atención al Cliente</a></li>
-            <li><a href="#">Prensa</a></li>
-            <li><a href="#">Oficinas</a></li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </footer>
+  <!-- Contenedor para el Footer -->
+  <div id="footer-container"></div>
 
   <!-- Bootstrap JS Bundle -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <!-- Script para alternar categorías -->
-  <script>
-    // Alternar categorías (si se requiere funcionalidad dinámica)
-    const btns = document.querySelectorAll('.category-buttons .btn');
-    const containers = document.querySelectorAll('.category-container');
-    btns.forEach(btn => {
-      btn.addEventListener('click', () => {
-        btns.forEach(b => b.classList.remove('active'));
-        containers.forEach(cont => cont.classList.remove('active'));
-        btn.classList.add('active');
-        const id = btn.getAttribute('data-category');
-        document.getElementById(id).classList.add('active', 'animate__animated', 'animate__fadeIn');
-      });
-    });
+  
+  <!-- Script que carga el navbar y footer -->
+  <script src="scripts/loadComponents.js"></script>
 
-    // Navbar: cambia de fondo al hacer scroll
-    const navbar = document.querySelector('.navbar');
-    window.addEventListener('scroll', () => {
-      if (window.scrollY > 50) {
-        navbar.classList.add('scrolled');
-      } else {
-        navbar.classList.remove('scrolled');
-      }
-    });
-
-    // Botón "Volver arriba"
-    const btnBackToTop = document.getElementById('btnBackToTop');
-    window.addEventListener('scroll', () => {
-      btnBackToTop.style.display = (window.scrollY > 300) ? 'block' : 'none';
-    });
-    btnBackToTop.addEventListener('click', () => {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
-  </script>
+  <!-- Script principal (opcional: main.js) -->
+  <script src="scripts/main.js"></script>
 </body>
 </html>
