@@ -1,18 +1,18 @@
-/*==============================
-  VARIABLES DE COLOR
-==============================*/
+/* ======================================
+   VARIABLES DE COLOR
+====================================== */
 :root {
-  --color-primario: #002a40;   /* Azul oscuro */
-  --color-secundario: #001b72; /* Azul más intenso */
+  --color-primario: #002a40;    /* Azul oscuro */
+  --color-secundario: #001b72;    /* Azul más intenso */
   --color-blanco: #ffffff;
   --color-dorado: #FFD700;
   --color-oscuro: #333333;
   --sombra: rgba(0, 0, 0, 0.3);
 }
 
-/*==============================
-  RESETEO BÁSICO
-==============================*/
+/* ======================================
+   RESETEO BÁSICO Y ESTILOS GLOBALES
+====================================== */
 * {
   margin: 0;
   padding: 0;
@@ -24,12 +24,12 @@ body {
   font-family: 'Lato', sans-serif;
   background: #f4f4f4;
   color: var(--color-oscuro);
-  padding-top: 70px; /* espacio para navbar fijo */
+  padding-top: 70px; /* Espacio para navbar fijo */
 }
 
-/*==============================
-  NAVBAR
-==============================*/
+/* ======================================
+   NAVBAR
+====================================== */
 .navbar {
   position: fixed;
   top: 0;
@@ -39,26 +39,24 @@ body {
   transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-/* Navbar transparente */
+/* Estado transparente */
 .navbar.transparent {
   background-color: transparent !important;
   box-shadow: none;
 }
 
-/* Navbar con fondo sólido */
+/* Estado sólido con gradiente */
 .navbar.solid {
   background: linear-gradient(135deg, var(--color-primario), var(--color-secundario)) !important;
   box-shadow: 0 2px 6px var(--sombra);
 }
 
-/* Logo de la marca en el navbar */
 .navbar-brand img {
   width: 50px;
   height: auto;
   margin-right: 0.5rem;
 }
 
-/* Ajustes para los enlaces del navbar */
 .navbar-nav .nav-link {
   color: var(--color-blanco) !important;
   margin: 0 0.5rem;
@@ -69,13 +67,12 @@ body {
   color: var(--color-dorado) !important;
 }
 
-/*==============================
-  HERO
-==============================*/
+/* ======================================
+   HERO
+====================================== */
 .hero {
   position: relative;
   min-height: 100vh;
-  /* Ajusta la ruta de fondo.jpg si está en public/images/fondo.jpg */
   background:
     linear-gradient(135deg, var(--color-primario), var(--color-secundario)),
     url('images/fondo.jpg') center/cover no-repeat fixed;
@@ -87,7 +84,6 @@ body {
   color: var(--color-blanco);
 }
 
-/* Overlay oscuro para mayor contraste */
 .hero::before {
   content: "";
   position: absolute;
@@ -96,7 +92,7 @@ body {
 }
 
 .hero .container {
-  position: relative; /* Para que el contenido esté por encima del overlay */
+  position: relative; /* Contenido sobre el overlay */
   z-index: 1;
 }
 
@@ -111,26 +107,35 @@ body {
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4);
 }
 
-/*==============================
-  FOOTER
-==============================*/
+/* Responsividad para el hero */
+@media (max-width: 768px) {
+  .hero h1 {
+    font-size: 2.5rem;
+  }
+  .hero p {
+    font-size: 1.2rem;
+  }
+}
+
+/* ======================================
+   FOOTER
+====================================== */
 footer {
   background: linear-gradient(135deg, var(--color-primario), var(--color-secundario));
   color: var(--color-blanco);
   padding: 2rem 1rem;
   margin-top: 2rem;
-  text-align: center; /* Centra todo el contenido */
+  text-align: center;
 }
 
-/* Ajuste de la disposición interna del footer */
+/* Estructura interna del footer */
 footer .container {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center; /* Centra las columnas horizontalmente */
-  gap: 2rem;              /* Espacio entre columnas */
+  justify-content: center;
+  gap: 2rem;
 }
 
-/* Marca / logo en el footer */
 .footer-brand {
   flex: 1 1 100%;
   display: flex;
@@ -150,7 +155,6 @@ footer p {
   font-size: 0.9rem;
 }
 
-/* Estilos para columnas en el footer */
 footer h4 {
   margin-bottom: 1rem;
   font-size: 1.1rem;
@@ -166,7 +170,6 @@ footer li {
   margin: 0.3rem 0;
 }
 
-/* Links del footer */
 footer a {
   color: var(--color-blanco);
   text-decoration: none;
@@ -178,9 +181,9 @@ footer a:hover {
   color: var(--color-dorado);
 }
 
-/*==============================
-  BOTÓN VOLVER ARRIBA
-==============================*/
+/* ======================================
+   BOTÓN VOLVER ARRIBA
+====================================== */
 #btnBackToTop {
   display: none;
   position: fixed;
@@ -199,55 +202,63 @@ footer a:hover {
   transition: opacity 0.3s;
 }
 
-/*==============================
-  TARJETAS (partidos, etc.)
-==============================*/
+/* ======================================
+   TARJETAS (Ej: Partidos)
+====================================== */
 .match-card-top .team-logo {
   width: 60px;
   height: 60px;
   object-fit: cover;
 }
 
-/*==============================
-  SECCIÓN: CATEGORÍAS (opcional)
-==============================*/
+/* ======================================
+   SECCIÓN: CATEGORÍAS (Opcional)
+====================================== */
 .category-section {
   padding: 2rem 0;
 }
+
 .category-section h1 {
   text-align: center;
   margin-bottom: 2rem;
   color: #800020;
   font-weight: bold;
 }
+
 .category-buttons {
   text-align: center;
   margin-bottom: 2rem;
 }
+
 .category-buttons .btn {
   margin: 0 0.5rem;
   transition: transform 0.3s, background-color 0.3s;
 }
+
 .category-buttons .btn:hover {
   transform: scale(1.05);
 }
+
 .category-buttons .btn.active {
   background-color: #800020;
   color: #fff;
 }
+
 .category-container {
   display: none;
 }
+
 .category-container.active {
   display: block;
 }
 
-/*==============================
-  MODALES DE LOGIN Y REGISTRO
-==============================*/
+/* ======================================
+   MODALES (LOGIN Y REGISTRO)
+====================================== */
 .modal-header.bg-dark {
   background: #000 !important;
 }
+
 .modal-header.bg-dark.text-white .btn-close {
   filter: invert(1);
 }
