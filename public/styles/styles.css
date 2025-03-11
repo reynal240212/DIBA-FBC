@@ -1,14 +1,30 @@
-
 /* ======================================
    VARIABLES DE COLOR
 ====================================== */
 :root {
-  --primary: #002a40;      /* Azul oscuro */
-  --secondary: #001b72;    /* Azul intenso */
+  --primary: #002a40;       /* Azul oscuro */
+  --secondary: #001b72;     /* Azul intenso */
   --white: #ffffff;
-  --gold: #FFD700;         /* Dorado */
+  --gold: #FFD700;          /* Dorado */
   --dark: #333333;
   --shadow: rgba(0, 0, 0, 0.3);
+}
+
+/* ======================================
+   RESETEO BÁSICO Y ESTILOS GLOBALES
+====================================== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Lato', sans-serif;
+  background: #f4f4f4;
+  color: var(--dark);
+  padding-top: 70px; /* Espacio para el navbar fijo */
 }
 
 /* ======================================
@@ -17,32 +33,33 @@
 .navbar {
   position: fixed;
   top: 0;
-  left: 0;
   width: 100%;
   z-index: 1000;
-  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  transition: background-color 0.3s, box-shadow 0.3s;
   background: transparent;
   padding: 0.75rem 1rem;
 }
 
+/* Navbar sólido (al hacer scroll) */
 .navbar.solid {
   background: linear-gradient(135deg, var(--primary), var(--secondary));
   box-shadow: 0 2px 6px var(--shadow);
 }
 
+/* Logo del navbar */
 .navbar-brand img {
   max-width: 50px;
   height: auto;
   margin-right: 0.5rem;
 }
 
+/* Enlaces del navbar */
 .navbar-nav .nav-link {
   color: var(--white) !important;
   margin: 0 0.5rem;
   transition: color 0.3s;
   font-weight: 500;
 }
-
 .navbar-nav .nav-link:hover {
   color: var(--gold) !important;
 }
@@ -66,6 +83,7 @@ footer .container {
   gap: 2rem;
 }
 
+/* Logo y marca en el footer */
 .footer-brand {
   flex: 1 1 100%;
   display: flex;
@@ -73,35 +91,30 @@ footer .container {
   align-items: center;
   margin-bottom: 1rem;
 }
-
 .footer-brand img {
   max-width: 120px;
-  height: auto;
   margin-bottom: 0.5rem;
 }
 
+/* Títulos y listas en el footer */
 footer h4 {
   margin-bottom: 1rem;
   font-size: 1.1rem;
   font-weight: 600;
 }
-
 footer ul {
   list-style: none;
   padding: 0;
   margin: 0;
 }
-
 footer li {
   margin: 0.3rem 0;
 }
-
 footer a {
   color: var(--white);
   text-decoration: none;
   transition: color 0.3s;
 }
-
 footer a:hover {
   text-decoration: underline;
   color: var(--gold);
@@ -126,16 +139,17 @@ footer a:hover {
   position: relative;
   min-height: 100vh;
   background:
-    linear-gradient(135deg, var(--color-primario), var(--color-secundario)),
+    linear-gradient(135deg, var(--primary), var(--secondary)),
     url('images/fondo.jpg') center/cover no-repeat fixed;
   background-blend-mode: multiply;
   display: flex;
   align-items: center;
   justify-content: center;
   text-align: center;
-  color: var(--color-blanco);
+  color: var(--white);
 }
 
+/* Overlay para el hero (oscurece un poco la imagen) */
 .hero::before {
   content: "";
   position: absolute;
@@ -144,22 +158,23 @@ footer a:hover {
 }
 
 .hero .container {
-  position: relative; /* Contenido sobre el overlay */
+  position: relative; /* contenido sobre el overlay */
   z-index: 1;
 }
 
+/* Título y subtítulo del hero */
 .hero h1 {
-  font-size: 3rem;
+  font-size: clamp(2rem, 5vw, 3.5rem); /* responsivo */
   text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
 }
-
 .hero p {
-  font-size: 1.5rem;
+  font-size: clamp(1rem, 2vw, 1.5rem);
   margin-top: 0.5rem;
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4);
 }
+
 /* ======================================
-   BOTÓN VOLVER ARRIBA
+   BOTÓN "VOLVER ARRIBA"
 ====================================== */
 #btnBackToTop {
   display: none;
@@ -167,21 +182,26 @@ footer a:hover {
   bottom: 30px;
   right: 30px;
   z-index: 9999;
-  background: var(--color-secundario);
-  color: var(--color-blanco);
+  background: var(--secondary);
+  color: var(--white);
   border: none;
   border-radius: 50%;
   width: 45px;
   height: 45px;
   font-size: 1.2rem;
   cursor: pointer;
-  box-shadow: 0 4px 8px var(--sombra);
+  box-shadow: 0 4px 8px var(--shadow);
   transition: opacity 0.3s;
 }
 
 /* ======================================
    TARJETAS (Ej: Partidos)
 ====================================== */
+.match-card {
+  border-radius: 0.5rem;
+  background-color: var(--white);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
 .match-card-top .team-logo {
   width: 60px;
   height: 60px;
@@ -194,37 +214,30 @@ footer a:hover {
 .category-section {
   padding: 2rem 0;
 }
-
 .category-section h1 {
   text-align: center;
   margin-bottom: 2rem;
   color: #800020;
   font-weight: bold;
 }
-
 .category-buttons {
   text-align: center;
   margin-bottom: 2rem;
 }
-
 .category-buttons .btn {
   margin: 0 0.5rem;
   transition: transform 0.3s, background-color 0.3s;
 }
-
 .category-buttons .btn:hover {
   transform: scale(1.05);
 }
-
 .category-buttons .btn.active {
   background-color: #800020;
   color: #fff;
 }
-
 .category-container {
   display: none;
 }
-
 .category-container.active {
   display: block;
 }
@@ -235,8 +248,6 @@ footer a:hover {
 .modal-header.bg-dark {
   background: #000 !important;
 }
-
 .modal-header.bg-dark.text-white .btn-close {
   filter: invert(1);
 }
-
