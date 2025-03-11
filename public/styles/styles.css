@@ -58,7 +58,7 @@ body {
   min-height: 100vh;
   /* Ajusta la ruta de fondo.jpg si está en public/images/fondo.jpg */
   background: linear-gradient(135deg, var(--color-primario), var(--color-secundario)),
-              url('images/fondo.jpg') center/cover no-repeat fixed;
+  url('images/fondo.jpg') center/cover no-repeat fixed;
   background-blend-mode: multiply;
   display: flex;
   align-items: center;
