@@ -6,59 +6,300 @@
   <link rel="icon" href="images/ESCUDO.ico" type="image/x-icon">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="Conoce la historia y los momentos más destacados de DIBA FBC, un recorrido lleno de pasión y logros deportivos." />
-
+  <script src="//code.tidio.co/jckoszxyxvs7izkxulr9bk5cbcspdjtj.js" async></script>
+  
   <!-- Bootstrap 5 CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
 
   <!-- Font Awesome -->
-  <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
-    crossorigin="anonymous"
-    referrerpolicy="no-referrer"
-  />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
   <!-- Animate.css -->
-  <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
-  />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
 
   <!-- AOS (opcional) -->
-  <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css"
-  />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" />
 
-  <!-- Tus estilos (puedes usar styles.css o un bloque <style>) -->
+  <!-- Tus estilos globales -->
   <link rel="stylesheet" href="styles/styles.css" />
 </head>
 <body>
-  <!-- Contenedor para el Navbar -->
+
+  <!-- Botón Volver Arriba -->
+  <button id="btnBackToTop" title="Volver arriba">
+    <i class="fas fa-arrow-up"></i>
+  </button>
+
+  <!-- Contenedor para el Navbar (se cargará desde layout/navbar.html) -->
   <div id="navbar-container"></div>
 
-  <!-- HERO SECTION (ejemplo) -->
-  <header id="inicio" class="hero animate__animated animate__fadeInDown">
+  <!-- HERO SECTION -->
+  <section class="hero animate__animated animate__fadeInDown">
     <div class="container hero-content">
       <h1 class="hero-title">Explora Nuestro Mundo</h1>
       <p class="hero-subtitle lead">
         Descubre los momentos históricos y logros que han definido a DIBA FBC. Un recorrido lleno de pasión y victorias.
       </p>
     </div>
-  </header>
+  </section>
 
-  <!-- ... Resto del contenido de tu página ... -->
+  <!-- Sección Resumen de Historia en Index -->
+  <section id="resumen-historia" class="container my-5">
+    <div class="row align-items-center">
+      <div class="col-md-6 mb-4 mb-md-0">
+        <img src="images/ESCUDO.png" alt="DIBA FBC - Historia" class="img-fluid rounded shadow">
+      </div>
+      <div class="col-md-6">
+        <h2 class="mb-3">Nuestra Historia</h2>
+        <p>
+          Fundado en <strong>2012</strong>, <strong>DIBA FBC</strong> ha forjado una trayectoria llena de éxitos y superación. 
+          El club se caracteriza por formar talentos y promover valores como la disciplina, el respeto y el trabajo en equipo.
+        </p>
+        <p>
+          A lo largo de los años, hemos competido en torneos locales, dejando huella en cada temporada 
+          y construyendo un legado que trasciende más allá de las canchas.
+        </p>
+        <a href="Historia.html" class="btn btn-primary mt-3">Conoce más</a>
+      </div>
+    </div>
+  </section>
 
-  <!-- Contenedor para el Footer -->
+  <!-- Sección Servicios -->
+  <section id="servicios" class="container my-5 animate__animated animate__fadeInUp">
+    <h2 class="text-center">Nuestros Servicios</h2>
+    <div class="row g-4 mt-4">
+      <div class="col-md-4">
+        <div class="card shadow h-100">
+          <div class="card-body">
+            <h5 class="card-title">Entrenamiento</h5>
+            <p class="card-text">
+              Potenciamos la técnica y táctica de cada jugador, preparándolos para competir al más alto nivel.
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card shadow h-100">
+          <div class="card-body">
+            <h5 class="card-title">Participación en Torneos</h5>
+            <p class="card-text">
+              Representamos a nuestra comunidad en torneos locales, demostrando competitividad y espíritu deportivo en cada desafío.
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card shadow h-100">
+          <div class="card-body">
+            <h5 class="card-title">Desarrollo Integral</h5>
+            <p class="card-text">
+              Fomentamos el desarrollo personal de nuestros jugadores, inculcando valores y liderazgo dentro y fuera del campo.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contenedor principal de partidos -->
+  <div class="container my-5">
+    <div class="row g-4">
+      <!-- Tarjeta 1: DIBA FBC vs Barranquillera -->
+      <div class="col-12 col-sm-6 col-lg-4">
+        <div class="match-card p-3 text-center border rounded shadow-sm">
+          <div class="match-card-top d-flex justify-content-center align-items-center gap-3">
+            <img src="images/ESCUDO.png" alt="DIBA FBC" class="team-logo">
+            <img src="https://escuelabarranquillera.com/wp-content/uploads/2019/07/logo-escuela-barranquilla-2.png" alt="Escuela Barranquillera de Fútbol" class="team-logo">
+          </div>
+          <div class="mt-2">
+            <strong>Amistoso 2014-2015-2016</strong>
+          </div>
+          <div class="match-card-body mt-3">
+            <h4 class="mb-2">Domingo, 09 de Marzo 2025 - 09:00 AM</h4>
+            <p class="text-muted mb-1">Estadio: Parque de los Sueños</p>
+            <p class="text-muted mb-1">Valor: $ 4000</p>
+            <button class="btn btn-warning" data-bs-toggle="collapse" data-bs-target="#resultado1">Resultado</button>
+          </div>
+          <div id="resultado1" class="collapse mt-3">
+            <h5>Resultado: <strong>DIBA FBC 1 - 1 Barranquillera</strong></h5>
+            <p>Goles: ZAID RICARDO (1)</p>
+            <iframe width="100%" height="200" src="https://www.youtube.com/embed/VIDEO_ID" frameborder="0" allowfullscreen></iframe>
+          </div>
+        </div>
+      </div>
+      <!-- Tarjeta 2: DIBA FBC vs Quiroz FC -->
+      <div class="col-12 col-sm-6 col-lg-4">
+        <div class="match-card p-3 text-center border rounded shadow-sm">
+          <div class="match-card-top d-flex justify-content-center align-items-center gap-3">
+            <img src="images/ESCUDO.png" alt="DIBA FBC" class="team-logo">
+            <img src="https://scontent.ftkd1-1.fna.fbcdn.net/v/t39.30808-1/294902630_526417012584396_3725388142398526323_n.jpg?stp=dst-jpg_p200x200_tt6&_nc_cat=102&ccb=1-7&_nc_sid=f907e8&_nc_ohc=GsYocxBYQ6YQ7kNvgHcqJK_&_nc_oc=AdiM9-4Yc5Ir3jXx8OvAiYBhwmt_vHPpYXP7lElyEcVNxjJ1PJD5tT3hHD8zlDZgZBs&_nc_zt=24&_nc_ht=scontent.ftkd1-1.fna&_nc_gid=AB1Voij-pfXXuP7rhiCLOT5&oh=00_AYHgsM7A-QIb2NZ2K2ZA5u4-8gd_7dwWSm3IEVwMmGzmXQ&oe=67D4D8FA" alt="Quiroz FC" class="team-logo">
+          </div>
+          <div class="mt-2">
+            <strong>Amistoso 2012-2013</strong>
+          </div>
+          <div class="match-card-body mt-3">
+            <h4 class="mb-2">Domingo, 09 de Marzo 2025 - 09:00 AM</h4>
+            <p class="text-muted mb-1">Lugar: Parque de los Sueños</p>
+            <button class="btn btn-warning" data-bs-toggle="collapse" data-bs-target="#resultado2">Resultado</button>
+          </div>
+          <div id="resultado2" class="collapse mt-3">
+            <h5>Resultado: <strong>DIBA FBC 3 - 2 Quiroz FC</strong></h5>
+            <p>Goles: DILAN SANCHEZ (2), OSCAR LOPEZ (1)</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sección Equipo (Cuerpo Técnico) -->
+  <section id="equipo" class="container my-5 animate__animated animate__fadeInUp">
+    <h2 class="text-center">CUERPO TECNICO</h2>
+    <div class="row text-center mt-4">
+      <div class="col-md-4 mb-4">
+        <img src="profesor.jpg" class="rounded-circle mb-3" alt="Entrenador DIBA FBC" loading="lazy">
+        <h5>Reinaldo Perez</h5>
+        <p>Director Técnico</p>
+      </div>
+      <div class="col-md-4 mb-4">
+        <img src="asistente.jpg" class="rounded-circle mb-3" alt="Asistente Técnico" loading="lazy">
+        <h5>Reinaldo Perez Navas</h5>
+        <p>Técnico</p>
+      </div>
+      <div class="col-md-4 mb-4">
+        <img src="fisioterapeuta.jpg" class="rounded-circle mb-3" alt="Fisioterapeuta DIBA FBC" loading="lazy">
+        <h5>Aldo Espinoza</h5>
+        <p>Técnico</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Sección Fundación -->
+  <section id="fundacion" class="container my-5">
+    <div class="row align-items-center">
+      <div class="col-md-6 mb-4 mb-md-0">
+        <a href="unnamed.jpg" target="_blank">
+          <img src="unnamed.jpg" alt="Fundación Tierra que Emana Leche y Miel" class="img-fluid w-100 rounded shadow">
+        </a>
+      </div>
+      <div class="col-md-6">
+        <h2 class="mb-4">
+          <i class="fas fa-hand-holding-heart me-2"></i>
+          Fundación Tierra que Emana Leche y Miel
+        </h2>
+        <p>
+          La <strong>Fundación Tierra que Emana Leche y Miel</strong> (FUNTILEMI) es una entidad sin ánimo de lucro registrada en la Cámara de Comercio de Barranquilla.
+        </p>
+        <p>
+          Fundada el <strong>28 de marzo de 2016</strong>, tiene su sede en <strong>Carrera 30A, Carrera 1B #245, Apartamento 701, Urbanización Villa Campestre, Barranquilla, Atlántico</strong>.
+        </p>
+        <p>
+          El nombre evoca una expresión bíblica que describe una tierra de abundancia, simbolizando el compromiso con el bienestar y desarrollo de la comunidad.
+        </p>
+        <div class="mt-4">
+          <a href="https://colombiapymes.com/empresas/fundacion-tierra-que-emana-leche-y-miel-sigla-funtilemi_id_EF8E1398F2821C3F" target="_blank" class="btn btn-warning">
+            <i class="fas fa-external-link-alt me-1"></i> Más Información
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Sección Patrocinadores -->
+  <section id="patrocinadores" class="animate__animated animate__fadeInUp" style="text-align: center; padding: 50px 0; background-color: var(--fondo);">
+    <div class="container">
+      <h2>Nuestros Patrocinadores</h2>
+      <div style="display: flex; justify-content: center; align-items: center; gap: 50px; flex-wrap: wrap; padding: 20px;">
+        <!-- Okey Sport -->
+        <div class="patrocinador">
+          <a href="https://okeysport.com/" target="_blank">
+            <img src="https://okeysport.com/cdn/shop/files/Logo_OKEY.svg?v=1721155737&width=100" alt="Logo de Okey Sport" style="width: 150px; height: auto;">
+          </a>
+          <p>Okey Sport</p>
+        </div>
+        <!-- Chiro Deportes Funtilemi -->
+        <div class="patrocinador">
+          <a href="https://www.facebook.com/chirodeportes/" target="_blank">
+            <img src="https://tse3.mm.bing.net/th?id=OIP.2pbPD48ADuuuNSlSKtgEpwHaHa&pid=Api" alt="Logo de Chiro Deportes" style="width: 150px; height: auto;">
+          </a>
+          <p>Chiro Deportes</p>
+        </div>
+        <!-- Calzado Orpis -->
+        <div class="patrocinador">
+          <a href="https://www.instagram.com/calzadoorpis/" target="_blank">
+            <img src="https://i.pinimg.com/originals/2d/36/e1/2d36e15e7ad8ab91b41f3db0eff0f7ac.png" alt="Logo de Calzado Orpis" style="width: 150px; height: auto;">
+          </a>
+          <p>Calzado Orpis</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MODAL: LOGIN -->
+  <div class="modal fade" id="modalLogin" tabindex="-1" aria-labelledby="modalLoginLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header bg-dark text-white">
+          <h5 class="modal-title" id="modalLoginLabel">Iniciar Sesión</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+        <div class="modal-body">
+          <form id="formLogin">
+            <div class="mb-3">
+              <label for="loginCorreo" class="form-label">Correo Electrónico</label>
+              <input type="email" class="form-control" id="loginCorreo" placeholder="tuemail@ejemplo.com" required>
+            </div>
+            <div class="mb-3">
+              <label for="loginClave" class="form-label">Contraseña</label>
+              <input type="password" class="form-control" id="loginClave" placeholder="********" required>
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Ingresar</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: REGISTRO -->
+  <div class="modal fade" id="modalRegistro" tabindex="-1" aria-labelledby="modalRegistroLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header bg-dark text-white">
+          <h5 class="modal-title" id="modalRegistroLabel">Registro de Nuevo Jugador</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+        <div class="modal-body">
+          <form id="formRegistro">
+            <div class="mb-3">
+              <label for="regNombre" class="form-label">Nombre Completo</label>
+              <input type="text" class="form-control" id="regNombre" placeholder="Tu nombre" required>
+            </div>
+            <div class="mb-3">
+              <label for="regCorreo" class="form-label">Correo Electrónico</label>
+              <input type="email" class="form-control" id="regCorreo" placeholder="tucorreo@ejemplo.com" required>
+            </div>
+            <div class="mb-3">
+              <label for="regPassword" class="form-label">Contraseña</label>
+              <input type="password" class="form-control" id="regPassword" placeholder="********" required>
+            </div>
+            <div class="mb-3">
+              <label for="regFechaNac" class="form-label">Fecha de Nacimiento</label>
+              <input type="date" class="form-control" id="regFechaNac" required>
+            </div>
+            <button type="submit" class="btn btn-warning w-100">Registrarse</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Contenedor para el Footer (se cargará desde layout/footer.html) -->
   <div id="footer-container"></div>
 
   <!-- Bootstrap JS Bundle -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-  
-  <!-- Script que carga el navbar y footer -->
+  <!-- Script para cargar componentes externos (Navbar y Footer) -->
   <script src="scripts/loadComponents.js"></script>
-
-  <!-- Script principal (opcional: main.js) -->
+  <!-- Script principal (funciones y animaciones) -->
   <script src="scripts/main.js"></script>
 </body>
 </html>
