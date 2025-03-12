@@ -39,7 +39,7 @@ html, body {
   width: 100%;
   height: 100%;
   z-index: -1; /* Queda detrás del contenido */
-  background: #000; /* Fondo oscuro para resaltar la animación */
+  background: #ffffff; /* Fondo oscuro para resaltar la animación */
   overflow: hidden;
 }
 /* Estilo y animación de los "cubos" (puedes cambiar a burbujas o imágenes) */
