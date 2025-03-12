@@ -26,9 +26,12 @@
 }
 body {
   font-family: 'Lato', sans-serif;
-  background: linear-gradient(135deg, #002a40, #001b72);
+  background: linear-gradient(135deg, #ffffff, #acdaff);
   color: var(--azul);
   padding-top: 70px; /* espacio para navbar fijo */
+}
+body{
+  min-height: 100vh;
 }
 a {
   text-decoration: none;
