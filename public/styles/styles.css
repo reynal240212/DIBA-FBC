@@ -2,24 +2,22 @@
    VARIABLES DE COLOR (CORREGIDAS)
 ====================================== */
 :root {
-  --azul:         #003399;  /* Azul oscuro */
-  --azul-intenso: #001b72;  /* Azul intenso (para gradientes si lo deseas) */
-  --grana:        #0b0281;  /* Grana intenso */
-  --amarillo:     #ffd700;  /* Amarillo dorado */
-  --dorado:       #ffd700;  /* Mismo valor que --amarillo, por consistencia */
-  --fondo:        #f4f4f4;  /* Fondo gris claro */
-  --fondo-gris:   #f4f4f4;  /* Usado en category-section */
-  --blanco:       #ffffff;  
-  --texto-claro:  #ffffff;  /* Para textos sobre fondos oscuros */
+  --azul:         #003399;      /* Azul oscuro */
+  --azul-intenso: #001b72;      /* Azul intenso */
+  --grana:        #0b0281;      /* Grana intenso */
+  --amarillo:     #ffd700;      /* Amarillo dorado */
+  --dorado:       #ffd900d8;    /* Dorado translúcido */
+  --fondo:        #003399;      /* Fondo azul para toda la página */
+  --fondo-gris:   #f4f4f4;      /* Usado en category-section */
+  --blanco:       #ffffff;
+  --texto-claro:  #ffffff;      /* Para textos sobre fondos oscuros */
   --sombra:       rgba(0, 0, 0, 0.2);
-  --dorado:       #ffd900d8;
 }
 
 /* ======================================
    RESET Y ESTILOS GENERALES
 ====================================== */
- /* Reiniciamos márgenes y configuramos box-sizing */
- * {
+* {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -30,7 +28,9 @@ html, body {
   font-family: 'Arial', sans-serif;
   overflow-x: hidden;
   position: relative;
+  background: var(--fondo);
 }
+
 /* Contenedor de fondo animado */
 .background-animation {
   position: fixed;
@@ -39,16 +39,17 @@ html, body {
   width: 100%;
   height: 100%;
   z-index: -1; /* Queda detrás del contenido */
-  background: #ffffff; /* Fondo oscuro para resaltar la animación */
+  background: var(--fondo);
   overflow: hidden;
 }
-/* Estilo y animación de los "cubos" (puedes cambiar a burbujas o imágenes) */
+
+/* Estilo y animación de los "cubos" */
 .cube {
   position: absolute;
-  bottom: -100px; /* Comienzan fuera de la pantalla por abajo */
+  bottom: -100px; /* Inician fuera de la pantalla por abajo */
   width: 50px;
   height: 50px;
-  background: rgba(255, 215, 0, 0.7); /* Color dorado semitransparente */
+  background: rgba(255, 215, 0, 0.7); /* Dorado semitransparente */
   animation: cubeAnim 10s infinite linear;
 }
 /* Distribución y delays para variar la animación con 10 cubos */
@@ -63,7 +64,6 @@ html, body {
 .cube:nth-child(9) { left: 85%; animation-delay: 8s; }
 .cube:nth-child(10) { left: 95%; animation-delay: 9s; }
 
-
 @keyframes cubeAnim {
   0% {
     transform: translateY(0) rotate(0deg);
@@ -74,13 +74,15 @@ html, body {
     opacity: 0;
   }
 }
+
 /* Contenedor principal de contenido */
 .content {
   position: relative;
   z-index: 1;
   padding: 20px;
-  color: #fff;
+  color: var(--blanco);
 }
+
 a {
   text-decoration: none;
   color: var(--azul);
@@ -103,13 +105,6 @@ a:hover {
   padding: 0.75rem 1rem;
   transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
-/* Si quisieras un gradiente al hacer scroll (opcional):
-.navbar.scrolled {
-  background: linear-gradient(135deg, var(--azul), var(--azul-intenso)) !important;
-  box-shadow: 0 4px 8px var(--sombra);
-} */
-
-/* Logo del navbar */
 .navbar-brand img {
   width: 50px;
   height: auto;
@@ -118,8 +113,6 @@ a:hover {
 .navbar-brand img:hover {
   transform: scale(1.1);
 }
-
-/* Enlaces del navbar */
 .nav-link {
   font-weight: 600;
   color: var(--blanco) !important;
@@ -136,15 +129,14 @@ a:hover {
 .hero {
   position: relative;
   min-height: 100vh;
-  background: 
-    linear-gradient(135deg, #002a40, #001b72),
-    url('images/fondo.jpg') center/cover no-repeat fixed;
+  background: linear-gradient(135deg, #002a40, #001b72),
+              url('images/fondo.jpg') center/cover no-repeat fixed;
   background-blend-mode: multiply;
   display: flex;
   align-items: center;
   justify-content: center;
   text-align: center;
-  color: #ffffff;
+  color: var(--blanco);
 }
 @media (min-width: 768px) {
   .hero {
@@ -185,16 +177,16 @@ a:hover {
 ====================================== */
 #resumen-historia {
   padding: 2rem 0;
-  background-color: #0b33a1;
+  background-color: #0b33a1; /* Fondo oscuro */
 }
 #resumen-historia h2 {
-  color: #004D73;
+  color: var(--amarillo);
   font-weight: bold;
   text-transform: uppercase;
 }
 #resumen-historia p {
   font-size: 1rem;
-  color: #333;
+  color: var(--blanco);
   line-height: 1.6;
 }
 
@@ -203,11 +195,13 @@ a:hover {
 ====================================== */
 #servicios {
   padding: 60px 20px;
+  background-color: var(--fondo-gris);
 }
 #servicios h2 {
   text-align: center;
   margin-bottom: 2rem;
   font-weight: bold;
+  color: var(--amarillo);
 }
 .card {
   border: none;
@@ -278,6 +272,7 @@ a:hover {
   text-align: center;
   margin-bottom: 2rem;
   font-weight: bold;
+  color: var(--amarillo);
 }
 #equipo img {
   width: 180px;
@@ -292,6 +287,7 @@ a:hover {
 #equipo h5 {
   margin-top: 1rem;
   font-weight: bold;
+  color: var(--blanco);
 }
 
 /* ======================================
@@ -299,11 +295,13 @@ a:hover {
 ====================================== */
 #contacto {
   padding: 60px 20px;
+  background-color: var(--fondo-gris);
 }
 #contacto h2 {
   text-align: center;
   margin-bottom: 2rem;
   font-weight: bold;
+  color: var(--amarillo);
 }
 #contacto .form-control:focus {
   box-shadow: 0 0 0 0.2rem rgba(0,77,152,0.25);
@@ -325,7 +323,7 @@ a:hover {
 #patrocinadores {
   text-align: center;
   padding: 50px 0;
-  background-color: var(--fondo);
+  background-color: var(--fondo-gris);
 }
 #patrocinadores h2 {
   margin-bottom: 2rem;
@@ -357,13 +355,13 @@ a:hover {
   background-color: var(--azul-intenso);
 }
 #fundacion h2 {
-  color: var(--azul);
+  color: var(--amarillo);
   margin-bottom: 20px;
 }
 #fundacion p {
   font-size: 1rem;
   line-height: 1.6;
-  color: #333;
+  color: var(--blanco);
 }
 #fundacion .btn {
   background-color: var(--amarillo);
@@ -479,12 +477,12 @@ footer a:hover {
   text-align: center;
   padding: 20px;
   position: relative;
-  color: #fff;
-  border-radius: 0 0 8px 8px; 
+  color: var(--blanco);
+  border-radius: 0 0 8px 8px;
 }
 .position-tag {
-  background-color: var(--dorado); /* Dorado */
-  color: #fff;
+  background-color: var(--dorado);
+  color: var(--blanco);
   font-weight: bold;
   padding: 5px 15px;
   position: absolute;
@@ -492,7 +490,7 @@ footer a:hover {
   left: 50%;
   transform: translateX(-50%);
   white-space: nowrap;
-  border: 2px solid #fff;
+  border: 2px solid var(--blanco);
   clip-path: polygon(15% 0, 85% 0, 100% 50%, 85% 100%, 15% 100%, 0 50%);
 }
 .player-name {
@@ -522,4 +520,25 @@ footer a:hover {
   width: max-content;
   transition: var(--rm-swipe-carousel-content-transition, transform .3s ease-in-out);
   scroll-padding-inline: var(--rm-swipe-carousel-scroll-padding-inline-default, 1.5rem);
+}
+
+/* ======================================
+   BOTONES DE INICIO DE SESIÓN Y REGISTRO
+====================================== */
+.btn-login,
+.btn-register {
+  background-color: var(--amarillo);
+  border: none;
+  color: var(--azul);
+  padding: 0.75rem 1.5rem;
+  font-weight: bold;
+  border-radius: 4px;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  cursor: pointer;
+  text-decoration: none;
+}
+.btn-login:hover,
+.btn-register:hover {
+  background-color: var(--dorado);
+  color: var(--blanco);
 }
