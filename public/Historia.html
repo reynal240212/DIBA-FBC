@@ -2,57 +2,83 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <title>HISTORIA - DIBA FBC</title>
-  <link rel="icon" href="images/ESCUDO.ico" type="image/x-icon">
+  <title>Inicio - DIBA FBC</title>
+  <link rel="icon" href="images/ESCUDO.ico" type="image/x-icon" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Descubre la historia de DIBA FBC, los momentos más destacados y la trayectoria que ha definido a nuestro club." />
+  <meta
+    name="description"
+    content="Conoce la historia y los momentos más destacados de DIBA FBC, un recorrido lleno de pasión y logros deportivos."
+  />
 
-  <!-- Bootstrap 5 CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <!-- Tidio Chat -->
+  <script src="//code.tidio.co/jckoszxyxvs7izkxulr9bk5cbcspdjtj.js" async></script>
 
-  <!-- Íconos de Font Awesome -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <!-- Bootstrap 5.3.2 CSS -->
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+  />
+
+  <!-- Font Awesome -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+  />
 
   <!-- Animate.css -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+  />
 
-  <!-- AOS (Animate On Scroll) CSS -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" />
+  <!-- AOS (opcional) -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css"
+  />
 
-   <!-- Tus estilos globales -->
-   <link rel="stylesheet" href="styles/styles.css" />
-  </head>
-  <body>
-    <!-- Botón Volver Arriba -->
-    <button id="btnBackToTop" title="Volver arriba">
-      <i class="fas fa-arrow-up"></i>
-    </button>
-  
-    <!-- Contenedor para el Navbar (se cargará dinámicamente) -->
-    <div id="navbar-container"></div>
-<!-- estilos globales -->
-<link rel="stylesheet" href="styles/styles.css" />
+  <!-- Tus estilos globales -->
+  <link rel="stylesheet" href="styles/styles.css" />
 </head>
-<body>
-   
-  <body>
-    <!-- Botón Volver Arriba -->
-    <button id="btnBackToTop" title="Volver arriba">
-      <i class="fas fa-arrow-up"></i>
-    </button>
-  
-    <!-- Contenedor para el Navbar (se cargará dinámicamente) -->
-    <div id="navbar-container"></div>
 
-<!-- HERO SECTION -->
-<section class="hero animate__animated animate__fadeInDown" role="banner">
-  <div class="container hero-content">
-    <h1 class="hero-title">Explora Nuestro Mundo</h1>
-    <p class="hero-subtitle lead">
-      Descubre los momentos históricos y logros que han definido a DIBA FBC. Un recorrido lleno de pasión y victorias.
-    </p>
+<body>
+  <!-- Fondo animado que cubre toda la página -->
+  <div class="background-animation">
+    <div class="cube"></div>
+    <div class="cube"></div>
+    <div class="cube"></div>
+    <div class="cube"></div>
+    <div class="cube"></div>
   </div>
-</section>
+
+  <!-- Botón Volver Arriba -->
+  <button id="btnBackToTop" title="Volver arriba">
+    <i class="fas fa-arrow-up"></i>
+  </button>
+
+  <!-- Contenedor para el Navbar (se cargará desde layout/navbar.html) -->
+  <div id="navbar-container"></div>
+
+  <!-- HERO SECTION -->
+  <section
+    class="hero animate__animated animate__fadeInDown d-flex align-items-center"
+    style="
+      background: linear-gradient(135deg, #002a40, #001b72),
+        url('images/fondo.jpg') center/cover no-repeat fixed;
+      background-blend-mode: multiply;
+      min-height: 80vh;
+    "
+  >
+    <div class="container hero-content text-center text-white">
+      <h1 class="hero-title display-4 fw-bold">NUESTRA HISTORIA</h1>
+      <p class="hero-subtitle lead">
+        Descubre los momentos históricos y logros que han definido a DIBA FBC.
+        Un recorrido lleno de pasión y victorias.
+      </p>
+    </div>
+  </section>
 
 <!-- TIMELINE / MOMENTOS DESTACADOS -->
 <section class="timeline-section animate__animated animate__fadeInUp" role="region" aria-labelledby="timeline-heading">
