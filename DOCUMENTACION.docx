@@ -1,0 +1,122 @@
+DOCUMENTACIÓN DEL PROYECTO WEB: DIBA FBC
+1. Portada
+Título del Proyecto: Sitio Web de DIBA FBC
+Materia: Análisis y Desarrollo de Sistemas
+Autor: (Tu nombre o nombres de los integrantes del equipo)
+Institución: (Nombre de la institución o universidad)
+Fecha: (Día/Mes/Año)
+
+2. Introducción
+En este documento se describe el proceso de análisis, diseño y desarrollo del sitio web de DIBA FBC, un club deportivo con sede en Barranquilla. El objetivo principal es mostrar la historia, los servicios y la plantilla de jugadores, permitiendo además la interacción con los usuarios.
+
+Objetivo General
+Desarrollar un sitio web que refleje la esencia del club DIBA FBC, facilitando información histórica, registros de jugadores y próximos eventos.
+Objetivos Específicos
+Presentar la historia y los valores fundamentales del club.
+Ofrecer información detallada sobre la plantilla de jugadores y el cuerpo técnico.
+Permitir la interacción con usuarios mediante secciones de contacto y enlaces a redes sociales.
+Alcance
+El proyecto abarca desde la concepción de la idea, levantamiento de requerimientos y diseño de la interfaz, hasta la implementación y despliegue en un hosting web. No se contempla, en esta versión, un sistema de gestión de usuarios avanzado ni transacciones de pago en línea.
+
+3. Análisis de Requerimientos
+3.1 Requerimientos Funcionales
+Página de inicio (Home):
+Mostrar un hero con fondo, título y subtítulo.
+Incluir enlaces a secciones principales: Historia, Ficha Técnica, Planillas, Normas y Reglamentos, Contacto.
+Sección de Historia:
+Presentar la trayectoria, fundación y logros del club.
+Incluir imágenes representativas.
+Sección de Servicios:
+Describir los servicios ofrecidos (entrenamiento, torneos, desarrollo integral).
+Sección de Jugadores:
+Mostrar la plantilla de jugadores por categorías (por ejemplo, 2010/11, 2012/13, 2014/15/16) con tarjetas que incluyan foto, nombre, posición, edad y fecha de nacimiento.
+Sección de Contacto:
+Formulario para que los usuarios envíen mensajes (Nombre, Correo, Mensaje).
+Sección de Patrocinadores:
+Incluir logos y enlaces a los patrocinadores del club.
+Navbar y Footer:
+Navbar fijo en la parte superior con enlaces de navegación.
+Footer con información sobre el club, redes sociales y contacto.
+3.2 Requerimientos No Funcionales
+Rendimiento:
+El sitio debe cargar en menos de 3 segundos en conexiones de banda ancha.
+Uso de lazy loading en imágenes para optimizar la velocidad.
+Usabilidad y Accesibilidad:
+Diseño responsive y semántico, compatible con dispositivos móviles.
+Buen contraste de colores y atributos ARIA básicos.
+Seguridad:
+Uso de HTTPS y medidas básicas de seguridad.
+Mantenibilidad:
+Código estructurado con HTML, CSS y JavaScript separados para facilitar actualizaciones.
+4. Diseño del Sistema
+4.1 Arquitectura
+El sitio se desarrolló utilizando:
+
+HTML5 para la estructura.
+CSS3 y Bootstrap 5 para estilos y diseño responsivo.
+JavaScript para interactividad (por ejemplo, mostrar/ocultar secciones, scroll suave).
+Animate.css y AOS para animaciones.
+Hosting en plataformas como Vercel o Netlify para el despliegue.
+4.2 Diagramas y Wireframes
+Se elaboraron diagramas de navegación y wireframes (bocetos) para planificar la estructura de las páginas, definiendo la ubicación de elementos clave como el Navbar, Hero, secciones de contenido y Footer.
+
+5. Desarrollo
+5.1 Herramientas Utilizadas
+Visual Studio Code para la edición del código.
+Git para el control de versiones y GitHub para almacenar el repositorio.
+Bootstrap 5, Animate.css y AOS para el desarrollo front-end.
+JavaScript para funcionalidades interactivas (p. ej., "Volver arriba", alternar categorías).
+5.2 Estructura de Carpetas
+css
+Copiar
+Editar
+project/
+  ├─ images/         (Escudos, fondo, fotos de jugadores, etc.)
+  ├─ layout/         (navbar.html, footer.html)
+  ├─ scripts/        (loadComponents.js, main.js)
+  ├─ styles/         (styles.css)
+  ├─ index.html
+  ├─ Historia.html
+  ├─ planillas.html
+  └─ ...
+5.3 Funcionalidades Destacadas
+Navbar fijo: Siempre visible en la parte superior sin cambios al hacer scroll.
+Hero Section: Fondo con degradado y una imagen (fondo.jpg) para impacto visual.
+Sección de Jugadores: Tarjetas organizadas por categoría, con animaciones y efectos visuales.
+Botón "Volver arriba": Aparece al hacer scroll y permite regresar suavemente al inicio.
+Formularios de Contacto, Login y Registro: Implementados con JavaScript (fetch para llamadas a API).
+Carga dinámica de componentes: Posible uso de fetch para cargar el Navbar y el Footer desde archivos externos.
+6. Pruebas y Validación
+6.1 Tipos de Pruebas Realizadas
+Pruebas Funcionales: Se verificó el funcionamiento correcto de los enlaces, formularios y navegación.
+Pruebas de Usabilidad: Se evaluó la adaptación del diseño en dispositivos móviles y escritorio.
+Pruebas de Rendimiento: Uso de herramientas como Lighthouse para validar tiempos de carga y optimización de imágenes.
+6.2 Resultados de Prueba
+El sitio es responsivo y se visualiza correctamente en diversas resoluciones.
+El rendimiento es adecuado gracias a la optimización de imágenes y lazy loading.
+Las animaciones y efectos de scroll mejoran la experiencia del usuario sin afectar la velocidad.
+7. Despliegue y Hosting
+El sitio fue desplegado en Vercel (o Netlify/GitHub Pages) con la URL:
+https://diba-fbc.vercel.app (ejemplo)
+
+Pasos de Despliegue:
+Subir el repositorio a GitHub.
+Conectar la cuenta de Vercel con GitHub.
+Configurar la build (para proyectos estáticos, Bootstrap y demás) y desplegar.
+Verificar la correcta carga de imágenes, scripts y estilos en el entorno de producción.
+8. Conclusiones y Mejoras Futuras
+8.1 Conclusiones
+Se logró un sitio web moderno y responsivo que refleja la identidad de DIBA FBC.
+Se utilizaron buenas prácticas de desarrollo, con separación de responsabilidades en HTML, CSS y JavaScript.
+La integración de herramientas como Bootstrap y Animate.css facilitó la creación de un diseño atractivo.
+8.2 Mejoras Futuras
+Sistema de Autenticación y Perfil:
+Implementar un sistema de login y registro más robusto para usuarios.
+Panel de Administración:
+Permitir actualizaciones en tiempo real de jugadores, eventos y noticias.
+Integración de Redes Sociales:
+Mostrar feeds en vivo o enlaces a publicaciones recientes.
+Optimización SEO:
+Mejorar etiquetas meta, encabezados y estructura semántica para un mejor posicionamiento.
+Internacionalización:
+Ofrecer el sitio en varios idioma
