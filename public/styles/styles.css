@@ -260,7 +260,7 @@ h4 {
   background: var(--blanco);
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 8px var(--blanco);
   max-width: 320px;
   margin: 0 auto;
 }
