@@ -260,10 +260,17 @@ h4 {
   background: var(--blanco);
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 4px 8px var(--blanco);
+  box-shadow: 0 4px 8px var(--sombra); /* Usamos la variable de sombra */
   max-width: 320px;
   margin: 0 auto;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
+
+.match-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px var(--sombra);
+}
+
 .match-card-top {
   background: var(--grana);
   color: var(--azul-intenso);
@@ -271,17 +278,32 @@ h4 {
   text-align: center;
   position: relative;
 }
+
 .match-card-top img {
   width: 70px;
   margin: 0 0.5rem;
+  transition: transform 0.3s ease;
 }
+
+.match-card-top img:hover {
+  transform: scale(1.1);
+}
+
 .match-card-body {
   padding: 1rem;
   text-align: center;
 }
+
 .match-card-body .btn {
   margin: 0.25rem;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
+
+.match-card-body .btn:hover {
+  background-color: var(--amarillo);
+  color: var(--azul);
+}
+
 
 /* ======================================
    ENCABEZADO OPCIONAL
