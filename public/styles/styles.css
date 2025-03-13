@@ -431,7 +431,7 @@ footer a {
   transition: color 0.3s;
 }
 footer a:hover {
-  color: var(--azul);
+  color: var(--blanco);
   text-decoration: underline;
 }
 .footer-brand {
