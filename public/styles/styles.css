@@ -267,13 +267,13 @@ a:hover {
 ====================================== */
 #equipo {
   padding: 60px 20px;
-  background: #d1d1d1;
+  background: var(--blanco);
 }
 #equipo h2 {
   text-align: center;
   margin-bottom: 2rem;
   font-weight: bold;
-  color: var(--amarillo);
+  color: var(--azul-intenso);
 }
 #equipo img {
   width: 180px;
