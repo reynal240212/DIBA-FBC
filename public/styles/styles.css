@@ -260,7 +260,7 @@ h4 {
   background: var(--blanco);
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 4px 8px var(--sombra); /* Usamos la variable de sombra */
+  box-shadow: 0 4px 8px var(--sombra);
   max-width: 320px;
   margin: 0 auto;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -271,39 +271,57 @@ h4 {
   box-shadow: 0 8px 16px var(--sombra);
 }
 
+/* Cabecera de la tarjeta (logos y título) */
 .match-card-top {
-  background: var(--grana);
-  color: var(--azul-intenso);
+  /* Si prefieres un azul intenso en lugar del "grana": */
+  background-color: var(--azul-intenso);
+  color: var(--blanco);
   padding: 1rem;
   text-align: center;
   position: relative;
 }
 
-.match-card-top img {
-  width: 70px;
+.match-card-top .team-logo {
+  width: 60px;
   margin: 0 0.5rem;
   transition: transform 0.3s ease;
 }
 
-.match-card-top img:hover {
+.match-card-top .team-logo:hover {
   transform: scale(1.1);
 }
 
+/* Título dentro de la parte superior */
+.match-card-title {
+  margin-top: 0.5rem;
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+/* Cuerpo de la tarjeta (detalles de partido, botón) */
 .match-card-body {
   padding: 1rem;
   text-align: center;
+  /* Texto en azul intenso para contraste sobre fondo blanco */
+  color: var(--azul-intenso);
 }
 
+.match-card-body p {
+  margin-bottom: 0.5rem;
+}
+
+/* Botones dentro de la tarjeta */
 .match-card-body .btn {
-  margin: 0.25rem;
+  margin-top: 0.75rem;
+  background-color: var(--amarillo);
+  color: var(--azul-intenso);
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .match-card-body .btn:hover {
-  background-color: var(--amarillo);
-  color: var(--azul);
+  background-color: var(--dorado);
+  color: var(--blanco);
 }
-
 
 /* ======================================
    ENCABEZADO OPCIONAL
