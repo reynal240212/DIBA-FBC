@@ -1,19 +1,18 @@
 /* ======================================
-   VARIABLES DE COLOR (CORREGIDAS)
+   VARIABLES DE COLOR
 ====================================== */
 :root {
-  --azul:         #003399;      
-  --azul-intenso: #001b72;      
-  --grana:        #0b0281;      
-  --amarillo:     #ffd700;      
-  --dorado:       #ffd900d8;    
+  --azul:         #003399;      /* Azul fuerte */
+  --azul-intenso: #001b72;      /* Azul oscuro */
+  --grana:        #0b0281;      /* Tono extra oscuro */
+  --amarillo:     #ffd700;      /* Amarillo dorado */
+  --dorado:       #ffd900d8;    /* Dorado con transparencia */
   --fondo:        #ffffff;      /* Fondo blanco */
-  --fondo-gris:   #f4f4f4;
+  --fondo-gris:   #f4f4f4;      /* Gris claro */
   --blanco:       #ffffff;
-  --texto-claro:  #ffffff;      
+  --texto-claro:  #ffffff;
   --sombra:       rgba(0, 0, 0, 0.2);
 }
-
 
 /* ======================================
    RESET Y ESTILOS GENERALES
@@ -28,10 +27,12 @@ html, body {
   height: 100%;
   font-family: 'Arial', sans-serif;
   overflow-x: hidden;
-  position: relative;
-  background: var(--fondo); /* Ahora será blanco */
+  background: var(--fondo);
 }
 
+/* ======================================
+   ANIMACIÓN DE FONDO (CUBOS)
+====================================== */
 .background-animation {
   position: fixed;
   top: 0;
@@ -39,21 +40,19 @@ html, body {
   width: 100%;
   height: 100%;
   z-index: -1;
-  background: var(--fondo); /* Fondo blanco para la animación */
+  background: var(--fondo);
   overflow: hidden;
 }
 
-
-/* Estilo y animación de los "cubos" */
 .cube {
   position: absolute;
-  bottom: -100px; /* Inician fuera de la pantalla por abajo */
+  bottom: -100px; /* Inician fuera de la pantalla */
   width: 50px;
   height: 50px;
   background: rgba(255, 215, 0, 0.7); /* Dorado semitransparente */
   animation: cubeAnim 10s infinite linear;
 }
-/* Distribución y delays para variar la animación con 10 cubos */
+/* Distribución y delays para 10 cubos */
 .cube:nth-child(1) { left: 5%;  animation-delay: 0s; }
 .cube:nth-child(2) { left: 15%; animation-delay: 1s; }
 .cube:nth-child(3) { left: 25%; animation-delay: 2s; }
@@ -76,14 +75,18 @@ html, body {
   }
 }
 
-/* Contenedor principal de contenido */
-.content {
-  position: relative;
-  z-index: 1;
-  padding: 20px;
-  color: var(--blanco);
+/* ======================================
+   CONTENIDO PRINCIPAL
+====================================== */
+.container.content {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 1rem;
+  /* Para secciones sobre fondo blanco, usamos un texto en azul fuerte */
+  color: var(--azul);
 }
 
+/* Enlaces */
 a {
   text-decoration: none;
   color: var(--azul);
@@ -93,8 +96,45 @@ a:hover {
   color: var(--amarillo);
 }
 
+/* Títulos de sección */
+.section-title,
+h4 {
+  font-weight: 700;
+  color: var(--azul);
+}
+
+/* Listas en Objetivos Específicos */
+.list-group-item {
+  font-size: 1rem;
+}
+
 /* ======================================
-   NAVBAR FIJA CON CONTRASTE
+   BOTÓN "VOLVER ARRIBA"
+====================================== */
+#btnBackToTop {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  display: none; /* Se muestra mediante JS */
+  z-index: 99;
+  border: none;
+  outline: none;
+  background-color: var(--azul);
+  color: var(--blanco);
+  cursor: pointer;
+  padding: 0.75rem 1rem;
+  border-radius: 0.25rem;
+  transition: background-color 0.3s ease;
+}
+#btnBackToTop:hover {
+  background-color: var(--azul-intenso);
+}
+#btnBackToTop.show {
+  display: inline-block;
+}
+
+/* ======================================
+   NAVBAR FIJA
 ====================================== */
 .navbar {
   position: fixed;
@@ -125,12 +165,12 @@ a:hover {
 }
 
 /* ======================================
-   HERO (PARALLAX)
+   HERO (SECCIÓN PRINCIPAL)
 ====================================== */
 .hero {
   position: relative;
   min-height: 100vh;
-  background: linear-gradient(135deg, #002a40, #001b72),
+  background: linear-gradient(135deg, var(--azul), var(--azul-intenso)), 
               url('images/fondo.jpg') center/cover no-repeat fixed;
   background-blend-mode: multiply;
   display: flex;
@@ -138,11 +178,6 @@ a:hover {
   justify-content: center;
   text-align: center;
   color: var(--blanco);
-}
-@media (min-width: 768px) {
-  .hero {
-    background-attachment: fixed;
-  }
 }
 .hero::before {
   content: "";
@@ -174,11 +209,11 @@ a:hover {
 }
 
 /* ======================================
-   SECCIÓN: RESUMEN HISTORIA
+   RESUMEN DE HISTORIA
 ====================================== */
 #resumen-historia {
   padding: 2rem 0;
-  background-color: #0b33a1; /* Fondo oscuro */
+  background-color: var(--azul-intenso);
 }
 #resumen-historia h2 {
   color: var(--amarillo);
@@ -253,7 +288,7 @@ a:hover {
 ====================================== */
 .header {
   background: var(--amarillo);
-  color: var(--amarillo);
+  color: var(--azul-intenso);
   padding: 1rem;
   text-align: center;
   margin-bottom: 1rem;
@@ -288,7 +323,7 @@ a:hover {
 #equipo h5 {
   margin-top: 1rem;
   font-weight: bold;
-  color: var(--blanco);
+  color: var(--azul);
 }
 
 /* ======================================
@@ -461,7 +496,9 @@ footer a:hover {
   display: block;
 }
 
-/* Estilo para el espacio vacío destinado a subir fotos */
+/* ======================================
+   ESPACIO VACÍO PARA SUBIR FOTOS
+====================================== */
 .empty-photo {
   height: 200px;
   background-color: #e9ecef;
@@ -472,9 +509,11 @@ footer a:hover {
   font-size: 1.2rem;
 }
 
-/* Tarjetas de jugador extra (Hexágono) */
+/* ======================================
+   TARJETAS DE JUGADOR (HEXÁGONO)
+====================================== */
 .player-card {
-  background-color: #090057; /* Azul oscuro */
+  background-color: var(--azul-intenso);
   text-align: center;
   padding: 20px;
   position: relative;
@@ -542,49 +581,4 @@ footer a:hover {
 .btn-register:hover {
   background-color: var(--dorado);
   color: var(--blanco);
-}
-/* Contenedor principal */
-.container.content {
-  max-width: 800px;
-  margin: 0 auto;
-  /* Puedes ajustar o quitar este padding según prefieras */
-  padding: 1rem;
-}
-
-/* Títulos de secciones (ya usas .h4, pero si quieres refinar más) */
-.section-title {
-  font-weight: 700;
-  color: #343a40;
-}
-
-/* Ajustes en la lista para objetivos */
-.list-group-item {
-  font-size: 1rem;
-}
-
-/* Botón Volver Arriba */
-#btnBackToTop {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  display: none; /* Oculto por defecto; se mostrará con JS */
-  z-index: 99;
-  border: none;
-  outline: none;
-  background-color: #0d6efd; /* Azul de Bootstrap */
-  color: #fff;
-  cursor: pointer;
-  padding: 0.75rem 1rem;
-  border-radius: 0.25rem;
-  transition: opacity 0.3s ease;
-}
-
-/* Hover en el botón */
-#btnBackToTop:hover {
-  background-color: #0b5ed7; /* Un tono más oscuro */
-}
-
-/* Clase para mostrar el botón (la controlas con JS) */
-#btnBackToTop.show {
-  display: inline-block;
 }
