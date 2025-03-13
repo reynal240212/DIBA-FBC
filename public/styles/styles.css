@@ -1,40 +1,38 @@
-/* ===================================================
-   VARIABLES DE COLOR (Global Variables)
-==================================================== */
+/* ======================================
+   VARIABLES DE COLOR
+====================================== */
 :root {
-  /* Colores base (utiliza nombres descriptivos y consistentes) */
-  --color-azul:         #003399;      /* Azul fuerte */
-  --color-azul-intenso: #001b72;      /* Azul oscuro */
-  --color-grana:        #0b0281;      /* Tono extra oscuro */
-  --color-amarillo:     #ffd700;      /* Amarillo dorado */
-  --color-dorado:       #ffd900d8;    /* Dorado con transparencia */
-  --color-fondo:        #ffffff;      /* Fondo blanco */
-  --color-fondo-gris:   #f4f4f4;      /* Gris claro */
-  --color-blanco:       #ffffff;
-  --color-texto-claro:  #ffffff;
-  --color-sombra:       rgba(0, 0, 0, 0.2);
+  --azul:         #003399;      /* Azul fuerte */
+  --azul-intenso: #001b72;      /* Azul oscuro */
+  --grana:        #0b0281;      /* Tono extra oscuro */
+  --amarillo:     #ffd700;      /* Amarillo dorado */
+  --dorado:       #ffd900d8;    /* Dorado con transparencia */
+  --fondo:        #ffffff;      /* Fondo blanco */
+  --fondo-gris:   #f4f4f4;      /* Gris claro */
+  --blanco:       #ffffff;
+  --texto-claro:  #ffffff;
+  --sombra:       rgba(0, 0, 0, 0.2);
 }
 
-/* ===================================================
+/* ======================================
    RESET Y ESTILOS GENERALES
-==================================================== */
+====================================== */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
-
 html, body {
   width: 100%;
   height: 100%;
   font-family: 'Arial', sans-serif;
   overflow-x: hidden;
-  background: var(--color-fondo);
+  background: var(--fondo);
 }
 
-/* ===================================================
+/* ======================================
    ANIMACIÓN DE FONDO (CUBOS)
-==================================================== */
+====================================== */
 .background-animation {
   position: fixed;
   top: 0;
@@ -42,7 +40,7 @@ html, body {
   width: 100%;
   height: 100%;
   z-index: -1;
-  background: var(--color-fondo);
+  background: var(--fondo);
   overflow: hidden;
 }
 
@@ -54,7 +52,7 @@ html, body {
   background: rgba(255, 215, 0, 0.7); /* Dorado semitransparente */
   animation: cubeAnim 10s infinite linear;
 }
-/* Distribución de cubos con delays */
+/* Distribución y delays para 10 cubos */
 .cube:nth-child(1) { left: 5%;  animation-delay: 0s; }
 .cube:nth-child(2) { left: 15%; animation-delay: 1s; }
 .cube:nth-child(3) { left: 25%; animation-delay: 2s; }
@@ -77,42 +75,42 @@ html, body {
   }
 }
 
-/* ===================================================
-   ESTILOS GLOBALES Y CONTENIDO PRINCIPAL
-==================================================== */
+/* ======================================
+   CONTENIDO PRINCIPAL
+====================================== */
 .container.content {
   max-width: 800px;
   margin: 0 auto;
   padding: 1rem;
-  /* Para textos sobre fondo blanco, usamos un color de texto consistente */
-  color: var(--color-azul);
+  /* Para secciones sobre fondo blanco, usamos un texto en azul fuerte */
+  color: var(--azul);
 }
 
-/* Enlaces: se incluye un fallback para asegurar la legibilidad */
+/* Enlaces */
 a {
   text-decoration: none;
-  color: var(--color-azul);
+  color: var(--azul);
   transition: color 0.3s ease;
 }
 a:hover {
-  color: var(--color-amarillo);
+  color: var(--amarillo);
 }
 
-/* Títulos de sección y encabezados */
+/* Títulos de sección */
 .section-title,
 h4 {
   font-weight: 700;
-  color: var(--color-blanco); /* Ajusta según el fondo en cada sección */
+  color: var(--azul);
 }
 
-/* Listas */
+/* Listas en Objetivos Específicos */
 .list-group-item {
   font-size: 1rem;
 }
 
-/* ===================================================
+/* ======================================
    BOTÓN "VOLVER ARRIBA"
-==================================================== */
+====================================== */
 #btnBackToTop {
   position: fixed;
   bottom: 20px;
@@ -121,30 +119,30 @@ h4 {
   z-index: 99;
   border: none;
   outline: none;
-  background-color: var(--color-azul);
-  color: var(--color-blanco);
+  background-color: var(--azul);
+  color: var(--blanco);
   cursor: pointer;
   padding: 0.75rem 1rem;
   border-radius: 0.25rem;
   transition: background-color 0.3s ease;
 }
 #btnBackToTop:hover {
-  background-color: var(--color-azul-intenso);
+  background-color: var(--azul-intenso);
 }
 #btnBackToTop.show {
   display: inline-block;
 }
 
-/* ===================================================
+/* ======================================
    NAVBAR FIJA
-==================================================== */
+====================================== */
 .navbar {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   z-index: 1000;
-  background: var(--color-azul-intenso);
+  background: var(--azul-intenso);
   padding: 0.75rem 1rem;
   transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
@@ -158,28 +156,28 @@ h4 {
 }
 .nav-link {
   font-weight: 600;
-  color: var(--color-blanco) !important;
+  color: var(--blanco) !important;
   margin: 0 0.5rem;
   transition: color 0.3s;
 }
 .nav-link:hover {
-  color: var(--color-dorado) !important;
+  color: var(--dorado) !important;
 }
 
-/* ===================================================
+/* ======================================
    HERO (SECCIÓN PRINCIPAL)
-==================================================== */
+====================================== */
 .hero {
   position: relative;
   min-height: 100vh;
-  background: linear-gradient(135deg, var(--color-azul), var(--color-azul-intenso)),
+  background: linear-gradient(135deg, var(--azul), var(--azul-intenso)), 
               url('images/fondo.jpg') center/cover no-repeat fixed;
   background-blend-mode: multiply;
   display: flex;
   align-items: center;
   justify-content: center;
   text-align: center;
-  color: var(--color-blanco);
+  color: var(--blanco);
 }
 .hero::before {
   content: "";
@@ -196,7 +194,7 @@ h4 {
   font-family: 'Dancing Script', cursive;
   font-size: 3rem;
   margin-bottom: 1rem;
-  color: var(--color-amarillo);
+  color: var(--amarillo);
   text-shadow: 3px 3px 8px rgba(0, 0, 0, 0.5);
 }
 .hero .hero-subtitle {
@@ -210,36 +208,36 @@ h4 {
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
 }
 
-/* ===================================================
+/* ======================================
    RESUMEN DE HISTORIA
-==================================================== */
+====================================== */
 #resumen-historia {
   padding: 2rem 0;
-  background-color: var(--color-azul-intenso);
+  background-color: var(--azul-intenso);
 }
 #resumen-historia h2 {
-  color: var(--color-amarillo);
+  color: var(--amarillo);
   font-weight: bold;
   text-transform: uppercase;
 }
 #resumen-historia p {
   font-size: 1rem;
-  color: var(--color-blanco);
+  color: var(--blanco);
   line-height: 1.6;
 }
 
-/* ===================================================
+/* ======================================
    SECCIÓN SERVICIOS
-==================================================== */
+====================================== */
 #servicios {
   padding: 60px 20px;
-  background-color: var(--color-fondo-gris);
+  background-color: var(--fondo-gris);
 }
 #servicios h2 {
   text-align: center;
   margin-bottom: 2rem;
   font-weight: bold;
-  color: var(--color-azul-intenso);
+  color: var(--azul-intenso);
 }
 .card {
   border: none;
@@ -248,74 +246,49 @@ h4 {
 }
 .card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 4px 10px var(--color-sombra);
+  box-shadow: 0 4px 10px var(--sombra);
 }
 .card-title {
-  color: var(--color-azul);
+  color: var(--azul);
   font-weight: bold;
 }
 
-/* ===================================================
+/* ======================================
    TARJETAS DE PARTIDOS
-==================================================== */
+====================================== */
 .match-card {
-  background: var(--color-blanco);
+  background: var(--blanco);
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 4px 8px var(--color-sombra);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
   max-width: 320px;
   margin: 0 auto;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-.match-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 16px var(--color-sombra);
 }
 .match-card-top {
-  background-color: var(--color-azul-intenso);
-  color: var(--color-blanco);
+  background: var(--grana);
+  color: var(--texto-claro);
   padding: 1rem;
   text-align: center;
   position: relative;
 }
-.match-card-top .team-logo {
-  width: 60px;
+.match-card-top img {
+  width: 70px;
   margin: 0 0.5rem;
-  transition: transform 0.3s ease;
-}
-.match-card-top .team-logo:hover {
-  transform: scale(1.1);
-}
-.match-card-title {
-  margin-top: 0.5rem;
-  font-weight: 600;
-  font-size: 1rem;
 }
 .match-card-body {
   padding: 1rem;
   text-align: center;
-  color: var(--color-azul-intenso);
-}
-.match-card-body p {
-  margin-bottom: 0.5rem;
 }
 .match-card-body .btn {
-  margin-top: 0.75rem;
-  background-color: var(--color-amarillo);
-  color: var(--color-azul-intenso);
-  transition: background-color 0.3s ease, color 0.3s ease;
-}
-.match-card-body .btn:hover {
-  background-color: var(--color-dorado);
-  color: var(--color-blanco);
+  margin: 0.25rem;
 }
 
-/* ===================================================
+/* ======================================
    ENCABEZADO OPCIONAL
-==================================================== */
+====================================== */
 .header {
-  background: var(--color-amarillo);
-  color: var(--color-azul-intenso);
+  background: var(--amarillo);
+  color: var(--azul-intenso);
   padding: 1rem;
   text-align: center;
   margin-bottom: 1rem;
@@ -324,24 +297,24 @@ h4 {
   margin: 0;
 }
 
-/* ===================================================
-   SECCIÓN EQUIPO (CUERPO TÉCNICO)
-==================================================== */
+/* ======================================
+   SECCIÓN EQUIPO
+====================================== */
 #equipo {
   padding: 60px 20px;
-  background: var(--color-blanco);
+  background: var(--blanco);
 }
 #equipo h2 {
   text-align: center;
   margin-bottom: 2rem;
   font-weight: bold;
-  color: var(--color-azul-intenso);
+  color: var(--azul-intenso);
 }
 #equipo img {
   width: 180px;
   height: 180px;
   object-fit: cover;
-  box-shadow: 0 2px 6px var(--color-sombra);
+  box-shadow: 0 2px 6px var(--sombra);
   transition: transform 0.3s;
 }
 #equipo img:hover {
@@ -350,48 +323,48 @@ h4 {
 #equipo h5 {
   margin-top: 1rem;
   font-weight: bold;
-  color: var(--color-azul);
+  color: var(--azul);
 }
 
-/* ===================================================
+/* ======================================
    SECCIÓN CONTACTO
-==================================================== */
+====================================== */
 #contacto {
   padding: 60px 20px;
-  background-color: var(--color-fondo-gris);
+  background-color: var(--fondo-gris);
 }
 #contacto h2 {
   text-align: center;
   margin-bottom: 2rem;
   font-weight: bold;
-  color: var(--color-amarillo);
+  color: var(--amarillo);
 }
 #contacto .form-control:focus {
-  box-shadow: 0 0 0 0.2rem rgba(0, 77, 152, 0.25);
-  border-color: var(--color-azul);
+  box-shadow: 0 0 0 0.2rem rgba(0,77,152,0.25);
+  border-color: var(--azul);
 }
 #contacto button {
-  background: var(--color-azul);
+  background: var(--azul);
   border: none;
   transition: background 0.3s;
 }
 #contacto button:hover {
-  background: var(--color-amarillo);
-  color: var(--color-blanco);
+  background: var(--amarillo);
+  color: var(--blanco);
 }
 
-/* ===================================================
+/* ======================================
    SECCIÓN PATROCINADORES
-==================================================== */
+====================================== */
 #patrocinadores {
   text-align: center;
   padding: 50px 0;
-  background-color: var(--color-fondo-gris);
+  background-color: var(--fondo-gris);
 }
 #patrocinadores h2 {
   margin-bottom: 2rem;
   font-weight: bold;
-  color: var(--color-azul);
+  color: var(--azul);
 }
 #patrocinadores .patrocinador {
   margin: 1rem;
@@ -407,29 +380,29 @@ h4 {
 #patrocinadores .patrocinador p {
   margin-top: 0.5rem;
   font-weight: bold;
-  color: var(--color-azul);
+  color: var(--azul);
 }
 
-/* ===================================================
+/* ======================================
    SECCIÓN FUNDACIÓN
-==================================================== */
+====================================== */
 #fundacion {
   padding: 60px 20px;
-  background-color: var(--color-azul-intenso);
+  background-color: var(--azul-intenso);
 }
 #fundacion h2 {
-  color: var(--color-amarillo);
+  color: var(--amarillo);
   margin-bottom: 20px;
 }
 #fundacion p {
   font-size: 1rem;
   line-height: 1.6;
-  color: var(--color-blanco);
+  color: var(--blanco);
 }
 #fundacion .btn {
-  background-color: var(--color-amarillo);
+  background-color: var(--amarillo);
   border: none;
-  color: var(--color-azul);
+  color: var(--azul);
   transition: background-color 0.3s ease;
 }
 #fundacion .btn:hover {
@@ -440,26 +413,25 @@ h4 {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* ===================================================
-   FOOTER (Full-Width Footer)
-==================================================== */
+/* ======================================
+   FOOTER
+====================================== */
 footer {
-  background: var(--color-azul);
-  color: var(--color-amarillo);
+  background: var(--azul);
+  color: var(--amarillo);
   padding: 2rem 1rem;
   text-align: center;
-  width: 100%; /* Asegura que el fondo se extienda a todo el ancho */
 }
 footer p {
   margin: 0;
 }
 footer a {
-  color: var(--color-amarillo);
+  color: var(--amarillo);
   text-decoration: none;
   transition: color 0.3s;
 }
 footer a:hover {
-  color: var(--color-blanco);
+  color: var(--blanco);
   text-decoration: underline;
 }
 .footer-brand {
@@ -473,9 +445,9 @@ footer a:hover {
   margin-bottom: 0.5rem;
 }
 
-/* ===================================================
+/* ======================================
    RESPONSIVIDAD
-==================================================== */
+====================================== */
 @media (max-width: 768px) {
   .hero .hero-title {
     font-size: 2.5rem;
@@ -489,17 +461,17 @@ footer a:hover {
   }
 }
 
-/* ===================================================
+/* ======================================
    SECCIÓN: JUGADORES POR CATEGORÍA
-==================================================== */
+====================================== */
 .category-section {
   padding: 2rem 0;
-  background: var(--color-fondo-gris);
+  background: var(--fondo-gris);
 }
 .category-section h1 {
   text-align: center;
   margin-bottom: 2rem;
-  color: var(--color-grana);
+  color: var(--grana);
   font-weight: bold;
 }
 .category-buttons {
@@ -514,8 +486,8 @@ footer a:hover {
   transform: scale(1.05);
 }
 .category-buttons .btn.active {
-  background-color: var(--color-grana);
-  color: var(--color-texto-claro);
+  background-color: var(--grana);
+  color: var(--texto-claro);
 }
 .category-container {
   display: none;
@@ -524,9 +496,9 @@ footer a:hover {
   display: block;
 }
 
-/* ===================================================
+/* ======================================
    ESPACIO VACÍO PARA SUBIR FOTOS
-==================================================== */
+====================================== */
 .empty-photo {
   height: 200px;
   background-color: #e9ecef;
@@ -537,20 +509,20 @@ footer a:hover {
   font-size: 1.2rem;
 }
 
-/* ===================================================
+/* ======================================
    TARJETAS DE JUGADOR (HEXÁGONO)
-==================================================== */
+====================================== */
 .player-card {
-  background-color: var(--color-azul-intenso);
+  background-color: var(--azul-intenso);
   text-align: center;
   padding: 20px;
   position: relative;
-  color: var(--color-blanco);
+  color: var(--blanco);
   border-radius: 0 0 8px 8px;
 }
 .position-tag {
-  background-color: var(--color-dorado);
-  color: var(--color-blanco);
+  background-color: var(--dorado);
+  color: var(--blanco);
   font-weight: bold;
   padding: 5px 15px;
   position: absolute;
@@ -558,7 +530,7 @@ footer a:hover {
   left: 50%;
   transform: translateX(-50%);
   white-space: nowrap;
-  border: 2px solid var(--color-blanco);
+  border: 2px solid var(--blanco);
   clip-path: polygon(15% 0, 85% 0, 100% 50%, 85% 100%, 15% 100%, 0 50%);
 }
 .player-name {
@@ -567,9 +539,9 @@ footer a:hover {
   margin-top: 20px;
 }
 
-/* ===================================================
+/* ======================================
    SWIPE CAROUSEL
-==================================================== */
+====================================== */
 .swipe-carousel {
   --rm-swipe-carousel-bg-color: transparent;
   --rm-swipe-carousel-height-default: auto;
@@ -586,18 +558,18 @@ footer a:hover {
   gap: var(--rm-swipe-carousel-gap);
   align-items: var(--rm-swipe-carousel-content-align);
   width: max-content;
-  transition: var(--rm-swipe-carousel-content-transition, transform 0.3s ease-in-out);
+  transition: var(--rm-swipe-carousel-content-transition, transform .3s ease-in-out);
   scroll-padding-inline: var(--rm-swipe-carousel-scroll-padding-inline-default, 1.5rem);
 }
 
-/* ===================================================
+/* ======================================
    BOTONES DE INICIO DE SESIÓN Y REGISTRO
-==================================================== */
+====================================== */
 .btn-login,
 .btn-register {
-  background-color: var(--color-amarillo);
+  background-color: var(--amarillo);
   border: none;
-  color: var(--color-azul);
+  color: var(--azul);
   padding: 0.75rem 1.5rem;
   font-weight: bold;
   border-radius: 4px;
@@ -607,6 +579,6 @@ footer a:hover {
 }
 .btn-login:hover,
 .btn-register:hover {
-  background-color: var(--color-dorado);
-  color: var(--color-blanco);
+  background-color: var(--dorado);
+  color: var(--blanco);
 }
