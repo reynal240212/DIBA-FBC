@@ -88,6 +88,41 @@
     .contenido-tab > div.active {
       display: block;
     }
+    /* Ajuste en .contenedor-input y sus inputs */
+.contenedor-input {
+  position: relative;
+  margin-bottom: 30px; /* un poco menos de espacio */
+}
+
+.contenedor-input label {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--azul-intenso);
+  font-weight: 600;
+  font-size: 15px;
+}
+
+.contenedor-input input {
+  width: 100%;
+  font-size: 16px;
+  padding: 12px 14px;
+  border: 2px solid var(--grana);
+  border-radius: 6px;
+  color: var(--azul);
+  background-color: #fff;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.contenedor-input input::placeholder {
+  color: #999;
+  opacity: 0.8;
+}
+
+.contenedor-input input:focus {
+  outline: none;
+  border-color: var(--amarillo);
+  box-shadow: 0 0 4px rgba(255, 215, 0, 0.4);
+}
     
     h1 {
       text-align: center;
