@@ -16,7 +16,11 @@
   <!-- Tu CSS global -->
   <link rel="stylesheet" href="styles/styles.css" />
 
+  <!-- Estilo adicional para forzar fondo blanco -->
   <style>
+    html, body {
+      background-color: #ffffff !important;
+    }
     /* Estilos específicos para la página de Contacto (opcionales) */
     .contact-hero {
       min-height: 60vh;
@@ -117,7 +121,7 @@
   <!-- Footer (mismo en todas las páginas) -->
   <footer class="py-4" style="background: linear-gradient(135deg, #002a40, #004D73); color: #fff;">
     <div class="container">
-      <div class="footer-brand">
+      <div class="footer-brand text-center">
         <img src="images/ESCUDO.png" alt="Escudo DIBA FBC" style="max-width: 120px;">
         <p class="mt-2">&copy; 2025 DIBA FBC. Todos los derechos reservados.</p>
       </div>
@@ -162,6 +166,7 @@
 
   <!-- Script extra para el navbar y el botón "Volver arriba" -->
   <script>
+    // Cambiar la clase del navbar al hacer scroll
     const navbar = document.querySelector('.navbar');
     window.addEventListener('scroll', () => {
       if (window.scrollY > 50) {
