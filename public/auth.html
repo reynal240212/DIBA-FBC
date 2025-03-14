@@ -16,7 +16,6 @@
 
   <!-- Estilos personalizados -->
   <style>
-    /* Variables de colores */
     :root {
       --azul:         #003399;
       --azul-intenso: #001b72;
@@ -26,7 +25,6 @@
       --fondo:        #ffffff;
       --sombra:       rgba(0, 0, 0, 0.2);
     }
-    /* Reset y estilos base */
     body, html {
       margin: 0;
       padding: 0;
@@ -34,34 +32,6 @@
       min-height: 100%;
       font-family: 'Arial', sans-serif;
     }
-    /* Estilos para la cabecera del modal */
-    .modal-header {
-      background-color: var(--azul-intenso);
-      color: var(--amarillo);
-    }
-    /* Botones */
-    .btn-primary {
-      background-color: var(--azul-intenso);
-      border: none;
-    }
-    .btn-primary:hover {
-      background-color: var(--azul);
-    }
-    .btn-warning {
-      background-color: var(--amarillo);
-      border: none;
-      color: var(--azul-intenso);
-    }
-    .btn-warning:hover {
-      background-color: var(--azul-intenso);
-      color: var(--amarillo);
-    }
-    /* Etiquetas */
-    label {
-      color: var(--azul-intenso);
-      font-weight: bold;
-    }
-    /* Contenedor de autenticación: centrado y con sombra */
     .auth-container {
       max-width: 500px;
       margin: 5vh auto;
@@ -80,10 +50,36 @@
       margin-bottom: 2rem;
       color: var(--azul);
     }
+    .nav-tabs .nav-link.active {
+      background-color: var(--azul-intenso) !important;
+      color: var(--amarillo) !important;
+    }
+    .nav-tabs .nav-link {
+      color: var(--azul) !important;
+    }
+    .btn-primary {
+      background-color: var(--azul-intenso);
+      border: none;
+    }
+    .btn-primary:hover {
+      background-color: var(--grana);
+    }
+    .btn-warning {
+      background-color: var(--amarillo);
+      border: none;
+      color: var(--azul-intenso);
+    }
+    .btn-warning:hover {
+      background-color: var(--azul-intenso);
+      color: var(--amarillo);
+    }
+    label {
+      color: var(--azul-intenso);
+      font-weight: bold;
+    }
   </style>
 </head>
 <body>
-  <!-- Contenedor principal de autenticación -->
   <div class="container py-5">
     <div class="auth-container">
       <h1>DIBA FBC</h1>
