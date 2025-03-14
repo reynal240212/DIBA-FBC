@@ -78,10 +78,8 @@ if (formRegistro) {
       const result = await response.json();
       if (response.ok) {
         alert(result.message);
-        // Cerrar modal de registro
-        const modalRegistro = bootstrap.Modal.getInstance(document.getElementById("modalRegistro"));
-        if (modalRegistro) modalRegistro.hide();
-        window.location.href = "login.html"; // O a profile.html, según prefieras
+        // Redirige al usuario a la página principal (o a profile.html, según tu flujo)
+        window.location.href = "index.html";
       } else {
         alert("Error: " + result.error);
       }
@@ -96,18 +94,17 @@ if (formRegistro) {
 function handleCredentialResponse(response) {
   try {
     const data = JSON.parse(atob(response.credential.split(".")[1])); // Decodificar JWT
-    console.log(data); // Para ver toda la información del usuario
-
-    const profilePicture = data.picture; // URL de la foto de perfil
-    const profileImg = document.getElementById("profile-img");
-    if (profileImg) {
-      profileImg.src = profilePicture;
-      profileImg.style.display = "block";
-    }
+    console.log(data); // Para ver la información del usuario
+    // Guarda la información en localStorage para manejar la sesión
+    localStorage.setItem("loggedUser", JSON.stringify(data));
+    // Redirige a la página principal o dashboard
+    window.location.href = "index.html";
   } catch (error) {
     console.error("Error al procesar la respuesta de Google:", error);
   }
 }
+
+// Función adicional (si la usas en otra parte, de lo contrario, puedes eliminarla)
 function scrollTimeline(direction) {
   const container = document.querySelector(".timeline-scroll");
   const scrollAmount = 300; // Cantidad de desplazamiento
