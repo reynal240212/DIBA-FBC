@@ -5,7 +5,8 @@ const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 // Lógica de Login
 document.getElementById("login-form").addEventListener("submit", async (e) => {
-    e.preventDefault();
+    e.preventDefault(); // Evita que el formulario haga un POST y recargue la página
+    
     const email = document.getElementById("login-email").value.trim();
     const password = document.getElementById("login-password").value;
 
@@ -16,13 +17,15 @@ document.getElementById("login-form").addEventListener("submit", async (e) => {
     } else {
         alert("Bienvenido, " + data.user.email);
         localStorage.setItem("loggedUser", JSON.stringify(data.user));
-        window.location.href = "index.html";  // Redirige a la página principal
+        // Redirige a la página principal (ajusta la URL según tu preferencia)
+        window.location.href = "index.html";
     }
 });
 
 // Lógica de Registro
 document.getElementById("register-form").addEventListener("submit", async (e) => {
-    e.preventDefault();
+    e.preventDefault(); // Evita el POST real y recarga
+
     const nombre = document.getElementById("register-nombre").value.trim();
     const apellido = document.getElementById("register-apellido").value.trim();
     const email = document.getElementById("register-email").value.trim();
@@ -30,11 +33,12 @@ document.getElementById("register-form").addEventListener("submit", async (e) =>
     const password2 = document.getElementById("register-password2").value;
     
     // Validar que ambas contraseñas sean iguales
-    if(password !== password2) {
+    if (password !== password2) {
         document.getElementById("register-error").textContent = "Las contraseñas no coinciden.";
         return;
     }
     
+    // Registrar en Supabase
     const { data, error } = await supabase.auth.signUp({ email, password });
     
     if (error) {
@@ -42,6 +46,7 @@ document.getElementById("register-form").addEventListener("submit", async (e) =>
     } else {
         alert("Registro exitoso. Revisa tu correo para confirmar tu cuenta.");
         localStorage.setItem("loggedUser", JSON.stringify(data.user));
-        window.location.href = "index.html";  // Redirige a la página principal
+        // Redirige a la página principal
+        window.location.href = "index.html";
     }
 });

@@ -194,31 +194,18 @@
            <!-- Registrarse -->
            <div id="registrarse">
                <h1>Registrarse</h1>
-               <form id="register-form" action="#" method="post">
-                   <div class="fila-arriba">
-                       <div class="contenedor-input">
-                           <label>Nombre <span class="req">*</span></label>
-                           <input type="text" id="register-nombre" required>
-                       </div>
-                       <div class="contenedor-input">
-                           <label>Apellido <span class="req">*</span></label>
-                           <input type="text" id="register-apellido" required>
-                       </div>
-                   </div>
-                   <div class="contenedor-input">
-                       <label>Correo Electrónico <span class="req">*</span></label>
-                       <input type="email" id="register-email" required>
-                   </div>
-                   <div class="contenedor-input">
-                       <label>Contraseña <span class="req">*</span></label>
-                       <input type="password" id="register-password" required>
-                   </div>
-                   <div class="contenedor-input">
-                       <label>Repetir Contraseña <span class="req">*</span></label>
-                       <input type="password" id="register-password2" required>
-                   </div>
-                   <input type="submit" class="button button-block" value="Registrarse">
-               </form>
+               <form id="register-form">
+                <!-- sin action, sin method -->
+                <div class="contenedor-input">
+                  <label>Correo Electrónico <span class="req">*</span></label>
+                  <input type="email" id="register-email" required>
+                </div>
+                <div class="contenedor-input">
+                  <label>Contraseña <span class="req">*</span></label>
+                  <input type="password" id="register-password" required>
+                </div>
+                <button type="submit" class="button button-block">Registrarse</button>
+              </form>              
                <p id="register-error" class="error-message"></p>
            </div>
        </div>
