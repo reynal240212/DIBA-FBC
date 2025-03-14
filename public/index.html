@@ -39,8 +39,15 @@
     href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css"
   />
 
-  <!-- Tus estilos globales -->
+  <!-- estilos globales -->
   <link rel="stylesheet" href="styles/styles.css" />
+  <script>
+    if (localStorage.getItem("loggedUser")) {
+      console.log("Usuario autenticado");
+    } else {
+      window.location.href = "auth.html";
+    }
+  </script>
   
 </head>
 
