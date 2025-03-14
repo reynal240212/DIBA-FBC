@@ -1,124 +1,66 @@
-// Botón "Volver arriba"
-window.addEventListener("scroll", function () {
-  let btn = document.getElementById("btnBackToTop");
-  if (btn) {
-    btn.style.display = window.scrollY > 300 ? "block" : "none";
-  }
+document.addEventListener("DOMContentLoaded", function () {
+  configurarMenu();
+  cargarJugadores();
 });
 
-const btnBackToTop = document.getElementById("btnBackToTop");
-if (btnBackToTop) {
-  btnBackToTop.addEventListener("click", () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
+let jugadores = [];
+
+function configurarMenu() {
+  document.querySelector(".menu-toggle").addEventListener("click", function () {
+      document.querySelector(".nav-links").classList.toggle("active");
   });
 }
 
-// Funcionalidad de categorías (si usas .category-buttons .btn)
-const btns = document.querySelectorAll(".category-buttons .btn");
-const containers = document.querySelectorAll(".category-container");
-
-if (btns.length > 0 && containers.length > 0) {
-  btns.forEach((btn) => {
-    btn.addEventListener("click", () => {
-      btns.forEach((b) => b.classList.remove("active"));
-      containers.forEach((cont) => cont.classList.remove("active"));
-      btn.classList.add("active");
-      const id = btn.getAttribute("data-category");
-      const targetContainer = document.getElementById(id);
-      if (targetContainer) {
-        targetContainer.classList.add("active", "animate__animated", "animate__fadeIn");
-      }
-    });
-  });
+function cargarJugadores() {
+  fetch("data/Ficha de Registro de Jugadores DIBA FBC.csv")
+      .then(response => response.text())
+      .then(data => procesarCSV(data))
+      .catch(error => console.error("Error al cargar el CSV:", error));
 }
 
-// scripts/main.js
+function procesarCSV(texto) {
+  const lineas = texto.split("\n").map(l => l.trim()).filter(l => l.length > 0);
+  if (lineas.length < 2) {
+      console.error("El archivo CSV parece vacío o incorrecto.");
+      return;
+  }
 
-// =======================
-// LOGIN
-// =======================
-const formLogin = document.getElementById("formLogin");
-if (formLogin) {
-  formLogin.addEventListener("submit", async (e) => {
-    e.preventDefault();
-    const correo = document.getElementById("loginCorreo").value.trim();
-    const clave = document.getElementById("loginClave").value;
+  const separador = texto.includes(";") ? ";" : texto.includes("\t") ? "\t" : ",";
+  const headers = lineas[0].split(separador).map(h => h.trim());
 
-    try {
-      const response = await fetch("/api/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ correo, password: clave }),
+  jugadores = lineas.slice(1).map(linea => {
+      const valores = linea.split(separador);
+      let jugador = {};
+      headers.forEach((header, index) => {
+          jugador[header] = valores[index] ? valores[index].trim() : "";
       });
-
-      if (!response.ok) {
-        const errorText = await response.text();
-        alert("Error en el login: " + errorText);
-        return;
-      }
-
-      const result = await response.json();
-      alert("Bienvenido, " + result.user.nombre);
-      localStorage.setItem("loggedUser", JSON.stringify(result.user));
-
-      // Redirige a la página que quieras
-      window.location.href = "profile.html";
-    } catch (error) {
-      console.error("Error en el login:", error);
-      alert("Error al iniciar sesión. Inténtalo de nuevo.");
-    }
+      return jugador;
   });
+
+  console.log("Jugadores cargados:", jugadores);
 }
 
-// =======================
-// REGISTRO
-// =======================
-const formRegistro = document.getElementById("formRegistro");
-if (formRegistro) {
-  formRegistro.addEventListener("submit", async (e) => {
-    e.preventDefault();
-    const nombre = document.getElementById("regNombre").value.trim();
-    const correo = document.getElementById("regCorreo").value.trim();
-    const password = document.getElementById("regPassword").value;
-    const fechaNac = document.getElementById("regFechaNac").value;
+function buscarJugador() {
+  const query = document.getElementById("searchInput").value.trim().toLowerCase();
+  if (query === "") {
+      alert("Por favor, ingresa un nombre.");
+      return;
+  }
 
-    try {
-      const response = await fetch("/api/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ nombre, correo, password, fechaNac }),
-      });
+  const jugadorEncontrado = jugadores.find(jugador =>
+      (jugador["Nombres"] && jugador["Nombres"].toLowerCase().includes(query)) ||
+      (jugador["Apellidos"] && jugador["Apellidos"].toLowerCase().includes(query))
+  );
 
-      if (!response.ok) {
-        const errorText = await response.text();
-        alert("Error en el registro: " + errorText);
-        return;
-      }
+  if (!jugadorEncontrado) {
+      alert("No se encontraron jugadores con ese nombre.");
+      return;
+  }
 
-      const result = await response.json();
-      alert(result.message);
+  const params = new URLSearchParams();
+  for (let key in jugadorEncontrado) {
+      params.append(encodeURIComponent(key), encodeURIComponent(jugadorEncontrado[key]));
+  }
 
-      // Cierra el modal de registro (opcional) si no rediriges inmediatamente
-      const modalRegistro = bootstrap.Modal.getInstance(document.getElementById("modalRegistro"));
-      if (modalRegistro) {
-        modalRegistro.hide();
-      }
-
-      // Redirige tras registrarse (o mantén al usuario en la misma página)
-      // window.location.href = "profile.html";
-    } catch (error) {
-      console.error("Error en el registro:", error);
-      alert("Error al registrar usuario. Inténtalo de nuevo.");
-    }
-  });
-}
-
-
-// =======================
-// SCROLL TIMELINE (Opcional)
-// =======================
-function scrollTimeline(direction) {
-  const container = document.querySelector(".timeline-scroll");
-  const scrollAmount = 300; 
-  container.scrollLeft += direction * scrollAmount;
+  window.location.href = `ficha.html?${params.toString()}`;
 }

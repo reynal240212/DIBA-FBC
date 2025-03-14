@@ -23,24 +23,7 @@
   <link rel="stylesheet" href="styles/styles.css" />
 </head>
 <body>
-  <!-- Botón para abrir modal de Login -->
-  <button
-    class="btn btn-primary"
-    data-bs-toggle="modal"
-    data-bs-target="#modalLogin"
-  >
-    Iniciar Sesión
-  </button>
-
-  <!-- Botón para abrir modal de Registro -->
-  <button
-    class="btn btn-warning"
-    data-bs-toggle="modal"
-    data-bs-target="#modalRegistro"
-  >
-    Registrarse
-  </button>
-
+ 
   <!-- MODAL: LOGIN -->
   <div
     class="modal fade"
@@ -63,7 +46,9 @@
         <div class="modal-body">
           <form id="formLogin">
             <div class="mb-3">
-              <label for="loginCorreo" class="form-label">Correo Electrónico</label>
+              <label for="loginCorreo" class="form-label"
+                >Correo Electrónico</label
+              >
               <input
                 type="email"
                 class="form-control"
@@ -82,9 +67,7 @@
                 required
               />
             </div>
-            <button type="submit" class="btn btn-primary w-100">
-              Ingresar
-            </button>
+            <button type="submit" class="btn btn-primary w-100">Ingresar</button>
           </form>
         </div>
       </div>
@@ -102,7 +85,9 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header bg-dark text-white">
-          <h5 class="modal-title" id="modalRegistroLabel">Registro de Nuevo Jugador</h5>
+          <h5 class="modal-title" id="modalRegistroLabel">
+            Registro de Nuevo Jugador
+          </h5>
           <button
             type="button"
             class="btn-close btn-close-white"
@@ -123,7 +108,9 @@
               />
             </div>
             <div class="mb-3">
-              <label for="regCorreo" class="form-label">Correo Electrónico</label>
+              <label for="regCorreo" class="form-label"
+                >Correo Electrónico</label
+              >
               <input
                 type="email"
                 class="form-control"
@@ -143,13 +130,10 @@
               />
             </div>
             <div class="mb-3">
-              <label for="regFechaNac" class="form-label">Fecha de Nacimiento</label>
-              <input
-                type="date"
-                class="form-control"
-                id="regFechaNac"
-                required
-              />
+              <label for="regFechaNac" class="form-label"
+                >Fecha de Nacimiento</label
+              >
+              <input type="date" class="form-control" id="regFechaNac" required />
             </div>
             <button type="submit" class="btn btn-warning w-100">
               Registrarse
