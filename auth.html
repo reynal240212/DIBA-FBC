@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Inicio de Sesión - DIBA FBC</title>
+    <link rel="icon" href="images/ESCUDO.ico" type="image/x-icon" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Inicia sesión o regístrate para acceder a la información de DIBA FBC."
+    />
+
+    <!-- Tidio Chat -->
+    <script
+      src="//code.tidio.co/jckoszxyxvs7izkxulr9bk5cbcspdjtj.js"
+      async
+    ></script>
+
+    <!-- Bootstrap 5.3.2 CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+
+    <!-- Font Awesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+
+    <!-- Animate.css -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+    />
+
+    <!-- AOS (opcional) -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css"
+    />
+
+    <!-- Tus estilos globales -->
+    <link rel="stylesheet" href="styles/styles.css" />
+  </head>
+  <body>
+    <div class="container py-5">
+      <h1 class="text-center mb-4">Bienvenido a DIBA FBC</h1>
+      <p class="text-center mb-5">
+        Por favor, inicia sesión o regístrate para continuar.
+      </p>
+      <!-- Pestañas para Login / Registro -->
+      <ul class="nav nav-tabs justify-content-center mb-4" id="authTab" role="tablist">
+        <li class="nav-item" role="presentation">
+          <button
+            class="nav-link active"
+            id="login-tab"
+            data-bs-toggle="tab"
+            data-bs-target="#login"
+            type="button"
+            role="tab"
+            aria-controls="login"
+            aria-selected="true"
+          >
+            Iniciar Sesión
+          </button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button
+            class="nav-link"
+            id="register-tab"
+            data-bs-toggle="tab"
+            data-bs-target="#register"
+            type="button"
+            role="tab"
+            aria-controls="register"
+            aria-selected="false"
+          >
+            Registro
+          </button>
+        </li>
+      </ul>
+      <div class="tab-content" id="authTabContent">
+        <!-- Formulario de Login -->
+        <div
+          class="tab-pane fade show active"
+          id="login"
+          role="tabpanel"
+          aria-labelledby="login-tab"
+        >
+          <form id="formLogin">
+            <div class="mb-3">
+              <label for="loginCorreo" class="form-label">Correo Electrónico</label>
+              <input
+                type="email"
+                class="form-control"
+                id="loginCorreo"
+                placeholder="tuemail@ejemplo.com"
+                required
+              />
+            </div>
+            <div class="mb-3">
+              <label for="loginClave" class="form-label">Contraseña</label>
+              <input
+                type="password"
+                class="form-control"
+                id="loginClave"
+                placeholder="********"
+                required
+              />
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Ingresar</button>
+          </form>
+        </div>
+        <!-- Formulario de Registro -->
+        <div
+          class="tab-pane fade"
+          id="register"
+          role="tabpanel"
+          aria-labelledby="register-tab"
+        >
+          <form id="formRegistro">
+            <div class="mb-3">
+              <label for="regNombre" class="form-label">Nombre Completo</label>
+              <input
+                type="text"
+                class="form-control"
+                id="regNombre"
+                placeholder="Tu nombre"
+                required
+              />
+            </div>
+            <div class="mb-3">
+              <label for="regCorreo" class="form-label">Correo Electrónico</label>
+              <input
+                type="email"
+                class="form-control"
+                id="regCorreo"
+                placeholder="tucorreo@ejemplo.com"
+                required
+              />
+            </div>
+            <div class="mb-3">
+              <label for="regPassword" class="form-label">Contraseña</label>
+              <input
+                type="password"
+                class="form-control"
+                id="regPassword"
+                placeholder="********"
+                required
+              />
+            </div>
+            <div class="mb-3">
+              <label for="regFechaNac" class="form-label">Fecha de Nacimiento</label>
+              <input type="date" class="form-control" id="regFechaNac" required />
+            </div>
+            <button type="submit" class="btn btn-warning w-100">Registrarse</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scripts Bootstrap -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Aquí se incluyen tus otros scripts si los necesitas -->
+    <script>
+      // Funcionalidad del Login (Vercel Functions)
+      const formLogin = document.getElementById("formLogin");
+      if (formLogin) {
+        formLogin.addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const correo = document.getElementById("loginCorreo").value.trim();
+          const clave = document.getElementById("loginClave").value;
+          try {
+            const response = await fetch("/api/login", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ correo, password: clave }),
+            });
+            const result = await response.json();
+            if (response.ok) {
+              alert("Bienvenido, " + result.user.nombre);
+              localStorage.setItem("loggedUser", JSON.stringify(result.user));
+              // Redirige al usuario a la página principal del sitio
+              window.location.href = "index.html";
+            } else {
+              alert("Error: " + result.error);
+            }
+          } catch (error) {
+            console.error("Error en el login:", error);
+            alert("Error al iniciar sesión. Inténtalo de nuevo.");
+          }
+        });
+      }
+
+      // Funcionalidad del Registro (Vercel Functions)
+      const formRegistro = document.getElementById("formRegistro");
+      if (formRegistro) {
+        formRegistro.addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const nombre = document.getElementById("regNombre").value.trim();
+          const correo = document.getElementById("regCorreo").value.trim();
+          const password = document.getElementById("regPassword").value;
+          const fechaNac = document.getElementById("regFechaNac").value;
+          try {
+            const response = await fetch("/api/register", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ nombre, correo, password, fechaNac }),
+            });
+            const result = await response.json();
+            if (response.ok) {
+              alert(result.message);
+              // Luego de registrarse, redirige al usuario al login o directamente a la página principal
+              window.location.href = "index.html";
+            } else {
+              alert("Error: " + result.error);
+            }
+          } catch (error) {
+            console.error("Error en el registro:", error);
+            alert("Error al registrar usuario. Inténtalo de nuevo.");
+          }
+        });
+      }
+
+      // Manejo de inicio de sesión con Google
+      function handleCredentialResponse(response) {
+        try {
+          const data = JSON.parse(atob(response.credential.split(".")[1]));
+          console.log(data);
+          const profilePicture = data.picture;
+          const profileImg = document.getElementById("profile-img");
+          if (profileImg) {
+            profileImg.src = profilePicture;
+            profileImg.style.display = "block";
+          }
+        } catch (error) {
+          console.error("Error al procesar la respuesta de Google:", error);
+        }
+      }
+    </script>
+  </body>
+</html>
