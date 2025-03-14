@@ -80,5 +80,26 @@
             </div>
         </div>
     </div>
+     <!-- jQuery (opcional para manejo de tabs) -->
+   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+   <!-- Script para el cambio de pestañas -->
+   <script>
+       $(document).ready(function(){
+           $('.contenedor-tabs li a').click(function(e){
+               e.preventDefault();
+               var target = $(this).attr('href');
+               
+               // Activar la pestaña clickeada
+               $('.contenedor-tabs li').removeClass('active');
+               $(this).parent().addClass('active');
+               
+               // Mostrar el contenido correspondiente
+               $('.contenido-tab > div').removeClass('active');
+               $(target).addClass('active');
+           });
+       });
+   </script>
+   <!-- main.js: Aquí se integraría la lógica de autenticación -->
+   <script src="js/main.js"></script>
 </body>
 </html>
