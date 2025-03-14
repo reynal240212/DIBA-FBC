@@ -32,7 +32,10 @@ if (btns.length > 0 && containers.length > 0) {
   });
 }
 
-/// LOGIN
+// scripts/main.js
+
+// =======================
+// LOGIN
 // =======================
 const formLogin = document.getElementById("formLogin");
 if (formLogin) {
@@ -48,21 +51,18 @@ if (formLogin) {
         body: JSON.stringify({ correo, password: clave }),
       });
 
-      // Si la respuesta no es OK (por ejemplo, 401 o 404), capturamos error
       if (!response.ok) {
         const errorText = await response.text();
-        alert("Error: " + errorText);
+        alert("Error en el login: " + errorText);
         return;
       }
 
       const result = await response.json();
       alert("Bienvenido, " + result.user.nombre);
-
-      // Guardar usuario en localStorage
       localStorage.setItem("loggedUser", JSON.stringify(result.user));
 
-      // Redirigir a la página principal (o la que quieras)
-      window.location.href = "index.html";
+      // Redirige a la página que quieras
+      window.location.href = "profile.html";
     } catch (error) {
       console.error("Error en el login:", error);
       alert("Error al iniciar sesión. Inténtalo de nuevo.");
@@ -91,15 +91,21 @@ if (formRegistro) {
 
       if (!response.ok) {
         const errorText = await response.text();
-        alert("Error: " + errorText);
+        alert("Error en el registro: " + errorText);
         return;
       }
 
       const result = await response.json();
       alert(result.message);
 
-      // Redirigir tras registrarse
-      window.location.href = "index.html";
+      // Cierra el modal de registro (opcional) si no rediriges inmediatamente
+      const modalRegistro = bootstrap.Modal.getInstance(document.getElementById("modalRegistro"));
+      if (modalRegistro) {
+        modalRegistro.hide();
+      }
+
+      // Redirige tras registrarse (o mantén al usuario en la misma página)
+      // window.location.href = "profile.html";
     } catch (error) {
       console.error("Error en el registro:", error);
       alert("Error al registrar usuario. Inténtalo de nuevo.");
@@ -107,21 +113,6 @@ if (formRegistro) {
   });
 }
 
-// =======================
-// INICIO DE SESIÓN CON GOOGLE (Opcional)
-// =======================
-function handleCredentialResponse(response) {
-  try {
-    const data = JSON.parse(atob(response.credential.split(".")[1])); // Decodificar JWT
-    console.log(data);
-    // Guardar la información en localStorage
-    localStorage.setItem("loggedUser", JSON.stringify(data));
-    // Redirigir a la página principal
-    window.location.href = "index.html";
-  } catch (error) {
-    console.error("Error al procesar la respuesta de Google:", error);
-  }
-}
 
 // =======================
 // SCROLL TIMELINE (Opcional)
