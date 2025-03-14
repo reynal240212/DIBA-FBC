@@ -219,12 +219,13 @@
                        <label>Contraseña <span class="req">*</span></label>
                        <input type="password" id="register-password" placeholder="********" required>
                    </div>
+                   <!-- Input para subir foto de perfil -->
                    <div class="contenedor-input">
-                       <label>URL de la Foto de Perfil</label>
-                       <input type="text" id="register-avatar" placeholder="https://ejemplo.com/tu-foto.jpg">
+                       <label>Subir Foto de Perfil</label>
+                       <input type="file" id="register-avatar-file" accept="image/*">
                    </div>
                    <input type="submit" class="button button-block" value="Registrarse">
-               </form>              
+               </form>
                <p id="register-error" class="error-message"></p>
            </div>
        </div>
