@@ -542,67 +542,83 @@ footer a:hover {
     width: 150px;
     height: 150px;
   }
-  .timeline-container {
-    position: relative;
-    display: flex;
-    align-items: center;
-    overflow: hidden;
-    width: 100%;
-  }
-  
-  .timeline-scroll {
-    display: flex;
-    gap: 20px;
-    overflow-x: auto;
-    scroll-behavior: smooth;
-    padding: 10px;
-    white-space: nowrap;
-  }
+ /* Contenedor general de la línea de tiempo */
+.timeline-container {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  padding: 20px 0;
+}
 
-  .timeline-card {
-    flex: 0 0 auto;
-    width: 250px;
-    background: white;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    border-radius: 8px;
-    text-align: center;
-    padding: 15px;
-  }
+/* Contenedor de las tarjetas con scroll horizontal */
+.timeline-scroll {
+  display: flex;
+  gap: 20px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  padding: 10px;
+  white-space: nowrap;
+}
 
-  .timeline-card img {
-    width: 100%;
-    border-radius: 8px;
-  }
+/* Ocultar scrollbar en navegadores */
+.timeline-scroll::-webkit-scrollbar {
+  display: none;
+}
 
-  .scroll-btn {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    background: rgba(0, 51, 102, 0.8);
-    color: white;
-    border: none;
-    cursor: pointer;
-    font-size: 24px;
-    padding: 10px;
-    z-index: 10;
-    border-radius: 50%;
-  }
+.timeline-card {
+  min-width: 250px;
+  max-width: 250px;
+  background: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  padding: 10px;
+  text-align: center;
+}
 
-  .scroll-btn.left {
-    left: 0;
-  }
+.timeline-card img {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 8px;
+}
 
-  .scroll-btn.right {
-    right: 0;
-  }
+.timeline-card h5 {
+  font-size: 16px;
+  margin-top: 10px;
+  font-weight: bold;
+}
 
-  .scroll-btn:hover {
-    background: rgba(0, 51, 102, 1);
-  }
+.timeline-card p {
+  font-size: 14px;
+  color: #555;
+}
 
-  .timeline-scroll::-webkit-scrollbar {
-    display: none;
-  }
+/* Botones de desplazamiento */
+.scroll-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0, 51, 102, 0.8);
+  color: white;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  border-radius: 50%;
+  font-size: 18px;
+  transition: background 0.3s ease;
+}
+
+.scroll-btn:hover {
+  background: #003366;
+}
+
+.scroll-btn.left {
+  left: 0;
+}
+
+.scroll-btn.right {
+  right: 0;
+}
   /* VIDEOS */
   .videos-section {
     padding: 2rem 1rem;
