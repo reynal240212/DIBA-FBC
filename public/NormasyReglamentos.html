@@ -32,6 +32,15 @@
 
   <!-- Script de Tidio Chat -->
   <script src="//code.tidio.co/jckoszxyxvs7izkxulr9bk5cbcspdjtj.js" async></script>
+  <script>
+    // Comprueba si el usuario está logueado
+    const user = localStorage.getItem("loggedUser");
+    if (!user) {
+      // Si NO hay usuario logueado, redirige a la página de autenticación
+      window.location.href = "auth.html";
+    }
+  </script>
+  
 </head>
 <body>
   <!-- Botón Volver Arriba -->
