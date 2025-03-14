@@ -207,17 +207,24 @@
            <div id="registrarse">
                <h1>Registrarse</h1>
                <form id="register-form">
-                <!-- Para este ejemplo, se usa solo email y contraseña -->
-                <div class="contenedor-input">
-                  <label>Correo Electrónico <span class="req">*</span></label>
-                  <input type="email" id="register-email" placeholder="tucorreo@ejemplo.com" required>
-                </div>
-                <div class="contenedor-input">
-                  <label>Contraseña <span class="req">*</span></label>
-                  <input type="password" id="register-password" placeholder="********" required>
-                </div>
-                <input type="submit" class="button button-block" value="Registrarse">
-              </form>              
+                   <div class="contenedor-input">
+                       <label>Nombre Completo <span class="req">*</span></label>
+                       <input type="text" id="register-fullname" placeholder="Tu nombre completo" required>
+                   </div>
+                   <div class="contenedor-input">
+                       <label>Correo Electrónico <span class="req">*</span></label>
+                       <input type="email" id="register-email" placeholder="tucorreo@ejemplo.com" required>
+                   </div>
+                   <div class="contenedor-input">
+                       <label>Contraseña <span class="req">*</span></label>
+                       <input type="password" id="register-password" placeholder="********" required>
+                   </div>
+                   <div class="contenedor-input">
+                       <label>URL de la Foto de Perfil</label>
+                       <input type="text" id="register-avatar" placeholder="https://ejemplo.com/tu-foto.jpg">
+                   </div>
+                   <input type="submit" class="button button-block" value="Registrarse">
+               </form>              
                <p id="register-error" class="error-message"></p>
            </div>
        </div>
@@ -245,6 +252,6 @@
    <!-- Carga la librería de Supabase -->
    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
    <!-- Lógica de autenticación en Supabase -->
-   <script src="scripts/auth.js"></script>
+   <script src="js/auth.js"></script>
 </body>
 </html>
