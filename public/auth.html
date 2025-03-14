@@ -16,6 +16,7 @@
 
   <!-- Estilos personalizados -->
   <style>
+    /* Variables de colores */
     :root {
       --azul:         #003399;
       --azul-intenso: #001b72;
@@ -25,6 +26,7 @@
       --fondo:        #ffffff;
       --sombra:       rgba(0, 0, 0, 0.2);
     }
+    /* Reset y estilos base */
     body, html {
       margin: 0;
       padding: 0;
@@ -32,6 +34,34 @@
       min-height: 100%;
       font-family: 'Arial', sans-serif;
     }
+    /* Estilos para la cabecera del modal */
+    .modal-header {
+      background-color: var(--azul-intenso);
+      color: var(--amarillo);
+    }
+    /* Botones */
+    .btn-primary {
+      background-color: var(--azul-intenso);
+      border: none;
+    }
+    .btn-primary:hover {
+      background-color: var(--azul);
+    }
+    .btn-warning {
+      background-color: var(--amarillo);
+      border: none;
+      color: var(--azul-intenso);
+    }
+    .btn-warning:hover {
+      background-color: var(--azul-intenso);
+      color: var(--amarillo);
+    }
+    /* Etiquetas */
+    label {
+      color: var(--azul-intenso);
+      font-weight: bold;
+    }
+    /* Contenedor de autenticación: centrado y con sombra */
     .auth-container {
       max-width: 500px;
       margin: 5vh auto;
@@ -50,33 +80,6 @@
       margin-bottom: 2rem;
       color: var(--azul);
     }
-    .nav-tabs .nav-link.active {
-      background-color: var(--azul-intenso) !important;
-      color: var(--amarillo) !important;
-    }
-    .nav-tabs .nav-link {
-      color: var(--azul) !important;
-    }
-    .btn-primary {
-      background-color: var(--azul-intenso);
-      border: none;
-    }
-    .btn-primary:hover {
-      background-color: var(--grana);
-    }
-    .btn-warning {
-      background-color: var(--amarillo);
-      border: none;
-      color: var(--azul-intenso);
-    }
-    .btn-warning:hover {
-      background-color: var(--azul-intenso);
-      color: var(--amarillo);
-    }
-    label {
-      color: var(--azul-intenso);
-      font-weight: bold;
-    }
   </style>
 </head>
 <body>
@@ -88,8 +91,12 @@
 
       <!-- Botones para abrir modales -->
       <div class="d-flex justify-content-center gap-3 mb-4">
-        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalLogin">Iniciar Sesión</button>
-        <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#modalRegistro">Registrarse</button>
+        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalLogin">
+          Iniciar Sesión
+        </button>
+        <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#modalRegistro">
+          Registrarse
+        </button>
       </div>
     </div>
   </div>
@@ -154,71 +161,7 @@
 
   <!-- Bootstrap JS Bundle -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-  <!-- Lógica de autenticación -->
-  <script>
-    // LOGIN
-    const formLogin = document.getElementById("formLogin");
-    if (formLogin) {
-      formLogin.addEventListener("submit", async (e) => {
-        e.preventDefault();
-        const correo = document.getElementById("loginCorreo").value.trim();
-        const clave = document.getElementById("loginClave").value;
-        try {
-          const response = await fetch("/api/login", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ correo, password: clave }),
-          });
-          if (!response.ok) {
-            const errorText = await response.text();
-            alert("Error en el login: " + errorText);
-            return;
-          }
-          const result = await response.json();
-          alert("Bienvenido, " + result.user.nombre);
-          localStorage.setItem("loggedUser", JSON.stringify(result.user));
-          // Redirigir a la página principal
-          window.location.href = "index.html";
-        } catch (error) {
-          console.error("Error en el login:", error);
-          alert("Error al iniciar sesión. Inténtalo de nuevo.");
-        }
-      });
-    }
-
-    // REGISTRO
-    const formRegistro = document.getElementById("formRegistro");
-    if (formRegistro) {
-      formRegistro.addEventListener("submit", async (e) => {
-        e.preventDefault();
-        const nombre = document.getElementById("regNombre").value.trim();
-        const correo = document.getElementById("regCorreo").value.trim();
-        const password = document.getElementById("regPassword").value;
-        const fechaNac = document.getElementById("regFechaNac").value;
-        try {
-          const response = await fetch("/api/register", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ nombre, correo, password, fechaNac }),
-          });
-          if (!response.ok) {
-            const errorText = await response.text();
-            alert("Error en el registro: " + errorText);
-            return;
-          }
-          const result = await response.json();
-          alert(result.message);
-          // Cerrar el modal de registro
-          const modalRegistro = bootstrap.Modal.getInstance(document.getElementById("modalRegistro"));
-          if (modalRegistro) modalRegistro.hide();
-          // Redirigir a la página principal
-          window.location.href = "index.html";
-        } catch (error) {
-          console.error("Error en el registro:", error);
-          alert("Error al registrar usuario. Inténtalo de nuevo.");
-        }
-      });
-    }
-  </script>
+  <!-- Script principal (lógica de login/registro) -->
+  <script src="scripts/main.js"></script>
 </body>
 </html>
