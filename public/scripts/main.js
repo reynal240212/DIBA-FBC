@@ -108,3 +108,8 @@ function handleCredentialResponse(response) {
     console.error("Error al procesar la respuesta de Google:", error);
   }
 }
+function scrollTimeline(direction) {
+  const container = document.querySelector(".timeline-scroll");
+  const scrollAmount = 300; // Cantidad de desplazamiento
+  container.scrollLeft += direction * scrollAmount;
+}

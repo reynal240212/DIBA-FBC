@@ -542,24 +542,66 @@ footer a:hover {
     width: 150px;
     height: 150px;
   }
-  /* TIMELINE */
-  .timeline-section {
-    padding: 2rem 1rem;
+  .timeline-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    width: 100%;
   }
-  .timeline-section h2 {
-    font-size: 2rem;
+  
+  .timeline-scroll {
+    display: flex;
+    gap: 20px;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    padding: 10px;
+    white-space: nowrap;
   }
-  .timeline-section .card-img-top {
-    height: 150px;
+
+  .timeline-card {
+    flex: 0 0 auto;
+    width: 250px;
+    background: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    text-align: center;
+    padding: 15px;
   }
-  .timeline-section .card-body {
-    padding: 0.75rem;
+
+  .timeline-card img {
+    width: 100%;
+    border-radius: 8px;
   }
-  .timeline-section .card-title {
-    font-size: 1rem;
+
+  .scroll-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0, 51, 102, 0.8);
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 24px;
+    padding: 10px;
+    z-index: 10;
+    border-radius: 50%;
   }
-  .timeline-section .card-text {
-    font-size: 0.9rem;
+
+  .scroll-btn.left {
+    left: 0;
+  }
+
+  .scroll-btn.right {
+    right: 0;
+  }
+
+  .scroll-btn:hover {
+    background: rgba(0, 51, 102, 1);
+  }
+
+  .timeline-scroll::-webkit-scrollbar {
+    display: none;
   }
   /* VIDEOS */
   .videos-section {

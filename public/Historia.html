@@ -86,63 +86,47 @@
     <h2 id="timeline-heading" class="text-center" style="color: #003366; font-weight: bold;">
       Momentos Destacados
     </h2>
-    <div class="row g-4">
-      <!-- Tarjeta 1: Subcampeonato -->
-      <div class="col-sm-6 col-md-4 col-lg-3">
-        <div class="card h-100">
-          <img src="images/subCAP_2003.jpg" class="card-img-top" alt="Subcampeonato 2013" loading="lazy">
-          <div class="card-body">
-            <h5 class="card-title text-uppercase">Subcampeonato 2013</h5>
-            <p class="card-text">
-              Un partido vibrante que dejó huella en la historia del club. A pesar de perder en penales, ganamos una experiencia invaluable.
-            </p>
-          </div>
+    
+    <!-- Contenedor con Scroll -->
+    <div class="timeline-container">
+      <button class="scroll-btn left" onclick="scrollTimeline(-1)">&#10094;</button>
+      
+      <div class="timeline-scroll">
+        <!-- Tarjeta 1 -->
+        <div class="timeline-card">
+          <img src="images/subCAP_2003.jpg" alt="Subcampeonato 2013">
+          <h5>Subcampeonato 2013</h5>
+          <p>Un partido vibrante que dejó huella en la historia del club. A pesar de perder en penales, ganamos una experiencia invaluable.</p>
+        </div>
+        <!-- Tarjeta 2 -->
+        <div class="timeline-card">
+          <img src="images/campeon-2002.jpg" alt="Campeón 2002">
+          <h5>Campeón Torneo Polideportivo</h5>
+          <p>Categoría 2002</p>
+        </div>
+        <!-- Tarjeta 3 -->
+        <div class="timeline-card">
+          <img src="images/1999.jpg" alt="Campeón 1999">
+          <h5>Campeón Torneo Polideportivo</h5>
+          <p>Categoría 1999</p>
+        </div>
+        <!-- Tarjeta 4 -->
+        <div class="timeline-card">
+          <img src="images/FB_IMG_1716757690178.jpg" alt="La Gran Remontada 2005">
+          <h5>Campeón San Carlos Borromeo</h5>
+          <p>Categoría 2005</p>
+        </div>
+        <!-- Tarjeta 5 -->
+        <div class="timeline-card">
+          <img src="images/2004.jpg" alt="Campeón 2004">
+          <h5>Campeón Polideportivo</h5>
+          <p>Categoría 2004</p>
         </div>
       </div>
-      <!-- Tarjeta 2: Campeón 2002 -->
-      <div class="col-sm-6 col-md-4 col-lg-3">
-        <div class="card h-100">
-          <img src="images/campeon-2002.jpg" class="card-img-top" alt="Equipo campeón del torneo en 2002" loading="lazy">
-          <div class="card-body text-center">
-            <h5 class="card-title text-uppercase">Campeón del Torneo Polideportivo de Los Olivos</h5>
-            <p class="card-text fw-bold">Categoría 2002</p>
-          </div>
-        </div>
-      </div>
-      <!-- Tarjeta 3: Campeón 1999 -->
-      <div class="col-sm-6 col-md-4 col-lg-3">
-        <div class="card h-100">
-          <img src="images/1999.jpg" class="card-img-top" alt="Equipo campeón del torneo en 1999" loading="lazy">
-          <div class="card-body text-center">
-            <h5 class="card-title text-uppercase">Campeón del Torneo Polideportivo de Los Olivos</h5>
-            <p class="card-text fw-bold">Categoría 1999</p>
-          </div>
-        </div>
-      </div>
-      <!-- Tarjeta 4: La Gran Remontada -->
-      <div class="col-sm-6 col-md-4 col-lg-3">
-        <div class="card h-100">
-          <img src="images/FB_IMG_1716757690178.jpg" class="card-img-top" alt="La Gran Remontada 2005" loading="lazy">
-          <div class="card-body text-center">
-            <h5 class="card-title text-uppercase">CAMPEON TORNEO SAN CARLOS BORROMEO 2005</h5>
-            <p class="card-text fw-bold">Categoría 2005</p>
-          </div>
-        </div>
-      </div>
+      
+      <button class="scroll-btn right" onclick="scrollTimeline(1)">&#10095;</button>
     </div>
   </div>
-  <!-- Tarjeta 5: campeon categoria 2004 -->
-  <div class="col-sm-6 col-md-4 col-lg-3">
-    <div class="card h-100">
-      <img src="images/2004.jpg" class="card-img-top" alt="La Gran Remontada 2005" loading="lazy">
-      <div class="card-body text-center">
-        <h5 class="card-title text-uppercase">CAMPEON TORNEO POLIDEPORTIVO LOS OLIVOS 2004</h5>
-        <p class="card-text fw-bold">Categoría 2004</p>
-      </div>
-    </div>
-  </div>
-</div>
-</div>
 </section>
 
 
