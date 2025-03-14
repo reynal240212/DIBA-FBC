@@ -653,7 +653,9 @@ footer a:hover {
       z-index: 1;
       margin-top: 5vh; /* un poco de espacio superior */
       max-width: 500px;
-      background: var(--fondo);
+      background: url("images/loging_badgroud.png") center/cover no-repeat;
+      background-color: var(--fondo);
+      
       border-radius: 8px;
       box-shadow: 0 4px 10px var(--sombra);
       padding: 2rem;
