@@ -32,27 +32,37 @@ if (btns.length > 0 && containers.length > 0) {
   });
 }
 
-// Funcionalidad del Login (Vercel Functions)
+/// LOGIN
+// =======================
 const formLogin = document.getElementById("formLogin");
 if (formLogin) {
   formLogin.addEventListener("submit", async (e) => {
     e.preventDefault();
     const correo = document.getElementById("loginCorreo").value.trim();
     const clave = document.getElementById("loginClave").value;
+
     try {
       const response = await fetch("/api/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ correo, password: clave }),
       });
-      const result = await response.json();
-      if (response.ok) {
-        alert("Bienvenido, " + result.user.nombre);
-        localStorage.setItem("loggedUser", JSON.stringify(result.user));
-        window.location.href = "profile.html";
-      } else {
-        alert("Error: " + result.error);
+
+      // Si la respuesta no es OK (por ejemplo, 401 o 404), capturamos error
+      if (!response.ok) {
+        const errorText = await response.text();
+        alert("Error: " + errorText);
+        return;
       }
+
+      const result = await response.json();
+      alert("Bienvenido, " + result.user.nombre);
+
+      // Guardar usuario en localStorage
+      localStorage.setItem("loggedUser", JSON.stringify(result.user));
+
+      // Redirigir a la página principal (o la que quieras)
+      window.location.href = "index.html";
     } catch (error) {
       console.error("Error en el login:", error);
       alert("Error al iniciar sesión. Inténtalo de nuevo.");
@@ -60,7 +70,9 @@ if (formLogin) {
   });
 }
 
-// Funcionalidad del Registro (Vercel Functions)
+// =======================
+// REGISTRO
+// =======================
 const formRegistro = document.getElementById("formRegistro");
 if (formRegistro) {
   formRegistro.addEventListener("submit", async (e) => {
@@ -69,20 +81,25 @@ if (formRegistro) {
     const correo = document.getElementById("regCorreo").value.trim();
     const password = document.getElementById("regPassword").value;
     const fechaNac = document.getElementById("regFechaNac").value;
+
     try {
       const response = await fetch("/api/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ nombre, correo, password, fechaNac }),
       });
-      const result = await response.json();
-      if (response.ok) {
-        alert(result.message);
-        // Redirige al usuario a la página principal (o a profile.html, según tu flujo)
-        window.location.href = "index.html";
-      } else {
-        alert("Error: " + result.error);
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        alert("Error: " + errorText);
+        return;
       }
+
+      const result = await response.json();
+      alert(result.message);
+
+      // Redirigir tras registrarse
+      window.location.href = "index.html";
     } catch (error) {
       console.error("Error en el registro:", error);
       alert("Error al registrar usuario. Inténtalo de nuevo.");
@@ -90,23 +107,27 @@ if (formRegistro) {
   });
 }
 
-// Manejo de inicio de sesión con Google
+// =======================
+// INICIO DE SESIÓN CON GOOGLE (Opcional)
+// =======================
 function handleCredentialResponse(response) {
   try {
     const data = JSON.parse(atob(response.credential.split(".")[1])); // Decodificar JWT
-    console.log(data); // Para ver la información del usuario
-    // Guarda la información en localStorage para manejar la sesión
+    console.log(data);
+    // Guardar la información en localStorage
     localStorage.setItem("loggedUser", JSON.stringify(data));
-    // Redirige a la página principal o dashboard
+    // Redirigir a la página principal
     window.location.href = "index.html";
   } catch (error) {
     console.error("Error al procesar la respuesta de Google:", error);
   }
 }
 
-// Función adicional (si la usas en otra parte, de lo contrario, puedes eliminarla)
+// =======================
+// SCROLL TIMELINE (Opcional)
+// =======================
 function scrollTimeline(direction) {
   const container = document.querySelector(".timeline-scroll");
-  const scrollAmount = 300; // Cantidad de desplazamiento
+  const scrollAmount = 300; 
   container.scrollLeft += direction * scrollAmount;
 }

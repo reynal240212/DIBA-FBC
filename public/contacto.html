@@ -45,10 +45,8 @@
     <!-- Tus estilos globales -->
     <link rel="stylesheet" href="styles/styles.css" />
     <script>
-      // Comprueba si el usuario está logueado
-      const user = localStorage.getItem("loggedUser");
-      if (!user) {
-        // Si NO hay usuario logueado, redirige a la página de autenticación
+      // Verificar si está logueado
+      if (!localStorage.getItem("loggedUser")) {
         window.location.href = "auth.html";
       }
     </script>
