@@ -87,53 +87,52 @@
       Momentos Destacados
     </h2>
     
-    <!-- Contenedor con Scroll -->
+    <!-- Contenedor con Scroll Horizontal y Botones -->
     <div class="timeline-container">
       <button class="scroll-btn left" onclick="scrollTimeline(-1)">&#10094;</button>
-      
       <div class="timeline-scroll">
-        <!-- Tarjeta 1 -->
+        <!-- Tarjeta 1: Subcampeonato -->
         <div class="timeline-card">
-          <img src="images/subCAP_2003.jpg" alt="Subcampeonato 2013">
+          <img src="images/subCAP_2003.jpg" alt="Subcampeonato 2013" loading="lazy">
           <h5>Subcampeonato 2013</h5>
-          <p>Un partido vibrante que dejó huella en la historia del club. A pesar de perder en penales, ganamos una experiencia invaluable.</p>
+          <p>
+            Un partido vibrante que dejó huella en la historia del club. A pesar de perder en penales, ganamos una experiencia invaluable.
+          </p>
         </div>
-        <!-- Tarjeta 2 -->
+        <!-- Tarjeta 2: Campeón 2002 -->
         <div class="timeline-card">
-          <img src="images/campeon-2002.jpg" alt="Campeón 2002">
+          <img src="images/campeon-2002.jpg" alt="Campeón 2002" loading="lazy">
           <h5>Campeón Torneo Polideportivo</h5>
           <p>Categoría 2002</p>
         </div>
-        <!-- Tarjeta 3 -->
+        <!-- Tarjeta 3: Campeón 1999 -->
         <div class="timeline-card">
-          <img src="images/1999.jpg" alt="Campeón 1999">
+          <img src="images/1999.jpg" alt="Campeón 1999" loading="lazy">
           <h5>Campeón Torneo Polideportivo</h5>
           <p>Categoría 1999</p>
         </div>
-        <!-- Tarjeta 4 -->
+        <!-- Tarjeta 4: La Gran Remontada -->
         <div class="timeline-card">
-          <img src="images/FB_IMG_1716757690178.jpg" alt="La Gran Remontada 2005">
+          <img src="images/FB_IMG_1716757690178.jpg" alt="La Gran Remontada 2005" loading="lazy">
           <h5>Campeón San Carlos Borromeo</h5>
           <p>Categoría 2005</p>
         </div>
-        <!-- Tarjeta 5 -->
+        <!-- Tarjeta 5: Campeón 2004 -->
         <div class="timeline-card">
-          <img src="images/2004.jpg" alt="Campeón 2004">
+          <img src="images/2004.jpg" alt="Campeón 2004" loading="lazy">
           <h5>Campeón Polideportivo</h5>
           <p>Categoría 2004</p>
         </div>
       </div>
-      
       <button class="scroll-btn right" onclick="scrollTimeline(1)">&#10095;</button>
     </div>
   </div>
 </section>
 
-
 <!-- SECCIÓN DE VIDEOS -->
 <section class="videos-section animate__animated animate__fadeInUp" role="region" aria-labelledby="videos-heading">
   <div class="container">
-    <h2 id="videos-heading">DIBA FBC VIDEOS</h2>
+    <h2 id="videos-heading" class="text-center">DIBA FBC VIDEOS</h2>
     <div class="videos-container d-flex gap-3 overflow-auto" role="group" aria-label="Videos destacados">
       <!-- Video 1 -->
       <div class="video-card">
@@ -159,6 +158,22 @@
 
 <!-- Contenedor para el Footer (se cargará dinámicamente) -->
 <div id="footer-container"></div>
+
+<!-- Bootstrap JS Bundle -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Script para cargar los componentes externos (Navbar y Footer) -->
+<script src="scripts/loadComponents.js"></script>
+<!-- Script principal (funciones y animaciones) -->
+<script src="scripts/main.js"></script>
+
+<!-- JavaScript para desplazamiento del Timeline -->
+<script>
+  function scrollTimeline(direction) {
+    const container = document.querySelector(".timeline-scroll");
+    const scrollAmount = 300; // Ajusta la cantidad de desplazamiento
+    container.scrollLeft += direction * scrollAmount;
+  }
+</script>
 
 <!-- Bootstrap JS Bundle -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
