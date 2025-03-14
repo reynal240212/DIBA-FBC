@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <title>Inicio - DIBA FBC</title>
+  <title>PLANTILLA - DIBA FBC</title>
   <link rel="icon" href="images/ESCUDO.ico" type="image/x-icon">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="Conoce la historia y los momentos más destacados de DIBA FBC, un recorrido lleno de pasión y logros deportivos." />
@@ -22,6 +22,13 @@
 
   <!-- Estilos Globales -->
   <link rel="stylesheet" href="styles/styles.css" />
+  
+  <!-- Regla adicional para forzar fondo blanco en toda la página -->
+  <style>
+    html, body {
+      background-color: #ffffff !important;
+    }
+  </style>
 
 </head>
 <body>
@@ -34,325 +41,324 @@
   <!-- Contenedor para el Navbar (se cargará dinámicamente) -->
   <div id="navbar-container"></div>
   
- <!-- HERO SECTION -->
-<section class="hero animate__animated animate__fadeInDown" style="background: linear-gradient(135deg, #002a40, #001b72), url('images/fondo.jpg') center/cover no-repeat fixed; background-blend-mode: multiply;">
-  <div class="container hero-content">
+  <!-- HERO SECTION -->
+  <section class="hero animate__animated animate__fadeInDown" style="background: linear-gradient(135deg, #002a40, #001b72), url('images/fondo.jpg') center/cover no-repeat fixed; background-blend-mode: multiply;">
     <div class="container hero-content">
       <h1 class="hero-title">JUGADORES</h1>
       <p class="hero-subtitle lead">PLANTILLA.</p>
     </div>
-</section>
- <!-- SECCIÓN JUGADORES POR CATEGORÍA -->
-<section class="category-section">
-  <div class="container">
-    <h1>Jugadores por Categoría</h1>
-    <div class="category-buttons">
-      <button class="btn btn-outline-danger active" data-category="cat1">2010/11</button>
-      <button class="btn btn-outline-danger" data-category="cat2">2012/13</button>
-      <button class="btn btn-outline-danger" data-category="cat3">2014/15/16</button>
+  </section>
+  
+  <!-- SECCIÓN JUGADORES POR CATEGORÍA -->
+  <section class="category-section">
+    <div class="container">
+      <h1>Jugadores por Categoría</h1>
+      <div class="category-buttons">
+        <button class="btn btn-outline-danger active" data-category="cat1">2010/11</button>
+        <button class="btn btn-outline-danger" data-category="cat2">2012/13</button>
+        <button class="btn btn-outline-danger" data-category="cat3">2014/15/16</button>
+      </div>
     </div>
-  </div>
 
-  <!-- Categoría 2010/11 -->
-  <div id="cat1" class="category-container active animate__animated animate__fadeIn">
-    <div class="container">
-      <h2 class="mb-4">Jugadores 2010/11</h2>
-      <div class="row">
-        <!-- Tarjeta 1: Juan José Vergara Ortiz -->
-        <div class="col-md-3 mb-4">
-          <div class="card h-100 animate__animated animate__zoomIn">
-            <!-- Placeholder de foto con aria-label -->
-            <div class="card-img-top empty-photo" aria-label="Foto del jugador">Foto</div>
-            <div class="player-card">
-              <div class="position-tag">Posición</div>
-              <div class="player-name">Juan José Vergara Ortiz</div>
-              <p>Edad: 13<br>Nac.: 25/8/2011</p>
+    <!-- Categoría 2010/11 -->
+    <div id="cat1" class="category-container active animate__animated animate__fadeIn">
+      <div class="container">
+        <h2 class="mb-4">Jugadores 2010/11</h2>
+        <div class="row">
+          <!-- Tarjeta 1: Juan José Vergara Ortiz -->
+          <div class="col-md-3 mb-4">
+            <div class="card h-100 animate__animated animate__zoomIn">
+              <div class="card-img-top empty-photo" aria-label="Foto del jugador">Foto</div>
+              <div class="player-card">
+                <div class="position-tag">Posición</div>
+                <div class="player-name">Juan José Vergara Ortiz</div>
+                <p>Edad: 13<br>Nac.: 25/8/2011</p>
+              </div>
             </div>
           </div>
-        </div>
-        <!-- Tarjeta 2: Breiner Vargas Diaz -->
-        <div class="col-md-3 mb-4" style="animation-delay: 0.1s;">
-          <div class="card h-100 animate__animated animate__zoomIn">
-            <div class="card-img-top empty-photo" aria-label="Foto del jugador">Foto</div>
-            <div class="player-card">
-              <div class="position-tag">Posición</div>
-              <div class="player-name">Breiner Vargas Diaz</div>
-              <p>Edad: 14<br>Nac.: 26/10/2010</p>
+          <!-- Tarjeta 2: Breiner Vargas Diaz -->
+          <div class="col-md-3 mb-4" style="animation-delay: 0.1s;">
+            <div class="card h-100 animate__animated animate__zoomIn">
+              <div class="card-img-top empty-photo" aria-label="Foto del jugador">Foto</div>
+              <div class="player-card">
+                <div class="position-tag">Posición</div>
+                <div class="player-name">Breiner Vargas Diaz</div>
+                <p>Edad: 14<br>Nac.: 26/10/2010</p>
+              </div>
             </div>
           </div>
-        </div>
-        <!-- Tarjeta 3: Leonardo Fabio Vargas Fuenmayor -->
-        <div class="col-md-3 mb-4" style="animation-delay: 0.2s;">
-          <div class="card h-100 animate__animated animate__zoomIn">
-            <div class="card-img-top empty-photo" aria-label="Foto del jugador">Foto</div>
-            <div class="player-card">
-              <div class="position-tag">Posición</div>
-              <div class="player-name">Leonardo Fabio Vargas Fuenmayor</div>
-              <p>Edad: 14<br>Nac.: 3/8/2010</p>
+          <!-- Tarjeta 3: Leonardo Fabio Vargas Fuenmayor -->
+          <div class="col-md-3 mb-4" style="animation-delay: 0.2s;">
+            <div class="card h-100 animate__animated animate__zoomIn">
+              <div class="card-img-top empty-photo" aria-label="Foto del jugador">Foto</div>
+              <div class="player-card">
+                <div class="position-tag">Posición</div>
+                <div class="player-name">Leonardo Fabio Vargas Fuenmayor</div>
+                <p>Edad: 14<br>Nac.: 3/8/2010</p>
+              </div>
             </div>
           </div>
-        </div>
-        <!-- Tarjeta 4: Luis Jose Moreno Sánchez -->
-        <div class="col-md-3 mb-4" style="animation-delay: 0.3s;">
-          <div class="card h-100 animate__animated animate__zoomIn">
-            <div class="card-img-top empty-photo" aria-label="Foto del jugador">Foto</div>
-            <div class="player-card">
-              <div class="position-tag">Posición</div>
-              <div class="player-name">Luis Jose Moreno Sánchez</div>
-              <p>Edad: 14<br>Nac.: 8/2/2011</p>
+          <!-- Tarjeta 4: Luis Jose Moreno Sánchez -->
+          <div class="col-md-3 mb-4" style="animation-delay: 0.3s;">
+            <div class="card h-100 animate__animated animate__zoomIn">
+              <div class="card-img-top empty-photo" aria-label="Foto del jugador">Foto</div>
+              <div class="player-card">
+                <div class="position-tag">Posición</div>
+                <div class="player-name">Luis Jose Moreno Sánchez</div>
+                <p>Edad: 14<br>Nac.: 8/2/2011</p>
+              </div>
             </div>
           </div>
-        </div>
-        <!-- Tarjeta 5: Jarveis Jose Garcia Tirado -->
-        <div class="col-md-3 mb-4" style="animation-delay: 0.4s;">
-          <div class="card h-100 animate__animated animate__zoomIn">
-            <div class="card-img-top empty-photo" aria-label="Foto del jugador">Foto</div>
-            <div class="player-card">
-              <div class="position-tag">Posición</div>
-              <div class="player-name">Jarveis Jose Garcia Tirado</div>
-              <p>Edad: 13<br>Nac.: 2/11/2011</p>
+          <!-- Tarjeta 5: Jarveis Jose Garcia Tirado -->
+          <div class="col-md-3 mb-4" style="animation-delay: 0.4s;">
+            <div class="card h-100 animate__animated animate__zoomIn">
+              <div class="card-img-top empty-photo" aria-label="Foto del jugador">Foto</div>
+              <div class="player-card">
+                <div class="position-tag">Posición</div>
+                <div class="player-name">Jarveis Jose Garcia Tirado</div>
+                <p>Edad: 13<br>Nac.: 2/11/2011</p>
+              </div>
             </div>
           </div>
-        </div>
-        <!-- Tarjeta 6: Cristopher Germán Buelvas Barrios -->
-        <div class="col-md-3 mb-4" style="animation-delay: 0.5s;">
-          <div class="card h-100 animate__animated animate__zoomIn">
-            <div class="card-img-top empty-photo" aria-label="Foto del jugador">Foto</div>
-            <div class="player-card">
-              <div class="position-tag">Posición</div>
-              <div class="player-name">Cristopher Germán Buelvas Barrios</div>
-              <p>Edad: 14<br>Nac.: 29/7/2010</p>
+          <!-- Tarjeta 6: Cristopher Germán Buelvas Barrios -->
+          <div class="col-md-3 mb-4" style="animation-delay: 0.5s;">
+            <div class="card h-100 animate__animated animate__zoomIn">
+              <div class="card-img-top empty-photo" aria-label="Foto del jugador">Foto</div>
+              <div class="player-card">
+                <div class="position-tag">Posición</div>
+                <div class="player-name">Cristopher Germán Buelvas Barrios</div>
+                <p>Edad: 14<br>Nac.: 29/7/2010</p>
+              </div>
             </div>
           </div>
-        </div>
-        <!-- Tarjeta 7: Karles David Silgado Viloria -->
-        <div class="col-md-3 mb-4" style="animation-delay: 0.6s;">
-          <div class="card h-100 animate__animated animate__zoomIn">
-            <div class="card-img-top empty-photo" aria-label="Foto del jugador">Foto</div>
-            <div class="player-card">
-              <div class="position-tag">Posición</div>
-              <div class="player-name">Karles David Silgado Viloria</div>
-              <p>Edad: 14<br>Nac.: 13/1/2011</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  
-  <!-- Categoría 2012/13 -->
-  <div id="cat2" class="category-container animate__animated animate__fadeIn">
-    <div class="container">
-      <h2 class="mb-4">Jugadores 2012/13</h2>
-      <div class="row">
-        <!-- Tarjeta 1: Santiago Andrés Mendoza Colmenarez -->
-        <div class="col-md-3 mb-4">
-          <div class="card h-100 animate__animated animate__zoomIn">
-            <div class="card-img-top empty-photo" aria-label="Foto del jugador">Foto</div>
-            <div class="player-card">
-              <div class="position-tag">Posición</div>
-              <div class="player-name">Santiago Andrés Mendoza Colmenarez</div>
-              <p>Edad: 12<br>Nac.: 9/6/2012</p>
-            </div>
-          </div>
-        </div>
-        <!-- Tarjeta 2: Oscar David López García -->
-        <div class="col-md-3 mb-4" style="animation-delay: 0.1s;">
-          <div class="card h-100 animate__animated animate__zoomIn">
-            <div class="card-img-top empty-photo" aria-label="Foto del jugador">Foto</div>
-            <div class="player-card">
-              <div class="position-tag">Posición</div>
-              <div class="player-name">Oscar David López García</div>
-              <p>Edad: 12<br>Nac.: 3/8/2012</p>
-            </div>
-          </div>
-        </div>
-        <!-- Tarjeta 3: Miguel Angel Aldana Charris -->
-        <div class="col-md-3 mb-4" style="animation-delay: 0.2s;">
-          <div class="card h-100 animate__animated animate__zoomIn">
-            <div class="card-img-top empty-photo" aria-label="Foto del jugador">Foto</div>
-            <div class="player-card">
-              <div class="position-tag">Posición</div>
-              <div class="player-name">Miguel Angel Aldana Charris</div>
-              <p>Edad: 13<br>Nac.: 19/1/2012</p>
-            </div>
-          </div>
-        </div>
-        <!-- Tarjeta 4: Dylan Alejandro Sanchez Cespedes -->
-        <div class="col-md-3 mb-4" style="animation-delay: 0.3s;">
-          <div class="card h-100 animate__animated animate__zoomIn">
-            <div class="card-img-top empty-photo" aria-label="Foto del jugador">Foto</div>
-            <div class="player-card">
-              <div class="position-tag">Posición</div>
-              <div class="player-name">Dylan Alejandro Sanchez Cespedes</div>
-              <p>Edad: 12<br>Nac.: 28/12/2012</p>
-            </div>
-          </div>
-        </div>
-        <!-- Tarjeta 5: Mateo De Jesús Boscan Gelvez -->
-        <div class="col-md-3 mb-4" style="animation-delay: 0.4s;">
-          <div class="card h-100 animate__animated animate__zoomIn">
-            <div class="card-img-top empty-photo" aria-label="Foto del jugador">Foto</div>
-            <div class="player-card">
-              <div class="position-tag">Posición</div>
-              <div class="player-name">Mateo De Jesús Boscan Gelvez</div>
-              <p>Edad: 11<br>Nac.: 10/9/2013</p>
-            </div>
-          </div>
-        </div>
-        <!-- Tarjeta 6: Daniel Isaac Rodriguez Cantilllo -->
-        <div class="col-md-3 mb-4" style="animation-delay: 0.5s;">
-          <div class="card h-100 animate__animated animate__zoomIn">
-            <div class="card-img-top empty-photo" aria-label="Foto del jugador">Foto</div>
-            <div class="player-card">
-              <div class="position-tag">Posición</div>
-              <div class="player-name">Daniel Isaac Rodriguez Cantilllo</div>
-              <p>Edad: 12<br>Nac.: 5/6/2012</p>
-            </div>
-          </div>
-        </div>
-        <!-- Tarjeta 7: Ángel David Hernández Hillembrand -->
-        <div class="col-md-3 mb-4" style="animation-delay: 0.6s;">
-          <div class="card h-100 animate__animated animate__zoomIn">
-            <div class="card-img-top empty-photo" aria-label="Foto del jugador">Foto</div>
-            <div class="player-card">
-              <div class="position-tag">Posición</div>
-              <div class="player-name">Ángel David Hernández Hillembrand</div>
-              <p>Edad: 10<br>Nac.: 3/5/2013</p>
-            </div>
-          </div>
-        </div>
-        <!-- Tarjeta 8: Nelson Enrique Pauline Escorcia -->
-        <div class="col-md-3 mb-4" style="animation-delay: 0.7s;">
-          <div class="card h-100 animate__animated animate__zoomIn">
-            <div class="card-img-top empty-photo" aria-label="Foto del jugador">Foto</div>
-            <div class="player-card">
-              <div class="position-tag">Posición</div>
-              <div class="player-name">Nelson Enrique Pauline Escorcia</div>
-              <p>Edad: 11<br>Nac.: 26/7/2013</p>
-            </div>
-          </div>
-        </div>
-        <!-- Tarjeta 9: Juan José Tobias Bornachera -->
-        <div class="col-md-3 mb-4" style="animation-delay: 0.8s;">
-          <div class="card h-100 animate__animated animate__zoomIn">
-            <div class="card-img-top empty-photo" aria-label="Foto del jugador">Foto</div>
-            <div class="player-card">
-              <div class="position-tag">Posición</div>
-              <div class="player-name">Juan José Tobias Bornachera</div>
-              <p>Edad: 11<br>Nac.: 25/9/2013</p>
-            </div>
-          </div>
-        </div>
-        <!-- Tarjeta 10: jesus herrera -->
-        <div class="col-md-3 mb-4" style="animation-delay: 0.9s;">
-          <div class="card h-100 animate__animated animate__zoomIn">
-            <div class="card-img-top empty-photo" aria-label="Foto del jugador">Foto</div>
-            <div class="player-card">
-              <div class="position-tag">Posición</div>
-              <div class="player-name">jesus herrera</div>
-              <p>Edad: 11<br>Nac.: 6/8/2013</p>
-            </div>
-          </div>
-        </div>
-        <!-- Tarjeta 11: Yojainer Jesús Vera Villalobos -->
-        <div class="col-md-3 mb-4" style="animation-delay: 1s;">
-          <div class="card h-100 animate__animated animate__zoomIn">
-            <div class="card-img-top empty-photo" aria-label="Foto del jugador">Foto</div>
-            <div class="player-card">
-              <div class="position-tag">Posición</div>
-              <div class="player-name">Yojainer Jesús Vera Villalobos</div>
-              <p>Edad: 12<br>Nac.: 30/3/2012</p>
+          <!-- Tarjeta 7: Karles David Silgado Viloria -->
+          <div class="col-md-3 mb-4" style="animation-delay: 0.6s;">
+            <div class="card h-100 animate__animated animate__zoomIn">
+              <div class="card-img-top empty-photo" aria-label="Foto del jugador">Foto</div>
+              <div class="player-card">
+                <div class="position-tag">Posición</div>
+                <div class="player-name">Karles David Silgado Viloria</div>
+                <p>Edad: 14<br>Nac.: 13/1/2011</p>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
-  
-  <!-- Categoría 2014/15/16 -->
-  <div id="cat3" class="category-container animate__animated animate__fadeIn">
-    <div class="container">
-      <h2 class="mb-4">Jugadores 2014/15/16</h2>
-      <div class="row">
-        <!-- Tarjeta: Mario Perez (con foto real) -->
-        <div class="col-md-3 mb-4">
-          <div class="card h-100 animate__animated animate__zoomIn">
-            <img src="images/MArio.png" class="card-img-top" alt="Foto de MARIO DE JESUS PEREZ NAVAS" loading="lazy">
-            <div class="player-card">
-              <div class="position-tag">Volante</div>
-              <div class="player-name">MARIO DE JESUS PEREZ NAVAS</div>
+    
+    <!-- Categoría 2012/13 -->
+    <div id="cat2" class="category-container animate__animated animate__fadeIn">
+      <div class="container">
+        <h2 class="mb-4">Jugadores 2012/13</h2>
+        <div class="row">
+          <!-- Tarjeta 1: Santiago Andrés Mendoza Colmenarez -->
+          <div class="col-md-3 mb-4">
+            <div class="card h-100 animate__animated animate__zoomIn">
+              <div class="card-img-top empty-photo" aria-label="Foto del jugador">Foto</div>
+              <div class="player-card">
+                <div class="position-tag">Posición</div>
+                <div class="player-name">Santiago Andrés Mendoza Colmenarez</div>
+                <p>Edad: 12<br>Nac.: 9/6/2012</p>
+              </div>
             </div>
           </div>
-        </div>
-        <!-- Tarjeta: Eliuth David Meza Madera -->
-        <div class="col-md-3 mb-4" style="animation-delay: 0.1s;">
-          <div class="card h-100 animate__animated animate__zoomIn">
-            <div class="card-img-top empty-photo" aria-label="Foto del jugador">Foto</div>
-            <div class="player-card">
-              <div class="position-tag">Posición</div>
-              <div class="player-name">Eliuth David Meza Madera</div>
-              <p>Edad: 10<br>Nac.: 22/2/2014</p>
+          <!-- Tarjeta 2: Oscar David López García -->
+          <div class="col-md-3 mb-4" style="animation-delay: 0.1s;">
+            <div class="card h-100 animate__animated animate__zoomIn">
+              <div class="card-img-top empty-photo" aria-label="Foto del jugador">Foto</div>
+              <div class="player-card">
+                <div class="position-tag">Posición</div>
+                <div class="player-name">Oscar David López García</div>
+                <p>Edad: 12<br>Nac.: 3/8/2012</p>
+              </div>
             </div>
           </div>
-        </div>
-        <!-- Tarjeta: Santiago Hernandez Garcia -->
-        <div class="col-md-3 mb-4" style="animation-delay: 0.2s;">
-          <div class="card h-100 animate__animated animate__zoomIn">
-            <div class="card-img-top empty-photo" aria-label="Foto del jugador">Foto</div>
-            <div class="player-card">
-              <div class="position-tag">Posición</div>
-              <div class="player-name">Santiago Hernandez Garcia</div>
-              <p>Edad: 10<br>Nac.: 10/10/2014</p>
+          <!-- Tarjeta 3: Miguel Angel Aldana Charris -->
+          <div class="col-md-3 mb-4" style="animation-delay: 0.2s;">
+            <div class="card h-100 animate__animated animate__zoomIn">
+              <div class="card-img-top empty-photo" aria-label="Foto del jugador">Foto</div>
+              <div class="player-card">
+                <div class="position-tag">Posición</div>
+                <div class="player-name">Miguel Angel Aldana Charris</div>
+                <p>Edad: 13<br>Nac.: 19/1/2012</p>
+              </div>
             </div>
           </div>
-        </div>
-        <!-- Tarjeta: Juan Andrés Martínez Álvarez -->
-        <div class="col-md-3 mb-4" style="animation-delay: 0.3s;">
-          <div class="card h-100 animate__animated animate__zoomIn">
-            <div class="card-img-top empty-photo" aria-label="Foto del jugador">Foto</div>
-            <div class="player-card">
-              <div class="position-tag">Posición</div>
-              <div class="player-name">Juan Andrés Martínez Álvarez</div>
-              <p>Edad: 8<br>Nac.: 18/3/2016</p>
+          <!-- Tarjeta 4: Dylan Alejandro Sanchez Cespedes -->
+          <div class="col-md-3 mb-4" style="animation-delay: 0.3s;">
+            <div class="card h-100 animate__animated animate__zoomIn">
+              <div class="card-img-top empty-photo" aria-label="Foto del jugador">Foto</div>
+              <div class="player-card">
+                <div class="position-tag">Posición</div>
+                <div class="player-name">Dylan Alejandro Sanchez Cespedes</div>
+                <p>Edad: 12<br>Nac.: 28/12/2012</p>
+              </div>
             </div>
           </div>
-        </div>
-        <!-- Tarjeta: KEINER DAVID ESCORCIA GARCIA -->
-        <div class="col-md-3 mb-4" style="animation-delay: 0.4s;">
-          <div class="card h-100 animate__animated animate__zoomIn">
-            <div class="card-img-top empty-photo" aria-label="Foto del jugador">Foto</div>
-            <div class="player-card">
-              <div class="position-tag">Posición</div>
-              <div class="player-name">KEINER DAVID ESCORCIA GARCIA</div>
-              <p>Edad: 9<br>Nac.: 7/3/2015</p>
+          <!-- Tarjeta 5: Mateo De Jesús Boscan Gelvez -->
+          <div class="col-md-3 mb-4" style="animation-delay: 0.4s;">
+            <div class="card h-100 animate__animated animate__zoomIn">
+              <div class="card-img-top empty-photo" aria-label="Foto del jugador">Foto</div>
+              <div class="player-card">
+                <div class="position-tag">Posición</div>
+                <div class="player-name">Mateo De Jesús Boscan Gelvez</div>
+                <p>Edad: 11<br>Nac.: 10/9/2013</p>
+              </div>
             </div>
           </div>
-        </div>
-        <!-- Tarjeta: NAYARETH CELIN CARPIO -->
-        <div class="col-md-3 mb-4" style="animation-delay: 0.6s;">
-          <div class="card h-100 animate__animated animate__zoomIn">
-            <img src="https://w7.pngwing.com/pngs/327/526/png-transparent-captain-tsubasa.png" class="card-img-top" alt="Foto de ZAID RICARDO" loading="lazy">
-            <div class="player-card">
-              <div class="position-tag">DEFENSA</div>
-              <div class="player-name">NAYARETH CELIN</div>
+          <!-- Tarjeta 6: Daniel Isaac Rodriguez Cantilllo -->
+          <div class="col-md-3 mb-4" style="animation-delay: 0.5s;">
+            <div class="card h-100 animate__animated animate__zoomIn">
+              <div class="card-img-top empty-photo" aria-label="Foto del jugador">Foto</div>
+              <div class="player-card">
+                <div class="position-tag">Posición</div>
+                <div class="player-name">Daniel Isaac Rodriguez Cantilllo</div>
+                <p>Edad: 12<br>Nac.: 5/6/2012</p>
+              </div>
             </div>
           </div>
-        </div>
-        <!-- Tarjeta: Zaid (con foto real) -->
-        <div class="col-md-3 mb-4" style="animation-delay: 0.6s;">
-          <div class="card h-100 animate__animated animate__zoomIn">
-            <img src="images/ZAID.png" class="card-img-top" alt="Foto de ZAID RICARDO" loading="lazy">
-            <div class="player-card">
-              <div class="position-tag">Volante</div>
-              <div class="player-name">ZAID RICARDO</div>
+          <!-- Tarjeta 7: Ángel David Hernández Hillembrand -->
+          <div class="col-md-3 mb-4" style="animation-delay: 0.6s;">
+            <div class="card h-100 animate__animated animate__zoomIn">
+              <div class="card-img-top empty-photo" aria-label="Foto del jugador">Foto</div>
+              <div class="player-card">
+                <div class="position-tag">Posición</div>
+                <div class="player-name">Ángel David Hernández Hillembrand</div>
+                <p>Edad: 10<br>Nac.: 3/5/2013</p>
+              </div>
+            </div>
+          </div>
+          <!-- Tarjeta 8: Nelson Enrique Pauline Escorcia -->
+          <div class="col-md-3 mb-4" style="animation-delay: 0.7s;">
+            <div class="card h-100 animate__animated animate__zoomIn">
+              <div class="card-img-top empty-photo" aria-label="Foto del jugador">Foto</div>
+              <div class="player-card">
+                <div class="position-tag">Posición</div>
+                <div class="player-name">Nelson Enrique Pauline Escorcia</div>
+                <p>Edad: 11<br>Nac.: 26/7/2013</p>
+              </div>
+            </div>
+          </div>
+          <!-- Tarjeta 9: Juan José Tobias Bornachera -->
+          <div class="col-md-3 mb-4" style="animation-delay: 0.8s;">
+            <div class="card h-100 animate__animated animate__zoomIn">
+              <div class="card-img-top empty-photo" aria-label="Foto del jugador">Foto</div>
+              <div class="player-card">
+                <div class="position-tag">Posición</div>
+                <div class="player-name">Juan José Tobias Bornachera</div>
+                <p>Edad: 11<br>Nac.: 25/9/2013</p>
+              </div>
+            </div>
+          </div>
+          <!-- Tarjeta 10: jesus herrera -->
+          <div class="col-md-3 mb-4" style="animation-delay: 0.9s;">
+            <div class="card h-100 animate__animated animate__zoomIn">
+              <div class="card-img-top empty-photo" aria-label="Foto del jugador">Foto</div>
+              <div class="player-card">
+                <div class="position-tag">Posición</div>
+                <div class="player-name">jesus herrera</div>
+                <p>Edad: 11<br>Nac.: 6/8/2013</p>
+              </div>
+            </div>
+          </div>
+          <!-- Tarjeta 11: Yojainer Jesús Vera Villalobos -->
+          <div class="col-md-3 mb-4" style="animation-delay: 1s;">
+            <div class="card h-100 animate__animated animate__zoomIn">
+              <div class="card-img-top empty-photo" aria-label="Foto del jugador">Foto</div>
+              <div class="player-card">
+                <div class="position-tag">Posición</div>
+                <div class="player-name">Yojainer Jesús Vera Villalobos</div>
+                <p>Edad: 12<br>Nac.: 30/3/2012</p>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
-</section>
+    
+    <!-- Categoría 2014/15/16 -->
+    <div id="cat3" class="category-container animate__animated animate__fadeIn">
+      <div class="container">
+        <h2 class="mb-4">Jugadores 2014/15/16</h2>
+        <div class="row">
+          <!-- Tarjeta: Mario Perez (con foto real) -->
+          <div class="col-md-3 mb-4">
+            <div class="card h-100 animate__animated animate__zoomIn">
+              <img src="images/MArio.png" class="card-img-top" alt="Foto de MARIO DE JESUS PEREZ NAVAS" loading="lazy">
+              <div class="player-card">
+                <div class="position-tag">Volante</div>
+                <div class="player-name">MARIO DE JESUS PEREZ NAVAS</div>
+              </div>
+            </div>
+          </div>
+          <!-- Tarjeta: Eliuth David Meza Madera -->
+          <div class="col-md-3 mb-4" style="animation-delay: 0.1s;">
+            <div class="card h-100 animate__animated animate__zoomIn">
+              <div class="card-img-top empty-photo" aria-label="Foto del jugador">Foto</div>
+              <div class="player-card">
+                <div class="position-tag">Posición</div>
+                <div class="player-name">Eliuth David Meza Madera</div>
+                <p>Edad: 10<br>Nac.: 22/2/2014</p>
+              </div>
+            </div>
+          </div>
+          <!-- Tarjeta: Santiago Hernandez Garcia -->
+          <div class="col-md-3 mb-4" style="animation-delay: 0.2s;">
+            <div class="card h-100 animate__animated animate__zoomIn">
+              <div class="card-img-top empty-photo" aria-label="Foto del jugador">Foto</div>
+              <div class="player-card">
+                <div class="position-tag">Posición</div>
+                <div class="player-name">Santiago Hernandez Garcia</div>
+                <p>Edad: 10<br>Nac.: 10/10/2014</p>
+              </div>
+            </div>
+          </div>
+          <!-- Tarjeta: Juan Andrés Martínez Álvarez -->
+          <div class="col-md-3 mb-4" style="animation-delay: 0.3s;">
+            <div class="card h-100 animate__animated animate__zoomIn">
+              <div class="card-img-top empty-photo" aria-label="Foto del jugador">Foto</div>
+              <div class="player-card">
+                <div class="position-tag">Posición</div>
+                <div class="player-name">Juan Andrés Martínez Álvarez</div>
+                <p>Edad: 8<br>Nac.: 18/3/2016</p>
+              </div>
+            </div>
+          </div>
+          <!-- Tarjeta: KEINER DAVID ESCORCIA GARCIA -->
+          <div class="col-md-3 mb-4" style="animation-delay: 0.4s;">
+            <div class="card h-100 animate__animated animate__zoomIn">
+              <div class="card-img-top empty-photo" aria-label="Foto del jugador">Foto</div>
+              <div class="player-card">
+                <div class="position-tag">Posición</div>
+                <div class="player-name">KEINER DAVID ESCORCIA GARCIA</div>
+                <p>Edad: 9<br>Nac.: 7/3/2015</p>
+              </div>
+            </div>
+          </div>
+          <!-- Tarjeta: NAYARETH CELIN CARPIO -->
+          <div class="col-md-3 mb-4" style="animation-delay: 0.6s;">
+            <div class="card h-100 animate__animated animate__zoomIn">
+              <img src="https://w7.pngwing.com/pngs/327/526/png-transparent-captain-tsubasa.png" class="card-img-top" alt="Foto de ZAID RICARDO" loading="lazy">
+              <div class="player-card">
+                <div class="position-tag">DEFENSA</div>
+                <div class="player-name">NAYARETH CELIN</div>
+              </div>
+            </div>
+          </div>
+          <!-- Tarjeta: Zaid (con foto real) -->
+          <div class="col-md-3 mb-4" style="animation-delay: 0.6s;">
+            <div class="card h-100 animate__animated animate__zoomIn">
+              <img src="images/ZAID.png" class="card-img-top" alt="Foto de ZAID RICARDO" loading="lazy">
+              <div class="player-card">
+                <div class="position-tag">Volante</div>
+                <div class="player-name">ZAID RICARDO</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
   
   <!-- Contenedor para el Footer (se cargará desde layout/footer.html) -->
   <div id="footer-container"></div>
@@ -363,9 +369,6 @@
   <script src="scripts/loadComponents.js"></script>
   <!-- Script principal (funciones y animaciones) -->
   <script src="scripts/main.js"></script>
-
-  <!-- Bootstrap JS Bundle -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
   <!-- Script para alternar categorías y otros efectos -->
   <script>
@@ -382,7 +385,6 @@
         document.getElementById(id).classList.add('active', 'animate__animated', 'animate__fadeIn');
       });
     });
-
   </script>
   
 </body>
