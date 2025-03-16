@@ -688,6 +688,64 @@ footer a:hover {
       text-align: right;
       margin-bottom: 20px;
     }
+    /* Estilos generales del carrusel */
+#timelineCarousel {
+  max-width: 800px; /* Ajusta el tamaño máximo del carrusel */
+  margin: auto; /* Centra el carrusel */
+}
+
+/* Estilos para las tarjetas dentro del carrusel */
+.timeline-card {
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  padding: 20px;
+  text-align: center;
+}
+
+/* Ajusta las imágenes dentro del carrusel */
+.carousel-item img {
+  border-radius: 10px;
+  max-height: 400px; /* Ajusta la altura máxima de las imágenes */
+  object-fit: cover;
+  width: 100%;
+}
+
+/* Controles de navegación del carrusel */
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+  background-color: rgba(0, 51, 102, 0.7); /* Color azul oscuro semitransparente */
+  border-radius: 50%;
+  padding: 10px;
+}
+
+/* Espaciado entre el título y las imágenes */
+.timeline-card h5 {
+  color: #003366; /* Azul oscuro */
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+/* Mejora el diseño del texto */
+.timeline-card p {
+  font-size: 14px;
+  color: #444;
+}
+
+/* Responsividad: Ajusta el tamaño en pantallas pequeñas */
+@media (max-width: 768px) {
+  #timelineCarousel {
+    max-width: 100%;
+  }
+
+  .carousel-item img {
+    max-height: 250px; /* Reduce el tamaño de las imágenes en móviles */
+  }
+
+  .timeline-card {
+    padding: 15px;
+  }
+}
     
     /* RESPONSIVIDAD */
     @media screen and (max-width: 500px) {
