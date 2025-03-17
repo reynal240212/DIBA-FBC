@@ -32,6 +32,14 @@ html, body {
 }
 
 /* ======================================
+       CONTENEDOR PRINCIPAL
+       (Se añade margen superior para compensar el navbar fijo)
+====================================== */
+main {
+  padding-top: 70px; /* Ajusta este valor según la altura real del navbar */
+}
+
+/* ======================================
        ANIMACIÓN DE FONDO (CUBOS) [Opcional]
 ====================================== */
 .background-animation {
@@ -129,7 +137,8 @@ html, body {
 /* ======================================
        HERO (SECCIÓN PRINCIPAL)
 ====================================== */
-.hero {
+.hero,
+.hero-section {
   position: relative;
   min-height: 100vh;
   background: linear-gradient(135deg, var(--azul), var(--azul-intenso)),
@@ -576,119 +585,120 @@ footer a:hover {
 
 /* ======================================
          CONTENEDOR DE FORMULARIOS
-    ===================================== */
-    .contenedor-formularios {
-      background: rgba(0, 0, 0, 0.05);
-      padding: 40px;
-      max-width: 600px;
-      margin: 40px auto;
-      border-radius: 4px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-    }
-    
-    /* ======================================
+====================================== */
+.contenedor-formularios {
+  background: rgba(0, 0, 0, 0.05);
+  padding: 40px;
+  max-width: 600px;
+  margin: 40px auto;
+  border-radius: 4px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+/* ======================================
          TABS (Links de formularios)
-    ===================================== */
-    .contenedor-tabs {
-      list-style: none;
-      padding: 0;
-      margin: 0 0 40px 0;
-      display: flex;
-      justify-content: center;
-      border-bottom: 2px solid var(--grana);
-    }
-    .contenedor-tabs li {
-      flex: 1;
-    }
-    .contenedor-tabs li a {
-      display: block;
-      text-decoration: none;
-      padding: 15px;
-      background: rgba(160, 179, 176, 0.25);
-      color: var(--grana);
-      font-size: 20px;
-      text-align: center;
-      cursor: pointer;
-      transition: 0.5s ease;
-    }
-    .contenedor-tabs li a:hover {
-      background: var(--azul-intenso);
-      color: var(--blanco);
-    }
-    .contenedor-tabs .active a {
-      background: var(--azul);
-      color: var(--blanco);
-    }
-    
-    /* ======================================
+====================================== */
+.contenedor-tabs {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 40px 0;
+  display: flex;
+  justify-content: center;
+  border-bottom: 2px solid var(--grana);
+}
+.contenedor-tabs li {
+  flex: 1;
+}
+.contenedor-tabs li a {
+  display: block;
+  text-decoration: none;
+  padding: 15px;
+  background: rgba(160, 179, 176, 0.25);
+  color: var(--grana);
+  font-size: 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: 0.5s ease;
+}
+.contenedor-tabs li a:hover {
+  background: var(--azul-intenso);
+  color: var(--blanco);
+}
+.contenedor-tabs .active a {
+  background: var(--azul);
+  color: var(--blanco);
+}
+
+/* ======================================
          CONTENIDO DE LOS FORMULARIOS
-    ===================================== */
-    .contenido-tab > div {
-      display: none;
-    }
-    .contenido-tab > div.active {
-      display: block;
-    }
-    
-    h1 {
-      text-align: center;
-      color: var(--azul);
-      font-weight: 300;
-      margin-bottom: 40px;
-    }
-    
-    .contenedor-input {
-      position: relative;
-      margin-bottom: 40px;
-    }
-    .contenedor-input label {
-      position: absolute;
-      transform: translateY(6px);
-      left: 13px;
-      color: rgba(0, 0, 0, 0.5);
-      transition: all 0.25s ease;
-      pointer-events: none;
-      font-size: 22px;
-    }
-    .contenedor-input input {
-      font-size: 22px;
-      display: block;
-      width: 100%;
-      padding: 5px 10px;
-      border: 1px solid var(--grana);
-      color: var(--azul);
-      border-radius: 5px;
-      transition: all 0.5s ease;
-    }
-    .contenedor-input input:focus {
-      outline: none;
-      border-color: var(--amarillo);
-    }
-    
-    .button {
-      border: none;
-      outline: none;
-      border-radius: 5px;
-      cursor: pointer;
-      padding: 15px 0;
-      font-size: 2rem;
-      background: var(--azul);
-      color: var(--blanco);
-      transition: all 0.5s ease;
-    }
-    .button:hover, .button:focus {
-      background: var(--azul-intenso);
-    }
-    .button-block {
-      display: block;
-      width: 100%;
-    }
-    .forgot {
-      margin-top: -20px;
-      text-align: right;
-      margin-bottom: 20px;
-    }
-    /* Estilos generales del carrusel */
+====================================== */
+.contenido-tab > div {
+  display: none;
+}
+.contenido-tab > div.active {
+  display: block;
+}
+
+h1 {
+  text-align: center;
+  color: var(--azul);
+  font-weight: 300;
+  margin-bottom: 40px;
+}
+
+.contenedor-input {
+  position: relative;
+  margin-bottom: 40px;
+}
+.contenedor-input label {
+  position: absolute;
+  transform: translateY(6px);
+  left: 13px;
+  color: rgba(0, 0, 0, 0.5);
+  transition: all 0.25s ease;
+  pointer-events: none;
+  font-size: 22px;
+}
+.contenedor-input input {
+  font-size: 22px;
+  display: block;
+  width: 100%;
+  padding: 5px 10px;
+  border: 1px solid var(--grana);
+  color: var(--azul);
+  border-radius: 5px;
+  transition: all 0.5s ease;
+}
+.contenedor-input input:focus {
+  outline: none;
+  border-color: var(--amarillo);
+}
+
+.button {
+  border: none;
+  outline: none;
+  border-radius: 5px;
+  cursor: pointer;
+  padding: 15px 0;
+  font-size: 2rem;
+  background: var(--azul);
+  color: var(--blanco);
+  transition: all 0.5s ease;
+}
+.button:hover, .button:focus {
+  background: var(--azul-intenso);
+}
+.button-block {
+  display: block;
+  width: 100%;
+}
+.forgot {
+  margin-top: -20px;
+  text-align: right;
+  margin-bottom: 20px;
+}
+
+/* Estilos generales del carrusel */
 #timelineCarousel {
   max-width: 800px; /* Ajusta el tamaño máximo del carrusel */
   margin: auto; /* Centra el carrusel */
@@ -746,18 +756,18 @@ footer a:hover {
     padding: 15px;
   }
 }
-    
-    /* RESPONSIVIDAD */
-    @media screen and (max-width: 500px) {
-      .fila-arriba div {
-        width: 100%;
-      }
-      .fila-arriba div:last-child {
-        margin-bottom: 40px;
-      }
-    }
-    @media screen and (max-width: 400px) {
-      .contenedor-tabs li a {
-        width: 100%;
-      }
-    }
+
+/* RESPONSIVIDAD */
+@media screen and (max-width: 500px) {
+  .fila-arriba div {
+    width: 100%;
+  }
+  .fila-arriba div:last-child {
+    margin-bottom: 40px;
+  }
+}
+@media screen and (max-width: 400px) {
+  .contenedor-tabs li a {
+    width: 100%;
+  }
+}
