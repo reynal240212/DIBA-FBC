@@ -43,7 +43,6 @@
   <link rel="stylesheet" href="styles/styles.css" />
   
 </head>
-
 <body>
   <!-- Fondo animado que cubre toda la página -->
   <div class="background-animation">
@@ -59,7 +58,24 @@
     <i class="fas fa-arrow-up"></i>
   </button>
 
-  <!-- Contenedor para el Navbar (se cargará desde layout/navbar.html) -->
+  <!-- HEADER: Agregamos elementos para el menú -->
+  <header class="container my-3">
+    <!-- Botón de menú (menu-toggle) -->
+    <button id="menu-toggle" class="btn btn-outline-secondary">
+      <i class="fas fa-bars"></i> Menú
+    </button>
+    <!-- Menú (nav) -->
+    <nav id="menu" class="mt-2" style="display: none;">
+      <ul class="list-unstyled">
+        <li><a href="index.html">Inicio</a></li>
+        <li><a href="Historia.html">Historia</a></li>
+        <li><a href="servicios.html">Servicios</a></li>
+        <!-- Agrega más enlaces según se requiera -->
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Contenedor para el Navbar cargado externamente (si lo usas) -->
   <div id="navbar-container"></div>
 
   <!-- HERO SECTION -->
@@ -128,6 +144,8 @@
               Potenciamos la técnica y táctica de cada jugador, preparándolos
               para competir al más alto nivel.
             </p>
+            <!-- Botón dinámico de ejemplo -->
+            <button class="btn btn-primary dynamic-button">Ver Entrenamiento</button>
           </div>
         </div>
       </div>
@@ -139,6 +157,8 @@
               Representamos a nuestra comunidad en torneos locales,
               demostrando competitividad y espíritu deportivo en cada desafío.
             </p>
+            <!-- Botón dinámico de ejemplo -->
+            <button class="btn btn-primary dynamic-button">Ver Torneos</button>
           </div>
         </div>
       </div>
@@ -150,6 +170,8 @@
               Fomentamos el desarrollo personal de nuestros jugadores,
               inculcando valores y liderazgo dentro y fuera del campo.
             </p>
+            <!-- Botón dinámico de ejemplo -->
+            <button class="btn btn-primary dynamic-button">Ver Desarrollo</button>
           </div>
         </div>
       </div>
