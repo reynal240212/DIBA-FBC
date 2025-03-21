@@ -707,7 +707,7 @@ footer a:hover {
 .carousel-item img {
   border-radius: 10px;
   max-height: 400px; /* Ajusta la altura máxima de las imágenes */
-  object-fit: cover;
+  object-fit: center;
   width: 100%;
 }
 
