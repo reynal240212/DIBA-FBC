@@ -16,25 +16,23 @@
     document.getElementById('generatePDF').addEventListener('click', async () => {
       const { jsPDF } = window.jspdf;
 
-      // 1. Configuración: modo "landscape" para tener más ancho
+      // 1. Configuración: modo "portrait" para repartir en varias páginas si no cabe
       const doc = new jsPDF({
-        orientation: 'landscape',
+        orientation: 'portrait',
         unit: 'pt',
-        format: 'letter' // 612 x 792 puntos aprox.
+        format: 'letter' // 612 x 792 pt aprox.
       });
 
       // 2. Inserta el LOGO (usa la ruta o URL de tu imagen)
-      // Para mejor resultado, usa un enlace HTTPS a la imagen o una versión base64
-      // Ejemplo: "https://ruta-a-tu-logo.png"
-      // Ajusta la posición y el tamaño según necesites
-      const logoUrl = "https://i.postimg.cc/x8W7vwJJ/ESCUDO.png"; // EJEMPLO
-      // Descargamos la imagen como base64 (para que jsPDF la procese)
+      // Para un mejor resultado, usa un enlace HTTPS o base64.
+      const logoUrl = "https://i.postimg.cc/x8W7vwJJ/ESCUDO.png"; // Ejemplo
+      // Descargamos la imagen como base64 para que jsPDF pueda insertarla
       const imgData = await getBase64ImageFromUrl(logoUrl);
-      // Agregamos la imagen en x=40, y=20, con ancho=60, alto=60 (ajusta a tu gusto)
+      // Agregamos la imagen en x=40, y=20, con ancho=60, alto=60 (ajusta según requieras)
       doc.addImage(imgData, 'PNG', 40, 20, 60, 60);
 
-      // 3. Títulos y texto
-      doc.setFontSize(12);
+      // 3. Encabezados
+      doc.setFontSize(14);
       doc.text("DIBA FBC", 120, 40);
       doc.setFontSize(10);
       doc.text("DEPORTIVO INTERNACIONAL DE BARRANQUILLA ATLANTICO", 120, 55);
@@ -90,31 +88,29 @@
       ];
 
       // 5. Genera la tabla usando autoTable
-      // Ajustamos margen, fontSize y cellPadding para compactar
       doc.autoTable({
         head: [columns],
         body: rows,
-        startY: 100,                   // Dónde inicia la tabla (pos vertical)
-        margin: { left: 40, right: 40 }, 
+        startY: 100,
+        margin: { left: 40, right: 40 },
         styles: {
-          fontSize: 9,                 // Texto más pequeño para que quepa
-          cellPadding: 3,             // Espacio interno de las celdas
+          fontSize: 10,        // Ajusta tamaño de fuente
+          cellPadding: 4,      // Espacio interno de celdas
           halign: 'center',
           valign: 'middle'
         },
         headStyles: {
-          fillColor: [0, 27, 114],    // Azul oscuro
+          fillColor: [0, 27, 114], // Azul oscuro
           textColor: 255
         },
         alternateRowStyles: {
-          fillColor: [240, 240, 240]  // Gris claro para filas alternas
+          fillColor: [240, 240, 240] // Gris claro
         },
-        tableWidth: 'auto',           // Ajusta el ancho de la tabla al contenido
-        // Con "pageBreak" en 'avoid' intenta no romper la tabla
-        pageBreak: 'avoid'
+        tableWidth: 'auto',
+        pageBreak: 'auto' // Se partirá en páginas adicionales si no cabe
       });
 
-      // 6. Descarga el PDF
+      // 6. Descargar el PDF
       doc.save("PlanillaDIBA.pdf");
     });
 
