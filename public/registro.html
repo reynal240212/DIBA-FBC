@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Registro con Supabase</title>
+  <script type="module">
+    import { createClient } from '@supabase/supabase-js';
+
+    const supabaseUrl = 'https://tu-proyecto.supabase.co'; // Reemplaza con tu URL
+    const supabaseKey = 'TU_SUPABASE_ANON_KEY'; // Reemplaza con tu anon key
+    const supabase = createClient(supabaseUrl, supabaseKey);
+
+    async function handleRegistro(e) {
+      e.preventDefault();
+      const correo = document.getElementById('correo').value;
+      const clave = document.getElementById('clave').value;
+      const usuario = document.getElementById('usuario').value;
+      
+      // Registro con Supabase Auth
+      const { user, error } = await supabase.auth.signUp({
+        email: correo,
+        password: clave
+      });
+      
+      if (error) {
+        alert('Error en el registro: ' + error.message);
+        return;
+      }
+      
+      // Inserta datos adicionales en tu tabla de usuarios
+      const { data, error: errorInsert } = await supabase
+        .from('usuarios')
+        .insert([{ id: user.id, usuario: usuario, correo: correo }]);
+      
+      if (errorInsert) {
+        alert('Error al guardar datos adicionales: ' + errorInsert.message);
+      } else {
+        alert('Registro exitoso. ¡Bienvenido!');
+        window.location.href = 'login.html';
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('registroForm').addEventListener('submit', handleRegistro);
+    });
+  </script>
+</head>
+<body>
+  <div class="registro-container">
+    <h2>Registrarse</h2>
+    <form id="registroForm">
+      <label for="usuario">Usuario:</label>
+      <input type="text" id="usuario" name="usuario" required>
+      <br>
+      <label for="correo">Correo:</label>
+      <input type="email" id="correo" name="correo" required>
+      <br>
+      <label for="clave">Contraseña:</label>
+      <input type="password" id="clave" name="clave" required>
+      <br>
+      <button type="submit">Registrarse</button>
+    </form>
+  </div>
+</body>
+</html>
