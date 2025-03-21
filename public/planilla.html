@@ -13,24 +13,35 @@
   <button id="generatePDF">Descargar PDF</button>
 
   <script>
-    document.getElementById('generatePDF').addEventListener('click', () => {
-      // 1. Inicializa jsPDF
+    document.getElementById('generatePDF').addEventListener('click', async () => {
       const { jsPDF } = window.jspdf;
+
+      // 1. Configuración: modo "landscape" para tener más ancho
       const doc = new jsPDF({
-        orientation: 'portrait',
+        orientation: 'landscape',
         unit: 'pt',
-        format: 'letter' // 'letter' (612x792 pt) equivale aprox. a 21.59 x 27.94 cm
+        format: 'letter' // 612 x 792 puntos aprox.
       });
 
-      // 2. Encabezados o títulos
-      doc.setFontSize(14);
-      doc.text("DIBA FBC", 40, 40);
-      doc.setFontSize(11);
-      doc.text("DEPORTIVO INTERNACIONAL DE BARRANQUILLA ATLANTICO", 40, 55);
-      doc.text("RESOLUCIÓN 0122 /2018- 10/SEPT/2018", 40, 70);
-      doc.text("Planilla de control", 40, 85);
+      // 2. Inserta el LOGO (usa la ruta o URL de tu imagen)
+      // Para mejor resultado, usa un enlace HTTPS a la imagen o una versión base64
+      // Ejemplo: "https://ruta-a-tu-logo.png"
+      // Ajusta la posición y el tamaño según necesites
+      const logoUrl = "https://i.postimg.cc/x8W7vwJJ/ESCUDO.png"; // EJEMPLO
+      // Descargamos la imagen como base64 (para que jsPDF la procese)
+      const imgData = await getBase64ImageFromUrl(logoUrl);
+      // Agregamos la imagen en x=40, y=20, con ancho=60, alto=60 (ajusta a tu gusto)
+      doc.addImage(imgData, 'PNG', 40, 20, 60, 60);
 
-      // 3. Define las columnas y filas de la tabla
+      // 3. Títulos y texto
+      doc.setFontSize(12);
+      doc.text("DIBA FBC", 120, 40);
+      doc.setFontSize(10);
+      doc.text("DEPORTIVO INTERNACIONAL DE BARRANQUILLA ATLANTICO", 120, 55);
+      doc.text("RESOLUCIÓN 0122 /2018- 10/SEPT/2018", 120, 70);
+      doc.text("Planilla de control", 120, 85);
+
+      // 4. Define las columnas y filas de la tabla
       const columns = ["#", "Nombre", "pagos", "asistencia", "disciplina"];
       const rows = [
         ["1",  "Abraham",        "", "", ""],
@@ -78,20 +89,47 @@
         ["43","Zaid",            "", "", ""]
       ];
 
-      // 4. Genera la tabla usando autoTable
+      // 5. Genera la tabla usando autoTable
+      // Ajustamos margen, fontSize y cellPadding para compactar
       doc.autoTable({
         head: [columns],
         body: rows,
-        startY: 100,           // Dónde inicia la tabla (pos vertical)
-        margin: { left: 40 },  // Margen izquierdo
-        styles: { fontSize: 10, halign: 'center', valign: 'middle' },
-        headStyles: { fillColor: [0, 27, 114], textColor: 255 }, // Azul para encabezados
-        alternateRowStyles: { fillColor: [240, 240, 240] }       // Fila gris clara alterna
+        startY: 100,                   // Dónde inicia la tabla (pos vertical)
+        margin: { left: 40, right: 40 }, 
+        styles: {
+          fontSize: 9,                 // Texto más pequeño para que quepa
+          cellPadding: 3,             // Espacio interno de las celdas
+          halign: 'center',
+          valign: 'middle'
+        },
+        headStyles: {
+          fillColor: [0, 27, 114],    // Azul oscuro
+          textColor: 255
+        },
+        alternateRowStyles: {
+          fillColor: [240, 240, 240]  // Gris claro para filas alternas
+        },
+        tableWidth: 'auto',           // Ajusta el ancho de la tabla al contenido
+        // Con "pageBreak" en 'avoid' intenta no romper la tabla
+        pageBreak: 'avoid'
       });
 
-      // 5. Descarga el PDF
+      // 6. Descarga el PDF
       doc.save("PlanillaDIBA.pdf");
     });
+
+    // Función auxiliar para convertir imagen externa a Base64
+    async function getBase64ImageFromUrl(imageUrl) {
+      const res = await fetch(imageUrl);
+      const blob = await res.blob();
+      return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          resolve(reader.result);
+        };
+        reader.readAsDataURL(blob);
+      });
+    }
   </script>
 </body>
 </html>
