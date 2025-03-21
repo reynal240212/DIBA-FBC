@@ -1,8 +1,10 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Registro con Supabase</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Registro - DIBA FBC</title>
+  <link rel="shortcut icon" href="images/ESCUDO.ico" type="image/x-icon" />
   <script type="module">
     import { createClient } from '@supabase/supabase-js';
 
@@ -44,22 +46,160 @@
       document.getElementById('registroForm').addEventListener('submit', handleRegistro);
     });
   </script>
+  <style>
+    /* Estilos generales para el layout */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Arial', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background: url('https://img.freepik.com/vector-gratis/fondo-conexion-degradado_52683-116652.jpg?semt=ais_hybrid') no-repeat center center fixed;
+      background-size: cover;
+    }
+    
+    header {
+      background-color: rgba(255, 255, 255, 0.9);
+      padding: 10px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    header .logo img {
+      width: 50px;
+    }
+    
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 20px;
+    }
+    
+    nav ul li a {
+      text-decoration: none;
+      color: #001b72;
+      font-weight: bold;
+      transition: color 0.3s;
+    }
+    
+    nav ul li a:hover {
+      color: #ffc107;
+    }
+    
+    main {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+    
+    .login-section {
+      background: #fff;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 400px;
+    }
+    
+    .login-section h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #001b72;
+    }
+    
+    .login-section form div {
+      margin-bottom: 15px;
+    }
+    
+    .login-section label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+      color: #001b72;
+    }
+    
+    .login-section input {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    
+    .login-section button {
+      width: 100%;
+      padding: 10px;
+      background-color: #001b72;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background-color 0.3s;
+    }
+    
+    .login-section button:hover {
+      background-color: #ffc107;
+    }
+    
+    footer {
+      background-color: rgba(255, 255, 255, 0.9);
+      text-align: center;
+      padding: 15px;
+      font-size: 14px;
+    }
+  </style>
 </head>
 <body>
-  <div class="registro-container">
-    <h2>Registrarse</h2>
-    <form id="registroForm">
-      <label for="usuario">Usuario:</label>
-      <input type="text" id="usuario" name="usuario" required>
-      <br>
-      <label for="correo">Correo:</label>
-      <input type="email" id="correo" name="correo" required>
-      <br>
-      <label for="clave">Contraseña:</label>
-      <input type="password" id="clave" name="clave" required>
-      <br>
-      <button type="submit">Registrarse</button>
-    </form>
-  </div>
+  <!-- Header con logo y navegación -->
+  <header>
+    <div class="logo">
+      <img src="images/ESCUDO.ico" alt="Logo DIBA FBC" loading="lazy" />
+    </div>
+    <nav>
+      <ul>
+        <li><a href="login.html">Login</a></li>
+        <li><a href="registro.html">Registro</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Contenido principal: Sección de Registro -->
+  <main>
+    <section class="login-section">
+      <h2>Registrarse</h2>
+      <form action="procesar-registro.php" method="POST">
+        <div>
+          <label for="usuario">Usuario:</label>
+          <input type="text" id="usuario" name="usuario" required />
+        </div>
+        <div>
+          <label for="correo">Correo:</label>
+          <input type="email" id="correo" name="correo" required />
+        </div>
+        <div>
+          <label for="clave">Contraseña:</label>
+          <input type="password" id="clave" name="clave" required />
+        </div>
+        <div>
+          <label for="confirmar_clave">Confirmar Contraseña:</label>
+          <input type="password" id="confirmar_clave" name="confirmar_clave" required />
+        </div>
+        <button type="submit">Registrarse</button>
+      </form>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2025 DIBA FBC. Todos los derechos reservados.</p>
+  </footer>
 </body>
 </html>
