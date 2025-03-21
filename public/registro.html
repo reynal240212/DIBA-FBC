@@ -5,47 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Registro - DIBA FBC</title>
   <link rel="shortcut icon" href="images/ESCUDO.ico" type="image/x-icon" />
-  <script type="module">
-    import { createClient } from '@supabase/supabase-js';
-
-    const supabaseUrl = 'https://tu-proyecto.supabase.co'; // Reemplaza con tu URL
-    const supabaseKey = 'TU_SUPABASE_ANON_KEY'; // Reemplaza con tu anon key
-    const supabase = createClient(supabaseUrl, supabaseKey);
-
-    async function handleRegistro(e) {
-      e.preventDefault();
-      const correo = document.getElementById('correo').value;
-      const clave = document.getElementById('clave').value;
-      const usuario = document.getElementById('usuario').value;
-      
-      // Registro con Supabase Auth
-      const { user, error } = await supabase.auth.signUp({
-        email: correo,
-        password: clave
-      });
-      
-      if (error) {
-        alert('Error en el registro: ' + error.message);
-        return;
-      }
-      
-      // Inserta datos adicionales en tu tabla de usuarios
-      const { data, error: errorInsert } = await supabase
-        .from('usuarios')
-        .insert([{ id: user.id, usuario: usuario, correo: correo }]);
-      
-      if (errorInsert) {
-        alert('Error al guardar datos adicionales: ' + errorInsert.message);
-      } else {
-        alert('Registro exitoso. ¡Bienvenido!');
-        window.location.href = 'login.html';
-      }
-    }
-
-    document.addEventListener('DOMContentLoaded', () => {
-      document.getElementById('registroForm').addEventListener('submit', handleRegistro);
-    });
-  </script>
   <style>
     /* Estilos generales para el layout */
     * {
@@ -156,6 +115,58 @@
       font-size: 14px;
     }
   </style>
+  <script type="module">
+    // Importa la librería Supabase desde un CDN
+    import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
+
+    // Reemplaza estos valores con los de tu proyecto en Supabase
+    const supabaseUrl = "https://tu-proyecto.supabase.co";
+    const supabaseKey = "TU_SUPABASE_ANON_KEY";
+    const supabase = createClient(supabaseUrl, supabaseKey);
+
+    async function handleRegistro(e) {
+      e.preventDefault();
+      
+      const usuario = document.getElementById("usuario").value;
+      const correo = document.getElementById("correo").value;
+      const clave = document.getElementById("clave").value;
+      const confirmarClave = document.getElementById("confirmar_clave").value;
+
+      if(clave !== confirmarClave) {
+        alert("Las contraseñas no coinciden.");
+        return;
+      }
+      
+      // Registra el usuario en Supabase Auth
+      const { user, error } = await supabase.auth.signUp({
+        email: correo,
+        password: clave
+      });
+      
+      if (error) {
+        alert("Error en el registro: " + error.message);
+        return;
+      }
+
+      // Inserta datos adicionales en la tabla "usuarios" (opcional)
+      const { error: errorInsert } = await supabase
+        .from("usuarios")
+        .insert([{ id: user.id, usuario: usuario, correo: correo }]);
+      
+      if (errorInsert) {
+        alert("Error al guardar datos adicionales: " + errorInsert.message);
+        return;
+      }
+      
+      alert("Registro exitoso. Revisa tu correo para confirmar tu cuenta.");
+      // Redirige al login o a otra página según tu flujo
+      window.location.href = "login.html";
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      document.getElementById("registroForm").addEventListener("submit", handleRegistro);
+    });
+  </script>
 </head>
 <body>
   <!-- Header con logo y navegación -->
@@ -175,7 +186,7 @@
   <main>
     <section class="login-section">
       <h2>Registrarse</h2>
-      <form action="procesar-registro.php" method="POST">
+      <form id="registroForm">
         <div>
           <label for="usuario">Usuario:</label>
           <input type="text" id="usuario" name="usuario" required />
