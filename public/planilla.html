@@ -2,12 +2,24 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
+  <title>Inicio - DIBA FBC</title>
+  <meta name="author" content="REINALDO DE JESUS PEREZ NAVAS" />
+  <meta name="keywords" content="DIBA FBC, Deportivo Internacional De Barranquilla Atlántico, Fútbol, Barranquilla, Atlántico, Colombia" />
+  <meta name="robots" content="index, follow" />
+  <meta name="theme-color" content="#002a40" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="#002a40" />
+  <meta name="msapplication-navbutton-color" content="#002a40" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="HandheldFriendly" content="True" />
+  <meta name="MobileOptimized" content="320" />
   <link rel="icon" href="images/ESCUDO.ico" sizes="32x32">
-  <title>Planilla DIBA FBC - PDF</title>
-  <!-- Carga jsPDF -->
-  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
-  <!-- Carga el complemento autoTable -->
-  <script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.5.25/dist/jspdf.plugin.autotable.min.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta
+    name="description"
+    content="Conoce la historia y los momentos más destacados de DIBA FBC, un recorrido lleno de pasión y logros deportivos."
+  />
+
   <!-- Tidio Chat -->
   <script src="//code.tidio.co/jckoszxyxvs7izkxulr9bk5cbcspdjtj.js" async></script>
 
@@ -41,16 +53,69 @@
   <!-- Estilos globales -->
   <link rel="stylesheet" href="styles/styles.css" />
   <link rel="stylesheet" href="styles/background-animation.css" />
+  
   <style>
+    /* Reset y fuentes */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
     body {
       font-family: 'Arial', sans-serif;
+      background: linear-gradient(135deg, #001b72, #ffc107);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: #333;
+    }
+    /* Contenedor para la pantalla de acceso */
+    .access-container, .content-container {
+      background: #fff;
+      padding: 30px 40px;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      width: 90%;
+      max-width: 400px;
       text-align: center;
-      margin-top: 40px;
+    }
+    h1 {
+      margin-bottom: 20px;
+      font-size: 24px;
+      color: #001b72;
+    }
+    input[type="password"] {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 16px;
+      margin-bottom: 20px;
     }
     button {
+      background-color: #001b72;
+      color: #fff;
       padding: 10px 20px;
+      border: none;
+      border-radius: 4px;
       font-size: 16px;
       cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    button:hover {
+      background-color: #ffc107;
+      color: #001b72;
+    }
+    /* Estilos para el PDF Generator */
+    .pdf-container {
+      margin-top: 20px;
+    }
+    .pdf-container h2 {
+      font-size: 20px;
+      margin-bottom: 15px;
+      color: #001b72;
     }
   </style>
 </head>
