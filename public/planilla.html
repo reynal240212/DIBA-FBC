@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Planilla DIBA FBC - PDF</title>
+  <!-- Carga jsPDF -->
+  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+  <!-- Carga el complemento autoTable para tablas -->
+  <script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.5.25/dist/jspdf.plugin.autotable.min.js"></script>
+</head>
+<body>
+  <h1>Generar PDF - Planilla DIBA FBC</h1>
+  <button id="generatePDF">Descargar PDF</button>
+
+  <script>
+    document.getElementById('generatePDF').addEventListener('click', () => {
+      // 1. Inicializa jsPDF
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF({
+        orientation: 'portrait',
+        unit: 'pt',
+        format: 'letter' // 'letter' (612x792 pt) equivale aprox. a 21.59 x 27.94 cm
+      });
+
+      // 2. Encabezados o títulos
+      doc.setFontSize(14);
+      doc.text("DIBA FBC", 40, 40);
+      doc.setFontSize(11);
+      doc.text("DEPORTIVO INTERNACIONAL DE BARRANQUILLA ATLANTICO", 40, 55);
+      doc.text("RESOLUCIÓN 0122 /2018- 10/SEPT/2018", 40, 70);
+      doc.text("Planilla de control", 40, 85);
+
+      // 3. Define las columnas y filas de la tabla
+      const columns = ["#", "Nombre", "pagos", "asistencia", "disciplina"];
+      const rows = [
+        ["1",  "Abraham",        "", "", ""],
+        ["2",  "Adrian",         "", "", ""],
+        ["3",  "Angel",          "", "", ""],
+        ["4",  "Brayan",         "", "", ""],
+        ["5",  "Breiner Davalos","", "", ""],
+        ["6",  "Breiner Vargas", "", "", ""],
+        ["7",  "Carlos",         "", "", ""],
+        ["8",  "Cristopher",     "", "", ""],
+        ["9",  "Daniel",         "", "", ""],
+        ["10", "Dany",           "", "", ""],
+        ["11","Dilan",           "", "", ""],
+        ["12","Dinkol",          "", "", ""],
+        ["13","Eliuth",          "", "", ""],
+        ["14","Esteban",         "", "", ""],
+        ["15","Gomez Angel",     "", "", ""],
+        ["16","ISAAC",           "", "", ""],
+        ["17","Jarveis",         "", "", ""],
+        ["18","Jesus",           "", "", ""],
+        ["19","Jhoyfran",        "", "", ""],
+        ["20","Joseth",          "", "", ""],
+        ["21","Josue",           "", "", ""],
+        ["22","Juan",            "", "", ""],
+        ["23","Juan Andrés",     "", "", ""],
+        ["24","Juan José",       "", "", ""],
+        ["25","Karles",          "", "", ""],
+        ["26","Kenner",          "", "", ""],
+        ["27","Keyner",          "", "", ""],
+        ["28","LEONARDO",        "", "", ""],
+        ["29","Leonardo",        "", "", ""],
+        ["30","Luis Moreno",     "", "", ""],
+        ["31","Mario",           "", "", ""],
+        ["32","Mateo",           "", "", ""],
+        ["33","Miguel",          "", "", ""],
+        ["34","Nayareth",        "", "", ""],
+        ["35","Nelson",          "", "", ""],
+        ["36","Oscar Lopez",     "", "", ""],
+        ["37","Oscar Sanchez",   "", "", ""],
+        ["38","Rey David",       "", "", ""],
+        ["39","Santiago",        "", "", ""],
+        ["40","Santy",           "", "", ""],
+        ["41","Santy T",         "", "", ""],
+        ["42","Yojainer",        "", "", ""],
+        ["43","Zaid",            "", "", ""]
+      ];
+
+      // 4. Genera la tabla usando autoTable
+      doc.autoTable({
+        head: [columns],
+        body: rows,
+        startY: 100,           // Dónde inicia la tabla (pos vertical)
+        margin: { left: 40 },  // Margen izquierdo
+        styles: { fontSize: 10, halign: 'center', valign: 'middle' },
+        headStyles: { fillColor: [0, 27, 114], textColor: 255 }, // Azul para encabezados
+        alternateRowStyles: { fillColor: [240, 240, 240] }       // Fila gris clara alterna
+      });
+
+      // 5. Descarga el PDF
+      doc.save("PlanillaDIBA.pdf");
+    });
+  </script>
+</body>
+</html>
