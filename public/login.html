@@ -1,57 +1,170 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="shortcut icon" href="images/ESCUDO.ico" type="image/x-icon">
-  <link rel="stylesheet" href="styles/styles.css">
-  <title>Mi Sitio Web - Login</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login - DIBA FBC</title>
+  <link rel="shortcut icon" href="images/ESCUDO.ico" type="image/x-icon" />
+  <style>
+    /* Estilos generales para el layout */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Arial', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    header {
+      background-color: rgba(255, 255, 255, 0.9);
+      padding: 10px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    header .logo img {
+      width: 50px;
+    }
+    
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 20px;
+    }
+    
+    nav ul li a {
+      text-decoration: none;
+      color: #001b72;
+      font-weight: bold;
+      transition: color 0.3s;
+    }
+    
+    nav ul li a:hover {
+      color: #ffc107;
+    }
+    
+    main {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+    
+    .login-section {
+      background: #fff;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 400px;
+    }
+    
+    .login-section h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #001b72;
+    }
+    
+    .login-section form div {
+      margin-bottom: 15px;
+    }
+    
+    .login-section label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+      color: #001b72;
+    }
+    
+    .login-section input {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    
+    .login-section button {
+      width: 100%;
+      padding: 10px;
+      background-color: #001b72;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background-color 0.3s;
+    }
+    
+    .login-section button:hover {
+      background-color: #ffc107;
+    }
+    
+    footer {
+      background-color: rgba(255, 255, 255, 0.9);
+      text-align: center;
+      padding: 15px;
+      font-size: 14px;
+    }
+    
+    /* Fondo específico para la página de login */
+    body {
+      background: url('https://img.freepik.com/vector-gratis/fondo-conexion-degradado_52683-116652.jpg?semt=ais_hybrid') no-repeat center center fixed;
+      background-size: cover;
+    }
+    
+    /* Si prefieres un degradado, podrías usar:
+    body {
+      background: linear-gradient(135deg, #001b72, #ffc107);
+    }
+    */
+  </style>
 </head>
 <body>
-  <!-- Header común -->
+  <!-- Header con logo y navegación -->
   <header>
     <div class="logo">
-      <img src="images/ESCUDO.ico" alt="Logo de DIBA FBC" loading="lazy">
+      <img src="images/ESCUDO.ico" alt="Logo DIBA FBC" loading="lazy" />
     </div>
-    <!-- Opcional: menú de navegación -->
     <nav>
       <ul>
         <li><a href="index.html">Inicio</a></li>
         <li><a href="login.html">Login</a></li>
-        <!-- Otros enlaces -->
       </ul>
     </nav>
   </header>
 
-  <!-- Contenido principal -->
+  <!-- Contenido principal: Sección de Login -->
   <main>
-    <!-- Aquí se inyecta el contenido específico de cada página, en este caso el login -->
     <section class="login-section">
       <h2>Iniciar Sesión</h2>
       <form action="procesar-login.php" method="POST">
         <div>
           <label for="usuario">Usuario:</label>
-          <input type="text" id="usuario" name="usuario" required>
+          <input type="text" id="usuario" name="usuario" required />
         </div>
         <div>
           <label for="correo">Correo:</label>
-          <input type="email" id="correo" name="correo" required>
+          <input type="email" id="correo" name="correo" required />
         </div>
         <div>
           <label for="clave">Contraseña:</label>
-          <input type="password" id="clave" name="clave" required>
+          <input type="password" id="clave" name="clave" required />
         </div>
         <button type="submit">Ingresar</button>
       </form>
     </section>
   </main>
 
-  <!-- Footer común -->
+  <!-- Footer -->
   <footer>
     <p>&copy; 2025 DIBA FBC. Todos los derechos reservados.</p>
   </footer>
-
-  <!-- Scripts compartidos -->
-  <script src="scripts/main.js"></script>
 </body>
 </html>
