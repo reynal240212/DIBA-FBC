@@ -1,22 +1,57 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" href="images/ESCUDO.ico" type="image/x-icon">
-    
-    <title>login</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="shortcut icon" href="images/ESCUDO.ico" type="image/x-icon">
+  <link rel="stylesheet" href="styles/global.css">
+  <title>Mi Sitio Web - Login</title>
 </head>
 <body>
-    <section>
-    <div>
-        <h4>Usuario :<input type="text"></h4>
-        <h4>Correo :<input type="text"></h4>
-        <h4>Contraseña :<input type="text"></h4>
+  <!-- Header común -->
+  <header>
+    <div class="logo">
+      <img src="images/ESCUDO.ico" alt="Logo de DIBA FBC" loading="lazy">
     </div>
-    
-    </section>
-    
+    <!-- Opcional: menú de navegación -->
+    <nav>
+      <ul>
+        <li><a href="index.html">Inicio</a></li>
+        <li><a href="login.html">Login</a></li>
+        <!-- Otros enlaces -->
+      </ul>
+    </nav>
+  </header>
 
+  <!-- Contenido principal -->
+  <main>
+    <!-- Aquí se inyecta el contenido específico de cada página, en este caso el login -->
+    <section class="login-section">
+      <h2>Iniciar Sesión</h2>
+      <form action="procesar-login.php" method="POST">
+        <div>
+          <label for="usuario">Usuario:</label>
+          <input type="text" id="usuario" name="usuario" required>
+        </div>
+        <div>
+          <label for="correo">Correo:</label>
+          <input type="email" id="correo" name="correo" required>
+        </div>
+        <div>
+          <label for="clave">Contraseña:</label>
+          <input type="password" id="clave" name="clave" required>
+        </div>
+        <button type="submit">Ingresar</button>
+      </form>
+    </section>
+  </main>
+
+  <!-- Footer común -->
+  <footer>
+    <p>&copy; 2025 DIBA FBC. Todos los derechos reservados.</p>
+  </footer>
+
+  <!-- Scripts compartidos -->
+  <script src="scripts/main.js"></script>
 </body>
 </html>
