@@ -108,3 +108,53 @@ function handleCredentialResponse(response) {
     console.error("Error al procesar la respuesta de Google:", error);
   }
 }
+document.addEventListener('DOMContentLoaded', () => {
+  const track = document.querySelector('#carrusel-partidos .carousel-track');
+  const slides = Array.from(track.children);
+  const prevButton = document.querySelector('#carrusel-partidos .prev-button');
+  const nextButton = document.querySelector('#carrusel-partidos .next-button');
+  const indicators = document.querySelectorAll('#carrusel-partidos .carousel-indicators button');
+  let currentSlide = 0;
+  
+  function moveToSlide(index) {
+    const slideWidth = slides[0].getBoundingClientRect().width;
+    track.style.transform = 'translateX(-' + (slideWidth * index) + 'px)';
+    indicators.forEach(ind => ind.classList.remove('active'));
+    indicators[index].classList.add('active');
+    currentSlide = index;
+  }
+  
+  prevButton.addEventListener('click', () => {
+    let nextIndex = currentSlide === 0 ? slides.length - 1 : currentSlide - 1;
+    moveToSlide(nextIndex);
+  });
+  
+  nextButton.addEventListener('click', () => {
+    let nextIndex = currentSlide === slides.length - 1 ? 0 : currentSlide + 1;
+    moveToSlide(nextIndex);
+  });
+  
+  indicators.forEach(indicator => {
+    indicator.addEventListener('click', (e) => {
+      const index = parseInt(e.target.getAttribute('data-slide'));
+      moveToSlide(index);
+    });
+  });
+  
+  // Auto slide cada 5 segundos
+  let autoSlide = setInterval(() => {
+    let nextIndex = currentSlide === slides.length - 1 ? 0 : currentSlide + 1;
+    moveToSlide(nextIndex);
+  }, 5000);
+  
+  const carouselContainer = document.querySelector('#carrusel-partidos .carousel-container');
+  carouselContainer.addEventListener('mouseover', () => {
+    clearInterval(autoSlide);
+  });
+  carouselContainer.addEventListener('mouseout', () => {
+    autoSlide = setInterval(() => {
+      let nextIndex = currentSlide === slides.length - 1 ? 0 : currentSlide + 1;
+      moveToSlide(nextIndex);
+    }, 5000);
+  });
+});

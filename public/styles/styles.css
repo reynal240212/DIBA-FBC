@@ -780,6 +780,65 @@ footer a:hover {
 .login-section button:hover {
   background-color: #001b72;
 }
+/* Carrusel de Partidos Destacados */
+.carousel-container {
+  position: relative;
+  overflow: hidden;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+  margin-top: 2rem;
+}
+.carousel-track {
+  display: flex;
+  transition: transform 0.5s ease-in-out;
+}
+.carousel-item {
+  min-width: 100%;
+  padding: 1rem;
+}
+.carousel-button {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255,255,255,0.7);
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  border-radius: 50%;
+  z-index: 10;
+  font-size: 18px;
+  transition: background 0.3s;
+}
+.carousel-button:hover {
+  background: rgba(255,255,255,1);
+}
+.prev-button {
+  left: 20px;
+}
+.next-button {
+  right: 20px;
+}
+.carousel-indicators {
+  position: absolute;
+  bottom: 15px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 10px;
+}
+.carousel-indicators button {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(0,0,0,0.3);
+  cursor: pointer;
+  transition: background 0.3s;
+}
+.carousel-indicators button.active {
+  background: rgba(0,0,0,0.8);
+}
 /* Responsividad: Ajusta el tamaño en pantallas pequeñas */
 @media (max-width: 768px) {
   #timelineCarousel {
