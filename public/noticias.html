@@ -2,55 +2,121 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Uniforme de Fútbol - DIBA FBC</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calendario de Partidos</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Bootstrap CSS (opcional, para estilos rápidos) -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
     body {
-      background-color: #f4f4f4;
       font-family: Arial, sans-serif;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
+      padding: 20px;
+    }
+    .match-item {
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      padding: 10px;
+      margin-bottom: 15px;
+      background-color: #f9f9f9;
+    }
+    .match-item h5 {
+      margin: 0 0 5px;
+      font-size: 1.1rem;
+    }
+    .match-item p {
       margin: 0;
-    }
-    .jersey-container {
-      text-align: center;
-    }
-    .jersey-container h2 {
-      margin-bottom: 1rem;
-      color: #333;
+      font-size: 0.95rem;
+      color: #555;
     }
   </style>
 </head>
 <body>
-  <div class="jersey-container">
-    <h2>Diseño de Uniforme DIBA FBC</h2>
-    <!-- SVG del uniforme -->
-    <svg width="200" height="300" viewBox="0 0 200 300" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <!-- Degradado vertical: de azul (#003399) a grana (#a50044) -->
-        <linearGradient id="jerseyGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-          <stop offset="0%" style="stop-color:#003399;stop-opacity:1" />
-          <stop offset="100%" style="stop-color:#a50044;stop-opacity:1" />
-        </linearGradient>
-      </defs>
-      <!-- Forma estilizada de la camiseta -->
-      <path d="M50,20 
-               C30,20 20,50 20,80 
-               L20,150 
-               C20,180 30,220 50,240 
-               L50,280 
-               L150,280 
-               L150,240 
-               C170,220 180,180 180,150 
-               L180,80 
-               C180,50 170,20 150,20 
-               Z" 
-            fill="url(#jerseyGradient)" stroke="#fff" stroke-width="3" />
-      <!-- Detalle en el pecho: un círculo amarillo que simula un logo -->
-      <circle cx="100" cy="60" r="10" fill="#ffd700" />
-    </svg>
+  <h2 class="text-center mb-4">Calendario de Partidos</h2>
+  <!-- Calendario (input date) -->
+  <div class="d-flex justify-content-center mb-3">
+    <input type="date" id="fecha" class="form-control w-auto" onchange="filtrarPartidos()">
   </div>
+  
+  <!-- Área donde se muestran los partidos filtrados -->
+  <div id="matches-container"></div>
+
+  <script>
+    // Datos de ejemplo: array de partidos con fecha en formato YYYY-MM-DD
+    const PARTIDOS = [
+      {
+        fecha: '2025-03-09',
+        descripcion: 'Amistoso 2014-2015-2016',
+        equipoLocal: 'DIBA FBC',
+        equipoVisitante: 'Barranquillera',
+        hora: '09:00 AM',
+        estadio: 'Parque de los Sueños',
+        valor: 4000,
+        resultado: 'DIBA FBC 1 - 1 Barranquillera',
+        goles: 'Zaid Ricardo (1)'
+      },
+      {
+        fecha: '2025-03-09',
+        descripcion: 'Amistoso 2012-2013',
+        equipoLocal: 'DIBA FBC',
+        equipoVisitante: 'Quiroz FC',
+        hora: '09:00 AM',
+        estadio: 'Parque de los Sueños',
+        valor: null,
+        resultado: 'DIBA FBC 3 - 2 Quiroz FC',
+        goles: 'Dilan Sanchez (2), Oscar Lopez (1)'
+      },
+      {
+        fecha: '2025-03-15',
+        descripcion: 'Amistoso 2014-2015',
+        equipoLocal: 'DIBA FBC',
+        equipoVisitante: 'Once Estrellas',
+        hora: '12:30 PM',
+        estadio: 'Parque de los Sueños',
+        valor: null,
+        resultado: 'DIBA FBC 3 - 1 Once Estrella',
+        goles: 'Rey David, Zaid Ricardo, Abraham'
+      },
+      // Agrega más partidos según sea necesario...
+    ];
+
+    // Función para filtrar y mostrar los partidos según la fecha seleccionada
+    function filtrarPartidos() {
+      const fechaSeleccionada = document.getElementById('fecha').value;
+      const contenedor = document.getElementById('matches-container');
+      
+      // Vaciar el contenedor
+      contenedor.innerHTML = '';
+      
+      // Validar que se haya seleccionado una fecha
+      if (!fechaSeleccionada) {
+        contenedor.innerHTML = '<p class="text-center">Selecciona una fecha para ver los partidos.</p>';
+        return;
+      }
+      
+      // Filtrar partidos que coincidan con la fecha seleccionada
+      const partidosFiltrados = PARTIDOS.filter(partido => partido.fecha === fechaSeleccionada);
+      
+      // Si no hay partidos para esa fecha, mostrar mensaje
+      if (partidosFiltrados.length === 0) {
+        contenedor.innerHTML = '<p class="text-center">No hay partidos para la fecha seleccionada.</p>';
+        return;
+      }
+      
+      // Crear y agregar cada tarjeta de partido
+      partidosFiltrados.forEach(partido => {
+        const div = document.createElement('div');
+        div.classList.add('match-item');
+        div.innerHTML = `
+          <h5>${partido.equipoLocal} vs ${partido.equipoVisitante}</h5>
+          <p><strong>Descripción:</strong> ${partido.descripcion}</p>
+          <p><strong>Fecha/Hora:</strong> ${partido.fecha} - ${partido.hora}</p>
+          <p><strong>Estadio:</strong> ${partido.estadio}</p>
+          ${partido.valor ? `<p><strong>Valor:</strong> $${partido.valor}</p>` : ''}
+          <p><strong>Resultado:</strong> ${partido.resultado}</p>
+          <p><strong>Goles:</strong> ${partido.goles}</p>
+        `;
+        contenedor.appendChild(div);
+      });
+    }
+  </script>
 </body>
 </html>
