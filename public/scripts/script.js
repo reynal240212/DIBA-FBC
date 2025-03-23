@@ -22,6 +22,7 @@ if (btns.length > 0 && containers.length > 0) {
     btn.addEventListener("click", () => {
       btns.forEach((b) => b.classList.remove("active"));
       containers.forEach((cont) => cont.classList.remove("active"));
+
       btn.classList.add("active");
       const id = btn.getAttribute("data-category");
       const targetContainer = document.getElementById(id);
@@ -95,8 +96,9 @@ if (formRegistro) {
 // Manejo de inicio de sesión con Google
 function handleCredentialResponse(response) {
   try {
-    const data = JSON.parse(atob(response.credential.split(".")[1])); // Decodificar JWT
-    console.log(data); // Para ver toda la información del usuario
+    // Decodificar JWT
+    const data = JSON.parse(atob(response.credential.split(".")[1]));
+    console.log(data); // Ver toda la información del usuario
 
     const profilePicture = data.picture; // URL de la foto de perfil
     const profileImg = document.getElementById("profile-img");
@@ -108,14 +110,24 @@ function handleCredentialResponse(response) {
     console.error("Error al procesar la respuesta de Google:", error);
   }
 }
+
+// ======================================
+//  CARRUSEL DE PARTIDOS (id="partidos")
+// ======================================
 document.addEventListener('DOMContentLoaded', () => {
-  const track = document.querySelector('#carrusel-partidos .carousel-track');
+  // Verificamos si existe la sección de Partidos
+  const carouselContainer = document.querySelector('#partidos .carousel-container');
+  if (!carouselContainer) return; // Si no existe, salimos
+
+  const track = carouselContainer.querySelector('.carousel-track');
   const slides = Array.from(track.children);
-  const prevButton = document.querySelector('#carrusel-partidos .prev-button');
-  const nextButton = document.querySelector('#carrusel-partidos .next-button');
-  const indicators = document.querySelectorAll('#carrusel-partidos .carousel-indicators button');
-  let currentSlide = 0;
+  const prevButton = carouselContainer.querySelector('.prev-button');
+  const nextButton = carouselContainer.querySelector('.next-button');
+  const indicators = carouselContainer.querySelectorAll('.carousel-indicators button');
   
+  let currentSlide = 0;
+
+  // Función para mover el carrusel al slide indicado
   function moveToSlide(index) {
     const slideWidth = slides[0].getBoundingClientRect().width;
     track.style.transform = 'translateX(-' + (slideWidth * index) + 'px)';
@@ -123,37 +135,40 @@ document.addEventListener('DOMContentLoaded', () => {
     indicators[index].classList.add('active');
     currentSlide = index;
   }
-  
+
+  // Botón Anterior
   prevButton.addEventListener('click', () => {
-    let nextIndex = currentSlide === 0 ? slides.length - 1 : currentSlide - 1;
+    const nextIndex = currentSlide === 0 ? slides.length - 1 : currentSlide - 1;
     moveToSlide(nextIndex);
   });
-  
+
+  // Botón Siguiente
   nextButton.addEventListener('click', () => {
-    let nextIndex = currentSlide === slides.length - 1 ? 0 : currentSlide + 1;
+    const nextIndex = currentSlide === slides.length - 1 ? 0 : currentSlide + 1;
     moveToSlide(nextIndex);
   });
-  
+
+  // Indicadores
   indicators.forEach(indicator => {
     indicator.addEventListener('click', (e) => {
       const index = parseInt(e.target.getAttribute('data-slide'));
       moveToSlide(index);
     });
   });
-  
-  // Auto slide cada 5 segundos
+
+  // Auto-slide cada 5 segundos
   let autoSlide = setInterval(() => {
-    let nextIndex = currentSlide === slides.length - 1 ? 0 : currentSlide + 1;
+    const nextIndex = currentSlide === slides.length - 1 ? 0 : currentSlide + 1;
     moveToSlide(nextIndex);
   }, 5000);
-  
-  const carouselContainer = document.querySelector('#carrusel-partidos .carousel-container');
+
+  // Pausar auto-slide al pasar el mouse
   carouselContainer.addEventListener('mouseover', () => {
     clearInterval(autoSlide);
   });
   carouselContainer.addEventListener('mouseout', () => {
     autoSlide = setInterval(() => {
-      let nextIndex = currentSlide === slides.length - 1 ? 0 : currentSlide + 1;
+      const nextIndex = currentSlide === slides.length - 1 ? 0 : currentSlide + 1;
       moveToSlide(nextIndex);
     }, 5000);
   });
