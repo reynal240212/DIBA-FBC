@@ -575,233 +575,150 @@ footer a:hover {
 }
 
 /* ======================================
-         CONTENEDOR DE FORMULARIOS
-    ===================================== */
-    .contenedor-formularios {
-      background: rgba(0, 0, 0, 0.05);
-      padding: 40px;
-      max-width: 600px;
-      margin: 40px auto;
-      border-radius: 4px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-    }
-    
-    /* ======================================
-         TABS (Links de formularios)
-    ===================================== */
-    .contenedor-tabs {
-      list-style: none;
-      padding: 0;
-      margin: 0 0 40px 0;
-      display: flex;
-      justify-content: center;
-      border-bottom: 2px solid var(--grana);
-    }
-    .contenedor-tabs li {
-      flex: 1;
-    }
-    .contenedor-tabs li a {
-      display: block;
-      text-decoration: none;
-      padding: 15px;
-      background: rgba(160, 179, 176, 0.25);
-      color: var(--grana);
-      font-size: 20px;
-      text-align: center;
-      cursor: pointer;
-      transition: 0.5s ease;
-    }
-    .contenedor-tabs li a:hover {
-      background: var(--azul-intenso);
-      color: var(--blanco);
-    }
-    .contenedor-tabs .active a {
-      background: var(--azul);
-      color: var(--blanco);
-    }
-    
-    /* ======================================
-         CONTENIDO DE LOS FORMULARIOS
-    ===================================== */
-    .contenido-tab > div {
-      display: none;
-    }
-    .contenido-tab > div.active {
-      display: block;
-    }
-    
-    h1 {
-      text-align: center;
-      color: var(--azul);
-      font-weight: 300;
-      margin-bottom: 40px;
-    }
-    
-    .contenedor-input {
-      position: relative;
-      margin-bottom: 40px;
-    }
-    .contenedor-input label {
-      position: absolute;
-      transform: translateY(6px);
-      left: 13px;
-      color: rgba(0, 0, 0, 0.5);
-      transition: all 0.25s ease;
-      pointer-events: none;
-      font-size: 22px;
-    }
-    .contenedor-input input {
-      font-size: 22px;
-      display: block;
-      width: 100%;
-      padding: 5px 10px;
-      border: 1px solid var(--grana);
-      color: var(--azul);
-      border-radius: 5px;
-      transition: all 0.5s ease;
-    }
-    .contenedor-input input:focus {
-      outline: none;
-      border-color: var(--amarillo);
-    }
-    
-    .button {
-      border: none;
-      outline: none;
-      border-radius: 5px;
-      cursor: pointer;
-      padding: 15px 0;
-      font-size: 2rem;
-      background: var(--azul);
-      color: var(--blanco);
-      transition: all 0.5s ease;
-    }
-    .button:hover, .button:focus {
-      background: var(--azul-intenso);
-    }
-    .button-block {
-      display: block;
-      width: 100%;
-    }
-    .forgot {
-      margin-top: -20px;
-      text-align: right;
-      margin-bottom: 20px;
-    }
-    /* Estilos generales del carrusel */
-#timelineCarousel {
-  max-width: 800px; /* Ajusta el tamaño máximo del carrusel */
-  margin: auto; /* Centra el carrusel */
+       CONTENEDOR DE FORMULARIOS
+====================================== */
+.contenedor-formularios {
+  background: rgba(0, 0, 0, 0.05);
+  padding: 40px;
+  max-width: 600px;
+  margin: 40px auto;
+  border-radius: 4px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
 }
-
-/* Estilos para las tarjetas dentro del carrusel */
-.timeline-card {
-  background: #fff;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  padding: 20px;
-  text-align: center;
+/* TABS */
+.contenedor-tabs {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 40px 0;
+  display: flex;
+  justify-content: center;
+  border-bottom: 2px solid var(--grana);
 }
-
-/* Ajusta las imágenes dentro del carrusel */
-.carousel-item img {
-  border-radius: 10px;
-  max-height: 400px; /* Ajusta la altura máxima de las imágenes */
-  object-fit: center;
-  width: 100%;
+.contenedor-tabs li {
+  flex: 1;
 }
-
-/* Controles de navegación del carrusel */
-.carousel-control-prev-icon,
-.carousel-control-next-icon {
-  background-color: rgba(0, 51, 102, 0.7); /* Color azul oscuro semitransparente */
-  border-radius: 50%;
-  padding: 10px;
-}
-
-/* Espaciado entre el título y las imágenes */
-.timeline-card h5 {
-  color: #003366; /* Azul oscuro */
-  font-weight: bold;
-  margin-top: 10px;
-}
-
-/* Mejora el diseño del texto */
-.timeline-card p {
-  font-size: 14px;
-  color: #444;
-}
- /* Sección de Login */
- .login-section {
-  background: #fff;
-  padding: 30px;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  width: 100%;
-  max-width: 400px;
-}
-
-.login-section h2 {
-  text-align: center;
-  margin-bottom: 20px;
-  color: #002a40;
-}
-
-.login-section form div {
-  margin-bottom: 15px;
-}
-
-.login-section label {
+.contenedor-tabs li a {
   display: block;
-  margin-bottom: 5px;
-  font-weight: bold;
-  color: #002a40;
-}
-
-.login-section input {
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
-
-.login-section button {
-  width: 100%;
-  padding: 10px;
-  background-color: #002a40;
-  color: #fff;
-  border: none;
-  border-radius: 4px;
+  text-decoration: none;
+  padding: 15px;
+  background: rgba(160, 179, 176, 0.25);
+  color: var(--grana);
+  font-size: 20px;
+  text-align: center;
   cursor: pointer;
-  font-size: 16px;
-  transition: background-color 0.3s;
+  transition: 0.5s ease;
+}
+.contenedor-tabs li a:hover {
+  background: var(--azul-intenso);
+  color: var(--blanco);
+}
+.contenedor-tabs .active a {
+  background: var(--azul);
+  color: var(--blanco);
+}
+.contenido-tab > div {
+  display: none;
+}
+.contenido-tab > div.active {
+  display: block;
+}
+h1 {
+  text-align: center;
+  color: var(--azul);
+  font-weight: 300;
+  margin-bottom: 40px;
+}
+.contenedor-input {
+  position: relative;
+  margin-bottom: 40px;
+}
+.contenedor-input label {
+  position: absolute;
+  transform: translateY(6px);
+  left: 13px;
+  color: rgba(0, 0, 0, 0.5);
+  transition: all 0.25s ease;
+  pointer-events: none;
+  font-size: 22px;
+}
+.contenedor-input input {
+  font-size: 22px;
+  display: block;
+  width: 100%;
+  padding: 5px 10px;
+  border: 1px solid var(--grana);
+  color: var(--azul);
+  border-radius: 5px;
+  transition: all 0.5s ease;
+}
+.contenedor-input input:focus {
+  outline: none;
+  border-color: var(--amarillo);
+}
+.button {
+  border: none;
+  outline: none;
+  border-radius: 5px;
+  cursor: pointer;
+  padding: 15px 0;
+  font-size: 2rem;
+  background: var(--azul);
+  color: var(--blanco);
+  transition: all 0.5s ease;
+}
+.button:hover, .button:focus {
+  background: var(--azul-intenso);
+}
+.button-block {
+  display: block;
+  width: 100%;
+}
+.forgot {
+  margin-top: -20px;
+  text-align: right;
+  margin-bottom: 20px;
 }
 
-.login-section button:hover {
-  background-color: #001b72;
+/* RESPONSIVIDAD EXTRA */
+@media (max-width: 768px) {
+  #timelineCarousel {
+    max-width: 100%;
+  }
+  .carousel-item img {
+    max-height: 250px; /* Reduce el tamaño de las imágenes en móviles */
+  }
+  .timeline-card {
+    padding: 15px;
+  }
 }
-/* Carrusel de Partidos Destacados */
-.carousel-container {
+
+/* ======================================
+       PARTIDOS CARRUSEL (NUEVO)
+====================================== */
+#partidos .carousel-container {
   position: relative;
   overflow: hidden;
-  background: #fff;
+  background: var(--blanco);
   border-radius: 10px;
   box-shadow: 0 10px 20px rgba(0,0,0,0.1);
   margin-top: 2rem;
 }
-.carousel-track {
+
+#partidos .carousel-track {
   display: flex;
   transition: transform 0.5s ease-in-out;
 }
-.carousel-item {
+
+#partidos .carousel-item {
   min-width: 100%;
   padding: 1rem;
 }
-.carousel-button {
+
+#partidos .carousel-button {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  background: rgba(255,255,255,0.7);
+  background: rgba(255, 255, 255, 0.7);
   border: none;
   padding: 10px;
   cursor: pointer;
@@ -810,16 +727,20 @@ footer a:hover {
   font-size: 18px;
   transition: background 0.3s;
 }
-.carousel-button:hover {
-  background: rgba(255,255,255,1);
+
+#partidos .carousel-button:hover {
+  background: rgba(255, 255, 255, 1);
 }
-.prev-button {
+
+#partidos .prev-button {
   left: 20px;
 }
-.next-button {
+
+#partidos .next-button {
   right: 20px;
 }
-.carousel-indicators {
+
+#partidos .carousel-indicators {
   position: absolute;
   bottom: 15px;
   left: 50%;
@@ -827,44 +748,18 @@ footer a:hover {
   display: flex;
   gap: 10px;
 }
-.carousel-indicators button {
+
+#partidos .carousel-indicators button {
   width: 10px;
   height: 10px;
   border-radius: 50%;
   border: none;
-  background: rgba(0,0,0,0.3);
+  background: rgba(0, 0, 0, 0.3);
   cursor: pointer;
   transition: background 0.3s;
 }
-.carousel-indicators button.active {
-  background: rgba(0,0,0,0.8);
-}
-/* Responsividad: Ajusta el tamaño en pantallas pequeñas */
-@media (max-width: 768px) {
-  #timelineCarousel {
-    max-width: 100%;
-  }
 
-  .carousel-item img {
-    max-height: 250px; /* Reduce el tamaño de las imágenes en móviles */
-  }
-
-  .timeline-card {
-    padding: 15px;
-  }
+#partidos .carousel-indicators button.active {
+  background: rgba(0, 0, 0, 0.8);
 }
-    
-    /* RESPONSIVIDAD */
-    @media screen and (max-width: 500px) {
-      .fila-arriba div {
-        width: 100%;
-      }
-      .fila-arriba div:last-child {
-        margin-bottom: 40px;
-      }
-    }
-    @media screen and (max-width: 400px) {
-      .contenedor-tabs li a {
-        width: 100%;
-      }
-    }
+
