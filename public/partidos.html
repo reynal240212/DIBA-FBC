@@ -100,87 +100,82 @@
   <!-- Script adicional para funcionalidades específicas (por ejemplo, botones dinámicos) -->
   <script src="scripts/script.js"></script>
 
-  <!-- Script del Calendario de Partidos -->
-  <script>
-    // Datos de ejemplo: array de partidos con fecha en formato YYYY-MM-DD
-    const PARTIDOS = [
-      {
-        fecha: '2025-03-09',
-        descripcion: 'Amistoso 2014-2015-2016',
-        equipoLocal: 'DIBA FBC',
-        equipoVisitante: 'Barranquillera',
-        hora: '09:00 AM',
-        estadio: 'Parque de los Sueños',
-        valor: 4000,
-        resultado: 'DIBA FBC 1 - 1 Barranquillera',
-        goles: 'Zaid Ricardo (1)'
-      },
-      {
-        fecha: '2025-03-09',
-        descripcion: 'Amistoso 2012-2013',
-        equipoLocal: 'DIBA FBC',
-        equipoVisitante: 'Quiroz FC',
-        hora: '09:00 AM',
-        estadio: 'Parque de los Sueños',
-        valor: null,
-        resultado: 'DIBA FBC 3 - 2 Quiroz FC',
-        goles: 'Dilan Sanchez (2), Oscar Lopez (1)'
-      },
-      {
-        fecha: '2025-03-15',
-        descripcion: 'Amistoso 2014-2015',
-        equipoLocal: 'DIBA FBC',
-        equipoVisitante: 'Once Estrellas',
-        hora: '12:30 PM',
-        estadio: 'Parque de los Sueños',
-        valor: null,
-        resultado: 'DIBA FBC 3 - 1 Once Estrella',
-        goles: 'Rey David, Zaid Ricardo, Abraham'
-      }
-      // Agrega más partidos según sea necesario...
-    ];
+  <!-- Sección de Partidos con integración a Supabase -->
+<section class="my-5">
+  <div class="container">
+    <h2 class="text-center mb-4">Calendario de Partidos</h2>
+    <!-- Calendario (input date) -->
+    <div class="d-flex justify-content-center mb-3">
+      <input type="date" id="fecha" class="form-control w-auto" />
+    </div>
+    <!-- Contenedor donde se mostrarán los partidos filtrados -->
+    <div id="matches-container" class="w-75 mx-auto"></div>
+  </div>
+</section>
 
-    // Función para filtrar y mostrar los partidos según la fecha seleccionada
-    function filtrarPartidos() {
-      const fechaSeleccionada = document.getElementById('fecha').value;
-      const contenedor = document.getElementById('matches-container');
-      
-      // Vaciar el contenedor
-      contenedor.innerHTML = '';
-      
-      // Validar que se haya seleccionado una fecha
-      if (!fechaSeleccionada) {
-        contenedor.innerHTML = '<p class="text-center">Selecciona una fecha para ver los partidos.</p>';
-        return;
-      }
-      
-      // Filtrar partidos que coincidan con la fecha seleccionada
-      const partidosFiltrados = PARTIDOS.filter(partido => partido.fecha === fechaSeleccionada);
-      
-      // Si no hay partidos para esa fecha, mostrar mensaje
-      if (partidosFiltrados.length === 0) {
-        contenedor.innerHTML = '<p class="text-center">No hay partidos para la fecha seleccionada.</p>';
-        return;
-      }
-      
-      // Crear y agregar cada tarjeta de partido
-      partidosFiltrados.forEach(partido => {
-        const div = document.createElement('div');
-        div.classList.add('match-item');
-        div.innerHTML = `
-          <h5>${partido.equipoLocal} vs ${partido.equipoVisitante}</h5>
-          <p><strong>Descripción:</strong> ${partido.descripcion}</p>
-          <p><strong>Fecha/Hora:</strong> ${partido.fecha} - ${partido.hora}</p>
-          <p><strong>Estadio:</strong> ${partido.estadio}</p>
-          ${partido.valor ? `<p><strong>Valor:</strong> $${partido.valor}</p>` : ''}
-          <p><strong>Resultado:</strong> ${partido.resultado}</p>
-          <p><strong>Goles:</strong> ${partido.goles}</p>
-        `;
-        contenedor.appendChild(div);
-      });
+<!-- Script de la sección: consulta y filtrado desde Supabase -->
+<script type="module">
+  import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+
+  // Reemplaza con los datos de tu proyecto Supabase
+  const supabaseUrl = 'https://nwxdshisfyenkylgqxgz.supabase.co';
+  const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im53eGRzaGlzZnllbmt5bGdxeGd6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzkwNTQzMDgsImV4cCI6MjA1NDYzMDMwOH0.QoIiNo5pFA1_MVfE2ugLgyz4HeET-WhA0C_sNOkWv9g';
+  const supabase = createClient(supabaseUrl, supabaseKey);
+
+  const inputFecha = document.getElementById('fecha');
+  const matchesContainer = document.getElementById('matches-container');
+
+  // Función para obtener los partidos desde Supabase
+  async function obtenerPartidos() {
+    const { data, error } = await supabase
+      .from('partidos')
+      .select('*');
+    
+    if (error) {
+      console.error('Error al obtener partidos:', error);
+      return [];
     }
-  </script>
-  </section>
+    return data;
+  }
+
+  // Función para filtrar y mostrar los partidos según la fecha seleccionada
+  async function filtrarPartidos() {
+    const fechaSeleccionada = inputFecha.value;
+    matchesContainer.innerHTML = '';
+
+    if (!fechaSeleccionada) {
+      matchesContainer.innerHTML = '<p class="text-center">Selecciona una fecha para ver los partidos.</p>';
+      return;
+    }
+
+    const partidos = await obtenerPartidos();
+    const partidosFiltrados = partidos.filter(partido => partido.fecha === fechaSeleccionada);
+
+    if (partidosFiltrados.length === 0) {
+      matchesContainer.innerHTML = '<p class="text-center">No hay partidos para la fecha seleccionada.</p>';
+      return;
+    }
+
+    partidosFiltrados.forEach(partido => {
+      const div = document.createElement('div');
+      div.classList.add('match-item');
+      div.innerHTML = `
+        <h5>${partido.equipoLocal} vs ${partido.equipoVisitante}</h5>
+        <p><strong>Descripción:</strong> ${partido.descripcion}</p>
+        <p><strong>Fecha/Hora:</strong> ${partido.fecha} - ${partido.hora || 'Sin hora'}</p>
+        <p><strong>Estadio:</strong> ${partido.estadio || 'No especificado'}</p>
+        ${partido.valor ? `<p><strong>Valor:</strong> $${partido.valor}</p>` : ''}
+        <p><strong>Resultado:</strong> ${partido.resultado || 'No disponible'}</p>
+        <p><strong>Goles:</strong> ${partido.goles || 'No disponible'}</p>
+      `;
+      matchesContainer.appendChild(div);
+    });
+  }
+
+  // Evento: al cambiar la fecha, se filtran los partidos
+  inputFecha.addEventListener('change', filtrarPartidos);
+</script>
+
     
 </body>
 </html>
