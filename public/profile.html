@@ -6,10 +6,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <!-- Bootstrap CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+  />
   <!-- Animate.css (opcional) -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+  />
 
   <style>
     /* Fondo deportivo */
@@ -62,15 +67,46 @@
       <form id="profile-form">
         <div class="mb-3">
           <label for="full_name" class="form-label">Nombre Completo</label>
-          <input type="text" class="form-control" id="full_name" name="full_name" placeholder="Tu nombre completo" required>
+          <input
+            type="text"
+            class="form-control"
+            id="full_name"
+            name="full_name"
+            placeholder="Tu nombre completo"
+            required
+          />
         </div>
         <div class="mb-3">
           <label for="username" class="form-label">Nombre de Usuario</label>
-          <input type="text" class="form-control" id="username" name="username" placeholder="Nombre de usuario" required>
+          <input
+            type="text"
+            class="form-control"
+            id="username"
+            name="username"
+            placeholder="Nombre de usuario"
+            required
+          />
         </div>
         <div class="mb-3">
           <label for="bio" class="form-label">Biografía</label>
-          <textarea class="form-control" id="bio" name="bio" rows="3" placeholder="Cuéntanos algo sobre ti"></textarea>
+          <textarea
+            class="form-control"
+            id="bio"
+            name="bio"
+            rows="3"
+            placeholder="Cuéntanos algo sobre ti"
+          ></textarea>
+        </div>
+        <!-- Campo para subir la imagen -->
+        <div class="mb-3">
+          <label for="avatar" class="form-label">Foto de Perfil</label>
+          <input
+            type="file"
+            class="form-control"
+            id="avatar"
+            name="avatar"
+            accept="image/*"
+          />
         </div>
         <button type="submit" class="btn btn-success w-100">Guardar Perfil</button>
       </form>
@@ -78,54 +114,43 @@
   </div>
 
   <!-- Bootstrap JS Bundle -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+  ></script>
   <!-- Supabase JS (versión 2.x) -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
   <script>
     // Configura tu Supabase
     const SUPABASE_URL = 'https://nwxdshisfyenkylgqxgz.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im53eGRzaGlzZnllbmt5bGdxeGd6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzkwNTQzMDgsImV4cCI6MjA1NDYzMDMwOH0.QoIiNo5pFA1_MVfE2ugLgyz4HeET-WhA0C_sNOkWv9g';
+    const SUPABASE_ANON_KEY = 'TU_ANON_KEY';
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    // Verifica si el usuario está autenticado al cargar la página
     document.addEventListener('DOMContentLoaded', async () => {
       const { data: { session } } = await supabaseClient.auth.getSession();
       if (!session) {
-        // Si no hay sesión, redirige al login
         window.location.href = 'login.html';
       } else {
-        // Si el usuario está logueado, intenta cargar su perfil (opcional)
         await loadProfile(session.user.id);
       }
     });
 
-    // Función para cargar el perfil existente (si lo hay)
     async function loadProfile(userId) {
       const { data: profileData, error } = await supabaseClient
         .from('profiles')
         .select('*')
         .eq('id', userId)
         .single();
-      if (error) {
-        console.log('No se encontró perfil. El usuario puede crear uno nuevo.');
-        return;
+      if (!error && profileData) {
+        document.getElementById('full_name').value = profileData.full_name || '';
+        document.getElementById('username').value = profileData.username || '';
+        document.getElementById('bio').value = profileData.bio || '';
+        // Si ya existe avatar_url, podrías mostrarlo en un <img> si deseas
       }
-      document.getElementById('full_name').value = profileData.full_name || '';
-      document.getElementById('username').value = profileData.username || '';
-      document.getElementById('bio').value = profileData.bio || '';
     }
 
-    // Maneja el submit del formulario para insertar o actualizar el perfil
     const profileForm = document.getElementById('profile-form');
     profileForm.addEventListener('submit', async (e) => {
       e.preventDefault();
-
-      // Obtén los valores del formulario
-      const full_name = document.getElementById('full_name').value;
-      const username = document.getElementById('username').value;
-      const bio = document.getElementById('bio').value;
-
-      // Verifica la sesión actual
       const { data: { session } } = await supabaseClient.auth.getSession();
       if (!session) {
         alert('No hay usuario autenticado. Por favor, inicia sesión.');
@@ -133,26 +158,51 @@
       }
       const userId = session.user.id;
 
-      // Inserta o actualiza el perfil en la tabla "profiles"
+      // Obtén valores del formulario
+      const full_name = document.getElementById('full_name').value;
+      const username = document.getElementById('username').value;
+      const bio = document.getElementById('bio').value;
+      const avatarFile = document.getElementById('avatar').files[0];
+
+      let avatar_url = null;
+      if (avatarFile) {
+        // Subir la imagen a Supabase Storage (bucket "avatars", por ejemplo)
+        const fileExt = avatarFile.name.split('.').pop();
+        const fileName = `${userId}.${fileExt}`;
+        const filePath = `${userId}/${fileName}`;
+
+        const { data, error: uploadError } = await supabaseClient.storage
+          .from('avatars')
+          .upload(filePath, avatarFile, { upsert: true });
+        if (uploadError) {
+          alert('Error al subir la imagen: ' + uploadError.message);
+          return;
+        }
+        // Obtener URL pública (si el bucket es público)
+        const { data: publicData } = supabaseClient
+          .storage
+          .from('avatars')
+          .getPublicUrl(filePath);
+        avatar_url = publicData.publicUrl;
+      }
+
+      // upsert en la tabla profiles
       const { error } = await supabaseClient
         .from('profiles')
         .upsert({
           id: userId,
           full_name,
           username,
-          bio
+          bio,
+          ...(avatar_url && { avatar_url })
         });
       if (error) {
         alert('Error al guardar el perfil: ' + error.message);
-        console.error(error);
       } else {
         alert('Perfil guardado exitosamente.');
-        // Redirige a index.html
         window.location.href = 'index.html';
       }
     });
   </script>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-  <script src="scripts/main.js"></script>
 </body>
 </html>
