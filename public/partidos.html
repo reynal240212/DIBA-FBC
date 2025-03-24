@@ -2,15 +2,15 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <title>Partidos y Entrenamientos - DIBA FBC</title>
+  <title>Calendario - DIBA FBC</title>
   <link rel="icon" href="images/ESCUDO.ico" sizes="32x32">
   <meta name="description" content="Conoce la historia y los momentos más destacados de DIBA FBC, un recorrido lleno de pasión y logros deportivos."/>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-
+  
   <!-- Tidio Chat -->
   <script src="//code.tidio.co/jckoszxyxvs7izkxulr9bk5cbcspdjtj.js" async></script>
-
-  <!-- Bootstrap 5.3.2 CSS -->
+  
+  <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
   <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer"/>
@@ -21,40 +21,59 @@
   <!-- Estilos globales -->
   <link rel="stylesheet" href="styles/styles.css" />
   <link rel="stylesheet" href="styles/background-animation.css" />
-
+  
   <style>
-    /* Fondo degradado en azul oscuro para cada partido/entrenamiento */
-    .match-item {
+    /* Ajustes para las tarjetas con Bootstrap */
+    .custom-card {
+      margin-bottom: 1.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .custom-card .btn-close-card {
+      position: absolute;
+      top: 0.5rem;
+      right: 0.5rem;
+      z-index: 10;
+      background: transparent;
+      border: none;
+      font-size: 1.2rem;
+      color: #dc3545;
+    }
+    .custom-card img.escudo {
+      max-width: 50px;
+      margin-right: 0.8rem;
+    }
+    /* Personalización de la tarjeta para partidos */
+    .match-card {
       background: linear-gradient(135deg, #002a40, #001b72);
       color: #fff;
-      border: 1px solid #001b72;
-      border-radius: 8px;
+      border: none;
+      border-radius: 0.5rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+    .match-card .card-header {
+      background: transparent;
+      border-bottom: none;
+      padding: 0.5rem 1rem;
+    }
+    .match-card .card-body {
       padding: 1rem;
-      margin-bottom: 15px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
     }
-    .match-item h5 {
-      margin-bottom: 0.5rem;
-      font-size: 1.2rem;
-      font-weight: bold;
-      color: #ffc107;
-    }
-    .match-item p {
-      margin: 0;
+    /* Personalización de la tarjeta para entrenamientos */
+    .training-card {
+      background: linear-gradient(135deg, #004d40, #00796b);
       color: #fff;
-      font-size: 0.95rem;
-      line-height: 1.3;
+      border: none;
+      border-radius: 0.5rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
     }
-    .match-item strong {
-      color: #ffc107;
+    .training-card .card-header {
+      background: transparent;
+      border-bottom: none;
+      padding: 0.5rem 1rem;
     }
-    @media (max-width: 576px) {
-      .match-item {
-        padding: 0.8rem;
-      }
-      .match-item h5 {
-        font-size: 1.1rem;
-      }
+    .training-card .card-body {
+      padding: 1rem;
     }
   </style>
 </head>
@@ -74,85 +93,92 @@
   </div>
 
   <!-- Botón Volver Arriba -->
-  <button id="btnBackToTop" title="Volver arriba" aria-label="Volver arriba">
+  <button id="btnBackToTop" title="Volver arriba" aria-label="Volver arriba" class="btn btn-primary rounded-circle">
     <i class="fas fa-arrow-up"></i>
   </button>
 
-  <!-- Contenedor para el Navbar -->
+  <!-- Navbar (se carga desde layout/navbar.html) -->
   <div id="navbar-container"></div>
 
   <!-- HERO SECTION -->
   <section class="hero animate__animated animate__fadeInDown d-flex align-items-center" style="background: linear-gradient(135deg, #002a40, #001b72), url('images/fondo.jpg') center/cover no-repeat fixed; background-blend-mode: multiply; min-height: 80vh;">
     <div class="container hero-content text-center text-white">
-      <h1 class="hero-title display-4 fw-bold">CALENDARIO DE PARTIDOS</h1>
-      <h2 class="hero-title display-4 fw-bold">Sábados y Domingos o Festivos</h2>
+      <h1 class="display-4 fw-bold">CALENDARIO</h1>
+      <p class="lead">Consulta los partidos y entrenamientos</p>
     </div>
   </section>
 
-  <!-- SECCIÓN DE PARTIDOS -->
+  <!-- SECCIÓN: FILTROS Y RESULTADOS -->
   <section class="my-5">
     <div class="container">
-      <h2 class="text-center mb-4">Calendario de Partidos</h2>
-      <div class="row justify-content-center mb-3">
-        <div class="col-auto">
-          <input type="date" id="fecha" class="form-control" aria-label="Seleccionar fecha de partido">
+      <div class="row g-4">
+        <!-- Columna de Partidos -->
+        <div class="col-md-6">
+          <div class="card p-3">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <h2 class="h5 mb-0">Partidos</h2>
+              <button class="btn btn-sm btn-outline-secondary" id="btn-close-partidos"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="mb-3">
+              <input type="date" id="fecha" class="form-control" aria-label="Seleccionar fecha de partido">
+            </div>
+            <!-- Spinner para Partidos -->
+            <div class="text-center my-3" id="loading-spinner" style="display: none;">
+              <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Cargando...</span>
+              </div>
+            </div>
+            <!-- Contenedor de Partidos -->
+            <div id="matches-container" aria-live="polite"></div>
+          </div>
+        </div>
+        <!-- Columna de Entrenamientos -->
+        <div class="col-md-6">
+          <div class="card p-3">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <h2 class="h5 mb-0">Entrenamientos</h2>
+              <button class="btn btn-sm btn-outline-secondary" id="btn-close-entrenamientos"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="mb-3">
+              <input type="date" id="fecha-entrenamiento" class="form-control" aria-label="Seleccionar fecha de entrenamiento">
+            </div>
+            <!-- Spinner para Entrenamientos -->
+            <div class="text-center my-3" id="loading-spinner-entrenamiento" style="display: none;">
+              <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Cargando entrenamientos...</span>
+              </div>
+            </div>
+            <!-- Contenedor de Entrenamientos -->
+            <div id="trainings-container" aria-live="polite"></div>
+          </div>
         </div>
       </div>
-      <!-- Spinner de carga para partidos -->
-      <div class="text-center my-3" id="loading-spinner" style="display: none;">
-        <div class="spinner-border text-primary" role="status">
-          <span class="visually-hidden">Cargando...</span>
-        </div>
-      </div>
-      <!-- Contenedor de partidos -->
-      <div id="matches-container" class="w-75 mx-auto" aria-live="polite"></div>
     </div>
   </section>
 
-  <!-- SECCIÓN DE ENTRENAMIENTOS -->
-  <section class="my-5">
-    <div class="container">
-      <h2 class="text-center mb-4">Calendario de Entrenamientos</h2>
-      <div class="row justify-content-center mb-3">
-        <div class="col-auto">
-          <input type="date" id="fecha-entrenamiento" class="form-control" aria-label="Seleccionar fecha de entrenamiento">
-        </div>
-      </div>
-      <!-- Spinner de carga para entrenamientos -->
-      <div class="text-center my-3" id="loading-spinner-entrenamiento" style="display: none;">
-        <div class="spinner-border text-primary" role="status">
-          <span class="visually-hidden">Cargando entrenamientos...</span>
-        </div>
-      </div>
-      <!-- Contenedor de entrenamientos -->
-      <div id="trainings-container" class="w-75 mx-auto" aria-live="polite"></div>
-    </div>
-  </section>
-
-  <!-- Contenedor para el Footer -->
+  <!-- Footer (se carga desde layout/footer.html) -->
   <div id="footer-container"></div>
 
   <!-- Bootstrap JS Bundle -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-  <!-- Script para cargar componentes externos (Navbar y Footer) -->
+  <!-- Carga de componentes externos (Navbar y Footer) -->
   <script src="scripts/loadComponents.js"></script>
-  <!-- jQuery (opcional si main.js lo utiliza) -->
+  <!-- jQuery (opcional) -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <!-- Script principal -->
+  <!-- Scripts principales -->
   <script src="scripts/main.js"></script>
-  <!-- Script adicional -->
   <script src="scripts/script.js"></script>
 
-  <!-- Script para consultar y filtrar partidos y entrenamientos desde Supabase -->
+  <!-- Script para consulta y filtrado desde Supabase -->
   <script type="module">
     import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
 
     // Configuración de Supabase
     const supabaseUrl = 'https://nwxdshisfyenkylgqxgz.supabase.co';
-    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im53eGRzaGlzZnllbmt5bGdxeGd6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzkwNTQzMDgsImV4cCI6MjA1NDYzMDMwOH0.QoIiNo5pFA1_MVfE2ugLgyz4HeET-WhA0C_sNOkWv9g';
+    const supabaseKey = 'TU_ANON_KEY';
     const supabase = createClient(supabaseUrl, supabaseKey);
 
-    /* -------- PARTIDOS -------- */
+    /* --- PARTIDOS --- */
     const inputFecha = document.getElementById('fecha');
     const matchesContainer = document.getElementById('matches-container');
     const loadingSpinner = document.getElementById('loading-spinner');
@@ -196,25 +222,34 @@
       }
 
       partidosFiltrados.forEach(partido => {
-        const div = document.createElement('div');
-        div.classList.add('match-item', 'animate__animated', 'animate__fadeInUp');
-        const fechaPartido = new Date(partido.fecha).toISOString().split('T')[0];
-        div.innerHTML = `
-          <h5>${partido.equipoLocal} vs ${partido.equipoVisitante}</h5>
-          <p><strong>Descripción:</strong> ${partido.descripcion}</p>
-          <p><strong>Fecha/Hora:</strong> ${fechaPartido} - ${partido.hora || 'Sin hora'}</p>
-          <p><strong>Estadio:</strong> ${partido.estadio || 'No especificado'}</p>
-          ${partido.valor ? `<p><strong>Valor:</strong> $${partido.valor}</p>` : ''}
-          <p><strong>Resultado:</strong> ${partido.resultado || 'No disponible'}</p>
-          <p><strong>Goles:</strong> ${partido.goles || 'No disponible'}</p>
+        const card = document.createElement('div');
+        card.classList.add('card', 'custom-card', 'match-card', 'animate__animated', 'animate__fadeInUp');
+        card.innerHTML = `
+          <button class="btn-close-card">&times;</button>
+          <div class="card-header d-flex align-items-center">
+            ${partido.escudo ? `<img src="${partido.escudo}" alt="Escudo" class="escudo">` : ''}
+            <h5 class="mb-0">${partido.equipoLocal} vs ${partido.equipoVisitante}</h5>
+          </div>
+          <div class="card-body">
+            <p><strong>Descripción:</strong> ${partido.descripcion}</p>
+            <p><strong>Fecha/Hora:</strong> ${new Date(partido.fecha).toISOString().split('T')[0]} - ${partido.hora || 'Sin hora'}</p>
+            <p><strong>Estadio:</strong> ${partido.estadio || 'No especificado'}</p>
+            ${partido.valor ? `<p><strong>Valor:</strong> $${partido.valor}</p>` : ''}
+            <p><strong>Resultado:</strong> ${partido.resultado || 'No disponible'}</p>
+            <p><strong>Goles:</strong> ${partido.goles || 'No disponible'}</p>
+          </div>
         `;
-        matchesContainer.appendChild(div);
+        // Agregar funcionalidad para cerrar la tarjeta
+        card.querySelector('.btn-close-card').addEventListener('click', () => {
+          card.remove();
+        });
+        matchesContainer.appendChild(card);
       });
     }
 
     inputFecha.addEventListener('change', filtrarPartidos);
 
-    /* -------- ENTRENAMIENTOS -------- */
+    /* --- ENTRENAMIENTOS --- */
     const inputFechaEntrenamiento = document.getElementById('fecha-entrenamiento');
     const trainingsContainer = document.getElementById('trainings-container');
     const loadingSpinnerEntrenamiento = document.getElementById('loading-spinner-entrenamiento');
@@ -258,27 +293,40 @@
       }
 
       entrenamientosFiltrados.forEach(ent => {
-        const div = document.createElement('div');
-        div.classList.add('match-item', 'animate__animated', 'animate__fadeInUp');
-        const fechaEnt = new Date(ent.fecha).toISOString().split('T')[0];
-        div.innerHTML = `
-          <h5>${ent.titulo || 'Entrenamiento'}</h5>
-          <p><strong>Descripción:</strong> ${ent.descripcion || 'N/A'}</p>
-          <p><strong>Fecha/Hora:</strong> ${fechaEnt} - ${ent.hora || 'Sin hora'}</p>
-          <p><strong>Lugar:</strong> ${ent.lugar || 'No especificado'}</p>
-          <p><strong>Observaciones:</strong> ${ent.observaciones || 'Ninguna'}</p>
+        const card = document.createElement('div');
+        card.classList.add('card', 'custom-card', 'training-card', 'animate__animated', 'animate__fadeInUp');
+        card.innerHTML = `
+          <button class="btn-close-card">&times;</button>
+          <div class="card-header">
+            <h5 class="mb-0">${ent.titulo || 'Entrenamiento'}</h5>
+          </div>
+          <div class="card-body">
+            <p><strong>Descripción:</strong> ${ent.descripcion || 'N/A'}</p>
+            <p><strong>Fecha/Hora:</strong> ${new Date(ent.fecha).toISOString().split('T')[0]} - ${ent.hora || 'Sin hora'}</p>
+            <p><strong>Lugar:</strong> ${ent.lugar || 'No especificado'}</p>
+            <p><strong>Observaciones:</strong> ${ent.observaciones || 'Ninguna'}</p>
+          </div>
         `;
-        trainingsContainer.appendChild(div);
+        card.querySelector('.btn-close-card').addEventListener('click', () => {
+          card.remove();
+        });
+        trainingsContainer.appendChild(card);
       });
     }
 
     inputFechaEntrenamiento.addEventListener('change', filtrarEntrenamientos);
 
-    // (Opcional) Puedes predefinir fechas para pruebas descomentando:
-    // inputFecha.value = '2025-03-09';
-    // filtrarPartidos();
-    // inputFechaEntrenamiento.value = '2025-03-09';
-    // filtrarEntrenamientos();
+    // (Opcional) Predefinir fechas para pruebas:
+    // inputFecha.value = '2025-03-09'; filtrarPartidos();
+    // inputFechaEntrenamiento.value = '2025-03-09'; filtrarEntrenamientos();
+
+    /* --- Funcionalidad para cerrar secciones completas --- */
+    document.getElementById('btn-close-partidos').addEventListener('click', () => {
+      document.querySelector('#matches-container').innerHTML = '';
+    });
+    document.getElementById('btn-close-entrenamientos').addEventListener('click', () => {
+      document.querySelector('#trainings-container').innerHTML = '';
+    });
   </script>
 </body>
 </html>
