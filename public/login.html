@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <title> Auth - DIBA FBC</title>
+  <title>Auth - DIBA FBC</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <!-- Bootstrap (opcional) para estilo rápido -->
@@ -25,6 +25,12 @@
     .toggle-link {
       text-decoration: underline;
       cursor: pointer;
+    }
+    /* Estilos para el contenedor de logout */
+    #logout-container {
+      display: none;
+      text-align: center;
+      margin-top: 1rem;
     }
   </style>
 </head>
@@ -87,6 +93,11 @@
       <span id="toggle-text">¿No tienes cuenta?</span>
       <span id="toggle-link" class="toggle-link">Regístrate aquí</span>
     </div>
+
+    <!-- Contenedor para Cerrar Sesión (visible cuando el usuario está logueado) -->
+    <div id="logout-container">
+      <button id="logout-btn" class="btn btn-danger">Cerrar Sesión</button>
+    </div>
   </div>
 
   <!-- Bootstrap JS (opcional) -->
@@ -106,6 +117,8 @@
     const toggleText = document.getElementById('toggle-text');
     const toggleLink = document.getElementById('toggle-link');
     const formTitle = document.getElementById('form-title');
+    const logoutContainer = document.getElementById('logout-container');
+    const logoutBtn = document.getElementById('logout-btn');
 
     // Alternar entre Login y Registro
     let showingLogin = true;
@@ -126,6 +139,20 @@
       }
     });
 
+    // Función para verificar si hay una sesión activa y mostrar el botón de logout
+    async function checkSession() {
+      const { data: { session } } = await supabaseClient.auth.getSession();
+      if (session) {
+        // Si hay sesión, mostramos el contenedor de logout
+        logoutContainer.style.display = 'block';
+      } else {
+        logoutContainer.style.display = 'none';
+      }
+    }
+
+    // Verificar sesión al cargar la página
+    document.addEventListener('DOMContentLoaded', checkSession);
+
     // Manejar Submit de Iniciar Sesión
     loginForm.addEventListener('submit', async (e) => {
       e.preventDefault();
@@ -139,11 +166,10 @@
         });
         if (error) throw error;
         
-        // Si se inicia sesión con éxito, data.session contiene la sesión
         alert('Has iniciado sesión correctamente');
         console.log('Session:', data.session);
-        // Redirige a tu página principal o a la de perfil
-        window.location.href = 'index.html';
+        // Redirige a la página de perfil
+        window.location.href = 'profile.html';
       } catch (error) {
         alert('Error al iniciar sesión: ' + error.message);
         console.error(error);
@@ -163,14 +189,25 @@
         });
         if (error) throw error;
 
-        // data.user contiene el usuario creado, data.session la sesión
         alert('Cuenta creada con éxito. Revisa tu email si requieres confirmación.');
         console.log('User:', data.user);
-        // Opcional: Redirigir o cambiar a la vista de Login
+        // Redirige a la página de perfil
         window.location.href = 'profile.html';
       } catch (error) {
         alert('Error al registrarse: ' + error.message);
         console.error(error);
+      }
+    });
+
+    // Manejar el clic en el botón de Cerrar Sesión
+    logoutBtn.addEventListener('click', async () => {
+      const { error } = await supabaseClient.auth.signOut();
+      if (error) {
+        alert('Error al cerrar sesión: ' + error.message);
+      } else {
+        alert('Has cerrado sesión correctamente');
+        // Redirige a la página de login
+        window.location.href = 'login.html';
       }
     });
   </script>
