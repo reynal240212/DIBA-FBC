@@ -108,3 +108,23 @@ function handleCredentialResponse(response) {
     console.error("Error al procesar la respuesta de Google:", error);
   }
 }
+// scripts/main.js
+const SUPABASE_URL = 'https://nwxdshisfyenkylgqxgz.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im53eGRzaGlzZnllbmt5bGdxeGd6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzkwNTQzMDgsImV4cCI6MjA1NDYzMDMwOH0.QoIiNo5pFA1_MVfE2ugLgyz4HeET-WhA0C_sNOkWv9g';
+const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+// Verificar sesión (ejemplo de función reutilizable)
+async function checkSessionOrRedirect() {
+  const { data: { session } } = await supabaseClient.auth.getSession();
+  if (!session) {
+    // Si no hay sesión, redirige al login
+    window.location.href = 'login.html';
+  }
+  // Si hay sesión, session.user contiene el usuario actual
+}
+
+// Cerrar sesión (ejemplo)
+async function signOut() {
+  await supabaseClient.auth.signOut();
+  window.location.href = 'login.html';
+}
