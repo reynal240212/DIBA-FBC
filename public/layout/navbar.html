@@ -60,14 +60,8 @@
         </ul>
       </div>
     </div>
- <!-- Botón para abrir el modal de suscripción -->
-<div class="d-flex">
-  <a href="#" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#modalSubscription">
-    Suscríbete
-  </a>
-</div>
-
-<!-- Modal de Suscripción -->
+  </nav>
+  <!-- Modal de Suscripción -->
 <div class="modal fade" id="modalSubscription" tabindex="-1" aria-labelledby="modalSubscriptionLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
@@ -97,10 +91,10 @@
 <script>
   document.getElementById('subscriptionForm').addEventListener('submit', function(e) {
     e.preventDefault();
+    // Aquí podrías enviar los datos a tu backend o servicio de email marketing.
     alert("¡Gracias por suscribirte!");
     const modalSubscription = bootstrap.Modal.getInstance(document.getElementById('modalSubscription'));
     modalSubscription.hide();
   });
 </script>
-  </nav>
   
