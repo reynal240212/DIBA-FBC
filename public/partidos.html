@@ -122,38 +122,43 @@
     }
 
     // Función para filtrar y mostrar los partidos según la fecha seleccionada
-    async function filtrarPartidos() {
-      const fechaSeleccionada = inputFecha.value;
-      matchesContainer.innerHTML = '';
+async function filtrarPartidos() {
+  const fechaSeleccionada = inputFecha.value;
+  matchesContainer.innerHTML = '';
 
-      if (!fechaSeleccionada) {
-        matchesContainer.innerHTML = '<p class="text-center">Selecciona una fecha para ver los partidos.</p>';
-        return;
-      }
+  if (!fechaSeleccionada) {
+    matchesContainer.innerHTML = '<p class="text-center">Selecciona una fecha para ver los partidos.</p>';
+    return;
+  }
 
-      const partidos = await obtenerPartidos();
-      const partidosFiltrados = partidos.filter(partido => partido.fecha === fechaSeleccionada);
+  const partidos = await obtenerPartidos();
 
-      if (partidosFiltrados.length === 0) {
-        matchesContainer.innerHTML = '<p class="text-center">No hay partidos para la fecha seleccionada.</p>';
-        return;
-      }
+  // Convertir la fecha del partido al formato YYYY-MM-DD para la comparación
+  const partidosFiltrados = partidos.filter(partido => {
+    const fechaPartido = new Date(partido.fecha).toISOString().split('T')[0];
+    return fechaPartido === fechaSeleccionada;
+  });
 
-      partidosFiltrados.forEach(partido => {
-        const div = document.createElement('div');
-        div.classList.add('match-item');
-        div.innerHTML = `
-          <h5>${partido.equipoLocal} vs ${partido.equipoVisitante}</h5>
-          <p><strong>Descripción:</strong> ${partido.descripcion}</p>
-          <p><strong>Fecha/Hora:</strong> ${partido.fecha} - ${partido.hora || 'Sin hora'}</p>
-          <p><strong>Estadio:</strong> ${partido.estadio || 'No especificado'}</p>
-          ${partido.valor ? `<p><strong>Valor:</strong> $${partido.valor}</p>` : ''}
-          <p><strong>Resultado:</strong> ${partido.resultado || 'No disponible'}</p>
-          <p><strong>Goles:</strong> ${partido.goles || 'No disponible'}</p>
-        `;
-        matchesContainer.appendChild(div);
-      });
-    }
+  if (partidosFiltrados.length === 0) {
+    matchesContainer.innerHTML = '<p class="text-center">No hay partidos para la fecha seleccionada.</p>';
+    return;
+  }
+
+  partidosFiltrados.forEach(partido => {
+    const div = document.createElement('div');
+    div.classList.add('match-item');
+    div.innerHTML = `
+      <h5>${partido.equipoLocal} vs ${partido.equipoVisitante}</h5>
+      <p><strong>Descripción:</strong> ${partido.descripcion}</p>
+      <p><strong>Fecha/Hora:</strong> ${partido.fecha} - ${partido.hora || 'Sin hora'}</p>
+      <p><strong>Estadio:</strong> ${partido.estadio || 'No especificado'}</p>
+      ${partido.valor ? `<p><strong>Valor:</strong> $${partido.valor}</p>` : ''}
+      <p><strong>Resultado:</strong> ${partido.resultado || 'No disponible'}</p>
+      <p><strong>Goles:</strong> ${partido.goles || 'No disponible'}</p>
+    `;
+    matchesContainer.appendChild(div);
+  });
+}
 
     // Asigna el evento al input sin usar atributo inline
     inputFecha.addEventListener('change', filtrarPartidos);
