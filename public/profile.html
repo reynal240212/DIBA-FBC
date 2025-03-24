@@ -97,15 +97,15 @@
             placeholder="Cuéntanos algo sobre ti"
           ></textarea>
         </div>
-        <!-- Campo para subir la imagen -->
+        <!-- Campo de texto para pegar la URL de la imagen -->
         <div class="mb-3">
-          <label for="avatar" class="form-label">Foto de Perfil</label>
+          <label for="avatar_url" class="form-label">URL de tu foto (opcional)</label>
           <input
-            type="file"
+            type="url"
             class="form-control"
-            id="avatar"
-            name="avatar"
-            accept="image/*"
+            id="avatar_url"
+            name="avatar_url"
+            placeholder="https://example.com/mi-foto.jpg"
           />
         </div>
         <button type="submit" class="btn btn-success w-100">Guardar Perfil</button>
@@ -125,32 +125,47 @@
     const SUPABASE_ANON_KEY = 'TU_ANON_KEY';
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+    // Verifica si el usuario está autenticado al cargar la página
     document.addEventListener('DOMContentLoaded', async () => {
       const { data: { session } } = await supabaseClient.auth.getSession();
       if (!session) {
+        // Si no hay sesión, redirige al login
         window.location.href = 'login.html';
       } else {
+        // Carga el perfil existente si lo hay
         await loadProfile(session.user.id);
       }
     });
 
+    // Función para cargar el perfil existente (si lo hay)
     async function loadProfile(userId) {
       const { data: profileData, error } = await supabaseClient
         .from('profiles')
         .select('*')
         .eq('id', userId)
         .single();
-      if (!error && profileData) {
-        document.getElementById('full_name').value = profileData.full_name || '';
-        document.getElementById('username').value = profileData.username || '';
-        document.getElementById('bio').value = profileData.bio || '';
-        // Si ya existe avatar_url, podrías mostrarlo en un <img> si deseas
+      if (error) {
+        console.log('No se encontró perfil. El usuario puede crear uno nuevo.');
+        return;
       }
+      document.getElementById('full_name').value = profileData.full_name || '';
+      document.getElementById('username').value = profileData.username || '';
+      document.getElementById('bio').value = profileData.bio || '';
+      document.getElementById('avatar_url').value = profileData.avatar_url || '';
     }
 
+    // Maneja el submit del formulario para insertar o actualizar el perfil
     const profileForm = document.getElementById('profile-form');
     profileForm.addEventListener('submit', async (e) => {
       e.preventDefault();
+
+      // Obtén los valores del formulario
+      const full_name = document.getElementById('full_name').value;
+      const username = document.getElementById('username').value;
+      const bio = document.getElementById('bio').value;
+      const avatar_url = document.getElementById('avatar_url').value;
+
+      // Verifica la sesión actual
       const { data: { session } } = await supabaseClient.auth.getSession();
       if (!session) {
         alert('No hay usuario autenticado. Por favor, inicia sesión.');
@@ -158,35 +173,7 @@
       }
       const userId = session.user.id;
 
-      // Obtén valores del formulario
-      const full_name = document.getElementById('full_name').value;
-      const username = document.getElementById('username').value;
-      const bio = document.getElementById('bio').value;
-      const avatarFile = document.getElementById('avatar').files[0];
-
-      let avatar_url = null;
-      if (avatarFile) {
-        // Subir la imagen a Supabase Storage (bucket "avatars", por ejemplo)
-        const fileExt = avatarFile.name.split('.').pop();
-        const fileName = `${userId}.${fileExt}`;
-        const filePath = `${userId}/${fileName}`;
-
-        const { data, error: uploadError } = await supabaseClient.storage
-          .from('avatars')
-          .upload(filePath, avatarFile, { upsert: true });
-        if (uploadError) {
-          alert('Error al subir la imagen: ' + uploadError.message);
-          return;
-        }
-        // Obtener URL pública (si el bucket es público)
-        const { data: publicData } = supabaseClient
-          .storage
-          .from('avatars')
-          .getPublicUrl(filePath);
-        avatar_url = publicData.publicUrl;
-      }
-
-      // upsert en la tabla profiles
+      // Inserta o actualiza el perfil en la tabla "profiles"
       const { error } = await supabaseClient
         .from('profiles')
         .upsert({
@@ -194,12 +181,14 @@
           full_name,
           username,
           bio,
-          ...(avatar_url && { avatar_url })
+          avatar_url
         });
       if (error) {
         alert('Error al guardar el perfil: ' + error.message);
+        console.error(error);
       } else {
         alert('Perfil guardado exitosamente.');
+        // Redirige a index.html o a otra página si lo deseas
         window.location.href = 'index.html';
       }
     });
