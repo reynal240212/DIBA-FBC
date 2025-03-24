@@ -23,6 +23,45 @@
           <a href="#" class="text-white me-3"><i class="fab fa-facebook fa-2x"></i></a>
           <a href="#" class="text-white"><i class="fab fa-instagram fa-2x"></i></a>
         </div>
+         <!-- Columna 3 -->
+         <div class="col-md-4">
+          <!-- Modal de Suscripción -->
+<div class="modal fade" id="modalSubscription" tabindex="-1" aria-labelledby="modalSubscriptionLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header bg-warning text-dark">
+        <h5 class="modal-title" id="modalSubscriptionLabel">Suscríbete y recibe novedades</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+      <div class="modal-body">
+        <form id="subscriptionForm">
+          <div class="mb-3">
+            <label for="subscriptionName" class="form-label">Nombre completo</label>
+            <input type="text" class="form-control" id="subscriptionName" placeholder="Tu nombre" required>
+          </div>
+          <div class="mb-3">
+            <label for="subscriptionEmail" class="form-label">Correo electrónico</label>
+            <input type="email" class="form-control" id="subscriptionEmail" placeholder="tuemail@ejemplo.com" required>
+          </div>
+          <button type="submit" class="btn btn-warning w-100">Suscribirme</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Bootstrap JS Bundle -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  document.getElementById('subscriptionForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    // Aquí podrías enviar los datos a tu backend o servicio de email marketing.
+    alert("¡Gracias por suscribirte!");
+    const modalSubscription = bootstrap.Modal.getInstance(document.getElementById('modalSubscription'));
+    modalSubscription.hide();
+  });
+</script>
+        </div>
       </div>
       <hr class="bg-white" />
       <p class="text-center m-0">© 2025 DIBA FBC. Todos los derechos reservados.</p>
