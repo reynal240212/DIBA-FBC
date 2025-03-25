@@ -3,9 +3,30 @@
 <head>
   <meta charset="UTF-8" />
   <title>Calendario - DIBA FBC</title>
-  <link rel="icon" href="images/ESCUDO.ico" sizes="32x32">
-  <meta name="description" content="Conoce la historia y los momentos más destacados de DIBA FBC, un recorrido lleno de pasión y logros deportivos."/>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Ícono del sitio -->
+  <link rel="icon" href="images/ESCUDO.ico" sizes="32x32" />
+
+  <!-- Meta descripción -->
+  <meta name="description" content="Consulta los partidos y entrenamientos de DIBA FBC, un recorrido lleno de pasión y logros deportivos." />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Mejora de vista previa en redes sociales (Open Graph) -->
+  <meta property="og:title" content="Calendario - DIBA FBC" />
+  <meta property="og:description" content="Revisa el calendario de partidos y entrenamientos de DIBA FBC." />
+  <!-- Ajusta esta URL a la ruta real de tu imagen de portada -->
+  <meta property="og:image" content="https://diba-fbc.vercel.app/images/preview.jpg" />
+  <!-- Ajusta esta URL al dominio donde publiques el calendario -->
+  <meta property="og:url" content="https://diba-fbc.vercel.app/calendario" />
+  <meta property="og:type" content="website" />
+
+  <!-- Meta tags de Twitter Card (opcional) -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Calendario - DIBA FBC" />
+  <meta name="twitter:description" content="Revisa el calendario de partidos y entrenamientos de DIBA FBC." />
+  <!-- Ajusta esta URL a la ruta real de tu imagen de portada -->
+  <meta name="twitter:image" content="https://diba-fbc.vercel.app/images/preview.jpg" />
+
   <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
   <!-- Font Awesome -->
@@ -17,7 +38,7 @@
   <!-- Estilos globales -->
   <link rel="stylesheet" href="styles/styles.css" />
   <link rel="stylesheet" href="styles/background-animation.css" />
-  
+
   <style>
     /* Ajustes para las tarjetas con Bootstrap */
     .custom-card {
@@ -97,7 +118,8 @@
   <div id="navbar-container"></div>
 
   <!-- HERO SECTION -->
-  <section class="hero animate__animated animate__fadeInDown d-flex align-items-center" style="background: linear-gradient(135deg, #002a40, #001b72), url('images/fondo.jpg') center/cover no-repeat fixed; background-blend-mode: multiply; min-height: 80vh;">
+  <section class="hero animate__animated animate__fadeInDown d-flex align-items-center"
+           style="background: linear-gradient(135deg, #002a40, #001b72), url('images/fondo.jpg') center/cover no-repeat fixed; background-blend-mode: multiply; min-height: 80vh;">
     <div class="container hero-content text-center text-white">
       <h1 class="display-4 fw-bold">CALENDARIO</h1>
       <p class="lead">Consulta los partidos y entrenamientos</p>
@@ -113,7 +135,9 @@
           <div class="card p-3">
             <div class="d-flex justify-content-between align-items-center mb-3">
               <h2 class="h5 mb-0">Partidos</h2>
-              <button class="btn btn-sm btn-outline-secondary" id="btn-close-partidos"><i class="fas fa-times"></i></button>
+              <button class="btn btn-sm btn-outline-secondary" id="btn-close-partidos">
+                <i class="fas fa-times"></i>
+              </button>
             </div>
             <div class="mb-3">
               <input type="date" id="fecha" class="form-control" aria-label="Seleccionar fecha de partido">
@@ -133,7 +157,9 @@
           <div class="card p-3">
             <div class="d-flex justify-content-between align-items-center mb-3">
               <h2 class="h5 mb-0">Entrenamientos</h2>
-              <button class="btn btn-sm btn-outline-secondary" id="btn-close-entrenamientos"><i class="fas fa-times"></i></button>
+              <button class="btn btn-sm btn-outline-secondary" id="btn-close-entrenamientos">
+                <i class="fas fa-times"></i>
+              </button>
             </div>
             <div class="mb-3">
               <input type="date" id="fecha-entrenamiento" class="form-control" aria-label="Seleccionar fecha de entrenamiento">
