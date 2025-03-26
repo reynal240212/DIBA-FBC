@@ -6,44 +6,71 @@
   <link rel="icon" href="images/ESCUDO.ico" sizes="32x32">
   <meta name="description" content="Conoce la historia y los momentos más destacados de DIBA FBC, un recorrido lleno de pasión y logros deportivos."/>
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Meta tags para evitar cache (útil en páginas protegidas) -->
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+
   <!-- Meta tags de Open Graph -->
   <meta property="og:title" content="DIBA FBC - Sitio oficial" />
   <meta property="og:description" content="Conoce la historia, los logros y eventos de DIBA FBC. ¡Visítanos!" />
-  <meta property="og:image" content="https://diba-fbc.vercel.app/images/images/ESCUDO.png" />
+  <meta property="og:image" content="https://diba-fbc.vercel.app/images/ESCUDO.png" />
   <meta property="og:url" content="https://diba-fbc.vercel.app" />
   <meta property="og:type" content="website" />
+
+  <!-- Meta tags de Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Calendario - DIBA FBC" />
+  <meta name="twitter:description" content="Revisa el calendario de partidos y entrenamientos de DIBA FBC." />
+  <meta name="twitter:image" content="https://diba-fbc.vercel.app/images/preview.jpg" />
+
   <!-- Bootstrap 5.3.2 CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
   <!-- Font Awesome -->
-  <link rel="stylesheet"href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer"/>
-
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer"/>
   <!-- Animate.css -->
-  <link rel="stylesheet"href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
-
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
   <!-- AOS (opcional) -->
-  <link rel="stylesheet"href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css"/>
   <!-- Estilos globales -->
   <link rel="stylesheet" href="styles/styles.css" />
   <link rel="stylesheet" href="styles/background-animation.css" />
-  
-  
-</head>
 
+  <style>
+    /* Estilos para las tarjetas y secciones */
+    .custom-card {
+      margin-bottom: 1.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .background-animation {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+    }
+    /* Otros estilos (personalizados para la identidad del sitio) */
+  </style>
+</head>
 <body>
-    <div class="background-animation">
-      <div class="cube"></div>
-      <div class="cube"></div>
-      <div class="cube"></div>
-      <div class="cube"></div>
-      <div class="cube"></div>
-      <div class="cube"></div>
-      <div class="cube"></div>
-      <div class="cube"></div>
-      <div class="cube"></div>
-      <div class="cube"></div>
-    </div>
+  <!-- Fondo animado -->
+  <div class="background-animation">
+    <div class="cube"></div>
+    <div class="cube"></div>
+    <div class="cube"></div>
+    <div class="cube"></div>
+    <div class="cube"></div>
+    <div class="cube"></div>
+    <div class="cube"></div>
+    <div class="cube"></div>
+    <div class="cube"></div>
+    <div class="cube"></div>
+  </div>
+
   <!-- Botón Volver Arriba -->
-  <button id="btnBackToTop" title="Volver arriba" aria-label="Volver arriba">
+  <button id="btnBackToTop" title="Volver arriba" aria-label="Volver arriba" class="btn btn-primary rounded-circle">
     <i class="fas fa-arrow-up"></i>
   </button>
 
@@ -53,29 +80,19 @@
   <!-- HERO SECTION -->
   <section
     class="hero animate__animated animate__fadeInDown d-flex align-items-center"
-    style="
-      background: linear-gradient(135deg, #002a40, #001b72),
-        url('images/fondo.jpg') center/cover no-repeat fixed;
-      background-blend-mode: multiply;
-      min-height: 80vh;
-    "
+    style="background: linear-gradient(135deg, #002a40, #001b72), url('images/fondo.jpg') center/cover no-repeat fixed; background-blend-mode: multiply; min-height: 80vh;"
   >
-
     <div class="container hero-content text-center text-white">
       <h1 class="hero-title display-4 fw-bold">Deportivo Internacional De Barranquilla Atlántico</h1>
       <p class="hero-subtitle lead">"Fuerza y Lealtad"</p>
     </div>
   </section>
 
-  <!-- Sección Resumen de Historia en Index -->
+  <!-- Sección Resumen de Historia -->
   <section id="resumen-historia" class="container my-5">
     <div class="row align-items-center">
       <div class="col-md-6 mb-4 mb-md-0">
-        <img
-          src="images/ESCUDO.png"
-          alt="DIBA FBC - Historia"
-          class="img-fluid rounded shadow"
-        />
+        <img src="images/ESCUDO.png" alt="DIBA FBC - Historia" class="img-fluid rounded shadow" loading="lazy" />
       </div>
       <div class="col-md-6">
         <h2 class="mb-3">Nuestra Historia</h2>
@@ -91,11 +108,7 @@
           allá de las canchas.
         </p>
         <div class="mt-4">
-          <a
-            href="Historia.html"
-            target="_blank"
-            class="btn btn-warning"
-          >
+          <a href="Historia.html" target="_blank" class="btn btn-warning">
             <i class="fas fa-external-link-alt me-1"></i> Más Información
           </a>
         </div>
@@ -105,7 +118,7 @@
 
   <!-- Sección Servicios -->
   <section id="servicios" class="container my-5 animate__animated animate__fadeInUp">
-    <strong><h2 class="text-center fw-bold">NUESTROS SERVICIOS</h2></strong>
+    <h2 class="text-center fw-bold mb-4">NUESTROS SERVICIOS</h2>
     <div class="row row-cols-1 row-cols-md-3 g-4 mt-4">
       <div class="col">
         <div class="card shadow h-100">
@@ -123,8 +136,7 @@
           <div class="card-body">
             <h5 class="card-title">Participación en Torneos</h5>
             <p class="card-text">
-              Representamos a nuestra comunidad en torneos locales,
-              demostrando competitividad y espíritu deportivo en cada desafío.
+              Representamos a nuestra comunidad en torneos locales, demostrando competitividad y espíritu deportivo en cada desafío.
             </p>
           </div>
         </div>
@@ -134,8 +146,7 @@
           <div class="card-body">
             <h5 class="card-title">Desarrollo Integral</h5>
             <p class="card-text">
-              Fomentamos el desarrollo personal de nuestros jugadores,
-              inculcando valores y liderazgo dentro y fuera del campo.
+              Fomentamos el desarrollo personal de nuestros jugadores, inculcando valores y liderazgo dentro y fuera del campo.
             </p>
           </div>
         </div>
@@ -145,25 +156,15 @@
 
   <!-- Sección Equipo (Cuerpo Técnico) -->
   <section id="equipo" class="container my-5 animate__animated animate__fadeInUp">
-    <h2 class="text-center">CUERPO TECNICO</h2>
+    <h2 class="text-center">CUERPO TÉCNICO</h2>
     <div class="row text-center mt-4">
       <div class="col-md-4 mb-4">
-        <img
-          src="images/profesor.jpg"
-          class="rounded-circle mb-3"
-          alt="Entrenador DIBA FBC"
-          loading="lazy"
-        />
+        <img src="images/profesor.jpg" class="rounded-circle mb-3" alt="Entrenador DIBA FBC" loading="lazy" />
         <h5>Reinaldo Perez</h5>
         <p>Director Técnico</p>
       </div>
       <div class="col-md-4 mb-4">
-        <img
-          src="images/reinaldoNavas.png"
-          class="rounded-circle mb-3"
-          alt="Asistente Técnico"
-          loading="lazy"
-        />
+        <img src="images/reinaldoNavas.png" class="rounded-circle mb-3" alt="Asistente Técnico" loading="lazy" />
         <h5>Reinaldo Perez Navas</h5>
         <p>Técnico</p>
       </div>
@@ -176,11 +177,7 @@
     <div class="row align-items-center">
       <div class="col-md-6 mb-4 mb-md-0">
         <a href="https://instagram.com" target="_blank">
-          <img
-            src="images/unnamed.jpg"
-            alt="Fundación Tierra que Emana Leche y Miel"
-            class="img-fluid w-100 rounded shadow"
-          />
+          <img src="images/unnamed.jpg" alt="Fundación Tierra que Emana Leche y Miel" class="img-fluid w-100 rounded shadow" loading="lazy" />
         </a>
       </div>
       <div class="col-md-6">
@@ -189,29 +186,18 @@
           Fundación Tierra que Emana Leche y Miel
         </h2>
         <p>
-          La <strong>Fundación Tierra que Emana Leche y Miel</strong> (FUNTILEMI) es una entidad sin ánimo de lucro registrada en la Cámara de Comercio de Barranquilla.
+          La <strong>Fundación Tierra que Emana Leche y Miel</strong> es una entidad sin ánimo de lucro, comprometida con el desarrollo y bienestar de la comunidad.
         </p>
         <p>
-          Fundada el <strong>28 de marzo de 2016</strong>, tiene su sede en <strong>Carrera 30A, Carrera 1B #245, Apartamento 701, Urbanización Villa Campestre, Barranquilla, Atlántico</strong>.
-        </p>
-        <p>
-          El nombre evoca una expresión bíblica que describe una tierra de abundancia, simbolizando el compromiso con el bienestar y desarrollo de la comunidad.
+          Fundada el <strong>28 de marzo de 2016</strong>, su sede está en Barranquilla, Atlántico.
         </p>
         <div class="mt-4">
-          <a
-            href="https://colombiapymes.com/empresas/fundacion-tierra-que-emana-leche-y-miel-sigla-funtilemi_id_EF8E1398F2821C3F"
-            target="_blank"
-            class="btn btn-warning"
-          >
+          <a href="https://colombiapymes.com/empresas/fundacion-tierra-que-emana-leche-y-miel-sigla-funtilemi_id_EF8E1398F2821C3F" target="_blank" class="btn btn-warning">
             <i class="fas fa-external-link-alt me-1"></i> Más Información
           </a>
         </div>
         <div class="mt-4">
-          <a
-            href="https://www.instagram.com/funtilemi/"
-            target="_blank"
-            class="btn btn-warning"
-          >
+          <a href="https://www.instagram.com/funtilemi/" target="_blank" class="btn btn-warning">
             <i class="fas fa-external-link-alt me-1"></i> Instagram
           </a>
         </div>
@@ -227,33 +213,21 @@
         <!-- Okey Sport -->
         <div class="patrocinador">
           <a href="https://okeysport.com/" target="_blank">
-            <img
-              src="https://okeysport.com/cdn/shop/files/Logo_OKEY.svg?v=1721155737&width=100"
-              alt="Logo de Okey Sport"
-              style="width: 150px; height: auto"
-            />
+            <img src="https://okeysport.com/cdn/shop/files/Logo_OKEY.svg?v=1721155737&width=100" alt="Logo de Okey Sport" style="width: 150px; height: auto" />
           </a>
           <p>Okey Sport</p>
         </div>
         <!-- Chiro Deportes -->
         <div class="patrocinador">
           <a href="https://www.facebook.com/chirodeportes/" target="_blank">
-            <img
-              src="https://tse3.mm.bing.net/th?id=OIP.2pbPD48ADuuuNSlSKtgEpwHaHa&pid=Api"
-              alt="Logo de Chiro Deportes"
-              style="width: 150px; height: auto"
-            />
+            <img src="https://tse3.mm.bing.net/th?id=OIP.2pbPD48ADuuuNSlSKtgEpwHaHa&pid=Api" alt="Logo de Chiro Deportes" style="width: 150px; height: auto" />
           </a>
           <p>Chiro Deportes</p>
         </div>
         <!-- Calzado Orpis -->
         <div class="patrocinador">
           <a href="https://www.instagram.com/calzadoorpis/" target="_blank">
-            <img
-              src="https://i.pinimg.com/originals/2d/36/e1/2d36e15e7ad8ab91b41f3db0eff0f7ac.png"
-              alt="Logo de Calzado Orpis"
-              style="width: 150px; height: auto"
-            />
+            <img src="https://i.pinimg.com/originals/2d/36/e1/2d36e15e7ad8ab91b41f3db0eff0f7ac.png" alt="Logo de Calzado Orpis" style="width: 150px; height: auto" />
           </a>
           <p>Calzado Orpis</p>
         </div>
@@ -266,15 +240,12 @@
 
   <!-- Bootstrap JS Bundle (5.3.2) -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-
-  <!-- Script para cargar componentes externos (Navbar y Footer) -->
+  <!-- Carga de componentes externos (Navbar y Footer) -->
   <script src="scripts/loadComponents.js"></script>
-
-  <!-- Script principal (funciones y animaciones) -->
+  <!-- jQuery (opcional) -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <!-- Scripts principales (main.js, script.js, etc.) -->
   <script src="scripts/main.js"></script>
-  
-  <!-- Script adicional para funcionalidades específicas (por ejemplo, botones dinámicos) -->
   <script src="scripts/script.js"></script>
 </body>
 </html>
