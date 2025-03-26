@@ -180,31 +180,6 @@
       }
     });
 
-    // Manejar Submit de Registro
-    signupForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const email = document.getElementById('signup-email').value;
-      const password = document.getElementById('signup-password').value;
-
-      try {
-        const { data, error } = await supabaseClient.auth.signUp({
-          email,
-          password
-        });
-        if (error) throw error;
-
-        alert('Cuenta creada con éxito. Revisa tu email si requieres confirmación.');
-        console.log('User:', data.user);
-        // Sincroniza o crea el perfil para el usuario autenticado
-        await syncProfile();
-        // Redirige a la página de perfil (o index, según tu flujo)
-        window.location.href = 'chat.html';
-      } catch (error) {
-        alert('Error al registrarse: ' + error.message);
-        console.error(error);
-      }
-    });
-
     // Manejar el clic en el botón de Cerrar Sesión
     logoutBtn.addEventListener('click', async () => {
       const { error } = await supabaseClient.auth.signOut();
