@@ -1,210 +1,209 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Chat Privado</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+  <meta charset="UTF-8" />
+  <title>Crear Perfil - DIBA FBC</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Prevenir cacheo -->
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <!-- Animate.css (opcional) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+
   <style>
+    /* Fondo deportivo */
     body {
-      background-color: #f8f9fa;
+      background: url('https://cdn.britannica.com/51/190751-050-147B93F7/soccer-ball-goal.jpg') no-repeat center center fixed;
+      background-size: cover;
+      font-family: Arial, sans-serif;
+      padding: 1rem;
+      position: relative;
     }
-    .chat-container {
-      height: 80vh;
+    /* Overlay oscuro para legibilidad */
+    body::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.55);
+      z-index: 0;
     }
-    .user-list {
-      height: 100%;
-      overflow-y: auto;
-      background-color: #fff;
-      border-right: 1px solid #ddd;
+    /* Contenedor principal */
+    .profile-container {
+      position: relative;
+      z-index: 1;
     }
-    .chat-box {
-      height: calc(100% - 60px);
-      overflow-y: auto;
-      padding: 10px;
-      background-color: #e9ecef;
+    /* Tarjeta para el formulario */
+    .profile-card {
+      max-width: 500px;
+      width: 100%;
+      margin: 0 auto;
+      border: none;
+      border-radius: 10px;
+      overflow: hidden;
+      background: #fff;
     }
-    .message-input {
-      height: 60px;
-      border-top: 1px solid #ddd;
+    .profile-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 16px rgba(0,0,0,0.25);
+      transition: transform 0.3s, box-shadow 0.3s;
     }
-    .message {
-      padding: 8px;
-      border-radius: 5px;
-      margin-bottom: 5px;
-    }
-    .sent {
-      background-color: #0d6efd;
-      color: white;
-      text-align: right;
-    }
-    .received {
-      background-color: #d1e7dd;
-      text-align: left;
+    .animate__animated {
+      animation-duration: 1s;
     }
   </style>
 </head>
 <body>
+  <div class="container profile-container d-flex align-items-center justify-content-center min-vh-100">
+    <div class="card profile-card shadow-sm p-4 animate__animated animate__fadeInUp">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="h4 text-center">Completa tu Perfil</h2>
+        <!-- Botón de cerrar sesión -->
+        <button id="logout-btn" class="btn btn-sm btn-danger">Cerrar Sesión</button>
+      </div>
 
-<div class="container mt-4">
-  <h2 class="text-center">Chat Privado</h2>
-  <div class="row chat-container">
-    <!-- Lista de usuarios -->
-    <div class="col-md-3 user-list p-3">
-      <h4 class="text-center">Usuarios</h4>
-      <ul id="user-list" class="list-group">
-        <!-- Aquí se cargarán los usuarios -->
-      </ul>
-    </div>
-
-    <!-- Sección de chat -->
-    <div class="col-md-9 d-flex flex-column">
-      <!-- Cabecera del chat con título y botón de logout -->
-      <div class="d-flex justify-content-between align-items-center p-2 bg-light">
-        <div id="chat-title">Selecciona un usuario</div>
-        <button id="logout-btn" class="btn btn-danger btn-sm">Cerrar sesión</button>
-      </div>
-      <div class="chat-box" id="chat-box">
-        <!-- Mensajes del chat -->
-      </div>
-      <div class="message-input p-2 d-flex">
-        <input type="text" id="message-input" class="form-control" placeholder="Escribe un mensaje..." disabled>
-        <button id="send-button" class="btn btn-primary ms-2" disabled>Enviar</button>
-      </div>
+      <!-- Formulario para completar/actualizar el perfil -->
+      <form id="profile-form">
+        <div class="mb-3">
+          <label for="full_name" class="form-label">Nombre Completo</label>
+          <input type="text" class="form-control" id="full_name" name="full_name" placeholder="Tu nombre completo" required>
+        </div>
+        <div class="mb-3">
+          <label for="username" class="form-label">Nombre de Usuario</label>
+          <input type="text" class="form-control" id="username" name="username" placeholder="Nombre de usuario" required>
+        </div>
+        <div class="mb-3">
+          <label for="bio" class="form-label">Biografía</label>
+          <textarea class="form-control" id="bio" name="bio" rows="3" placeholder="Cuéntanos algo sobre ti"></textarea>
+        </div>
+        <!-- Campo de texto para pegar la URL de la imagen -->
+        <div class="mb-3">
+          <label for="avatar_url" class="form-label">URL de tu foto (opcional)</label>
+          <input type="url" class="form-control" id="avatar_url" name="avatar_url" placeholder="https://example.com/mi-foto.jpg">
+        </div>
+        <button type="submit" class="btn btn-success w-100">Guardar Perfil</button>
+      </form>
     </div>
   </div>
-</div>
 
-<script>
-  // Configurar Supabase
-  const supabaseUrl = "https://nwxdshisfyenkylgqxgz.supabase.co";
-  const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im53eGRzaGlzZnllbmt5bGdxeGd6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzkwNTQzMDgsImV4cCI6MjA1NDYzMDMwOH0.QoIiNo5pFA1_MVfE2ugLgyz4HeET-WhA0C_sNOkWv9g";
-  const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+  <!-- Bootstrap JS Bundle -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Supabase JS (versión 2.x) -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script>
+    // Configura tu Supabase
+    const SUPABASE_URL = 'https://nwxdshisfyenkylgqxgz.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im53eGRzaGlzZnllbmt5bGdxeGd6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzkwNTQzMDgsImV4cCI6MjA1NDYzMDMwOH0.QoIiNo5pFA1_MVfE2ugLgyz4HeET-WhA0C_sNOkWv9g';
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-  let currentUser = null;
-  let selectedUser = null;
-  
-  const userList = document.getElementById("user-list");
-  const chatBox = document.getElementById("chat-box");
-  const messageInput = document.getElementById("message-input");
-  const sendButton = document.getElementById("send-button");
-  const chatTitle = document.getElementById("chat-title");
-  const logoutBtn = document.getElementById("logout-btn");
-
-  // Obtener el usuario logueado
-  async function getCurrentUser() {
-    const { data: { user }, error } = await supabase.auth.getUser();
-    if (error || !user) {
-      window.location.href = "login.html"; // Redirigir si no está autenticado
-      return;
+    // Función para forzar que la página verifique la sesión al cargar (si el usuario no está autenticado, se redirige al login)
+    async function checkSession() {
+      const { data: { session } } = await supabaseClient.auth.getSession();
+      if (!session) {
+        window.location.href = 'login.html';
+      }
     }
-    currentUser = user;
-    loadUsers();
-  }
 
-  // Obtener lista de usuarios desde la tabla "profiles"
-  async function loadUsers() {
-    const { data, error } = await supabase.from("profiles").select("*");
-    if (error) {
-      console.error("Error al obtener usuarios:", error);
-      return;
-    }
-    userList.innerHTML = "";
-    data.forEach(user => {
-      if (user.id !== currentUser.id) {
-        const li = document.createElement("li");
-        li.classList.add("list-group-item", "user-item");
-        li.textContent = user.username;
-        li.dataset.userId = user.id;
-        li.addEventListener("click", () => selectUser(user));
-        userList.appendChild(li);
+    // Ejecutar la verificación al cargar la página
+    document.addEventListener('DOMContentLoaded', async () => {
+      await checkSession();
+      // Cargar el perfil existente si hay sesión
+      const { data: { session } } = await supabaseClient.auth.getSession();
+      if (session) {
+        await syncProfile(session.user.id);
+        await loadProfile(session.user.id);
       }
     });
-  }
 
-  // Seleccionar un usuario para chatear
-  function selectUser(user) {
-    selectedUser = user;
-    chatTitle.textContent = `Chat con ${user.username}`;
-    messageInput.disabled = false;
-    sendButton.disabled = false;
-    fetchMessages();
-  }
+    // Función para sincronizar (crear) el perfil si no existe
+    async function syncProfile(userId) {
+      const { data: profileData, error } = await supabaseClient
+        .from('profiles')
+        .select('*')
+        .eq('id', userId)
+        .single();
 
-  // Obtener mensajes entre el usuario actual y el seleccionado
-  async function fetchMessages() {
-    if (!selectedUser) return;
-    
-    const { data, error } = await supabase
-      .from("messages")
-      .select("*")
-      // Filtrar mensajes entre currentUser y selectedUser
-      .or(`and(sender_id.eq.${currentUser.id},receiver_id.eq.${selectedUser.id})`)
-      .or(`and(sender_id.eq.${selectedUser.id},receiver_id.eq.${currentUser.id})`)
-      .order("created_at", { ascending: true });
-
-    if (error) {
-      console.error("Error al obtener mensajes:", error);
-      return;
-    }
-    chatBox.innerHTML = "";
-    data.forEach(displayMessage);
-  }
-
-  // Mostrar mensaje en la interfaz
-  function displayMessage(message) {
-    const div = document.createElement("div");
-    div.classList.add("message", message.sender_id === currentUser.id ? "sent" : "received");
-    div.textContent = message.content;
-    chatBox.appendChild(div);
-    chatBox.scrollTop = chatBox.scrollHeight;
-  }
-
-  // Escuchar nuevos mensajes en tiempo real
-  supabase.channel("messages")
-    .on("postgres_changes", { event: "INSERT", schema: "public", table: "messages" }, (payload) => {
-      if ((payload.new.sender_id === currentUser.id && payload.new.receiver_id === selectedUser.id) ||
-          (payload.new.sender_id === selectedUser.id && payload.new.receiver_id === currentUser.id)) {
-        displayMessage(payload.new);
+      if (error || !profileData) {
+        const { data: { user } } = await supabaseClient.auth.getUser();
+        const email = user?.email || '';
+        const { error: insertError } = await supabaseClient
+          .from('profiles')
+          .insert([{ id: userId, username: email, full_name: '', bio: '', avatar_url: '' }]);
+        if (insertError) {
+          console.error('Error al crear perfil:', insertError);
+        } else {
+          console.log('Perfil creado exitosamente.');
+        }
+      } else {
+        console.log('Perfil sincronizado:', profileData);
       }
-    })
-    .subscribe();
-
-  // Enviar mensaje
-  sendButton.addEventListener("click", async () => {
-    if (!selectedUser) return;
-    
-    const content = messageInput.value.trim();
-    if (!content) return;
-
-    const { error } = await supabase.from("messages").insert([{
-      sender_id: currentUser.id,
-      receiver_id: selectedUser.id,
-      content
-    }]);
-
-    if (error) {
-      console.error("Error al enviar mensaje:", error);
-    } else {
-      messageInput.value = "";
     }
-  });
 
-  // Manejar el clic en el botón de Cerrar Sesión
-  logoutBtn.addEventListener("click", async () => {
-    const { error } = await supabase.auth.signOut();
-    if (error) {
-      alert("Error al cerrar sesión: " + error.message);
-    } else {
-      alert("Has cerrado sesión correctamente.");
-      window.location.href = "login.html";
+    // Función para cargar el perfil existente
+    async function loadProfile(userId) {
+      const { data: profileData, error } = await supabaseClient
+        .from('profiles')
+        .select('*')
+        .eq('id', userId)
+        .single();
+      if (error) {
+        console.log('No se encontró perfil. Probablemente se acaba de crear uno vacío.');
+        return;
+      }
+      document.getElementById('full_name').value = profileData.full_name || '';
+      document.getElementById('username').value = profileData.username || '';
+      document.getElementById('bio').value = profileData.bio || '';
+      document.getElementById('avatar_url').value = profileData.avatar_url || '';
     }
-  });
 
-  // Cargar usuario y lista de contactos al iniciar
-  getCurrentUser();
-</script>
+    // Manejar el submit del formulario para insertar o actualizar el perfil
+    const profileForm = document.getElementById('profile-form');
+    profileForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const full_name = document.getElementById('full_name').value;
+      const username = document.getElementById('username').value;
+      const bio = document.getElementById('bio').value;
+      const avatar_url = document.getElementById('avatar_url').value;
 
+      const { data: { session } } = await supabaseClient.auth.getSession();
+      if (!session) {
+        alert('No hay usuario autenticado. Por favor, inicia sesión.');
+        return;
+      }
+      const userId = session.user.id;
+
+      const { error } = await supabaseClient
+        .from('profiles')
+        .upsert({
+          id: userId,
+          full_name,
+          username,
+          bio,
+          avatar_url
+        });
+      if (error) {
+        alert('Error al guardar el perfil: ' + error.message);
+        console.error(error);
+      } else {
+        alert('Perfil guardado exitosamente.');
+        window.location.href = 'chat.html';
+      }
+    });
+
+    // Manejar el clic en el botón de Cerrar Sesión
+    const logoutBtn = document.getElementById('logout-btn');
+    logoutBtn.addEventListener('click', async () => {
+      const { error } = await supabaseClient.auth.signOut();
+      if (error) {
+        alert('Error al cerrar sesión: ' + error.message);
+      } else {
+        alert('Has cerrado sesión correctamente');
+        window.location.href = 'login.html';
+      }
+    });
+  </script>
 </body>
 </html>
