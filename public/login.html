@@ -6,10 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <!-- Bootstrap (opcional) para estilo rápido -->
-  <link
-    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
-    rel="stylesheet"
-  />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
   <style>
     body {
       background: #f7f7f7;
@@ -42,23 +39,11 @@
     <form id="login-form">
       <div class="mb-3">
         <label for="login-email" class="form-label">Email</label>
-        <input
-          type="email"
-          class="form-control"
-          id="login-email"
-          placeholder="Tu email"
-          required
-        />
+        <input type="email" class="form-control" id="login-email" placeholder="Tu email" required />
       </div>
       <div class="mb-3">
         <label for="login-password" class="form-label">Contraseña</label>
-        <input
-          type="password"
-          class="form-control"
-          id="login-password"
-          placeholder="Tu contraseña"
-          required
-        />
+        <input type="password" class="form-control" id="login-password" placeholder="Tu contraseña" required />
       </div>
       <button type="submit" class="btn btn-primary w-100">Entrar</button>
     </form>
@@ -67,23 +52,11 @@
     <form id="signup-form" style="display: none;">
       <div class="mb-3">
         <label for="signup-email" class="form-label">Email</label>
-        <input
-          type="email"
-          class="form-control"
-          id="signup-email"
-          placeholder="Tu email"
-          required
-        />
+        <input type="email" class="form-control" id="signup-email" placeholder="Tu email" required />
       </div>
       <div class="mb-3">
         <label for="signup-password" class="form-label">Contraseña</label>
-        <input
-          type="password"
-          class="form-control"
-          id="signup-password"
-          placeholder="Tu contraseña"
-          required
-        />
+        <input type="password" class="form-control" id="signup-password" placeholder="Tu contraseña" required />
       </div>
       <button type="submit" class="btn btn-success w-100">Registrarse</button>
     </form>
@@ -153,6 +126,35 @@
     // Verificar sesión al cargar la página
     document.addEventListener('DOMContentLoaded', checkSession);
 
+    // Función para conectar el perfil con el usuario autenticado:
+    async function syncProfile() {
+      const { data: { user }, error } = await supabaseClient.auth.getUser();
+      if (error || !user) {
+        console.error("No hay usuario autenticado:", error);
+        return;
+      }
+      const userId = user.id;
+      // Intenta obtener el perfil del usuario
+      let { data: profile, error: profileError } = await supabaseClient
+        .from('profiles')
+        .select('*')
+        .eq('id', userId)
+        .single();
+      // Si no existe, crearlo
+      if (profileError || !profile) {
+        const { error: insertError } = await supabaseClient
+          .from('profiles')
+          .insert([{ id: userId, username: user.email, full_name: '', bio: '' }]);
+        if (insertError) {
+          console.error("Error al crear perfil:", insertError);
+        } else {
+          console.log("Perfil creado exitosamente.");
+        }
+      } else {
+        console.log("Perfil sincronizado:", profile);
+      }
+    }
+
     // Manejar Submit de Iniciar Sesión
     loginForm.addEventListener('submit', async (e) => {
       e.preventDefault();
@@ -168,6 +170,8 @@
         
         alert('Has iniciado sesión correctamente');
         console.log('Session:', data.session);
+        // Sincroniza o crea el perfil para el usuario autenticado
+        await syncProfile();
         // Redirige a la página de perfil
         window.location.href = 'profile.html';
       } catch (error) {
@@ -191,8 +195,10 @@
 
         alert('Cuenta creada con éxito. Revisa tu email si requieres confirmación.');
         console.log('User:', data.user);
-        // Redirige a la página de perfil
-        window.location.href = 'index.html';
+        // Sincroniza o crea el perfil para el usuario autenticado
+        await syncProfile();
+        // Redirige a la página de perfil (o index, según tu flujo)
+        window.location.href = 'chat.html';
       } catch (error) {
         alert('Error al registrarse: ' + error.message);
         console.error(error);
@@ -206,7 +212,6 @@
         alert('Error al cerrar sesión: ' + error.message);
       } else {
         alert('Has cerrado sesión correctamente');
-        // Redirige a la página de login
         window.location.href = 'login.html';
       }
     });

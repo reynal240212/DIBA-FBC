@@ -90,6 +90,10 @@
     const messageInput = document.getElementById("message-input");
     const sendButton = document.getElementById("send-button");
     const chatTitle = document.getElementById("chat-title");
+    const toggleLink = document.getElementById('toggle-link');
+    const formTitle = document.getElementById('form-title');
+    const logoutContainer = document.getElementById('logout-container');
+    const logoutBtn = document.getElementById('logout-btn');
 
     // Obtener el usuario logueado
     async function getCurrentUser() {
@@ -191,6 +195,17 @@
 
     // Cargar usuario y lista de contactos al iniciar
     getCurrentUser();
+// Manejar el clic en el botón de Cerrar Sesión
+logoutBtn.addEventListener('click', async () => {
+      const { error } = await supabaseClient.auth.signOut();
+      if (error) {
+        alert('Error al cerrar sesión: ' + error.message);
+      } else {
+        alert('Has cerrado sesión correctamente');
+        // Redirige a la página de login
+        window.location.href = 'login.html';
+      }
+    });
 </script>
 
 </body>
