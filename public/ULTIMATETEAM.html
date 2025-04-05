@@ -7,12 +7,12 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
     body {
-      background-color: #e9eff5;
-      font-family: 'Segoe UI', sans-serif;
+      background-color: #0f172a;
+      font-family: 'Arial', sans-serif;
+      color: white;
     }
     header, footer {
       background-color: #1e3a8a;
-      color: white;
       text-align: center;
       padding: 1rem;
     }
@@ -25,29 +25,29 @@
       justify-content: center;
       gap: 1rem;
     }
-    .carta-jugador, .carta-tecnico {
-      background: white;
+    .carta-jugador {
+      background: #1f2937;
       border-radius: 10px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-      width: 160px;
+      box-shadow: 0 4px 8px rgba(255,255,255,0.1);
+      width: 180px;
       text-align: center;
-      cursor: move;
+      cursor: grab;
+      padding: 1rem;
     }
-    .carta-jugador img, .carta-tecnico img {
+    .carta-jugador img {
       width: 100%;
-      height: 150px;
-      object-fit: cover;
-      border-bottom: 1px solid #ccc;
-    }
-    .info-jugador {
-      padding: 0.5rem;
+      border-radius: 10px;
     }
     .campo-futbol {
       background: url('https://upload.wikimedia.org/wikipedia/commons/6/63/Soccer_Field_Transparant.svg') no-repeat center;
       background-size: contain;
       min-height: 500px;
-      border: 2px dashed #1e3a8a;
+      border: 2px dashed white;
       margin-bottom: 2rem;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
     }
   </style>
 </head>
@@ -60,23 +60,17 @@
   <main class="container">
     <section class="zona">
       <h2 class="text-center">Campo de Juego</h2>
-      <div id="campo" class="campo-futbol d-flex flex-wrap justify-content-center align-items-center p-3" ondrop="drop(event)" ondragover="allowDrop(event)">
-        <!-- Jugadores se soltarán aquí -->
-      </div>
+      <div id="campo" class="campo-futbol" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
     </section>
 
     <section class="zona">
       <h2 class="text-center">Titulares</h2>
       <div class="alineacion">
-        ${Array.from({ length: 20 }).map((_, i) => `
+        ${Array.from({ length: 11 }).map((_, i) => `
         <div class="carta-jugador" id="jugador${i + 1}" draggable="true" ondragstart="drag(event)">
-          <img src="https://via.placeholder.com/160x150?text=Jugador+${i + 1}" alt="Jugador ${i + 1}">
-          <div class="info-jugador">
-            <h4>Jugador ${i + 1}</h4>
-            <p>Posición: ${["Portero", "Defensa", "Medio", "Delantero"][i % 4]}</p>
-            <p>Velocidad: ${70 + (i % 30)}</p>
-            <p>Físico: ${60 + (i % 40)}</p>
-          </div>
+          <img src="https://via.placeholder.com/180x180?text=Jugador+${i + 1}" alt="Jugador ${i + 1}">
+          <h4>Jugador ${i + 1}</h4>
+          <p>Posición: ${["Portero", "Defensa", "Mediocampo", "Delantero"][i % 4]}</p>
         </div>`).join('')}
       </div>
     </section>
@@ -84,34 +78,18 @@
     <section class="zona">
       <h2 class="text-center">Suplentes</h2>
       <div class="alineacion">
-        ${Array.from({ length: 30 }).map((_, i) => `
-        <div class="carta-jugador" id="jugador${i + 21}" draggable="true" ondragstart="drag(event)">
-          <img src="https://via.placeholder.com/160x150?text=Jugador+${i + 21}" alt="Jugador ${i + 21}">
-          <div class="info-jugador">
-            <h4>Jugador ${i + 21}</h4>
-            <p>Posición: ${["Portero", "Defensa", "Medio", "Delantero"][i % 4]}</p>
-            <p>Velocidad: ${60 + (i % 30)}</p>
-            <p>Físico: ${55 + (i % 35)}</p>
-          </div>
+        ${Array.from({ length: 10 }).map((_, i) => `
+        <div class="carta-jugador" id="jugador${i + 12}" draggable="true" ondragstart="drag(event)">
+          <img src="https://via.placeholder.com/180x180?text=Jugador+${i + 12}" alt="Jugador ${i + 12}">
+          <h4>Jugador ${i + 12}</h4>
+          <p>Posición: ${["Portero", "Defensa", "Mediocampo", "Delantero"][i % 4]}</p>
         </div>`).join('')}
-      </div>
-    </section>
-
-    <section class="zona text-center">
-      <h2>Director Técnico</h2>
-      <div class="carta-tecnico mx-auto">
-        <img src="https://via.placeholder.com/160x150?text=DT+Reinaldo" alt="DT">
-        <div class="info-jugador">
-          <h4>Reinaldo Coach</h4>
-          <p>Estrategia: 90</p>
-          <p>Disciplina: 95</p>
-        </div>
       </div>
     </section>
   </main>
 
   <footer>
-    <p>© 2025 DIBA FBC - Powered by el mejor DT del barrio</p>
+    <p>© 2025 DIBA FBC - Creado por el DT más táctico</p>
   </footer>
 
   <script>
