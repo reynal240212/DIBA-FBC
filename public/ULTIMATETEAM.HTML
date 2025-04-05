@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ultimate Team - DIBA FBC</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<style>
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #e9eff5;
+    color: #2c3e50;
+  }
+  
+  header {
+    background-color: #1e3a8a;
+    color: white;
+    padding: 1.5rem;
+    text-align: center;
+  }
+  
+  footer {
+    background-color: #1e3a8a;
+    color: white;
+    padding: 1rem;
+    text-align: center;
+    margin-top: 2rem;
+  }
+  
+  #plantilla {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: auto;
+  }
+  
+  .zona {
+    margin-bottom: 3rem;
+  }
+  
+  .zona h2 {
+    margin-bottom: 1rem;
+    border-bottom: 2px solid #1e3a8a;
+    padding-bottom: 0.5rem;
+  }
+  
+  .alineacion {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
+  }
+  
+  .carta-jugador, .carta-tecnico {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    width: 160px;
+    text-align: center;
+    overflow: hidden;
+    transition: transform 0.2s;
+  }
+  
+  .carta-jugador:hover, .carta-tecnico:hover {
+    transform: scale(1.05);
+  }
+  
+  .carta-jugador img, .carta-tecnico img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .info-jugador {
+    padding: 0.5rem;
+  }
+  
+  .info-jugador h4 {
+    margin: 0.3rem 0;
+    font-size: 1.1rem;
+    color: #1e3a8a;
+  }
+</style>  
+<body>
+
+  <header>
+    <h1>Ultimate Team - DIBA FBC</h1>
+  </header>
+
+  <main id="plantilla">
+    <!-- Titulares -->
+    <section class="zona titulares">
+      <h2>Titulares</h2>
+      <div class="alineacion">
+        <!-- 20 jugadores titulares -->
+        <!-- Puedes reemplazar nombres e imágenes -->
+        <!-- Generados con JS también en versiones futuras -->
+        <!-- Aquí van del 1 al 20 -->
+        <!-- Copiamos un jugador base 20 veces -->
+        <!-- Para ahorrar espacio, te muestro uno y los replicamos abajo -->
+        <!-- Jugador base -->
+        <!-- Aquí empieza -->
+        <!-- Generado en bucle con diferentes nombres luego -->
+        <!-- Sección cortada para no ser kilométrica... sigue abajo -->
+        ${Array.from({ length: 20 }).map((_, i) => `
+        <div class="carta-jugador">
+          <img src="https://via.placeholder.com/160x150?text=Jugador+${i + 1}" alt="Jugador ${i + 1}">
+          <div class="info-jugador">
+            <h4>Jugador ${i + 1}</h4>
+            <p>Posición: ${["Portero", "Defensa", "Medio", "Delantero"][i % 4]}</p>
+            <p>Velocidad: ${70 + (i % 30)}</p>
+            <p>Físico: ${60 + (i % 40)}</p>
+          </div>
+        </div>`).join('')}
+      </div>
+    </section>
+
+    <!-- Suplentes -->
+    <section class="zona suplentes">
+      <h2>Suplentes</h2>
+      <div class="alineacion">
+        ${Array.from({ length: 30 }).map((_, i) => `
+        <div class="carta-jugador">
+          <img src="https://via.placeholder.com/160x150?text=Jugador+${i + 21}" alt="Jugador ${i + 21}">
+          <div class="info-jugador">
+            <h4>Jugador ${i + 21}</h4>
+            <p>Posición: ${["Portero", "Defensa", "Medio", "Delantero"][i % 4]}</p>
+            <p>Velocidad: ${60 + (i % 30)}</p>
+            <p>Físico: ${55 + (i % 35)}</p>
+          </div>
+        </div>`).join('')}
+      </div>
+    </section>
+
+    <!-- Técnico -->
+    <section class="zona tecnico">
+      <h2>Director Técnico</h2>
+      <div class="carta-tecnico">
+        <img src="https://via.placeholder.com/160x150?text=DT+Reinaldo" alt="DT">
+        <div class="info-jugador">
+          <h4>Reinaldo Coach</h4>
+          <p>Estrategia: 90</p>
+          <p>Disciplina: 95</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>© 2025 DIBA FBC - Powered by el mejor DT del barrio</p>
+  </footer>
+
+</body>
+</html>
