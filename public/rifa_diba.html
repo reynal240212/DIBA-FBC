@@ -170,19 +170,27 @@
       let boletaDiv = document.createElement('div');
       boletaDiv.className = 'boleta';
       boletaDiv.innerHTML = `
-        <img src="images/ESCUDO.png" alt="Logo DIBA FBC" class="logo">
-        <div class="titulo">RESPONSABLE DIBA FBC</div>
-        <div class="info">
-          Juega el sábado <strong>19/04/2025</strong><br>
-          Lotería El Sinuano – Noche<br>
-          Con las dos últimas cifras - 10:00 PM<br>
-          Sorteo de 2 Perfumes para Caballeros<br>
-          Valor: $3000 cada número
-        </div>
-        <div class="numeros">
-          ${generarNumeros()}
-        </div>
-        <div class="footer">Boleta #${numBoleta}</div>
+       <div class="boleta shadow p-3 mb-3 bg-white rounded">
+  <div class="d-flex justify-content-between align-items-center">
+    <img src="images/ESCUDO.png" alt="Logo DIBA FBC" class="logo" style="max-width:60px;">
+    <h2 class="titulo text-uppercase text-primary fw-bold mb-0">Responsable DIBA FBC</h2>
+  </div>
+  <div class="info mt-3 text-center">
+    <p>Juega el sábado <strong>19/04/2025</strong></p>
+    <p>Lotería El Sinuano – Noche</p>
+    <p>Con las dos últimas cifras – 10:00 PM</p>
+    <p>Sorteo de 2 Perfumes para Caballeros</p>
+    <p class="fs-5 text-warning mt-2">Valor: $3000 cada número</p>
+  </div>
+  <div class="numeros d-flex justify-content-around mt-3">
+    <!-- La función generarNumeros() debe retornar el contenido HTML de los 6 números -->
+    ${generarNumeros()}
+  </div>
+  <div class="footer text-center mt-3">
+    <small class="text-muted">Boleta #${numBoleta}</small>
+  </div>
+</div>
+
       `;
       pageDiv.appendChild(boletaDiv);
     }
