@@ -2,22 +2,14 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <title>Rifa DIBA FBC</title>
+  <title>Boletas Rifa DIBA FBC</title>
   <style>
     body {
       margin: 0;
       padding: 0;
       font-family: Arial, sans-serif;
-      background: #f4f4f4;
+      background: #f9f9f9;
       color: #001f63;
-    }
-    header {
-      background: #001f63;
-      color: #FFD700;
-      text-align: center;
-      padding: 1rem;
-      font-size: 1.2rem;
-      font-weight: bold;
     }
     .btn-container {
       text-align: center;
@@ -29,132 +21,118 @@
       padding: 0.5rem 1rem;
       border: none;
       font-weight: bold;
+      font-size: 1rem;
       cursor: pointer;
       border-radius: 4px;
-      font-size: 1rem;
     }
     .page {
       display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 1rem;
+      flex-direction: column;
+      align-items: center;
       page-break-after: always;
+      padding: 1rem 0;
     }
     .boleta {
-      width: 380px;
-      height: 200px;
+      width: 90%;
+      height: 250px;
       background: #FFD700;
       border: 2px solid #001f63;
       border-radius: 8px;
-      padding: 0.5rem;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+      padding: 1rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
       position: relative;
     }
     .titulo-boleta {
       text-align: center;
       font-weight: bold;
-      margin-bottom: 0.2rem;
-      color: #001f63;
-    }
-    .info-loteria {
-      font-size: 0.8rem;
-      text-align: center;
-      margin-bottom: 0.5rem;
+      font-size: 1.3rem;
+      margin-bottom: 0.4rem;
     }
     .logo {
-      width: 50px;
+      width: 60px;
       position: absolute;
-      top: 8px;
-      right: 8px;
+      top: 10px;
+      right: 10px;
+    }
+    .info {
+      text-align: center;
+      font-size: 0.9rem;
+      margin-bottom: 0.5rem;
     }
     .numeros {
       display: flex;
-      justify-content: space-around;
-      margin-top: 0.3rem;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 0.5rem;
     }
     .numero {
       background: #fff;
       color: #001f63;
-      width: 40px;
-      height: 40px;
+      width: 50px;
+      height: 50px;
       border: 2px solid #001f63;
-      border-radius: 4px;
+      border-radius: 6px;
       display: flex;
       justify-content: center;
       align-items: center;
       font-weight: bold;
-      font-size: 1.2rem;
+      font-size: 1.3rem;
     }
-    .desc {
+    .footer {
       position: absolute;
-      bottom: 5px;
-      left: 0.5rem;
-      font-size: 0.9rem;
+      bottom: 10px;
+      left: 1rem;
       font-weight: bold;
-      color: #001f63;
+      font-size: 0.9rem;
     }
   </style>
 </head>
 <body>
-  <header>
-    RIFA DIBA FBC - Sábado 19 de Abril 2025 <br />
-    Sorteo con la Lotería El Sinuano - Últimas 2 cifras - 10:00 PM<br />
-    Valor: $3000 cada número - Sorteo de 2 Perfumes para Caballeros
-  </header>
 
   <div class="btn-container">
     <button onclick="generarPDF()">Descargar PDF</button>
   </div>
 
-  <div id="contenedor-boletas"></div>
-
-  <script>
-    const cantBoletas = 40;
-    const porPagina = 5;
-    const contenedor = document.getElementById('contenedor-boletas');
-
-    for(let p = 0; p < Math.ceil(cantBoletas / porPagina); p++) {
-      const pageDiv = document.createElement('div');
-      pageDiv.className = 'page';
-
-      for(let i = 0; i < porPagina; i++) {
-        const idx = p * porPagina + i + 1;
-        if (idx > cantBoletas) break;
-
-        let numerosHTML = '';
-        for (let j = 0; j < 6; j++) {
-          const num = Math.floor(Math.random() * 100);
-          numerosHTML += '<div class="numero">' + num.toString().padStart(2, '0') + '</div>';
-        }
-
-        const boleta = document.createElement('div');
-        boleta.className = 'boleta';
-        boleta.innerHTML = `
-          <img src="images/ESCUDO.png" class="logo" alt="Logo DIBA FBC"/>
-          <div class="titulo-boleta">RESPONSABLE: DIBA FBC</div>
-          <div class="info-loteria">
-            Juega el sábado <b>19/04/2025</b><br/>
-            Lotería El Sinuano (últimas 2 cifras)
-          </div>
-          <div class="numeros">${numerosHTML}</div>
-          <div class="desc">
-            Sorteo de 2 Perfumes<br/><b>Boleta #${idx}</b>
-          </div>
-        `;
-        pageDiv.appendChild(boleta);
-      }
-      contenedor.appendChild(pageDiv);
-    }
-  </script>
+  <div id="contenedor"></div>
 
   <!-- Librerías -->
   <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+
   <script>
+    const total = 40;
+    const contenedor = document.getElementById('contenedor');
+
+    for (let i = 1; i <= total; i++) {
+      const page = document.createElement('div');
+      page.className = 'page';
+
+      let numeros = '';
+      for (let j = 0; j < 6; j++) {
+        const n = Math.floor(Math.random() * 100);
+        numeros += `<div class="numero">${n.toString().padStart(2, '0')}</div>`;
+      }
+
+      page.innerHTML = `
+        <div class="boleta">
+          <img src="images/ESCUDO.png" class="logo" />
+          <div class="titulo-boleta">RESPONSABLE DIBA FBC</div>
+          <div class="info">
+            Juega el sábado 19 de abril de 2025<br>
+            Lotería El Sinuano - Noche - Últimas 2 cifras - 10:00 PM<br>
+            Sorteo de 2 Perfumes para Caballeros<br>
+            Valor: $3000 cada número
+          </div>
+          <div class="numeros">${numeros}</div>
+          <div class="footer">Boleta #${i}</div>
+        </div>
+      `;
+      contenedor.appendChild(page);
+    }
+
     async function generarPDF() {
       const { jsPDF } = window.jspdf;
-      const pdf = new jsPDF({ orientation: 'landscape', unit: 'pt', format: 'a4' });
-
+      const pdf = new jsPDF({ orientation: 'portrait', unit: 'pt', format: 'a4' });
       const pages = document.querySelectorAll('.page');
 
       for (let i = 0; i < pages.length; i++) {
@@ -163,12 +141,14 @@
         const imgProps = pdf.getImageProperties(imgData);
         const pdfWidth = pdf.internal.pageSize.getWidth();
         const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
-        if (i > 0) pdf.addPage();
+
+        if (i !== 0) pdf.addPage();
         pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
       }
 
-      pdf.save('Rifa_DIBA_FBC.pdf');
+      pdf.save('Boletas_Rifa_DIBA.pdf');
     }
   </script>
+
 </body>
 </html>
