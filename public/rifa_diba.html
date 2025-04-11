@@ -3,39 +3,52 @@
 <head>
   <meta charset="UTF-8" />
   <title>Rifa DIBA FBC</title>
-  <!-- Estilos -->
   <style>
     body {
       margin: 0;
       padding: 0;
       font-family: Arial, sans-serif;
       background: #f4f4f4;
-      color: #001f63; /* Azul de tu web */
+      color: #001f63;
     }
     header {
-      background: #001f63; /* Azul oscuro */
-      color: #FFD700;       /* Amarillo vibrante */
+      background: #001f63;
+      color: #FFD700;
       text-align: center;
       padding: 1rem;
       font-size: 1.2rem;
       font-weight: bold;
     }
-    .container {
-      width: 95%;
-      margin: 1rem auto;
+    .btn-container {
+      text-align: center;
+      margin: 1rem 0;
+    }
+    button {
+      background: #001f63;
+      color: #FFD700;
+      padding: 0.5rem 1rem;
+      border: none;
+      font-weight: bold;
+      cursor: pointer;
+      border-radius: 4px;
+      font-size: 1rem;
+    }
+    .page {
       display: flex;
       flex-wrap: wrap;
+      justify-content: center;
       gap: 1rem;
+      page-break-after: always;
     }
     .boleta {
-      width: 280px;
-      height: 150px;
-      background: #FFD700; /* Fondo amarillo */
+      width: 380px;
+      height: 200px;
+      background: #FFD700;
       border: 2px solid #001f63;
       border-radius: 8px;
-      position: relative;
       padding: 0.5rem;
       box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+      position: relative;
     }
     .titulo-boleta {
       text-align: center;
@@ -62,117 +75,99 @@
     .numero {
       background: #fff;
       color: #001f63;
-      width: 30px;
-      height: 30px;
+      width: 40px;
+      height: 40px;
       border: 2px solid #001f63;
       border-radius: 4px;
       display: flex;
       justify-content: center;
       align-items: center;
       font-weight: bold;
+      font-size: 1.2rem;
     }
     .desc {
       position: absolute;
       bottom: 5px;
       left: 0.5rem;
-      font-size: 0.8rem;
+      font-size: 0.9rem;
       font-weight: bold;
-      color: #001f63;
-    }
-    .btn-container {
-      text-align: center;
-      margin-bottom: 1rem;
-    }
-    button {
-      background: #001f63;
-      color: #FFD700;
-      padding: 0.5rem 1rem;
-      border: none;
-      font-weight: bold;
-      cursor: pointer;
-      border-radius: 4px;
-      font-size: 1rem;
-    }
-    button:hover {
-      background: #FFD700;
       color: #001f63;
     }
   </style>
 </head>
 <body>
   <header>
-    <div>RIFA DIBA FBC</div>
-    <div>Sábado 19 de Abril 2025 - 10:00 PM</div>
-    <div>Valor: $3000 c/boleta - Lotería El Sinuano (2 últimas cifras)</div>
+    RIFA DIBA FBC - Sábado 19 de Abril 2025 <br />
+    Sorteo con la Lotería El Sinuano - Últimas 2 cifras - 10:00 PM<br />
+    Valor: $3000 cada número - Sorteo de 2 Perfumes para Caballeros
   </header>
 
-  <!-- Botón para generar PDF -->
   <div class="btn-container">
     <button onclick="generarPDF()">Descargar PDF</button>
   </div>
 
-  <div class="container" id="contenedor-boletas">
-    <!-- Generamos 40 boletas con 6 números cada una -->
-    <!-- Ejemplo de boleta con números aleatorios -->
-    <!-- (Podrías generar estos 40 divs dinámicamente con JavaScript) -->
-    <script>
-      const cantBoletas = 40;
-      const contenedor = document.getElementById('contenedor-boletas');
+  <div id="contenedor-boletas"></div>
 
-      for(let i = 1; i <= cantBoletas; i++){
-        // Generar 6 números aleatorios de 0-99
+  <script>
+    const cantBoletas = 40;
+    const porPagina = 5;
+    const contenedor = document.getElementById('contenedor-boletas');
+
+    for(let p = 0; p < Math.ceil(cantBoletas / porPagina); p++) {
+      const pageDiv = document.createElement('div');
+      pageDiv.className = 'page';
+
+      for(let i = 0; i < porPagina; i++) {
+        const idx = p * porPagina + i + 1;
+        if (idx > cantBoletas) break;
+
         let numerosHTML = '';
-        for (let j = 0; j < 6; j++){
+        for (let j = 0; j < 6; j++) {
           const num = Math.floor(Math.random() * 100);
-          numerosHTML += '<div class="numero">'+ num.toString().padStart(2,'0') +'</div>';
+          numerosHTML += '<div class="numero">' + num.toString().padStart(2, '0') + '</div>';
         }
 
-        // Crear el div de la boleta
         const boleta = document.createElement('div');
         boleta.className = 'boleta';
         boleta.innerHTML = `
           <img src="images/ESCUDO.png" class="logo" alt="Logo DIBA FBC"/>
           <div class="titulo-boleta">RESPONSABLE: DIBA FBC</div>
           <div class="info-loteria">
-            Juega el día <b>19/04/2025</b> <br/>
-            Lotería El Sinuano (Dos últimas cifras)
+            Juega el sábado <b>19/04/2025</b><br/>
+            Lotería El Sinuano (últimas 2 cifras)
           </div>
-          <div class="numeros">
-            ${numerosHTML}
-          </div>
+          <div class="numeros">${numerosHTML}</div>
           <div class="desc">
-            Sorteo de 2 Perfumes - <b>Boleta #${i}</b>
+            Sorteo de 2 Perfumes<br/><b>Boleta #${idx}</b>
           </div>
         `;
-        contenedor.appendChild(boleta);
+        pageDiv.appendChild(boleta);
       }
-    </script>
-  </div>
+      contenedor.appendChild(pageDiv);
+    }
+  </script>
 
-  <!-- Librerías para generar PDF (html2canvas + jsPDF) -->
+  <!-- Librerías -->
   <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
   <script>
     async function generarPDF() {
       const { jsPDF } = window.jspdf;
-      const pdf = new jsPDF('p', 'pt', 'a4');
+      const pdf = new jsPDF({ orientation: 'landscape', unit: 'pt', format: 'a4' });
 
-      // Escalado para acomodar la imagen
-      const scale = 2; 
+      const pages = document.querySelectorAll('.page');
 
-      // Seleccionar el contenedor de boletas
-      const input = document.getElementById('contenedor-boletas');
+      for (let i = 0; i < pages.length; i++) {
+        const canvas = await html2canvas(pages[i], { scale: 2 });
+        const imgData = canvas.toDataURL('image/png');
+        const imgProps = pdf.getImageProperties(imgData);
+        const pdfWidth = pdf.internal.pageSize.getWidth();
+        const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+        if (i > 0) pdf.addPage();
+        pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+      }
 
-      // Convertir a canvas con html2canvas
-      const canvas = await html2canvas(input, { scale: scale });
-      const imgData = canvas.toDataURL('image/png');
-
-      const imgProps = pdf.getImageProperties(imgData);
-      const pdfWidth = pdf.internal.pageSize.getWidth();
-      const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
-
-      pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-      pdf.save('RifaDibaFBC.pdf');
+      pdf.save('Rifa_DIBA_FBC.pdf');
     }
   </script>
 </body>
