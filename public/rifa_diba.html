@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Rifa DIBA FBC</title>
+  <!-- Estilos -->
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      color: #001f63; /* Azul de tu web */
+    }
+    header {
+      background: #001f63; /* Azul oscuro */
+      color: #FFD700;       /* Amarillo vibrante */
+      text-align: center;
+      padding: 1rem;
+      font-size: 1.2rem;
+      font-weight: bold;
+    }
+    .container {
+      width: 95%;
+      margin: 1rem auto;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .boleta {
+      width: 280px;
+      height: 150px;
+      background: #FFD700; /* Fondo amarillo */
+      border: 2px solid #001f63;
+      border-radius: 8px;
+      position: relative;
+      padding: 0.5rem;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    }
+    .titulo-boleta {
+      text-align: center;
+      font-weight: bold;
+      margin-bottom: 0.2rem;
+      color: #001f63;
+    }
+    .info-loteria {
+      font-size: 0.8rem;
+      text-align: center;
+      margin-bottom: 0.5rem;
+    }
+    .logo {
+      width: 50px;
+      position: absolute;
+      top: 8px;
+      right: 8px;
+    }
+    .numeros {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 0.3rem;
+    }
+    .numero {
+      background: #fff;
+      color: #001f63;
+      width: 30px;
+      height: 30px;
+      border: 2px solid #001f63;
+      border-radius: 4px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-weight: bold;
+    }
+    .desc {
+      position: absolute;
+      bottom: 5px;
+      left: 0.5rem;
+      font-size: 0.8rem;
+      font-weight: bold;
+      color: #001f63;
+    }
+    .btn-container {
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+    button {
+      background: #001f63;
+      color: #FFD700;
+      padding: 0.5rem 1rem;
+      border: none;
+      font-weight: bold;
+      cursor: pointer;
+      border-radius: 4px;
+      font-size: 1rem;
+    }
+    button:hover {
+      background: #FFD700;
+      color: #001f63;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div>RIFA DIBA FBC</div>
+    <div>Sábado 19 de Abril 2025 - 10:00 PM</div>
+    <div>Valor: $3000 c/boleta - Lotería El Sinuano (2 últimas cifras)</div>
+  </header>
+
+  <!-- Botón para generar PDF -->
+  <div class="btn-container">
+    <button onclick="generarPDF()">Descargar PDF</button>
+  </div>
+
+  <div class="container" id="contenedor-boletas">
+    <!-- Generamos 40 boletas con 6 números cada una -->
+    <!-- Ejemplo de boleta con números aleatorios -->
+    <!-- (Podrías generar estos 40 divs dinámicamente con JavaScript) -->
+    <script>
+      const cantBoletas = 40;
+      const contenedor = document.getElementById('contenedor-boletas');
+
+      for(let i = 1; i <= cantBoletas; i++){
+        // Generar 6 números aleatorios de 0-99
+        let numerosHTML = '';
+        for (let j = 0; j < 6; j++){
+          const num = Math.floor(Math.random() * 100);
+          numerosHTML += '<div class="numero">'+ num.toString().padStart(2,'0') +'</div>';
+        }
+
+        // Crear el div de la boleta
+        const boleta = document.createElement('div');
+        boleta.className = 'boleta';
+        boleta.innerHTML = `
+          <img src="images/ESCUDO.png" class="logo" alt="Logo DIBA FBC"/>
+          <div class="titulo-boleta">RESPONSABLE: DIBA FBC</div>
+          <div class="info-loteria">
+            Juega el día <b>19/04/2025</b> <br/>
+            Lotería El Sinuano (Dos últimas cifras)
+          </div>
+          <div class="numeros">
+            ${numerosHTML}
+          </div>
+          <div class="desc">
+            Sorteo de 2 Perfumes - <b>Boleta #${i}</b>
+          </div>
+        `;
+        contenedor.appendChild(boleta);
+      }
+    </script>
+  </div>
+
+  <!-- Librerías para generar PDF (html2canvas + jsPDF) -->
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+  <script>
+    async function generarPDF() {
+      const { jsPDF } = window.jspdf;
+      const pdf = new jsPDF('p', 'pt', 'a4');
+
+      // Escalado para acomodar la imagen
+      const scale = 2; 
+
+      // Seleccionar el contenedor de boletas
+      const input = document.getElementById('contenedor-boletas');
+
+      // Convertir a canvas con html2canvas
+      const canvas = await html2canvas(input, { scale: scale });
+      const imgData = canvas.toDataURL('image/png');
+
+      const imgProps = pdf.getImageProperties(imgData);
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+
+      pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+      pdf.save('RifaDibaFBC.pdf');
+    }
+  </script>
+</body>
+</html>
