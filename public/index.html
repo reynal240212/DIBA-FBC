@@ -2,235 +2,249 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <title>Generador de Boletas</title>
+  <title>Inicio - DIBA FBC | Historia, Servicios y Más</title>
+  <link rel="icon" href="images/ESCUDO.ico" sizes="32x32">
+  <meta name="description" content="Descubre la historia, los servicios y el equipo de DIBA FBC. Vive la pasión deportiva y conoce a nuestros patrocinadores, fundación y cuerpo técnico."/>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Open Graph meta tags -->
+  <meta property="og:title" content="DIBA FBC - Sitio oficial" />
+  <meta property="og:description" content="Descubre la historia y los logros de DIBA FBC. Conoce nuestros servicios, equipo y patrocinadores." />
+  <meta property="og:image" content="https://diba-fbc.vercel.app/images/ESCUDO.png" />
+  <meta property="og:url" content="https://diba-fbc.vercel.app" />
+  <meta property="og:type" content="website" />
+
+  <!-- Twitter Card meta tags -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="DIBA FBC - Sitio oficial" />
+  <meta name="twitter:description" content="Descubre la historia y servicios de DIBA FBC, la pasión deportiva en Barranquilla." />
+  <meta name="twitter:image" content="https://diba-fbc.vercel.app/images/preview.jpg" />
+  <meta name="theme-color" content="#001b72" />
+ 
+  <!-- Bootstrap 5.3.2 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer"/>
+  <!-- Animate.css -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+  <!-- AOS (opcional) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css"/>
+  <!-- Estilos globales -->
+  <link rel="stylesheet" href="styles/styles.css" />
+  <link rel="stylesheet" href="styles/background-animation.css" />
+  <!--PWR-->
+  <link rel="manifest" href="manifest.json" />
   <style>
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: Arial, sans-serif;
-      background: #f9f9f9;
-      color: #001f63;
-      font-size: 16px;
-    }
-    .btn-container {
-      text-align: center;
-      margin: 1rem 0;
-    }
-    button {
-      background: #001f63;
-      color: #FFD700;
-      padding: 0.7rem 1.2rem;
-      border: none;
-      font-weight: bold;
-      font-size: 1rem;
-      cursor: pointer;
-      border-radius: 4px;
-      margin: 8px;
-      transition: background 0.3s;
-    }
-    button:hover {
-      background: #001751;
-    }
-    input[type="number"] {
-      width: 70px;
-      padding: 6px;
-      font-size: 1rem;
-      text-align: center;
-      border: 1px solid #001f63;
-      border-radius: 4px;
-    }
-    /* Se simula una hoja tamaño carta con fondo blanco y sombra */
-    .page {
-      width: 210mm;
-      margin: 10mm auto;
-      padding: 10mm;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      page-break-after: always;
-      background: white;
-      box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-    }
-    /* Ajuste de boleta: tamaño, alto reducido y buen tamaño de fuente */
-    .boleta {
-      width: 95%;
-      min-height: 240px;
-      background: #FFD700;
-      border: 2px solid #001f63;
-      border-radius: 10px;
-      padding: 1rem;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    /* Estilos para las tarjetas y secciones */
+    .custom-card {
+      margin-bottom: 1.5rem;
       position: relative;
-      margin: 10px 0;
+      overflow: hidden;
     }
-    .titulo-boleta {
-      text-align: center;
-      font-weight: bold;
-      font-size: 1.8rem;
-      margin-bottom: 0.5rem;
-    }
-    .logo {
-      width: 60px;
-      position: absolute;
-      top: 10px;
-      right: 10px;
-    }
-    .info {
-      text-align: center;
-      font-size: 1.1rem;
-      margin-bottom: 0.7rem;
-      line-height: 1.3;
-    }
-    .numeros {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      margin-top: 0.7rem;
-    }
-    .fila-numero-nombre {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-    }
-    .numero {
-      background: #fff;
-      color: #001f63;
-      width: 60px;
-      height: 60px;
-      border: 2px solid #001f63;
-      border-radius: 6px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-weight: bold;
-      font-size: 1.5rem;
-    }
-    .nombre-numero {
-      flex: 1;
-      font-size: 1rem;
-      padding: 8px;
-      border: 1px solid #001f63;
-      border-radius: 6px;
-    }
-    .footer {
-      position: absolute;
-      bottom: 10px;
-      left: 1rem;
-      font-weight: bold;
-      font-size: 1rem;
+    .background-animation {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
     }
   </style>
 </head>
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/service-worker.js')
+      .then(reg => console.log("✅ Service Worker registrado"))
+      .catch(err => console.error("❌ Error al registrar el SW", err));
+  }
+</script>
+
 <body>
-  <div class="btn-container">
-    <label for="cantidad">Cantidad de boletas:</label>
-    <input type="number" id="cantidad" min="1" value="40" />
-    <button onclick="generarBoletas()">Generar Boletas</button>
-    <button onclick="descargarZip()">Descargar ZIP</button>
+  <!-- Fondo animado -->
+  <div class="background-animation">
+    <div class="cube"></div>
+    <div class="cube"></div>
+    <div class="cube"></div>
+    <div class="cube"></div>
+    <div class="cube"></div>
+    <div class="cube"></div>
+    <div class="cube"></div>
+    <div class="cube"></div>
+    <div class="cube"></div>
+    <div class="cube"></div>
   </div>
-  
-  <div id="contenedor"></div>
 
-  <!-- Librerías necesarias -->
-  <!-- html2canvas para capturar elementos HTML en imagen -->
-  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
-  <!-- JSZip para crear archivos ZIP -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.7.1/jszip.min.js"></script>
+  <!-- Botón Volver Arriba -->
+  <button id="btnBackToTop" title="Volver arriba" aria-label="Volver arriba" class="btn btn-primary rounded-circle">
+    <i class="fas fa-arrow-up"></i>
+  </button>
 
-  <script>
-    const contenedor = document.getElementById('contenedor');
-    const numerosUsadosGlobal = new Set();
-    const MAX_NUMEROS_UNICOS = 100;
-    const NUMEROS_POR_BOLETA = 6;
+  <!-- Contenedor para el Navbar (se cargará desde layout/navbar.html) -->
+  <div id="navbar-container"></div>
 
-    function generarNumerosParaBoleta() {
-      const numerosBoleta = new Set();
-      while (numerosBoleta.size < NUMEROS_POR_BOLETA) {
-        const numero = Math.floor(Math.random() * 100);
-        const numeroFormateado = numero.toString().padStart(2, '0');
-        const sePermitenRepetidos = numerosUsadosGlobal.size >= MAX_NUMEROS_UNICOS;
-        if (sePermitenRepetidos || !numerosUsadosGlobal.has(numeroFormateado)) {
-          numerosBoleta.add(numeroFormateado);
-          numerosUsadosGlobal.add(numeroFormateado);
-        }
-      }
-      return [...numerosBoleta].sort((a, b) => parseInt(a) - parseInt(b));
-    }
+  <!-- HERO SECTION -->
+  <section
+    class="hero animate__animated animate__fadeInDown d-flex align-items-center"
+    style="background: linear-gradient(135deg, #002a40, #001b72), url('images/fondo.jpg') center/cover no-repeat fixed; background-blend-mode: multiply; min-height: 80vh;"
+  >
+    <div class="container hero-content text-center text-white">
+      <h1 class="hero-title display-4 fw-bold">Deportivo Internacional De Barranquilla Atlántico</h1>
+      <p class="hero-subtitle lead">"Fuerza y Lealtad"</p>
+    </div>
+  </section>
 
-    function generarBoletas() {
-      contenedor.innerHTML = "";
-      numerosUsadosGlobal.clear();
+  <!-- Sección Resumen de Historia -->
+  <section id="resumen-historia" class="container my-5">
+    <div class="row align-items-center">
+      <div class="col-md-6 mb-4 mb-md-0">
+        <img src="images/ESCUDO.png" alt="Escudo de DIBA FBC" class="img-fluid rounded shadow" loading="lazy" />
+      </div>
+      <div class="col-md-6">
+        <h2 class="mb-3">Nuestra Historia</h2>
+        <p>
+          Fundado en <strong>2012</strong>, <strong>DIBA FBC</strong> ha forjado una trayectoria llena de éxitos y superación. El club se caracteriza por formar talentos y promover valores como la disciplina, el respeto y el trabajo en equipo.
+        </p>
+        <p>
+          A lo largo de los años, hemos competido en torneos locales, dejando huella en cada temporada y construyendo un legado que trasciende más allá de las canchas.
+        </p>
+        <div class="mt-4">
+          <a href="Historia.html" target="_blank" class="btn btn-warning">
+            <i class="fas fa-external-link-alt me-1"></i> Más Información
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
 
-      // Agrupamos 4 boletas por "page"
-      const total = parseInt(document.getElementById('cantidad').value) || 40;
-      let paginaActual;
-      for (let i = 1; i <= total; i++) {
-        if ((i - 1) % 4 === 0) {
-          paginaActual = document.createElement('div');
-          paginaActual.className = 'page';
-          contenedor.appendChild(paginaActual);
-        }
-        const numeros = generarNumerosParaBoleta();
-        const numerosHTML = numeros.map(n => `
-          <div class="fila-numero-nombre">
-            <div class="numero">${n}</div>
-            <input type="text" class="nombre-numero" placeholder="Nombre del comprador" />
+  <!-- Sección Servicios -->
+  <section id="servicios" class="container my-5 animate__animated animate__fadeInUp">
+    <h2 class="text-center fw-bold mb-4">NUESTROS SERVICIOS</h2>
+    <div class="row row-cols-1 row-cols-md-3 g-4 mt-4">
+      <div class="col">
+        <div class="card shadow h-100">
+          <div class="card-body">
+            <h5 class="card-title">Entrenamiento</h5>
+            <p class="card-text">
+              Potenciamos la técnica y táctica de cada jugador, preparándolos para competir al más alto nivel.
+            </p>
           </div>
-        `).join('');
-
-        const boleta = document.createElement('div');
-        boleta.className = 'boleta';
-        boleta.innerHTML = `
-          <img src="images/ESCUDO.png" class="logo" alt="Logo" />
-          <div>
-            <div class="titulo-boleta">RESPONSABLE DIBA FBC</div>
-            <div class="info">
-              Juega el sábado 19 de abril de 2025<br>
-              Lotería El Sinuano - Noche - Últimas 2 cifras - 10:00 PM<br>
-              Sorteo de 2 Perfumes para Caballeros<br>
-              Valor: $3000 cada número
-            </div>
-            <div class="numeros">${numerosHTML}</div>
-            <div class="footer">Boleta #${i}</div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card shadow h-100">
+          <div class="card-body">
+            <h5 class="card-title">Participación en Torneos</h5>
+            <p class="card-text">
+              Representamos a nuestra comunidad en torneos locales, demostrando competitividad y espíritu deportivo en cada desafío.
+            </p>
           </div>
-        `;
-        paginaActual.appendChild(boleta);
-      }
-    }
+        </div>
+      </div>
+      <div class="col">
+        <div class="card shadow h-100">
+          <div class="card-body">
+            <h5 class="card-title">Desarrollo Integral</h5>
+            <p class="card-text">
+              Fomentamos el desarrollo personal de nuestros jugadores, inculcando valores y liderazgo dentro y fuera del campo.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-    async function descargarZip() {
-      const zip = new JSZip();
-      const boletas = document.querySelectorAll('.boleta');
-      
-      if (boletas.length === 0) {
-        alert("Primero genera las boletas.");
-        return;
-      }
-      
-      // Mostramos un mensaje mientras se procesan las imágenes
-      alert("Generando imágenes y creando el ZIP, puede tardar unos segundos...");
+  <!-- Sección Equipo (Cuerpo Técnico) -->
+  <section id="equipo" class="container my-5 animate__animated animate__fadeInUp">
+    <h2 class="text-center">CUERPO TÉCNICO</h2>
+    <div class="row text-center mt-4">
+      <div class="col-md-4 mb-4">
+        <img src="images/profesor.jpg" class="rounded-circle mb-3" alt="Reinaldo Perez, Director Técnico" loading="lazy" />
+        <h5>Reinaldo Perez</h5>
+        <p>Director Técnico</p>
+      </div>
+      <div class="col-md-4 mb-4">
+        <img src="images/reinaldoNavas.png" class="rounded-circle mb-3" alt="Reinaldo Perez Navas, Técnico" loading="lazy" />
+        <h5>Reinaldo Perez Navas</h5>
+        <p>Técnico</p>
+      </div>
+      <!-- Agrega más miembros si lo deseas -->
+    </div>
+  </section>
 
-      // Procesamos cada boleta y la convertimos en imagen
-      const promises = Array.from(boletas).map(async (boleta, index) => {
-        // Usamos un scale mayor para mayor calidad
-        const canvas = await html2canvas(boleta, { scale: 2 });
-        const imgData = canvas.toDataURL("image/jpeg", 1.0);
-        // La imagen se guarda en el zip, usando un nombre único
-        zip.file(`boleta_${index + 1}.jpg`, imgData.split(',')[1], { base64: true });
-      });
-      
-      // Esperamos a que se procesen todas las imágenes
-      await Promise.all(promises);
-      
-      // Generamos el zip final y lo descargamos
-      zip.generateAsync({ type: "blob" }).then(function(content) {
-        const link = document.createElement("a");
-        link.href = URL.createObjectURL(content);
-        link.download = "boletas.zip";
-        link.click();
-      });
-    }
-  </script>
+  <!-- Sección Fundación -->
+  <section id="fundacion" class="container my-5">
+    <div class="row align-items-center">
+      <div class="col-md-6 mb-4 mb-md-0">
+        <a href="https://instagram.com" target="_blank">
+          <img src="images/unnamed.jpg" alt="funtilemi" class="img-fluid w-100 rounded shadow" loading="lazy" />
+        </a>
+      </div>
+      <div class="col-md-6">
+        <h2 class="mb-4"><i class="fas fa-hand-holding-heart me-2"></i>Fundación Tierra que Emana Leche y Miel</h2>
+        <p>
+          La <strong>Fundación Tierra que Emana Leche y Miel</strong> es una entidad sin ánimo de lucro, comprometida con el desarrollo y bienestar de la comunidad.
+        </p>
+        <p>
+          Fundada el <strong>28 de marzo de 2016</strong>, su sede está en Barranquilla, Atlántico.
+        </p>
+        <div class="mt-4">
+          <a href="https://colombiapymes.com/empresas/fundacion-tierra-que-emana-leche-y-miel-sigla-funtilemi_id_EF8E1398F2821C3F" target="_blank" class="btn btn-warning">
+            <i class="fas fa-external-link-alt me-1"></i> Más Información
+          </a>
+        </div>
+        <div class="mt-4">
+          <a href="https://www.instagram.com/funtilemi/" target="_blank" class="btn btn-warning">
+            <i class="fas fa-external-link-alt me-1"></i> Instagram
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Sección Patrocinadores -->
+  <section id="patrocinadores" class="animate__animated animate__fadeInUp text-center py-5">
+    <div class="container">
+      <h2 class="mb-4">Nuestros Patrocinadores</h2>
+      <div class="d-flex flex-wrap justify-content-center align-items-center gap-5">
+        <!-- Okey Sport -->
+        <div class="patrocinador">
+          <a href="https://okeysport.com/" target="_blank">
+            <img src="https://okeysport.com/cdn/shop/files/Logo_OKEY.svg?v=1721155737&width=100" alt="Logo de Okey Sport" style="width: 150px; height: auto" loading="lazy" />
+          </a>
+          <p>Okey Sport</p>
+        </div>
+        <!-- Chiro Deportes -->
+        <div class="patrocinador">
+          <a href="https://www.facebook.com/chirodeportes/" target="_blank">
+            <img src="https://tse3.mm.bing.net/th?id=OIP.2pbPD48ADuuuNSlSKtgEpwHaHa&pid=Api" alt="Logo de Chiro Deportes" style="width: 150px; height: auto" loading="lazy" />
+          </a>
+          <p>Chiro Deportes</p>
+        </div>
+        <!-- Calzado Orpis -->
+        <div class="patrocinador">
+          <a href="https://www.instagram.com/calzadoorpis/" target="_blank">
+            <img src="https://i.pinimg.com/originals/2d/36/e1/2d36e15e7ad8ab91b41f3db0eff0f7ac.png" alt="Logo de Calzado Orpis" style="width: 150px; height: auto" loading="lazy" />
+          </a>
+          <p>Calzado Orpis</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contenedor para el Footer (se cargará desde layout/footer.html) -->
+  <div id="footer-container"></div>
+
+  <!-- Bootstrap JS Bundle (5.3.2) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Script para cargar componentes externos (Navbar y Footer) -->
+  <script src="scripts/loadComponents.js"></script>
+
+  <!-- jQuery (opcional) -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+  <!-- Scripts principales (main.js, script.js, etc.) -->
+  <script src="scripts/main.js"></script>
+  <script src="scripts/script.js"></script>
 </body>
 </html>

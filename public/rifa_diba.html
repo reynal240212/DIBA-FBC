@@ -25,7 +25,7 @@
       font-size: 1rem;
       cursor: pointer;
       border-radius: 4px;
-      margin-left: 8px;
+      margin: 8px;
       transition: background 0.3s;
     }
     button:hover {
@@ -39,7 +39,6 @@
       border: 1px solid #001f63;
       border-radius: 4px;
     }
-    /* Cada "page" simula la hoja de una carta; aquí se agrupan 4 boletas */
     .page {
       width: 210mm;
       margin: 10mm auto;
@@ -51,7 +50,6 @@
       background: white;
       box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
     }
-    /* Se reduce un poco el alto y se aumenta el tamaño de fuente y componentes para mejor legibilidad */
     .boleta {
       width: 95%;
       min-height: 240px;
@@ -127,13 +125,14 @@
     <label for="cantidad">Cantidad de boletas:</label>
     <input type="number" id="cantidad" min="1" value="40" />
     <button onclick="generarBoletas()">Generar Boletas</button>
-    <button onclick="generarJPG()">Descargar JPG</button>
+    <button onclick="descargarZip()">Descargar ZIP</button>
   </div>
   
   <div id="contenedor"></div>
 
-  <!-- Librería html2canvas para capturar el HTML y convertirlo en imagen -->
+  <!-- Librerías necesarias -->
   <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.7.1/jszip.min.js"></script>
 
   <script>
     const contenedor = document.getElementById('contenedor');
@@ -159,7 +158,6 @@
       contenedor.innerHTML = "";
       numerosUsadosGlobal.clear();
 
-      // Agrupamos 4 boletas por "page"
       const total = parseInt(document.getElementById('cantidad').value) || 40;
       let paginaActual;
       for (let i = 1; i <= total; i++) {
@@ -194,19 +192,46 @@
         `;
         paginaActual.appendChild(boleta);
       }
+      console.log("Boletas generadas correctamente.");
     }
 
-    async function generarJPG() {
-      // Capturamos el contenedor completo (si hay varias páginas, se generará una imagen larga)
-      await html2canvas(contenedor, { scale: 2 }).then(canvas => {
-        // Convertimos el canvas a datos en formato JPEG (calidad 1.0)
-        const imgData = canvas.toDataURL('image/jpeg', 1.0);
-        // Creamos un enlace temporal para descargar la imagen
-        const link = document.createElement('a');
-        link.download = 'boletas.jpg';
-        link.href = imgData;
-        link.click();
+    async function descargarZip() {
+      const zip = new JSZip();
+      const boletas = document.querySelectorAll('.boleta');
+      
+      if (boletas.length === 0) {
+        alert("Primero genera las boletas.");
+        return;
+      }
+      
+      console.log(`Procesando ${boletas.length} boleta(s)...`);
+      // Mensaje informativo
+      alert("Generando imágenes y creando el ZIP, puede tardar unos segundos...");
+      
+      const promises = Array.from(boletas).map(async (boleta, index) => {
+        try {
+          const canvas = await html2canvas(boleta, { scale: 2 });
+          const imgData = canvas.toDataURL("image/jpeg", 1.0);
+          zip.file(`boleta_${index + 1}.jpg`, imgData.split(',')[1], { base64: true });
+          console.log(`Boleta ${index + 1} procesada.`);
+        } catch (error) {
+          console.error(`Error procesando la boleta ${index + 1}: `, error);
+        }
       });
+      
+      await Promise.all(promises);
+      
+      try {
+        const contenidoZip = await zip.generateAsync({ type: "blob" });
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(contenidoZip);
+        link.download = "boletas.zip";
+        link.click();
+        console.log("ZIP descargado con éxito.");
+      } catch (error) {
+        console.error("Error al generar el ZIP: ", error);
+        alert("Ocurrió un error al generar el ZIP. Revisa la consola para más detalles.");
+      }
     }
   </script>
 </body>
