@@ -10,6 +10,7 @@
       font-family: Arial, sans-serif;
       background: #f9f9f9;
       color: #001f63;
+      font-size: 16px;
     }
     .btn-container {
       text-align: center;
@@ -18,37 +19,42 @@
     button {
       background: #001f63;
       color: #FFD700;
-      padding: 0.5rem 1rem;
+      padding: 0.7rem 1.2rem;
       border: none;
       font-weight: bold;
       font-size: 1rem;
       cursor: pointer;
       border-radius: 4px;
       margin-left: 8px;
+      transition: background 0.3s;
+    }
+    button:hover {
+      background: #001751;
     }
     input[type="number"] {
-      width: 60px;
-      padding: 4px;
+      width: 70px;
+      padding: 6px;
       font-size: 1rem;
       text-align: center;
       border: 1px solid #001f63;
       border-radius: 4px;
     }
-    /* Ajustamos la página para que tenga el alto de una hoja tamaño carta */
+    /* Cada "page" simula la hoja de una carta; aquí se agrupan 4 boletas */
     .page {
-      width: 100%;
-      margin: 0 auto;
-      padding: 10mm 0;
-      /* Con 4 boletas por página, se adaptará mejor el contenido */
+      width: 210mm;
+      margin: 10mm auto;
+      padding: 10mm;
       display: flex;
       flex-direction: column;
       align-items: center;
       page-break-after: always;
+      background: white;
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
     }
-    /* Reducimos un poco el alto mínimo de la boleta */
+    /* Se reduce un poco el alto y se aumenta el tamaño de fuente y componentes para mejor legibilidad */
     .boleta {
-      width: 90%;
-      min-height: 260px;
+      width: 95%;
+      min-height: 240px;
       background: #FFD700;
       border: 2px solid #001f63;
       border-radius: 10px;
@@ -60,7 +66,7 @@
     .titulo-boleta {
       text-align: center;
       font-weight: bold;
-      font-size: 1.4rem;
+      font-size: 1.8rem;
       margin-bottom: 0.5rem;
     }
     .logo {
@@ -71,38 +77,39 @@
     }
     .info {
       text-align: center;
-      font-size: 0.9rem;
-      margin-bottom: 0.5rem;
+      font-size: 1.1rem;
+      margin-bottom: 0.7rem;
+      line-height: 1.3;
     }
     .numeros {
       display: flex;
       flex-direction: column;
-      gap: 6px;
-      margin-top: 0.5rem;
+      gap: 8px;
+      margin-top: 0.7rem;
     }
     .fila-numero-nombre {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 8px;
+      gap: 10px;
     }
     .numero {
       background: #fff;
       color: #001f63;
-      width: 50px;
-      height: 50px;
+      width: 60px;
+      height: 60px;
       border: 2px solid #001f63;
       border-radius: 6px;
       display: flex;
       justify-content: center;
       align-items: center;
       font-weight: bold;
-      font-size: 1.3rem;
+      font-size: 1.5rem;
     }
     .nombre-numero {
       flex: 1;
-      font-size: 0.8rem;
-      padding: 6px;
+      font-size: 1rem;
+      padding: 8px;
       border: 1px solid #001f63;
       border-radius: 6px;
     }
@@ -111,7 +118,7 @@
       bottom: 10px;
       left: 1rem;
       font-weight: bold;
-      font-size: 0.9rem;
+      font-size: 1rem;
     }
   </style>
 </head>
@@ -120,13 +127,13 @@
     <label for="cantidad">Cantidad de boletas:</label>
     <input type="number" id="cantidad" min="1" value="40" />
     <button onclick="generarBoletas()">Generar Boletas</button>
-    <button onclick="generarPDF()">Descargar PDF</button>
+    <button onclick="generarJPG()">Descargar JPG</button>
   </div>
+  
   <div id="contenedor"></div>
 
-  <!-- Librerías -->
+  <!-- Librería html2canvas para capturar el HTML y convertirlo en imagen -->
   <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
 
   <script>
     const contenedor = document.getElementById('contenedor');
@@ -152,7 +159,7 @@
       contenedor.innerHTML = "";
       numerosUsadosGlobal.clear();
 
-      // Generamos 4 boletas por cada página
+      // Agrupamos 4 boletas por "page"
       const total = parseInt(document.getElementById('cantidad').value) || 40;
       let paginaActual;
       for (let i = 1; i <= total; i++) {
@@ -189,26 +196,17 @@
       }
     }
 
-    async function generarPDF() {
-      const { jsPDF } = window.jspdf;
-      // Creamos el documento PDF con formato carta (tamaño "letter")
-      const doc = new jsPDF('p', 'mm', 'letter');
-      const paginas = document.querySelectorAll('.page');
-
-      for (let i = 0; i < paginas.length; i++) {
-        // Capturamos cada "page" con html2canvas
-        await html2canvas(paginas[i]).then((canvas) => {
-          const imgData = canvas.toDataURL('image/png');
-          const imgProps = doc.getImageProperties(imgData);
-          const pdfWidth = doc.internal.pageSize.getWidth();
-          const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
-          if (i > 0) {
-            doc.addPage();
-          }
-          doc.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-        });
-      }
-      doc.save('boletas.pdf');
+    async function generarJPG() {
+      // Capturamos el contenedor completo (si hay varias páginas, se generará una imagen larga)
+      await html2canvas(contenedor, { scale: 2 }).then(canvas => {
+        // Convertimos el canvas a datos en formato JPEG (calidad 1.0)
+        const imgData = canvas.toDataURL('image/jpeg', 1.0);
+        // Creamos un enlace temporal para descargar la imagen
+        const link = document.createElement('a');
+        link.download = 'boletas.jpg';
+        link.href = imgData;
+        link.click();
+      });
     }
   </script>
 </body>
