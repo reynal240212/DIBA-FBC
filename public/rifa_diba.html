@@ -163,32 +163,48 @@
 
   <script>
     const contenedor = document.getElementById('contenedor');
-
-    function generarNumerosUnicos(cantidad, max = 99) {
-      const numeros = new Set();
-      while (numeros.size < cantidad) {
-        const n = Math.floor(Math.random() * (max + 1));
-        numeros.add(n.toString().padStart(2, '0'));
+    const numerosUsadosGlobal = new Set();
+  
+    function generarNumerosParaBoleta() {
+      const boletaNumeros = new Set();
+      const maxNumeros = 100;
+  
+      while (boletaNumeros.size < 6) {
+        const n = Math.floor(Math.random() * 100);
+        const numeroStr = n.toString().padStart(2, '0');
+  
+        // Si todavía no se han usado todos los posibles números (00-99)
+        if (numerosUsadosGlobal.size < maxNumeros) {
+          if (!numerosUsadosGlobal.has(numeroStr)) {
+            boletaNumeros.add(numeroStr);
+            numerosUsadosGlobal.add(numeroStr);
+          }
+        } else {
+          // Ya se usaron todos, permitir duplicados
+          boletaNumeros.add(numeroStr);
+        }
       }
-      return [...numeros];
+  
+      return [...boletaNumeros];
     }
-
+  
     function generarBoletas() {
       contenedor.innerHTML = "";
+      numerosUsadosGlobal.clear(); // Reiniciamos al generar nuevas boletas
       const total = parseInt(document.getElementById('cantidad').value) || 40;
-
+  
       let paginaActual;
-
+  
       for (let i = 1; i <= total; i++) {
         if ((i - 1) % 4 === 0) {
           paginaActual = document.createElement('div');
           paginaActual.className = 'page';
           contenedor.appendChild(paginaActual);
         }
-
-        const numerosGenerados = generarNumerosUnicos(6);
+  
+        const numerosGenerados = generarNumerosParaBoleta();
         const numerosHTML = numerosGenerados.map(n => `<div class="numero">${n}</div>`).join('');
-
+  
         const boleta = document.createElement('div');
         boleta.className = 'boleta';
         boleta.innerHTML = `
@@ -209,38 +225,8 @@
         paginaActual.appendChild(boleta);
       }
     }
-
-    async function generarPDF() {
-      const btns = document.querySelectorAll("button");
-      btns.forEach(btn => {
-        btn.disabled = true;
-        btn.textContent = "Procesando...";
-      });
-
-      const { jsPDF } = window.jspdf;
-      const pdf = new jsPDF({ orientation: 'portrait', unit: 'pt', format: 'a4' });
-      const pages = document.querySelectorAll('.page');
-
-      for (let i = 0; i < pages.length; i++) {
-        const canvas = await html2canvas(pages[i], { scale: 2 });
-        const imgData = canvas.toDataURL('image/png');
-        const pdfWidth = pdf.internal.pageSize.getWidth();
-        const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
-
-        if (i !== 0) pdf.addPage();
-        pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-      }
-
-      pdf.save('Boletas_Rifa_DIBA.pdf');
-
-      btns[0].textContent = "Generar Boletas";
-      btns[1].textContent = "Descargar PDF";
-      btns.forEach(btn => btn.disabled = false);
-    }
-
-    // Generar por defecto al cargar
-    window.onload = generarBoletas;
   </script>
+  
 
 </body>
 </html>
