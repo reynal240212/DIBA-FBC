@@ -12,23 +12,9 @@
       color: #001f63;
     }
 
-    header {
-      text-align: center;
-      padding: 1rem 0;
-      background-color: #001f63;
-      color: #FFD700;
-    }
-
     .btn-container {
       text-align: center;
       margin: 1rem 0;
-    }
-
-    input[type="number"] {
-      padding: 0.4rem;
-      font-size: 1rem;
-      width: 80px;
-      margin-right: 0.5rem;
     }
 
     button {
@@ -40,7 +26,16 @@
       font-size: 1rem;
       cursor: pointer;
       border-radius: 4px;
-      margin: 0 0.3rem;
+      margin-left: 8px;
+    }
+
+    input[type="number"] {
+      width: 60px;
+      padding: 4px;
+      font-size: 1rem;
+      text-align: center;
+      border: 1px solid #001f63;
+      border-radius: 4px;
     }
 
     .page {
@@ -53,25 +48,21 @@
 
     .boleta {
       width: 90%;
-      max-width: 600px;
-      height: 350px;
+      min-height: 300px;
       background: #FFD700;
       border: 2px solid #001f63;
       border-radius: 10px;
       padding: 1rem;
-      margin-bottom: 1rem;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
       position: relative;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
+      margin: 10px 0;
     }
 
     .titulo-boleta {
       text-align: center;
       font-weight: bold;
-      font-size: 1.3rem;
-      margin-bottom: 0.4rem;
+      font-size: 1.4rem;
+      margin-bottom: 0.5rem;
     }
 
     .logo {
@@ -89,10 +80,16 @@
 
     .numeros {
       display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 10px;
+      flex-direction: column;
+      gap: 6px;
       margin-top: 0.5rem;
+    }
+
+    .fila-numero-nombre {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
     }
 
     .numero {
@@ -107,50 +104,30 @@
       align-items: center;
       font-weight: bold;
       font-size: 1.3rem;
-      box-shadow: 0 0 3px rgba(0,0,0,0.3);
     }
 
-    .comprador {
-      margin-top: 1rem;
-      font-size: 0.95rem;
-      font-weight: bold;
-    }
-
-    .comprador span {
-      display: inline-block;
-      border-bottom: 1px solid #001f63;
-      width: 70%;
-      margin-left: 0.5rem;
+    .nombre-numero {
+      flex: 1;
+      font-size: 0.8rem;
+      padding: 6px;
+      border: 1px solid #001f63;
+      border-radius: 6px;
     }
 
     .footer {
+      position: absolute;
+      bottom: 10px;
+      left: 1rem;
       font-weight: bold;
       font-size: 0.9rem;
-      text-align: left;
-    }
-
-    @media screen and (max-width: 768px) {
-      .numero {
-        width: 40px;
-        height: 40px;
-        font-size: 1.1rem;
-      }
-
-      .logo {
-        width: 40px;
-      }
     }
   </style>
 </head>
 <body>
 
-  <header>
-    <h1>Boletas Rifa DIBA FBC</h1>
-    <p>Generación automática de boletas para el sorteo</p>
-  </header>
-
   <div class="btn-container">
-    <input type="number" id="cantidad" value="40" min="1" max="200" />
+    <label for="cantidad">Cantidad de boletas:</label>
+    <input type="number" id="cantidad" min="1" value="40" />
     <button onclick="generarBoletas()">Generar Boletas</button>
     <button onclick="generarPDF()">Descargar PDF</button>
   </div>
@@ -166,53 +143,47 @@
     const numerosUsadosGlobal = new Set();
     const MAX_NUMEROS_UNICOS = 100;
     const NUMEROS_POR_BOLETA = 6;
-  
-    /**
-     * Genera un conjunto de 6 números únicos para una boleta.
-     * No repite a nivel global hasta haber usado los 100 posibles (00-99).
-     * @returns {string[]} Array de 6 números en formato '00' a '99'
-     */
+
     function generarNumerosParaBoleta() {
       const numerosBoleta = new Set();
-  
+
       while (numerosBoleta.size < NUMEROS_POR_BOLETA) {
         const numero = Math.floor(Math.random() * 100);
         const numeroFormateado = numero.toString().padStart(2, '0');
-  
+
         const sePermitenRepetidos = numerosUsadosGlobal.size >= MAX_NUMEROS_UNICOS;
-  
+
         if (sePermitenRepetidos || !numerosUsadosGlobal.has(numeroFormateado)) {
           numerosBoleta.add(numeroFormateado);
           numerosUsadosGlobal.add(numeroFormateado);
         }
       }
-  
-      // Ordenar numéricamente antes de devolver
+
       return [...numerosBoleta].sort((a, b) => parseInt(a) - parseInt(b));
     }
-  
-    /**
-     * Genera todas las boletas según la cantidad indicada por el usuario.
-     * Agrupa 4 boletas por página para exportar a PDF más fácilmente.
-     */
+
     function generarBoletas() {
       contenedor.innerHTML = "";
       numerosUsadosGlobal.clear();
-  
+
       const total = parseInt(document.getElementById('cantidad').value) || 40;
       let paginaActual;
-  
+
       for (let i = 1; i <= total; i++) {
-        // Cada 4 boletas, se crea una nueva página
         if ((i - 1) % 4 === 0) {
           paginaActual = document.createElement('div');
           paginaActual.className = 'page';
           contenedor.appendChild(paginaActual);
         }
-  
+
         const numeros = generarNumerosParaBoleta();
-        const numerosHTML = numeros.map(n => `<div class="numero">${n}</div>`).join('');
-  
+        const numerosHTML = numeros.map(n => `
+          <div class="fila-numero-nombre">
+            <div class="numero">${n}</div>
+            <input type="text" class="nombre-numero" placeholder="Nombre del comprador" />
+          </div>
+        `).join('');
+
         const boleta = document.createElement('div');
         boleta.className = 'boleta';
         boleta.innerHTML = `
@@ -226,17 +197,32 @@
               Valor: $3000 cada número
             </div>
             <div class="numeros">${numerosHTML}</div>
-            <div class="comprador">
-              <strong>Nombre del comprador:</strong> <span style="border-bottom: 1px solid #001f63; display: inline-block; width: 150px;">&nbsp;</span>
-            </div>
             <div class="footer">Boleta #${i}</div>
           </div>
         `;
         paginaActual.appendChild(boleta);
       }
     }
+
+    async function generarPDF() {
+      const { jsPDF } = window.jspdf;
+      const pdf = new jsPDF({ orientation: 'portrait', unit: 'pt', format: 'a4' });
+      const pages = document.querySelectorAll('.page');
+
+      for (let i = 0; i < pages.length; i++) {
+        const canvas = await html2canvas(pages[i], { scale: 2 });
+        const imgData = canvas.toDataURL('image/png');
+        const imgProps = pdf.getImageProperties(imgData);
+        const pdfWidth = pdf.internal.pageSize.getWidth();
+        const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+
+        if (i !== 0) pdf.addPage();
+        pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+      }
+
+      pdf.save('Boletas_Rifa_DIBA.pdf');
+    }
   </script>
-  
 
 </body>
 </html>
