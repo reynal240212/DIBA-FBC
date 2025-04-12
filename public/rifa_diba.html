@@ -164,46 +164,54 @@
   <script>
     const contenedor = document.getElementById('contenedor');
     const numerosUsadosGlobal = new Set();
+    const MAX_NUMEROS_UNICOS = 100;
+    const NUMEROS_POR_BOLETA = 6;
   
+    /**
+     * Genera un conjunto de 6 números únicos para una boleta.
+     * No repite a nivel global hasta haber usado los 100 posibles (00-99).
+     * @returns {string[]} Array de 6 números en formato '00' a '99'
+     */
     function generarNumerosParaBoleta() {
-      const boletaNumeros = new Set();
-      const maxNumeros = 100;
+      const numerosBoleta = new Set();
   
-      while (boletaNumeros.size < 6) {
-        const n = Math.floor(Math.random() * 100);
-        const numeroStr = n.toString().padStart(2, '0');
+      while (numerosBoleta.size < NUMEROS_POR_BOLETA) {
+        const numero = Math.floor(Math.random() * 100);
+        const numeroFormateado = numero.toString().padStart(2, '0');
   
-        // Si todavía no se han usado todos los posibles números (00-99)
-        if (numerosUsadosGlobal.size < maxNumeros) {
-          if (!numerosUsadosGlobal.has(numeroStr)) {
-            boletaNumeros.add(numeroStr);
-            numerosUsadosGlobal.add(numeroStr);
-          }
-        } else {
-          // Ya se usaron todos, permitir duplicados
-          boletaNumeros.add(numeroStr);
+        const sePermitenRepetidos = numerosUsadosGlobal.size >= MAX_NUMEROS_UNICOS;
+  
+        if (sePermitenRepetidos || !numerosUsadosGlobal.has(numeroFormateado)) {
+          numerosBoleta.add(numeroFormateado);
+          numerosUsadosGlobal.add(numeroFormateado);
         }
       }
   
-      return [...boletaNumeros];
+      // Ordenar numéricamente antes de devolver
+      return [...numerosBoleta].sort((a, b) => parseInt(a) - parseInt(b));
     }
   
+    /**
+     * Genera todas las boletas según la cantidad indicada por el usuario.
+     * Agrupa 4 boletas por página para exportar a PDF más fácilmente.
+     */
     function generarBoletas() {
       contenedor.innerHTML = "";
-      numerosUsadosGlobal.clear(); // Reiniciamos al generar nuevas boletas
-      const total = parseInt(document.getElementById('cantidad').value) || 40;
+      numerosUsadosGlobal.clear();
   
+      const total = parseInt(document.getElementById('cantidad').value) || 40;
       let paginaActual;
   
       for (let i = 1; i <= total; i++) {
+        // Cada 4 boletas, se crea una nueva página
         if ((i - 1) % 4 === 0) {
           paginaActual = document.createElement('div');
           paginaActual.className = 'page';
           contenedor.appendChild(paginaActual);
         }
   
-        const numerosGenerados = generarNumerosParaBoleta();
-        const numerosHTML = numerosGenerados.map(n => `<div class="numero">${n}</div>`).join('');
+        const numeros = generarNumerosParaBoleta();
+        const numerosHTML = numeros.map(n => `<div class="numero">${n}</div>`).join('');
   
         const boleta = document.createElement('div');
         boleta.className = 'boleta';
@@ -218,13 +226,9 @@
               Valor: $3000 cada número
             </div>
             <div class="numeros">${numerosHTML}</div>
-            <div class="comprador">Nombre del jugador: <span>&nbsp;</span></div>
-            <div class="comprador">Nombre del comprador: <span>&nbsp;</span></div>
-            <div class="comprador">Nombre del comprador: <span>&nbsp;</span></div>
-            <div class="comprador">Nombre del comprador: <span>&nbsp;</span></div>
-            <div class="comprador">Nombre del comprador: <span>&nbsp;</span></div>
-            <div class="comprador">Nombre del comprador: <span>&nbsp;</span></div>
-            <div class="comprador">Nombre del comprador: <span>&nbsp;</span></div>
+            <div class="comprador">
+              <strong>Nombre del comprador:</strong> <span style="border-bottom: 1px solid #001f63; display: inline-block; width: 150px;">&nbsp;</span>
+            </div>
             <div class="footer">Boleta #${i}</div>
           </div>
         `;
