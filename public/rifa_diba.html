@@ -54,14 +54,17 @@
     .boleta {
       width: 90%;
       max-width: 600px;
-      height: auto;
+      height: 350px;
       background: #FFD700;
       border: 2px solid #001f63;
-      border-radius: 8px;
+      border-radius: 10px;
       padding: 1rem;
       margin-bottom: 1rem;
       box-shadow: 0 2px 8px rgba(0,0,0,0.2);
       position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
     }
 
     .titulo-boleta {
@@ -107,12 +110,23 @@
       box-shadow: 0 0 3px rgba(0,0,0,0.3);
     }
 
+    .comprador {
+      margin-top: 1rem;
+      font-size: 0.95rem;
+      font-weight: bold;
+    }
+
+    .comprador span {
+      display: inline-block;
+      border-bottom: 1px solid #001f63;
+      width: 70%;
+      margin-left: 0.5rem;
+    }
+
     .footer {
-      position: absolute;
-      bottom: 10px;
-      left: 1rem;
       font-weight: bold;
       font-size: 0.9rem;
+      text-align: left;
     }
 
     @media screen and (max-width: 768px) {
@@ -166,7 +180,7 @@
       let paginaActual;
 
       for (let i = 1; i <= total; i++) {
-        if ((i - 1) % 5 === 0) {
+        if ((i - 1) % 4 === 0) {
           paginaActual = document.createElement('div');
           paginaActual.className = 'page';
           contenedor.appendChild(paginaActual);
@@ -179,15 +193,18 @@
         boleta.className = 'boleta';
         boleta.innerHTML = `
           <img src="images/ESCUDO.png" class="logo" />
-          <div class="titulo-boleta">RESPONSABLE DIBA FBC</div>
-          <div class="info">
-            Juega el sábado 19 de abril de 2025<br>
-            Lotería El Sinuano - Noche - Últimas 2 cifras - 10:00 PM<br>
-            Sorteo de 2 Perfumes para Caballeros<br>
-            Valor: $3000 cada número
+          <div>
+            <div class="titulo-boleta">RESPONSABLE DIBA FBC</div>
+            <div class="info">
+              Juega el sábado 19 de abril de 2025<br>
+              Lotería El Sinuano - Noche - Últimas 2 cifras - 10:00 PM<br>
+              Sorteo de 2 Perfumes para Caballeros<br>
+              Valor: $3000 cada número
+            </div>
+            <div class="numeros">${numerosHTML}</div>
+            <div class="comprador">Nombre del comprador: <span>&nbsp;</span></div>
+            <div class="footer">Boleta #${i}</div>
           </div>
-          <div class="numeros">${numerosHTML}</div>
-          <div class="footer">Boleta #${i}</div>
         `;
         paginaActual.appendChild(boleta);
       }
