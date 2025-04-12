@@ -34,16 +34,21 @@
       border: 1px solid #001f63;
       border-radius: 4px;
     }
+    /* Ajustamos la página para que tenga el alto de una hoja tamaño carta */
     .page {
+      width: 100%;
+      margin: 0 auto;
+      padding: 10mm 0;
+      /* Con 4 boletas por página, se adaptará mejor el contenido */
       display: flex;
       flex-direction: column;
       align-items: center;
       page-break-after: always;
-      padding: 1rem 0;
     }
+    /* Reducimos un poco el alto mínimo de la boleta */
     .boleta {
       width: 90%;
-      min-height: 300px;
+      min-height: 260px;
       background: #FFD700;
       border: 2px solid #001f63;
       border-radius: 10px;
@@ -147,6 +152,7 @@
       contenedor.innerHTML = "";
       numerosUsadosGlobal.clear();
 
+      // Generamos 4 boletas por cada página
       const total = parseInt(document.getElementById('cantidad').value) || 40;
       let paginaActual;
       for (let i = 1; i <= total; i++) {
@@ -185,12 +191,12 @@
 
     async function generarPDF() {
       const { jsPDF } = window.jspdf;
-      // Creación de un documento PDF en formato A4
-      const doc = new jsPDF('p', 'mm', 'a4');
+      // Creamos el documento PDF con formato carta (tamaño "letter")
+      const doc = new jsPDF('p', 'mm', 'letter');
       const paginas = document.querySelectorAll('.page');
 
       for (let i = 0; i < paginas.length; i++) {
-        // Capturamos cada página con html2canvas
+        // Capturamos cada "page" con html2canvas
         await html2canvas(paginas[i]).then((canvas) => {
           const imgData = canvas.toDataURL('image/png');
           const imgProps = doc.getImageProperties(imgData);
