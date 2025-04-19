@@ -821,3 +821,55 @@ main.container a {
     font-size: 0.95rem;
   }
 }
+/* Ajustes para las tarjetas con Bootstrap */
+.custom-card {
+  margin-bottom: 1.5rem;
+  position: relative;
+  overflow: hidden;
+}
+.custom-card .btn-close-card {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  z-index: 10;
+  background: transparent;
+  border: none;
+  font-size: 1.2rem;
+  color: #dc3545;
+}
+.custom-card img.escudo {
+  max-width: 50px;
+  margin-right: 0.8rem;
+}
+/* Personalización de la tarjeta para partidos */
+.match-card {
+  background: linear-gradient(135deg, #002a40, #001b72);
+  color: #fff;
+  border: none;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+.match-card .card-header {
+  background: transparent;
+  border-bottom: none;
+  padding: 0.5rem 1rem;
+}
+.match-card .card-body {
+  padding: 1rem;
+}
+/* Personalización de la tarjeta para entrenamientos */
+.training-card {
+  background: linear-gradient(135deg, #004d40, #00796b);
+  color: #fff;
+  border: none;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+.training-card .card-header {
+  background: transparent;
+  border-bottom: none;
+  padding: 0.5rem 1rem;
+}
+.training-card .card-body {
+  padding: 1rem;
+}

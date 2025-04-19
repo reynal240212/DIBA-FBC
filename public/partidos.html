@@ -38,61 +38,6 @@
   <!-- Estilos globales -->
   <link rel="stylesheet" href="styles/styles.css" />
   <link rel="stylesheet" href="styles/background-animation.css" />
-
-  <style>
-    /* Ajustes para las tarjetas con Bootstrap */
-    .custom-card {
-      margin-bottom: 1.5rem;
-      position: relative;
-      overflow: hidden;
-    }
-    .custom-card .btn-close-card {
-      position: absolute;
-      top: 0.5rem;
-      right: 0.5rem;
-      z-index: 10;
-      background: transparent;
-      border: none;
-      font-size: 1.2rem;
-      color: #dc3545;
-    }
-    .custom-card img.escudo {
-      max-width: 50px;
-      margin-right: 0.8rem;
-    }
-    /* Personalización de la tarjeta para partidos */
-    .match-card {
-      background: linear-gradient(135deg, #002a40, #001b72);
-      color: #fff;
-      border: none;
-      border-radius: 0.5rem;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-    }
-    .match-card .card-header {
-      background: transparent;
-      border-bottom: none;
-      padding: 0.5rem 1rem;
-    }
-    .match-card .card-body {
-      padding: 1rem;
-    }
-    /* Personalización de la tarjeta para entrenamientos */
-    .training-card {
-      background: linear-gradient(135deg, #004d40, #00796b);
-      color: #fff;
-      border: none;
-      border-radius: 0.5rem;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-    }
-    .training-card .card-header {
-      background: transparent;
-      border-bottom: none;
-      padding: 0.5rem 1rem;
-    }
-    .training-card .card-body {
-      padding: 1rem;
-    }
-  </style>
 </head>
 <body>
   <!-- Fondo animado -->
@@ -116,16 +61,16 @@
 
   <!-- Navbar (se carga desde layout/navbar.html) -->
   <div id="navbar-container"></div>
-
   <!-- HERO SECTION -->
-  <section class="hero animate__animated animate__fadeInDown d-flex align-items-center"
-           style="background: linear-gradient(135deg, #002a40, #001b72), url('images/fondo.jpg') center/cover no-repeat fixed; background-blend-mode: multiply; min-height: 80vh;">
+  <section
+    class="hero animate__animated animate__fadeInDown d-flex align-items-center"
+    style="background: linear-gradient(135deg, #002a40, #001b72), url('images/fondo.jpg') center/cover no-repeat fixed; background-blend-mode: multiply; min-height: 80vh;"
+  >
     <div class="container hero-content text-center text-white">
-      <h1 class="display-4 fw-bold">CALENDARIO</h1>
-      <p class="lead">Consulta los partidos y entrenamientos</p>
+      <h1 class="hero-title display-4 fw-bold">CALENDARIO</h1>
+      <p class="hero-subtitle lead">Programación de partidos</p>
     </div>
   </section>
-
   <!-- SECCIÓN: FILTROS Y RESULTADOS -->
   <section class="my-5">
     <div class="container">
