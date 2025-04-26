@@ -50,7 +50,7 @@ async function filtrarPartidos() {
 
   partidosFiltrados.forEach(partido => {
     const card = document.createElement('div');
-    card.classList.add('card', 'custom-card', 'match-card', 'animate__animated', 'animate__fadeInUp');
+    card.classList.add('card', 'custom-card', 'match-card', 'bg-primary', 'text-white', 'animate__animated', 'animate__fadeInUp');
     card.innerHTML = `
       <button class="btn-close-card">&times;</button>
       <div class="card-header d-flex align-items-center">
@@ -121,7 +121,7 @@ async function filtrarEntrenamientos() {
 
   entrenamientosFiltrados.forEach(ent => {
     const card = document.createElement('div');
-    card.classList.add('card', 'custom-card', 'training-card', 'animate__animated', 'animate__fadeInUp');
+    card.classList.add('card', 'custom-card', 'training-card', 'bg-success', 'text-white', 'animate__animated', 'animate__fadeInUp');
     card.innerHTML = `
       <button class="btn-close-card">&times;</button>
       <div class="card-header">
