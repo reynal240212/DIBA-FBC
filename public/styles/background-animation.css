@@ -1,6 +1,6 @@
-/* background-animation.css */
+/* background-animation.css
 
-/* Contenedor de la animación de fondo */
+/* Contenedor de la animación de fondo *
 .background-animation {
     position: fixed;
     top: 0;
@@ -9,20 +9,20 @@
     height: 100%;
     overflow: hidden;
     z-index: -1;
-    background: #ffffff; /* Puedes cambiar este color según tus necesidades */
+    background: #ffffff; /* Puedes cambiar este color según tus necesidades 
   }
-  
-  /* Estilo para cada cubo animado */
+
   .cube {
     position: absolute;
     bottom: -100px;
     width: 50px;
+
     height: 50px;
-    background: rgba(255, 215, 0, 0.7); /* Color dorado con transparencia */
+    background: rgba(255, 215, 0, 0.7); /* Color dorado con transparencia 
     animation: cubeAnim 10s infinite linear;
   }
   
-  /* Distribución y retraso en la animación para cada cubo */
+   Distribución y retraso en la animación para cada cubo 
   .cube:nth-child(1) { left: 5%;  animation-delay: 0s; }
   .cube:nth-child(2) { left: 15%; animation-delay: 1s; }
   .cube:nth-child(3) { left: 25%; animation-delay: 2s; }
@@ -34,7 +34,7 @@
   .cube:nth-child(9) { left: 85%; animation-delay: 8s; }
   .cube:nth-child(10){ left: 95%; animation-delay: 9s; }
   
-  /* Definición de la animación: se desplaza hacia arriba y rota */
+ 
   @keyframes cubeAnim {
     0% {
       transform: translateY(0) rotate(0deg);
