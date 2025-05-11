@@ -1,875 +1,722 @@
 /* ======================================
-       VARIABLES DE COLOR
+       VARIABLES DE COLOR Y TIPOGRAFÍA
 ====================================== */
 :root {
-  --azul:         #003399;      /* Azul fuerte */
-  --azul-intenso: #001b72;      /* Azul oscuro */
-  --grana:        #0b0281;      /* Tono extra oscuro */
-  --amarillo:     #ffd700;      /* Amarillo dorado */
-  --dorado:       #ffd900d8;    /* Dorado con transparencia */
-  --fondo:        #ffffff;      /* Fondo blanco */
-  --fondo-gris:   #f4f4f4;      /* Gris claro */
-  --blanco:       #ffffff;
-  --texto-claro:  #ffffff;      /* Texto claro para fondos oscuros */
-  --sombra:       rgba(0, 0, 0, 0.2);
+  /* Colores principales */
+  --primary-dark: #001b72;      /* Azul oscuro principal */
+  --primary: #003399;           /* Azul fuerte */
+  --primary-darker: #0b0281;    /* Tono extra oscuro */
+  
+  /* Colores acentuados */
+  --accent: #ffd700;            /* Amarillo dorado */
+  --accent-transparent: rgba(255, 217, 0, 0.85); /* Dorado con transparencia */
+  
+  /* Escala de grises */
+  --white: #ffffff;
+  --light-gray: #f4f4f4;
+  --medium-gray: #e9ecef;
+  --dark-gray: #6c757d;
+  
+  /* Sombras y transparencias */
+  --shadow: rgba(0, 0, 0, 0.2);
+  --shadow-dark: rgba(0, 0, 0, 0.3);
+  --overlay: rgba(0, 0, 0, 0.5);
+  
+  /* Tipografía */
+  --font-primary: 'Arial', sans-serif;
+  --font-secondary: 'Dancing Script', cursive;
+  
+  /* Transiciones */
+  --transition-fast: 0.2s ease;
+  --transition-normal: 0.3s ease;
+  --transition-slow: 0.5s ease;
+  
+  /* Bordes */
+  --border-radius-sm: 5px;
+  --border-radius-md: 8px;
+  --border-radius-lg: 12px;
+  
+  /* Espaciado */
+  --space-xs: 0.5rem;
+  --space-sm: 1rem;
+  --space-md: 1.5rem;
+  --space-lg: 2rem;
+  --space-xl: 3rem;
 }
 
 /* ======================================
-       RESET Y ESTILOS GENERALES
+       RESET Y ESTILOS BASE
 ====================================== */
-* {
+*,
+*::before,
+*::after {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+}
+
+html {
   scroll-behavior: smooth;
-}
-html, body {
-  width: 100%;
+  font-size: 16px;
   height: 100%;
-  font-family: 'Arial', sans-serif;
+}
+
+body {
+  width: 100%;
+  min-height: 100%;
+  font-family: var(--font-primary);
+  line-height: 1.6;
+  color: #333;
+  background-color: var(--white);
   overflow-x: hidden;
-  background: var(--fondo);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Tipografía mejorada */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: var(--space-sm);
+}
+
+h1 { font-size: 2.5rem; }
+h2 { font-size: 2rem; }
+h3 { font-size: 1.75rem; }
+h4 { font-size: 1.5rem; }
+h5 { font-size: 1.25rem; }
+h6 { font-size: 1rem; }
+
+p {
+  margin-bottom: var(--space-sm);
+}
+
+a {
+  color: var(--primary);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+a:hover {
+  color: var(--primary-darker);
+  text-decoration: underline;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
 }
 
 /* ======================================
-       ANIMACIÓN DE FONDO (CUBOS) [Opcional]
+       COMPONENTES REUTILIZABLES
 ====================================== */
-.background-animation {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: -1;
-  background: var(--fondo);
-  overflow: hidden;
-}
-.cube {
-  position: absolute;
-  bottom: -100px;
-  width: 50px;
-  height: 50px;
-  background: rgba(255, 215, 0, 0.7);
-  animation: cubeAnim 10s infinite linear;
-}
-.cube:nth-child(1) { left: 5%;  animation-delay: 0s; }
-.cube:nth-child(2) { left: 15%; animation-delay: 1s; }
-.cube:nth-child(3) { left: 25%; animation-delay: 2s; }
-.cube:nth-child(4) { left: 35%; animation-delay: 3s; }
-.cube:nth-child(5) { left: 45%; animation-delay: 4s; }
-.cube:nth-child(6) { left: 55%; animation-delay: 5s; }
-.cube:nth-child(7) { left: 65%; animation-delay: 6s; }
-.cube:nth-child(8) { left: 75%; animation-delay: 7s; }
-.cube:nth-child(9) { left: 85%; animation-delay: 8s; }
-.cube:nth-child(10) { left: 95%; animation-delay: 9s; }
-@keyframes cubeAnim {
-  0% {
-    transform: translateY(0) rotate(0deg);
-    opacity: 1;
-  }
-  100% {
-    transform: translateY(-110vh) rotate(360deg);
-    opacity: 0;
-  }
-}
-
-/* ======================================
-       BOTÓN "VOLVER ARRIBA"
-====================================== */
-#btnBackToTop {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  display: none;
-  z-index: 99;
-  border: none;
-  outline: none;
-  background-color: var(--azul);
-  color: var(--blanco);
+/* Botones */
+.btn {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  font-weight: 600;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  border: 2px solid transparent;
+  border-radius: var(--border-radius-sm);
+  transition: all var(--transition-normal);
   cursor: pointer;
-  padding: 0.75rem 1rem;
-  border-radius: 0.25rem;
-  transition: background-color 0.3s ease;
+  box-shadow: 0 2px 4px var(--shadow);
 }
-#btnBackToTop:hover {
-  background-color: var(--azul-intenso);
+
+.btn-primary {
+  background-color: var(--primary);
+  color: var(--white);
+}
+
+.btn-primary:hover {
+  background-color: var(--primary-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px var(--shadow);
+}
+
+.btn-accent {
+  background-color: var(--accent);
+  color: var(--primary-dark);
+}
+
+.btn-accent:hover {
+  background-color: var(--accent-transparent);
+  color: var(--primary-darker);
+  border-color: var(--accent);
+}
+
+.btn-outline-light {
+  background-color: transparent;
+  color: var(--white);
+  border-color: var(--white);
+}
+
+.btn-outline-light:hover {
+  background-color: var(--white);
+  color: var(--primary-dark);
+}
+
+/* Tarjetas */
+.card {
+  border: none;
+  border-radius: var(--border-radius-md);
+  overflow: hidden;
+  transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+  background-color: var(--white);
+  box-shadow: 0 2px 8px var(--shadow);
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px var(--shadow-dark);
+}
+
+.card-img-top {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.card-body {
+  padding: var(--space-md);
+}
+
+.card-title {
+  color: var(--primary-dark);
+  margin-bottom: var(--space-sm);
+}
+
+/* Secciones */
+.section {
+  padding: var(--space-xl) 0;
+  position: relative;
+}
+
+.section-dark {
+  background-color: var(--primary-dark);
+  color: var(--white);
+}
+
+.section-light {
+  background-color: var(--white);
+}
+
+.section-gray {
+  background-color: var(--light-gray);
+}
+
+.section-title {
+  text-align: center;
+  margin-bottom: var(--space-lg);
+  position: relative;
+  padding-bottom: var(--space-sm);
+}
+
+.section-title::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 3px;
+  background-color: var(--accent);
+}
+
+.section-dark .section-title::after {
+  background-color: var(--accent);
 }
 
 /* ======================================
-       NAVBAR FIJA
+       LAYOUT PRINCIPAL
 ====================================== */
+/* Navbar */
 .navbar {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   z-index: 1000;
-  background: var(--azul-intenso);
-  padding: 0.75rem 1rem;
-  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  background-color: var(--primary-dark);
+  padding: var(--space-sm);
+  transition: all var(--transition-normal);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
+
 .navbar-brand img {
   width: 50px;
   height: auto;
-  transition: transform 0.3s;
+  transition: transform var(--transition-normal);
 }
+
 .navbar-brand img:hover {
   transform: scale(1.1);
 }
+
 .nav-link {
   font-weight: 600;
-  color: var(--blanco) !important;
-  margin: 0 0.5rem;
-  transition: color 0.3s;
-}
-.nav-link:hover {
-  color: var(--dorado) !important;
+  color: var(--white) !important;
+  margin: 0 var(--space-xs);
+  padding: var(--space-xs) 0;
+  position: relative;
 }
 
-/* ======================================
-       HERO (SECCIÓN PRINCIPAL)
-====================================== */
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: var(--accent);
+  transition: width var(--transition-normal);
+}
+
+.nav-link:hover::after,
+.nav-link.active::after {
+  width: 100%;
+}
+
+/* Hero */
 .hero {
   position: relative;
   min-height: 80vh;
-  background: linear-gradient(135deg, var(--azul), var(--azul-intenso)),
-              url('images/fondo.jpg') center/cover no-repeat fixed;
-  background-blend-mode: multiply;
   display: flex;
   align-items: center;
   justify-content: center;
   text-align: center;
-  color: var(--blanco);
+  color: var(--white);
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark)),
+              url('images/fondo.jpg') center/cover no-repeat fixed;
+  background-blend-mode: multiply;
+  overflow: hidden;
 }
+
 .hero::before {
   content: "";
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.5);
+  background-color: var(--overlay);
 }
-.hero .hero-content {
+
+.hero-content {
   position: relative;
   z-index: 2;
-  padding: 2rem;
-}
-.hero .hero-title {
-  font-family: 'Dancing Script', cursive;
-  font-size: 3rem;
-  margin-bottom: 1rem;
-  color: var(--amarillo);
-  text-shadow: 3px 3px 8px rgba(0, 0, 0, 0.5);
-}
-.hero .hero-subtitle {
-  font-size: 1.2rem;
-  max-width: 700px;
-  margin: auto;
-}
-.hero .btn {
-  margin-top: 1.5rem;
-  font-weight: bold;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
-}
-
-/* ======================================
-       RESUMEN DE HISTORIA
-====================================== */
-#resumen-historia {
-  padding: 2rem 0;
-  background-color: var(--azul-intenso);
-  text-align: center;
-}
-#resumen-historia h2 {
-  color: var(--amarillo);
-  font-weight: bold;
-  text-transform: uppercase;
-}
-#resumen-historia p {
-  font-size: 1rem;
-  color: var(--blanco);
-  line-height: 1.6;
-  text-align: justify;
-}
-.btn-dorado {
-  background-color: var(--amarillo);
-  color: var(--azul-intenso);
-  font-weight: bold;
-  padding: 10px 20px;
-  border-radius: 5px;
-  text-decoration: none;
-  display: inline-block;
-  transition: background 0.3s ease-in-out;
-  border: 2px solid var(--amarillo);
-}
-.btn-dorado:hover {
-  background-color: #FFC107;
-  color: #fff;
-  border: 2px solid #FFC107;
-}
-
-/* ======================================
-       SECCIÓN SERVICIOS
-====================================== */
-#servicios {
-  padding: 60px 20px;
-  background-color: var(--fondo-gris);
-}
-#servicios h2 {
-  text-align: center;
-  margin-bottom: 2rem;
-  font-weight: bold;
-  color: var(--azul-intenso);
-}
-.card {
-  border: none;
-  border-radius: 8px;
-  transition: transform 0.3s, box-shadow 0.3s;
-}
-.card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 4px 10px var(--sombra);
-}
-.card-title {
-  color: var(--azul);
-  font-weight: bold;
-}
-
-/* ======================================
-       TARJETAS DE PARTIDOS
-====================================== */
-.match-card {
-  background: var(--blanco);
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-  max-width: 320px;
+  padding: var(--space-md);
+  max-width: 1200px;
   margin: 0 auto;
 }
-.match-card-top {
-  background: var(--grana);
-  color: var(--texto-claro);
-  padding: 1rem;
-  text-align: center;
-  position: relative;
+
+.hero-title {
+  font-family: var(--font-secondary);
+  font-size: 4rem;
+  margin-bottom: var(--space-md);
+  color: var(--accent);
+  text-shadow: 3px 3px 8px rgba(0, 0, 0, 0.5);
+  animation: fadeInDown 1s ease;
 }
-.match-card-top img {
-  width: 70px;
-  margin: 0 0.5rem;
+
+.hero-subtitle {
+  font-size: 1.5rem;
+  max-width: 700px;
+  margin: 0 auto var(--space-lg);
+  animation: fadeInUp 1s ease;
 }
-.match-card-body {
-  padding: 1rem;
-  text-align: center;
+
+.hero-buttons {
+  display: flex;
+  gap: var(--space-md);
+  justify-content: center;
+  animation: fadeIn 1.5s ease;
 }
-.match-card-body .btn {
-  margin: 0.25rem;
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 /* ======================================
-       ENCABEZADO OPCIONAL
+       SECCIONES ESPECÍFICAS
 ====================================== */
-.header {
-  background: var(--amarillo);
-  color: var(--azul-intenso);
-  padding: 1rem;
+/* Sección de historia */
+#resumen-historia {
   text-align: center;
-  margin-bottom: 1rem;
-}
-.header h1 {
-  margin: 0;
 }
 
-/* ======================================
-       SECCIÓN EQUIPO
-====================================== */
-#equipo {
-  padding: 60px 20px;
-  background: var(--blanco);
+#resumen-historia p {
+  text-align: justify;
+  max-width: 800px;
+  margin: 0 auto var(--space-md);
 }
-#equipo h2 {
+
+/* Sección de servicios */
+.service-card {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.service-icon {
+  font-size: 3rem;
+  color: var(--accent);
+  margin-bottom: var(--space-sm);
+}
+
+/* Sección de equipo */
+.team-member {
   text-align: center;
-  margin-bottom: 2rem;
-  font-weight: bold;
-  color: var(--azul-intenso);
+  margin-bottom: var(--space-lg);
 }
-#equipo img {
+
+.team-member img {
   width: 180px;
   height: 180px;
   object-fit: cover;
-  box-shadow: 0 2px 6px var(--sombra);
-  transition: transform 0.3s;
-}
-#equipo img:hover {
-  transform: scale(1.05);
-}
-#equipo h5 {
-  margin-top: 1rem;
-  font-weight: bold;
-  color: var(--azul);
+  border-radius: 50%;
+  border: 4px solid var(--accent);
+  margin: 0 auto var(--space-sm);
+  transition: transform var(--transition-normal);
 }
 
-/* ======================================
-       SECCIÓN CONTACTO
-====================================== */
-.contact-hero {
-  min-height: 60vh;
-  background: url('images/fondo.jpg') center/cover no-repeat;
-  position: relative;
-  display: flex;
+.team-member:hover img {
+  transform: scale(1.05);
+}
+
+.team-member h5 {
+  color: var(--primary-dark);
+}
+
+.team-member p {
+  color: var(--dark-gray);
+}
+
+/* Sección de patrocinadores */
+.sponsor-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: var(--space-lg);
   align-items: center;
-  justify-content: center;
-  color: #fff;
-  text-align: center;
+  justify-items: center;
 }
-.contact-hero::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: rgb(255, 255, 255);
+
+.sponsor-item img {
+  max-width: 150px;
+  height: auto;
+  filter: grayscale(100%);
+  opacity: 0.7;
+  transition: all var(--transition-normal);
 }
-.contact-hero .container {
-  position: relative;
-  z-index: 1;
+
+.sponsor-item:hover img {
+  filter: grayscale(0%);
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+/* Sección de contacto */
+.contact-form .form-group {
+  margin-bottom: var(--space-md);
+}
+
+.contact-form label {
+  display: block;
+  margin-bottom: var(--space-xs);
+  font-weight: 600;
+}
+
+.contact-form input,
+.contact-form textarea {
+  width: 100%;
+  padding: var(--space-sm);
+  border: 1px solid var(--medium-gray);
+  border-radius: var(--border-radius-sm);
+  transition: border-color var(--transition-fast);
+}
+
+.contact-form input:focus,
+.contact-form textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.2);
 }
 
 /* ======================================
-       SECCIÓN PATROCINADORES
+       COMPONENTES ESPECIALES
 ====================================== */
-#patrocinadores {
+/* Tarjeta de partido */
+.match-card {
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  color: var(--white);
+  border-radius: var(--border-radius-lg);
+  overflow: hidden;
+  box-shadow: 0 4px 12px var(--shadow-dark);
+  max-width: 320px;
+  margin: 0 auto;
+}
+
+.match-card-header {
+  background-color: var(--primary-darker);
+  color: var(--white);
+  padding: var(--space-sm);
   text-align: center;
-  padding: 50px 0;
-  background-color: var(--fondo-gris);
+  font-weight: 600;
 }
-#patrocinadores h2 {
-  margin-bottom: 2rem;
-  font-weight: bold;
-  color: var(--azul);
+
+.match-card-body {
+  padding: var(--space-md);
+  text-align: center;
 }
-#patrocinadores .patrocinador {
-  margin: 1rem;
+
+.team-logo {
+  width: 70px;
+  height: 70px;
+  object-fit: contain;
+  margin: 0 var(--space-xs);
 }
-#patrocinadores .patrocinador img {
-  width: 150px;
-  height: auto;
-  transition: transform 0.3s;
+
+.match-score {
+  font-size: 2rem;
+  font-weight: 700;
+  margin: var(--space-sm) 0;
 }
-#patrocinadores .patrocinador img:hover {
+
+/* Tarjeta de jugador */
+.player-card {
+  position: relative;
+  text-align: center;
+  margin-bottom: var(--space-lg);
+}
+
+.player-photo {
+  width: 180px;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 5px solid var(--accent);
+  margin: 0 auto var(--space-sm);
+  transition: transform var(--transition-normal);
+}
+
+.player-card:hover .player-photo {
   transform: scale(1.05);
 }
-#patrocinadores .patrocinador p {
-  margin-top: 0.5rem;
-  font-weight: bold;
-  color: var(--azul);
-}
 
-/* ======================================
-       SECCIÓN FUNDACIÓN
-====================================== */
-#fundacion {
-  padding: 60px 20px;
-  background-color: var(--azul-intenso);
-}
-#fundacion h2 {
-  color: var(--amarillo);
-  margin-bottom: 20px;
-}
-#fundacion p {
-  font-size: 1rem;
-  line-height: 1.6;
-  color: var(--blanco);
-}
-#fundacion .btn {
-  background-color: var(--amarillo);
-  border: none;
-  color: var(--azul);
-  transition: background-color 0.3s ease;
-}
-#fundacion .btn:hover {
-  background-color: #e6b800;
-}
-#fundacion img {
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+.position-tag {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: var(--accent);
+  color: var(--primary-dark);
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: 20px;
+  font-weight: 700;
+  font-size: 0.8rem;
+  text-transform: uppercase;
 }
 
 /* ======================================
        FOOTER
 ====================================== */
-footer {
-  background: var(--azul);
-  color: var(--amarillo);
-  padding: 2rem 1rem;
-  text-align: center;
+.footer {
+  background-color: var(--primary-dark);
+  color: var(--white);
+  padding: var(--space-xl) 0;
 }
-footer p {
-  margin: 0;
+
+.footer-logo {
+  width: 80px;
+  margin-bottom: var(--space-md);
 }
-footer a {
-  color: var(--amarillo);
+
+.footer-links {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--space-lg);
+  margin-bottom: var(--space-lg);
+}
+
+.footer-links h5 {
+  color: var(--accent);
+  margin-bottom: var(--space-md);
+  position: relative;
+  padding-bottom: var(--space-xs);
+}
+
+.footer-links h5::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 40px;
+  height: 2px;
+  background-color: var(--accent);
+}
+
+.footer-links ul {
+  list-style: none;
+}
+
+.footer-links li {
+  margin-bottom: var(--space-xs);
+}
+
+.footer-links a {
+  color: var(--white);
+  transition: color var(--transition-fast);
+}
+
+.footer-links a:hover {
+  color: var(--accent);
   text-decoration: none;
-  transition: color 0.3s;
-}
-footer a:hover {
-  color: var(--blanco);
-  text-decoration: underline;
-}
-.footer-brand {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-bottom: 1rem;
-}
-.footer-brand img {
-  width: 60px;
-  margin-bottom: 0.5rem;
 }
 
-/* ======================================
-       SECCIÓN: JUGADORES POR CATEGORÍA
-====================================== */
-.category-section {
-  padding: 2rem 0;
-  background: var(--fondo-gris);
-}
-.category-section h1 {
-  text-align: center;
-  margin-bottom: 2rem;
-  color: var(--grana);
-  font-weight: bold;
-}
-.category-buttons {
-  text-align: center;
-  margin-bottom: 2rem;
-}
-.category-buttons .btn {
-  margin: 0 0.5rem;
-  transition: transform 0.3s, background-color 0.3s;
-}
-.category-buttons .btn:hover {
-  transform: scale(1.05);
-}
-.category-buttons .btn.active {
-  background-color: var(--grana);
-  color: var(--texto-claro);
-}
-.category-container {
-  display: none;
-}
-.category-container.active {
-  display: block;
+.social-links {
+  display: flex;
+  gap: var(--space-sm);
+  margin-top: var(--space-md);
 }
 
-/* ======================================
-       ESPACIO VACÍO PARA SUBIR FOTOS
-====================================== */
-.empty-photo {
-  height: 200px;
-  background-color: #e9ecef;
-  display: flex;
+.social-links a {
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  color: #6c757d;
-  font-size: 1.2rem;
+  width: 40px;
+  height: 40px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  color: var(--white);
+  transition: all var(--transition-normal);
 }
 
-/* ======================================
-       TARJETAS DE JUGADOR (HEXÁGONO)
-====================================== */
-.player-card {
-  background-color: var(--azul-intenso);
+.social-links a:hover {
+  background-color: var(--accent);
+  color: var(--primary-dark);
+  transform: translateY(-3px);
+}
+
+.copyright {
   text-align: center;
-  padding: 20px;
-  position: relative;
-  color: var(--blanco);
-  border-radius: 0 0 8px 8px;
-}
-.position-tag {
-  background-color: var(--dorado);
-  color: var(--blanco);
-  font-weight: bold;
-  padding: 5px 15px;
-  position: absolute;
-  top: -15px;
-  left: 50%;
-  transform: translateX(-50%);
-  white-space: nowrap;
-  border: 2px solid var(--blanco);
-  clip-path: polygon(15% 0, 85% 0, 100% 50%, 85% 100%, 15% 100%, 0 50%);
-}
-.player-name {
-  font-size: 20px;
-  font-weight: bold;
-  margin-top: 20px;
+  padding-top: var(--space-md);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  margin-top: var(--space-lg);
 }
 
 /* ======================================
-       SWIPE CAROUSEL
+       UTILIDADES
 ====================================== */
-.swipe-carousel {
-  --rm-swipe-carousel-bg-color: transparent;
-  --rm-swipe-carousel-height-default: auto;
-  --rm-swipe-carousel-content-align: flex-start;
-  position: relative;
-  user-select: none;
-  -webkit-user-drag: none;
-  -webkit-tap-highlight-color: rgba(0,0,0,0);
-  touch-action: pan-y;
-}
-.swipe-carousel__content {
-  display: flex;
-  flex-direction: row;
-  gap: var(--rm-swipe-carousel-gap);
-  align-items: var(--rm-swipe-carousel-content-align);
-  width: max-content;
-  transition: var(--rm-swipe-carousel-content-transition, transform .3s ease-in-out);
-  scroll-padding-inline: var(--rm-swipe-carousel-scroll-padding-inline-default, 1.5rem);
+.text-accent {
+  color: var(--accent);
 }
 
+.bg-primary {
+  background-color: var(--primary);
+}
+
+.bg-primary-dark {
+  background-color: var(--primary-dark);
+}
+
+.text-white {
+  color: var(--white);
+}
+
+.text-center {
+  text-align: center;
+}
+
+.mb-0 {
+  margin-bottom: 0;
+}
+
+.mt-1 { margin-top: var(--space-xs); }
+.mt-2 { margin-top: var(--space-sm); }
+.mt-3 { margin-top: var(--space-md); }
+.mt-4 { margin-top: var(--space-lg); }
+.mt-5 { margin-top: var(--space-xl); }
+
 /* ======================================
-       RESPONSIVIDAD GENERAL
+       RESPONSIVIDAD
 ====================================== */
+@media (max-width: 992px) {
+  .hero-title {
+    font-size: 3rem;
+  }
+  
+  .hero-subtitle {
+    font-size: 1.25rem;
+  }
+}
+
 @media (max-width: 768px) {
-  /* HERO */
-  .hero .hero-title {
+  :root {
+    --space-xl: 2rem;
+    --space-lg: 1.5rem;
+  }
+  
+  h1 { font-size: 2rem; }
+  h2 { font-size: 1.75rem; }
+  h3 { font-size: 1.5rem; }
+  
+  .hero {
+    min-height: 70vh;
+  }
+  
+  .hero-title {
     font-size: 2.5rem;
   }
-  .hero .hero-subtitle {
+  
+  .hero-buttons {
+    flex-direction: column;
+    gap: var(--space-sm);
+  }
+  
+  .footer-links {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 576px) {
+  :root {
+    --space-md: 1rem;
+  }
+  
+  .hero-title {
+    font-size: 2rem;
+  }
+  
+  .hero-subtitle {
     font-size: 1rem;
   }
-  /* EQUIPO */
-  #equipo img {
+  
+  .team-member img,
+  .player-photo {
     width: 150px;
     height: 150px;
   }
-  /* LÍNEA DE TIEMPO */
-  .timeline-container {
-    padding: 20px 0;
-  }
-  /* Swipe Carousel */
-  .swipe-carousel__content {
-    gap: 10px;
-  }
-  /* VIDEOS */
-  .videos-section h2 {
-    font-size: 1.8rem;
-  }
-  .video-card {
-    min-width: 220px;
-    max-width: 260px;
-  }
-  .video-card img {
-    height: 120px;
-  }
-  .video-info h5 {
-    font-size: 0.9rem;
-  }
-  .video-info p {
-    font-size: 0.75rem;
-  }
-  /* JUGADORES POR CATEGORÍA */
-  .category-section h1 {
-    font-size: 2rem;
-  }
-  .category-buttons .btn {
-    padding: 0.5rem 1rem;
-    font-size: 0.9rem;
-  }
-}
-
-/* ======================================
-       CONTENEDOR DE FORMULARIOS
-====================================== */
-.contenedor-formularios {
-  background: rgba(0, 0, 0, 0.05);
-  padding: 40px;
-  max-width: 600px;
-  margin: 40px auto;
-  border-radius: 4px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-}
-/* TABS */
-.contenedor-tabs {
-  list-style: none;
-  padding: 0;
-  margin: 0 0 40px 0;
-  display: flex;
-  justify-content: center;
-  border-bottom: 2px solid var(--grana);
-}
-.contenedor-tabs li {
-  flex: 1;
-}
-.contenedor-tabs li a {
-  display: block;
-  text-decoration: none;
-  padding: 15px;
-  background: rgba(160, 179, 176, 0.25);
-  color: var(--grana);
-  font-size: 20px;
-  text-align: center;
-  cursor: pointer;
-  transition: 0.5s ease;
-}
-.contenedor-tabs li a:hover {
-  background: var(--azul-intenso);
-  color: var(--blanco);
-}
-.contenedor-tabs .active a {
-  background: var(--azul);
-  color: var(--blanco);
-}
-.contenido-tab > div {
-  display: none;
-}
-.contenido-tab > div.active {
-  display: block;
-}
-h1 {
-  text-align: center;
-  color: var(--azul);
-  font-weight: 300;
-  margin-bottom: 40px;
-}
-.contenedor-input {
-  position: relative;
-  margin-bottom: 40px;
-}
-.contenedor-input label {
-  position: absolute;
-  transform: translateY(6px);
-  left: 13px;
-  color: rgba(0, 0, 0, 0.5);
-  transition: all 0.25s ease;
-  pointer-events: none;
-  font-size: 22px;
-}
-.contenedor-input input {
-  font-size: 22px;
-  display: block;
-  width: 100%;
-  padding: 5px 10px;
-  border: 1px solid var(--grana);
-  color: var(--azul);
-  border-radius: 5px;
-  transition: all 0.5s ease;
-}
-.contenedor-input input:focus {
-  outline: none;
-  border-color: var(--amarillo);
-}
-.button {
-  border: none;
-  outline: none;
-  border-radius: 5px;
-  cursor: pointer;
-  padding: 15px 0;
-  font-size: 2rem;
-  background: var(--azul);
-  color: var(--blanco);
-  transition: all 0.5s ease;
-}
-.button:hover, .button:focus {
-  background: var(--azul-intenso);
-}
-.button-block {
-  display: block;
-  width: 100%;
-}
-.forgot {
-  margin-top: -20px;
-  text-align: right;
-  margin-bottom: 20px;
-}
-
-/* RESPONSIVIDAD EXTRA */
-@media (max-width: 768px) {
-  #timelineCarousel {
-    max-width: 100%;
-  }
-  .carousel-item img {
-    max-height: 250px; /* Reduce el tamaño de las imágenes en móviles */
-  }
-  .timeline-card {
-    padding: 15px;
-  }
-}
-
-/* ======================================
-       PARTIDOS CARRUSEL (NUEVO)
-====================================== */
-#partidos .carousel-container {
-  position: relative;
-  overflow: hidden;
-  background: var(--blanco);
-  border-radius: 10px;
-  box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-  margin-top: 2rem;
-}
-
-#partidos .carousel-track {
-  display: flex;
-  transition: transform 0.5s ease-in-out;
-}
-
-#partidos .carousel-item {
-  min-width: 100%;
-  padding: 1rem;
-}
-
-#partidos .carousel-button {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  background: rgba(255, 255, 255, 0.7);
-  border: none;
-  padding: 10px;
-  cursor: pointer;
-  border-radius: 50%;
-  z-index: 10;
-  font-size: 18px;
-  transition: background 0.3s;
-}
-
-#partidos .carousel-button:hover {
-  background: rgba(255, 255, 255, 1);
-}
-
-#partidos .prev-button {
-  left: 20px;
-}
-
-#partidos .next-button {
-  right: 20px;
-}
-
-#partidos .carousel-indicators {
-  position: absolute;
-  bottom: 15px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  gap: 10px;
-}
-
-#partidos .carousel-indicators button {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  border: none;
-  background: rgba(0, 0, 0, 0.3);
-  cursor: pointer;
-  transition: background 0.3s;
-}
-
-#partidos .carousel-indicators button.active {
-  background: rgba(0, 0, 0, 0.8);
-}
-
-/* Contenedor principal */
-main.container {
-  background-color: #fff;
-  padding: 20px;
-  margin: 20px auto;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  max-width: 800px;
-}
-
-/* Título de la sección (Aviso Legal) */
-.section-title {
-  color: #002a40;
-  border-bottom: 2px solid #002a40;
-  padding-bottom: 8px;
-  margin-bottom: 20px;
-  font-size: 2rem;
-  font-weight: bold;
-}
-
-/* Subtítulos (por ejemplo, h3) */
-main.container h3 {
-  color: #001b72;
-  margin-top: 20px;
-  margin-bottom: 10px;
-  font-size: 1.5rem;
-}
-
-/* Párrafos */
-main.container p {
-  color: #333;
-  font-size: 1rem;
-  line-height: 1.6;
-  margin-bottom: 15px;
-}
-
-/* Enlaces */
-main.container a {
-  color: #002a40;
-  text-decoration: underline;
-}
-
-/* Ajustes responsivos para dispositivos móviles */
-@media (max-width: 576px) {
-  main.container {
-    padding: 15px;
-    margin: 15px;
-  }
-  .section-title {
-    font-size: 1.5rem;
-  }
-  main.container h3 {
-    font-size: 1.3rem;
-  }
-  main.container p {
-    font-size: 0.95rem;
-  }
-}
-/* Ajustes para las tarjetas con Bootstrap */
-.custom-card {
-  margin-bottom: 1.5rem;
-  position: relative;
-  overflow: hidden;
-}
-.custom-card .btn-close-card {
-  position: absolute;
-  top: 0.5rem;
-  right: 0.5rem;
-  z-index: 10;
-  background: transparent;
-  border: none;
-  font-size: 1.2rem;
-  color: #dc3545;
-}
-.custom-card img.escudo {
-  max-width: 50px;
-  margin-right: 0.8rem;
-}
-/* Personalización de la tarjeta para partidos */
-.match-card {
-  background: linear-gradient(135deg, #002a40, #001b72);
-  color: #fff;
-  border: none;
-  border-radius: 0.5rem;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-}
-.match-card .card-header {
-  background: transparent;
-  border-bottom: none;
-  padding: 0.5rem 1rem;
-}
-.match-card .card-body {
-  padding: 1rem;
-}
-/* Personalización de la tarjeta para entrenamientos */
-.training-card {
-  background: linear-gradient(135deg, #004d40, #00796b);
-  color: #fff;
-  border: none;
-  border-radius: 0.5rem;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-}
-.training-card .card-header {
-  background: transparent;
-  border-bottom: none;
-  padding: 0.5rem 1rem;
-}
-.training-card .card-body {
-  padding: 1rem;
 }
