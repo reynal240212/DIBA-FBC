@@ -466,78 +466,351 @@ img {
 }
 
 /* ======================================
-       COMPONENTES ESPECIALES
+       COMPONENTES ESPECIALES MEJORADOS
 ====================================== */
-/* Tarjeta de partido */
+
+/* --------------------------------------
+        TARJETA DE PARTIDO MEJORADA
+-------------------------------------- */
 .match-card {
-  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-  color: var(--white);
+  background: var(--white);
   border-radius: var(--border-radius-lg);
   overflow: hidden;
-  box-shadow: 0 4px 12px var(--shadow-dark);
-  max-width: 320px;
+  box-shadow: 0 8px 24px rgba(0, 27, 114, 0.12);
+  max-width: 380px;
   margin: 0 auto;
+  transition: all var(--transition-normal);
+  position: relative;
+  border: 1px solid rgba(0, 51, 153, 0.1);
 }
 
+.match-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 32px rgba(0, 27, 114, 0.2);
+}
+
+/* Encabezado con gradiente sutil */
 .match-card-header {
-  background-color: var(--primary-darker);
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
   color: var(--white);
-  padding: var(--space-sm);
-  text-align: center;
-  font-weight: 600;
-}
-
-.match-card-body {
   padding: var(--space-md);
   text-align: center;
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.match-card-header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, 
+              rgba(255, 215, 0, 0.1) 0%, 
+              rgba(255, 215, 0, 0) 50%, 
+              rgba(255, 215, 0, 0.1) 100%);
+}
+
+.match-date {
+  font-size: 0.9rem;
+  opacity: 0.9;
+  font-weight: 500;
+}
+
+.match-competition {
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  background-color: rgba(255, 215, 0, 0.2);
+  padding: 0.25rem 0.75rem;
+  border-radius: 2rem;
+  display: inline-block;
+}
+
+/* Cuerpo de la tarjeta */
+.match-card-body {
+  padding: var(--space-lg);
+  position: relative;
+}
+
+/* Contenedor de equipos */
+.teams-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-md);
+}
+
+.team {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 40%;
 }
 
 .team-logo {
-  width: 70px;
-  height: 70px;
+  width: 80px;
+  height: 80px;
   object-fit: contain;
-  margin: 0 var(--space-xs);
+  margin-bottom: var(--space-sm);
+  transition: all var(--transition-normal);
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+}
+
+.team:hover .team-logo {
+  transform: scale(1.1);
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.15));
+}
+
+.team-name {
+  font-weight: 700;
+  text-align: center;
+  color: var(--primary-dark);
+  font-size: 1.1rem;
+  margin-top: var(--space-xs);
+}
+
+/* Contenedor central (VS) */
+.match-center {
+  width: 20%;
+  text-align: center;
+  position: relative;
+}
+
+.vs-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.vs-text {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--primary);
+  background-color: var(--light-gray);
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.match-time {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--primary-dark);
+  margin-top: var(--space-xs);
+  background-color: rgba(0, 51, 153, 0.05);
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
 }
 
 .match-score {
-  font-size: 2rem;
-  font-weight: 700;
+  font-size: 2.25rem;
+  font-weight: 800;
+  color: var(--primary);
   margin: var(--space-sm) 0;
+  font-family: 'Arial Black', sans-serif;
 }
 
-/* Tarjeta de jugador */
+/* Detalles del partido */
+.match-details {
+  margin-top: var(--space-md);
+  padding-top: var(--space-sm);
+  border-top: 1px dashed rgba(0, 51, 153, 0.2);
+}
+
+.match-info {
+  display: flex;
+  align-items: center;
+  margin-bottom: var(--space-xs);
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.match-info i {
+  margin-right: var(--space-xs);
+  color: var(--primary);
+  width: 20px;
+  text-align: center;
+  font-size: 1rem;
+}
+
+/* Badge de estado */
+.match-status {
+  position: absolute;
+  top: -12px;
+  right: var(--space-md);
+  padding: 0.35rem 1.25rem;
+  border-radius: 2rem;
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  z-index: 2;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.status-live {
+  background-color: #ff4444;
+  color: white;
+  animation: pulse 1.5s infinite;
+}
+
+.status-upcoming {
+  background-color: var(--accent);
+  color: var(--primary-dark);
+}
+
+.status-finished {
+  background-color: #00C851;
+  color: white;
+}
+
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(255, 68, 68, 0.7); }
+  70% { box-shadow: 0 0 0 10px rgba(255, 68, 68, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(255, 68, 68, 0); }
+}
+
+/* --------------------------------------
+        TARJETA DE JUGADOR MEJORADA
+-------------------------------------- */
 .player-card {
   position: relative;
   text-align: center;
-  margin-bottom: var(--space-lg);
+  margin-bottom: var(--space-xl);
+  perspective: 1000px;
+}
+
+.player-card-inner {
+  position: relative;
+  width: 100%;
+  transition: transform 0.6s;
+  transform-style: preserve-3d;
+}
+
+.player-card:hover .player-card-inner {
+  transform: rotateY(10deg);
+}
+
+.player-photo-container {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  margin: 0 auto var(--space-md);
+  perspective: 1000px;
 }
 
 .player-photo {
-  width: 180px;
-  height: 180px;
+  width: 100%;
+  height: 100%;
   object-fit: cover;
   border-radius: 50%;
-  border: 5px solid var(--accent);
-  margin: 0 auto var(--space-sm);
-  transition: transform var(--transition-normal);
+  border: 6px solid var(--accent);
+  transition: all var(--transition-normal);
+  box-shadow: 0 8px 24px rgba(0, 27, 114, 0.15);
+  position: relative;
+  z-index: 2;
+}
+
+.player-photo::before {
+  content: '';
+  position: absolute;
+  top: -6px;
+  left: -6px;
+  right: -6px;
+  bottom: -6px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, 
+              rgba(255, 215, 0, 0.4) 0%, 
+              rgba(255, 215, 0, 0) 50%, 
+              rgba(255, 215, 0, 0.4) 100%);
+  z-index: -1;
 }
 
 .player-card:hover .player-photo {
-  transform: scale(1.05);
+  transform: scale(1.05) rotateZ(2deg);
+  box-shadow: 0 12px 32px rgba(0, 27, 114, 0.25);
+}
+
+.player-info {
+  background-color: var(--white);
+  padding: var(--space-md);
+  border-radius: var(--border-radius-md);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  margin-top: -40px;
+  position: relative;
+  z-index: 1;
+  transition: all var(--transition-normal);
+}
+
+.player-card:hover .player-info {
+  transform: translateY(-10px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+.player-name {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--primary-dark);
+  margin-bottom: var(--space-xs);
+}
+
+.player-position {
+  font-size: 1rem;
+  color: var(--primary);
+  font-weight: 600;
+  margin-bottom: var(--space-sm);
 }
 
 .position-tag {
   position: absolute;
-  top: 10px;
+  top: 20px;
   left: 50%;
   transform: translateX(-50%);
   background-color: var(--accent);
   color: var(--primary-dark);
-  padding: var(--space-xs) var(--space-sm);
-  border-radius: 20px;
-  font-weight: 700;
-  font-size: 0.8rem;
+  padding: var(--space-xs) var(--space-md);
+  border-radius: 2rem;
+  font-weight: 800;
+  font-size: 0.75rem;
   text-transform: uppercase;
+  letter-spacing: 1px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  z-index: 3;
+  border: 2px solid var(--white);
+}
+
+.player-stats {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-lg);
+  margin-top: var(--space-md);
+}
+
+.player-stat {
+  text-align: center;
+}
+
+.stat-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.stat-label {
+  font-size: 0.8rem;
+  color: var(--dark-gray);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-top: var(--space-xs);
 }
 
 /* ======================================
