@@ -818,7 +818,7 @@ img {
 ====================================== */
 .footer {
   background-color: var(--primary-dark);
-  color: var(--white);
+  color: var(--primary);
   padding: var(--space-xl) 0;
 }
 
