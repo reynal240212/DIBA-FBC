@@ -1,436 +1,234 @@
 <!DOCTYPE html>
-<html lang="es" data-bs-theme="light">
+<html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>Inicio - DIBA FBC | Club Deportivo en Barranquilla</title>
-  <meta name="description" content="Club deportivo DIBA FBC de Barranquilla. Formación de talentos con valores en fútbol. Conoce nuestra historia, servicios, equipo técnico y proyectos sociales.">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="robots" content="index, follow">
-  
-  <!-- Favicon en múltiples formatos -->
-  <link rel="icon" href="images/ESCUDO.ico" sizes="any">
-  <link rel="icon" href="images/ESCUDO.svg" type="image/svg+xml">
-  <link rel="apple-touch-icon" href="images/ESCUDO-180x180.png">
-  
-  <!-- Open Graph / Facebook -->
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://diba-fbc.vercel.app/">
-  <meta property="og:title" content="DIBA FBC - Fútbol con Pasión en Barranquilla">
-  <meta property="og:description" content="Club deportivo formador de talentos con valores en Barranquilla, Atlántico. Conoce nuestra historia, servicios y equipo.">
-  <meta property="og:image" content="https://diba-fbc.vercel.app/images/social-preview.jpg">
-  <meta property="og:image:width" content="1200">
-  <meta property="og:image:height" content="630">
-  
-  <!-- Twitter -->
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="DIBA FBC - Fútbol con Pasión en Barranquilla">
-  <meta name="twitter:description" content="Club deportivo formador de talentos con valores en Barranquilla, Atlántico. Conoce nuestra historia, servicios y equipo.">
-  <meta name="twitter:image" content="https://diba-fbc.vercel.app/images/social-preview.jpg">
-  
-  <!-- Preconexión y precarga de recursos críticos -->
-  <link rel="preconnect" href="https://cdn.jsdelivr.net">
-  <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
-  
-  <link rel="preload" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" as="style">
-  <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" as="style" crossorigin>
-  <link rel="preload" href="styles/styles.css" as="style">
-  <link rel="preload" href="images/ESCUDO.png" as="image" type="image/png">
-  
+  <meta charset="UTF-8" />
+  <title>Inicio - DIBA FBC | Historia, Servicios y Más</title>
+  <link rel="icon" href="images/ESCUDO.ico" sizes="32x32">
+  <meta name="description" content="Descubre la historia, los servicios y el equipo de DIBA FBC. Vive la pasión deportiva y conoce a nuestros patrocinadores, fundación y cuerpo técnico."/>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- Bootstrap 5.3.2 CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" 
-        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-  
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" 
-        integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==" 
-        crossorigin="anonymous" referrerpolicy="no-referrer">
-  
-  <!-- AOS (Animate On Scroll) -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
-  
-  <!-- Estilos locales -->
-  <link rel="stylesheet" href="styles/styles.css">
-  <link rel="stylesheet" href="styles/background-animation.css">
-  
-  <!-- PWA -->
-  <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#001b72">
-  
-  <!-- Estilos críticos inline -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css"/>
+  <link rel="stylesheet" href="styles/styles.css" />
+  <link rel="stylesheet" href="styles/background-animation.css" />
+  <link rel="manifest" href="manifest.json" />
   <style>
-    :root {
-      --diba-primary: #001b72;
-      --diba-secondary: #002a40;
-      --diba-accent: #ffc107;
-      --diba-light: #f8f9fa;
-      --diba-dark: #212529;
-    }
-    
-    .hero-section {
-      min-height: 100vh;
-      background: linear-gradient(135deg, var(--diba-secondary), var(--diba-primary));
-      position: relative;
-      overflow: hidden;
-      display: flex;
-      align-items: center;
-    }
-    
-    .hero-content {
-      position: relative;
-      z-index: 2;
-    }
-    
-    .background-overlay {
-      position: absolute;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.5);
-      z-index: 1;
-    }
-    
-    .btn-back-to-top {
+    .background-animation {
       position: fixed;
-      bottom: 1.5rem;
-      right: 1.5rem;
-      width: 3rem;
-      height: 3rem;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 999;
-      opacity: 0;
-      visibility: hidden;
-      transition: all 0.3s ease;
+      top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
     }
-    
-    .btn-back-to-top.show {
-      opacity: 1;
-      visibility: visible;
-    }
-    
-    /* Optimización de imágenes */
-    img {
-      max-width: 100%;
-      height: auto;
-      display: block;
-    }
-    
-    /* Mejoras de accesibilidad */
-    :focus-visible {
-      outline: 3px solid var(--diba-accent);
-      outline-offset: 2px;
-    }
-    
-    .skip-link {
-      position: absolute;
-      top: -3rem;
-      left: 0;
-      background: var(--diba-primary);
-      color: white;
-      padding: 0.5rem 1rem;
+    #btnBackToTop {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
       z-index: 1000;
-      transition: top 0.3s;
-    }
-    
-    .skip-link:focus {
-      top: 0;
+      display: none;
     }
   </style>
 </head>
-
-<body class="d-flex flex-column min-vh-100">
-  <!-- Enlace para saltar al contenido (accesibilidad) -->
-  <a href="#main-content" class="skip-link">Saltar al contenido</a>
-
-  <!-- Fondo animado optimizado -->
-  <div class="background-animation" aria-hidden="true">
-    <div class="cube"></div>
-    <div class="cube"></div>
-    <div class="cube"></div>
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/service-worker.js')
+      .then(reg => console.log("✅ Service Worker registrado"))
+      .catch(err => console.error("❌ Error al registrar el SW", err));
+  }
+</script>
+<body>
+  <!-- Fondo animado -->
+  <div class="background-animation">
+    <div class="cube"></div><div class="cube"></div><div class="cube"></div>
+    <div class="cube"></div><div class="cube"></div><div class="cube"></div>
+    <div class="cube"></div><div class="cube"></div><div class="cube"></div>
     <div class="cube"></div>
   </div>
 
-  <!-- Botón Volver Arriba accesible -->
-  <button id="btnBackToTop" class="btn btn-primary btn-back-to-top shadow" aria-label="Volver al inicio" title="Volver arriba">
-    <i class="fas fa-arrow-up" aria-hidden="true"></i>
+  <!-- Botón Volver Arriba -->
+  <button id="btnBackToTop" title="Volver arriba" aria-label="Volver arriba" class="btn btn-primary btn-lg rounded-circle shadow">
+    <i class="fas fa-arrow-up"></i>
   </button>
 
-  <!-- Navbar cargado dinámicamente -->
-  <header id="navbar-container"></header>
+  <!-- Navbar -->
+  <div id="navbar-container"></div>
 
-  <!-- Contenido principal -->
-  <main id="main-content">
-    <!-- HERO SECTION MEJORADA -->
-    <section class="hero-section text-white">
-      <div class="background-overlay"></div>
-      <div class="container hero-content text-center py-5">
-        <div data-aos="fade-down" data-aos-duration="800">
-          <img src="images/ESCUDO.png" alt="Escudo DIBA FBC" class="mb-4 mx-auto img-fluid" width="150" height="150" loading="eager">
-          <h1 class="display-3 fw-bold mb-3">Deportivo Internacional De Barranquilla Atlántico</h1>
-          <p class="lead mb-4">"Fuerza y Lealtad"</p>
-          <div class="d-flex flex-wrap justify-content-center gap-3">
-            <a href="#resumen-historia" class="btn btn-warning btn-lg px-4 py-2">Conócenos</a>
-            <a href="#contacto" class="btn btn-outline-light btn-lg px-4 py-2">Contáctanos</a>
+  <!-- HERO SECTION -->
+  <section class="hero animate__animated animate__fadeInDown d-flex align-items-center justify-content-center" style="background: linear-gradient(135deg, #002a40, #001b72), url('images/fondo.jpg') center/cover no-repeat fixed; background-blend-mode: multiply; min-height: 80vh;">
+    <div class="container text-center text-white py-5">
+      <h1 class="display-4 fw-bold mb-3">Deportivo Internacional De Barranquilla Atlántico</h1>
+      <p class="lead mb-4">"Fuerza y Lealtad"</p>
+    </div>
+  </section>
+
+  <!-- Sección Resumen de Historia -->
+  <section id="resumen-historia" class="container my-5">
+    <div class="row align-items-center">
+      <div class="col-md-6 mb-4 mb-md-0 text-center">
+        <img src="images/ESCUDO.png" alt="Escudo de DIBA FBC" class="img-fluid rounded shadow" loading="lazy" style="max-width: 300px;" />
+      </div>
+      <div class="col-md-6">
+        <h2 class="mb-3">Nuestra Historia</h2>
+        <p>
+          Fundado en <strong>2012</strong>, <strong>DIBA FBC</strong> ha forjado una trayectoria llena de éxitos y superación. El club se caracteriza por formar talentos y promover valores como la disciplina, el respeto y el trabajo en equipo.
+        </p>
+        <p>
+          A lo largo de los años, hemos competido en torneos locales, dejando huella en cada temporada y construyendo un legado que trasciende más allá de las canchas.
+        </p>
+        <a href="Historia.html" target="_blank" class="btn btn-warning mt-3">
+          <i class="fas fa-external-link-alt me-1"></i> Más Información
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Sección Servicios -->
+  <section id="servicios" class="container my-5 animate__animated animate__fadeInUp">
+    <h2 class="text-center fw-bold mb-4">NUESTROS SERVICIOS</h2>
+    <div class="row row-cols-1 row-cols-md-3 g-4 mt-4">
+      <div class="col">
+        <div class="card h-100 shadow text-center">
+          <div class="card-body">
+            <i class="fas fa-dumbbell fa-2x mb-3 text-primary"></i>
+            <h5 class="card-title">Entrenamiento</h5>
+            <p class="card-text">
+              Potenciamos la técnica y táctica de cada jugador, preparándolos para competir al más alto nivel.
+            </p>
           </div>
         </div>
       </div>
-    </section>
-
-    <!-- Sección Resumen de Historia Mejorada -->
-    <section id="resumen-historia" class="py-5 bg-light">
-      <div class="container">
-        <div class="row align-items-center">
-          <div class="col-lg-6 mb-5 mb-lg-0" data-aos="fade-right">
-            <div class="ratio ratio-16x9 rounded-3 overflow-hidden shadow">
-              <img src="images/ESCUDO.png" alt="Escudo de DIBA FBC" class="img-fluid object-fit-cover" width="800" height="450" loading="lazy">
-            </div>
+      <div class="col">
+        <div class="card h-100 shadow text-center">
+          <div class="card-body">
+            <i class="fas fa-trophy fa-2x mb-3 text-warning"></i>
+            <h5 class="card-title">Participación en Torneos</h5>
+            <p class="card-text">
+              Representamos a nuestra comunidad en torneos locales, demostrando competitividad y espíritu deportivo en cada desafío.
+            </p>
           </div>
-          <div class="col-lg-6" data-aos="fade-left" data-aos-delay="200">
-            <h2 class="display-5 fw-bold mb-4 text-primary">Nuestra Historia</h2>
-            <div class="timeline">
-              <div class="timeline-item">
-                <div class="timeline-badge bg-warning">2012</div>
-                <div class="timeline-content">
-                  <p>Fundación del club con la visión de formar jóvenes talentos con valores en Barranquilla.</p>
-                </div>
-              </div>
-              <div class="timeline-item">
-                <div class="timeline-badge bg-warning">2016</div>
-                <div class="timeline-content">
-                  <p>Creación de la Fundación Tierra que Emana Leche y Miel para ampliar nuestro impacto social.</p>
-                </div>
-              </div>
-              <div class="timeline-item">
-                <div class="timeline-badge bg-warning">Presente</div>
-                <div class="timeline-content">
-                  <p>Seguimos creciendo y compitiendo, dejando huella en el fútbol del Atlántico.</p>
-                </div>
-              </div>
-            </div>
-            <a href="Historia.html" class="btn btn-warning mt-4 animate__animated animate__pulse animate__infinite animate__slower">
-              <i class="fas fa-book-open me-2" aria-hidden="true"></i>Descubre más
+        </div>
+      </div>
+      <div class="col">
+        <div class="card h-100 shadow text-center">
+          <div class="card-body">
+            <i class="fas fa-users fa-2x mb-3 text-success"></i>
+            <h5 class="card-title">Desarrollo Integral</h5>
+            <p class="card-text">
+              Fomentamos el desarrollo personal de nuestros jugadores, inculcando valores y liderazgo dentro y fuera del campo.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Sección Equipo (Cuerpo Técnico) -->
+  <section id="equipo" class="container my-5 animate__animated animate__fadeInUp">
+    <h2 class="text-center mb-4">CUERPO TÉCNICO</h2>
+    <div class="row justify-content-center g-4">
+      <div class="col-md-4">
+        <div class="card h-100 text-center shadow">
+          <img src="images/profesor.jpg" class="card-img-top rounded-circle mx-auto mt-4" alt="Reinaldo Perez, Director Técnico" style="width: 140px; height: 140px; object-fit: cover;" loading="lazy" />
+          <div class="card-body">
+            <h5 class="card-title">Reinaldo Perez</h5>
+            <p class="card-text">Director Técnico</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card h-100 text-center shadow">
+          <img src="images/reinaldoNavas.png" class="card-img-top rounded-circle mx-auto mt-4" alt="Reinaldo Perez Navas, Técnico" style="width: 140px; height: 140px; object-fit: cover;" loading="lazy" />
+          <div class="card-body">
+            <h5 class="card-title">Reinaldo Perez Navas</h5>
+            <p class="card-text">Técnico</p>
+          </div>
+        </div>
+      </div>
+      <!-- Puedes agregar más miembros aquí -->
+    </div>
+  </section>
+
+  <!-- Sección Fundación -->
+  <section id="fundacion" class="container my-5">
+    <div class="row align-items-center">
+      <div class="col-md-6 mb-4 mb-md-0 text-center">
+        <a href="https://instagram.com" target="_blank">
+          <img src="images/unnamed.jpg" alt="funtilemi" class="img-fluid w-100 rounded shadow" loading="lazy" style="max-width:350px;" />
+        </a>
+      </div>
+      <div class="col-md-6">
+        <h2 class="mb-4"><i class="fas fa-hand-holding-heart me-2"></i>Fundación Tierra que Emana Leche y Miel</h2>
+        <p>
+          La <strong>Fundación Tierra que Emana Leche y Miel</strong> es una entidad sin ánimo de lucro, comprometida con el desarrollo y bienestar de la comunidad.
+        </p>
+        <p>
+          Fundada el <strong>28 de marzo de 2016</strong>, su sede está en Barranquilla, Atlántico.
+        </p>
+        <a href="https://colombiapymes.com/empresas/fundacion-tierra-que-emana-leche-y-miel-sigla-funtilemi_id_EF8E1398F2821C3F" target="_blank" class="btn btn-warning mb-2">
+          <i class="fas fa-external-link-alt me-1"></i> Más Información
+        </a>
+        <a href="https://www.instagram.com/funtilemi/" target="_blank" class="btn btn-warning mb-2">
+          <i class="fab fa-instagram me-1"></i> Instagram
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Sección Patrocinadores -->
+  <section id="patrocinadores" class="animate__animated animate__fadeInUp text-center py-5">
+    <div class="container">
+      <h2 class="mb-4">Nuestros Patrocinadores</h2>
+      <div class="row justify-content-center g-4">
+        <div class="col-6 col-md-4 col-lg-3">
+          <div class="card h-100 border-0 shadow-sm">
+            <a href="https://okeysport.com/" target="_blank">
+              <img src="https://okeysport.com/cdn/shop/files/Logo_OKEY.svg?v=1721155737&width=100" alt="Logo de Okey Sport" class="card-img-top p-3" style="height: 100px; object-fit: contain;" loading="lazy" />
             </a>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Sección Servicios Mejorada -->
-    <section id="servicios" class="py-5">
-      <div class="container">
-        <header class="text-center mb-5" data-aos="fade-up">
-          <h2 class="display-5 fw-bold mb-3">Nuestros Servicios</h2>
-          <p class="lead text-muted">Formación integral para deportistas de alto rendimiento</p>
-        </header>
-        
-        <div class="row g-4">
-          <div class="col-md-4" data-aos="fade-up" data-aos-delay="100">
-            <article class="card h-100 border-0 shadow-sm hover-effect">
-              <div class="card-body text-center p-4">
-                <div class="icon-box bg-primary bg-opacity-10 text-primary rounded-circle mx-auto mb-4">
-                  <i class="fas fa-running fa-2x" aria-hidden="true"></i>
-                </div>
-                <h3 class="h5">Entrenamiento Profesional</h3>
-                <p class="text-muted">Programas de entrenamiento técnico-táctico para todas las edades y niveles.</p>
-              </div>
-            </article>
-          </div>
-          
-          <div class="col-md-4" data-aos="fade-up" data-aos-delay="200">
-            <article class="card h-100 border-0 shadow-sm hover-effect">
-              <div class="card-body text-center p-4">
-                <div class="icon-box bg-primary bg-opacity-10 text-primary rounded-circle mx-auto mb-4">
-                  <i class="fas fa-trophy fa-2x" aria-hidden="true"></i>
-                </div>
-                <h3 class="h5">Competencias</h3>
-                <p class="text-muted">Participación en torneos locales y regionales con alto nivel competitivo.</p>
-              </div>
-            </article>
-          </div>
-          
-          <div class="col-md-4" data-aos="fade-up" data-aos-delay="300">
-            <article class="card h-100 border-0 shadow-sm hover-effect">
-              <div class="card-body text-center p-4">
-                <div class="icon-box bg-primary bg-opacity-10 text-primary rounded-circle mx-auto mb-4">
-                  <i class="fas fa-heart fa-2x" aria-hidden="true"></i>
-                </div>
-                <h3 class="h5">Formación en Valores</h3>
-                <p class="text-muted">Desarrollo personal y formación en valores para la vida.</p>
-              </div>
-            </article>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Sección Equipo Mejorada -->
-    <section id="equipo" class="py-5 bg-light">
-      <div class="container">
-        <header class="text-center mb-5" data-aos="fade-up">
-          <h2 class="display-5 fw-bold">Cuerpo Técnico</h2>
-          <p class="lead text-muted">Profesionales comprometidos con el desarrollo deportivo</p>
-        </header>
-        
-        <div class="row justify-content-center">
-          <div class="col-lg-3 col-md-6 mb-4" data-aos="zoom-in" data-aos-delay="100">
-            <article class="team-card text-center">
-              <div class="team-img-container mx-auto mb-4">
-                <img src="images/profesor.jpg" alt="Reinaldo Perez" class="rounded-circle shadow" width="200" height="200" loading="lazy">
-                <div class="team-overlay d-flex align-items-center justify-content-center">
-                  <div class="social-links">
-                    <a href="#" class="text-white mx-2" aria-label="Facebook de Reinaldo Perez"><i class="fab fa-facebook-f" aria-hidden="true"></i></a>
-                    <a href="#" class="text-white mx-2" aria-label="Instagram de Reinaldo Perez"><i class="fab fa-instagram" aria-hidden="true"></i></a>
-                  </div>
-                </div>
-              </div>
-              <h3 class="h5 mb-1">Reinaldo Perez</h3>
-              <p class="text-muted mb-2">Director Técnico</p>
-              <p class="small text-primary">Licenciado en Educación Física</p>
-            </article>
-          </div>
-          
-          <div class="col-lg-3 col-md-6 mb-4" data-aos="zoom-in" data-aos-delay="200">
-            <article class="team-card text-center">
-              <div class="team-img-container mx-auto mb-4">
-                <img src="images/reinaldoNavas.png" alt="Reinaldo Perez Navas" class="rounded-circle shadow" width="200" height="200" loading="lazy">
-                <div class="team-overlay d-flex align-items-center justify-content-center">
-                  <div class="social-links">
-                    <a href="#" class="text-white mx-2" aria-label="Facebook de Reinaldo Perez Navas"><i class="fab fa-facebook-f" aria-hidden="true"></i></a>
-                    <a href="#" class="text-white mx-2" aria-label="Instagram de Reinaldo Perez Navas"><i class="fab fa-instagram" aria-hidden="true"></i></a>
-                  </div>
-                </div>
-              </div>
-              <h3 class="h5 mb-1">Reinaldo Perez Navas</h3>
-              <p class="text-muted mb-2">Técnico Asistente</p>
-              <p class="small text-primary">Especialista en Fútbol Juvenil</p>
-            </article>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Sección Fundación Mejorada -->
-    <section id="fundacion" class="py-5">
-      <div class="container">
-        <div class="row align-items-center">
-          <div class="col-lg-6 mb-5 mb-lg-0" data-aos="fade-right">
-            <div class="ratio ratio-16x9 rounded-3 overflow-hidden shadow">
-              <img src="images/unnamed.jpg" alt="Fundación Tierra que Emana Leche y Miel" class="img-fluid object-fit-cover" width="800" height="450" loading="lazy">
+            <div class="card-body p-2">
+              <p class="card-text">Okey Sport</p>
             </div>
           </div>
-          <div class="col-lg-6" data-aos="fade-left" data-aos-delay="200">
-            <div class="ps-lg-5">
-              <span class="badge bg-warning text-dark mb-3">Desde 2016</span>
-              <h2 class="display-5 fw-bold mb-4">Fundación Tierra que Emana Leche y Miel</h2>
-              <p class="lead mb-4">Comprometidos con el desarrollo social de nuestra comunidad.</p>
-              
-              <ul class="list-unstyled mb-4">
-                <li class="mb-2"><i class="fas fa-check-circle text-primary me-2" aria-hidden="true"></i> Programas sociales para niños y jóvenes</li>
-                <li class="mb-2"><i class="fas fa-check-circle text-primary me-2" aria-hidden="true"></i> Apoyo educativo y nutricional</li>
-                <li class="mb-2"><i class="fas fa-check-circle text-primary me-2" aria-hidden="true"></i> Desarrollo comunitario</li>
-              </ul>
-              
-              <div class="d-flex flex-wrap gap-3">
-                <a href="https://colombiapymes.com/empresas/fundacion-tierra-que-emana-leche-y-miel-sigla-funtilemi_id_EF8E1398F2821C3F" target="_blank" rel="noopener noreferrer" class="btn btn-warning px-4">
-                  <i class="fas fa-external-link-alt me-2" aria-hidden="true"></i>Visita nuestro perfil
-                </a>
-                <a href="https://www.instagram.com/funtilemi/" target="_blank" rel="noopener noreferrer" class="btn btn-outline-primary px-4">
-                  <i class="fab fa-instagram me-2" aria-hidden="true"></i>Síguenos
-                </a>
-              </div>
+        </div>
+        <div class="col-6 col-md-4 col-lg-3">
+          <div class="card h-100 border-0 shadow-sm">
+            <a href="https://www.facebook.com/chirodeportes/" target="_blank">
+              <img src="https://tse3.mm.bing.net/th?id=OIP.2pbPD48ADuuuNSlSKtgEpwHaHa&pid=Api" alt="Logo de Chiro Deportes" class="card-img-top p-3" style="height: 100px; object-fit: contain;" loading="lazy" />
+            </a>
+            <div class="card-body p-2">
+              <p class="card-text">Chiro Deportes</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-6 col-md-4 col-lg-3">
+          <div class="card h-100 border-0 shadow-sm">
+            <a href="https://www.instagram.com/calzadoorpis/" target="_blank">
+              <img src="https://i.pinimg.com/originals/2d/36/e1/2d36e15e7ad8ab91b41f3db0eff0f7ac.png" alt="Logo de Calzado Orpis" class="card-img-top p-3" style="height: 100px; object-fit: contain;" loading="lazy" />
+            </a>
+            <div class="card-body p-2">
+              <p class="card-text">Calzado Orpis</p>
             </div>
           </div>
         </div>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <!-- Sección Patrocinadores Mejorada -->
-    <section id="patrocinadores" class="py-5 bg-light">
-      <div class="container">
-        <header class="text-center mb-5" data-aos="fade-up">
-          <h2 class="display-5 fw-bold">Nuestros Aliados</h2>
-          <p class="lead text-muted">Empresas que apoyan nuestro proyecto deportivo</p>
-        </header>
-        
-        <div class="row justify-content-center align-items-center g-4" data-aos="fade-up" data-aos-delay="200">
-          <div class="col-md-4 col-6">
-            <div class="sponsor-card p-4 text-center">
-              <a href="https://okeysport.com/" target="_blank" rel="noopener noreferrer" class="d-block">
-                <img src="https://okeysport.com/cdn/shop/files/Logo_OKEY.svg?v=1721155737" alt="Okey Sport" class="img-fluid mx-auto" style="max-height: 80px;" width="160" height="80" loading="lazy">
-                <p class="mt-3 mb-0 fw-bold">Okey Sport</p>
-              </a>
-            </div>
-          </div>
-          
-          <div class="col-md-4 col-6">
-            <div class="sponsor-card p-4 text-center">
-              <a href="https://www.facebook.com/chirodeportes/" target="_blank" rel="noopener noreferrer" class="d-block">
-                <img src="https://tse3.mm.bing.net/th?id=OIP.2pbPD48ADuuuNSlSKtgEpwHaHa&pid=Api" alt="Chiro Deportes" class="img-fluid mx-auto" style="max-height: 80px;" width="160" height="80" loading="lazy">
-                <p class="mt-3 mb-0 fw-bold">Chiro Deportes</p>
-              </a>
-            </div>
-          </div>
-          
-          <div class="col-md-4 col-6">
-            <div class="sponsor-card p-4 text-center">
-              <a href="https://www.instagram.com/calzadoorpis/" target="_blank" rel="noopener noreferrer" class="d-block">
-                <img src="https://i.pinimg.com/originals/2d/36/e1/2d36e15e7ad8ab91b41f3db0eff0f7ac.png" alt="Calzado Orpis" class="img-fluid mx-auto" style="max-height: 80px;" width="160" height="80" loading="lazy">
-                <p class="mt-3 mb-0 fw-bold">Calzado Orpis</p>
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  </main>
+  <!-- Footer -->
+  <div id="footer-container"></div>
 
-  <!-- Footer cargado dinámicamente -->
-  <footer id="footer-container" class="mt-auto"></footer>
-
-  <!-- Scripts optimizados -->
-  <!-- Bootstrap JS Bundle con Popper -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" 
-          integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" 
-          crossorigin="anonymous" defer></script>
-  
-  <!-- AOS Animation -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js" defer></script>
-  
-  <!-- Script para cargar componentes -->
-  <script src="scripts/loadComponents.js" defer></script>
-  
-  <!-- Scripts principales -->
-  <script src="scripts/main.js" defer></script>
-  
-  <!-- Inicialización de AOS -->
+  <!-- Bootstrap JS Bundle (5.3.2) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="scripts/loadComponents.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="scripts/main.js"></script>
+  <script src="scripts/script.js"></script>
   <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      AOS.init({
-        duration: 800,
-        easing: 'ease-in-out',
-        once: true,
-        mirror: false,
-        disable: window.matchMedia('(prefers-reduced-motion: reduce)').matches
-      });
-      
-      // Botón volver arriba
-      const backToTopButton = document.getElementById('btnBackToTop');
-      
-      window.addEventListener('scroll', () => {
-        if (window.pageYOffset > 300) {
-          backToTopButton.classList.add('show');
-        } else {
-          backToTopButton.classList.remove('show');
-        }
-      });
-      
-      backToTopButton.addEventListener('click', () => {
-        window.scrollTo({
-          top: 0,
-          behavior: 'smooth'
-        });
-      });
+    // Mostrar/ocultar botón volver arriba
+    window.addEventListener('scroll', function() {
+      document.getElementById('btnBackToTop').style.display = window.scrollY > 200 ? 'block' : 'none';
     });
+    document.getElementById('btnBackToTop').onclick = function() {
+      window.scrollTo({top:0, behavior:'smooth'});
+    };
   </script>
 </body>
 </html>
