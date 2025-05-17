@@ -823,9 +823,13 @@ img {
 }
 
 .footer-logo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: 80px;
-  margin-bottom: var(--space-md);
+  margin: 0 auto var(--space-md);
 }
+
 
 .footer-links {
   display: grid;
