@@ -128,3 +128,10 @@ async function signOut() {
   await supabaseClient.auth.signOut();
   window.location.href = 'login.html';
 }
+ // Mostrar/ocultar botón volver arriba
+    window.addEventListener('scroll', function() {
+      document.getElementById('btnBackToTop').style.display = window.scrollY > 200 ? 'block' : 'none';
+    });
+    document.getElementById('btnBackToTop').onclick = function() {
+      window.scrollTo({top:0, behavior:'smooth'});
+    };

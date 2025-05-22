@@ -3,6 +3,8 @@
 ====================================== */
 :root {
   /* Colores principales */
+  --font-primary: 'Arial', sans-serif; /* Mantenido como fallback */
+  --font-secondary: 'Dancing Script', cursive;
   --primary-dark: #001b72;      /* Azul oscuro principal */
   --primary: #003399;           /* Azul fuerte */
   --primary-darker: #0b0281;    /* Tono extra oscuro */
@@ -64,7 +66,7 @@ html {
 body {
   width: 100%;
   min-height: 100%;
-  font-family: var(--font-primary);
+  font-family: 'Arial', var(--font-primary);
   line-height: 1.6;
   color: #333;
   background-color: var(--white);
@@ -996,4 +998,14 @@ img {
     width: 150px;
     height: 150px;
   }
+}
+#patrocinadores .col-6 a img { /* O una clase más específica si añades a los 'a' o 'img' */
+  filter: grayscale(100%);
+  opacity: 0.7;
+  transition: all var(--transition-normal);
+}
+#patrocinadores .col-6 a:hover img {
+  filter: grayscale(0%);
+  opacity: 1;
+  transform: scale(1.1);
 }

@@ -4,8 +4,22 @@
   <meta charset="UTF-8" />
   <title>Inicio - DIBA FBC | Historia, Servicios y Más</title>
   <link rel="icon" href="images/ESCUDO.ico" sizes="32x32">
-  <meta name="description" content="Descubre la historia, los servicios y el equipo de DIBA FBC. Vive la pasión deportiva y conoce a nuestros patrocinadores, fundación y cuerpo técnico."/>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <head>
+  <!-- ... otros meta tags -->
+  <meta property="og:title" content="Inicio - DIBA FBC | Historia, Servicios y Más" />
+  <meta property="og:description" content="Descubre la historia, los servicios y el equipo de DIBA FBC. Vive la pasión deportiva y conoce a nuestros patrocinadores, fundación y cuerpo técnico." />
+  <meta property="og:image" content="https://diba-fbc.vercel.app/images/ESCUDO.png" /> <!-- URL absoluta a una imagen representativa -->
+  <meta property="og:url" content="https://diba-fbc.vercel.app/" />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Inicio - DIBA FBC | Historia, Servicios y Más" />
+  <meta name="twitter:description" content="Descubre la historia, los servicios y el equipo de DIBA FBC." />
+  <meta name="twitter:image" content="https://diba-fbc.vercel.app/images/ESCUDO.png" /> <!-- URL absoluta -->
+  <!-- ... -->
+</head>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Arial:wght@400;700&display=swap" rel="stylesheet">
   <!-- Bootstrap 5.3.2 CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer"/>
@@ -52,11 +66,19 @@
   <!-- Navbar -->
   <div id="navbar-container"></div>
 
- <div class="container text-center text-white py-5">
-  <h1 class="display-4 fw-bold mb-3 animate__animated animate__zoomIn">Deportivo Internacional De Barranquilla Atlántico</h1>
-  <p class="lead mb-4 animate__animated animate__fadeInUp animate__delay-1s">"Fuerza y Lealtad"</p>
-  <a href="" class="btn btn-lg btn-warning animate__animated animate__fadeInUp animate__delay-2s">Descubre Más</a>
-</div>
+ <section class="hero"> <!-- Quita d-flex, align-items, justify-content si .hero CSS lo maneja -->
+  <div class="hero-content"> <!-- Nueva capa para aplicar .hero-content -->
+    <div class="container text-center text-white py-5"> <!-- Container de Bootstrap aún puede ser útil para el ancho -->
+      <h1 class="display-4 fw-bold mb-3 hero-title animate__animated animate__fadeInDown">Deportivo Internacional De Barranquilla Atlántico</h1>
+      <p class="lead mb-4 hero-subtitle animate__animated animate__fadeInUp animate__delay-1s">"Fuerza y Lealtad"</p>
+      <div class="hero-buttons"> <!-- Para aplicar los estilos .hero-buttons si tienes varios botones -->
+        <a href="#servicios" class="btn btn-accent btn-lg animate__animated animate__pulse animate__delay-2s animate__infinite"> <!-- Usando tu btn-accent -->
+          <i class="fas fa-chevron-down me-2" aria-hidden="true"></i> Descubre Nuestros Servicios
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
   <!-- Sección Resumen de Historia -->
   <section id="resumen-historia" class="container my-5">
     <div class="row align-items-center">
@@ -82,17 +104,16 @@
   <section id="servicios" class="container my-5 animate__animated animate__fadeInUp">
     <h2 class="text-center fw-bold mb-4">NUESTROS SERVICIOS</h2>
     <div class="row row-cols-1 row-cols-md-3 g-4 mt-4">
-      <div class="col">
-        <div class="card h-100 shadow text-center">
-          <div class="card-body">
-            <i class="fas fa-dumbbell fa-2x mb-3 text-primary"></i>
-            <h5 class="card-title">Entrenamiento</h5>
-            <p class="card-text">
-              Potenciamos la técnica y táctica de cada jugador, preparándolos para competir al más alto nivel.
-            </p>
-          </div>
-        </div>
-      </div>
+     <!-- En la sección servicios -->
+<div class="col">
+  <div class="card h-100 shadow text-center service-card"> <!-- Añadida clase service-card -->
+    <div class="card-body py-4">
+      <i class="fas fa-dumbbell service-icon" aria-hidden="true"></i> <!-- Añadida clase service-icon y aumentado tamaño base de Bootstrap -->
+      <h5 class="card-title fw-semibold">Entrenamiento Profesional</h5>
+      <p class="card-text">...</p>
+    </div>
+  </div>
+</div>
       <div class="col">
         <div class="card h-100 shadow text-center">
           <div class="card-body">
@@ -169,7 +190,7 @@
       </div>
     </div>
   </section>
-
+  
   <!-- Sección Patrocinadores -->
   <section id="patrocinadores" class="animate__animated animate__fadeInUp text-center py-5">
     <div class="container">
@@ -211,21 +232,39 @@
 
   <!-- Footer -->
   <div id="footer-container"></div>
-
+  
   <!-- Bootstrap JS Bundle (5.3.2) -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
   <script src="scripts/loadComponents.js"></script>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="scripts/main.js"></script>
   <script src="scripts/script.js"></script>
-  <script>
-    // Mostrar/ocultar botón volver arriba
-    window.addEventListener('scroll', function() {
-      document.getElementById('btnBackToTop').style.display = window.scrollY > 200 ? 'block' : 'none';
-    });
-    document.getElementById('btnBackToTop').onclick = function() {
-      window.scrollTo({top:0, behavior:'smooth'});
-    };
-  </script>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SportsTeam",
+  "name": "Deportivo Internacional De Barranquilla Atlántico (DIBA FBC)",
+  "alternateName": "DIBA FBC",
+  "url": "https://www.tudominio.com/",
+  "logo": "https://www.tudominio.com/images/ESCUDO.png",
+  "description": "Club de fútbol fundado en 2012, enfocado en formar talentos y promover valores deportivos.",
+  "foundingDate": "2012",
+  "sport": "Football (Soccer)",
+  "location": {
+    "@type": "Place",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Barranquilla",
+      "addressRegion": "Atlántico",
+      "addressCountry": "CO"
+    }
+  },
+  "memberOf": { // Si aplica, liga a la que pertenece
+    "@type": "SportsLeague",
+    "name": "Nombre de la Liga Local"
+  }
+  // Puedes añadir "coach", "athlete" etc.
+}
+</script>
 </body>
 </html>
