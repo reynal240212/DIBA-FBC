@@ -682,7 +682,7 @@ img {
 }
 
 /* --------------------------------------
-        TARJETA DE JUGADOR MEJORADA
+        TARJETA DE JUGADOR 
 -------------------------------------- */
 .player-card {
   position: relative;
@@ -704,8 +704,8 @@ img {
 
 .player-photo-container {
   position: relative;
-  width: 200px;
-  height: 200px;
+  width: 250px;
+  height: 250px;
   margin: 0 auto var(--space-md);
   perspective: 1000px;
 }
@@ -730,15 +730,15 @@ img {
   right: -6px;
   bottom: -6px;
   border-radius: 50%;
-  background: linear-gradient(135deg, 
-              rgba(255, 215, 0, 0.4) 0%, 
-              rgba(255, 215, 0, 0) 50%, 
-              rgba(255, 215, 0, 0.4) 100%);
+  background: linear-gradient(135deg,
+                rgba(255, 215, 0, 0.4) 0%,
+                rgba(255, 215, 0, 0) 50%,
+                rgba(255, 215, 0, 0.4) 100%);
   z-index: -1;
 }
 
 .player-card:hover .player-photo {
-  transform: scale(1.05) rotateZ(2deg);
+  transform: scale(1.02) rotateZ(1deg);
   box-shadow: 0 12px 32px rgba(0, 27, 114, 0.25);
 }
 
@@ -814,7 +814,6 @@ img {
   letter-spacing: 1px;
   margin-top: var(--space-xs);
 }
-
 /* ======================================
        FOOTER
 ====================================== */
