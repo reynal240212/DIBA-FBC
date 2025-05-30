@@ -87,7 +87,10 @@
       doc.setFontSize(10);
       doc.text("DEPORTIVO INTERNACIONAL DE BARRANQUILLA ATLANTICO", 120, 55);
       doc.text("RESOLUCIÓN 0122 /2018- 10/SEPT/2018", 120, 70);
-      doc.text("Planilla de control", 120, 85),doc.text("FECHA: ____________", 120, 85);;
+      doc.setFontSize(12);
+      doc.text("Planilla de control de asistencia, disciplina y pagos", 120, 95);
+      doc.setFontSize(10);
+      doc.text("Fecha: " + new Date().toLocaleDateString(), 40, 90);
       
       
       // Definir las columnas y filas de la tabla
