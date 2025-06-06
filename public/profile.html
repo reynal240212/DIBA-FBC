@@ -7,10 +7,12 @@
 
   <!-- Bootstrap CSS -->
   <link
-    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
     rel="stylesheet"
   />
-  <!-- Animate.css (opcional) -->
+  <!-- Bootstrap Icons (para el icono de marcador de posición) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <!-- Animate.css -->
   <link
     rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
@@ -21,7 +23,7 @@
     body {
       background: url('https://cdn.britannica.com/51/190751-050-147B93F7/soccer-ball-goal.jpg') no-repeat center center fixed;
       background-size: cover;
-      font-family: Arial, sans-serif;
+      font-family: 'Segoe UI', Arial, sans-serif;
       padding: 1rem;
       position: relative;
     }
@@ -30,8 +32,8 @@
       content: "";
       position: absolute;
       inset: 0;
-      background: rgba(0, 0, 0, 0.55);
-      z-index: 0;
+      background: rgba(0, 0, 0, 0.6); /* Un poco más oscuro para mejor contraste */
+      z-index: -1;
     }
     /* Contenedor principal */
     .profile-container {
@@ -42,29 +44,62 @@
     .profile-card {
       max-width: 500px;
       width: 100%;
-      margin: 0 auto;
+      margin: 2rem auto;
       border: none;
-      border-radius: 10px;
+      border-radius: 12px;
       overflow: hidden;
-      background: #fff;
+      background-color: rgba(255, 255, 255, 0.98); /* Fondo ligeramente traslúcido */
+      backdrop-filter: blur(5px);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
     .profile-card:hover {
       transform: translateY(-5px);
-      box-shadow: 0 8px 16px rgba(0,0,0,0.25);
-      transition: transform 0.3s, box-shadow 0.3s;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.2);
     }
     .animate__animated {
-      animation-duration: 1s;
+      --animate-duration: 0.8s;
+    }
+    /* Estilos para la previsualización del avatar */
+    .avatar-preview-wrapper {
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+    .avatar-preview {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid #dee2e6;
+      background-color: #f8f9fa;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem; /* Tamaño del icono */
+      color: #adb5bd;
+    }
+    /* Estilo para el botón de envío */
+    .btn-submit .spinner-border {
+      width: 1.2rem;
+      height: 1.2rem;
     }
   </style>
 </head>
 <body>
   <div class="container profile-container d-flex align-items-center justify-content-center min-vh-100">
-    <div class="card profile-card shadow-sm p-4 animate__animated animate__fadeInUp">
-      <h2 class="h4 text-center mb-4">Completa tu Perfil</h2>
+    <div class="card profile-card shadow-lg p-4 animate__animated animate__fadeInUp">
+      
+      <!-- Contenedor para la previsualización del avatar -->
+      <div class="avatar-preview-wrapper">
+        <img id="avatar-preview-img" class="avatar-preview shadow-sm" src="" alt="Previsualización del Avatar">
+      </div>
+
+      <h2 class="h4 text-center mb-4 fw-bold">Completa tu Perfil</h2>
+
+      <!-- Contenedor para alertas dinámicas -->
+      <div id="alert-container"></div>
 
       <!-- Formulario para completar/actualizar el perfil -->
-      <form id="profile-form">
+      <form id="profile-form" novalidate>
         <div class="mb-3">
           <label for="full_name" class="form-label">Nombre Completo</label>
           <input
@@ -72,7 +107,7 @@
             class="form-control"
             id="full_name"
             name="full_name"
-            placeholder="Tu nombre completo"
+            placeholder="Ej: Lionel Messi"
             required
           />
         </div>
@@ -83,7 +118,7 @@
             class="form-control"
             id="username"
             name="username"
-            placeholder="Nombre de usuario"
+            placeholder="Ej: lio_messi"
             required
           />
         </div>
@@ -94,102 +129,201 @@
             id="bio"
             name="bio"
             rows="3"
-            placeholder="Cuéntanos algo sobre ti"
+            placeholder="Cuéntanos algo sobre ti..."
           ></textarea>
         </div>
         <!-- Campo de texto para pegar la URL de la imagen -->
-        <div class="mb-3">
+        <div class="mb-4">
           <label for="avatar_url" class="form-label">URL de tu foto (opcional)</label>
           <input
             type="url"
             class="form-control"
             id="avatar_url"
             name="avatar_url"
-            placeholder="https://example.com/mi-foto.jpg"
+            placeholder="https://ejemplo.com/tu-foto.jpg"
           />
         </div>
-        <button type="submit" class="btn btn-success w-100">Guardar Perfil</button>
+        <button type="submit" id="submit-button" class="btn btn-success w-100 fw-bold btn-submit">
+          <span class="button-text">Guardar Perfil</span>
+          <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+        </button>
       </form>
     </div>
   </div>
 
   <!-- Bootstrap JS Bundle -->
-  <script
-    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
-  ></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <!-- Supabase JS (versión 2.x) -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  
   <script>
-    // Configura tu Supabase
+    // --- 1. CONFIGURACIÓN Y CONSTANTES ---
     const SUPABASE_URL = 'https://nwxdshisfyenkylgqxgz.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im53eGRzaGlzZnllbmt5bGdxeGd6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzkwNTQzMDgsImV4cCI6MjA1NDYzMDMwOH0.QoIiNo5pFA1_MVfE2ugLgyz4HeET-WhA0C_sNOkWv9g';
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    // Verifica si el usuario está autenticado al cargar la página
-    document.addEventListener('DOMContentLoaded', async () => {
-      const { data: { session } } = await supabaseClient.auth.getSession();
-      if (!session) {
-        // Si no hay sesión, redirige al login
-        window.location.href = 'login.html';
+    // Seleccionamos elementos del DOM para reutilizarlos
+    const profileForm = document.getElementById('profile-form');
+    const submitButton = document.getElementById('submit-button');
+    const buttonText = submitButton.querySelector('.button-text');
+    const buttonSpinner = submitButton.querySelector('.spinner-border');
+    const alertContainer = document.getElementById('alert-container');
+    const avatarUrlInput = document.getElementById('avatar_url');
+    const avatarPreviewImg = document.getElementById('avatar-preview-img');
+    const placeholderIcon = '<i class="bi bi-person-circle"></i>'; // Icono de Bootstrap para el placeholder
+
+    // --- 2. FUNCIONES AUXILIARES ---
+
+    /**
+     * Muestra una alerta de Bootstrap.
+     * @param {string} message - El mensaje a mostrar.
+     * @param {string} type - El tipo de alerta ('success', 'danger', 'warning', 'info').
+     */
+    function showAlert(message, type = 'danger') {
+      const alertHTML = `
+        <div class="alert alert-${type} alert-dismissible fade show" role="alert">
+          ${message}
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      `;
+      alertContainer.innerHTML = alertHTML;
+    }
+
+    /**
+     * Activa o desactiva el estado de carga del formulario.
+     * @param {boolean} isLoading - True para activar el estado de carga, false para desactivarlo.
+     */
+    function setLoading(isLoading) {
+      if (isLoading) {
+        submitButton.disabled = true;
+        profileForm.setAttribute('aria-busy', 'true');
+        buttonText.textContent = 'Guardando...';
+        buttonSpinner.classList.remove('d-none');
       } else {
-        // Carga el perfil existente si lo hay
+        submitButton.disabled = false;
+        profileForm.setAttribute('aria-busy', 'false');
+        buttonText.textContent = 'Guardar Perfil';
+        buttonSpinner.classList.add('d-none');
+      }
+    }
+
+    /**
+     * Actualiza la previsualización del avatar.
+     * @param {string} url - La URL de la imagen.
+     */
+    function updateAvatarPreview(url) {
+      if (url && url.trim() !== '') {
+        avatarPreviewImg.src = url;
+        avatarPreviewImg.innerHTML = ''; // Limpiar el icono si la imagen carga
+        avatarPreviewImg.onerror = () => { // Si la URL es inválida
+          avatarPreviewImg.src = ''; // Limpiar el src fallido
+          avatarPreviewImg.innerHTML = placeholderIcon; // Mostrar icono de placeholder
+        };
+      } else {
+        avatarPreviewImg.src = '';
+        avatarPreviewImg.innerHTML = placeholderIcon; // Mostrar icono por defecto
+      }
+    }
+
+    /**
+     * Carga el perfil del usuario autenticado en el formulario.
+     * @param {string} userId - El ID del usuario de Supabase.
+     */
+    async function loadProfile(userId) {
+      try {
+        const { data: profileData, error } = await supabaseClient
+          .from('profiles')
+          .select('full_name, username, bio, avatar_url')
+          .eq('id', userId)
+          .single();
+
+        if (error && error.code !== 'PGRST116') { // PGRST116: No rows found
+          throw error;
+        }
+
+        if (profileData) {
+          document.getElementById('full_name').value = profileData.full_name || '';
+          document.getElementById('username').value = profileData.username || '';
+          document.getElementById('bio').value = profileData.bio || '';
+          avatarUrlInput.value = profileData.avatar_url || '';
+          updateAvatarPreview(profileData.avatar_url);
+        } else {
+          // Si no hay perfil, mostrar el placeholder por defecto
+          updateAvatarPreview('');
+        }
+      } catch (error) {
+        console.error('Error al cargar el perfil:', error);
+        showAlert('No se pudo cargar tu perfil. Inténtalo de nuevo más tarde.', 'warning');
+      }
+    }
+
+    // --- 3. LÓGICA PRINCIPAL Y EVENT LISTENERS ---
+
+    // Al cargar la página, verificar la sesión y cargar datos
+    document.addEventListener('DOMContentLoaded', async () => {
+      try {
+        const { data: { session }, error: sessionError } = await supabaseClient.auth.getSession();
+        if (sessionError) throw sessionError;
+
+        if (!session) {
+          window.location.href = 'login.html'; // Redirigir si no hay sesión
+          return;
+        }
+
         await loadProfile(session.user.id);
+      } catch (error) {
+        console.error("Error en la inicialización:", error);
+        showAlert("Error de autenticación. Por favor, intenta iniciar sesión de nuevo.");
       }
     });
 
-    // Función para cargar el perfil existente (si lo hay)
-    async function loadProfile(userId) {
-      const { data: profileData, error } = await supabaseClient
-        .from('profiles')
-        .select('*')
-        .eq('id', userId)
-        .single();
-      if (error) {
-        console.log('No se encontró perfil. El usuario puede crear uno nuevo.');
-        return;
-      }
-      document.getElementById('full_name').value = profileData.full_name || '';
-      document.getElementById('username').value = profileData.username || '';
-      document.getElementById('bio').value = profileData.bio || '';
-      document.getElementById('avatar_url').value = profileData.avatar_url || '';
-    }
+    // Actualizar la previsualización del avatar cuando el usuario escribe en el campo URL
+    avatarUrlInput.addEventListener('input', () => {
+      updateAvatarPreview(avatarUrlInput.value);
+    });
 
-    // Maneja el submit del formulario para insertar o actualizar el perfil
-    const profileForm = document.getElementById('profile-form');
+    // Manejar el envío del formulario
     profileForm.addEventListener('submit', async (e) => {
       e.preventDefault();
+      alertContainer.innerHTML = ''; // Limpiar alertas previas
+      setLoading(true);
 
-      // Obtén los valores del formulario
-      const full_name = document.getElementById('full_name').value;
-      const username = document.getElementById('username').value;
-      const bio = document.getElementById('bio').value;
-      const avatar_url = document.getElementById('avatar_url').value;
+      try {
+        const { data: { user } } = await supabaseClient.auth.getUser();
+        if (!user) throw new Error('Usuario no autenticado.');
 
-      // Verifica la sesión actual
-      const { data: { session } } = await supabaseClient.auth.getSession();
-      if (!session) {
-        alert('No hay usuario autenticado. Por favor, inicia sesión.');
-        return;
-      }
-      const userId = session.user.id;
+        const profileUpdate = {
+          id: user.id,
+          full_name: document.getElementById('full_name').value,
+          username: document.getElementById('username').value,
+          bio: document.getElementById('bio').value,
+          avatar_url: avatarUrlInput.value,
+          updated_at: new Date().toISOString(),
+        };
 
-      // Inserta o actualiza el perfil en la tabla "profiles"
-      const { error } = await supabaseClient
-        .from('profiles')
-        .upsert({
-          id: userId,
-          full_name,
-          username,
-          bio,
-          avatar_url
-        });
-      if (error) {
-        alert('Error al guardar el perfil: ' + error.message);
-        console.error(error);
-      } else {
-        alert('Perfil guardado exitosamente.');
-        // Redirige a index.html o a otra página si lo deseas
-        window.location.href = 'index.html';
+        // La función upsert inserta si no existe, o actualiza si ya existe
+        const { error } = await supabaseClient
+          .from('profiles')
+          .upsert(profileUpdate, { onConflict: 'id' }); // Especifica la columna de conflicto
+
+        if (error) throw error;
+
+        showAlert('¡Perfil guardado con éxito! Redirigiendo...', 'success');
+        
+        // Redirigir a la página principal después de un breve momento
+        setTimeout(() => {
+          window.location.href = 'index.html';
+        }, 2000);
+
+      } catch (error) {
+        console.error('Error al guardar el perfil:', error);
+        showAlert(`Error al guardar: ${error.message || 'Ocurrió un problema.'}`);
+      } finally {
+        // No desactivamos el loading aquí si hay una redirección exitosa,
+        // pero sí lo hacemos si falla.
+        if (!document.querySelector('.alert-success')) {
+            setLoading(false);
+        }
       }
     });
   </script>
