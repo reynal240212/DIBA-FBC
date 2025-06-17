@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <title>Inicio - DIBA FBC</title>
+  <title>Planilla Interactiva - DIBA FBC</title>
   <meta name="author" content="REINALDO DE JESUS PEREZ NAVAS" />
   <meta name="keywords" content="DIBA FBC, Deportivo Internacional De Barranquilla Atlántico, Fútbol, Barranquilla, Atlántico, Colombia" />
   <meta name="robots" content="index, follow" />
@@ -32,19 +32,96 @@
   <link rel="stylesheet" href="styles/styles.css" />
   <link rel="stylesheet" href="styles/background-animation.css" />
   
-
-  
   <!-- Carga jsPDF y jsPDF-AutoTable -->
   <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.5.25/dist/jspdf.plugin.autotable.min.js"></script>
+  
+  <style>
+    /* Estilos para mejorar la apariencia de la tabla */
+    body {
+      padding: 20px;
+    }
+    .table-responsive {
+      max-height: 70vh; /* Altura máxima para la tabla antes de hacer scroll */
+    }
+    .table input[type="text"] {
+      width: 100%;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      padding: 4px 6px;
+    }
+  </style>
 </head>
 <body>
-   <!-- Contenedor para el Navbar (se cargará desde layout/navbar.html) -->
-   <div id="navbar-container"></div>
-  <h1>Generar PDF - Planilla DIBA FBC</h1>
-  <button id="generatePDF">Descargar PDF</button>
+  <!-- Contenedor para el Navbar (se cargará desde layout/navbar.html) -->
+  <div id="navbar-container"></div>
+
+  <div class="container mt-4">
+    <h1 class="mb-3">Planilla Interactiva - DIBA FBC</h1>
+    
+    <!-- Campo para seleccionar la fecha -->
+    <div class="mb-3">
+        <label for="planillaDate" class="form-label"><b>Seleccione la Fecha de la Planilla:</b></label>
+        <input type="date" class="form-control" id="planillaDate" style="width: 200px;">
+    </div>
+
+    <!-- Tabla HTML para llenar los datos -->
+    <div class="table-responsive">
+      <table class="table table-striped table-bordered" id="planillaTable">
+        <thead class="table-dark">
+          <tr>
+            <th style="width: 5%;">#</th>
+            <th style="width: 35%;">Nombre</th>
+            <th style="width: 20%;">Pagos</th>
+            <th style="width: 20%;">Asistencia</th>
+            <th style="width: 20%;">Disciplina</th>
+          </tr>
+        </thead>
+        <tbody id="planillaBody">
+          <!-- Las filas se generarán aquí con JavaScript -->
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Botón para generar y descargar el PDF -->
+    <button id="generatePDF" class="btn btn-primary mt-3">
+      <i class="fas fa-file-pdf"></i> Descargar Planilla en PDF
+    </button>
+  </div>
+  
+  <div id="footer-container" class="mt-5"></div>
   
   <script>
+    // Lista de nombres para poblar la tabla
+    const playerNames = [
+      "Mario", "Juan Andrés", "Jhoyfran", "Nayareth", "Eliuth", "Abraham",
+      "Rey David", "Santy h", "Santy t", "ISAAC", "Carlos", "Zaid",
+      "Keyner", "ALAN", "Cristian", "Dilan sanchez", "Juan t", "Dinkol",
+      "Dany", "Miguel", "Rodríguez", "Nelson", "Santiago", "Joseth",
+      "Hernández angel", "Oscar", "Yojainer", "Jesus", "Mateo", "Dilan correa"
+    ];
+
+    // Función para poblar la tabla HTML al cargar la página
+    function populateTable() {
+      const tableBody = document.getElementById('planillaBody');
+      playerNames.forEach((name, index) => {
+        const row = `
+          <tr>
+            <td>${index + 1}</td>
+            <td>${name}</td>
+            <td><input type="text" class="form-control form-control-sm" placeholder="$"></td>
+            <td><input type="text" class="form-control form-control-sm" placeholder="P / A / E"></td>
+            <td><input type="text" class="form-control form-control-sm" placeholder="Observación"></td>
+          </tr>
+        `;
+        tableBody.innerHTML += row;
+      });
+    }
+
+    // Llama a la función cuando el DOM esté completamente cargado
+    document.addEventListener('DOMContentLoaded', populateTable);
+
+
     // Función auxiliar: convierte una imagen externa a Base64
     async function getBase64ImageFromUrl(imageUrl) {
       try {
@@ -64,18 +141,15 @@
     document.getElementById("generatePDF").addEventListener("click", async () => {
       const { jsPDF } = window.jspdf;
       
-      // Configuración del PDF: orientación portrait, formato letter (612 x 792 pt aprox.)
       const doc = new jsPDF({
         orientation: 'portrait',
         unit: 'pt',
         format: 'letter'
       });
       
-      // URL del logo (escudo) - asegúrate de que la URL sea accesible vía HTTPS
       const logoUrl = "https://i.postimg.cc/x8W7vwJJ/ESCUDO.png";
       const imgData = await getBase64ImageFromUrl(logoUrl);
       if (imgData) {
-        // Agrega el logo en x=40, y=20, ancho=60, alto=60
         doc.addImage(imgData, 'PNG', 40, 20, 60, 60);
       } else {
         console.warn("No se pudo cargar el logo.");
@@ -89,59 +163,50 @@
       doc.text("RESOLUCIÓN 0122 /2018- 10/SEPT/2018", 120, 70);
       doc.setFontSize(12);
       doc.text("Planilla de control de asistencia, disciplina y pagos", 120, 95);
+      
+      // Obtener la fecha del input y formatearla si es necesario
+      let planillaDate = document.getElementById('planillaDate').value;
+      if (planillaDate) {
+        // Opcional: formatear la fecha a dd/mm/yyyy
+        const dateParts = planillaDate.split('-');
+        planillaDate = `${dateParts[2]}/${dateParts[1]}/${dateParts[0]}`;
+      } else {
+        planillaDate = "_________________"; // Si no se selecciona fecha
+      }
       doc.setFontSize(10);
-      doc.text("Fecha:              ", 40, 90);
+      doc.text(`Fecha: ${planillaDate}`, 40, 90);
       
+      // --- LECTURA DE DATOS DESDE LA TABLA HTML ---
+      const columns = ["#", "Nombre", "Pagos", "Asistencia", "Disciplina"];
+      const rowsData = [];
+      const tableRows = document.querySelectorAll("#planillaBody tr");
+
+      tableRows.forEach(row => {
+          const cells = row.querySelectorAll("td");
+          const rowData = [
+              cells[0].textContent, // #
+              cells[1].textContent, // Nombre
+              cells[2].querySelector('input').value, // Valor del input de pagos
+              cells[3].querySelector('input').value, // Valor del input de asistencia
+              cells[4].querySelector('input').value  // Valor del input de disciplina
+          ];
+          rowsData.push(rowData);
+      });
       
-      // Definir las columnas y filas de la tabla
-      const columns = ["#", "Nombre", "pagos", "asistencia", "disciplina"];
-      const rows = [
-        ["1", "Mario", "", "", ""],
-        ["2", "Juan Andrés", "", "", ""],
-        ["3", "Jhoyfran", "", "", ""],
-        ["4", "Nayareth", "", "", ""],
-        ["5", "Eliuth", "", "", ""],
-        ["6", "Abraham", "", "", ""],
-        ["7", "Rey David", "", "", ""],
-        ["8", "Santy h", "", "", ""],
-        ["9", "Santy t", "", "", ""],
-        ["10", "ISAAC", "", "", ""],
-        ["11", "Carlos", "", "", ""],
-        ["12", "Zaid", "", "", ""],
-        ["13", "Keyner", "", "", ""],
-        ["14", "ALAN", "", "", ""],
-        ["15", "Cristian", "", "", ""],
-        ["16", "Dilan sanchez", "", "", ""],
-        ["17", "Juan t", "", "", ""],
-        ["18", "Dinkol", "", "", ""],
-        ["19", "Dany", "", "", ""],
-        ["20", "Miguel", "", "", ""],
-        ["21", "Rodríguez", "", "", ""],
-        ["22", "Nelson", "", "", ""],
-        ["23", "Santiago", "", "", ""],
-        ["24", "Joseth", "", "", ""],
-        ["25", "Hernández angel", "", "", ""],
-        ["26", "Oscar", "", "", ""],
-        ["27", "Yojainer", "", "", ""],
-        ["28", "Jesus", "", "", ""],
-        ["29", "Mateo", "", "", ""],
-        ["30", "Dilan correa", "", "", ""]
-];
-      
-      // Generar la tabla con autoTable; se dividirá en páginas automáticamente si es necesario.
+      // Generar la tabla en el PDF con los datos leídos
       doc.autoTable({
         head: [columns],
-        body: rows,
-        startY: 100,
+        body: rowsData, // Usamos los datos leídos de la tabla HTML
+        startY: 110, // Un poco más abajo para no chocar con los títulos
         margin: { left: 40, right: 40 },
         styles: {
-          fontSize: 10,
+          fontSize: 9,
           cellPadding: 4,
           halign: 'center',
           valign: 'middle'
         },
         headStyles: {
-          fillColor: [0, 27, 114],
+          fillColor: [0, 42, 64], // #002a40
           textColor: 255
         },
         alternateRowStyles: {
@@ -152,19 +217,15 @@
       });
       
       // Descargar el PDF
-      doc.save("PlanillaDIBA.pdf");
+      doc.save(`Planilla_DIBA_${new Date().toISOString().slice(0,10)}.pdf`);
     });
   </script>
   
-  <!-- (Opcional) Carga de otros scripts y componentes si se requieren -->
-
-  <div id="footer-container"></div>
+  <!-- Carga de otros scripts y componentes -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
   <script src="scripts/loadComponents.js"></script>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="scripts/main.js"></script>
   <script src="scripts/script.js"></script>
-
-  
 </body>
 </html>
