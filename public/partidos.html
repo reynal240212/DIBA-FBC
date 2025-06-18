@@ -95,57 +95,61 @@
     ></iframe>
   </div>
 </section>
-  <!-- SECCIÓN: FILTROS Y RESULTADOS -->
-  <section class="my-5">
-    <div class="container">
-      <div class="row g-4">
-        <!-- Columna de Partidos -->
-        <div class="col-md-6">
-          <div class="card p-3">
-            <div class="d-flex justify-content-between align-items-center mb-3">
-              <h2 class="h5 mb-0">Partidos</h2>
-              <button class="btn btn-sm btn-outline-secondary" id="btn-close-partidos">
-                <i class="fas fa-times"></i>
-              </button>
-            </div>
-            <div class="mb-3">
-              <input type="date" id="fecha" class="form-control" aria-label="Seleccionar fecha de partido">
-            </div>
-            <!-- Spinner para Partidos -->
-            <div class="text-center my-3" id="loading-spinner" style="display: none;">
-              <div class="spinner-border text-primary" role="status">
-                <span class="visually-hidden">Cargando...</span>
-              </div>
-            </div>
-            <!-- Contenedor de Partidos -->
-            <div id="matches-container" aria-live="polite"></div>
+ <!-- SECCIÓN: FILTROS Y RESULTADOS -->
+<section class="my-5">
+  <div class="container">
+    <div class="row g-4">
+      <!-- Columna de Partidos -->
+      <div class="col-md-6">
+        <div class="card shadow-sm border-0 p-4 bg-light">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h2 class="h5 mb-0 text-primary"><i class="fas fa-futbol me-2"></i>Partidos</h2>
+            <button class="btn btn-sm btn-outline-danger rounded-circle" id="btn-close-partidos" title="Cerrar">
+              <i class="fas fa-times"></i>
+            </button>
           </div>
+          <div class="mb-3">
+            <label for="fecha" class="form-label fw-semibold">Selecciona una fecha</label>
+            <input type="date" id="fecha" class="form-control">
+          </div>
+          <!-- Spinner para Partidos -->
+          <div class="text-center my-3" id="loading-spinner" style="display: none;">
+            <div class="spinner-border text-primary" role="status">
+              <span class="visually-hidden">Cargando partidos...</span>
+            </div>
+          </div>
+          <!-- Contenedor de Partidos -->
+          <div id="matches-container" aria-live="polite"></div>
         </div>
-        <!-- Columna de Entrenamientos -->
-        <div class="col-md-6">
-          <div class="card p-3">
-            <div class="d-flex justify-content-between align-items-center mb-3">
-              <h2 class="h5 mb-0">Entrenamientos</h2>
-              <button class="btn btn-sm btn-outline-secondary" id="btn-close-entrenamientos">
-                <i class="fas fa-times"></i>
-              </button>
-            </div>
-            <div class="mb-3">
-              <input type="date" id="fecha-entrenamiento" class="form-control" aria-label="Seleccionar fecha de entrenamiento">
-            </div>
-            <!-- Spinner para Entrenamientos -->
-            <div class="text-center my-3" id="loading-spinner-entrenamiento" style="display: none;">
-              <div class="spinner-border text-primary" role="status">
-                <span class="visually-hidden">Cargando entrenamientos...</span>
-              </div>
-            </div>
-            <!-- Contenedor de Entrenamientos -->
-            <div id="trainings-container" aria-live="polite"></div>
+      </div>
+
+      <!-- Columna de Entrenamientos -->
+      <div class="col-md-6">
+        <div class="card shadow-sm border-0 p-4 bg-light">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h2 class="h5 mb-0 text-success"><i class="fas fa-dumbbell me-2"></i>Entrenamientos</h2>
+            <button class="btn btn-sm btn-outline-danger rounded-circle" id="btn-close-entrenamientos" title="Cerrar">
+              <i class="fas fa-times"></i>
+            </button>
           </div>
+          <div class="mb-3">
+            <label for="fecha-entrenamiento" class="form-label fw-semibold">Selecciona una fecha</label>
+            <input type="date" id="fecha-entrenamiento" class="form-control">
+          </div>
+          <!-- Spinner para Entrenamientos -->
+          <div class="text-center my-3" id="loading-spinner-entrenamiento" style="display: none;">
+            <div class="spinner-border text-success" role="status">
+              <span class="visually-hidden">Cargando entrenamientos...</span>
+            </div>
+          </div>
+          <!-- Contenedor de Entrenamientos -->
+          <div id="trainings-container" aria-live="polite"></div>
         </div>
       </div>
     </div>
-  </section>
+  </div>
+</section>
+
 
   <!-- Footer (se carga desde layout/footer.html) -->
   <div id="footer-container"></div>
