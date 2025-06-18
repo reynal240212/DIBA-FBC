@@ -2,14 +2,14 @@
 <html lang="es">
 <head>
      <!-- ... otros meta tags -->
-  <meta property="og:title" content="Inicio - DIBA FBC | Historia, Servicios y Más" />
+  <meta property="og:title" content="Ficha Tecnica, Jugadores" />
   <meta property="og:description" content="Descubre la historia, los servicios y el equipo de DIBA FBC. Vive la pasión deportiva y conoce a nuestros patrocinadores, fundación y cuerpo técnico." />
   <meta property="og:image" content="https://diba-fbc.vercel.app/images/ESCUDO.png" /> <!-- URL absoluta a una imagen representativa -->
   <meta property="og:url" content="https://diba-fbc.vercel.app/" />
   <meta property="og:type" content="website" />
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Inicio - DIBA FBC | Historia, Servicios y Más" />
-  <meta name="twitter:description" content="Descubre la historia, los servicios y el equipo de DIBA FBC." />
+  <meta name="twitter:title" content="Ficha Tecnica" />
+  <meta name="twitter:description" content="Nuestras categorias" />
   <meta name="twitter:image" content="https://diba-fbc.vercel.app/images/ESCUDO.png" /> <!-- URL absoluta -->
   <!-- ... -->
 </head>
@@ -103,18 +103,23 @@
     </style>
 </head>
 <body class="p-4">
-    <!-- Navbar integrado directamente en el HTML -->
-    <nav class="navbar">
-        <div class="navbar-brand">
-            DIBA FBC
-        </div>
-        <div class="navbar-links">
-            <a href="#">Inicio</a>
-            <a href="#">Plantilla</a>
-            <a href="#">Historia</a>
-            <a href="#">Contacto</a>
-        </div>
-    </nav>
+  <!-- Navbar -->
+  <div id="navbar-container"></div>
+
+ <section class="hero"> <!-- Quita d-flex, align-items, justify-content si .hero CSS lo maneja -->
+  <div class="hero-content"> <!-- Nueva capa para aplicar .hero-content -->
+    <div class="container text-center text-white py-5"> <!-- Container de Bootstrap aún puede ser útil para el ancho -->
+      <h1 class="display-4 fw-bold mb-3 hero-title animate__animated animate__fadeInDown">Deportivo Internacional De Barranquilla Atlántico</h1>
+      <p class="lead mb-4 hero-subtitle animate__animated animate__fadeInUp animate__delay-1s">"Fuerza y Lealtad"</p>
+      <p class="lead mb-4 hero-subtitle animate__animated animate__fadeInUp animate__delay-1s">"Nuestras categorias"</p>
+      <div class="hero-buttons"> <!-- Para aplicar los estilos .hero-buttons si tienes varios botones -->
+        <a href="#servicios" class="btn btn-accent btn-lg animate__animated animate__pulse animate__delay-2s animate__infinite"> <!-- Usando tu btn-accent -->
+          <i class="fas fa-chevron-down me-2" aria-hidden="true"></i> Descubre Nuestros Servicios
+        </a>
+      </div>
+    </div>
+  </div>
+</section> 
 
     <!-- Botón Volver Arriba -->
     <button id="btnBackToTop" title="Volver arriba">
