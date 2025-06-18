@@ -1046,3 +1046,49 @@ img {
   font-size: 1.25rem;
   cursor: pointer;
 }
+/* ======================================
+       SECCIÓN DE PARTIDOS
+====================================== */
+.fixture-section h3 {
+  border-bottom: 2px solid #002a40;
+  padding-bottom: 0.5rem;
+  color: #001b72;
+}
+
+.fixture-item {
+  background-color: #fff;
+  border-radius: 1rem;
+  transition: transform 0.2s;
+}
+
+.fixture-item:hover {
+  transform: scale(1.01);
+  background-color: #f9f9f9;
+}
+
+.fixture-date .day {
+  font-size: 0.9rem;
+}
+
+.fixture-date .hour {
+  font-size: 0.9rem;
+}
+
+.team-logo {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+}
+
+.team-name {
+  font-size: 0.95rem;
+}
+
+.vs {
+  color: #6c757d;
+}
+
+.fixture-actions button {
+  font-size: 0.85rem;
+  padding: 4px 8px;
+}
