@@ -3,33 +3,23 @@
 <head>
     <meta charset="UTF-8" />
     <title>PLANTILLA - DIBA FBC</title>
+    <!-- Ya no se puede cargar un favicon desde ruta local en Canvas
     <link rel="icon" href="images/ESCUDO.ico" type="image/x-icon">
+    -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="Conoce la historia y los momentos más destacados de DIBA FBC, un recorrido lleno de pasión y logros deportivos." />
-    <!-- Bootstrap 5 CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
-
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
-
-    <!-- Animate.css -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
-
-    <!-- AOS para efectos de scroll (opcional) -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" />
-
-    <!-- Estilos Globales -->
-    <link rel="stylesheet" href="styles/styles.css" />
 
     <!-- Incluye Tailwind CSS (una sola vez en la cabecera) -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-    <!-- Estilos específicos para las tarjetas de jugadores -->
+    <!-- Estilos específicos para las tarjetas de jugadores y otros elementos -->
     <style>
         body {
             font-family: 'Inter', sans-serif;
             background-color: #f0f2f5; /* Un fondo gris claro para la página */
+            margin: 0; /* Asegura que no haya margen por defecto */
+            padding: 0; /* Asegura que no haya padding por defecto */
         }
         .card {
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
@@ -47,16 +37,77 @@
             border-top-left-radius: 0.5rem; /* Asegura bordes redondeados en la parte superior */
             border-top-right-radius: 0.5rem;
         }
+
+        /* Estilos para el botón Volver Arriba */
+        #btnBackToTop {
+            display: none; /* Oculto por defecto */
+            position: fixed; /* Fijo en la pantalla */
+            bottom: 20px; /* 20px desde abajo */
+            right: 30px; /* 30px desde la derecha */
+            z-index: 99; /* Asegura que esté encima de otros elementos */
+            border: none; /* Sin borde */
+            outline: none; /* Sin contorno */
+            background-color: #4F46E5; /* Color de fondo azul */
+            color: white; /* Color de texto blanco */
+            cursor: pointer; /* Cursor de puntero */
+            padding: 15px; /* Relleno */
+            border-radius: 10px; /* Bordes redondeados */
+            font-size: 18px; /* Tamaño de fuente */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s ease;
+        }
+
+        #btnBackToTop:hover {
+            background-color: #4338CA; /* Un tono más oscuro al pasar el ratón */
+        }
+
+        /* Estilos básicos para el navbar */
+        .navbar {
+            background-color: #1a202c; /* Color de fondo oscuro para el navbar */
+            color: white;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .navbar-brand {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        .navbar-links a {
+            margin-left: 1.5rem;
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        .navbar-links a:hover {
+            color: #a0aec0;
+        }
+
+        /* Para ocultar los enlaces de Bootstrap y Font Awesome que no son necesarios con Tailwind */
+        link[href*="bootstrap"], link[href*="font-awesome"], link[href*="animate.css"], link[href*="aos"] {
+            display: none;
+        }
     </style>
 </head>
-<body>
+<body class="p-4">
+    <!-- Navbar integrado directamente en el HTML -->
+    <nav class="navbar">
+        <div class="navbar-brand">
+            DIBA FBC
+        </div>
+        <div class="navbar-links">
+            <a href="#">Inicio</a>
+            <a href="#">Plantilla</a>
+            <a href="#">Historia</a>
+            <a href="#">Contacto</a>
+        </div>
+    </nav>
+
     <!-- Botón Volver Arriba -->
     <button id="btnBackToTop" title="Volver arriba">
         <i class="fas fa-arrow-up"></i>
     </button>
-
-    <!-- Contenedor para el Navbar (se cargará dinámicamente) -->
-    <div id="navbar-container"></div>
 
     <div class="container mx-auto px-4 py-8">
         <h1 class="text-3xl font-bold text-gray-800 mb-8 text-center">Gestión de Jugadores por Categoría</h1>
@@ -169,19 +220,39 @@
         </script>
     </div>
 
-    <!-- Contenedor para el Footer (se cargará desde layout/footer.html) -->
-    <div id="footer-container"></div>
+    <!-- Contenedor para el Footer (se cargará desde layout/footer.html) - COMENTADO para evitar errores -->
+    <!-- <div id="footer-container"></div> -->
 
-    <!-- Bootstrap JS Bundle -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- Script para cargar componentes externos (Navbar y Footer) -->
-    <script src="scripts/loadComponents.js"></script>
-    <!-- Script principal (funciones y animaciones) -->
-    <script src="scripts/main.js"></script>
+    <!-- Scripts externos que no se cargarán en Canvas y se comentan o eliminan -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script> -->
+    <!-- <script src="scripts/loadComponents.js"></script> -->
+    <!-- <script src="scripts/main.js"></script> -->
 
-    <!-- Script para alternar categorías y otros efectos -->
+    <!-- Script para alternar categorías y otros efectos (adaptado o comentado si depende de elementos externos) -->
     <script>
-        // Alternar categorías
+        // Funcionalidad del botón Volver Arriba (Back To Top)
+        const btnBackToTop = document.getElementById("btnBackToTop");
+
+        window.onscroll = function() { scrollFunction() };
+
+        function scrollFunction() {
+            if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+                btnBackToTop.style.display = "block";
+            } else {
+                btnBackToTop.style.display = "none";
+            }
+        }
+
+        btnBackToTop.addEventListener('click', topFunction);
+
+        function topFunction() {
+            document.body.scrollTop = 0; // Para Safari
+            document.documentElement.scrollTop = 0; // Para Chrome, Firefox, IE y Opera
+        }
+
+        // Alternar categorías - Este script depende de elementos que no están presentes en esta versión autocontenida
+        // Por lo tanto, se deja como referencia o se podría adaptar si se añadieran los botones de categoría.
+        /*
         const btns = document.querySelectorAll('.category-buttons .btn');
         const containers = document.querySelectorAll('.category-container');
 
@@ -194,6 +265,7 @@
                 document.getElementById(id).classList.add('active', 'animate__animated', 'animate__fadeIn');
             });
         });
+        */
     </script>
 
 </body>
