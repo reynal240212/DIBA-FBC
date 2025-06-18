@@ -6,13 +6,12 @@
   <title>Registro - DIBA FBC</title>
   <link rel="shortcut icon" href="images/ESCUDO.ico" type="image/x-icon" />
   <style>
-    /* Estilos generales para el layout */
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
     }
-    
+
     body {
       font-family: 'Arial', sans-serif;
       min-height: 100vh;
@@ -21,7 +20,7 @@
       background: url('https://img.freepik.com/vector-gratis/fondo-conexion-degradado_52683-116652.jpg?semt=ais_hybrid') no-repeat center center fixed;
       background-size: cover;
     }
-    
+
     header {
       background-color: rgba(255, 255, 255, 0.9);
       padding: 10px 20px;
@@ -29,28 +28,28 @@
       justify-content: space-between;
       align-items: center;
     }
-    
+
     header .logo img {
       width: 50px;
     }
-    
+
     nav ul {
       list-style: none;
       display: flex;
       gap: 20px;
     }
-    
+
     nav ul li a {
       text-decoration: none;
       color: #001b72;
       font-weight: bold;
       transition: color 0.3s;
     }
-    
+
     nav ul li a:hover {
       color: #ffc107;
     }
-    
+
     main {
       flex: 1;
       display: flex;
@@ -58,7 +57,7 @@
       align-items: center;
       padding: 20px;
     }
-    
+
     .login-section {
       background: #fff;
       padding: 30px;
@@ -67,31 +66,31 @@
       width: 100%;
       max-width: 400px;
     }
-    
+
     .login-section h2 {
       text-align: center;
       margin-bottom: 20px;
       color: #001b72;
     }
-    
+
     .login-section form div {
       margin-bottom: 15px;
     }
-    
+
     .login-section label {
       display: block;
       margin-bottom: 5px;
       font-weight: bold;
       color: #001b72;
     }
-    
+
     .login-section input {
       width: 100%;
       padding: 10px;
       border: 1px solid #ccc;
       border-radius: 4px;
     }
-    
+
     .login-section button {
       width: 100%;
       padding: 10px;
@@ -103,11 +102,11 @@
       font-size: 16px;
       transition: background-color 0.3s;
     }
-    
+
     .login-section button:hover {
       background-color: #ffc107;
     }
-    
+
     footer {
       background-color: rgba(255, 255, 255, 0.9);
       text-align: center;
@@ -115,51 +114,53 @@
       font-size: 14px;
     }
   </style>
+
   <script type="module">
-    // Importa la librería Supabase desde un CDN
     import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
 
-    // Reemplaza estos valores con los de tu proyecto en Supabase
-    const supabaseUrl = "https://tu-proyecto.supabase.chttps://wfssnnhewzchttudpsex.supabase.co";
-    const supabaseKey = "TU_SUPABASE_ANON_KEeyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Indmc3Nubmhld3pjaHR0dWRwc2V4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDE5ODExNTQsImV4cCI6MjA1NzU1NzE1NH0.j2uEikVy5cM0yY7Rdr4D5BKv95xrn1j48IOuVdbI0MgY";
+    const supabaseUrl = "https://wfssnnhewzchttudpsex.supabase.co";
+    const supabaseKey = "TU_CLAVE_ANON";
     const supabase = createClient(supabaseUrl, supabaseKey);
 
     async function handleRegistro(e) {
       e.preventDefault();
-      
+
       const usuario = document.getElementById("usuario").value;
       const correo = document.getElementById("correo").value;
       const clave = document.getElementById("clave").value;
       const confirmarClave = document.getElementById("confirmar_clave").value;
 
-      if(clave !== confirmarClave) {
-        alert("Las contraseñas no coinciden.");
-        return;
-      }
-      
-      // Registra el usuario en Supabase Auth
-      const { user, error } = await supabase.auth.signUp({
-        email: correo,
-        password: clave
-      });
-      
-      if (error) {
-        alert("Error en el registro: " + error.message);
+      if (clave !== confirmarClave) {
+        alert("❌ Las contraseñas no coinciden.");
         return;
       }
 
-      // Inserta datos adicionales en la tabla "usuarios" (opcional)
-      const { error: errorInsert } = await supabase
-        .from("usuarios")
-        .insert([{ id: user.id, usuario: usuario, correo: correo }]);
-      
-      if (errorInsert) {
-        alert("Error al guardar datos adicionales: " + errorInsert.message);
+      const { data, error } = await supabase.auth.signUp({
+        email: correo,
+        password: clave,
+      });
+
+      if (error) {
+        alert("❌ Error al registrarse: " + error.message);
         return;
       }
-      
-      alert("Registro exitoso. Revisa tu correo para confirmar tu cuenta.");
-      // Redirige al login o a otra página según tu flujo
+
+      const user = data?.user;
+      if (!user) {
+        alert("⚠ Registro incompleto.");
+        return;
+      }
+
+      const { error: insertError } = await supabase
+        .from("usuarios")
+        .insert([{ id: user.id, usuario, correo }]);
+
+      if (insertError) {
+        alert("⚠ Error al guardar info adicional: " + insertError.message);
+        return;
+      }
+
+      alert("✅ Registro exitoso. Revisa tu correo para confirmar tu cuenta.");
       window.location.href = "login.html";
     }
 
@@ -169,7 +170,7 @@
   </script>
 </head>
 <body>
-  <!-- Header con logo y navegación -->
+  <!-- Header -->
   <header>
     <div class="logo">
       <img src="images/ESCUDO.ico" alt="Logo DIBA FBC" loading="lazy" />
@@ -182,7 +183,7 @@
     </nav>
   </header>
 
-  <!-- Contenido principal: Sección de Registro -->
+  <!-- Registro -->
   <main>
     <section class="login-section">
       <h2>Registrarse</h2>
