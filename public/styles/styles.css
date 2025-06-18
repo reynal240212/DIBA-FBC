@@ -1018,3 +1018,10 @@ img {
   opacity: 1;
   transform: scale(1.1);
 }
+#mapa {
+  height: 400px;
+  width: 100%;
+  border-radius: 12px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.2);
+  margin-top: 20px;
+}

@@ -113,3 +113,32 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 });
+document.addEventListener("DOMContentLoaded", () => {
+    if (!navigator.geolocation) {
+      alert("⚠ Tu navegador no soporta geolocalización.");
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      posicion => {
+        const { latitude, longitude } = posicion.coords;
+
+        const mapa = L.map('mapa').setView([latitude, longitude], 16);
+
+        // Capa de mapa base (OpenStreetMap)
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(mapa);
+
+        // Marcador de la posición actual
+        L.marker([latitude, longitude])
+          .addTo(mapa)
+          .bindPopup("📍 Estás aquí")
+          .openPopup();
+      },
+      error => {
+        alert("🚫 No se pudo obtener tu ubicación.");
+        console.error(error);
+      }
+    );
+  });
