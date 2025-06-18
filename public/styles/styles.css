@@ -1018,10 +1018,52 @@ img {
   opacity: 1;
   transform: scale(1.1);
 }
-#mapa {
-  height: 400px;
-  width: 100%;
-  margin-top: 20px;
+.contact {
+  font-size: 30px;
+  margin: 10px;
+  color: #222f6a;
+}
+
+.mapsInfo {
+  margin: 20px;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+}
+
+.directionText {
+  font-size: 30px;
+  text-align: center;
+  justify-content: center;
+  margin: 20px;
+}
+
+.line {
+  background-color: #798de8;
+  width: 50px;
+  height: 5px;
   border-radius: 10px;
-  box-shadow: 0 0 8px rgba(0,0,0,0.2);
+}
+
+.nav {
+  color: #ffffff;
+  background-color: #798de8;
+  height: 80px;
+  width: 100%;
+  font-size: 50px;
+  font-weight: bold;
+  position: relative;
+}
+
+.navTitle {
+  position: absolute;
+  margin-top: 7px;
+  margin-left: 10px;
+}
+
+.mapContainer {
+  margin: 10;
+  text-align: center;
+  align-items: center;
 }
