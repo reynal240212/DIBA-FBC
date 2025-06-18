@@ -38,7 +38,7 @@
   <!-- Incluye Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>
+ <style>
         body {
             font-family: 'Inter', sans-serif;
             background-color: #f0f2f5; /* Un fondo gris claro para la página */
@@ -52,7 +52,7 @@
         }
         .card-img-top {
             object-fit: cover; /* Cambiado a cover para llenar el espacio */
-            height: 150px; /* Altura fija para las imágenes */
+            height: 250px; /* Altura aumentada para las imágenes */
             width: 100%;
             background-color: #e2e8f0; /* Fondo gris para la imagen si no se carga o es PNG transparente */
             border-top-left-radius: 0.5rem; /* Asegura bordes redondeados en la parte superior */
@@ -62,7 +62,7 @@
 </head>
 <body class="p-4">
     <div class="container mx-auto px-4 py-8">
-        <h1 class="text-3xl font-bold text-gray-800 mb-8 text-center">Gestión de Jugadores por Categoría</h1>
+        <h1 class="text-3xl font-bold text-gray-800 mb-8 text-center">Jugadores por Categoría</h1>
 
         <script>
             // Función para normalizar nombres para URLs de imágenes
@@ -154,6 +154,7 @@
                 });
                 return cardsHtml;
             }
+
             // Generar las secciones dinámicamente
             categories.forEach(category => {
                 const sectionHtml = `
