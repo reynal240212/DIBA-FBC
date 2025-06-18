@@ -1,276 +1,188 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>Acceso - DIBA FBC</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-
-  <!-- Bootstrap CSS -->
-  <link
-    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-    rel="stylesheet"
-  />
-  <!-- Animate.css -->
-  <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
-  />
-
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login - DIBA FBC</title>
+  <link rel="shortcut icon" href="images/ESCUDO.ico" type="image/x-icon" />
   <style>
-    /* Mismos estilos base para consistencia visual */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
     body {
-      background: url('https://cdn.britannica.com/51/190751-050-147B93F7/soccer-ball-goal.jpg') no-repeat center center fixed;
+      font-family: 'Arial', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background: url('https://img.freepik.com/vector-gratis/fondo-conexion-degradado_52683-116652.jpg?semt=ais_hybrid') no-repeat center center fixed;
       background-size: cover;
-      font-family: 'Segoe UI', Arial, sans-serif;
-      padding: 1rem;
-      position: relative;
     }
-    body::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.6);
-      z-index: -1;
+
+    header {
+      background-color: rgba(255, 255, 255, 0.9);
+      padding: 10px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
-    .auth-container {
-      position: relative;
-      z-index: 1;
+
+    header .logo img {
+      width: 50px;
     }
-    .auth-card {
-      max-width: 450px;
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 20px;
+    }
+
+    nav ul li a {
+      text-decoration: none;
+      color: #001b72;
+      font-weight: bold;
+      transition: color 0.3s;
+    }
+
+    nav ul li a:hover {
+      color: #ffc107;
+    }
+
+    main {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .login-section {
+      background: #fff;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
       width: 100%;
-      margin: 2rem auto;
+      max-width: 400px;
+    }
+
+    .login-section h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #001b72;
+    }
+
+    .login-section form div {
+      margin-bottom: 15px;
+    }
+
+    .login-section label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+      color: #001b72;
+    }
+
+    .login-section input {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    .login-section button {
+      width: 100%;
+      padding: 10px;
+      background-color: #001b72;
+      color: #fff;
       border: none;
-      border-radius: 12px;
-      background-color: rgba(255, 255, 255, 0.98);
-      backdrop-filter: blur(5px);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background-color 0.3s;
     }
-    .auth-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+
+    .login-section button:hover {
+      background-color: #ffc107;
     }
-    .animate__animated {
-      --animate-duration: 0.8s;
-    }
-    /* Estilos para las pestañas de navegación */
-    .nav-tabs {
-      border-bottom: 0;
-    }
-    .nav-tabs .nav-link {
-      border: none;
-      border-bottom: 2px solid transparent;
-      color: #6c757d;
-      font-weight: 600;
-    }
-    .nav-tabs .nav-link.active {
-      color: #0d6efd;
-      border-color: #0d6efd;
-      background-color: transparent;
-    }
-    /* Estilo para el botón de envío */
-    .btn-submit .spinner-border {
-      width: 1.2rem;
-      height: 1.2rem;
+
+    footer {
+      background-color: rgba(255, 255, 255, 0.9);
+      text-align: center;
+      padding: 15px;
+      font-size: 14px;
     }
   </style>
-</head>
-<body>
-  <div class="container auth-container d-flex align-items-center justify-content-center min-vh-100">
-    <div class="card auth-card shadow-lg p-4 animate__animated animate__fadeInUp">
-      
-      <h2 class="h3 text-center mb-3 fw-bold">Bienvenido a DIBA FBC</h2>
-      
-      <!-- Contenedor para alertas dinámicas -->
-      <div id="alert-container"></div>
 
-      <!-- Pestañas para Login y Registro -->
-      <ul class="nav nav-tabs nav-fill mb-4" id="authTabs" role="tablist">
-        <li class="nav-item" role="presentation">
-          <button class="nav-link active" id="login-tab" data-bs-toggle="tab" data-bs-target="#login-pane" type="button" role="tab" aria-controls="login-pane" aria-selected="true">Iniciar Sesión</button>
-        </li>
-        <li class="nav-item" role="presentation">
-          <button class="nav-link" id="signup-tab" data-bs-toggle="tab" data-bs-target="#signup-pane" type="button" role="tab" aria-controls="signup-pane" aria-selected="false">Registrarse</button>
-        </li>
-      </ul>
+  <script type="module">
+    import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
 
-      <!-- Contenido de las pestañas -->
-      <div class="tab-content" id="authTabsContent">
-        
-        <!-- Pestaña de Iniciar Sesión -->
-        <div class="tab-pane fade show active" id="login-pane" role="tabpanel" aria-labelledby="login-tab">
-          <form id="login-form" novalidate>
-            <div class="mb-3">
-              <label for="login-email" class="form-label">Correo Electrónico</label>
-              <input type="email" class="form-control" id="login-email" required placeholder="tu@email.com">
-            </div>
-            <div class="mb-4">
-              <label for="login-password" class="form-label">Contraseña</label>
-              <input type="password" class="form-control" id="login-password" required placeholder="••••••••">
-            </div>
-            <button type="submit" id="login-button" class="btn btn-primary w-100 fw-bold btn-submit">
-              <span class="button-text">Iniciar Sesión</span>
-              <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
-            </button>
-          </form>
-        </div>
+    const supabaseUrl = "https://wfssnnhewzchttudpsex.supabase.co";
+    const supabaseKey = "TU_CLAVE_ANON";
+    const supabase = createClient(supabaseUrl, supabaseKey);
 
-        <!-- Pestaña de Registrarse -->
-        <div class="tab-pane fade" id="signup-pane" role="tabpanel" aria-labelledby="signup-tab">
-          <form id="signup-form" novalidate>
-            <div class="mb-3">
-              <label for="signup-email" class="form-label">Correo Electrónico</label>
-              <input type="email" class="form-control" id="signup-email" required placeholder="tu@email.com">
-            </div>
-            <div class="mb-4">
-              <label for="signup-password" class="form-label">Contraseña</label>
-              <input type="password" class="form-control" id="signup-password" required placeholder="Crea una contraseña segura">
-            </div>
-            <button type="submit" id="signup-button" class="btn btn-success w-100 fw-bold btn-submit">
-              <span class="button-text">Crear Cuenta</span>
-              <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
-            </button>
-          </form>
-        </div>
+    async function handleLogin(e) {
+      e.preventDefault();
 
-      </div>
-    </div>
-  </div>
+      const correo = document.getElementById("correo").value;
+      const clave = document.getElementById("clave").value;
 
-  <!-- Bootstrap JS Bundle -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  <!-- Supabase JS (versión 2.x) -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-  
-  <script>
-    // --- 1. CONFIGURACIÓN Y CONSTANTES ---
-    const SUPABASE_URL = 'https://nwxdshisfyenkylgqxgz.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im53eGRzaGlzZnllbmt5bGdxeGd6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzkwNTQzMDgsImV4cCI6MjA1NDYzMDMwOH0.QoIiNo5pFA1_MVfE2ugLgyz4HeET-WhA0C_sNOkWv9g';
-    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: correo,
+        password: clave,
+      });
 
-    // Seleccionamos elementos del DOM
-    const loginForm = document.getElementById('login-form');
-    const signupForm = document.getElementById('signup-form');
-    const loginButton = document.getElementById('login-button');
-    const signupButton = document.getElementById('signup-button');
-    const alertContainer = document.getElementById('alert-container');
+      if (error) {
+        alert("❌ Error al iniciar sesión: " + error.message);
+        return;
+      }
 
-    // --- 2. FUNCIONES AUXILIARES ---
-    
-    /**
-     * Muestra una alerta de Bootstrap.
-     * @param {string} message - El mensaje a mostrar.
-     * @param {string} type - El tipo de alerta ('success', 'danger', 'info').
-     */
-    function showAlert(message, type = 'danger') {
-      const alertHTML = `
-        <div class="alert alert-${type} alert-dismissible fade show" role="alert">
-          ${message}
-          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-      `;
-      alertContainer.innerHTML = alertHTML;
+      alert("✅ Bienvenido. Inicio de sesión exitoso.");
+      // Redirige a tu página principal o dashboard
+      window.location.href = "index.html";
     }
 
-    /**
-     * Activa o desactiva el estado de carga de un botón.
-     * @param {HTMLButtonElement} button - El botón a modificar.
-     * @param {boolean} isLoading - True para activar el estado de carga.
-     * @param {string} originalText - El texto original del botón.
-     */
-    function setLoading(button, isLoading, originalText = '') {
-      const buttonText = button.querySelector('.button-text');
-      const spinner = button.querySelector('.spinner-border');
-      
-      if (isLoading) {
-        button.disabled = true;
-        button.form.setAttribute('aria-busy', 'true');
-        buttonText.textContent = 'Procesando...';
-        spinner.classList.remove('d-none');
-      } else {
-        button.disabled = false;
-        button.form.setAttribute('aria-busy', 'false');
-        buttonText.textContent = originalText;
-        spinner.classList.add('d-none');
-      }
-    }
-
-    // --- 3. LÓGICA PRINCIPAL Y EVENT LISTENERS ---
-
-    // Verificar si el usuario ya tiene una sesión activa al cargar la página
-    document.addEventListener('DOMContentLoaded', async () => {
-      const { data: { session } } = await supabaseClient.auth.getSession();
-      if (session) {
-        // Si hay sesión, redirigir a la página principal o al perfil
-        window.location.href = 'index.html';
-      }
-    });
-
-    // Manejar el envío del formulario de INICIO DE SESIÓN
-    loginForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      alertContainer.innerHTML = '';
-      setLoading(loginButton, true, 'Iniciar Sesión');
-
-      const email = document.getElementById('login-email').value;
-      const password = document.getElementById('login-password').value;
-
-      try {
-        const { error } = await supabaseClient.auth.signInWithPassword({
-          email,
-          password,
-        });
-
-        if (error) throw error;
-        
-        // El login fue exitoso
-        showAlert('¡Inicio de sesión exitoso! Redirigiendo...', 'success');
-        
-        // Redirigir después de un momento para que el usuario vea el mensaje
-        setTimeout(() => {
-          window.location.href = 'index.html';
-        }, 1500);
-
-      } catch (error) {
-        console.error('Error de inicio de sesión:', error);
-        showAlert('Credenciales incorrectas. Por favor, verifica tu email y contraseña.', 'danger');
-        setLoading(loginButton, false, 'Iniciar Sesión');
-      }
-    });
-
-    // Manejar el envío del formulario de REGISTRO
-    signupForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      alertContainer.innerHTML = '';
-      setLoading(signupButton, true, 'Crear Cuenta');
-      
-      const email = document.getElementById('signup-email').value;
-      const password = document.getElementById('signup-password').value;
-
-      try {
-        const { data, error } = await supabaseClient.auth.signUp({
-          email,
-          password,
-        });
-
-        if (error) throw error;
-
-        // El registro fue exitoso, pero requiere confirmación por email
-        showAlert('¡Registro exitoso! Por favor, revisa tu correo electrónico para confirmar tu cuenta.', 'success');
-        signupForm.reset(); // Limpiar el formulario
-
-      } catch (error) {
-        console.error('Error de registro:', error);
-        let errorMessage = 'Ocurrió un error durante el registro.';
-        if (error.message.includes('User already registered')) {
-            errorMessage = 'Este correo electrónico ya está registrado. Intenta iniciar sesión.';
-        }
-        showAlert(errorMessage, 'danger');
-      } finally {
-        // Siempre reactivar el botón de registro al finalizar
-        setLoading(signupButton, false, 'Crear Cuenta');
-      }
+    document.addEventListener("DOMContentLoaded", () => {
+      document.getElementById("loginForm").addEventListener("submit", handleLogin);
     });
   </script>
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <div class="logo">
+      <img src="images/ESCUDO.ico" alt="Logo DIBA FBC" loading="lazy" />
+    </div>
+    <nav>
+      <ul>
+        <li><a href="login.html">Login</a></li>
+        <li><a href="registro.html">Registro</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Login -->
+  <main>
+    <section class="login-section">
+      <h2>Iniciar Sesión</h2>
+      <form id="loginForm">
+        <div>
+          <label for="correo">Correo:</label>
+          <input type="email" id="correo" name="correo" required />
+        </div>
+        <div>
+          <label for="clave">Contraseña:</label>
+          <input type="password" id="clave" name="clave" required />
+        </div>
+        <button type="submit">Entrar</button>
+      </form>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2025 DIBA FBC. Todos los derechos reservados.</p>
+  </footer>
 </body>
 </html>
