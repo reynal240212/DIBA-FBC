@@ -22,11 +22,7 @@
   <link rel="stylesheet" href="styles/styles.css" />
   
   <!-- Regla adicional para forzar fondo blanco en toda la página -->
-  <style>
-    html, body {
-      background-color: #ffffff !important;
-    }
-  </style>
+
 
 </head>
 <body>
@@ -39,73 +35,145 @@
   <!-- Contenedor para el Navbar (se cargará dinámicamente) -->
   <div id="navbar-container"></div>
   
-  <!-- HERO SECTION -->
-  <section class="hero animate__animated animate__fadeInDown" style="background: linear-gradient(135deg, #002a40, #001b72), url('images/fondo.jpg') center/cover no-repeat fixed; background-blend-mode: multiply;">
-    <div class="container hero-content">
-      <h1 class="hero-title">JUGADORES</h1>
-      <p class="hero-subtitle lead">PLANTILLA.</p>
-    </div>
-  </section>
-  
-  <body class="p-4">
+  <!-- Incluye Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f2f5; /* Un fondo gris claro para la página */
+        }
+        .card {
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+            transition: transform 0.2s ease-in-out;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        .card-img-top {
+            object-fit: cover; /* Cambiado a cover para llenar el espacio */
+            height: 150px; /* Altura fija para las imágenes */
+            width: 100%;
+            background-color: #e2e8f0; /* Fondo gris para la imagen si no se carga o es PNG transparente */
+            border-top-left-radius: 0.5rem; /* Asegura bordes redondeados en la parte superior */
+            border-top-right-radius: 0.5rem;
+        }
+    </style>
+</head>
+<body class="p-4">
     <div class="container mx-auto px-4 py-8">
-        <h1 class="text-3xl font-bold text-gray-800 mb-8 text-center">Nuestros Jugadores</h1>
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            <!-- Nombres de los jugadores -->
-            <script>
-                const players = [
-                    { name: "Mario", imageUrl: "https://placehold.co/150x150/ADD8E6/000000?text=Mario" },
-                    { name: "Juan Andrés", imageUrl: "https://placehold.co/150x150/90EE90/000000?text=Juan+Andres" },
-                    { name: "Jhoyfran", imageUrl: "https://placehold.co/150x150/FFB6C1/000000?text=Jhoyfran" },
-                    { name: "Nayareth", imageUrl: "https://placehold.co/150x150/FFD700/000000?text=Nayareth" },
-                    { name: "Eliuth", imageUrl: "https://placehold.co/150x150/DDA0DD/000000?text=Eliuth" },
-                    { name: "Abraham", imageUrl: "https://placehold.co/150x150/87CEFA/000000?text=Abraham" },
-                    { name: "Rey David", imageUrl: "https://placehold.co/150x150/FF6347/000000?text=Rey+David" },
-                    { name: "Santy h", imageUrl: "https://placehold.co/150x150/7B68EE/000000?text=Santy+h" },
-                    { name: "Santy t", imageUrl: "https://placehold.co/150x150/BA55D3/000000?text=Santy+t" },
-                    { name: "ISAAC", imageUrl: "https://placehold.co/150x150/F0E68C/000000?text=ISAAC" },
-                    { name: "Carlos", imageUrl: "https://placehold.co/150x150/CD5C5C/000000?text=Carlos" },
-                    { name: "Zaid", imageUrl: "https://placehold.co/150x150/00CED1/000000?text=Zaid" },
-                    { name: "Keyner", imageUrl: "https://placehold.co/150x150/5F9EA0/000000?text=Keyner" },
-                    { name: "ALAN", imageUrl: "https://placehold.co/150x150/DEB887/000000?text=ALAN" },
-                    { name: "Cristian", imageUrl: "https://placehold.co/150x150/B0C4DE/000000?text=Cristian" },
-                    { name: "Dilan sanchez", imageUrl: "https://placehold.co/150x150/8A2BE2/000000?text=Dilan+Sanchez" },
-                    { name: "Juan t", imageUrl: "https://placehold.co/150x150/A52A2A/000000?text=Juan+t" },
-                    { name: "Dinkol", imageUrl: "https://placehold.co/150x150/5F9EA0/000000?text=Dinkol" },
-                    { name: "Dany", imageUrl: "https://placehold.co/150x150/D2B48C/000000?text=Dany" },
-                    { name: "Miguel", imageUrl: "https://placehold.co/150x150/F08080/000000?text=Miguel" },
-                    { name: "Rodríguez", imageUrl: "https://placehold.co/150x150/C0C0C0/000000?text=Rodriguez" },
-                    { name: "Nelson", imageUrl: "images/jugadores/nelson.png" },
-                    { name: "Santiago", imageUrl: "https://placehold.co/150x150/FFE4B5/000000?text=Santiago" },
-                    { name: "Joseth", imageUrl: "https://placehold.co/150x150/ADD8E6/000000?text=Joseth" },
-                    { name: "Hernández angel", imageUrl: "https://placehold.co/150x150/F0F8FF/000000?text=Hernandez+Angel" },
-                    { name: "Oscar", imageUrl: "https://placehold.co/150x150/E0FFFF/000000?text=Oscar" },
-                    { name: "Yojainer", imageUrl: "https://placehold.co/150x150/F5DEB3/000000?text=Yojainer" },
-                    { name: "Jesus", imageUrl: "https://placehold.co/150x150/98FB98/000000?text=Jesus" },
-                    { name: "Mateo", imageUrl: "https://placehold.co/150x150/AFEEEE/000000?text=Mateo" },
-                    { name: "Dilan correa", imageUrl: "https://placehold.co/150x150/DDA0DD/000000?text=Dilan+Correa" }
-                ];
-                const image_url = "https://placehold.co/150x150/e2e8f0/000000?text=Jugador"; // Imagen por defecto si la URL original falla o no existe.
+        <h1 class="text-3xl font-bold text-gray-800 mb-8 text-center">Gestión de Jugadores por Categoría</h1>
 
-                players.forEach(player => {
-                    const cardHtml = `
+        <script>
+            // Función para normalizar nombres para URLs de imágenes
+            function normalizeName(name) {
+                return name.toLowerCase().replace(/ /g, '_').replace(/á/g, 'a').replace(/é/g, 'e').replace(/í/g, 'i').replace(/ó/g, 'o').replace(/ú/g, 'u').replace(/ñ/g, 'n');
+            }
+
+            // Lista maestra de jugadores con sus nombres y URLs de imagen locales (ejemplos)
+            const playersData = [
+                { name: "Dilan sanchez", imageUrl: "images/jugadores/dilan_sanchez.jpg" },
+                { name: "Juan t", imageUrl: "images/jugadores/juan_t.jpg" },
+                { name: "Dinkol", imageUrl: "images/jugadores/dinkol.jpg" },
+                { name: "Dany", imageUrl: "images/jugadores/dany.jpg" },
+                { name: "Miguel", imageUrl: "images/jugadores/miguel.jpg" },
+                { name: "Rodríguez", imageUrl: "images/jugadores/rodriguez.jpg" },
+                { name: "Nelson", imageUrl: "images/jugadores/nelson.jpg" },
+                { name: "Santiago", imageUrl: "images/jugadores/santiago.jpg" },
+                { name: "Joseth", imageUrl: "images/jugadores/joseth.jpg" },
+                { name: "Hernández angel", imageUrl: "images/jugadores/hernandez_angel.jpg" },
+                { name: "Oscar", imageUrl: "images/jugadores/oscar.jpg" },
+                { name: "Yojainer", imageUrl: "images/jugadores/yojainer.jpg" },
+                { name: "Jesus", imageUrl: "images/jugadores/jesus.jpg" },
+                { name: "Mateo", imageUrl: "images/jugadores/mateo.jpg" },
+                { name: "Dilan correa", imageUrl: "images/jugadores/dilan_correa.jpg" },
+                { name: "Mario", imageUrl: "images/jugadores/mario.jpg" },
+                { name: "Juan Andrés", imageUrl: "images/jugadores/juan_andres.jpg" },
+                { name: "Jhoyfran", imageUrl: "images/jugadores/jhoyfran.jpg" },
+                { name: "Nayareth", imageUrl: "images/jugadores/nayareth.jpg" },
+                { name: "Eliuth", imageUrl: "images/jugadores/eliuth.jpg" },
+                { name: "Abraham", imageUrl: "images/jugadores/abraham.jpg" },
+                { name: "Rey David", imageUrl: "images/jugadores/rey_david.jpg" },
+                { name: "Santy h", imageUrl: "images/jugadores/santy_h.jpg" },
+                { name: "Santy t", imageUrl: "images/jugadores/santy_t.jpg" },
+                { name: "ISAAC", imageUrl: "images/jugadores/isaac.jpg" },
+                { name: "Carlos", imageUrl: "images/jugadores/carlos.jpg" },
+                { name: "Zaid", imageUrl: "images/jugadores/zaid.jpg" },
+                { name: "Keyner", imageUrl: "images/jugadores/keyner.jpg" },
+                { name: "ALAN", imageUrl: "images/jugadores/alan.jpg" },
+                { name: "Cristian Marcano", imageUrl: "images/jugadores/cristian_marcano.jpg" }
+            ];
+
+            // URL de imagen por defecto si la URL local no se encuentra
+            const default_image_url = "https://placehold.co/150x150/e2e8f0/000000?text=Jugador";
+
+            // Definición de categorías y los jugadores que pertenecen a cada una
+            const categories = [
+                {
+                    id: "categoria-2012-2013",
+                    title: "Categoría 2012/13",
+                    players: [
+                        "Dilan sanchez", "Juan t", "Dinkol", "Dany", "Miguel",
+                        "Rodríguez", "Nelson", "Santiago", "Joseth", "Hernández angel",
+                        "Oscar", "Yojainer", "Jesus", "Mateo", "Dilan correa"
+                    ]
+                },
+                {
+                    id: "categoria-2014-2015-2016",
+                    title: "Categoría 2014/15/16",
+                    players: [
+                        "Mario", "Juan Andrés", "Jhoyfran", "Nayareth", "Eliuth",
+                        "Abraham", "Rey David", "Santy h", "Santy t", "ISAAC",
+                        "Carlos", "Zaid", "Keyner", "ALAN", "Cristian Marcano"
+                    ]
+                }
+            ];
+
+            // Función para generar las tarjetas de jugadores
+            function generatePlayerCards(playersToDisplay) {
+                let cardsHtml = '';
+                playersToDisplay.forEach(playerName => {
+                    const player = playersData.find(p => p.name === playerName);
+
+                    // Si el jugador no se encuentra en playersData o no tiene imageUrl, se usa la imagen por defecto
+                    const imageUrl = player ? player.imageUrl : default_image_url;
+
+                    cardsHtml += `
                         <div class="col-span-1">
                             <div class="card bg-white rounded-xl shadow-lg overflow-hidden h-full flex flex-col">
-                                <img src="https://previews.123rf.com/images/juliarstudio/juliarstudio1602/juliarstudio160200163/51456955-jugador-de-f%C3%BAtbol-simple-icono-negro-aislado-en-el-fondo-blanco.jpg"
-                                     onerror="this.onerror=null; this.src='${image_url}';"
+                                <img src="${imageUrl}"
+                                     onerror="this.onerror=null; this.src='${default_image_url}';"
                                      class="card-img-top w-full h-40 object-cover rounded-t-xl"
-                                     alt="${player}">
+                                     alt="${player ? player.name : playerName}">
                                 <div class="card-body p-4 text-center flex-grow flex items-center justify-center">
-                                    <h5 class="text-lg font-semibold text-gray-700">${player}</h5>
+                                    <h5 class="text-lg font-semibold text-gray-700">${playerName}</h5>
                                 </div>
                             </div>
                         </div>
                     `;
-                    document.write(cardHtml);
                 });
-            </script>
-        </div>
+                return cardsHtml;
+            }
+
+            // Generar las secciones dinámicamente
+            categories.forEach(category => {
+                const sectionHtml = `
+                    <section id="${category.id}" class="py-5">
+                        <div class="container mx-auto px-4">
+                            <h2 class="text-2xl font-bold text-gray-700 mb-6 text-center">${category.title}</h2>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                                ${generatePlayerCards(category.players)}
+                            </div>
+                        </div>
+                    </section>
+                `;
+                document.write(sectionHtml);
+            });
+        </script>
     </div>
+</body>
+  
+  
   <!-- Contenedor para el Footer (se cargará desde layout/footer.html) -->
   <div id="footer-container"></div>
 
