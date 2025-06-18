@@ -1032,3 +1032,17 @@ img {
       height: 300px;
     }
   }
+  .card .escudo {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  margin-right: 0.5rem;
+}
+
+.btn-close-card {
+  border: none;
+  background: transparent;
+  color: #fff;
+  font-size: 1.25rem;
+  cursor: pointer;
+}
