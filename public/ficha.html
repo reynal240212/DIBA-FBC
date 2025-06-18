@@ -47,403 +47,65 @@
     </div>
   </section>
   
-  <section id="plantilla" class="py-5">
-    <div class="container">
-      <h2 class="mb-4 text-center">Plantilla Completa</h2>
-      <div class="row g-4">
-        <!-- Tarjeta 1: Abraham -->
-        <div class="col-md-3">
-          <div class="card h-100">
-            <img src="https://previews.123rf.com/images/juliarstudio/juliarstudio1602/juliarstudio160200163/51456955-jugador-de-f%C3%BAtbol-simple-icono-negro-aislado-en-el-fondo-blanco.jpg" class="card-img-top" alt="Abraham">
-            <div class="card-body text-center">
-              <h5 class="card-title">Abraham</h5>
-            </div>
-          </div>
+  <body class="p-4">
+    <div class="container mx-auto px-4 py-8">
+        <h1 class="text-3xl font-bold text-gray-800 mb-8 text-center">Nuestros Jugadores</h1>
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            <!-- Nombres de los jugadores -->
+            <script>
+                const players = [
+                    { name: "Mario", imageUrl: "https://placehold.co/150x150/ADD8E6/000000?text=Mario" },
+                    { name: "Juan Andrés", imageUrl: "https://placehold.co/150x150/90EE90/000000?text=Juan+Andres" },
+                    { name: "Jhoyfran", imageUrl: "https://placehold.co/150x150/FFB6C1/000000?text=Jhoyfran" },
+                    { name: "Nayareth", imageUrl: "https://placehold.co/150x150/FFD700/000000?text=Nayareth" },
+                    { name: "Eliuth", imageUrl: "https://placehold.co/150x150/DDA0DD/000000?text=Eliuth" },
+                    { name: "Abraham", imageUrl: "https://placehold.co/150x150/87CEFA/000000?text=Abraham" },
+                    { name: "Rey David", imageUrl: "https://placehold.co/150x150/FF6347/000000?text=Rey+David" },
+                    { name: "Santy h", imageUrl: "https://placehold.co/150x150/7B68EE/000000?text=Santy+h" },
+                    { name: "Santy t", imageUrl: "https://placehold.co/150x150/BA55D3/000000?text=Santy+t" },
+                    { name: "ISAAC", imageUrl: "https://placehold.co/150x150/F0E68C/000000?text=ISAAC" },
+                    { name: "Carlos", imageUrl: "https://placehold.co/150x150/CD5C5C/000000?text=Carlos" },
+                    { name: "Zaid", imageUrl: "https://placehold.co/150x150/00CED1/000000?text=Zaid" },
+                    { name: "Keyner", imageUrl: "https://placehold.co/150x150/5F9EA0/000000?text=Keyner" },
+                    { name: "ALAN", imageUrl: "https://placehold.co/150x150/DEB887/000000?text=ALAN" },
+                    { name: "Cristian", imageUrl: "https://placehold.co/150x150/B0C4DE/000000?text=Cristian" },
+                    { name: "Dilan sanchez", imageUrl: "https://placehold.co/150x150/8A2BE2/000000?text=Dilan+Sanchez" },
+                    { name: "Juan t", imageUrl: "https://placehold.co/150x150/A52A2A/000000?text=Juan+t" },
+                    { name: "Dinkol", imageUrl: "https://placehold.co/150x150/5F9EA0/000000?text=Dinkol" },
+                    { name: "Dany", imageUrl: "https://placehold.co/150x150/D2B48C/000000?text=Dany" },
+                    { name: "Miguel", imageUrl: "https://placehold.co/150x150/F08080/000000?text=Miguel" },
+                    { name: "Rodríguez", imageUrl: "https://placehold.co/150x150/C0C0C0/000000?text=Rodriguez" },
+                    { name: "Nelson", imageUrl: "images/jugadores/nelson.png" },
+                    { name: "Santiago", imageUrl: "https://placehold.co/150x150/FFE4B5/000000?text=Santiago" },
+                    { name: "Joseth", imageUrl: "https://placehold.co/150x150/ADD8E6/000000?text=Joseth" },
+                    { name: "Hernández angel", imageUrl: "https://placehold.co/150x150/F0F8FF/000000?text=Hernandez+Angel" },
+                    { name: "Oscar", imageUrl: "https://placehold.co/150x150/E0FFFF/000000?text=Oscar" },
+                    { name: "Yojainer", imageUrl: "https://placehold.co/150x150/F5DEB3/000000?text=Yojainer" },
+                    { name: "Jesus", imageUrl: "https://placehold.co/150x150/98FB98/000000?text=Jesus" },
+                    { name: "Mateo", imageUrl: "https://placehold.co/150x150/AFEEEE/000000?text=Mateo" },
+                    { name: "Dilan correa", imageUrl: "https://placehold.co/150x150/DDA0DD/000000?text=Dilan+Correa" }
+                ];
+                const image_url = "https://placehold.co/150x150/e2e8f0/000000?text=Jugador"; // Imagen por defecto si la URL original falla o no existe.
+
+                players.forEach(player => {
+                    const cardHtml = `
+                        <div class="col-span-1">
+                            <div class="card bg-white rounded-xl shadow-lg overflow-hidden h-full flex flex-col">
+                                <img src="https://previews.123rf.com/images/juliarstudio/juliarstudio1602/juliarstudio160200163/51456955-jugador-de-f%C3%BAtbol-simple-icono-negro-aislado-en-el-fondo-blanco.jpg"
+                                     onerror="this.onerror=null; this.src='${image_url}';"
+                                     class="card-img-top w-full h-40 object-cover rounded-t-xl"
+                                     alt="${player}">
+                                <div class="card-body p-4 text-center flex-grow flex items-center justify-center">
+                                    <h5 class="text-lg font-semibold text-gray-700">${player}</h5>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    document.write(cardHtml);
+                });
+            </script>
         </div>
-        <!-- Tarjeta 2: Adrian -->
-        <div class="col-md-3">
-          <div class="card h-100">
-            <img src="https://previews.123rf.com/images/juliarstudio/juliarstudio1602/juliarstudio160200163/51456955-jugador-de-f%C3%BAtbol-simple-icono-negro-aislado-en-el-fondo-blanco.jpg" class="card-img-top" alt="Adrian">
-            <div class="card-body text-center">
-              <h5 class="card-title">Adrian</h5>
-            </div>
-          </div>
-        </div>
-        <!-- Tarjeta 3: Angel -->
-        <div class="col-md-3">
-          <div class="card h-100">
-            <img src="https://previews.123rf.com/images/juliarstudio/juliarstudio1602/juliarstudio160200163/51456955-jugador-de-f%C3%BAtbol-simple-icono-negro-aislado-en-el-fondo-blanco.jpg" class="card-img-top" alt="Angel">
-            <div class="card-body text-center">
-              <h5 class="card-title">Angel</h5>
-            </div>
-          </div>
-        </div>
-        <!-- Tarjeta 4: Brayan -->
-        <div class="col-md-3">
-          <div class="card h-100">
-            <img src="https://previews.123rf.com/images/juliarstudio/juliarstudio1602/juliarstudio160200163/51456955-jugador-de-f%C3%BAtbol-simple-icono-negro-aislado-en-el-fondo-blanco.jpg" class="card-img-top" alt="Brayan">
-            <div class="card-body text-center">
-              <h5 class="card-title">Brayan</h5>
-            </div>
-          </div>
-        </div>
-        <!-- Tarjeta 5: Breiner Davalos -->
-        <div class="col-md-3">
-          <div class="card h-100">
-            <img src="https://previews.123rf.com/images/juliarstudio/juliarstudio1602/juliarstudio160200163/51456955-jugador-de-f%C3%BAtbol-simple-icono-negro-aislado-en-el-fondo-blanco.jpg" class="card-img-top" alt="Breiner Davalos">
-            <div class="card-body text-center">
-              <h5 class="card-title">Breiner Davalos</h5>
-            </div>
-          </div>
-        </div>
-        <!-- Tarjeta 6: Breiner Vargas -->
-        <div class="col-md-3">
-          <div class="card h-100">
-            <img src="https://previews.123rf.com/images/juliarstudio/juliarstudio1602/juliarstudio160200163/51456955-jugador-de-f%C3%BAtbol-simple-icono-negro-aislado-en-el-fondo-blanco.jpg" class="card-img-top" alt="Breiner Vargas">
-            <div class="card-body text-center">
-              <h5 class="card-title">Breiner Vargas</h5>
-            </div>
-          </div>
-        </div>
-        <!-- Tarjeta 7: Carlos -->
-        <div class="col-md-3">
-          <div class="card h-100">
-            <img src="https://previews.123rf.com/images/juliarstudio/juliarstudio1602/juliarstudio160200163/51456955-jugador-de-f%C3%BAtbol-simple-icono-negro-aislado-en-el-fondo-blanco.jpg" class="card-img-top" alt="Carlos">
-            <div class="card-body text-center">
-              <h5 class="card-title">Carlos</h5>
-            </div>
-          </div>
-        </div>
-        <!-- Tarjeta 8: Cristopher -->
-        <div class="col-md-3">
-          <div class="card h-100">
-            <img src="https://previews.123rf.com/images/juliarstudio/juliarstudio1602/juliarstudio160200163/51456955-jugador-de-f%C3%BAtbol-simple-icono-negro-aislado-en-el-fondo-blanco.jpg" class="card-img-top" alt="Cristopher">
-            <div class="card-body text-center">
-              <h5 class="card-title">Cristopher</h5>
-            </div>
-          </div>
-        </div>
-        <!-- Tarjeta 9: Daniel -->
-        <div class="col-md-3">
-          <div class="card h-100">
-            <img src="https://previews.123rf.com/images/juliarstudio/juliarstudio1602/juliarstudio160200163/51456955-jugador-de-f%C3%BAtbol-simple-icono-negro-aislado-en-el-fondo-blanco.jpg" class="card-img-top" alt="Daniel">
-            <div class="card-body text-center">
-              <h5 class="card-title">Daniel</h5>
-            </div>
-          </div>
-        </div>
-        <!-- Tarjeta 10: Dany -->
-        <div class="col-md-3">
-          <div class="card h-100">
-            <img src="https://previews.123rf.com/images/juliarstudio/juliarstudio1602/juliarstudio160200163/51456955-jugador-de-f%C3%BAtbol-simple-icono-negro-aislado-en-el-fondo-blanco.jpg" class="card-img-top" alt="Dany">
-            <div class="card-body text-center">
-              <h5 class="card-title">Dany</h5>
-            </div>
-          </div>
-        </div>
-        <!-- Tarjeta 11: Dilan -->
-        <div class="col-md-3">
-          <div class="card h-100">
-            <img src="https://previews.123rf.com/images/juliarstudio/juliarstudio1602/juliarstudio160200163/51456955-jugador-de-f%C3%BAtbol-simple-icono-negro-aislado-en-el-fondo-blanco.jpg" class="card-img-top" alt="Dilan">
-            <div class="card-body text-center">
-              <h5 class="card-title">Dilan</h5>
-            </div>
-          </div>
-        </div>
-        <!-- Tarjeta 12: Dinkol -->
-        <div class="col-md-3">
-          <div class="card h-100">
-            <img src="https://previews.123rf.com/images/juliarstudio/juliarstudio1602/juliarstudio160200163/51456955-jugador-de-f%C3%BAtbol-simple-icono-negro-aislado-en-el-fondo-blanco.jpg" class="card-img-top" alt="Dinkol">
-            <div class="card-body text-center">
-              <h5 class="card-title">Dinkol</h5>
-            </div>
-          </div>
-        </div>
-        <!-- Tarjeta 13: Eliuth -->
-        <div class="col-md-3">
-          <div class="card h-100">
-            <img src="https://previews.123rf.com/images/juliarstudio/juliarstudio1602/juliarstudio160200163/51456955-jugador-de-f%C3%BAtbol-simple-icono-negro-aislado-en-el-fondo-blanco.jpg" class="card-img-top" alt="Eliuth">
-            <div class="card-body text-center">
-              <h5 class="card-title">Eliuth</h5>
-            </div>
-          </div>
-        </div>
-        <!-- Tarjeta 14: Esteban -->
-        <div class="col-md-3">
-          <div class="card h-100">
-            <img src="https://previews.123rf.com/images/juliarstudio/juliarstudio1602/juliarstudio160200163/51456955-jugador-de-f%C3%BAtbol-simple-icono-negro-aislado-en-el-fondo-blanco.jpg" class="card-img-top" alt="Esteban">
-            <div class="card-body text-center">
-              <h5 class="card-title">Esteban</h5>
-            </div>
-          </div>
-        </div>
-        <!-- Tarjeta 15: Gomez Angel -->
-        <div class="col-md-3">
-          <div class="card h-100">
-            <img src="https://previews.123rf.com/images/juliarstudio/juliarstudio1602/juliarstudio160200163/51456955-jugador-de-f%C3%BAtbol-simple-icono-negro-aislado-en-el-fondo-blanco.jpg" class="card-img-top" alt="Gomez Angel">
-            <div class="card-body text-center">
-              <h5 class="card-title">Gomez Angel</h5>
-            </div>
-          </div>
-        </div>
-        <!-- Tarjeta 16: ISAAC -->
-        <div class="col-md-3">
-          <div class="card h-100">
-            <img src="https://previews.123rf.com/images/juliarstudio/juliarstudio1602/juliarstudio160200163/51456955-jugador-de-f%C3%BAtbol-simple-icono-negro-aislado-en-el-fondo-blanco.jpg" class="card-img-top" alt="ISAAC">
-            <div class="card-body text-center">
-              <h5 class="card-title">ISAAC</h5>
-            </div>
-          </div>
-        </div>
-        <!-- Tarjeta 17: Jarveis -->
-        <div class="col-md-3">
-          <div class="card h-100">
-            <img src="https://previews.123rf.com/images/juliarstudio/juliarstudio1602/juliarstudio160200163/51456955-jugador-de-f%C3%BAtbol-simple-icono-negro-aislado-en-el-fondo-blanco.jpg" class="card-img-top" alt="Jarveis">
-            <div class="card-body text-center">
-              <h5 class="card-title">Jarveis</h5>
-            </div>
-          </div>
-        </div>
-        <!-- Tarjeta 18: Jesus -->
-        <div class="col-md-3">
-          <div class="card h-100">
-            <img src="images/jugadores/jesus.jpg" class="card-img-top" alt="Jesus">
-            <div class="card-body text-center">
-              <h5 class="card-title">Jesus</h5>
-            </div>
-          </div>
-        </div>
-        <!-- Tarjeta 19: Jhoyfran -->
-        <div class="col-md-3">
-          <div class="card h-100">
-            <img src="https://previews.123rf.com/images/juliarstudio/juliarstudio1602/juliarstudio160200163/51456955-jugador-de-f%C3%BAtbol-simple-icono-negro-aislado-en-el-fondo-blanco.jpg" class="card-img-top" alt="Jhoyfran">
-            <div class="card-body text-center">
-              <h5 class="card-title">Jhoyfran</h5>
-            </div>
-          </div>
-        </div>
-        <!-- Tarjeta 20: Joseth -->
-        <div class="col-md-3">
-          <div class="card h-100">
-            <img src="images/jugadores/josept.jpg" class="card-img-top" alt="Joseth">
-            <div class="card-body text-center">
-              <h5 class="card-title">Joseth</h5>
-            </div>
-          </div>
-        </div>
-        <!-- Tarjeta 21: Josue -->
-        <div class="col-md-3">
-          <div class="card h-100">
-            <img src="https://previews.123rf.com/images/juliarstudio/juliarstudio1602/juliarstudio160200163/51456955-jugador-de-f%C3%BAtbol-simple-icono-negro-aislado-en-el-fondo-blanco.jpg" class="card-img-top" alt="Josue">
-            <div class="card-body text-center">
-              <h5 class="card-title">Josue</h5>
-            </div>
-          </div>
-        </div>
-        <!-- Tarjeta 22: Juan -->
-        <div class="col-md-3">
-          <div class="card h-100">
-            <img src="images/jugadores/juan t.jpg" class="card-img-top" alt="Juan">
-            <div class="card-body text-center">
-              <h5 class="card-title">Juan T</h5>
-            </div>
-          </div>
-        </div>
-        <!-- Tarjeta 23: Juan Andrés -->
-        <div class="col-md-3">
-          <div class="card h-100">
-            <img src="https://previews.123rf.com/images/juliarstudio/juliarstudio1602/juliarstudio160200163/51456955-jugador-de-f%C3%BAtbol-simple-icono-negro-aislado-en-el-fondo-blanco.jpg" class="card-img-top" alt="Juan Andrés">
-            <div class="card-body text-center">
-              <h5 class="card-title">Juan Andrés</h5>
-            </div>
-          </div>
-        </div>
-        <!-- Tarjeta 24: Juan José -->
-        <div class="col-md-3">
-          <div class="card h-100">
-            <img src="https://previews.123rf.com/images/juliarstudio/juliarstudio1602/juliarstudio160200163/51456955-jugador-de-f%C3%BAtbol-simple-icono-negro-aislado-en-el-fondo-blanco.jpg" class="card-img-top" alt="Juan José">
-            <div class="card-body text-center">
-              <h5 class="card-title">Juan José</h5>
-            </div>
-          </div>
-        </div>
-        <!-- Tarjeta 25: Karles -->
-        <div class="col-md-3">
-          <div class="card h-100">
-            <img src="https://previews.123rf.com/images/juliarstudio/juliarstudio1602/juliarstudio160200163/51456955-jugador-de-f%C3%BAtbol-simple-icono-negro-aislado-en-el-fondo-blanco.jpg" class="card-img-top" alt="Karles">
-            <div class="card-body text-center">
-              <h5 class="card-title">Karles</h5>
-            </div>
-          </div>
-        </div>
-        <!-- Tarjeta 26: Kenner -->
-        <div class="col-md-3">
-          <div class="card h-100">
-            <img src="https://previews.123rf.com/images/juliarstudio/juliarstudio1602/juliarstudio160200163/51456955-jugador-de-f%C3%BAtbol-simple-icono-negro-aislado-en-el-fondo-blanco.jpg" class="card-img-top" alt="Kenner">
-            <div class="card-body text-center">
-              <h5 class="card-title">Kenner</h5>
-            </div>
-          </div>
-        </div>
-        <!-- Tarjeta 27: Keyner -->
-        <div class="col-md-3">
-          <div class="card h-100">
-            <img src="https://previews.123rf.com/images/juliarstudio/juliarstudio1602/juliarstudio160200163/51456955-jugador-de-f%C3%BAtbol-simple-icono-negro-aislado-en-el-fondo-blanco.jpg" class="card-img-top" alt="Keyner">
-            <div class="card-body text-center">
-              <h5 class="card-title">Keyner</h5>
-            </div>
-          </div>
-        </div>
-        <!-- Tarjeta 28: LEONARDO -->
-        <div class="col-md-3">
-          <div class="card h-100">
-            <img src="https://previews.123rf.com/images/juliarstudio/juliarstudio1602/juliarstudio160200163/51456955-jugador-de-f%C3%BAtbol-simple-icono-negro-aislado-en-el-fondo-blanco.jpg" class="card-img-top" alt="LEONARDO">
-            <div class="card-body text-center">
-              <h5 class="card-title">LEONARDO</h5>
-            </div>
-          </div>
-        </div>
-        <!-- Tarjeta 29: Leonardo -->
-        <div class="col-md-3">
-          <div class="card h-100">
-            <img src="https://previews.123rf.com/images/juliarstudio/juliarstudio1602/juliarstudio160200163/51456955-jugador-de-f%C3%BAtbol-simple-icono-negro-aislado-en-el-fondo-blanco.jpg" class="card-img-top" alt="Leonardo">
-            <div class="card-body text-center">
-              <h5 class="card-title">Leonardo</h5>
-            </div>
-          </div>
-        </div>
-        <!-- Tarjeta 30: Luis Moreno -->
-        <div class="col-md-3">
-          <div class="card h-100">
-            <img src="https://previews.123rf.com/images/juliarstudio/juliarstudio1602/juliarstudio160200163/51456955-jugador-de-f%C3%BAtbol-simple-icono-negro-aislado-en-el-fondo-blanco.jpg" class="card-img-top" alt="Luis Moreno">
-            <div class="card-body text-center">
-              <h5 class="card-title">Luis Moreno</h5>
-            </div>
-          </div>
-        </div>
-        <!-- Tarjeta 31: Mario -->
-        <div class="col-md-3">
-          <div class="card h-100">
-            <img src="https://previews.123rf.com/images/juliarstudio/juliarstudio1602/juliarstudio160200163/51456955-jugador-de-f%C3%BAtbol-simple-icono-negro-aislado-en-el-fondo-blanco.jpg" class="card-img-top" alt="Mario">
-            <div class="card-body text-center">
-              <h5 class="card-title">Mario</h5>
-            </div>
-          </div>
-        </div>
-        <!-- Tarjeta 32: Mateo -->
-        <div class="col-md-3">
-          <div class="card h-100">
-            <img src="images/jugadores/mateo.jpg" class="card-img-top" alt="Mateo">
-            <div class="card-body text-center">
-              <h5 class="card-title">Mateo</h5>
-            </div>
-          </div>
-        </div>
-        <!-- Tarjeta 33: Miguel -->
-        <div class="col-md-3">
-          <div class="card h-100">
-            <img src="images//jugadores/migue.jpg" class="card-img-top" alt="Miguel">
-            <div class="card-body text-center">
-              <h5 class="card-title">Miguel</h5>
-            </div>
-          </div>
-        </div>
-        <!-- Tarjeta 34: Nayareth -->
-        <div class="col-md-3">
-          <div class="card h-100">
-            <img src="https://previews.123rf.com/images/juliarstudio/juliarstudio1602/juliarstudio160200163/51456955-jugador-de-f%C3%BAtbol-simple-icono-negro-aislado-en-el-fondo-blanco.jpg" class="card-img-top" alt="Nayareth">
-            <div class="card-body text-center">
-              <h5 class="card-title">Nayareth</h5>
-            </div>
-          </div>
-        </div>
-        <!-- Tarjeta 35: Nelson -->
-        <div class="col-md-3">
-          <div class="card h-100">
-            <img src="https://previews.123rf.com/images/juliarstudio/juliarstudio1602/juliarstudio160200163/51456955-jugador-de-f%C3%BAtbol-simple-icono-negro-aislado-en-el-fondo-blanco.jpg" class="card-img-top" alt="Nelson">
-            <div class="card-body text-center">
-              <h5 class="card-title">Nelson</h5>
-            </div>
-          </div>
-        </div>
-        <!-- Tarjeta 36: Oscar Lopez -->
-        <div class="col-md-3">
-          <div class="card h-100">
-            <img src="images/jugadores/Imagen de WhatsApp 2025-05-24 a las 17.54.41_32b6b1ff.jpg" class="card-img-top" alt="Oscar Lopez">
-            <div class="card-body text-center">
-              <h5 class="card-title">Oscar Lopez</h5>
-            </div>
-          </div>
-        </div>
-        <!-- Tarjeta 37: Oscar Sanchez -->
-        <div class="col-md-3">
-          <div class="card h-100">
-            <img src="images/jugadores/oscar.jpg" class="card-img-top" alt="Oscar Sanchez">
-            <div class="card-body text-center">
-              <h5 class="card-title">Oscar Sanchez</h5>
-            </div>
-          </div>
-        </div>
-        <!-- Tarjeta 38: Rey David -->
-        <div class="col-md-3">
-          <div class="card h-100">
-            <img src="https://previews.123rf.com/images/juliarstudio/juliarstudio1602/juliarstudio160200163/51456955-jugador-de-f%C3%BAtbol-simple-icono-negro-aislado-en-el-fondo-blanco.jpg" class="card-img-top" alt="Rey David">
-            <div class="card-body text-center">
-              <h5 class="card-title">Rey David</h5>
-            </div>
-          </div>
-        </div>
-        <!-- Tarjeta 39: Santiago -->
-        <div class="col-md-3">
-          <div class="card h-100">
-            <img src="images/jugadores/mendoza.jpg" class="card-img-top" alt="Santiago">
-            <div class="card-body text-center">
-              <h5 class="card-title">Santiago</h5>
-            </div>
-          </div>
-        </div>
-        <!-- Tarjeta 40: Santy -->
-        <div class="col-md-3">
-          <div class="card h-100">
-            <img src="https://previews.123rf.com/images/juliarstudio/juliarstudio1602/juliarstudio160200163/51456955-jugador-de-f%C3%BAtbol-simple-icono-negro-aislado-en-el-fondo-blanco.jpg" class="card-img-top" alt="Santy">
-            <div class="card-body text-center">
-              <h5 class="card-title">Santy</h5>
-            </div>
-          </div>
-        </div>
-        <!-- Tarjeta 41: Santy T -->
-        <div class="col-md-3">
-          <div class="card h-100">
-            <img src="https://previews.123rf.com/images/juliarstudio/juliarstudio1602/juliarstudio160200163/51456955-jugador-de-f%C3%BAtbol-simple-icono-negro-aislado-en-el-fondo-blanco.jpg" class="card-img-top" alt="Santy T">
-            <div class="card-body text-center">
-              <h5 class="card-title">Santy T</h5>
-            </div>
-          </div>
-        </div>
-        <!-- Tarjeta 42: Yojainer -->
-        <div class="col-md-3">
-          <div class="card h-100">
-            <img src="https://previews.123rf.com/images/juliarstudio/juliarstudio1602/juliarstudio160200163/51456955-jugador-de-f%C3%BAtbol-simple-icono-negro-aislado-en-el-fondo-blanco.jpg" class="card-img-top" alt="Yojainer">
-            <div class="card-body text-center">
-              <h5 class="card-title">Yojainer</h5>
-            </div>
-          </div>
-        </div>
-        <!-- Tarjeta 43: Zaid -->
-        <div class="col-md-3">
-          <div class="card h-100">
-            <img src="https://previews.123rf.com/images/juliarstudio/juliarstudio1602/juliarstudio160200163/51456955-jugador-de-f%C3%BAtbol-simple-icono-negro-aislado-en-el-fondo-blanco.jpg" class="card-img-top" alt="Zaid">
-            <div class="card-body text-center">
-              <h5 class="card-title">Zaid</h5>
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
-  </section>
-  
-  
-  
   <!-- Contenedor para el Footer (se cargará desde layout/footer.html) -->
   <div id="footer-container"></div>
 
