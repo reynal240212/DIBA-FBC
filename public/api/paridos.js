@@ -85,7 +85,7 @@ async function filtrarPartidos() {
     `;
     const card = crearCard({
       tipo: 'partido',
-      titulo: `${p.equipoLocal} vs ${p.equipoVisitante}`,
+      titulo: `${p.equipolocal} vs ${p.equipovisitante}`,
       cuerpo,
       escudo: p.escudo,
       color: 'primary'
