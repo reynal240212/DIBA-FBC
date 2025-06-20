@@ -149,34 +149,45 @@
     </div>
   </div>
 </section>
+<!-- SECCIÓN: PARTIDOS PROGRAMADOS -->
 <section class="fixture-section container my-5">
-  <h3 class="mb-4 text-uppercase fw-bold">22 de Junio 2025</h3>
+  <h3 class="mb-4 text-uppercase fw-bold">22 de junio de 2025</h3>
 
-  <div class="fixture-item d-flex align-items-center justify-content-between p-3 mb-3 shadow-sm">
+  <article class="fixture-item d-flex align-items-center justify-content-between p-3 mb-3 shadow-sm border rounded bg-light" aria-label="Partido programado">
+    
+    <!-- Fecha y hora -->
     <div class="fixture-date text-center me-3">
-      <div class="day text-uppercase fw-bold">Dom</div>
-      <div class="hour text-danger fw-semibold">10:30 Am</div>
+      <div class="day text-uppercase fw-bold text-primary">Dom</div>
+      <time class="hour text-danger fw-semibold" datetime="2025-06-22T10:30:00">10:30 AM</time>
     </div>
     
-    <div class="fixture-info d-flex flex-column flex-md-row align-items-center flex-grow-1">
-      <div class="fixture-type text-muted small text-center text-md-start mb-2 mb-md-0 me-md-4"></div>
+    <!-- Info del partido -->
+    <div class="fixture-info d-flex flex-column flex-md-row align-items-center flex-grow-1 gap-3">
+      
+      <div class="fixture-type text-muted small text-center text-md-start mb-2 mb-md-0 me-md-4">
+        <!-- Puedes poner tipo: “Amistoso”, “Torneo”, etc. -->
+      </div>
       
       <div class="teams d-flex align-items-center justify-content-center flex-grow-1 gap-3">
+        
+        <!-- Equipo local -->
         <div class="team d-flex align-items-center gap-2">
-          <img src="https://cdn-icons-png.flaticon.com/512/833/833472.png" class="team-logo" alt="">
-          <span class="team-name fw-semibold">Amigos del futuro</span>
+          <img src="https://cdn-icons-png.flaticon.com/512/833/833472.png" class="team-logo" alt="Escudo Amigos del Futuro" width="40" height="40" style="object-fit: contain;">
+          <span class="team-name fw-semibold text-dark">Amigos del Futuro</span>
         </div>
-        <span class="vs fw-bold">vs.</span>
+        
+        <span class="vs fw-bold text-muted">vs</span>
+        
+        <!-- Equipo visitante -->
         <div class="team d-flex align-items-center gap-2">
-          <img src="images/ESCUDO.png" class="team-logo" alt="DIBA FBC">
-          <span class="team-name fw-semibold">DIBA FBC</span>
+          <img src="images/ESCUDO.png" class="team-logo" alt="Escudo DIBA FBC" width="40" height="40" style="object-fit: contain;">
+          <span class="team-name fw-semibold text-dark">DIBA FBC</span>
         </div>
+        
       </div>
     </div>
-
-  <!-- Puedes duplicar el bloque .fixture-item para más partidos -->
+  </article>
 </section>
-
 
   <!-- Footer (se carga desde layout/footer.html) -->
   <div id="footer-container"></div>
