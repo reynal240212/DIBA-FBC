@@ -78,7 +78,7 @@ async function filtrarPartidos() {
     const cuerpo = `
       <p><i class="fas fa-align-left me-2"></i><strong>Descripción:</strong> ${p.descripcion || 'N/A'}</p>
       <p><i class="fas fa-calendar-alt me-2"></i><strong>Fecha/Hora:</strong> ${formatearFecha(p.fecha)} - ${p.hora || 'Sin hora'}</p>
-      <p><i class="fas fa-map-marker-alt me-2"></i><strong>Estadio:</strong> ${p.estadio || 'No especificado'}</p>
+      <p><i class="fas fa-map-marker-alt me-2"></i><strong>Estadio:</strong> ${p.cancha || 'No especificado'}</p>
       ${p.valor ? `<p><i class="fas fa-dollar-sign me-2"></i><strong>Valor:</strong> $${p.valor}</p>` : ''}
       <p><i class="fas fa-trophy me-2"></i><strong>Resultado:</strong> ${p.resultado || 'No disponible'}</p>
       <p><i class="fas fa-futbol me-2"></i><strong>Goles:</strong> ${p.goles || 'No disponible'}</p>
