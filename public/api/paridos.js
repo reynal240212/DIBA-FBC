@@ -144,3 +144,75 @@ async function filtrarEntrenamientos() {
 }
 
 inputFechaEntrenamiento.addEventListener('change', filtrarEntrenamientos);
+// ----- CLASIFICACIÓN -----
+
+async function obtenerClasificacion() {
+  const { data, error } = await supabase
+    .from('clasificacion_categoria_2014_15')
+    .select('*')
+    .order('posicion', { ascending: true });
+
+  if (error) {
+    console.error('Error al obtener clasificación:', error);
+    return [];
+  }
+
+  return data;
+}
+
+async function mostrarClasificacion() {
+  const container = document.getElementById('clasificacion-container');
+  const spinner = document.getElementById('loading-clasificacion');
+
+  spinner.style.display = 'block';
+  container.innerHTML = '';
+
+  const datos = await obtenerClasificacion();
+  spinner.style.display = 'none';
+
+  if (datos.length === 0) {
+    container.innerHTML = '<p class="text-center text-muted">No hay datos de clasificación disponibles.</p>';
+    return;
+  }
+
+  const tabla = document.createElement('table');
+  tabla.className = 'table table-striped table-hover table-bordered text-center align-middle';
+
+  tabla.innerHTML = `
+    <thead class="table-dark">
+      <tr>
+        <th>Pos</th>
+        <th>Equipo</th>
+        <th>Pts</th>
+        <th>J</th>
+        <th>G</th>
+        <th>E</th>
+        <th>P</th>
+        <th>GF</th>
+        <th>GC</th>
+        <th>DIF</th>
+      </tr>
+    </thead>
+    <tbody>
+      ${datos.map(e => `
+        <tr class="${e.equipo.toLowerCase().includes('diba') ? 'table-danger fw-bold' : ''}">
+          <td>${e.posicion}</td>
+          <td>${e.equipo}</td>
+          <td>${e.puntos}</td>
+          <td>${e.jugados}</td>
+          <td>${e.ganados}</td>
+          <td>${e.empatados}</td>
+          <td>${e.perdidos}</td>
+          <td>${e.goles_favor}</td>
+          <td>${e.goles_contra}</td>
+          <td>${e.diferencia}</td>
+        </tr>
+      `).join('')}
+    </tbody>
+  `;
+
+  container.appendChild(tabla);
+}
+
+// Ejecutar automáticamente al cargar la página
+mostrarClasificacion();

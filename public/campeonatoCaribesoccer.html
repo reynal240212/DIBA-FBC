@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Inicio - DIBA FBC | Historia, Servicios y Más</title>
+  <link rel="icon" href="images/ESCUDO.ico" sizes="32x32">
+  <head>
+  <!-- ... otros meta tags -->
+  <meta property="og:title" content="Inicio - DIBA FBC | Historia, Servicios y Más" />
+  <meta property="og:description" content="Descubre la historia, los servicios y el equipo de DIBA FBC. Vive la pasión deportiva y conoce a nuestros patrocinadores, fundación y cuerpo técnico." />
+  <meta property="og:image" content="https://diba-fbc.vercel.app/images/ESCUDO.png" /> <!-- URL absoluta a una imagen representativa -->
+  <meta property="og:url" content="https://diba-fbc.vercel.app/" />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Inicio - DIBA FBC | Historia, Servicios y Más" />
+  <meta name="twitter:description" content="Descubre la historia, los servicios y el equipo de DIBA FBC." />
+  <meta name="twitter:image" content="https://diba-fbc.vercel.app/images/ESCUDO.png" /> <!-- URL absoluta -->
+  <!-- ... -->
+</head>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Arial:wght@400;700&display=swap" rel="stylesheet">
+  <!-- Bootstrap 5.3.2 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css"/>
+  <link rel="stylesheet" href="styles/styles.css" />
+  <link rel="stylesheet" href="styles/background-animation.css" />
+  <link rel="manifest" href="manifest.json" />
+  <style>
+    .background-animation {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
+    }
+    #btnBackToTop {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      z-index: 1000;
+      display: none;
+    }
+  </style>
+</head>
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/service-worker.js')
+      .then(reg => console.log("✅ Service Worker registrado"))
+      .catch(err => console.error("❌ Error al registrar el SW", err));
+  }
+</script>
+<body>
+  <!-- Fondo animado -->
+  <div class="background-animation">
+    <div class="cube"></div><div class="cube"></div><div class="cube"></div>
+    <div class="cube"></div><div class="cube"></div><div class="cube"></div>
+    <div class="cube"></div><div class="cube"></div><div class="cube"></div>
+    <div class="cube"></div>
+  </div>
+
+  <!-- Botón Volver Arriba -->
+  <button id="btnBackToTop" title="Volver arriba" aria-label="Volver arriba" class="btn btn-primary btn-lg rounded-circle shadow">
+    <i class="fas fa-arrow-up"></i>
+  </button>
+
+  <!-- Navbar -->
+  <div id="navbar-container"></div>
+
+ <section class="hero"> <!-- Quita d-flex, align-items, justify-content si .hero CSS lo maneja -->
+  <div class="hero-content"> <!-- Nueva capa para aplicar .hero-content -->
+    <div class="container text-center text-white py-5"> <!-- Container de Bootstrap aún puede ser útil para el ancho -->
+      <h1 class="display-4 fw-bold mb-3 hero-title animate__animated animate__fadeInDown">Tabla de clasificacion torneo caribe Soccer</h1>
+      <p class="lead mb-4 hero-subtitle animate__animated animate__fadeInUp animate__delay-1s"></p>
+      <div class="hero-buttons"> <!-- Para aplicar los estilos .hero-buttons si tienes varios botones -->
+        <a href="#servicios" class="btn btn-accent btn-lg animate__animated animate__pulse animate__delay-2s animate__infinite"> <!-- Usando tu btn-accent -->
+          <i class="fas fa-chevron-down me-2" aria-hidden="true"></i> 
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="container my-5">
+  <h2 class="text-center text-success fw-bold mb-4">Tabla de Clasificación</h2>
+  <div id="loading-clasificacion" class="text-center my-3" style="display: none;">
+    <div class="spinner-border text-success" role="status"></div>
+  </div>
+  <div id="clasificacion-container" class="table-responsive"></div>
+</div>
+ <!-- Footer -->
+  <div id="footer-container"></div>
+  
+  <!-- Bootstrap JS Bundle (5.3.2) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="scripts/loadComponents.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="scripts/main.js"></script>
+  <script src="scripts/script.js"></script>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SportsTeam",
+  "name": "Deportivo Internacional De Barranquilla Atlántico (DIBA FBC)",
+  "alternateName": "DIBA FBC",
+  "url": "https://diba-fbc.vercel.app/",
+  "logo": "https://diba-fbc.vercel.app/images/ESCUDO.png",
+  "description": "Club de fútbol fundado en 2012, enfocado en formar talentos y promover valores deportivos.",
+  "foundingDate": "2012",
+  "sport": "Football (Soccer)",
+  "location": {
+    "@type": "Place",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Barranquilla",
+      "addressRegion": "Atlántico",
+      "addressCountry": "CO"
+    }
+  },
+  "memberOf": { // Si aplica, liga a la que pertenece
+    "@type": "SportsLeague",
+    "name": "Nombre de la Liga Local"
+  }
+  // Puedes añadir "coach", "athlete" etc.
+}
+</script>
+</body>
+</html>
+
