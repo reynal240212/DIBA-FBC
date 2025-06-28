@@ -160,7 +160,9 @@
             <tr class="${e.equipo.toLowerCase().includes('diba') ? 'table-danger fw-bold' : ''}">
               <tr class="${e.equipo.toLowerCase().includes('diba') ? 'table-danger fw-bold' : ''}">
               <td>${e.posicion}</td>
-              <td><img src="${e.img}" alt="${e.equipo}" style="height: 40px; width: 40px; object-fit: contain;" class="mx-auto d-block"></td>
+              <td><img src="${e.img}" alt="${e.equipo}" style="height:40px;" loading="lazy"></td>
+              <td>${e.posicion}</td>
+              <td>${e.img}</td>
               <td>${e.equipo}</td>
               <td>${e.puntos}</td>
               <td>${e.jugados}</td>
