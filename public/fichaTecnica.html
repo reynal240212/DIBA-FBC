@@ -1,68 +1,106 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-   <meta charset="UTF-8" />
-  <title>Ficha tecnica Jugadores DIBA FBC</title>
-  <link rel="icon" href="images/ESCUDO.ico" sizes="32x32">
-  <head>
-  <!-- ... otros meta tags -->
-  <meta property="og:title" content="Inicio - DIBA FBC | Historia, Servicios y Más" />
-  <meta property="og:description" content="Descubre la historia, los servicios y el equipo de DIBA FBC. Vive la pasión deportiva y conoce a nuestros patrocinadores, fundación y cuerpo técnico." />
-  <meta property="og:image" content="https://diba-fbc.vercel.app/images/ESCUDO.png" /> <!-- URL absoluta a una imagen representativa -->
-  <meta property="og:url" content="https://diba-fbc.vercel.app/" />
-  <meta property="og:type" content="website" />
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Inicio - DIBA FBC | Historia, Servicios y Más" />
-  <meta name="twitter:description" content="Descubre la historia, los servicios y el equipo de DIBA FBC." />
-  <meta name="twitter:image" content="https://diba-fbc.vercel.app/images/ESCUDO.png" /> <!-- URL absoluta -->
-  <!-- ... -->
-</head>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Arial:wght@400;700&display=swap" rel="stylesheet">
-  <!-- Bootstrap 5.3.2 CSS -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ficha Técnica del Jugador</title>
+  <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer"/>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css"/>
-  <link rel="stylesheet" href="styles/styles.css" />
-  <link rel="stylesheet" href="styles/background-animation.css" />
-  <link rel="manifest" href="manifest.json" />
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f8f9fa;
+      padding: 20px;
+    }
+    .ficha-container {
+      max-width: 900px;
+      margin: auto;
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      padding: 20px;
+    }
+    .encabezado {
+      text-align: center;
+      background-color: #007bff;
+      color: white;
+      padding: 15px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+    }
+    .foto-jugador {
+      width: 180px;
+      height: 240px;
+      object-fit: cover;
+      border: 3px solid #dee2e6;
+      border-radius: 6px;
+    }
+    .barra {
+      background-color: #e9ecef;
+      border-radius: 5px;
+      overflow: hidden;
+      height: 10px;
+    }
+    .nivel {
+      height: 10px;
+    }
+    .nivel-1 { width: 20%; background-color: #198754; }
+    .nivel-2 { width: 40%; background-color: #20c997; }
+    .nivel-3 { width: 60%; background-color: #0dcaf0; }
+    .nivel-4 { width: 80%; background-color: #0d6efd; }
+    .nivel-5 { width: 100%; background-color: #6610f2; }
+  </style>
 </head>
 <body>
   <div class="ficha-container">
     <header class="encabezado">
-      <h1></h1>
-      <h2></h2>
+      <h1 class="h4 mb-1">Alevín A</h1>
+      <h2 class="h5">Medina Cubas, Abián José</h2>
     </header>
 
-    <div style="display: flex; gap: 20px; margin-top: 20px;">
-      <img src="img/abian.jpg" alt="Foto del jugador" class="foto-jugador" />
-      <table>
-        <tr><th colspan="2">Datos Personales</th></tr>
-        <tr><td><strong>Nombre</strong></td><td></td></tr>
-        <tr><td><strong>Apellidos</strong></td><td></td></tr>
-        <tr><td><strong>Fecha de Nac.</strong></td><td></td></tr>
-        <tr><td><strong>Edad</strong></td><td></td></tr>
-        <tr><td><strong>Categoría</strong></td><td></td></tr>
-        <tr><td><strong>DNI</strong></td><td></td></tr>
-        <tr><td><strong>Dirección</strong></td><td></td></tr>
-      </table>
+    <div class="row g-4">
+      <div class="col-md-4 text-center">
+        <img src="img/abian.jpg" alt="Foto del jugador" class="foto-jugador" />
+      </div>
+      <div class="col-md-8">
+        <table class="table table-bordered">
+          <thead class="table-light">
+            <tr><th colspan="2">Datos Personales</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>Nombre</strong></td><td>Abián José</td></tr>
+            <tr><td><strong>Apellidos</strong></td><td>Medina Cubas</td></tr>
+            <tr><td><strong>Fecha de Nac.</strong></td><td>04/05/1999</td></tr>
+            <tr><td><strong>Edad</strong></td><td>11</td></tr>
+            <tr><td><strong>Categoría</strong></td><td>Alevín A</td></tr>
+            <tr><td><strong>DNI</strong></td><td>386092011</td></tr>
+            <tr><td><strong>Dirección</strong></td><td>Barrio Atl.</td></tr>
+          </tbody>
+        </table>
+      </div>
     </div>
 
-    <table>
-      <tr><th colspan="2">Datos Deportivos</th></tr>
-      <tr><td><strong>Posiciones</strong></td><td></td></tr>
-      <tr><td><strong>Velocidad</strong></td><td><div class="barra"><div class="nivel nivel-4"></div></div></td></tr>
-      <tr><td><strong>Pase</strong></td><td><div class="barra"><div class="nivel nivel-5"></div></div></td></tr>
-      <tr><td><strong>Técnica</strong></td><td><div class="barra"><div class="nivel nivel-3"></div></div></td></tr>
-      <tr><td><strong>Resistencia</strong></td><td><div class="barra"><div class="nivel nivel-2"></div></div></td></tr>
+    <table class="table table-bordered mt-4">
+      <thead class="table-light">
+        <tr><th colspan="2">Datos Deportivos</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Posiciones</strong></td><td>Medio Centro, Interior Derecho, Marcador Central</td></tr>
+        <tr><td><strong>Velocidad</strong></td><td><div class="barra"><div class="nivel nivel-4"></div></div></td></tr>
+        <tr><td><strong>Pase</strong></td><td><div class="barra"><div class="nivel nivel-5"></div></div></td></tr>
+        <tr><td><strong>Técnica</strong></td><td><div class="barra"><div class="nivel nivel-3"></div></div></td></tr>
+        <tr><td><strong>Resistencia</strong></td><td><div class="barra"><div class="nivel nivel-2"></div></div></td></tr>
+      </tbody>
     </table>
 
-    <table>
-      <tr><th colspan="2">Observaciones</th></tr>
-      <tr><td colspan="2"></td></tr>
-      <tr><td><strong></strong></td><td></td></tr>
+    <table class="table table-bordered mt-4">
+      <thead class="table-light">
+        <tr><th colspan="2">Observaciones</th></tr>
+      </thead>
+      <tbody>
+        <tr><td colspan="2">Jugador con buen pase largo, visión y liderazgo en el campo.</td></tr>
+        <tr><td><strong>Pie hábil</strong></td><td>Derecho</td></tr>
+      </tbody>
     </table>
   </div>
 </body>
