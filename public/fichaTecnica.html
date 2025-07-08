@@ -52,6 +52,22 @@
   </style>
 </head>
 <body>
+    <!-- Navbar -->
+  <div id="navbar-container"></div>
+
+ <section class="hero"> <!-- Quita d-flex, align-items, justify-content si .hero CSS lo maneja -->
+  <div class="hero-content"> <!-- Nueva capa para aplicar .hero-content -->
+    <div class="container text-center text-white py-5"> <!-- Container de Bootstrap aún puede ser útil para el ancho -->
+      <h1 class="display-4 fw-bold mb-3 hero-title animate__animated animate__fadeInDown">Deportivo Internacional De Barranquilla Atlántico</h1>
+      <p class="lead mb-4 hero-subtitle animate__animated animate__fadeInUp animate__delay-1s">"Fuerza y Lealtad"</p>
+      <div class="hero-buttons"> <!-- Para aplicar los estilos .hero-buttons si tienes varios botones -->
+        <a href="#servicios" class="btn btn-accent btn-lg animate__animated animate__pulse animate__delay-2s animate__infinite"> <!-- Usando tu btn-accent -->
+          <i class="fas fa-chevron-down me-2" aria-hidden="true"></i> Descubre Nuestros Servicios
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
   <div class="ficha-container">
     <header class="encabezado">
       <h1 class="h4 mb-1">Alevín A</h1>
@@ -103,5 +119,40 @@
       </tbody>
     </table>
   </div>
+   <!-- Footer -->
+  <div id="footer-container"></div>
+  
+  <!-- Bootstrap JS Bundle (5.3.2) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="scripts/loadComponents.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="scripts/main.js"></script>
+  <script src="scripts/script.js"></script>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SportsTeam",
+  "name": "Deportivo Internacional De Barranquilla Atlántico (DIBA FBC)",
+  "alternateName": "DIBA FBC",
+  "url": "https://diba-fbc.vercel.app/",
+  "logo": "https://diba-fbc.vercel.app/images/ESCUDO.png",
+  "description": "Club de fútbol fundado en 2012, enfocado en formar talentos y promover valores deportivos.",
+  "foundingDate": "2012",
+  "sport": "Football (Soccer)",
+  "location": {
+    "@type": "Place",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Barranquilla",
+      "addressRegion": "Atlántico",
+      "addressCountry": "CO"
+    }
+  },
+  "memberOf": { // Si aplica, liga a la que pertenece
+    "@type": "SportsLeague",
+    "name": "Nombre de la Liga Local"
+  }
+}
+</script>
 </body>
 </html>
