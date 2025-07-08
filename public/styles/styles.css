@@ -1178,4 +1178,54 @@ img {
     font-size: 1.1rem;
   }
 }
+ .ficha-container {
+      max-width: 900px;
+      margin: auto;
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      padding: 20px;
+    }
+    .encabezado {
+      text-align: center;
+      background-color: #001b72;
+      color: white;
+      padding: 10px;
+      border-radius: 6px;
+    }
+    .foto-jugador {
+      width: 180px;
+      height: 240px;
+      object-fit: cover;
+      border: 3px solid #ccc;
+      border-radius: 4px;
+      margin-bottom: 10px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      text-align: left;
+      padding: 8px;
+      border-bottom: 1px solid #ccc;
+    }
+    th {
+      background-color: #f2f2f2;
+    }
+    .barra {
+      background-color: #eee;
+      border-radius: 5px;
+      overflow: hidden;
+      margin: 5px 0;
+    }
+    .nivel {
+      height: 10px;
+    }
+    .nivel-1 { width: 20%; background-color: #ffccbc; }
+    .nivel-2 { width: 40%; background-color: #ffab91; }
+    .nivel-3 { width: 60%; background-color: #ff8a65; }
+    .nivel-4 { width: 80%; background-color: #ff7043; }
+    .nivel-5 { width: 100%; background-color: #ff5722; }
 
