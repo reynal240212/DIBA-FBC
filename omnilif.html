@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vacante Disponible</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <style>
+    body {
+        /* Gradiente moderno */
+        background: linear-gradient(135deg, #e0f7fa, #b2ebf2);
+    }
+    .job-card {
+        max-width: 450px;
+        margin: 40px auto;
+        border: none;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        background: white;
+        overflow: hidden; /* Para que el header no se salga de los bordes redondeados */
+    }
+    .card-header-custom {
+        padding: 40px 20px;
+        background: linear-gradient(135deg, #28a745, #20c997);
+        color: white;
+    }
+    .btn-apply {
+        background: linear-gradient(135deg, #ffc107, #ff9800);
+        border: none;
+        font-weight: bold;
+        transition: transform 0.2s;
+    }
+    .btn-apply:hover {
+        transform: scale(1.05);
+    }
+</style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="card text-center job-card">
+            <div class="card-header fs-5">
+                ¡ESTAMOS CONTRATANDO!
+            </div>
+            <div class="card-body p-4">
+                <h1 class="card-title fw-bold">Oportunidad Laboral</h1>
+                <p class="lead">Buscamos personal para trabajo de medio tiempo.</p>
+                
+                <div class="my-4 p-3 salary-highlight">
+                    <h2 class="display-5 mb-0">$500,000</h2>
+                    <p class="fs-4 mb-0">Pesos Semanales</p>
+                </div>
+
+                <ul class="list-group list-group-flush text-start my-4">
+                    <li class="list-group-item border-0"><i class="bi bi-clock-fill me-2 text-success"></i> Horario flexible de medio tiempo.</li>
+                    <li class="list-group-item border-0"><i class="bi bi-calendar-check-fill me-2 text-success"></i> ¡Contratación inmediata y urgente!</li>
+                    <li class="list-group-item border-0"><i class="bi bi-arrow-up-right-circle-fill me-2 text-success"></i> Oportunidad de crecimiento.</li>
+                </ul>
+
+                <a href="#" class="btn btn-success btn-lg w-100 py-3 mt-3">
+                    <i class="bi bi-whatsapp me-2"></i> POSTULA AHORA POR WHATSAPP
+                </a>
+            </div>
+            <div class="card-footer text-muted">
+                ¡No dejes pasar esta increíble oportunidad!
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
