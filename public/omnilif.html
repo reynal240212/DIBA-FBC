@@ -38,7 +38,350 @@
     }
 </style>
 </head>
+<body><!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jersey 3D Interactivo</title>
+    
+    <!-- Bootstrap para el layout general -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Google Fonts para una fuente similar -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Roboto:wght@700&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- ESTILOS GENERALES Y BOOTSTRAP --- */
+        body {
+            background-color: #f0f0f0;
+            font-family: 'Roboto', sans-serif;
+            overflow: hidden; /* Evita scroll al arrastrar */
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .instructions {
+            margin-bottom: 2rem;
+            color: #555;
+            background-color: white;
+            padding: 1rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        /* --- ESCENA 3D --- */
+        .scene {
+            width: 300px;
+            height: 350px;
+            perspective: 1500px; /* La "profundidad" de la escena */
+            cursor: grab;
+        }
+
+        .jersey-model {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transform: rotateY(-20deg); /* Posición inicial */
+            transition: transform 0.2s ease-out;
+        }
+
+        .jersey-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden; /* Oculta la cara trasera del elemento */
+            
+            /* Color base de la camiseta */
+            background-color: #4a6988; 
+            
+            /* Patrón de líneas diagonales de la camiseta */
+            background-image: repeating-linear-gradient(
+                135deg,
+                transparent,
+                transparent 4px,
+                rgba(255, 255, 255, 0.15) 4px,
+                rgba(255, 255, 255, 0.15) 5px
+            );
+        }
+
+        /* --- POSICIONAMIENTO DE LAS CARAS DEL "CUBO" 3D --- */
+        .front { transform: translateZ(15px); }
+        .back  { transform: rotateY(180deg) translateZ(15px); }
+        .right { width: 30px; transform: rotateY(90deg) translateZ(150px); }
+        .left  { width: 30px; transform: rotateY(-90deg) translateZ(150px); }
+
+        /* --- ESTILOS DEL FRENTE DE LA CAMISETA --- */
+        .front {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px 15px;
+            box-sizing: border-box;
+            color: white;
+        }
+
+        /* Cuello */
+        .collar {
+            width: 120px;
+            height: 40px;
+            border: 10px solid #a9d6e5;
+            border-bottom-color: transparent;
+            border-radius: 50% / 100%;
+            border-bottom-left-radius: 0;
+            border-bottom-right-radius: 0;
+            position: absolute;
+            top: -10px;
+            box-sizing: content-box;
+        }
+        
+        .sponsors-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            margin-top: 40px;
+            padding: 0 10px;
+        }
+
+        /* Logo JSP */
+        .logo-jsp {
+            font-family: 'Anton', sans-serif;
+            font-size: 24px;
+            color: #ffde59; /* Amarillo */
+            text-shadow: 1px 1px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000;
+            position: absolute;
+        }
+        .jsp-left { top: 15px; left: 25px; }
+        .jsp-right { top: 15px; right: 25px; }
+
+        /* Logo FBC */
+        .logo-fbc {
+            background-color: white;
+            color: #333;
+            font-weight: bold;
+            padding: 5px 15px;
+            font-size: 16px;
+            clip-path: polygon(0 0, 100% 5%, 95% 100%, 5% 95%); /* Simula bordes rotos */
+        }
+        
+        /* Logo Fintilemi */
+        .logo-fintilemi {
+            width: 50px;
+            height: 50px;
+            background-color: white;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: black;
+            font-size: 8px;
+            font-weight: bold;
+            text-align: center;
+            padding: 2px;
+            border: 2px solid #333;
+        }
+        .logo-fintilemi img { width: 25px; } /* Usaremos un icono SVG como placeholder */
+
+        /* Escudo del equipo */
+        .team-crest {
+            width: 55px;
+            height: 55px;
+            background-color: #f0e6d2; /* Color crema */
+            border-radius: 50%;
+            border: 2px solid #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 2px;
+        }
+        .crest-shield {
+            width: 90%;
+            height: 90%;
+            background-color: black;
+            color: white;
+            clip-path: polygon(0% 0%, 100% 0%, 100% 75%, 50% 100%, 0% 75%); /* Forma de escudo */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-around;
+            font-size: 8px;
+        }
+        .crest-shield .ball { font-size: 16px; }
+        .crest-text { font-size: 5px; transform: scale(0.9); }
+
+        /* Banner principal */
+        .main-banner {
+            width: 100%;
+            text-align: center;
+            margin-top: 15px;
+            position: relative;
+        }
+        .banner-shape {
+            background-color: white;
+            color: #333;
+            padding: 10px 30px;
+            font-family: 'Anton', sans-serif;
+            font-size: 38px;
+            display: inline-block;
+            clip-path: polygon(0% 20%, 10% 0%, 90% 0%, 100% 20%, 100% 80%, 90% 100%, 10% 100%, 0% 80%);
+        }
+
+        /* Sponsor inferior */
+        .bottom-sponsor {
+            margin-top: 15px;
+            text-align: center;
+            color: white;
+        }
+        .flame-icon {
+            font-size: 40px;
+            line-height: 1;
+        }
+        .club-text {
+            font-weight: bold;
+            font-size: 18px;
+            letter-spacing: 1px;
+        }
+
+        /* --- ESTILOS DE LA PARTE TRASERA --- */
+        .back {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-family: 'Anton', sans-serif;
+        }
+        .player-name {
+            font-size: 30px;
+            letter-spacing: 2px;
+        }
+        .player-number {
+            font-size: 120px;
+            line-height: 1;
+            font-weight: bold;
+        }
+
+    </style>
+</head>
 <body>
+
+    <div class="container">
+        <div class="instructions text-center">
+            <h5>Camiseta 3D Interactiva</h5>
+            <p><strong>Instrucciones:</strong> Haz clic y arrastra sobre la camiseta para rotarla.</p>
+        </div>
+
+        <!-- La escena 3D que contiene el modelo -->
+        <div class="scene">
+            <div class="jersey-model" id="jerseyModel">
+                
+                <!-- CARA FRONTAL -->
+                <div class="jersey-face front">
+                    <div class="collar"></div>
+                    <div class="logo-jsp jsp-left">JSP</div>
+                    <div class="logo-jsp jsp-right">JSP</div>
+                    
+                    <div class="sponsors-top">
+                        <div class="logo-fintilemi">
+                            <!-- Placeholder para el logo de Fintilemi -->
+                            <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLXVzZXJzIj48cGF0aCBkPSJNMTYgMjF2LTJhNCA0IDAgMCAwLTQtNEg4YTQgNCAwIDAgMC00IDR2MiIvPjxjaXJjbGUgY3g9IjEyIiBjeT0iNyIgcj0iNCIvPjxwYXRoIGQ9Ik0yMiAyMXYtMmE0IDQgMCAwIDAtMy0zLjhsLTEuMTQtMS4xNCIvPjxwYXRoIGQ9Im0yIDE4LjcxdjIuMThhNCA0IDAgMCAwIDMtMy44NSIvPjwvC3N2Zz4=" alt="Fintilemi icon">
+                            <span>FINTILEMI</span>
+                        </div>
+                        <div class="logo-fbc">FBC</div>
+                        <div class="team-crest">
+                           <div class="crest-shield">
+                               <span>DJ FC</span>
+                               <span class="ball">⚽</span>
+                               <span class="crest-text">FUERZA Y LEALTAD</span>
+                           </div>
+                        </div>
+                    </div>
+                    
+                    <div class="main-banner">
+                        <div class="banner-shape">MUBLES JK</div>
+                    </div>
+
+                    <div class="bottom-sponsor">
+                        <div class="flame-icon">🔥</div>
+                        <div class="club-text">CLUB DE PADRINOS</div>
+                    </div>
+                </div>
+
+                <!-- CARA TRASERA (Ejemplo) -->
+                <div class="jersey-face back">
+                    <div class="player-name">CRACK</div>
+                    <div class="player-number">10</div>
+                </div>
+
+                <!-- LADOS para dar grosor -->
+                <div class="jersey-face side right"></div>
+                <div class="jersey-face side left"></div>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const jerseyModel = document.getElementById('jerseyModel');
+        const scene = document.querySelector('.scene');
+
+        let isDragging = false;
+        let previousX;
+        let rotationY = -20; // Inicia con la rotación CSS
+
+        scene.addEventListener('mousedown', (e) => {
+            isDragging = true;
+            previousX = e.clientX;
+            scene.style.cursor = 'grabbing';
+        });
+
+        window.addEventListener('mouseup', () => {
+            isDragging = false;
+            scene.style.cursor = 'grab';
+        });
+
+        window.addEventListener('mousemove', (e) => {
+            if (!isDragging) return;
+            
+            const deltaX = e.clientX - previousX;
+            previousX = e.clientX;
+
+            rotationY += deltaX * 0.5; // El 0.5 ajusta la sensibilidad
+            
+            jerseyModel.style.transform = `rotateY(${rotationY}deg)`;
+        });
+
+        // Para funcionalidad táctil en móviles
+        scene.addEventListener('touchstart', (e) => {
+            isDragging = true;
+            previousX = e.touches[0].clientX;
+        }, { passive: true });
+
+        window.addEventListener('touchend', () => {
+            isDragging = false;
+        });
+
+        window.addEventListener('touchmove', (e) => {
+            if (!isDragging) return;
+            const deltaX = e.touches[0].clientX - previousX;
+            previousX = e.touches[0].clientX;
+            rotationY += deltaX * 0.5;
+            jerseyModel.style.transform = `rotateY(${rotationY}deg)`;
+        }, { passive: true });
+
+    </script>
+
+</body>
+</html>
 
     <div class="container">
         <div class="card text-center job-card">
