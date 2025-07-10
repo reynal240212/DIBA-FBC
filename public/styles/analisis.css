@@ -1,0 +1,35 @@
+/* --- ESTILOS ADAPTADOS PARA LA PÁGINA DE ANÁLISIS --- */
+        :root {
+            --dark-blue: #003399;
+            --darker-blue: #0d1326;
+            --gold: #ffd700;
+            --light-grey: #c0c0c0;
+            --white: #ffffff;
+            --font-family: 'Poppins', sans-serif;
+            --success-color: #28a745;
+            --warning-color: #ffc107;
+            --danger-color: #dc3545;
+        }
+        body {
+            background-color: var(--dark-blue);
+            font-family: var(--font-family);
+            color: var(--white);
+            overflow-x: hidden;
+        }
+        .page-container {
+            min-height: 100vh;
+            position: relative;
+        }
+        /* Texto gigante en el fondo cambiado a "DIBA" */
+        .page-container::before {
+            content: 'DIBA';
+            position: absolute;
+            top: 50%;
+            left: 28%;
+            transform: translate(-50%, -50%) rotate(-15deg);
+            font-size: 35rem; /* Ajustado para que quepa bien */
+            font-weight: 900;
+            color: rgba(255, 255, 255, 0.03);
+            z-index: 0;
+            pointer-events: none;
+        }
