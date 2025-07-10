@@ -5,7 +5,7 @@ Bienvenido al repositorio del sitio web oficial de **DIBA FBC**, un club de fút
 ---
 
 ## 🔗 Enlace al sitio
-> [https://tusitio.vercel.app](https://tusitio.vercel.app) *(modificar con URL real si está desplegado)*
+> https://diba-fbc.vercel.app 
 
 ---
 
