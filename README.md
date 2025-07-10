@@ -53,7 +53,7 @@ Bienvenido al repositorio del sitio web oficial de **DIBA FBC**, un club de fút
 Este proyecto está en crecimiento. Si deseas colaborar, ¡bienvenido! Puedes enviar un pull request o abrir un issue con sugerencias o mejoras.
 
 👨‍💻 Desarrollador principal
-Reinaldo
+Reinaldo De Jesus Perez Navas
 Técnico del club & Desarrollador de software
 📍 Barranquilla, Colombia
 
