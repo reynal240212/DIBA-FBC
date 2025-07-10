@@ -142,3 +142,9 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     );
   });
+  // Análisis de Rendimiento
+  fetch("layout/analisis.html")
+    .then(response => response.text())
+    .then(data => {
+      document.getElementById("analisis-container").innerHTML = data;
+    });
