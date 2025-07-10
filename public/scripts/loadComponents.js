@@ -143,7 +143,7 @@ document.addEventListener("DOMContentLoaded", () => {
     );
   });
   // Análisis de Rendimiento
-  fetch("layout/analisis.html")
+  fetch("EstadisticasCat2012.html")
     .then(response => response.text())
     .then(data => {
       document.getElementById("analisis-container").innerHTML = data;
