@@ -1,15 +1,228 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ficha Técnica - abraham</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil del Jugador - Mario Pérez</title>
+    
+    <!-- Metadatos para SEO y redes sociales -->
+    <meta property="og:title" content="Perfil de Mario Pérez - DIBA FBC" />
+    <meta property="og:description" content="Descubre las estadísticas y los mejores momentos de Mario Pérez, atacante de DIBA FBC." />
+    <meta property="og:image" content="https://diba-fbc.vercel.app/images/ESCUDO.png" />
+    <meta property="og:url" content="https://diba-fbc.vercel.app/perfil-mario-perez.html" />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Perfil de Mario Pérez - DIBA FBC" />
+    <meta name="twitter:description" content="Descubre las estadísticas y los mejores momentos de Mario Pérez." />
+    <meta name="twitter:image" content="https://diba-fbc.vercel.app/images/ESCUDO.png" />
+    <link rel="manifest" href="manifest.json" />
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Arial:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- Librerías CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css"/>
+
+    <!-- Estilos Personalizados (Asegúrate que estas rutas son correctas) -->
+    <link rel="stylesheet" href="/public/styles/styles.css" />
+    <link rel="stylesheet" href="styles/background-animation.css" />
+
+    <style>
+        /* --- ESTILOS ESPECÍFICOS PARA ESTA PÁGINA --- */
+        :root {
+            --dark-blue: #003399;
+            --darker-blue: #0d1326;
+            --gold: #ffd700;
+            --light-grey: #c0c0c0;
+            --white: #ffffff;
+            --font-family: 'Poppins', sans-serif;
+        }
+        body {
+            background-color: var(--dark-blue);
+            font-family: var(--font-family);
+            color: var(--white);
+            overflow-x: hidden;
+        }
+        .player-profile-page {
+            min-height: 100vh;
+            position: relative;
+        }
+        .player-profile-page::before {
+            content: 'PE';
+            position: absolute;
+            top: 50%;
+            left: 25%;
+            transform: translate(-50%, -50%) rotate(-15deg);
+            font-size: 40rem;
+            font-weight: 900;
+            color: rgba(255, 255, 255, 0.03);
+            z-index: 0;
+            pointer-events: none;
+        }
+        .left-pane { padding: 4rem 3rem; z-index: 2; }
+        .stats-section .stat-item { text-align: center; margin-bottom: 3rem; }
+        .stat-item p { font-size: 0.9rem; font-weight: 700; color: var(--light-grey); letter-spacing: 1px; margin-bottom: 0.5rem; }
+        .stat-item .stat-number { font-size: 5rem; font-weight: 900; color: var(--gold); line-height: 1; }
+        .stat-item .stat-season { font-size: 0.8rem; color: var(--light-grey); }
+        .stat-season .icon { color: var(--gold); font-size: 0.9rem; vertical-align: middle; }
+        .videos-section { margin-top: 2rem; }
+        .content-item { position: relative; cursor: pointer; }
+        .content-item img { width: 100%; border-radius: 8px; filter: brightness(0.8); transition: filter 0.3s ease; }
+        .content-item:hover img { filter: brightness(1); }
+        .video-info { padding: 1rem; }
+        .video-info h5 { font-size: 1rem; font-weight: 700; text-transform: uppercase; line-height: 1.2; margin-bottom: 0.5rem; }
+        .video-info .duration { font-size: 0.9rem; color: var(--light-grey); }
+        .video-info .duration .bi-play-fill { font-size: 1.2rem; vertical-align: middle; }
+        .instagram-card { background-color: var(--darker-blue); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; overflow: hidden; }
+        .instagram-media { margin: 0 !important; }
+        .right-pane { position: relative; min-height: 100vh; }
+        .player-image { position: absolute; bottom: 0; right: -5%; height: 95%; z-index: 1; object-fit: contain; }
+        .side-nav { position: absolute; top: 50%; right: 2rem; transform: translateY(-50%); display: flex; flex-direction: column; gap: 0.5rem; z-index: 3; }
+        .side-nav .nav-button { background-color: var(--white); color: var(--dark-blue); width: 50px; height: 50px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; cursor: pointer; transition: background-color 0.3s, color 0.3s; text-decoration: none; }
+        .side-nav .nav-button.text-button { height: auto; flex-direction: column; padding: 0.5rem; }
+        .side-nav .nav-button span { font-size: 0.6rem; font-weight: 700; margin-top: 2px; }
+        .side-nav .nav-button:hover { background-color: var(--gold); }
+        .player-info-box { position: absolute; bottom: 0; left: 0; width: 100%; background-color: var(--darker-blue); padding: 1.5rem 2rem; z-index: 2; }
+        .player-info-box .position { font-size: 1rem; font-weight: 700; color: var(--light-grey); text-transform: uppercase; }
+        .player-info-box .player-name { font-size: 3rem; font-weight: 900; line-height: 1.1; text-transform: uppercase; }
+        .buy-shirt-container { position: absolute; bottom: 18%; left: 10%; z-index: 2; display: flex; align-items: center; gap: 1rem; cursor: pointer; }
+        .shirt-icon-wrapper { position: relative; background-color: white; width: 80px; height: 80px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 4px solid var(--dark-blue); }
+        .shirt-icon-wrapper i { font-size: 2.5rem; color: var(--dark-blue); }
+        .plus-icon { position: absolute; top: -5px; right: -5px; background-color: var(--gold); color: var(--dark-blue); width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: 700; }
+        .buy-shirt-text .action { font-size: 1.2rem; font-weight: 900; color: var(--gold); text-transform: uppercase; }
+        .buy-shirt-text .item-name { font-size: 0.9rem; color: var(--white); }
+    </style>
 </head>
 <body>
-  <div class="container mt-5">
-    <h1 class="text-center">Ficha Técnica de Abraham</h1>
-    <p>Próximamente más información...</p>
+  <!-- Contenedor para el Navbar (se cargará dinámicamente) -->
+  <div id="navbar-container"></div>
+
+  <!-- INICIO DEL CONTENIDO DE LA PÁGINA DE PERFIL -->
+  <div class="player-profile-page">
+      <div class="container-fluid h-100">
+          <div class="row h-100">
+              <!-- ========= PANEL IZQUIERDO (STATS Y CONTENIDO) ========= -->
+              <div class="col-lg-7 left-pane">
+                  <!-- Sección de Estadísticas -->
+                  <div class="row stats-section">
+                      <div class="col-md-4 stat-item">
+                          <p>PARTIDOS</p>
+                          <h1 class="stat-number">4</h1>
+                          <p class="stat-season">TEMPORADA 2025/2026 <i class="bi bi-info-circle-fill icon"></i></p>
+                      </div>
+                      <div class="col-md-4 stat-item">
+                          <p>GOLES</p>
+                          <h1 class="stat-number">2</h1>
+                          <p class="stat-season">TEMPORADA 2025/2026 <i class="bi bi-info-circle-fill icon"></i></p>
+                      </div>
+                      <div class="col-md-4 stat-item">
+                          <p>ASISTENCIAS</p>
+                          <h1 class="stat-number">1</h1>
+                          <p class="stat-season">TEMPORADA 2025/2026 <i class="bi bi-info-circle-fill icon"></i></p>
+                      </div>
+                  </div>
+                  <!-- Sección de Contenido (Vídeos e Instagram) -->
+                  <div class="row videos-section g-4">
+                      <div class="col-md-4 content-item">
+                          <img src="https://placehold.co/400x250/333/fff?text=Video+1" alt="Goles de Mario Pérez">
+                          <div class="video-info">
+                              <h5>Goles con sello Mario Pérez</h5>
+                              <p class="duration"><i class="bi bi-play-fill"></i> 13:36</p>
+                          </div>
+                      </div>
+                      <div class="col-md-4 content-item">
+                          <div class="card h-100 instagram-card">
+                              <div class="card-body p-0 d-flex align-items-center">
+                                 <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/reel/C7ch7lJPrzD/?utm_source=ig_embed&utm_campaign=loading" data-instgrm-version="14"></blockquote>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="col-md-4 content-item">
+                          <img src="https://placehold.co/400x250/777/fff?text=Video+3" alt="Seguimiento a Mario Pérez">
+                          <div class="video-info">
+                              <h5>Siguiendo a... Mario Pérez</h5>
+                              <p class="duration"><i class="bi bi-play-fill"></i> 04:36</p>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              <!-- ========= PANEL DERECHO (JUGADOR E INTERACCIONES) ========= -->
+              <div class="col-lg-5 right-pane">
+                  <!-- Imagen del jugador -->
+                  <!-- RECUERDA CAMBIAR ESTE SRC por tu ruta local: "../images/jugadores/mario sin fondo.png" -->
+                  <img src="https://assets.stickpng.com/images/580b57fcd9996e24bc43c48d.png" alt="Mario Pérez" class="player-image">
+                  
+                  <div class="side-nav">
+                      <a href="/ficha.html" class="nav-button text-button">
+                          <i class="bi bi-people-fill"></i>
+                          <span>PLANTILLA</span>
+                      </a>
+                      <a href="/ficha.html" class="nav-button"><i class="bi bi-arrow-right"></i></a>
+                  </div>
+
+                  <div class="buy-shirt-container">
+                      <div class="shirt-icon-wrapper">
+                          <i class="bi bi-t-shirt"></i>
+                          <div class="plus-icon">+</div>
+                      </div>
+                      <div class="buy-shirt-text">
+                          <div class="action">Mi camiseta </div>
+                          <div class="item-name">Indumentaria</div>
+                      </div>
+                  </div>
+                  
+                  <div class="player-info-box">
+                      <p class="position">Atacante</p>
+                      <h2 class="player-name">7 Mario Pérez</h2>
+                  </div>
+              </div>
+          </div>
+      </div>
   </div>
+  <!-- FIN DEL CONTENIDO DE LA PÁGINA DE PERFIL -->
+
+  <!-- Contenedor para el Footer (se cargará dinámicamente) -->
+  <div id="footer-container"></div>
+  
+  <!-- Scripts -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script async src="//www.instagram.com/embed.js"></script>
+  
+  <!-- Tus Scripts personalizados -->
+  <script src="/public/scripts/loadComponents.js"></script>
+  <script src="/public/scripts/main.js"></script>
+  <script src="/public/scripts/script.js"></script>
+
+  <!-- Datos Estructurados para SEO -->
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SportsTeam",
+      "name": "Deportivo Internacional De Barranquilla Atlántico (DIBA FBC)",
+      "alternateName": "DIBA FBC",
+      "url": "https://diba-fbc.vercel.app/",
+      "logo": "https://diba-fbc.vercel.app/images/ESCUDO.png",
+      "description": "Club de fútbol fundado en 2012, enfocado en formar talentos y promover valores deportivos.",
+      "foundingDate": "2012",
+      "sport": "Football (Soccer)",
+      "location": {
+        "@type": "Place",
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Barranquilla",
+          "addressRegion": "Atlántico",
+          "addressCountry": "CO"
+        }
+      }
+    }
+  </script>
 </body>
 </html>
