@@ -27,7 +27,7 @@ document.addEventListener("DOMContentLoaded", function () {
       { name: "Miguel", imageUrl: "images/jugadores/miguel.jpg" },
       { name: "Rodríguez", imageUrl: "images/jugadores/rodriguez.jpg" },
       { name: "Nelson", imageUrl: "images/jugadores/nelson.jpg" },
-      { name: "Santiago", imageUrl: "images/jugadores/santiago.jpg" },
+      { name: "Santiago", imageUrl: "images/jugadores/mendoza.jpg" },
       { name: "Joseth", imageUrl: "images/jugadores/joseth.jpg" },
       { name: "Hernández angel", imageUrl: "images/jugadores/hernandez_angel.jpg" },
       { name: "Oscar", imageUrl: "images/jugadores/oscar.jpg" },
