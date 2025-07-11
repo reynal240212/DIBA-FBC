@@ -47,7 +47,6 @@ document.addEventListener("DOMContentLoaded", function () {
       { name: "ISAAC", imageUrl: "images/jugadores/isaac.jpg" },
       { name: "Carlos", imageUrl: "images/jugadores/carlos.jpg" },
       { name: "Zaid", imageUrl: "images/jugadores/zaid.jpg" },
-      { name: "ALAN", imageUrl: "images/jugadores/alan.jpg" },
       { name: "Cristian Marcano", imageUrl: "images/jugadores/cristian_marcano.jpg" }
     ];
 
@@ -67,7 +66,7 @@ document.addEventListener("DOMContentLoaded", function () {
         players: [
           "Mario", "Juan Andrés", "Jhoyfran", "Nayareth", "Eliuth",
           "Abraham", "Rey David", "Santy h", "Santy t", "ISAAC",
-          "Carlos", "Zaid", "ALAN", "Cristian Marcano"
+          "Carlos", "Zaid", "Cristian Marcano"
         ]
       }
     ];
