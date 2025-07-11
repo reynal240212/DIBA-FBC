@@ -57,7 +57,7 @@ document.addEventListener("DOMContentLoaded", function () {
         players: [
           "Dilan sanchez", "Juan t", "Dinkol", "Dany", "Miguel",
           "Rodríguez", "Nelson", "Santiago", "Joseth", "Hernández angel",
-          "Oscar", "Yojainer", "Jesus", "Mateo", "Dilan correa"
+          "Oscar", "Yojainer", "Jesus", "Mateo", "Dilan correa","Estiben Montiel"
         ]
       },
       {
@@ -66,7 +66,7 @@ document.addEventListener("DOMContentLoaded", function () {
         players: [
           "Mario", "Juan Andrés", "Jhoyfran", "Nayareth", "Eliuth",
           "Abraham", "Rey David", "Santy h", "Santy t", "ISAAC",
-          "Carlos", "Zaid", "Cristian Marcano"
+          "Carlos", "Zaid", "Estiben Gomez", "Cristian Marcano"
         ]
       }
     ];
