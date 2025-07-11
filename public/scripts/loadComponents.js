@@ -23,7 +23,7 @@ document.addEventListener("DOMContentLoaded", function () {
       { name: "Dilan sanchez", imageUrl: "images/jugadores/dilan_sanchez.jpg" },
       { name: "Juan t", imageUrl: "images/jugadores/juan_t.jpg" },
       { name: "Dinkol", imageUrl: "images/jugadores/dinkol.jpg" },
-      { name: "Dany", imageUrl: "images/jugadores/dany.jpg" },
+      { name: "Dany", imageUrl: "images/jugadores/danny.jpg" },
       { name: "Miguel", imageUrl: "images/jugadores/miguel.jpg" },
       { name: "Rodríguez", imageUrl: "images/jugadores/rodriguez.jpg" },
       { name: "Nelson", imageUrl: "images/jugadores/nelson.jpg" },
