@@ -48,7 +48,7 @@ document.addEventListener("DOMContentLoaded", function () {
       { name: "ISAAC", imageUrl: "images/jugadores/isaac.jpg" },
       { name: "Carlos", imageUrl: "images/jugadores/carlos.jpg" },
       { name: "Zaid", imageUrl: "images/jugadores/zaid.jpg" },
-      { name: "DEstiben Gomez", imageUrl: "images/jugadores/estibengomez.jpg" },
+      { name: "Estiben Gomez", imageUrl: "images/jugadores/estibengomez.jpg" },
       { name: "Cristian Marcano", imageUrl: "images/jugadores/cristian_marcano.jpg" }
     ];
 
