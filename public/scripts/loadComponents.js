@@ -50,7 +50,10 @@ document.addEventListener("DOMContentLoaded", function () {
       { name: "Zaid", imageUrl: "images/jugadores/zaid.jpg" },
       { name: "Estiben Gomez", imageUrl: "images/jugadores/estibengomez.jpg" },
       { name: "Cristian Marcano", imageUrl: "images/jugadores/cristian_marcano.jpg" },
-      { name: "Yesid Manzano", imageUrl: "images/jugadores/yesid.jpg" }
+      { name: "Yesid Manzano", imageUrl: "images/jugadores/yesid.jpg" },
+      { name: "Sebastian Castro", imageUrl: "images/jugadores/sebastian_castro.jpg" }
+      ,{ name: "Andrés sierra", imageUrl: "images/jugadores/andres_sierra.jpg" }
+
     ];
 
     const categories = [
@@ -69,7 +72,7 @@ document.addEventListener("DOMContentLoaded", function () {
         players: [
           "Mario", "Juan Andrés", "Jhoyfran", "Nayareth", "Eliuth",
           "Abraham", "Rey David", "Santy h", "Santy t", "ISAAC",
-          "Carlos", "Zaid", "Estiben Gomez", "Cristian Marcano","yesid Manzano"
+          "Carlos", "Zaid", "Estiben Gomez", "Cristian Marcano","yesid Manzano","Sebastian Castro","Andrés sierra"
         ]
       }
     ];
