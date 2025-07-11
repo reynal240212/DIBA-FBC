@@ -49,7 +49,7 @@ document.addEventListener("DOMContentLoaded", function () {
       { name: "Carlos", imageUrl: "images/jugadores/carlos.jpg" },
       { name: "Zaid", imageUrl: "images/jugadores/zaid.jpg" },
       { name: "Estiben Gomez", imageUrl: "images/jugadores/estibengomez.jpg" },
-      { name: "Cristian Marcano", imageUrl: "images/jugadores/cristian_marcano.jpg" }
+      { name: "Cristian Marcano", imageUrl: "images/jugadores/cristian_marcano.jpg" },
       { name: "Yesid Manzano", imageUrl: "images/jugadores/yesid.jpg" }
     ];
 
