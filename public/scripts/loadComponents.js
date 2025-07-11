@@ -39,7 +39,7 @@ document.addEventListener("DOMContentLoaded", function () {
       { name: "Juan Andrés", imageUrl: "images/jugadores/juan_andres.jpg" },
       { name: "Jhoyfran", imageUrl: "images/jugadores/jhoyfran.jpg" },
       { name: "Nayareth", imageUrl: "images/jugadores/nayareth.jpg" },
-      { name: "Eliuth", imageUrl: "images/jugadores/eliuth.jpg" },
+      { name: "Eliuth", imageUrl: "images/jugadores/eliut.jpg" },
       { name: "Abraham", imageUrl: "images/jugadores/abraham.jpg" },
       { name: "Rey David", imageUrl: "images/jugadores/rey_david.jpg" },
       { name: "Santy h", imageUrl: "images/jugadores/santy_h.jpg" },
