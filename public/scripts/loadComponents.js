@@ -35,6 +35,7 @@ document.addEventListener("DOMContentLoaded", function () {
       { name: "Jesus", imageUrl: "images/jugadores/jesus.jpg" },
       { name: "Mateo", imageUrl: "images/jugadores/mateo.jpg" },
       { name: "Dilan correa", imageUrl: "images/jugadores/dilan_correa.jpg" },
+      { name: "Estiben Montiel", imageUrl: "images/jugadores/EstibenMontiel.jpg" },
       { name: "Mario", imageUrl: "images/mario sin fondo.png" },
       { name: "Juan Andrés", imageUrl: "images/jugadores/juan_andres.jpg" },
       { name: "Jhoyfran", imageUrl: "images/jugadores/jhoyfran.jpg" },
@@ -47,6 +48,7 @@ document.addEventListener("DOMContentLoaded", function () {
       { name: "ISAAC", imageUrl: "images/jugadores/isaac.jpg" },
       { name: "Carlos", imageUrl: "images/jugadores/carlos.jpg" },
       { name: "Zaid", imageUrl: "images/jugadores/zaid.jpg" },
+      { name: "DEstiben Gomez", imageUrl: "images/jugadores/estibengomez.jpg" },
       { name: "Cristian Marcano", imageUrl: "images/jugadores/cristian_marcano.jpg" }
     ];
 
