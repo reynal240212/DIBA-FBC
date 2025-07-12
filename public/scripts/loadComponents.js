@@ -28,7 +28,7 @@ document.addEventListener("DOMContentLoaded", function () {
       { name: "Rodríguez", imageUrl: "images/jugadores/rodriguez.jpg" },
       { name: "Nelson", imageUrl: "images/jugadores/nelson.png" },
       { name: "Santiago", imageUrl: "images/jugadores/mendoza.jpg" },
-      { name: "Joseth", imageUrl: "images/jugadores/josept.jpg" },
+      { name: "Josept", imageUrl: "images/jugadores/josept.jpg" },
       { name: "Hernández angel", imageUrl: "images/jugadores/hernandez_angel.jpg" },
       { name: "Oscar", imageUrl: "images/jugadores/oscar.jpg" },
       { name: "Yojainer", imageUrl: "images/jugadores/yojainer.jpg" },
@@ -62,7 +62,7 @@ document.addEventListener("DOMContentLoaded", function () {
         title: "Categoría 2012/13",
         players: [
           "Dilan sanchez", "Juan t", "Dinkol", "Dany", "Miguel",
-          "Rodríguez", "Nelson", "Santiago", "Joseth", "Hernández angel",
+          "Rodríguez", "Nelson", "Santiago", "Josept", "Hernández angel",
           "Oscar", "Yojainer", "Jesus", "Mateo", "Dilan correa","Estiben Montiel"
         ]
       },
