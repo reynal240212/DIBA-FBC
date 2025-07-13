@@ -1,85 +1,448 @@
-   /* --- ESTILOS ADAPTADOS PARA LA PÁGINA DE ANÁLISIS --- */
-        :root {
-            --dark-blue: #003399;
-            --darker-blue: #0d1326;
-            --gold: #ffd700;
-            --light-grey: #c0c0c0;
-            --white: #ffffff;
-            --font-family: 'Poppins', sans-serif;
-            --success-color: #28a745;
-            --warning-color: #ffc107;
-            --danger-color: #dc3545;
-        }
-        body {
-            background-color: var(--dark-blue);
-            font-family: var(--font-family);
-            color: var(--white);
-            overflow-x: hidden;
-        }
-        .page-container {
-            min-height: 100vh;
-            position: relative;
-        }
-        /* Texto gigante en el fondo cambiado a "DIBA" */
-        .page-container::before {
-            content: 'DIBA';
-            position: absolute;
-            top: 50%;
-            left: 28%;
-            transform: translate(-50%, -50%) rotate(-15deg);
-            font-size: 35rem; /* Ajustado para que quepa bien */
-            font-weight: 900;
-            color: rgba(255, 255, 255, 0.03);
-            z-index: 0;
-            pointer-events: none;
-        }
-        .left-pane { padding: 4rem 3rem; z-index: 2; }
-        .right-pane { position: relative; min-height: 100vh; }
+/* --- ESTILOS ADAPTADOS PARA LA PÁGINA DE ANÁLISIS --- */
+:root {
+    --dark-blue: #003399; /* Azul principal del equipo */
+    --darker-blue: #0A1931; /* Azul oscuro para fondos de tarjeta */
+    --gold: #FFD700; /* Dorado para acentos y números clave */
+    --light-grey: #B0BEC5; /* Gris claro para texto secundario */
+    --white: #F8F8F8; /* Blanco casi puro para texto principal */
+    --font-family: 'Poppins', sans-serif;
+    --success-color: #4CAF50; /* Verde más vibrante */
+    --warning-color: #FFC107; /* Amarillo para empates */
+    --danger-color: #F44336; /* Rojo para derrotas */
+    --shadow-light: rgba(0, 0, 0, 0.1);
+    --shadow-medium: rgba(0, 0, 0, 0.2);
+    --transition-speed: 0.3s ease;
+}
 
-        /* Sección de Estadísticas del Equipo */
-        .stats-section .stat-item { text-align: center; margin-bottom: 3rem; }
-        .stat-item p { font-size: 0.9rem; font-weight: 700; color: var(--light-grey); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 0.5rem; }
-        .stat-item .stat-number { font-size: 5rem; font-weight: 900; color: var(--gold); line-height: 1; }
-        .stat-item .stat-season { font-size: 0.8rem; color: var(--light-grey); }
+body {
+    background-color: var(--dark-blue);
+    font-family: var(--font-family);
+    color: var(--white);
+    overflow-x: hidden;
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+}
 
-        /* Secciones de Contenido (Goleadores, Análisis, Resultados) */
-        .content-section { margin-top: 3rem; }
-        .content-section h4 { font-weight: 700; color: var(--gold); margin-bottom: 1.5rem; text-transform: uppercase; letter-spacing: 1px; }
-        
-        /* Lista de Goleadores */
-        .goalscorers-list { list-style: none; padding: 0; }
-        .goalscorers-list li { background-color: rgba(255,255,255,0.05); padding: 0.8rem 1.5rem; border-radius: 8px; margin-bottom: 0.5rem; display: flex; justify-content: space-between; align-items: center; font-size: 1.1rem; }
-        .goalscorers-list .goals { font-weight: 900; color: var(--gold); }
-        
-        /* Análisis Táctico */
-        .analysis-card { background-color: var(--darker-blue); padding: 1.5rem; border-radius: 8px; height: 100%; }
-        .analysis-card h5 { font-weight: 700; display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem; }
-        .analysis-card .icon-strength { color: var(--success-color); }
-        .analysis-card .icon-weakness { color: var(--danger-color); }
-        .analysis-card ul { list-style-position: inside; padding-left: 0; }
-        .analysis-card li { margin-bottom: 0.5rem; }
+.page-container {
+    min-height: 100vh;
+    position: relative;
+    display: flex; /* Usar flexbox para el layout principal */
+    flex-direction: row; /* Asegura que los paneles estén en fila */
+}
 
-        /* Lista de Resultados */
-        .results-list { list-style: none; padding: 0; }
-        .results-list li { background-color: rgba(255,255,255,0.05); padding: 0.8rem 1.5rem; border-radius: 8px; margin-bottom: 0.5rem; display: flex; justify-content: space-between; align-items: center; }
-        .result-badge { font-weight: 700; padding: 0.25rem 0.75rem; border-radius: 5px; font-size: 0.9rem; }
-        .result-win { background-color: var(--success-color); color: var(--white); }
-        .result-draw { background-color: var(--warning-color); color: var(--darker-blue); }
-        .result-loss { background-color: var(--danger-color); color: var(--white); }
+/* Texto gigante en el fondo "DIBA" */
+.page-container::before {
+    content: 'DIBA';
+    position: absolute;
+    top: 50%;
+    left: 20%; /* Ajustado para mejor visibilidad */
+    transform: translate(-50%, -50%) rotate(-15deg);
+    font-size: 30rem; /* Tamaño un poco más pequeño para elegancia */
+    font-weight: 900;
+    color: rgba(255, 255, 255, 0.04); /* Un poco más visible */
+    z-index: 0;
+    pointer-events: none;
+    user-select: none; /* Evita que el texto sea seleccionable */
+    opacity: 0.7; /* Suaviza el efecto */
+}
 
-        /* Panel Derecho */
-        .team-crest { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 60%; max-width: 350px; z-index: 1; filter: drop-shadow(0 10px 30px rgba(0,0,0,0.5)); }
-        .side-nav { position: absolute; top: 50%; right: 2rem; transform: translateY(-50%); display: flex; flex-direction: column; gap: 0.5rem; z-index: 3; }
-        .side-nav .nav-button { background-color: var(--white); color: var(--dark-blue); width: 50px; height: 50px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; cursor: pointer; transition: all 0.3s; text-decoration: none; }
-        .side-nav .nav-button.text-button { height: auto; flex-direction: column; padding: 0.5rem; }
-        .side-nav .nav-button span { font-size: 0.6rem; font-weight: 700; margin-top: 2px; }
-        .side-nav .nav-button:hover { background-color: var(--gold); }
-        .team-info-box { position: absolute; bottom: 0; left: 0; width: 100%; background-color: var(--darker-blue); padding: 1.5rem 2rem; z-index: 2; }
-        .team-info-box .subtitle { font-size: 1rem; font-weight: 700; color: var(--light-grey); text-transform: uppercase; }
-        .team-info-box .team-name { font-size: 3rem; font-weight: 900; line-height: 1.1; text-transform: uppercase; }
-        .buy-shirt-container { position: absolute; top: 10%; left: 10%; z-index: 2; display: flex; align-items: center; gap: 1rem; cursor: pointer; }
-        .shirt-icon-wrapper { position: relative; background-color: white; width: 80px; height: 80px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 4px solid var(--dark-blue); }
-        .shirt-icon-wrapper i { font-size: 2.5rem; color: var(--dark-blue); }
-        .plus-icon { position: absolute; top: -5px; right: -5px; background-color: var(--gold); color: var(--dark-blue); width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: 700; }
-        .buy-shirt-text .action { font-size: 1.2rem; font-weight: 900; color: var(--gold); text-transform: uppercase; }
-        .buy-shirt-text .item-name { font-size: 0.9rem; color: var(--white); }
+.left-pane {
+    flex: 1; /* Ocupa el espacio restante */
+    padding: 3rem 2.5rem; /* Padding ajustado */
+    z-index: 2;
+    overflow-y: auto; /* Permite scroll si el contenido es largo */
+    padding-bottom: 5rem; /* Espacio extra al final para el scroll */
+}
+
+.right-pane {
+    position: sticky; /* Sticky para que el panel derecho se quede fijo */
+    top: 0;
+    width: 40%; /* Ancho fijo para el panel derecho */
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Para colocar el escudo y la info en extremos */
+    align-items: center;
+    padding: 2rem;
+    background: linear-gradient(180deg, var(--dark-blue) 0%, var(--darker-blue) 100%); /* Degradado sutil */
+    box-shadow: -5px 0 15px var(--shadow-medium);
+    z-index: 1; /* Menor z-index que left-pane si se superponen ligeramente */
+}
+
+/* Sección de Estadísticas del Equipo */
+.stats-section {
+    display: flex;
+    flex-wrap: wrap; /* Permite que los ítems se envuelvan */
+    justify-content: space-around;
+    gap: 1.5rem; /* Espacio entre los ítems */
+    margin-bottom: 3rem;
+    background-color: var(--darker-blue);
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px var(--shadow-medium);
+}
+.stats-section .stat-item {
+    flex-basis: calc(50% - 1.5rem); /* Dos columnas en pantallas medianas */
+    text-align: center;
+    margin-bottom: 0; /* Eliminar el margen inferior si ya hay gap */
+    padding: 1rem 0;
+    border-right: 1px solid rgba(255,255,255,0.05); /* Separador sutil */
+}
+.stats-section .stat-item:nth-child(even) {
+    border-right: none; /* Eliminar separador del último de cada fila */
+}
+/* Reajuste para 4 columnas en desktop */
+@media (min-width: 992px) {
+    .stats-section .stat-item {
+        flex-basis: calc(25% - 1.5rem); /* Cuatro columnas en pantallas grandes */
+        border-right: 1px solid rgba(255,255,255,0.05);
+    }
+    .stats-section .stat-item:last-child,
+    .stats-section .stat-item:nth-child(4) { /* Asegura que el último de la fila no tenga borde */
+        border-right: none;
+    }
+}
+
+
+.stat-item p {
+    font-size: 0.9rem;
+    font-weight: 600; /* Menos negrita */
+    color: var(--light-grey);
+    letter-spacing: 1.2px; /* Un poco más de espaciado */
+    text-transform: uppercase;
+    margin-bottom: 0.4rem;
+}
+.stat-item .stat-number {
+    font-size: 4.5rem; /* Un poco más pequeño */
+    font-weight: 900;
+    color: var(--gold);
+    line-height: 1;
+    text-shadow: 0 0 15px rgba(255, 215, 0, 0.4); /* Sombra para resaltar */
+}
+.stat-item .stat-season {
+    font-size: 0.8rem;
+    color: var(--light-grey);
+    opacity: 0.8;
+}
+
+/* Secciones de Contenido (Goleadores, Análisis, Resultados) */
+.content-section {
+    margin-top: 3.5rem; /* Más espacio entre secciones */
+    padding: 0 1rem; /* Pequeño padding horizontal */
+}
+.content-section h4 {
+    font-weight: 700;
+    color: var(--gold);
+    margin-bottom: 1.8rem; /* Más espacio */
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    border-bottom: 2px solid rgba(255,215,0,0.3); /* Línea decorativa */
+    padding-bottom: 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+}
+.content-section h4 i {
+    font-size: 1.5rem;
+    color: var(--white);
+}
+
+/* Lista de Goleadores */
+.goalscorers-list {
+    list-style: none;
+    padding: 0;
+}
+.goalscorers-list li {
+    background-color: rgba(255,255,255,0.07); /* Un poco más opaco */
+    padding: 1rem 1.8rem; /* Más padding */
+    border-radius: 10px; /* Bordes más suaves */
+    margin-bottom: 0.8rem; /* Más espacio entre ítems */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1.15rem; /* Texto ligeramente más grande */
+    transition: background-color var(--transition-speed), transform var(--transition-speed);
+    box-shadow: 0 2px 8px var(--shadow-light);
+}
+.goalscorers-list li:hover {
+    background-color: rgba(255,255,255,0.12);
+    transform: translateY(-3px); /* Efecto flotante al pasar el mouse */
+}
+.goalscorers-list .goals {
+    font-weight: 900;
+    color: var(--gold);
+    font-size: 1.25rem; /* Goles más grandes */
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+}
+
+/* Análisis Táctico */
+.analysis-card {
+    background-color: var(--darker-blue);
+    padding: 2rem; /* Más padding */
+    border-radius: 12px;
+    height: 100%;
+    box-shadow: 0 5px 15px var(--shadow-medium);
+    transition: transform var(--transition-speed);
+}
+.analysis-card:hover {
+    transform: translateY(-5px); /* Efecto al pasar el mouse */
+}
+.analysis-card h5 {
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    margin-bottom: 1.2rem;
+    color: var(--gold); /* Títulos de fortaleza/debilidad dorados */
+}
+.analysis-card h5 i {
+    font-size: 1.7rem; /* Iconos más grandes */
+}
+.analysis-card .icon-strength {
+    color: var(--success-color); /* Color de icono de fortaleza */
+}
+.analysis-card .icon-weakness {
+    color: var(--danger-color); /* Color de icono de debilidad */
+}
+.analysis-card ul {
+    list-style: none; /* Quitar viñetas por defecto */
+    padding-left: 0;
+    margin-bottom: 0;
+}
+.analysis-card li {
+    margin-bottom: 0.8rem;
+    position: relative;
+    padding-left: 1.5rem; /* Espacio para el ícono de lista personalizado */
+    font-size: 1rem;
+    color: var(--light-grey);
+}
+.analysis-card li::before {
+    content: "•"; /* Viñeta personalizada */
+    color: var(--gold); /* Color dorado para las viñetas */
+    font-weight: bold;
+    display: inline-block;
+    width: 1em;
+    margin-left: -1.5em;
+    position: absolute;
+    left: 0;
+}
+
+
+/* Lista de Resultados */
+.results-list {
+    list-style: none;
+    padding: 0;
+}
+.results-list li {
+    background-color: rgba(255,255,255,0.07);
+    padding: 1rem 1.8rem;
+    border-radius: 10px;
+    margin-bottom: 0.8rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1.1rem;
+    transition: background-color var(--transition-speed), transform var(--transition-speed);
+    box-shadow: 0 2px 8px var(--shadow-light);
+}
+.results-list li:hover {
+    background-color: rgba(255,255,255,0.12);
+    transform: translateX(5px); /* Deslizamiento lateral al pasar el mouse */
+}
+.result-badge {
+    font-weight: 700;
+    padding: 0.4rem 1rem; /* Más padding */
+    border-radius: 20px; /* Bordes más redondos */
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: 0 2px 5px var(--shadow-light);
+}
+.result-win { background-color: var(--success-color); color: var(--white); }
+.result-draw { background-color: var(--warning-color); color: var(--darker-blue); }
+.result-loss { background-color: var(--danger-color); color: var(--white); }
+
+/* Panel Derecho (Escudo e Interacciones) */
+.team-crest {
+    position: relative; /* Cambiado a relative para que se ajuste mejor en flexbox */
+    width: 80%; /* Más grande para llenar el espacio */
+    max-width: 400px; /* Tamaño máximo */
+    margin-top: 5rem; /* Empuja el escudo hacia abajo */
+    z-index: 1;
+    filter: drop-shadow(0 15px 40px rgba(0,0,0,0.6)); /* Sombra más pronunciada */
+    animation: pulse 2s infinite alternate; /* Animación sutil de pulso */
+}
+@keyframes pulse {
+    from { transform: scale(1); }
+    to { transform: scale(1.03); }
+}
+
+.side-nav {
+    position: absolute; /* Vuelve a absolute para posicionamiento preciso */
+    top: 50%;
+    right: 1rem; /* Más cerca del borde */
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem; /* Más espacio entre botones */
+    z-index: 3;
+}
+.side-nav .nav-button {
+    background-color: var(--white);
+    color: var(--dark-blue);
+    width: 55px; /* Un poco más grande */
+    height: 55px;
+    border-radius: 12px; /* Más redondeado */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem; /* Iconos más grandes */
+    cursor: pointer;
+    transition: all var(--transition-speed);
+    text-decoration: none;
+    box-shadow: 0 4px 10px var(--shadow-medium);
+    border: 2px solid transparent; /* Borde para el hover */
+}
+.side-nav .nav-button.text-button {
+    height: auto;
+    flex-direction: column;
+    padding: 0.6rem 0.4rem; /* Más padding */
+}
+.side-nav .nav-button span {
+    font-size: 0.7rem; /* Texto un poco más grande */
+    font-weight: 700;
+    margin-top: 4px; /* Más espacio */
+    color: var(--dark-blue);
+}
+.side-nav .nav-button:hover {
+    background-color: var(--gold);
+    color: var(--darker-blue);
+    transform: translateX(-5px); /* Efecto de deslizamiento al pasar el mouse */
+    border-color: var(--white); /* Borde blanco al pasar el mouse */
+}
+.side-nav .nav-button:hover i,
+.side-nav .nav-button:hover span {
+    color: var(--darker-blue); /* Cambia el color del icono y texto al dorado */
+}
+
+
+.team-info-box {
+    width: 100%;
+    background-color: var(--darker-blue);
+    padding: 2rem 2.5rem; /* Más padding */
+    border-top-left-radius: 15px; /* Esquinas redondeadas arriba a la izquierda */
+    border-top-right-radius: 15px;
+    text-align: center; /* Centrar el texto */
+    box-shadow: 0 -5px 15px var(--shadow-medium);
+    margin-top: auto; /* Empuja la caja hacia abajo en el flexbox */
+}
+.team-info-box .subtitle {
+    font-size: 1.1rem; /* Un poco más grande */
+    font-weight: 600;
+    color: var(--light-grey);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 0.5rem;
+}
+.team-info-box .team-name {
+    font-size: 3.5rem; /* Nombre más grande y prominente */
+    font-weight: 900;
+    line-height: 1.1;
+    text-transform: uppercase;
+    color: var(--white); /* Nombre en blanco para contraste */
+    text-shadow: 0 0 20px rgba(255,255,255,0.2);
+}
+
+/* Media Queries para Responsividad */
+@media (max-width: 991.98px) {
+    .page-container {
+        flex-direction: column; /* Apila los paneles en móviles */
+    }
+    .page-container::before {
+        font-size: 20rem; /* Tamaño más pequeño en móviles */
+        left: 50%; /* Centrar */
+        transform: translate(-50%, -50%) rotate(-10deg);
+        top: 20%; /* Mover un poco hacia arriba */
+    }
+    .left-pane {
+        padding: 2rem 1.5rem;
+    }
+    .right-pane {
+        position: relative; /* Deja de ser sticky en móviles */
+        width: 100%; /* Ocupa todo el ancho */
+        min-height: auto;
+        padding: 2rem 1.5rem;
+        flex-direction: row; /* Para poner el escudo y la info lado a lado si es posible */
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap; /* Permite que los elementos se envuelvan */
+    }
+    .team-crest {
+        width: 50%;
+        max-width: 250px;
+        margin-top: 0;
+        margin-bottom: 1.5rem; /* Espacio debajo del escudo */
+    }
+    .side-nav {
+        position: relative; /* Posicionamiento normal */
+        top: auto;
+        right: auto;
+        transform: none;
+        flex-direction: row; /* Botones en fila */
+        width: 100%;
+        justify-content: center;
+        margin-top: 1.5rem;
+    }
+    .team-info-box {
+        position: relative;
+        bottom: auto;
+        left: auto;
+        border-radius: 0;
+        text-align: center;
+        padding: 1.5rem;
+        margin-top: 2rem; /* Espacio desde los botones */
+    }
+    .team-info-box .team-name {
+        font-size: 2.5rem;
+    }
+
+    .stats-section .stat-item {
+        flex-basis: calc(50% - 1.5rem); /* Asegura 2 columnas */
+        border-right: 1px solid rgba(255,255,255,0.05);
+    }
+    .stats-section .stat-item:nth-child(even) {
+        border-right: none;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .stats-section .stat-item {
+        flex-basis: 100%; /* Una columna en pantallas muy pequeñas */
+        border-right: none !important; /* Asegura que no haya borde */
+    }
+    .content-section h4 {
+        font-size: 1.2rem; /* Títulos un poco más pequeños */
+        text-align: center;
+        justify-content: center;
+    }
+    .goalscorers-list li, .results-list li {
+        font-size: 1rem;
+        flex-direction: column; /* Apila nombre y goles/resultado */
+        align-items: flex-start;
+        padding: 0.8rem 1rem;
+    }
+    .goalscorers-list .goals, .result-badge {
+        margin-top: 0.5rem;
+        align-self: flex-end; /* Alinea el badge a la derecha */
+    }
+    .analysis-card li {
+        font-size: 0.95rem;
+    }
+}
+
+/* Estilos de compra de camiseta (si se implementa) */
+/* Mantengo el buy-shirt-container para completitud, pero sugiero ocultarlo o moverlo si no es relevante en esta página */
+.buy-shirt-container {
+    display: none; /* Oculto por defecto ya que no se usa en el HTML proporcionado */
+}
