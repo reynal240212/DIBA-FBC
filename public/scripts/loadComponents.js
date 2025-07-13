@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", function () {
     .catch(error => console.error("Error cargando el Footer:", error));
 
   // Cargar Cartas de Jugadores
-  const playersContainer = document.getElementById("players-container");
+  const playersContainer = document.getElementById("players-container2012-2013");
   if (playersContainer) {
     const playersData = [
       { name: "Dilan sanchez", imageUrl: "images/jugadores/dilan_sanchez.jpg" },
