@@ -281,6 +281,42 @@ img {
 .nav-link.active::after {
   width: 100%;
 }
+/* Asegura que el submenú esté oculto por defecto */
+.dropdown-menu {
+    display: none;
+    position: absolute; /* O 'relative' dependiendo del contexto de tu nav */
+    background-color: #0d1326; /* Tu --darker-blue */
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1000; /* Asegura que esté por encima de otros elementos */
+    border-radius: 8px;
+    padding: 10px 0;
+}
+
+/* Muestra el submenú al pasar el mouse sobre el elemento padre */
+.nav-item.dropdown:hover .dropdown-menu {
+    display: block;
+}
+
+/* Estilos para los ítems del desplegable */
+.dropdown-item {
+    color: #f8f8f8; /* Tu --white */
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    transition: background-color 0.3s ease;
+}
+
+.dropdown-item:hover {
+    background-color: #003399; /* Tu --dark-blue */
+    color: #ffd700; /* Tu --gold */
+}
+
+/* Ajustes para el nav-link principal */
+.dropdown-toggle {
+    /* Puedes añadir estilos específicos para el enlace principal si lo deseas */
+    white-space: nowrap; /* Evita que el texto del botón se rompa en varias líneas */
+}
 
 /* Hero */
 .hero {
