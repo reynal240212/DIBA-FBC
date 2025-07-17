@@ -327,7 +327,7 @@ img {
   justify-content: center;
   text-align: center;
   color: var(--white);
-  background: linear-gradient(135deg, var(--primary), var(--primary-dark)),
+  background: linear-gradient(135deg, var(--primary), var(--light-gray)),
               url('images/fondo.jpg') center/cover no-repeat fixed;
   background-blend-mode: multiply;
   overflow: hidden;
