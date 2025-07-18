@@ -1,151 +1,122 @@
-  body {
-      background-color: #ffffff;
-      color: #333;
-    }
+/* ======================================
+   ESTILOS GENERALES Y LAYOUT
+====================================== */
+body {
+    background-color: #f0f2f5; /* Un gris muy claro para el fondo general */
+    color: #333;
+    /* IMPORTANTE: Añade un padding-top igual a la altura de tu navbar para que no oculte el contenido */
+    padding-top: 70px; /* ¡AJUSTA ESTE VALOR A LA ALTURA DE TU NAVBAR! */
+}
 
-    .left-pane {
-      padding: 40px;
-      background-color: #f8f9fa;
-      border-right: 1px solid #dee2e6;
-    }
+.page-container {
+    max-width: 1400px;
+    margin: auto;
+}
 
-    .stats-section {
-      background-color: #00274d; /* Azul Oscuro */
-      color: #ffffff;
-      padding: 20px;
-      border-radius: 8px;
-      margin-bottom: 30px;
-    }
+.left-pane {
+    padding: 30px;
+    background-color: #ffffff;
+    border-radius: 12px;
+}
 
-    .stat-item {
-      text-align: center;
-      padding: 15px;
-    }
+/* ======================================
+   ESTILOS PARA LAS PESTAÑAS (TABS)
+====================================== */
+.nav-tabs {
+    border-bottom: 2px solid #dee2e6;
+}
 
-    .stat-number {
-      font-size: 2.5rem;
-      font-weight: bold;
-      color: #ffc107; /* Amarillo */
-    }
+.nav-tabs .nav-link {
+    color: #6c757d;
+    font-weight: 600;
+    border: none;
+    border-bottom: 2px solid transparent;
+    transition: all 0.3s ease;
+}
 
-    .stat-season {
-      font-size: 0.9rem;
-      opacity: 0.8;
-    }
+.nav-tabs .nav-link:hover {
+    border-bottom: 2px solid #ffc107; /* Amarillo */
+    color: #00274d; /* Azul Oscuro */
+}
 
-    .content-section {
-      margin-bottom: 30px;
-    }
+.nav-tabs .nav-link.active {
+    color: #00274d; /* Azul Oscuro */
+    background-color: transparent;
+    border-bottom: 2px solid #00274d; /* Azul Oscuro */
+}
 
-    .content-section h4 {
-      color: #00274d; /* Azul Oscuro */
-      font-weight: bold;
-      margin-bottom: 15px;
-      border-bottom: 2px solid #ffc107; /* Amarillo */
-      padding-bottom: 5px;
-    }
 
-    .goalscorers-list, .results-list {
-      list-style: none;
-      padding: 0;
-    }
+/* ======================================
+   ESTILOS DE LAS SECCIONES DE CONTENIDO
+====================================== */
 
-    .goalscorers-list li, .results-list li {
-      display: flex;
-      justify-content: space-between;
-      padding: 10px;
-      border-radius: 5px;
-      margin-bottom: 8px;
-      background-color: #e9ecef;
-    }
+.stats-section {
+    background-color: #00274d; /* Azul Oscuro */
+    color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 30px;
+}
+.stat-item { text-align: center; padding: 10px; }
+.stat-number { font-size: 2.2rem; font-weight: bold; color: #ffc107; } /* Amarillo */
+.stat-season { font-size: 0.9rem; opacity: 0.8; }
 
-    .goalscorers-list .goals {
-      font-weight: bold;
-      color: #00274d; /* Azul Oscuro */
-    }
+.content-section h4 {
+    color: #00274d; /* Azul Oscuro */
+    font-weight: bold; margin-bottom: 15px; border-bottom: 2px solid #ffc107; padding-bottom: 5px;
+}
 
-    .analysis-card {
-      background-color: #ffffff;
-      border: 1px solid #dee2e6;
-      padding: 20px;
-      border-radius: 8px;
-      height: 100%;
-    }
+.goalscorers-list, .results-list {
+    list-style: none; padding: 0;
+}
+.goalscorers-list li, .results-list li {
+    display: flex; justify-content: space-between; padding: 10px; border-radius: 5px; margin-bottom: 8px; background-color: #e9ecef;
+}
+.goalscorers-list .goals { font-weight: bold; color: #00274d; }
 
-    .analysis-card h5 {
-      font-weight: bold;
-      color: #00274d; /* Azul Oscuro */
-    }
-    
-    .icon-strength { color: #28a745; }
-    .icon-weakness { color: #dc3545; }
+.analysis-card {
+    background-color: #f8f9fa; border: 1px solid #dee2e6; padding: 20px; border-radius: 8px; height: 100%;
+}
+.analysis-card h5 { font-weight: bold; color: #00274d; }
+.icon-strength { color: #28a745; }
+.icon-weakness { color: #dc3545; }
 
-    .result-badge {
-      padding: 5px 10px;
-      border-radius: 15px;
-      color: #fff;
-      font-size: 0.8rem;
-    }
-    .result-win { background-color: #28a745; }
-    .result-loss { background-color: #dc3545; }
-    .result-draw { background-color: #6c757d; }
-    
-    .right-pane {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      background-color: #ffffff; /* Azul Oscuro */
-      padding: 40px;
-    }
+.result-badge { padding: 5px 10px; border-radius: 15px; color: #fff; font-size: 0.8rem; }
+.result-win { background-color: #28a745; }
+.result-loss { background-color: #dc3545; }
+.result-draw { background-color: #6c757d; }
 
-    .team-crest {
-      max-width: 150px;
-      margin-bottom: 20px;
-    }
+/* ======================================
+   ESTILOS PARA EL PANEL DERECHO
+====================================== */
+.right-pane {
+    display: flex; /* d-flex en Bootstrap */
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #00274d; /* CORREGIDO: El fondo debe ser oscuro para que el texto blanco se lea */
+    padding: 40px;
+    border-top-right-radius: 12px;
+    border-bottom-right-radius: 12px;
+}
 
-    .team-info-box {
-      text-align: center;
-      color: #ffffff;
-    }
+.team-crest {
+    max-width: 150px; margin-bottom: 20px;
+    filter: drop-shadow(0px 4px 8px rgba(0,0,0,0.3)); /* Sombra para el logo */
+}
 
-    .team-info-box .subtitle {
-      font-size: 1.2rem;
-      color: #ffc107; /* Amarillo */
-    }
+.team-info-box { text-align: center; color: #ffffff; }
+.team-info-box .subtitle { font-size: 1.2rem; color: #ffc107; /* Amarillo */ }
+.team-name { font-size: 2.5rem; font-weight: bold; }
 
-    .team-name {
-      font-size: 2.5rem;
-      font-weight: bold;
-    }
+.side-nav { margin-top: 30px; display: flex; gap: 15px; }
 
-    .side-nav {
-      margin-top: 30px;
-      display: flex;
-      gap: 15px;
-    }
+.nav-button {
+    background-color: #ffc107; color: #00274d; padding: 10px 20px; border-radius: 25px;
+    text-decoration: none; font-weight: bold; display: flex; align-items: center; transition: all 0.3s ease;
+}
+.nav-button:hover { background-color: #ffffff; color: #00274d; transform: translateY(-3px); }
+.nav-button i { font-size: 1.2rem; }
+.nav-button.text-button span { margin-left: 8px; }
 
-    .nav-button {
-      background-color: #ffc107; /* Amarillo */
-      color: #00274d; /* Azul Oscuro */
-      padding: 10px 20px;
-      border-radius: 25px;
-      text-decoration: none;
-      font-weight: bold;
-      display: flex;
-      align-items: center;
-      transition: background-color 0.3s ease;
-    }
-    
-    .nav-button:hover {
-      background-color: #e0a800; /* Amarillo más oscuro al pasar el ratón */
-      color: #00274d;
-    }
-
-    .nav-button i {
-      font-size: 1.2rem;
-    }
-    
-    .nav-button.text-button span {
-        margin-left: 8px;
-    }
+/* Ocultar panel derecho en pantallas pequeñas (Bootstrap ya lo hace con d-none d-lg-flex) */
