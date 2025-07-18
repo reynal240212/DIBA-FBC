@@ -247,7 +247,7 @@ img {
 
 /* --- Logo --- */
 .navbar-brand img {
-  width: 50px;
+  width: 35px;
   height: auto;
   transition: transform var(--transition-normal);
   will-change: transform; /* Optimización para la animación */
