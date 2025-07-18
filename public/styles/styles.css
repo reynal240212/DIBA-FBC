@@ -232,10 +232,7 @@ img {
   background-color: var(--accent);
 }
 
-/* ======================================
-       LAYOUT PRINCIPAL
-====================================== */
-/* Navbar */
+/* --- Navbar Principal --- */
 .navbar {
   position: fixed;
   top: 0;
@@ -244,78 +241,107 @@ img {
   z-index: 1000;
   background-color: var(--primary-dark);
   padding: var(--space-sm);
-  transition: all var(--transition-normal);
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  transition: background-color var(--transition-normal); /* Transición solo al color de fondo */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); /* Sombra más suave */
 }
 
+/* --- Logo --- */
 .navbar-brand img {
   width: 50px;
   height: auto;
   transition: transform var(--transition-normal);
+  will-change: transform; /* Optimización para la animación */
 }
 
 .navbar-brand img:hover {
-  transform: scale(1.1);
+  transform: scale(1.1) rotate(-5deg); /* Añade un toque más dinámico */
 }
 
+/* --- Enlaces de Navegación --- */
 .nav-link {
   font-weight: 600;
   color: var(--white) !important;
   margin: 0 var(--space-xs);
   padding: var(--space-xs) 0;
   position: relative;
+  text-decoration: none; /* Asegura que no haya subrayado por defecto */
+  transition: color var(--transition-normal);
 }
 
 .nav-link::after {
   content: '';
   position: absolute;
-  bottom: 0;
-  left: 0;
+  bottom: -2px; /* Ligeramente separado para mejor visibilidad */
+  left: 50%; /* Inicia en el centro */
+  transform: translateX(-50%); /* Centra la línea */
   width: 0;
   height: 2px;
   background-color: var(--accent);
-  transition: width var(--transition-normal);
+  transition: width 0.4s ease-in-out; /* Transición más suave */
 }
 
+/* Efecto de subrayado al pasar el mouse o cuando está activo */
 .nav-link:hover::after,
 .nav-link.active::after {
   width: 100%;
 }
-/* Asegura que el submenú esté oculto por defecto */
+
+.nav-link:hover {
+    color: var(--accent) !important; /* Cambia el color del texto al pasar el mouse */
+}
+
+
+/* --- Dropdown / Submenú --- */
+
+/* Contenedor del dropdown */
+.nav-item.dropdown {
+    position: relative;
+}
+
 .dropdown-menu {
-    display: none;
-    position: absolute; /* O 'relative' dependiendo del contexto de tu nav */
-    background-color: #0d1326; /* Tu --darker-blue */
-    min-width: 160px;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-    z-index: 1000; /* Asegura que esté por encima de otros elementos */
-    border-radius: 8px;
-    padding: 10px 0;
+  display: none; /* Oculto por defecto */
+  position: absolute;
+  top: 100%; /* Se posiciona justo debajo del nav-item */
+  left: 0;
+  background-color: var(--primary-dark);
+  min-width: 200px; /* Ancho mínimo un poco mayor */
+  box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+  z-index: 1100; /* Mayor que el navbar para superponerse */
+  border-radius: 8px;
+  padding: 10px 0;
+  list-style: none; /* Remueve viñetas si se usa con <ul> */
+  border-top: 2px solid var(--accent); /* Detalle visual */
+  opacity: 0; /* Para animación de aparición */
+  transform: translateY(10px); /* Para animación de desplazamiento */
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  pointer-events: none; /* Evita interacciones cuando está oculto */
 }
 
 /* Muestra el submenú al pasar el mouse sobre el elemento padre */
-.nav-item.dropdown:hover .dropdown-menu {
+.nav-item.dropdown:hover .dropdown-menu,
+.nav-item.dropdown:focus-within .dropdown-menu { /* Mejora para accesibilidad (teclado) */
     display: block;
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto; /* Permite interacciones al mostrarse */
 }
 
-/* Estilos para los ítems del desplegable */
+/* --- Ítems del Dropdown --- */
 .dropdown-item {
-    color: #f8f8f8; /* Tu --white */
-    padding: 12px 16px;
-    text-decoration: none;
-    display: block;
-    transition: background-color 0.3s ease;
+  color: var(--white);
+  padding: 12px 20px;
+  text-decoration: none;
+  display: block;
+  font-weight: 500;
+  transition: background-color 0.3s ease, color 0.3s ease, padding-left 0.3s ease;
 }
 
-.dropdown-item:hover {
-    background-color: #003399; /* Tu --dark-blue */
-    color: #ffd700; /* Tu --gold */
-}
-
-/* Ajustes para el nav-link principal */
-.dropdown-toggle {
-    /* Puedes añadir estilos específicos para el enlace principal si lo deseas */
-    white-space: nowrap; /* Evita que el texto del botón se rompa en varias líneas */
+.dropdown-item:hover,
+.dropdown-item:focus { /* Añadido :focus para accesibilidad */
+  background-color: var(--darker-blue);
+  color: var(--gold);
+  padding-left: 25px; /* Pequeño desplazamiento para feedback visual */
+  outline: none; /* Remueve el borde de foco, ya que tenemos otros estilos */
 }
 
 /* Hero */
