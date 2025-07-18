@@ -153,3 +153,10 @@ document.addEventListener("DOMContentLoaded", () => {
     .then(data => {
       document.getElementById("analisis-container").innerHTML = data;
     });
+document.addEventListener('DOMContentLoaded', function() {
+    const navbar = document.querySelector('.navbar');
+    if (navbar) {
+      const navbarHeight = navbar.offsetHeight;
+      document.body.style.paddingTop = navbarHeight + 'px';
+    }
+  });
