@@ -997,6 +997,13 @@ img {
   border-top: 1px solid rgba(255, 255, 255, 0.1);
   margin-top: var(--space-lg);
 }
+.text-warning {
+  color: var(--accent);
+}
+.text-warning:hover {
+  color: var(--white);
+  text-decoration: underline;
+}
 
 /* ======================================
        UTILIDADES
