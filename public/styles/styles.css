@@ -1290,4 +1290,198 @@ img {
     .nivel-3 { width: 60%; background-color: #ff8a65; }
     .nivel-4 { width: 80%; background-color: #ff7043; }
     .nivel-5 { width: 100%; background-color: #ff5722; }
+    .visually-hidden {
+          position: absolute;
+          width: 1px;
+          height: 1px;
+          margin: -1px;
+          padding: 0;
+          overflow: hidden;
+          clip: rect(0, 0, 0, 0);
+          border: 0;
+        }
+
+        /* ======================================
+               CONTENEDOR PRINCIPAL
+        ====================================== */
+        .fixture-result-list__wrapper {
+          max-width: 900px;
+          margin: auto;
+          background-color: var(--white);
+          border-radius: var(--border-radius-md);
+          box-shadow: 0 4px 12px var(--shadow);
+          overflow: hidden;
+        }
+
+        /* ======================================
+               CABECERA DE MES
+        ====================================== */
+        .fixture-result-list__month-container {
+          display: flex;
+          align-items: center;
+          padding: 12px 20px;
+          background-color: var(--primary-dark);
+          color: var(--white);
+          font-weight: bold;
+        }
+        
+        .fixture-result-list__month-full {
+          font-size: 1.2rem;
+          text-transform: uppercase;
+        }
+        .fixture-result-list__month-abbreviation {
+          display: none; /* Oculto para simplicidad */
+        }
+
+        /* ======================================
+               LISTA DE PARTIDOS
+        ====================================== */
+        .fixture-result-list__fixture-list-container {
+          list-style: none;
+          padding: 0;
+          margin: 0;
+        }
+
+        /* ======================================
+               ELEMENTO DE PARTIDO INDIVIDUAL
+        ====================================== */
+        .fixture-result-list__fixture {
+          border-bottom: 1px solid var(--medium-gray);
+        }
+        .fixture-result-list__fixture:last-child {
+          border-bottom: none;
+        }
+        
+        .fixture-result-list__link {
+          display: flex;
+          align-items: center;
+          padding: 20px;
+          text-decoration: none;
+          color: var(--text-color);
+          transition: background-color var(--transition-normal);
+        }
+
+        .fixture-result-list__link:hover {
+          background-color: var(--light-gray);
+        }
+
+        .fixture-result-list__fixture-date-container {
+          text-align: center;
+          min-width: 80px;
+          margin-right: 20px;
+        }
+
+        .fixture-result-list__fixture-date {
+          font-weight: bold;
+          font-size: 1rem;
+          color: var(--primary);
+        }
+
+        .fixture-info__time {
+          font-size: 0.9rem;
+          color: var(--dark-gray);
+        }
+
+        .fixture-result-list__fixture-competition {
+            text-align: center;
+            margin-right: 20px;
+        }
+
+        .fixture-result-list__comp-logo {
+            width: 40px;
+            height: 40px;
+            object-fit: contain;
+        }
+
+        .fixture-result-list__stage-container {
+          flex-grow: 1;
+        }
+        .fixture-result-list__stage {
+          font-weight: bold;
+        }
+        .fixture-result-list__stage-location {
+          font-size: 0.9rem;
+          color: var(--dark-gray);
+        }
+
+        .fixture-info {
+          display: flex;
+          align-items: center;
+          justify-content: flex-end;
+          min-width: 300px;
+        }
+
+        .fixture-info__team-container {
+          display: flex;
+          align-items: center;
+        }
+
+        .fixture-info__name {
+          font-size: 1.1rem;
+          font-weight: bold;
+        }
+        
+        .fixture-info__name--home {
+            margin-right: 10px;
+        }
+        
+        .fixture-info__name--away {
+            margin-left: 10px;
+        }
+
+        .fixture-info__badge {
+          margin: 0 10px;
+        }
+
+        .badge-image {
+          width: 40px;
+          height: 40px;
+        }
+        
+        /* Contenedor del resultado */
+        .fixture-info__score-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            min-width: 80px;
+        }
+
+        .fixture-info__score {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--primary-dark);
+            padding: 5px 10px;
+            border-radius: var(--border-radius-md);
+            background-color: var(--medium-gray);
+        }
+        
+        .fixture-info__result-status {
+            font-size: 0.8rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            padding: 2px 8px;
+            border-radius: var(--border-radius-sm);
+            color: var(--white);
+            margin-top: 5px;
+        }
+
+        .status--win { background-color: var(--win-color); }
+        .status--draw { background-color: var(--draw-color); color: var(--text-color); }
+        .status--loss { background-color: var(--loss-color); }
+
+        /* Contenedor de goleadores */
+        .fixture-result-list__scorers {
+            padding: 10px 20px;
+            background-color: var(--light-gray);
+            font-size: 0.9rem;
+            color: var(--dark-gray);
+            border-top: 1px dashed var(--medium-gray);
+        }
+        
+        .fixture-result-list__scorers strong {
+            color: var(--primary-dark);
+        }
+
 
