@@ -64,6 +64,40 @@
             background-color: var(--diba-light-gray);
             color: var(--diba-text);
         }
+        
+    .background-animation {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
+    }
+    #btnBackToTop {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      z-index: 1000;
+      display: none;
+    }
+    .hero-section {
+  background-image: url('images/kidssoccer.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  min-height: 100vh;
+  position: relative;
+  z-index: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.hero-section::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0, 0, 0, 0.6); /* Oscurece para mejor lectura */
+  z-index: -1;
+}
+
+  
 
         /* Título Principal */
         .main-title {
