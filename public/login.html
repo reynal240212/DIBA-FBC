@@ -52,24 +52,18 @@
       const { data: { session } } = await supabase.auth.getSession();
 
       if (!session) {
-        alert("⚠️ Sesión no encontrada. Por favor inicia sesión.");
+        // Redirige si no hay sesión
         window.location.href = "login.html";
         return;
       }
 
-      // Mostrar saludo o datos si quieres aquí
+      // Mostrar datos en consola si es necesario
       console.log("Sesión activa:", session.user.email);
     });
 
     // Cerrar sesión
     async function cerrarSesion() {
-      const { error } = await supabase.auth.signOut();
-      if (error) {
-        alert("❌ Error al cerrar sesión: " + error.message);
-        return;
-      }
-
-      alert("👋 Sesión cerrada correctamente.");
+      await supabase.auth.signOut();
       window.location.href = "login.html";
     }
 
