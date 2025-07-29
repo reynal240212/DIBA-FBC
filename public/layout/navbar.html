@@ -58,6 +58,12 @@
             <i class="fas fa-envelope"></i> Contacto
           </a>
         </li>
+        <button onclick="cerrarSesion()">Cerrar sesión</button>
+
+<script type="module">
+  import { cerrarSesion } from "../scripts/auth.js";
+  window.cerrarSesion = cerrarSesion;
+</script>
       </ul>
     </div>
   </div>
