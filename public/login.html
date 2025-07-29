@@ -3,40 +3,115 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Dashboard - DIBA FBC</title>
+  <title>Login - DIBA FBC</title>
   <link rel="shortcut icon" href="images/ESCUDO.ico" type="image/x-icon" />
   <style>
-    body {
-      font-family: 'Arial', sans-serif;
-      background-color: #f3f4f6;
+    * {
       margin: 0;
       padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Arial', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background: url('https://img.freepik.com/vector-gratis/fondo-conexion-degradado_52683-116652.jpg?semt=ais_hybrid') no-repeat center center fixed;
+      background-size: cover;
     }
 
     header {
-      background-color: #001b72;
-      color: white;
-      padding: 15px 20px;
+      background-color: rgba(255, 255, 255, 0.9);
+      padding: 10px 20px;
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
 
-    header h1 {
-      font-size: 1.5em;
+    header .logo img {
+      width: 50px;
     }
 
-    header button {
-      padding: 10px 15px;
-      background-color: #ffc107;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 20px;
+    }
+
+    nav ul li a {
+      text-decoration: none;
+      color: #001b72;
       font-weight: bold;
+      transition: color 0.3s;
+    }
+
+    nav ul li a:hover {
+      color: #ffc107;
     }
 
     main {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
       padding: 20px;
+    }
+
+    .login-section {
+      background: #fff;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 400px;
+    }
+
+    .login-section h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #001b72;
+    }
+
+    .login-section form div {
+      margin-bottom: 15px;
+    }
+
+    .login-section label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+      color: #001b72;
+    }
+
+    .login-section input {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    .login-section button {
+      width: 100%;
+      padding: 10px;
+      background-color: #001b72;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background-color 0.3s;
+    }
+
+    .login-section button:hover {
+      background-color: #ffc107;
+    }
+
+    footer {
+      background-color: rgba(255, 255, 255, 0.9);
+      text-align: center;
+      padding: 15px;
+      font-size: 14px;
     }
   </style>
 
@@ -47,38 +122,67 @@
     const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndkbmxxZml3dW9jbW1jZG93anl3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg1MjY1ODAsImV4cCI6MjA2NDEwMjU4MH0.4SCS_NRDIYLQJ1XouqW111BxkMOlwMWOjje9gFTgW_Q";
     const supabase = createClient(supabaseUrl, supabaseKey);
 
-    // Verificar sesión activa al cargar
-    document.addEventListener("DOMContentLoaded", async () => {
-      const { data: { session } } = await supabase.auth.getSession();
+    async function handleLogin(e) {
+      e.preventDefault();
 
-      if (!session) {
-        // Redirige si no hay sesión
-        window.location.href = "login.html";
+      const correo = document.getElementById("correo").value;
+      const clave = document.getElementById("clave").value;
+
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: correo,
+        password: clave,
+      });
+
+      if (error) {
+        alert("❌ Error al iniciar sesión: " + error.message);
         return;
       }
 
-      // Mostrar datos en consola si es necesario
-      console.log("Sesión activa:", session.user.email);
-    });
-
-    // Cerrar sesión
-    async function cerrarSesion() {
-      await supabase.auth.signOut();
-      window.location.href = "login.html";
+      alert("✅ Bienvenido. Inicio de sesión exitoso.");
+      // Redirige a tu página principal o dashboard
+      window.location.href = "index.html";
     }
 
-    window.cerrarSesion = cerrarSesion;
+    document.addEventListener("DOMContentLoaded", () => {
+      document.getElementById("loginForm").addEventListener("submit", handleLogin);
+    });
   </script>
 </head>
 <body>
+  <!-- Header -->
   <header>
-    <h1>Bienvenido al Panel de DIBA FBC</h1>
-    <button onclick="cerrarSesion()">Cerrar Sesión</button>
+    <div class="logo">
+      <img src="images/ESCUDO.ico" alt="Logo DIBA FBC" loading="lazy" />
+    </div>
+    <nav>
+      <ul>
+        <li><a href="login.html">Login</a></li>
+        <li><a href="registro.html">Registro</a></li>
+      </ul>
+    </nav>
   </header>
 
+  <!-- Login -->
   <main>
-    <h2>Contenido exclusivo para usuarios autenticados</h2>
-    <p>Aquí puedes cargar tus estadísticas, ver reportes, etc.</p>
+    <section class="login-section">
+      <h2>Iniciar Sesión</h2>
+      <form id="loginForm">
+        <div>
+          <label for="correo">Correo:</label>
+          <input type="email" id="correo" name="correo" required />
+        </div>
+        <div>
+          <label for="clave">Contraseña:</label>
+          <input type="password" id="clave" name="clave" required />
+        </div>
+        <button type="submit">Entrar</button>
+      </form>
+    </section>
   </main>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2025 DIBA FBC. Todos los derechos reservados.</p>
+  </footer>
 </body>
 </html>
