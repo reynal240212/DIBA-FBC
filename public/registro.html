@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -125,15 +125,8 @@
     async function handleRegistro(e) {
       e.preventDefault();
 
-      const usuario = document.getElementById("usuario").value;
       const correo = document.getElementById("correo").value;
       const clave = document.getElementById("clave").value;
-      const confirmarClave = document.getElementById("confirmar_clave").value;
-
-      if (clave !== confirmarClave) {
-        alert("❌ Las contraseñas no coinciden.");
-        return;
-      }
 
       const { data, error } = await supabase.auth.signUp({
         email: correo,
@@ -141,26 +134,11 @@
       });
 
       if (error) {
-        alert("❌ Error al registrarse: " + error.message);
+        alert("❌ Error al registrar: " + error.message);
         return;
       }
 
-      const user = data?.user;
-      if (!user) {
-        alert("⚠ Registro incompleto.");
-        return;
-      }
-
-      const { error: insertError } = await supabase
-        .from("usuarios")
-        .insert([{ id: user.id, usuario, correo }]);
-
-      if (insertError) {
-        alert("⚠ Error al guardar info adicional: " + insertError.message);
-        return;
-      }
-
-      alert("✅ Registro exitoso. Revisa tu correo para confirmar tu cuenta.");
+      alert("✅ Registro exitoso. Por favor revisa tu correo para confirmar.");
       window.location.href = "login.html";
     }
 
@@ -186,12 +164,8 @@
   <!-- Registro -->
   <main>
     <section class="login-section">
-      <h2>Registrarse</h2>
+      <h2>Registro</h2>
       <form id="registroForm">
-        <div>
-          <label for="usuario">Usuario:</label>
-          <input type="text" id="usuario" name="usuario" required />
-        </div>
         <div>
           <label for="correo">Correo:</label>
           <input type="email" id="correo" name="correo" required />
@@ -199,10 +173,6 @@
         <div>
           <label for="clave">Contraseña:</label>
           <input type="password" id="clave" name="clave" required />
-        </div>
-        <div>
-          <label for="confirmar_clave">Confirmar Contraseña:</label>
-          <input type="password" id="confirmar_clave" name="confirmar_clave" required />
         </div>
         <button type="submit">Registrarse</button>
       </form>
