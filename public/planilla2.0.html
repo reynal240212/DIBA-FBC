@@ -239,7 +239,7 @@
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF({ orientation: 'portrait', unit: 'pt', format: 'letter' });
             
-            const logoUrl = "reynal240212/DIBA-FBC/public/images/ESCUDO.png";
+            const logoUrl = "images/ESCUDO.png";
             try {
                 const response = await fetch(logoUrl);
                 const blob = await response.blob();
