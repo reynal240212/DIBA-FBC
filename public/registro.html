@@ -134,9 +134,85 @@
 
     async function handleRegistro(e) {
       e.preventDefault();
+      // Validar campos
+      const Nombre = document.getElementById("nombre").value;
+      if (!Nombre) {
+        alert("❌ Por favor, ingresa un nombre.");
+        return;
+      }
+      if (Nombre.length > 50) {
+        alert("❌ El nombre no puede tener más de 50 caracteres.");
+        return;
+      }
+      if (!/^[a-zA-Z\s]+$/.test(Nombre)) {
+        alert("❌ El nombre solo puede contener letras y espacios.");
+        return;
+      }
+      const apellido = document.getElementById("apellido").value;
+      if (!apellido) {
+        alert("❌ Por favor, ingresa un apellido.");
+        return;
+      }
+      if (apellido.length > 50) {
+        alert("❌ El apellido no puede tener más de 50 caracteres.");
+        return;
+      }
+      if (!/^[a-zA-Z\s]+$/.test(apellido)) {
+        alert("❌ El apellido solo puede contener letras y espacios.");
+        return;
+      }
 
       const correo = document.getElementById("correo").value;
+      if (!correo) {
+        alert("❌ Por favor, ingresa un correo electrónico.");
+        return;
+      }
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(correo)) {
+        alert("❌ Por favor, ingresa un correo electrónico válido.");
+        return;
+      }
+      if (correo.length > 100) {
+        alert("❌ El correo electrónico no puede tener más de 100 caracteres.");
+        return;
+      }
+      if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(correo)) {
+        alert("❌ El correo electrónico no es válido.");
+        return;
+      }
+
       const clave = document.getElementById("clave").value;
+      if (!clave) {
+        alert("❌ Por favor, ingresa una contraseña.");
+        return;
+      }
+      if (clave.length < 8  {
+        alert("❌ La contraseña debe tener entre 8");
+        return;
+      }
+
+      if (clave.length > 8) {
+        alert("❌ La contraseña no puede tener más de 8 caracteres.");
+        return;
+      }
+      if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/.test(clave)) {
+        alert("❌ La contraseña debe tener al menos una letra mayúscula, una minúscula y un número.");
+        return;
+      }
+      
+      // Si todos los campos son válidos, proceder con el registro
+      const { data: existingUser, error: userError } = await supabase.auth.api.getUserByEmail(correo);
+      if (userError) {
+        alert("❌ Error al verificar el usuario: " + userError.message);
+        return;
+      }
+      if (existingUser) {
+        alert("❌ El correo electrónico ya está registrado. Por favor, utiliza otro.");
+        return;
+      }
+      // Registrar el usuario
+      // Aquí puedes agregar la lógica para registrar al usuario en tu base de datos
+      // Por ejemplo, usando Supabase:
+      
 
       const { data, error } = await supabase.auth.signUp({
         email: correo,
@@ -176,6 +252,14 @@
     <section class="login-section">
       <h2>Registro</h2>
       <form id="registroForm">
+        <div>
+          <label for="nombre">Nombre:</label>
+          <input type="text" id="nombre" name="nombre" required />
+        </div>
+        <div>
+          <label for="apellido">Apellido:</label>
+          <input type="text" id="apellido" name="apellido" required />
+        </div>
         <div>
           <label for="correo">Correo:</label>
           <input type="email" id="correo" name="correo" required />
