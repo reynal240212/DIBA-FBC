@@ -81,16 +81,19 @@
                 <input type="text" id="newPlayerName" class="form-control" placeholder="Nombre del nuevo jugador" required>
                 <button type="submit" class="btn btn-success"><i class="fas fa-plus"></i> Añadir</button>
             </form>
+            
+            <div class="d-flex align-items-end gap-2">
+                <div>
+                    <label for="csvFile" class="form-label small mb-0">Cargar Jugadores (CSV)</label>
+                    <input type="file" id="csvFile" accept=".csv" class="form-control form-control-sm">
+                </div>
+                <button id="importCsvBtn" class="btn btn-info btn-sm">Importar</button>
+            </div>
+
             <div class="d-flex gap-2">
                 <button id="generatePDF" class="btn btn-primary"><span id="pdf-icon"><i class="fas fa-file-pdf"></i></span><span id="pdf-text"> Descargar PDF</span></button>
                 <button id="clearData" class="btn btn-danger" data-bs-toggle="tooltip" title="Borra pagos, asistencia y observaciones. No borra la lista de jugadores."><i class="fas fa-eraser"></i> Limpiar Planilla</button>
             </div>
-            <div>
-  <label for="csvFile" class="form-label small mb-1">Cargar CSV</label>
-  <input type="file" id="csvFile" accept=".csv" class="form-control form-control-sm">
-   <button class="btn btn-success mb-4" onclick="leerCSV()">Subir y Leer CSV</button>
-</div>
-
         </div>
     </div>
 
@@ -112,43 +115,6 @@
   </main>
   
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-   <script>
-    function leerCSV() {
-      const archivo = document.getElementById('csvFile').files[0];
-      if (!archivo) {
-        alert("Por favor, selecciona un archivo CSV.");
-        return;
-      }
-
-      const lector = new FileReader();
-      lector.onload = function (e) {
-        const texto = e.target.result;
-        mostrarTablaDesdeCSV(texto);
-      };
-      lector.readAsText(archivo);
-    }
-
-    function mostrarTablaDesdeCSV(csv) {
-      const lineas = csv.split('\n').filter(linea => linea.trim() !== '');
-      const tabla = document.createElement('table');
-      tabla.className = 'table table-bordered table-striped';
-
-      lineas.forEach((linea, indice) => {
-        const fila = tabla.insertRow();
-        const columnas = linea.split(',');
-
-        columnas.forEach(col => {
-          const celda = indice === 0 ? document.createElement('th') : document.createElement('td');
-          celda.textContent = col.trim();
-          fila.appendChild(celda);
-        });
-      });
-
-      const resultado = document.getElementById('resultado');
-      resultado.innerHTML = '';
-      resultado.appendChild(tabla);
-    }
-  </script>
   
   <script>
     document.addEventListener('DOMContentLoaded', () => {
@@ -163,13 +129,15 @@
       const categoryInput = document.getElementById('planillaCategory');
       const toastElement = document.getElementById('appToast');
       const bsToast = new bootstrap.Toast(toastElement);
+      const csvFileInput = document.getElementById('csvFile');
+      const importCsvBtn = document.getElementById('importCsvBtn');
 
       new bootstrap.Tooltip(clearDataBtn);
 
       // --- ESTADO DE LA APLICACIÓN ---
       let appState = { players: [], data: {}, category: '' };
 
-      // --- FUNCIONES DE MANEJO DE ESTADO Y DATOS ---
+      // --- FUNCIONES DE UTILIDAD ---
       const showToast = (message, isError = false) => {
           toastElement.querySelector('.toast-body').textContent = message;
           const icon = toastElement.querySelector('.toast-header i');
@@ -189,11 +157,11 @@
         if (!dateInput.value) dateInput.valueAsDate = new Date();
       };
       
-      // --- RENDERIZADO DE LA TABLA HTML ---
+      // --- RENDERIZADO DE LA TABLA ---
       const renderTable = () => {
         tableBody.innerHTML = '';
         if (appState.players.length === 0) {
-            tableBody.innerHTML = `<tr><td colspan="6" class="text-center text-muted p-4">No hay jugadores en la lista. ¡Añade uno para empezar!</td></tr>`;
+            tableBody.innerHTML = `<tr><td colspan="6" class="text-center text-muted p-4">No hay jugadores en la lista. ¡Añade uno para empezar o importa un archivo CSV!</td></tr>`;
             return;
         }
         
@@ -239,7 +207,7 @@
           const row = e.target.closest('tr');
           const playerId = Number(row.dataset.playerId);
           const player = appState.players.find(p => p.id === playerId);
-          if (confirm(`¿Eliminar a ${player.name} de la lista?`)) {
+          if (confirm(`¿Eliminar a ${player.name} de la lista? Esta acción no se puede deshacer.`)) {
             appState.players = appState.players.filter(p => p.id !== playerId);
             delete appState.data[playerId];
             saveState();
@@ -261,7 +229,7 @@
       });
 
       clearDataBtn.addEventListener('click', () => {
-        if (confirm('¿Limpiar todos los datos de pago, asistencia y observaciones?')) {
+        if (confirm('¿Está seguro de que desea limpiar todos los datos de pago, asistencia y observaciones? La lista de jugadores no se borrará.')) {
             appState.data = {};
             saveState();
             renderTable();
@@ -270,6 +238,72 @@
       });
       
       categoryInput.addEventListener('input', saveState);
+
+      // --- IMPORTACIÓN DE CSV ---
+      const handleCsvImport = () => {
+        const file = csvFileInput.files[0];
+        if (!file) {
+            showToast('Por favor, selecciona un archivo CSV primero.', true);
+            return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            try {
+                const text = e.target.result;
+                const lines = text.split('\n').map(l => l.trim()).filter(l => l);
+                if (lines.length < 2) {
+                    showToast('El archivo CSV está vacío o no tiene datos.', true);
+                    return;
+                }
+
+                const headers = lines[0].split(',').map(h => h.trim().toLowerCase());
+                const nameIndex = headers.indexOf('nombre');
+                
+                if (nameIndex === -1) {
+                    showToast('El archivo CSV debe tener una columna "nombre".', true);
+                    return;
+                }
+                
+                const pagoIndex = headers.indexOf('pago');
+                const asistenciaIndex = headers.indexOf('asistencia');
+                const obsIndex = headers.indexOf('observaciones');
+
+                if (appState.players.length > 0 && !confirm('Esto reemplazará la lista de jugadores actual. ¿Desea continuar?')) {
+                    return;
+                }
+                
+                appState.players = [];
+                appState.data = {};
+
+                lines.slice(1).forEach((line, i) => {
+                    const cols = line.split(',');
+                    const nombre = cols[nameIndex]?.trim();
+                    if (!nombre) return;
+
+                    const id = Date.now() + i;
+                    const pago = pagoIndex !== -1 ? cols[pagoIndex]?.trim() : '';
+                    let asistencia = asistenciaIndex !== -1 ? cols[asistenciaIndex]?.trim().toUpperCase() : 'P';
+                    if (!['P', 'A', 'E'].includes(asistencia)) asistencia = 'P'; // Default to Presente
+                    const observacion = obsIndex !== -1 ? cols[obsIndex]?.trim() : '';
+
+                    appState.players.push({ id, name: nombre });
+                    appState.data[id] = { pago, asistencia, observacion };
+                });
+
+                saveState();
+                renderTable();
+                showToast(`Se importaron ${appState.players.length} jugadores desde el CSV.`);
+                csvFileInput.value = ''; // Reset file input
+            } catch (error) {
+                showToast('Error al procesar el archivo CSV. Verifique el formato.', true);
+                console.error("Error CSV:", error);
+            }
+        };
+        reader.readAsText(file);
+      };
+
+      importCsvBtn.addEventListener('click', handleCsvImport);
 
       // --- GENERACIÓN DE PDF ---
       generatePdfBtn.addEventListener('click', async () => {
@@ -282,7 +316,8 @@
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF({ orientation: 'portrait', unit: 'pt', format: 'letter' });
             
-            const logoUrl = "images/ESCUDO.png";
+            // CORREGIDO: Usar URL absoluta para el logo
+            const logoUrl = "https://i.postimg.cc/x8W7vwJJ/ESCUDO.png";
             try {
                 const response = await fetch(logoUrl);
                 const blob = await response.blob();
@@ -311,13 +346,12 @@
             let body;
 
             if (appState.players.length === 0) {
-                // SI NO HAY JUGADORES, CREAR 50 FILAS VACÍAS
+                // Si no hay jugadores, crea una tabla vacía para imprimir y llenar a mano
                 body = [];
-                for (let i = 1; i <= 50; i++) {
+                for (let i = 1; i <= 30; i++) { // Generar 30 filas vacías
                     body.push([i, '', '', '', '']); 
                 }
             } else {
-                // SI HAY JUGADORES, USAR SUS DATOS
                 body = appState.players.map((player, index) => {
                     const playerData = appState.data[player.id] || {};
                     const asistenciaText = { P: 'Presente', A: 'Ausente', E: 'Excusa' }[playerData.asistencia] || '';
@@ -364,56 +398,7 @@
       loadState();
       renderTable();
     });
-    document.getElementById('csvFile').addEventListener('change', function(event) {
-    const file = event.target.files[0];
-    if (!file) return;
-
-    const reader = new FileReader();
-    reader.onload = function(e) {
-        const text = e.target.result;
-        const lines = text.split('\n').map(l => l.trim()).filter(l => l);
-        const headers = lines[0].split(',').map(h => h.trim().toLowerCase());
-
-        const nameIndex = headers.indexOf('nombre');
-        const pagoIndex = headers.indexOf('pago');
-        const asistenciaIndex = headers.indexOf('asistencia');
-        const obsIndex = headers.indexOf('observaciones');
-
-        if (nameIndex === -1) {
-            showToast('El archivo CSV debe tener una columna "Nombre".', true);
-            return;
-        }
-
-        // Limpiar tabla antes de importar
-        appState.players = [];
-        appState.data = {};
-
-        lines.slice(1).forEach((line, i) => {
-            const cols = line.split(',');
-            if (!cols[nameIndex]) return;
-
-            const id = Date.now() + i;
-            const nombre = cols[nameIndex].trim();
-            const pago = pagoIndex !== -1 ? cols[pagoIndex].trim() : '';
-            const asistencia = asistenciaIndex !== -1 ? (cols[asistenciaIndex].trim().toUpperCase() || 'P') : 'P';
-            const observacion = obsIndex !== -1 ? cols[obsIndex].trim() : '';
-
-            appState.players.push({ id, name: nombre });
-            appState.data[id] = { pago, asistencia, observacion };
-        });
-
-        saveState();
-        renderTable();
-        showToast('Datos importados desde CSV.');
-    };
-    reader.readAsText(file);
-});
-
   </script>
-  <script type="module">
-  import { verificarSesion } from "./scripts/auth.js";
-  verificarSesion();
-</script>
 
 </body>
 </html>
