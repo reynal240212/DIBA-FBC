@@ -321,6 +321,51 @@
       loadState();
       renderTable();
     });
+    document.getElementById('csvFile').addEventListener('change', function(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        const text = e.target.result;
+        const lines = text.split('\n').map(l => l.trim()).filter(l => l);
+        const headers = lines[0].split(',').map(h => h.trim().toLowerCase());
+
+        const nameIndex = headers.indexOf('nombre');
+        const pagoIndex = headers.indexOf('pago');
+        const asistenciaIndex = headers.indexOf('asistencia');
+        const obsIndex = headers.indexOf('observaciones');
+
+        if (nameIndex === -1) {
+            showToast('El archivo CSV debe tener una columna "Nombre".', true);
+            return;
+        }
+
+        // Limpiar tabla antes de importar
+        appState.players = [];
+        appState.data = {};
+
+        lines.slice(1).forEach((line, i) => {
+            const cols = line.split(',');
+            if (!cols[nameIndex]) return;
+
+            const id = Date.now() + i;
+            const nombre = cols[nameIndex].trim();
+            const pago = pagoIndex !== -1 ? cols[pagoIndex].trim() : '';
+            const asistencia = asistenciaIndex !== -1 ? (cols[asistenciaIndex].trim().toUpperCase() || 'P') : 'P';
+            const observacion = obsIndex !== -1 ? cols[obsIndex].trim() : '';
+
+            appState.players.push({ id, name: nombre });
+            appState.data[id] = { pago, asistencia, observacion };
+        });
+
+        saveState();
+        renderTable();
+        showToast('Datos importados desde CSV.');
+    };
+    reader.readAsText(file);
+});
+
   </script>
   <script type="module">
   import { verificarSesion } from "./scripts/auth.js";
