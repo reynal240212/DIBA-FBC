@@ -42,6 +42,13 @@
     }
     #generatePDF:disabled { cursor: not-allowed; }
     .toast-container { z-index: 1100; }
+    /* Estilo para la celda del nombre editable */
+    .editable-name {
+        cursor: pointer;
+    }
+    .editable-name:hover {
+        background-color: #e9ecef;
+    }
   </style>
 </head>
 <body>
@@ -171,7 +178,8 @@
           row.dataset.playerId = player.id;
           row.innerHTML = `
             <td><b>${index + 1}</b></td>
-            <td class="fw-medium">${player.name}</td>
+            <!-- CAMBIO: Se añade la clase 'editable-name' y un 'title' para indicar que se puede editar -->
+            <td class="editable-name fw-medium" title="Doble clic para editar">${player.name}</td>
             <td><input type="text" class="form-control form-control-sm data-input" data-field="pago" placeholder="$0" value="${playerData.pago}"></td>
             <td>
               <select class="form-select form-select-sm data-input" data-field="asistencia">
@@ -202,6 +210,7 @@
         }
       });
 
+      // Evento para borrar jugador
       tableBody.addEventListener('click', e => {
         if (e.target.closest('.btn-delete')) {
           const row = e.target.closest('tr');
@@ -217,6 +226,7 @@
         }
       });
       
+      // Evento para actualizar datos de pago, asistencia y observaciones
       tableBody.addEventListener('input', e => {
         if (e.target.classList.contains('data-input')) {
           const row = e.target.closest('tr');
@@ -226,6 +236,48 @@
           appState.data[playerId][field] = e.target.value;
           saveState();
         }
+      });
+
+      // --- NUEVO: MANEJADOR PARA EDITAR NOMBRES ---
+      tableBody.addEventListener('dblclick', e => {
+        const cell = e.target.closest('.editable-name');
+        if (!cell) return; // Si no se hizo clic en una celda de nombre, no hacer nada
+
+        const originalName = cell.textContent;
+        const row = cell.closest('tr');
+        const playerId = Number(row.dataset.playerId);
+
+        // Reemplazar el texto con un campo de input
+        cell.innerHTML = `<input type="text" class="form-control form-control-sm" value="${originalName}" />`;
+        const input = cell.querySelector('input');
+        input.focus();
+        input.select();
+
+        // Función para guardar el cambio
+        const saveChange = () => {
+            const newName = input.value.trim();
+            if (newName && newName !== originalName) {
+                const player = appState.players.find(p => p.id === playerId);
+                if (player) {
+                    player.name = newName;
+                    saveState();
+                    showToast(`Nombre actualizado a "${newName}".`);
+                }
+            }
+            renderTable(); // Re-renderizar la tabla para restaurar la vista normal
+        };
+
+        // Guardar al perder el foco (clic fuera)
+        input.addEventListener('blur', saveChange);
+
+        // Guardar con Enter o cancelar con Escape
+        input.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                saveChange();
+            } else if (e.key === 'Escape') {
+                renderTable(); // Cancelar edición y restaurar
+            }
+        });
       });
 
       clearDataBtn.addEventListener('click', () => {
@@ -284,7 +336,7 @@
                     const id = Date.now() + i;
                     const pago = pagoIndex !== -1 ? cols[pagoIndex]?.trim() : '';
                     let asistencia = asistenciaIndex !== -1 ? cols[asistenciaIndex]?.trim().toUpperCase() : 'P';
-                    if (!['P', 'A', 'E'].includes(asistencia)) asistencia = 'P'; // Default to Presente
+                    if (!['P', 'A', 'E'].includes(asistencia)) asistencia = 'P';
                     const observacion = obsIndex !== -1 ? cols[obsIndex]?.trim() : '';
 
                     appState.players.push({ id, name: nombre });
@@ -294,7 +346,7 @@
                 saveState();
                 renderTable();
                 showToast(`Se importaron ${appState.players.length} jugadores desde el CSV.`);
-                csvFileInput.value = ''; // Reset file input
+                csvFileInput.value = '';
             } catch (error) {
                 showToast('Error al procesar el archivo CSV. Verifique el formato.', true);
                 console.error("Error CSV:", error);
@@ -316,7 +368,6 @@
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF({ orientation: 'portrait', unit: 'pt', format: 'letter' });
             
-            // CORREGIDO: Usar URL absoluta para el logo
             const logoUrl = "https://i.postimg.cc/x8W7vwJJ/ESCUDO.png";
             try {
                 const response = await fetch(logoUrl);
@@ -346,9 +397,8 @@
             let body;
 
             if (appState.players.length === 0) {
-                // Si no hay jugadores, crea una tabla vacía para imprimir y llenar a mano
                 body = [];
-                for (let i = 1; i <= 30; i++) { // Generar 30 filas vacías
+                for (let i = 1; i <= 30; i++) {
                     body.push([i, '', '', '', '']); 
                 }
             } else {
