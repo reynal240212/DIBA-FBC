@@ -88,6 +88,7 @@
             <div>
   <label for="csvFile" class="form-label small mb-1">Cargar CSV</label>
   <input type="file" id="csvFile" accept=".csv" class="form-control form-control-sm">
+   <button class="btn btn-success mb-4" onclick="leerCSV()">Subir y Leer CSV</button>
 </div>
 
         </div>
@@ -111,6 +112,43 @@
   </main>
   
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+   <script>
+    function leerCSV() {
+      const archivo = document.getElementById('csvFile').files[0];
+      if (!archivo) {
+        alert("Por favor, selecciona un archivo CSV.");
+        return;
+      }
+
+      const lector = new FileReader();
+      lector.onload = function (e) {
+        const texto = e.target.result;
+        mostrarTablaDesdeCSV(texto);
+      };
+      lector.readAsText(archivo);
+    }
+
+    function mostrarTablaDesdeCSV(csv) {
+      const lineas = csv.split('\n').filter(linea => linea.trim() !== '');
+      const tabla = document.createElement('table');
+      tabla.className = 'table table-bordered table-striped';
+
+      lineas.forEach((linea, indice) => {
+        const fila = tabla.insertRow();
+        const columnas = linea.split(',');
+
+        columnas.forEach(col => {
+          const celda = indice === 0 ? document.createElement('th') : document.createElement('td');
+          celda.textContent = col.trim();
+          fila.appendChild(celda);
+        });
+      });
+
+      const resultado = document.getElementById('resultado');
+      resultado.innerHTML = '';
+      resultado.appendChild(tabla);
+    }
+  </script>
   
   <script>
     document.addEventListener('DOMContentLoaded', () => {
