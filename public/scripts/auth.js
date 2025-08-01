@@ -18,3 +18,4 @@ export async function cerrarSesion() {
   const { error } = await supabase.auth.signOut();
   if (!error) window.location.href = "login.html";
 }
+//
