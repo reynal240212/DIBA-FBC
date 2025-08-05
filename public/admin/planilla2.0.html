@@ -368,7 +368,7 @@
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF({ orientation: 'portrait', unit: 'pt', format: 'letter' });
             
-            const logoUrl = "https://i.postimg.cc/x8W7vwJJ/ESCUDO.png";
+            const logoUrl = "images/ESCUDO.png";
             try {
                 const response = await fetch(logoUrl);
                 const blob = await response.blob();
