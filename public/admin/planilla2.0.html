@@ -7,6 +7,7 @@
   <meta name="keywords" content="DIBA FBC, Deportivo Internacional De Barranquilla Atlántico, Fútbol, Barranquilla, Atlántico, Colombia" />
   <meta name="robots" content="index, follow" />
   <meta name="theme-color" content="#002a40" />
+  <!-- URL pública para el ícono, funciona en cualquier lugar -->
   <link rel="icon" href="https://i.postimg.cc/x8W7vwJJ/ESCUDO.png" type="image/png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="Planilla interactiva para el control de jugadores del club DIBA FBC." />
@@ -32,6 +33,17 @@
       padding-bottom: 5rem;
     }
     .navbar { background-color: var(--primary-color) !important; }
+    /* CORRECCIÓN: Se eliminó la imagen de fondo local que no cargaba */
+    .hero {
+      background: linear-gradient(135deg, #002a40, #001b72);
+      background-blend-mode: multiply;
+      padding: 3rem 1rem;
+      text-align: center;
+      color: white;
+    }
+    .hero-title {
+        font-weight: bold;
+    }
     .table-responsive { max-height: 65vh; overflow-y: auto; }
     .table th {
         background-color: var(--primary-color);
@@ -42,7 +54,6 @@
     }
     #generatePDF:disabled { cursor: not-allowed; }
     .toast-container { z-index: 1100; }
-    /* Estilo para la celda del nombre editable */
     .editable-name {
         cursor: pointer;
     }
@@ -52,15 +63,23 @@
   </style>
 </head>
 <body>
-     <!-- Contenedor para el Navbar (se cargará dinámicamente) -->
-  <div id="navbar-container"></div>
-  
+  <!-- Navbar funcional (se eliminó el contenedor dinámico que no se usaba) -->
+  <nav class="navbar navbar-expand-lg navbar-dark shadow-sm">
+    <div class="container">
+      <a class="navbar-brand" href="#">
+        <img src="https://i.postimg.cc/x8W7vwJJ/ESCUDO.png" alt="DIBA FBC Logo" width="30" height="30" class="d-inline-block align-text-top me-2">
+        DIBA FBC
+      </a>
+    </div>
+  </nav>
+
   <!-- HERO SECTION -->
-  <section class="hero animate__animated animate__fadeInDown" style="background: linear-gradient(135deg, #002a40, #001b72), url('images/fondo.jpg') center/cover no-repeat fixed; background-blend-mode: multiply;">
-    <div class="container hero-content">
-      <h1 class="hero-title">Planilla</h1>
+  <section class="hero">
+    <div class="container">
+      <h1 class="hero-title">Planilla General</h1>
     </div>
   </section>
+  
   <!-- Contenedor para Notificaciones -->
   <div class="toast-container position-fixed top-0 end-0 p-3">
     <div id="appToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
@@ -69,15 +88,9 @@
     </div>
   </div>
 
-  <nav class="navbar navbar-expand-lg navbar-dark shadow-sm">
-    <div class="container">
-      <a class="navbar-brand" href="#"><img src="images/ESCUDO.png" alt="DIBA FBC Logo" width="30" height="30" class="d-inline-block align-text-top me-2">DIBA FBC</a>
-    </div>
-  </nav>
-
   <main class="container mt-4">
     <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
-      <h1 class="mb-0 h2">Planilla General</h1>
+      <h1 class="mb-0 h2">Controles de la Planilla</h1>
       <div class="d-flex gap-3 align-items-center mt-2 mt-md-0">
           <div>
               <label for="planillaCategory" class="form-label mb-0 fw-bold small">Categoría:</label>
@@ -134,7 +147,6 @@
   <script>
     document.addEventListener('DOMContentLoaded', () => {
 
-      // --- ELEMENTOS DEL DOM ---
       const tableBody = document.getElementById('planillaBody');
       const addPlayerForm = document.getElementById('addPlayerForm');
       const newPlayerNameInput = document.getElementById('newPlayerName');
@@ -149,10 +161,8 @@
 
       new bootstrap.Tooltip(clearDataBtn);
 
-      // --- ESTADO DE LA APLICACIÓN ---
       let appState = { players: [], data: {}, category: '' };
 
-      // --- FUNCIONES DE UTILIDAD ---
       const showToast = (message, isError = false) => {
           toastElement.querySelector('.toast-body').textContent = message;
           const icon = toastElement.querySelector('.toast-header i');
@@ -167,12 +177,15 @@
 
       const loadState = () => {
         const savedState = localStorage.getItem('dibaFbcAppState');
-        if (savedState) appState = JSON.parse(savedState);
+        if (savedState) {
+            appState = JSON.parse(savedState);
+        }
         categoryInput.value = appState.category || '';
-        if (!dateInput.value) dateInput.valueAsDate = new Date();
+        if (!dateInput.value) {
+            dateInput.valueAsDate = new Date();
+        }
       };
       
-      // --- RENDERIZADO DE LA TABLA ---
       const renderTable = () => {
         tableBody.innerHTML = '';
         if (appState.players.length === 0) {
@@ -186,7 +199,6 @@
           row.dataset.playerId = player.id;
           row.innerHTML = `
             <td><b>${index + 1}</b></td>
-            <!-- CAMBIO: Se añade la clase 'editable-name' y un 'title' para indicar que se puede editar -->
             <td class="editable-name fw-medium" title="Doble clic para editar">${player.name}</td>
             <td><input type="text" class="form-control form-control-sm data-input" data-field="pago" placeholder="$0" value="${playerData.pago}"></td>
             <td>
@@ -205,7 +217,6 @@
         });
       };
 
-      // --- MANEJADORES DE EVENTOS ---
       addPlayerForm.addEventListener('submit', e => {
         e.preventDefault();
         const newName = newPlayerNameInput.value.trim();
@@ -218,7 +229,6 @@
         }
       });
 
-      // Evento para borrar jugador
       tableBody.addEventListener('click', e => {
         if (e.target.closest('.btn-delete')) {
           const row = e.target.closest('tr');
@@ -234,7 +244,6 @@
         }
       });
       
-      // Evento para actualizar datos de pago, asistencia y observaciones
       tableBody.addEventListener('input', e => {
         if (e.target.classList.contains('data-input')) {
           const row = e.target.closest('tr');
@@ -246,22 +255,19 @@
         }
       });
 
-      // --- NUEVO: MANEJADOR PARA EDITAR NOMBRES ---
       tableBody.addEventListener('dblclick', e => {
         const cell = e.target.closest('.editable-name');
-        if (!cell) return; // Si no se hizo clic en una celda de nombre, no hacer nada
+        if (!cell) return;
 
         const originalName = cell.textContent;
         const row = cell.closest('tr');
         const playerId = Number(row.dataset.playerId);
 
-        // Reemplazar el texto con un campo de input
         cell.innerHTML = `<input type="text" class="form-control form-control-sm" value="${originalName}" />`;
         const input = cell.querySelector('input');
         input.focus();
         input.select();
 
-        // Función para guardar el cambio
         const saveChange = () => {
             const newName = input.value.trim();
             if (newName && newName !== originalName) {
@@ -272,18 +278,15 @@
                     showToast(`Nombre actualizado a "${newName}".`);
                 }
             }
-            renderTable(); // Re-renderizar la tabla para restaurar la vista normal
+            renderTable();
         };
 
-        // Guardar al perder el foco (clic fuera)
         input.addEventListener('blur', saveChange);
-
-        // Guardar con Enter o cancelar con Escape
         input.addEventListener('keydown', (e) => {
             if (e.key === 'Enter') {
                 saveChange();
             } else if (e.key === 'Escape') {
-                renderTable(); // Cancelar edición y restaurar
+                renderTable();
             }
         });
       });
@@ -299,7 +302,6 @@
       
       categoryInput.addEventListener('input', saveState);
 
-      // --- IMPORTACIÓN DE CSV ---
       const handleCsvImport = () => {
         const file = csvFileInput.files[0];
         if (!file) {
@@ -313,7 +315,7 @@
                 const text = e.target.result;
                 const lines = text.split('\n').map(l => l.trim()).filter(l => l);
                 if (lines.length < 2) {
-                    showToast('El archivo CSV está vacío o no tiene datos.', true);
+                    showToast('El archivo CSV está vacío o no tiene encabezados y datos.', true);
                     return;
                 }
 
@@ -337,6 +339,7 @@
                 appState.data = {};
 
                 lines.slice(1).forEach((line, i) => {
+                    // Nota: Esta forma de parsear CSV es simple y puede fallar si los datos contienen comas.
                     const cols = line.split(',');
                     const nombre = cols[nameIndex]?.trim();
                     if (!nombre) return;
@@ -365,7 +368,6 @@
 
       importCsvBtn.addEventListener('click', handleCsvImport);
 
-      // --- GENERACIÓN DE PDF ---
       generatePdfBtn.addEventListener('click', async () => {
         const btn = generatePdfBtn;
         btn.disabled = true;
@@ -376,7 +378,8 @@
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF({ orientation: 'portrait', unit: 'pt', format: 'letter' });
             
-            const logoUrl = "images/ESCUDO.png";
+            // CORRECCIÓN: Usar una URL pública para el logo para que siempre funcione.
+            const logoUrl = "https://i.postimg.cc/x8W7vwJJ/ESCUDO.png";
             try {
                 const response = await fetch(logoUrl);
                 const blob = await response.blob();
@@ -386,7 +389,10 @@
                     reader.readAsDataURL(blob);
                 });
                 doc.addImage(imgData, 'PNG', 40, 30, 60, 60);
-            } catch (err) { console.error("Error cargando logo para PDF:", err); }
+            } catch (err) { 
+                console.error("Error cargando logo para PDF:", err);
+                showToast("No se pudo cargar el logo para el PDF.", true);
+            }
 
             doc.setFontSize(16).setFont('helvetica', 'bold').text("DIBA FBC", 115, 50);
             doc.setFontSize(10).setFont('helvetica', 'normal');
@@ -396,7 +402,7 @@
             doc.setFontSize(12).setFont('helvetica', 'bold').text("PLANILLA GENERAL DE CONTROL", doc.internal.pageSize.getWidth() / 2, 120, { align: 'center' });
 
             const planillaDate = dateInput.value ? new Date(dateInput.value + 'T00:00:00').toLocaleDateString('es-CO', { day: '2-digit', month: '2-digit', year: 'numeric' }) : "No especificada";
-            const planillaCategory = categoryInput.value.trim() || "No especificada";
+            const planillaCategory = categoryInput.value.trim() || "General";
             doc.setFontSize(10).setFont('helvetica', 'normal');
             doc.text(`Fecha: ${planillaDate}`, 40, 140);
             doc.text(`Categoría: ${planillaCategory}`, doc.internal.pageSize.getWidth() - 40, 140, { align: 'right' });
@@ -405,10 +411,8 @@
             let body;
 
             if (appState.players.length === 0) {
-                body = [];
-                for (let i = 1; i <= 30; i++) {
-                    body.push([i, '', '', '', '']); 
-                }
+                // MEJORA: Mostrar un mensaje claro en lugar de filas vacías.
+                body = [[{ content: 'No hay jugadores en la lista.', colSpan: 5, styles: { halign: 'center', textColor: 150 } }]];
             } else {
                 body = appState.players.map((player, index) => {
                     const playerData = appState.data[player.id] || {};
@@ -439,7 +443,9 @@
                 doc.text(`Página ${i} de ${pageCount}`, doc.internal.pageSize.getWidth() / 2, doc.internal.pageSize.getHeight() - 20, { align: 'center' });
             }
 
-            doc.save(`Planilla_DIBA_FBC_${planillaCategory}_${dateInput.value}.pdf`);
+            // MEJORA: Añadir la fecha al nombre del archivo.
+            const fileNameDate = dateInput.value || 'sin-fecha';
+            doc.save(`Planilla_DIBA_FBC_${planillaCategory}_${fileNameDate}.pdf`);
             showToast('PDF generado con éxito.');
 
         } catch (error) {
@@ -452,18 +458,9 @@
         }
       });
       
-      // --- INICIALIZACIÓN ---
       loadState();
       renderTable();
     });
   </script>
-   <!-- Contenedor para el Footer (se carga desde layout/footer.html) -->
-  <div id="footer-container"></div>
-
-  <!-- Script para cargar componentes externos (Navbar y Footer) -->
-  <script src="scripts/loadComponents.js"></script>
-
-  <!-- Script principal (funciones y animaciones) -->
-  <script src="scripts/main.js"></script>
 </body>
 </html>
