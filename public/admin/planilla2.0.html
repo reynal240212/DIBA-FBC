@@ -52,7 +52,15 @@
   </style>
 </head>
 <body>
-
+     <!-- Contenedor para el Navbar (se cargará dinámicamente) -->
+  <div id="navbar-container"></div>
+  
+  <!-- HERO SECTION -->
+  <section class="hero animate__animated animate__fadeInDown" style="background: linear-gradient(135deg, #002a40, #001b72), url('images/fondo.jpg') center/cover no-repeat fixed; background-blend-mode: multiply;">
+    <div class="container hero-content">
+      <h1 class="hero-title">Planilla</h1>
+    </div>
+  </section>
   <!-- Contenedor para Notificaciones -->
   <div class="toast-container position-fixed top-0 end-0 p-3">
     <div id="appToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
@@ -449,6 +457,13 @@
       renderTable();
     });
   </script>
+   <!-- Contenedor para el Footer (se carga desde layout/footer.html) -->
+  <div id="footer-container"></div>
 
+  <!-- Script para cargar componentes externos (Navbar y Footer) -->
+  <script src="scripts/loadComponents.js"></script>
+
+  <!-- Script principal (funciones y animaciones) -->
+  <script src="scripts/main.js"></script>
 </body>
 </html>
