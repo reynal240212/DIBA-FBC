@@ -1570,5 +1570,90 @@ img {
         .fixture-result-list__scorers strong {
             color: var(--primary-dark);
         }
+         /* Estilos específicos y robustos SOLO para esta página, para evitar conflictos */
+    .player-slider-section {
+      background-color: #0d223f; /* Un color de fondo oscuro y neutro */
+      padding: 50px 0;
+      position: relative;
+    }
+    
+    .player-slider-section .slider-title {
+        text-align: center;
+        color: #FFD700; /* Usando un color de acento */
+        font-family: 'Arial Black', sans-serif;
+        font-weight: 800;
+        font-size: 2.5rem;
+        text-transform: uppercase;
+        letter-spacing: 4px;
+        margin-bottom: 40px;
+    }
 
+    /* Contenedor del Swiper debe tener una altura explícita */
+    .player-slider-section .swiper {
+        width: 100%;
+        height: 550px; /* ALTURA CLAVE para que no se colapse */
+    }
+    
+    .player-slider-section .swiper-slide {
+      transition: transform 0.4s ease, opacity 0.4s ease;
+      cursor: grab;
+    }
+    
+    .player-slider-section .swiper-slide:not(.swiper-slide-active) {
+      transform: scale(0.85);
+      opacity: 0.3;
+    }
+
+    .player-slider-section .player-slide-card {
+      position: relative;
+      width: 100%;
+      height: 100%; /* Ocupa toda la altura de la slide */
+      background-size: cover;
+      background-position: center top;
+      border-radius: 12px;
+      overflow: hidden;
+      color: white;
+      display: flex;
+      align-items: flex-end;
+    }
+    
+    .player-slider-section .player-slide-card::before {
+        content: '';
+        position: absolute;
+        bottom: 0; left: 0;
+        width: 100%; height: 70%;
+        background: linear-gradient(to top, rgba(11, 2, 81, 0.95) 0%, rgba(11, 2, 81, 0) 100%);
+        z-index: 1;
+    }
+
+    .player-slider-section .player-info-overlay {
+      position: relative;
+      z-index: 2;
+      padding: 30px;
+      width: 100%;
+      text-align: center;
+      text-shadow: 2px 2px 8px rgba(0,0,0,0.8);
+    }
+    
+    .player-slider-section .player-info-overlay .name {
+        display: block;
+        font-size: 2.5rem;
+        font-weight: 900;
+        text-transform: uppercase;
+        line-height: 1;
+        letter-spacing: 1px;
+    }
+    
+    .player-slider-section .player-info-overlay .category {
+        font-size: 1rem;
+        font-weight: 500;
+        opacity: 0.8;
+    }
+
+    .player-slider-section .swiper-button-next,
+    .player-slider-section .swiper-button-prev {
+      color: white;
+      top: 50%; /* Centra verticalmente */
+      transform: translateY(-50%);
+    }
 
