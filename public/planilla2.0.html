@@ -4,94 +4,50 @@
   <meta charset="UTF-8" />
   <title>Manager - DIBA FBC</title>
 
-  <!-- Ícono del sitio -->
+  <!-- Ícono del sitio y Metas -->
   <link rel="icon" href="images/ESCUDO.ico" sizes="32x32" />
-
-  <!-- Meta descripción -->
   <meta name="description" content="Consulta los partidos y entrenamientos de DIBA FBC, y gestiona el equipo desde un solo lugar." />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-
-  <!-- Open Graph & Twitter Cards -->
   <meta property="og:title" content="Calendario - DIBA FBC" />
-  <meta property="og:description" content="Revisa el calendario de partidos y entrenamientos de DIBA FBC." />
   <meta property="og:image" content="https://diba-fbc.vercel.app/images/ESCUDO.png" />
-  <meta property="og:url" content="https://diba-fbc.vercel.app/calendario" />
-  <meta property="og:type" content="website" />
   <meta name="twitter:card" content="summary_large_image" />
-
-  <!-- =================================================================== -->
-  <!-- ESTILOS PRINCIPALES (PÚBLICOS Y DE GESTIÓN) -->
-  <!-- =================================================================== -->
   
-  <!-- Bootstrap & Icons -->
+  <!-- Dependencias CSS Externas -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
-  <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-  <!-- Animate.css -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
   
-  <!-- Estilos de la página pública DIBA FBC (RUTAS RELATIVAS) -->
+  <!-- Estilos Públicos DIBA FBC (Rutas Relativas) -->
   <link rel="stylesheet" href="styles/styles.css" />
-  <link rel="stylesheet" href="styles/analisis.css" />
   <link rel="stylesheet" href="styles/background-animation.css" />
 
-  <!-- Estilos del Panel de Gestión (Manager Pro X) -->
+  <!-- Estilos Internos (Manager Pro X y Puente) -->
   <style>
     /* ----- ESTILOS GENERALES DEL MANAGER ----- */
     #manager-app-container {
       display: none; /* Oculto por defecto */
-      font-family: 'Inter', sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-    }
-    .manager-active {
-      overflow: hidden; /* Evita scroll en el body cuando el manager está activo */
-    }
-    .manager-active .public-site-container,
-    .manager-active #btnBackToTop,
-    .manager-active #manager-login-button {
-      display: none !important;
-    }
-
-    /* ----- BOTÓN DE LOGIN ----- */
-    #manager-login-button {
-      position: fixed;
-      top: 15px;
-      right: 15px;
-      z-index: 1056; /* Encima de todo */
-      background-color: #0d6efd;
-      color: white;
-      border-radius: 50%;
-      width: 50px;
-      height: 50px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-    }
-
-    /* ----- ESTILOS DEL MANAGER PRO X ----- */
-    :root {
-      --primary-color: #4f46e5;
-      --dark-bg-800: #111827;
-      --dark-bg-700: #1f2937;
-      --dark-bg-600: #374151;
-      --text-light: #f3f4f6;
-      --text-muted-light: #9ca3af;
-    }
-
-    #manager-app-container .sidebar {
-      width: 260px;
-      background-color: var(--dark-bg-700);
-      padding: 1.5rem 1rem;
-      height: 100vh;
+      z-index: 2000; /* Asegura que esté por encima de todo */
       position: fixed;
       top: 0;
       left: 0;
-      display: flex;
-      flex-direction: column;
-      border-right: 1px solid var(--dark-bg-600);
-      color: var(--text-light);
+      width: 100%;
+      height: 100%;
+      font-family: 'Inter', sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     }
+    .manager-active { overflow: hidden; }
+    .manager-active .public-site-container,
+    .manager-active #btnBackToTop,
+    .manager-active #manager-login-button { display: none !important; }
+
+    #manager-login-button { position: fixed; top: 15px; right: 15px; z-index: 1056; background-color: #0d6efd; color: white; border-radius: 50%; width: 50px; height: 50px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+
+    :root { --primary-color: #4f46e5; --dark-bg-800: #111827; --dark-bg-700: #1f2937; --dark-bg-600: #374151; --text-light: #f3f4f6; --text-muted-light: #9ca3af; }
+
+    #manager-app-container .sidebar { width: 260px; background-color: var(--dark-bg-700); padding: 1.5rem 1rem; height: 100vh; position: fixed; top: 0; left: 0; display: flex; flex-direction: column; border-right: 1px solid var(--dark-bg-600); color: var(--text-light); }
     #manager-app-container .sidebar .logo { font-size: 1.5rem; font-weight: 700; color: white; margin-bottom: 2rem; text-align: center; }
     #manager-app-container .sidebar .logo i { color: var(--primary-color); }
-    #manager-app-container .sidebar .nav-link { color: var(--text-muted-light); font-weight: 500; padding: 0.75rem 1rem; border-radius: 0.5rem; margin-bottom: 0.5rem; transition: all 0.2s; }
+    #manager-app-container .sidebar .nav-link { color: var(--text-muted-light); font-weight: 500; padding: 0.75rem 1rem; border-radius: 0.5rem; margin-bottom: 0.5rem; transition: all 0.2s; cursor: pointer; }
     #manager-app-container .sidebar .nav-link:hover { background-color: var(--dark-bg-600); color: white; }
     #manager-app-container .sidebar .nav-link.active { background-color: var(--primary-color); color: white; }
     #manager-app-container .sidebar .nav-link i { margin-right: 0.75rem; width: 20px; }
@@ -100,7 +56,7 @@
     #manager-app-container .form-select, #manager-app-container .form-control { background-color: var(--dark-bg-600); border-color: var(--dark-bg-600); color: white; }
     #manager-app-container .form-select:focus, #manager-app-container .form-control:focus { background-color: var(--dark-bg-600); border-color: var(--primary-color); color: white; box-shadow: 0 0 0 0.25rem rgba(79, 70, 229, 0.25); }
 
-    #manager-app-container .main-content { margin-left: 260px; width: calc(100% - 260px); padding: 2rem; background-color: var(--dark-bg-800); min-height: 100vh; color: var(--text-light); }
+    #manager-app-container .main-content { margin-left: 260px; width: calc(100% - 260px); padding: 2rem; background-color: var(--dark-bg-800); height: 100vh; overflow-y: auto; color: var(--text-light); }
     #manager-app-container .view { display: none; }
     #manager-app-container .view.active { display: block; animation: fadeIn 0.5s forwards; }
     @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
@@ -123,76 +79,37 @@
 
 </head>
 <body>
-
-  <!-- =================================================================== -->
-  <!-- CONTENEDOR DE LA WEB PÚBLICA -->
-  <!-- =================================================================== -->
+  <!-- Contenedor de la Web Pública -->
   <div class="public-site-container">
-    <!-- Fondo animado -->
     <div class="background-animation">
       <div class="cube"></div><div class="cube"></div><div class="cube"></div><div class="cube"></div><div class="cube"></div>
       <div class="cube"></div><div class="cube"></div><div class="cube"></div><div class="cube"></div><div class="cube"></div>
     </div>
-
-    <!-- Botón Volver Arriba -->
-    <button id="btnBackToTop" title="Volver arriba" aria-label="Volver arriba" class="btn btn-primary rounded-circle">
-      <i class="fas fa-arrow-up"></i>
-    </button>
-
-    <!-- Navbar (se carga desde layout/navbar.html) -->
+    <button id="btnBackToTop" title="Volver arriba" aria-label="Volver arriba" class="btn btn-primary rounded-circle"><i class="fas fa-arrow-up"></i></button>
     <div id="navbar-container"></div>
-    <!-- HERO SECTION -->
-    <section class="hero animate__animated animate__fadeInDown d-flex align-items-center" style="background: linear-gradient(135deg, #ffffff, #ffffff), url('images/fondo.jpg') center/cover no-repeat fixed; background-blend-mode: multiply; min-height: 80vh;">
-      <div class="container hero-content text-center text-white">
-        <h1 class="hero-title display-4 fw-bold">CALENDARIO</h1>
-        <p class="hero-subtitle lead">Programación de partidos</p>
-      </div>
-    </section>
-    <section class="container my-5">
-      <h2 class="text-center mb-4 text-primary">Lugar de Entrenamiento del Club</h2>
-      <div class="mapa-container">
-        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3916.801711935751!2d-74.84118122607062!3d10.978334455439269!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8ef42cdd367c2453%3A0x401e8f23384cd2a6!2sParque%20La%20Pradera!5e0!3m2!1ses-419!2sco!4v1750282065919!5m2!1ses-419!2sco" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-      </div>
-    </section>
-    <!-- SECCIÓN: FILTROS Y RESULTADOS -->
-    <section class="my-5">
-      <div class="container">
-        <div class="row g-4">
-          <!-- ... (Contenido de filtros y resultados) ... -->
-        </div>
-      </div>
-    </section>
-    <!-- Footer (se carga desde layout/footer.html) -->
+    <section class="hero animate__animated animate__fadeInDown d-flex align-items-center"><div class="container hero-content text-center text-white"><h1 class="hero-title display-4 fw-bold">CALENDARIO</h1><p class="hero-subtitle lead">Programación de partidos</p></div></section>
+    <section class="container my-5"><h2 class="text-center mb-4 text-primary">Lugar de Entrenamiento del Club</h2><div class="mapa-container"><iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3916.801711935751!2d-74.84118122607062!3d10.978334455439269!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8ef42cdd367c2453%3A0x401e8f23384cd2a6!2sParque%20La%20Pradera!5e0!3m2!1ses-419!2sco!4v1750282065919!5m2!1ses-419!2sco" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></div></section>
     <div id="footer-container"></div>
   </div>
 
+  <!-- Botón de Login Flotante -->
+  <button id="manager-login-button" class="btn d-flex align-items-center justify-content-center" title="Acceso Manager"><i class="fas fa-user-shield"></i></button>
 
-  <!-- =================================================================== -->
-  <!-- BOTÓN DE LOGIN FLOTANTE -->
-  <!-- =================================================================== -->
-  <button id="manager-login-button" class="btn d-flex align-items-center justify-content-center" title="Acceso Manager">
-    <i class="fas fa-user-shield"></i>
-  </button>
-
-
-  <!-- =================================================================== -->
-  <!-- CONTENEDOR DE LA APP DE GESTIÓN (OCULTO) -->
-  <!-- =================================================================== -->
+  <!-- Contenedor de la App de Gestión (Oculto) -->
   <div id="manager-app-container">
-      <!-- ======== SIDEBAR ======== -->
       <nav class="sidebar">
           <div>
               <div class="logo"><i class="bi bi-shield-shaded"></i> ManagerPro X</div>
               <ul class="nav flex-column">
-                  <li class="nav-item"><a class="nav-link active" href="#" data-view="dashboard"><i class="bi bi-grid-1x2-fill"></i>Dashboard</a></li>
-                  <li class="nav-item"><a class="nav-link" href="#" data-view="players"><i class="bi bi-people-fill"></i>Jugadores</a></li>
-                  <li class="nav-item"><a class="nav-link" href="#" data-view="calendar"><i class="bi bi-calendar-event-fill"></i>Calendario</a></li>
-                  <li class="nav-item"><a class="nav-link" href="#" data-view="records"><i class="bi bi-clipboard-data-fill"></i>Registros</a></li>
+                  <li class="nav-item"><a class="nav-link active" data-view="dashboard"><i class="bi bi-grid-1x2-fill"></i>Dashboard</a></li>
+                  <li class="nav-item"><a class="nav-link" data-view="players"><i class="bi bi-people-fill"></i>Jugadores</a></li>
+                  <li class="nav-item"><a class="nav-link" data-view="calendar"><i class="bi bi-calendar-event-fill"></i>Calendario</a></li>
+                  <li class="nav-item"><a class="nav-link" data-view="records"><i class="bi bi-clipboard-data-fill"></i>Registros</a></li>
               </ul>
           </div>
           <div class="team-selector">
-              <label for="team-filter">Equipo Activo</label>
-              <select id="team-filter" class="form-select">
+              <label for="manager-team-filter">Equipo Activo</label>
+              <select id="manager-team-filter" class="form-select">
                   <option value="2012/13">Categoría 2012/13</option>
                   <option value="2014/15/16">Categoría 2014/15/16</option>
               </select>
@@ -200,56 +117,40 @@
           </div>
       </nav>
 
-      <!-- ======== MAIN CONTENT ======== -->
       <main class="main-content">
-          <!-- Vistas del Dashboard (Dashboard, Players, Calendar, Records) -->
-          <!-- ... (El contenido de las vistas del manager va aquí, idéntico al de la versión anterior) ... -->
+          <!-- DASHBOARD VIEW -->
+          <div id="dashboard-view" class="view">
+              <h1 class="h2 mb-4">Dashboard</h1><div id="dashboard-content" class="row g-4"></div>
+          </div>
+          <!-- PLAYERS VIEW -->
+          <div id="players-view" class="view">
+              <h1 class="h2 mb-4">Plantilla de Jugadores</h1><div id="player-list-container" class="row g-4"></div>
+          </div>
+          <!-- CALENDAR VIEW -->
+          <div id="calendar-view" class="view">
+              <div class="d-flex justify-content-between align-items-center mb-4"><h1 class="h2 mb-0">Calendario de Eventos</h1><button class="btn btn-primary"><i class="bi bi-plus-circle-fill me-2"></i>Nuevo Evento</button></div>
+              <div class="card p-3"><div class="d-flex justify-content-between align-items-center mb-3"><button id="prev-month" class="btn btn-outline-light">&lt;</button><h3 id="calendar-month-year"></h3><button id="next-month" class="btn btn-outline-light">&gt;</button></div><div class="calendar-grid calendar-header"><div>Dom</div><div>Lun</div><div>Mar</div><div>Mié</div><div>Jue</div><div>Vie</div><div>Sáb</div></div><div id="calendar-body" class="calendar-grid"></div></div>
+          </div>
+          <!-- RECORDS VIEW -->
+          <div id="records-view" class="view">
+              <h1 class="h2 mb-4">Registros Detallados</h1><div class="card"><div class="card-body"><p>Sección para registros detallados, importación/exportación CSV.</p></div></div>
+          </div>
       </main>
   </div>
 
+  <!-- Modal de Login -->
+  <div class="modal fade" id="login-modal" tabindex="-1"><div class="modal-dialog modal-dialog-centered"><div class="modal-content bg-light"><div class="modal-header"><h5 class="modal-title text-dark">Acceso de Administrador</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><form id="login-form"><div class="mb-3"><label for="password-input" class="form-label text-dark">Contraseña</label><input type="password" class="form-control" id="password-input" required><div class="invalid-feedback">Contraseña incorrecta.</div></div><button type="submit" class="btn btn-primary w-100">Ingresar</button></form></div></div></div></div>
 
-  <!-- =================================================================== -->
-  <!-- MODAL DE LOGIN -->
-  <!-- =================================================================== -->
-  <div class="modal fade" id="login-modal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content bg-light">
-        <div class="modal-header">
-          <h5 class="modal-title text-dark">Acceso de Administrador</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <form id="login-form">
-            <div class="mb-3">
-              <label for="password-input" class="form-label text-dark">Contraseña</label>
-              <input type="password" class="form-control" id="password-input" required>
-              <div class="invalid-feedback">Contraseña incorrecta.</div>
-            </div>
-            <button type="submit" class="btn btn-primary w-100">Ingresar</button>
-          </form>
-        </div>
-      </div>
-    </div>
-  </div>
-
-
-  <!-- =================================================================== -->
-  <!-- SCRIPTS -->
-  <!-- =================================================================== -->
-  <!-- Bootstrap JS Bundle -->
+  <!-- Scripts Externos -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  <!-- Scripts de la página pública (RUTAS RELATIVAS) -->
   <script src="scripts/loadComponents.js"></script>
   <script src="scripts/main.js"></script>
-  <script src="scripts/script.js"></script>
-  <script type="module" src="api/paridos.js"></script>
 
-  <!-- SCRIPT DE LA APP DE GESTIÓN Y EL PUENTE ENTRE AMBAS VISTAS -->
+  <!-- Script Principal de la App -->
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-
         // =================================================================
-        // PUENTE ENTRE VISTA PÚBLICA Y MANAGER
+        // PUENTE Y LÓGICA DE AUTENTICACIÓN
         // =================================================================
         const loginButton = document.getElementById('manager-login-button');
         const loginModalEl = document.getElementById('login-modal');
@@ -258,34 +159,22 @@
         const passwordInput = document.getElementById('password-input');
         const managerAppContainer = document.getElementById('manager-app-container');
         const logoutButton = document.getElementById('logout-button');
+        const MANAGER_PASSWORD = "admin"; // Tu contraseña
 
-        // Contraseña (para un caso real, esto debería venir de un backend)
-        const MANAGER_PASSWORD = "admin";
-
-        loginButton.addEventListener('click', () => {
-            loginModal.show();
-        });
-
+        loginButton.addEventListener('click', () => loginModal.show());
         loginForm.addEventListener('submit', (e) => {
             e.preventDefault();
             if (passwordInput.value === MANAGER_PASSWORD) {
                 passwordInput.classList.remove('is-invalid');
                 loginModal.hide();
-                
-                // Activar el modo manager
                 document.body.classList.add('manager-active');
                 managerAppContainer.style.display = 'block';
-                
-                // Iniciar la aplicación de manager
                 initManagerApp();
-
             } else {
                 passwordInput.classList.add('is-invalid');
             }
         });
-
         logoutButton.addEventListener('click', () => {
-            // Desactivar el modo manager
             document.body.classList.remove('manager-active');
             managerAppContainer.style.display = 'none';
         });
@@ -293,15 +182,13 @@
         // =================================================================
         // LÓGICA DE LA APLICACIÓN MANAGER PRO X
         // =================================================================
-        let managerState = {}; // Usamos un nombre de variable diferente para evitar colisiones
-
+        let managerState = {};
         const initialPlayers = {
             "2012/13": ["Juan Tobías á", "Dilan sanchez", "Dany tapias", "Angel Hernández", "Miguel aldana", "Rodríguez Daniel", "Nelson pauline", "Santiago Mendoza", "Oscar López", "Yojainer villalobos", "Jesus Ricardo", "Stiven Montiel", "Deiyembes", "larson"],
             "2014/15/16": ["Mario perez", "Nayareth Celin", "Eliuth Meza", "Abraham Pérez", "Rey David Arrieta", "Santy tobias", "Santy hernandez", "ISAAC ventura", "Carlos moreno", "Zaid Ricardo", "Cristian Marcano", "Yesid Manzano", "estiben gomez", "Andrés sierra"]
         };
-        
+
         function initManagerApp() {
-            // Esta función se llama solo una vez al iniciar sesión
             loadManagerState();
             setupManagerEventListeners();
             navigateTo('dashboard');
@@ -324,58 +211,104 @@
         }
 
         function setupManagerEventListeners() {
-            // Seleccionamos elementos dentro del contenedor del manager para evitar conflictos
             const container = document.getElementById('manager-app-container');
             container.querySelectorAll('.sidebar .nav-link').forEach(link => {
-                if (!link.hasAttribute('data-listener-set')) { // Evita añadir listeners múltiples veces
-                    link.addEventListener('click', e => {
-                        e.preventDefault();
-                        navigateTo(e.target.closest('a').dataset.view);
-                    });
+                if (!link.hasAttribute('data-listener-set')) {
+                    link.addEventListener('click', e => { e.preventDefault(); navigateTo(e.currentTarget.dataset.view); });
                     link.setAttribute('data-listener-set', 'true');
                 }
             });
-
-            container.querySelector('#team-filter').addEventListener('change', e => {
+            container.querySelector('#manager-team-filter').addEventListener('change', e => {
                 managerState.currentTeamId = e.target.value;
                 const activeView = container.querySelector('.view.active').id.replace('-view', '');
                 navigateTo(activeView);
                 saveManagerState();
             });
-
-            // ... (resto de los event listeners de la app de manager) ...
+            container.querySelector('#prev-month').addEventListener('click', () => updateCalendarMonth(-1));
+            container.querySelector('#next-month').addEventListener('click', () => updateCalendarMonth(1));
         }
-
+        
         function navigateTo(viewId) {
             const container = document.getElementById('manager-app-container');
             container.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-            const viewElement = container.querySelector(`#${viewId}-view`);
-            if (viewElement) {
-                viewElement.classList.add('active');
-            }
-            
+            container.querySelector(`#${viewId}-view`).classList.add('active');
             container.querySelectorAll('.sidebar .nav-link').forEach(l => l.classList.remove('active'));
-            const linkElement = container.querySelector(`.sidebar .nav-link[data-view="${viewId}"]`);
-            if (linkElement) {
-                linkElement.classList.add('active');
-            }
+            container.querySelector(`.sidebar .nav-link[data-view="${viewId}"]`).classList.add('active');
 
-            // Renderizar la vista activa
             switch(viewId) {
                 case 'dashboard': renderDashboard(); break;
-                // ... (resto de los renders) ...
+                case 'players': renderPlayers(); break;
+                case 'calendar': renderCalendar(); break;
             }
         }
 
-        // --- Funciones de renderizado (renderDashboard, renderPlayers, etc.) ---
-        // Estas funciones son las mismas de la versión anterior de Manager Pro X
-        // y deben ser incluidas aquí. Por brevedad, solo pongo una como ejemplo.
+        // --- FUNCIONES DE RENDERIZADO COMPLETAS ---
         function renderDashboard() {
-            // El código de esta función es idéntico al de la respuesta anterior
+            const content = document.getElementById('dashboard-content');
             const teamEvents = managerState.events.filter(e => e.teamId === managerState.currentTeamId);
-            // ... resto de la lógica ...
+            const thisMonth = new Date().getMonth(), thisYear = new Date().getFullYear();
+            let totalPaid = 0;
+            teamEvents.filter(e => new Date(e.date).getMonth() === thisMonth && new Date(e.date).getFullYear() === thisYear)
+                      .forEach(e => { Object.values(e.records || {}).forEach(r => totalPaid += parseFloat(r.payment || 0)); });
+            let totalAttendance = 0, totalPossible = 0;
+            teamEvents.forEach(e => {
+                totalAttendance += Object.values(e.records || {}).filter(r => r.attendance === 'P').length;
+                totalPossible += (managerState.players[managerState.currentTeamId] || []).length;
+            });
+            const avgAttendance = totalPossible > 0 ? ((totalAttendance / totalPossible) * 100).toFixed(0) : 0;
+            const futureEvents = teamEvents.filter(e => new Date(e.date) >= new Date()).sort((a,b) => new Date(a.date) - new Date(b.date));
+            const nextEventText = futureEvents.length > 0 ? `${futureEvents[0].type} - ${new Date(futureEvents[0].date).toLocaleDateString('es-ES', {weekday: 'long', day: 'numeric'})}` : "Ninguno programado";
+            
+            content.innerHTML = `
+                <div class="col-md-6 col-lg-4"><div class="card stat-card p-3"><div class="card-body"><h5 class="text-uppercase">Total Recaudado (Mes)</h5><p class="display-4 text-success">$${totalPaid.toLocaleString('es-CO')}</p></div></div></div>
+                <div class="col-md-6 col-lg-4"><div class="card stat-card p-3"><div class="card-body"><h5 class="text-uppercase">Asistencia Promedio</h5><p class="display-4 text-info">${avgAttendance}%</p></div></div></div>
+                <div class="col-md-6 col-lg-4"><div class="card stat-card p-3"><div class="card-body"><h5 class="text-uppercase">Próximo Evento</h5><p class="h4">${nextEventText}</p></div></div></div>`;
         }
 
+        function renderPlayers() {
+            const container = document.getElementById('player-list-container');
+            container.innerHTML = '';
+            const players = managerState.players[managerState.currentTeamId] || [];
+            if (players.length === 0) { container.innerHTML = `<p>No hay jugadores en esta categoría.</p>`; return; }
+            players.forEach(player => {
+                const initials = player.split(' ').map(n => n[0]).join('').substring(0,2).toUpperCase();
+                container.innerHTML += `<div class="col-md-6 col-lg-4"><div class="card player-card"><div class="card-body d-flex align-items-center gap-3"><div class="player-avatar">${initials}</div><div><h5 class="card-title mb-0">${player}</h5><span class="text-muted-light">Jugador</span></div></div></div></div>`;
+            });
+        }
+        
+        function renderCalendar() {
+            const calendarBody = document.getElementById('calendar-body');
+            const monthYearLabel = document.getElementById('calendar-month-year');
+            calendarBody.innerHTML = '';
+            const currentDate = managerState.calendar.date;
+            const month = currentDate.getMonth(), year = currentDate.getFullYear();
+            monthYearLabel.textContent = currentDate.toLocaleDateString('es-ES', { month: 'long', year: 'numeric' }).toUpperCase();
+            const firstDayOfMonth = new Date(year, month, 1).getDay();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+            for (let i = 0; i < firstDayOfMonth; i++) { calendarBody.innerHTML += `<div class="calendar-day not-in-month"></div>`; }
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dayEl = document.createElement('div');
+                dayEl.className = 'calendar-day';
+                dayEl.textContent = day;
+                const today = new Date();
+                if (day === today.getDate() && month === today.getMonth() && year === today.getFullYear()) { dayEl.classList.add('is-today'); }
+                const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                const dayEvents = managerState.events.filter(e => e.date === dateStr && e.teamId === managerState.currentTeamId);
+                if (dayEvents.length > 0) {
+                    const eventsContainer = document.createElement('div');
+                    eventsContainer.className = 'mt-2';
+                    dayEvents.forEach(event => { eventsContainer.innerHTML += `<div><span class="event-dot ${event.type}"></span><small>${event.type}</small></div>`; });
+                    dayEl.appendChild(eventsContainer);
+                }
+                calendarBody.appendChild(dayEl);
+            }
+        }
+        
+        function updateCalendarMonth(change) {
+            managerState.calendar.date.setMonth(managerState.calendar.date.getMonth() + change);
+            renderCalendar();
+            saveManagerState();
+        }
     });
   </script>
 
