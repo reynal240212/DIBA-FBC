@@ -1,248 +1,311 @@
 <!DOCTYPE html>
-<html lang="es" data-bs-theme="light">
+<html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Facturador 360 - Gestión Profesional</title>
-    
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <title>Manager - DIBA FBC</title>
 
-    <style>
-        :root { --primary-color: #0d6efd; }
-        body { background-color: #f4f7f9; font-family: 'Poppins', sans-serif; }
-        .navbar-brand { font-weight: 600; }
-        .main-container { transition: opacity 0.3s ease-in-out; }
-        
-        /* Dashboard Styles */
-        .invoice-list-card {
-            border: 1px solid #e9ecef;
-            border-left: 5px solid;
-            transition: all 0.2s ease;
-        }
-        .invoice-list-card:hover { transform: translateY(-3px); box-shadow: 0 4px 15px rgba(0,0,0,.07); }
-        .status-badge { font-size: 0.75rem; font-weight: 600; padding: 0.3em 0.6em; }
-        
-        /* Editor Styles */
-        .editor-card { box-shadow: 0 4px 25px rgba(0,0,0,.08); border: none; }
-        .logo-container { border: 2px dashed #d0d7e0; cursor: pointer; transition: all 0.2s; }
-        .logo-container:hover { background-color: #f8f9fa; border-color: var(--primary-color); }
-        .logo-container img { max-height: 100px; max-width: 100%; }
-        
-        /* Invoice Modal Styles */
-        #invoice-modal .modal-dialog { max-width: 850px; }
-        .invoice-preview-container { background: #fff; color: #333; padding: 2.5rem; border: 1px solid #e9ecef; }
-        .invoice-header-section { border-bottom: 4px solid var(--primary-color); padding-bottom: 1rem; margin-bottom: 2rem; }
-        .invoice-header-section h1 { color: var(--primary-color); font-weight: 700; }
-        .invoice-preview-table thead { background-color: var(--primary-color) !important; color: #fff; }
-        
-        .toast-container { z-index: 1100; }
-        @media print { /* Print styles... */ }
-    </style>
+  <!-- Metas e Íconos -->
+  <link rel="icon" href="images/ESCUDO.ico" sizes="32x32" />
+  <meta name="description" content="Consulta los partidos y entrenamientos de DIBA FBC, y gestiona el equipo desde un solo lugar." />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  
+  <!-- Dependencias CSS Externas -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+  
+  <!-- Estilos Públicos (Simulados) -->
+  <style> body { font-family: sans-serif; } .hero { background: #eee; padding: 100px 0; text-align: center; } </style>
+  <!-- Estilos del Manager -->
+  <style>
+    #manager-app-container { display: none; z-index: 2000; position: fixed; top: 0; left: 0; width: 100%; height: 100%; font-family: 'Inter', sans-serif; }
+    .manager-active { overflow: hidden; }
+    .manager-active .public-site-container, .manager-active #manager-login-button { display: none !important; }
+    #manager-login-button { position: fixed; top: 15px; right: 15px; z-index: 1056; background-color: #0d6efd; color: white; border-radius: 50%; width: 50px; height: 50px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+    :root { --primary-color: #4f46e5; --dark-bg-800: #111827; --dark-bg-700: #1f2937; --dark-bg-600: #374151; --text-light: #f3f4f6; --text-muted-light: #9ca3af; }
+    #manager-app-container .sidebar { width: 260px; background-color: var(--dark-bg-700); padding: 1.5rem 1rem; height: 100vh; position: fixed; top: 0; left: 0; display: flex; flex-direction: column; border-right: 1px solid var(--dark-bg-600); }
+    #manager-app-container .sidebar .logo { font-size: 1.5rem; font-weight: 700; color: white; margin-bottom: 2rem; text-align: center; }
+    #manager-app-container .sidebar .nav-link { color: var(--text-muted-light); font-weight: 500; padding: 0.75rem 1rem; border-radius: 0.5rem; margin-bottom: 0.5rem; transition: all 0.2s; cursor: pointer; }
+    #manager-app-container .sidebar .nav-link:hover { background-color: var(--dark-bg-600); color: white; }
+    #manager-app-container .sidebar .nav-link.active { background-color: var(--primary-color); color: white; }
+    #manager-app-container .form-select, #manager-app-container .form-control { background-color: var(--dark-bg-600); border-color: var(--dark-bg-600); color: white; }
+    #manager-app-container .form-select:focus, #manager-app-container .form-control:focus { background-color: var(--dark-bg-600); border-color: var(--primary-color); color: white; box-shadow: 0 0 0 0.25rem rgba(79, 70, 229, 0.25); }
+    #manager-app-container .main-content { margin-left: 260px; width: calc(100% - 260px); padding: 2rem; background-color: var(--dark-bg-800); height: 100vh; overflow-y: auto; }
+    #manager-app-container .view { display: none; }
+    #manager-app-container .view.active { display: block; animation: fadeIn 0.5s forwards; }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    #manager-app-container .card { background-color: var(--dark-bg-700); border: 1px solid var(--dark-bg-600); }
+    #manager-app-container .calendar-day { min-height: 120px; background-color: var(--dark-bg-600); padding: 0.5rem; }
+    #manager-app-container .event-dot { height: 10px; width: 10px; border-radius: 50%; display: inline-block; }
+    #manager-app-container .event-dot.Partido { background-color: #16a34a; }
+    #manager-app-container .event-dot.Práctica { background-color: #3b82f6; }
+  </style>
 </head>
 <body>
-    <nav class="navbar navbar-dark sticky-top" style="background-color: var(--primary-color);">
-        <div class="container">
-            <a class="navbar-brand" href="#" onclick="location.reload()"><i class="fas fa-rocket me-2"></i>Facturador 360</a>
-            <button class="btn btn-outline-light" data-bs-toggle="modal" data-bs-target="#settings-modal"><i class="fas fa-cogs me-1"></i>Ajustes</button>
+  <!-- Contenedor de la Web Pública -->
+  <div class="public-site-container">
+    <div id="navbar-container"></div>
+    <section class="hero"><div class="container text-center"><h1 class="display-4 fw-bold">CALENDARIO</h1><p class="lead">Programación de partidos</p></div></section>
+    <section class="container my-5">
+      <h2 class="text-center mb-4 text-primary">Tabla de Clasificación (Cat. 2014-15)</h2>
+      <div id="loading-clasificacion" class="text-center" style="display: none;"><div class="spinner-border"></div></div>
+      <div id="clasificacion-container" class="table-responsive"></div>
+    </section>
+    <section class="my-5">
+      <div class="container">
+        <div class="row g-4">
+          <div class="col-md-6">
+            <div class="card shadow-sm p-4 bg-light"><h2 class="h5 mb-3 text-primary"><i class="fas fa-futbol me-2"></i>Partidos</h2><label for="fecha" class="form-label fw-semibold">Selecciona una fecha</label><input type="date" id="fecha" class="form-control mb-3"><div id="loading-spinner" style="display: none;"><div class="spinner-border text-primary"></div></div><div id="matches-container"></div></div>
+          </div>
+          <div class="col-md-6">
+            <div class="card shadow-sm p-4 bg-light"><h2 class="h5 mb-3 text-success"><i class="fas fa-dumbbell me-2"></i>Entrenamientos</h2><label for="fecha-entrenamiento" class="form-label fw-semibold">Selecciona una fecha</label><input type="date" id="fecha-entrenamiento" class="form-control mb-3"><div id="loading-spinner-entrenamiento" style="display: none;"><div class="spinner-border text-success"></div></div><div id="trainings-container"></div></div>
+          </div>
         </div>
+      </div>
+    </section>
+    <div id="footer-container"></div>
+  </div>
+
+  <!-- Botón de Login y App de Gestión -->
+  <button id="manager-login-button" class="btn d-flex align-items-center justify-content-center" title="Acceso Manager"><i class="fas fa-user-shield"></i></button>
+  <div id="manager-app-container">
+    <nav class="sidebar">
+      <div>
+        <div class="sidebar-logo"><i class="bi bi-shield-shaded"></i> ManagerPro X</div>
+        <ul class="nav flex-column"><li class="nav-item"><a class="nav-link active" data-view="calendar"><i class="bi bi-calendar-event-fill"></i>Calendario</a></li><li class="nav-item"><a class="nav-link" data-view="records"><i class="bi bi-clipboard-data-fill"></i>Registros</a></li></ul>
+      </div>
+      <button id="logout-button" class="btn btn-danger w-100 mt-auto"><i class="bi bi-box-arrow-left me-2"></i>Cerrar Sesión</button>
     </nav>
+    <main class="main-content">
+      <div id="calendar-view" class="view"></div>
+      <div id="records-view" class="view"></div>
+    </main>
+  </div>
+  
+  <!-- Modales -->
+  <div class="modal fade" id="login-modal" tabindex="-1"><div class="modal-dialog modal-dialog-centered"><div class="modal-content bg-light"><div class="modal-header"><h5 class="modal-title text-dark">Acceso de Administrador</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><form id="login-form"><div class="mb-3"><label for="password-input" class="form-label text-dark">Contraseña</label><input type="password" class="form-control" id="password-input" required><div class="invalid-feedback">Contraseña incorrecta.</div></div><button type="submit" class="btn btn-primary w-100">Ingresar</button></form></div></div></div></div>
+  <div class="modal fade" id="event-modal" tabindex="-1"><div class="modal-dialog modal-dialog-centered modal-lg"><div id="event-modal-content" class="modal-content"></div></div></div>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script type="module">
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+
+    // ===================================================================
+    // CONFIGURACIÓN GLOBAL Y SUPABASE
+    // ===================================================================
+    const supabaseUrl = 'https://wdnlqfiwuocmmcdowjyw.supabase.co';
+    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndkbmxxZml3dW9jbW1jZG93anl3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg1MjY1ODAsImV4cCI6MjA2NDEwMjU4MH0.4SCS_NRDIYLQJ1XouqW111BxkMOlwMWOjje9gFTgW_Q';
+    const supabase = createClient(supabaseUrl, supabaseKey);
+    let CALENDAR_DATE = new Date();
+
+    // ===================================================================
+    // LÓGICA DE LA PÁGINA PÚBLICA (Leer de Supabase)
+    // ===================================================================
+    const initPublicPage = () => {
+        const formatearFecha = fechaISO => new Date(fechaISO).toLocaleDateString('es-CO', { year: 'numeric', month: 'long', day: 'numeric' });
+        
+        function crearCard({ titulo, cuerpo, escudo = null, color = 'primary' }) {
+            const card = document.createElement('div');
+            card.className = `card border-0 shadow-lg mb-4 bg-${color} text-white animate__animated animate__fadeInUp`;
+            card.innerHTML = `<div class="card-header d-flex justify-content-between align-items-center bg-opacity-75">${escudo ? `<img src="${escudo}" alt="Escudo" class="rounded shadow" style="width: 40px; height: 40px; object-fit: contain;">` : ''}<h5 class="mb-0 fw-bold">${titulo}</h5><button class="btn btn-sm btn-outline-light rounded-circle btn-close-card" title="Cerrar"><i class="fas fa-times"></i></button></div><div class="card-body fs-6">${cuerpo}</div>`;
+            card.querySelector('.btn-close-card').onclick = () => card.remove();
+            return card;
+        }
+
+        async function filtrarPartidos() {
+            const container = document.getElementById('matches-container'), spinner = document.getElementById('loading-spinner'), fecha = document.getElementById('fecha').value;
+            if (!fecha) { container.innerHTML = '<p class="text-center text-muted">Selecciona una fecha.</p>'; return; }
+            spinner.style.display = 'block'; container.innerHTML = '';
+            const { data, error } = await supabase.from('partidos').select('*').eq('fecha', fecha);
+            spinner.style.display = 'none';
+            if (error || data.length === 0) { container.innerHTML = '<p class="text-center text-muted">No hay partidos para esta fecha.</p>'; return; }
+            data.forEach(p => container.appendChild(crearCard({ titulo: `${p.equipolocal} vs ${p.equipovisitante}`, cuerpo: `<p><i class="fas fa-align-left me-2"></i><strong>Descripción:</strong> ${p.descripcion || 'N/A'}</p><p><i class="fas fa-calendar-alt me-2"></i><strong>Hora:</strong> ${p.hora || 'Sin hora'}</p><p><i class="fas fa-map-marker-alt me-2"></i><strong>Estadio:</strong> ${p.Cancha || 'N/A'}</p><p><i class="fas fa-trophy me-2"></i><strong>Resultado:</strong> ${p.resultado || 'No disponible'}</p>`, escudo: p.escudo, color: 'primary' })));
+        }
+
+        async function filtrarEntrenamientos() {
+            const container = document.getElementById('trainings-container'), spinner = document.getElementById('loading-spinner-entrenamiento'), fecha = document.getElementById('fecha-entrenamiento').value;
+            if (!fecha) { container.innerHTML = '<p class="text-center text-muted">Selecciona una fecha.</p>'; return; }
+            spinner.style.display = 'block'; container.innerHTML = '';
+            const { data, error } = await supabase.from('entrenamientos').select('*').eq('fecha', fecha);
+            spinner.style.display = 'none';
+            if (error || data.length === 0) { container.innerHTML = '<p class="text-center text-muted">No hay entrenamientos para esta fecha.</p>'; return; }
+            data.forEach(e => container.appendChild(crearCard({ titulo: e.titulo || 'Entrenamiento', cuerpo: `<p><i class="fas fa-align-left me-2"></i><strong>Descripción:</strong> ${e.descripcion || 'N/A'}</p><p><i class="fas fa-calendar-alt me-2"></i><strong>Hora:</strong> ${e.hora || 'Sin hora'}</p><p><i class="fas fa-map-marker-alt me-2"></i><strong>Lugar:</strong> ${e.lugar || 'N/A'}</p><p><i class="fas fa-comment-dots me-2"></i><strong>Observaciones:</strong> ${e.observaciones || 'Ninguna'}</p>`, color: 'success' })));
+        }
+        
+        async function mostrarClasificacion() {
+            const container = document.getElementById('clasificacion-container'), spinner = document.getElementById('loading-clasificacion');
+            spinner.style.display = 'block';
+            const { data, error } = await supabase.from('clasificacion_categoria_2014_15').select('*').order('posicion', { ascending: true });
+            spinner.style.display = 'none';
+            if (error || !data) { container.innerHTML = '<p class="text-center text-muted">No se pudo cargar la clasificación.</p>'; return; }
+            container.innerHTML = `<table class="table table-striped table-hover table-bordered text-center align-middle">
+                <thead class="table-dark"><tr><th>Pos</th><th>Equipo</th><th>Pts</th><th>J</th><th>G</th><th>E</th><th>P</th><th>GF</th><th>GC</th><th>DIF</th></tr></thead>
+                <tbody>${data.map(e => `<tr class="${e.equipo.toLowerCase().includes('diba') ? 'table-danger fw-bold' : ''}"><td>${e.posicion}</td><td>${e.equipo}</td><td>${e.puntos}</td><td>${e.jugados}</td><td>${e.ganados}</td><td>${e.empatados}</td><td>${e.perdidos}</td><td>${e.goles_favor}</td><td>${e.goles_contra}</td><td>${e.diferencia}</td></tr>`).join('')}</tbody>
+            </table>`;
+        }
+
+        document.getElementById('fecha').addEventListener('change', filtrarPartidos);
+        document.getElementById('fecha-entrenamiento').addEventListener('change', filtrarEntrenamientos);
+        mostrarClasificacion();
+    };
+
+    // ===================================================================
+    // LÓGICA DEL MANAGER (Escribir en Supabase)
+    // ===================================================================
+    const eventModal = new bootstrap.Modal(document.getElementById('event-modal'));
     
-    <div class="main-container">
-        <!-- VISTA: DASHBOARD -->
-        <div id="dashboard-view">
-            <div class="container py-4">
-                <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h2 class="h3 mb-0">Mis Facturas</h2>
-                    <button id="go-to-editor-new-btn" class="btn btn-primary"><i class="fas fa-plus me-2"></i>Crear Nueva Factura</button>
-                </div>
-                <div id="invoice-list-container" class="row g-3">
-                    <!-- Las facturas se cargarán aquí -->
-                </div>
-            </div>
-        </div>
+    const navigateTo = (viewId) => {
+        document.querySelectorAll('#manager-app-container .view').forEach(v => { v.style.display = 'none'; v.classList.remove('active'); });
+        document.querySelectorAll('#manager-app-container .nav-link').forEach(l => l.classList.remove('active'));
+        document.querySelector(`#manager-app-container .nav-link[data-view="${viewId}"]`).classList.add('active');
+        const viewContainer = document.getElementById(`${viewId}-view`);
+        viewContainer.style.display = 'block';
+        viewContainer.classList.add('active');
+        if (viewId === 'calendar') renderCalendar(viewContainer);
+        if (viewId === 'records') renderRecords(viewContainer);
+    };
 
-        <!-- VISTA: EDITOR DE FACTURA -->
-        <div id="editor-view" class="d-none">
-            <div class="container my-4">
-                <div class="card p-4 p-lg-5 editor-card">
-                    <!-- Contenido completo del formulario del editor aquí -->
-                </div>
-            </div>
-        </div>
-    </div>
+    const renderCalendar = async (container) => {
+        container.innerHTML = `<div class="d-flex justify-content-between align-items-center mb-4"><h1 class="h2 text-light">Calendario</h1><button id="add-event-btn" class="btn btn-primary"><i class="bi bi-plus-circle-fill me-2"></i>Nuevo Evento</button></div><div class="card p-3"><div class="d-flex justify-content-between align-items-center mb-3"><button id="prev-month" class="btn btn-outline-light">&lt;</button><h3 id="calendar-month-year" class="text-light"></h3><button id="next-month" class="btn btn-outline-light">&gt;</button></div><div class="calendar-grid text-muted-light text-center"><div>D</div><div>L</div><div>M</div><div>X</div><div>J</div><div>V</div><div>S</div></div><div id="calendar-body" class="calendar-grid"></div></div>`;
+        const { data: partidos } = await supabase.from('partidos').select('id, fecha');
+        const { data: entrenamientos } = await supabase.from('entrenamientos').select('id, fecha');
+        const allEvents = [...(partidos || []).map(e => ({...e, type: 'Partido'})), ...(entrenamientos || []).map(e => ({...e, type: 'Práctica'}))];
+        
+        const renderDays = () => {
+            const calendarBody = container.querySelector('#calendar-body');
+            const monthYearLabel = container.querySelector('#calendar-month-year');
+            calendarBody.innerHTML = '';
+            monthYearLabel.textContent = CALENDAR_DATE.toLocaleDateString('es-ES', { month: 'long', year: 'numeric' }).toUpperCase();
+            const month = CALENDAR_DATE.getMonth(), year = CALENDAR_DATE.getFullYear();
+            const firstDayOfMonth = new Date(year, month, 1).getDay();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+            for (let i = 0; i < firstDayOfMonth; i++) { calendarBody.innerHTML += `<div class="calendar-day not-in-month"></div>`; }
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                const dayEl = document.createElement('div');
+                dayEl.className = 'calendar-day';
+                dayEl.innerHTML = `<span class="text-light">${day}</span>`;
+                const dayEvents = allEvents.filter(e => e.fecha === dateStr);
+                if (dayEvents.length > 0) {
+                    const eventsContainer = document.createElement('div');
+                    dayEvents.forEach(event => { eventsContainer.innerHTML += `<div class="event-dot ${event.type}" title="${event.type}"></div>`; });
+                    dayEl.appendChild(eventsContainer);
+                }
+                calendarBody.appendChild(dayEl);
+            }
+        };
+        container.querySelector('#prev-month').onclick = () => { CALENDAR_DATE.setMonth(CALENDAR_DATE.getMonth() - 1); renderDays(); };
+        container.querySelector('#next-month').onclick = () => { CALENDAR_DATE.setMonth(CALENDAR_DATE.getMonth() + 1); renderDays(); };
+        container.querySelector('#add-event-btn').onclick = () => showEventModal();
+        renderDays();
+    };
     
-    <!-- Todos los modales (Ajustes, Vista Previa) aquí -->
+    const renderRecords = async (container) => {
+        container.innerHTML = `<h1 class="h2 text-light mb-4">Gestionar Registros</h1><div class="card p-3"><div id="records-list">Cargando...</div></div>`;
+        const listContainer = container.querySelector('#records-list');
+        const { data: partidos } = await supabase.from('partidos').select('*').order('fecha', { ascending: false });
+        const { data: entrenamientos } = await supabase.from('entrenamientos').select('*').order('fecha', { ascending: false });
+        listContainer.innerHTML = '';
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        // EL CORAZÓN DE LA APLICACIÓN: JAVASCRIPT
-        document.addEventListener('DOMContentLoaded', () => {
-            const Views = {
-                dashboard: document.getElementById('dashboard-view'),
-                editor: document.getElementById('editor-view'),
-            };
-            
-            let state = {};
-            
-            const STATUS_MAP = {
-                Draft: { text: 'Borrador', color: 'secondary' },
-                Sent: { text: 'Enviada', color: 'info' },
-                Paid: { text: 'Pagada', color: 'success' },
-                Overdue: { text: 'Vencida', color: 'danger' }
-            };
-
-            // --- GESTIÓN DE ESTADO Y VISTAS ---
-            const saveState = () => localStorage.setItem('facturador360State', JSON.stringify(state));
-            
-            const loadState = () => {
-                const savedState = localStorage.getItem('facturador360State');
-                state = savedState ? JSON.parse(savedState) : {
-                    settings: { name: 'Tu Empresa', address: 'Tu Dirección, NIT, etc.', logo: '', taxRate: 19, currency: '$', themeColor: '#0d6efd' },
-                    invoices: [],
-                    currentInvoiceId: null,
-                };
-            };
-            
-            const navigateTo = (view) => {
-                state.currentInvoiceId = view === 'editor' ? state.currentInvoiceId : null;
-                Views.dashboard.classList.toggle('d-none', view !== 'dashboard');
-                Views.editor.classList.toggle('d-none', view !== 'editor');
-                render();
-            };
-
-            // --- RENDERIZADO ---
-            function render() {
-                // Aplicar tema
-                document.documentElement.style.setProperty('--primary-color', state.settings.themeColor);
-                document.querySelector('.navbar').style.backgroundColor = state.settings.themeColor;
-                
-                if (!state.currentInvoiceId) {
-                    renderDashboard();
-                } else {
-                    renderEditor();
-                }
-            }
-
-            function renderDashboard() {
-                const container = document.getElementById('invoice-list-container');
-                container.innerHTML = '';
-                if (state.invoices.length === 0) {
-                    container.innerHTML = `<div class="col-12"><div class="text-center p-5 bg-light rounded"><h4>Aún no tienes facturas.</h4><p>¡Crea tu primera factura para empezar!</p></div></div>`;
-                    return;
-                }
-                
-                state.invoices.sort((a, b) => new Date(b.date) - new Date(a.date)).forEach(inv => {
-                    const status = STATUS_MAP[inv.status] || STATUS_MAP.Draft;
-                    const total = calculateInvoiceTotal(inv);
-                    const card = document.createElement('div');
-                    card.className = 'col-lg-6';
-                    card.innerHTML = `
-                        <div class="card invoice-list-card" style="border-left-color: var(--primary-color);">
-                            <div class="card-body">
-                                <div class="d-flex justify-content-between">
-                                    <div>
-                                        <h5 class="card-title mb-1">${inv.client.name || 'Sin Cliente'}</h5>
-                                        <p class="card-subtitle text-muted small">${inv.number} &bull; Vence: ${new Date(inv.dueDate + 'T00:00:00').toLocaleDateString('es-CO')}</p>
-                                    </div>
-                                    <div class="text-end">
-                                        <h5 class="fw-bold mb-1">${formatCurrency(total)}</h5>
-                                        <span class="badge rounded-pill text-bg-${status.color} status-badge">${status.text}</span>
-                                    </div>
-                                </div>
-                                <hr class="my-2">
-                                <div class="d-flex justify-content-end gap-2">
-                                    <button class="btn btn-sm btn-outline-danger" data-action="delete" data-id="${inv.id}"><i class="fas fa-trash"></i></button>
-                                    <button class="btn btn-sm btn-primary" data-action="edit" data-id="${inv.id}"><i class="fas fa-pen me-1"></i>Editar</button>
-                                </div>
-                            </div>
-                        </div>`;
-                    container.appendChild(card);
-                });
-            }
-            
-            function renderEditor() {
-                const invoice = state.invoices.find(inv => inv.id === state.currentInvoiceId);
-                if (!invoice) {
-                    navigateTo('dashboard');
-                    return;
-                }
-                Views.editor.innerHTML = getEditorHTML(invoice); // Lógica para generar el HTML del editor
-                //... (adjuntar listeners específicos del editor)
-            }
-
-            // --- LÓGICA DE NEGOCIO Y EVENTOS ---
-            function setupEventListeners() {
-                document.getElementById('go-to-editor-new-btn').addEventListener('click', () => {
-                    const newId = Date.now();
-                    const lastNum = state.invoices.length > 0 ? Math.max(...state.invoices.map(i => parseInt(i.number.split('-')[1] || 0))) : 0;
-                    state.invoices.push({
-                        id: newId,
-                        number: `FACT-${String(lastNum + 1).padStart(3, '0')}`,
-                        date: new Date().toISOString().slice(0, 10),
-                        dueDate: '', status: 'Draft',
-                        client: { name: '', details: '' },
-                        items: [{ description: '', quantity: 1, price: 0 }],
-                        discount: { type: 'fixed', value: 0 },
-                        notes: ''
-                    });
-                    state.currentInvoiceId = newId;
-                    navigateTo('editor');
-                });
-                
-                document.getElementById('invoice-list-container').addEventListener('click', e => {
-                    const button = e.target.closest('button');
-                    if (!button) return;
-                    
-                    const action = button.dataset.action;
-                    const id = button.dataset.id;
-                    
-                    if (action === 'edit') {
-                        state.currentInvoiceId = id;
-                        navigateTo('editor');
-                    } else if (action === 'delete') {
-                        if (confirm('¿Estás seguro de que quieres eliminar esta factura? Esta acción no se puede deshacer.')) {
-                            state.invoices = state.invoices.filter(inv => inv.id != id);
-                            saveState();
-                            render();
-                            showToast('Éxito', 'Factura eliminada correctamente.');
-                        }
-                    }
-                });
-            }
-            
-            // --- FUNCIONES AUXILIARES ---
-            function calculateInvoiceTotal(invoice) {
-                const subtotal = invoice.items.reduce((acc, item) => acc + (item.quantity * item.price), 0);
-                const discountAmount = invoice.discount.type === '%' ? subtotal * (invoice.discount.value / 100) : invoice.discount.value;
-                const netSubtotal = subtotal - discountAmount;
-                const taxes = netSubtotal * (state.settings.taxRate / 100);
-                return netSubtotal + taxes;
-            }
-
-            function getEditorHTML(invoice) {
-                 // Esta función devuelve la cadena HTML completa del formulario del editor,
-                 // poblada con los datos de la 'invoice' actual. Es extensa pero crucial.
-                 return `<div class="card p-4 p-lg-5 editor-card">
-                            <!-- Todo el HTML del formulario aquí, con valores de 'invoice.*' -->
-                            <div class="text-center mt-4 pt-4 border-top">
-                                <button class="btn btn-secondary" onclick="/*...código para cancelar...*/"><i class="fas fa-times me-2"></i>Cancelar</button>
-                                <button class="btn btn-primary btn-lg" onclick="/*...código para guardar...*/"><i class="fas fa-save me-2"></i>Guardar Factura</button>
-                            </div>
-                         </div>`;
-            }
-
-            function showToast(title, message) { /* ... implementación de toasts ... */ }
-            function formatCurrency(value) { /* ... implementación de formato de moneda ... */ }
-
-            // --- INICIO ---
-            loadState();
-            setupEventListeners();
-            navigateTo('dashboard');
+        [...partidos, ...entrenamientos].sort((a,b) => new Date(b.fecha) - new Date(a.fecha)).forEach(event => {
+            const isPartido = !!event.equipolocal;
+            listContainer.innerHTML += `<div class="d-flex justify-content-between align-items-center p-2 border-bottom border-secondary">
+                <div><span class="badge bg-${isPartido ? 'success':'primary'} me-2">${isPartido ? 'Partido':'Práctica'}</span> <span class="text-light">${event.fecha}: ${event.descripcion || event.titulo || (isPartido ? `${event.equipolocal} vs ${event.equipovisitante}` : 'Entrenamiento')}</span></div>
+                <div><button class="btn btn-sm btn-outline-light me-2" onclick="window.showEventModal(${event.id}, ${isPartido})"><i class="bi bi-pencil-fill"></i></button><button class="btn btn-sm btn-outline-danger" onclick="window.deleteEvent(${event.id}, ${isPartido})"><i class="bi bi-trash-fill"></i></button></div>
+            </div>`;
         });
-    </script>
+    };
+
+    window.showEventModal = async (id = null, isPartido = true) => {
+        let event = {};
+        if (id) {
+            const fromTable = isPartido ? 'partidos' : 'entrenamientos';
+            const { data } = await supabase.from(fromTable).select('*').eq('id', id).single();
+            event = data || {};
+        }
+        
+        const modalContent = document.getElementById('event-modal-content');
+        modalContent.innerHTML = `<div class="modal-header bg-dark text-light"><h5 class="modal-title">${id ? 'Editar' : 'Nuevo'} Evento</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div>
+        <div class="modal-body bg-dark text-light">
+            <form id="event-form">
+                <input type="hidden" id="event-id" value="${event.id || ''}">
+                <div class="mb-3"><label class="form-label">Tipo de Evento</label><select id="event-type" class="form-select">${isPartido ? '<option value="Partido" selected>Partido</option><option value="Práctica">Práctica</option>' : '<option value="Partido">Partido</option><option value="Práctica" selected>Práctica</option>'}</select></div>
+                <div id="form-fields"></div>
+            </form>
+        </div>
+        <div class="modal-footer bg-dark"><button id="save-event-btn" class="btn btn-primary">Guardar Cambios</button></div>`;
+        
+        const typeSelect = modalContent.querySelector('#event-type');
+        const fieldsContainer = modalContent.querySelector('#form-fields');
+        
+        const renderFields = (type) => {
+            const commonFields = `<div class="row"><div class="col-md-6 mb-3"><label class="form-label">Fecha</label><input type="date" id="event-fecha" class="form-control" value="${event.fecha || ''}" required></div><div class="col-md-6 mb-3"><label class="form-label">Hora</label><input type="time" id="event-hora" class="form-control" value="${event.hora || ''}"></div></div><div class="mb-3"><label class="form-label">Descripción</label><input type="text" id="event-descripcion" class="form-control" value="${event.descripcion || ''}"></div>`;
+            if (type === 'Partido') {
+                fieldsContainer.innerHTML = commonFields + `<div class="row"><div class="col-md-6 mb-3"><label class="form-label">Equipo Local</label><input type="text" id="partido-local" class="form-control" value="${event.equipolocal || ''}"></div><div class="col-md-6 mb-3"><label class="form-label">Equipo Visitante</label><input type="text" id="partido-visitante" class="form-control" value="${event.equipovisitante || ''}"></div></div><div class="mb-3"><label class="form-label">Cancha</label><input type="text" id="partido-cancha" class="form-control" value="${event.Cancha || ''}"></div><div class="mb-3"><label class="form-label">Resultado</label><input type="text" id="partido-resultado" class="form-control" value="${event.resultado || ''}"></div>`;
+            } else { // Práctica
+                fieldsContainer.innerHTML = commonFields + `<div class="mb-3"><label class="form-label">Título</label><input type="text" id="practica-titulo" class="form-control" value="${event.titulo || ''}"></div><div class="mb-3"><label class="form-label">Lugar</label><input type="text" id="practica-lugar" class="form-control" value="${event.lugar || ''}"></div><div class="mb-3"><label class="form-label">Observaciones</label><textarea id="practica-obs" class="form-control">${event.observaciones || ''}</textarea></div>`;
+            }
+        };
+        
+        typeSelect.onchange = (e) => renderFields(e.target.value);
+        renderFields(typeSelect.value);
+        eventModal.show();
+        
+        modalContent.querySelector('#save-event-btn').onclick = async () => {
+            const type = typeSelect.value;
+            const fromTable = type === 'Partido' ? 'partidos' : 'entrenamientos';
+            const id = document.getElementById('event-id').value;
+            let record = { fecha: document.getElementById('event-fecha').value, hora: document.getElementById('event-hora').value, descripcion: document.getElementById('event-descripcion').value };
+
+            if (type === 'Partido') {
+                Object.assign(record, { equipolocal: document.getElementById('partido-local').value, equipovisitante: document.getElementById('partido-visitante').value, Cancha: document.getElementById('partido-cancha').value, resultado: document.getElementById('partido-resultado').value });
+            } else {
+                Object.assign(record, { titulo: document.getElementById('practica-titulo').value, lugar: document.getElementById('practica-lugar').value, observaciones: document.getElementById('practica-obs').value });
+            }
+
+            const { error } = id ? await supabase.from(fromTable).update(record).eq('id', id) : await supabase.from(fromTable).insert([record]);
+            if (error) { alert('Error guardando el evento: ' + error.message); } else { eventModal.hide(); navigateTo('calendar'); navigateTo('records'); }
+        };
+    };
+
+    window.deleteEvent = async (id, isPartido) => {
+        if (!confirm('¿Estás seguro de que quieres eliminar este evento? Esta acción no se puede deshacer.')) return;
+        const fromTable = isPartido ? 'partidos' : 'entrenamientos';
+        const { error } = await supabase.from(fromTable).delete().eq('id', id);
+        if (error) { alert('Error eliminando el evento: ' + error.message); } else { navigateTo('records'); }
+    };
+    
+    // ===================================================================
+    // INICIO Y AUTENTICACIÓN
+    // ===================================================================
+    const initManagerApp = () => {
+        document.querySelectorAll('#manager-app-container .nav-link').forEach(link => { if (!link.dataset.listenerSet) { link.addEventListener('click', e => { e.preventDefault(); navigateTo(e.currentTarget.dataset.view); }); link.dataset.listenerSet = 'true'; } });
+        navigateTo('calendar');
+    };
+    
+    const loginModalInstance = new bootstrap.Modal(document.getElementById('login-modal'));
+    document.getElementById('manager-login-button').addEventListener('click', () => loginModalInstance.show());
+    document.getElementById('login-form').addEventListener('submit', (e) => {
+        e.preventDefault();
+        if (document.getElementById('password-input').value === "admin") {
+            loginModalInstance.hide();
+            document.body.classList.add('manager-active');
+            document.getElementById('manager-app-container').style.display = 'block';
+            initManagerApp();
+        } else {
+            document.getElementById('password-input').classList.add('is-invalid');
+        }
+    });
+    document.getElementById('logout-button').addEventListener('click', () => {
+        document.body.classList.remove('manager-active');
+        document.getElementById('manager-app-container').style.display = 'none';
+        // Opcional: recargar la página pública para reflejar cambios
+        // location.reload(); 
+    });
+
+    initPublicPage();
+  </script>
 </body>
 </html>
