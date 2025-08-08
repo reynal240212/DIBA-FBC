@@ -117,10 +117,10 @@ async function initDashboard() {
     new Chart(document.getElementById('topScorersChart'), {
         type: 'bar',
         data: {
-            labels: ['L. Suarez', 'E. Cavani', 'J. Rodriguez', 'Neymar JR'], // Reemplazar con datos reales
+            labels: ['sebastian', 'Mario Perez', 'Rey David', 'isaac Ventura',"Juan Alvarez"], // Reemplazar con datos reales
             datasets: [{
                 label: 'Goles',
-                data: [15, 11, 8, 5], // Reemplazar con datos reales
+                data: [4,3,2,2,2], // Reemplazar con datos reales
                 backgroundColor: '#198754'
             }]
         },
