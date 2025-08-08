@@ -557,6 +557,64 @@ img {
 /* --------------------------------------
         TARJETA DE PARTIDO MEJORADA
 -------------------------------------- */
+/* styles.css - AÑADIR AL FINAL */
+
+/* =========================================
+   ESTILOS PERSONALIZADOS PARA VIS.JS TIMELINE
+========================================= */
+
+/* Estilo general del timeline */
+.vis-timeline {
+  border: 2px solid var(--medium-gray);
+  border-radius: var(--border-radius-md);
+  font-family: var(--font-primary), 'Arial', sans-serif;
+  background-color: #fcfdff;
+}
+
+/* Items en el timeline */
+.vis-item {
+  border-color: var(--primary);
+  background-color: var(--primary-darker);
+  color: var(--white);
+  border-radius: var(--border-radius-sm);
+  padding: 8px;
+  font-weight: 600;
+  box-shadow: 0 2px 5px var(--shadow);
+  transition: all var(--transition-fast);
+}
+
+.vis-item:hover {
+    background-color: var(--accent);
+    color: var(--primary-dark);
+    border-color: var(--accent);
+    box-shadow: 0 4px 10px var(--shadow-dark);
+}
+
+/* Estilos específicos para Partidos y Entrenamientos */
+.vis-item.item-partido {
+  background-color: var(--primary);
+  border-color: var(--primary-dark);
+}
+
+.vis-item.item-entrenamiento {
+  background-color: #198754; /* Color success de Bootstrap */
+  border-color: #157347;
+  border-radius: 50%; /* Entrenamientos como puntos */
+}
+
+/* Línea de tiempo actual */
+.vis-current-time {
+  background-color: var(--accent);
+  width: 2px;
+}
+
+/* Cabecera del tiempo */
+.vis-time-axis .vis-grid.vis-major {
+  border-color: #e0e0e0;
+}
+.vis-time-axis .vis-text {
+  color: #333;
+}
 .match-card {
   background: var(--white);
   border-radius: var(--border-radius-lg);
