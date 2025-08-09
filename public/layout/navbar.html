@@ -1,71 +1,88 @@
+<!-- === INICIO: CÓDIGO CORREGIDO PARA layout/navbar.html === -->
 <nav class="navbar navbar-expand-lg navbar-dark fixed-top transparent">
   <div class="container">
-    <a class="navbar-brand" href="index.html">
-      <img src="images/ESCUDO.png" alt="Logo DIBA FBC" height="40" />
-      DIBA FBC
+    <!-- Logo del Club -->
+    <a class="navbar-brand d-flex align-items-center" href="index.html">
+      <img src="images/ESCUDO.png" alt="Logo DIBA FBC" height="40" class="me-2" />
+      <span>DIBA FBC</span>
     </a>
 
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-      aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
+    <!-- Botón Hamburguesa para Móvil -->
+    <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#mobileMenuOffcanvas" aria-controls="mobileMenuOffcanvas" aria-label="Toggle navigation">
+      <i class="fas fa-bars"></i>
     </button>
 
-    <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
-      <ul class="navbar-nav">
+    <!-- Menú para Escritorio (Se oculta en móvil) -->
+    <div class="collapse navbar-collapse justify-content-end" id="desktopNavbar">
+      <ul class="navbar-nav align-items-center">
         <li class="nav-item">
-          <a class="nav-link" href="index.html">
-            <i class="fas fa-home"></i> Inicio
-          </a>
+          <a class="nav-link" href="index.html"><i class="fas fa-home me-1"></i> Inicio</a>
         </li>
-
         <li class="nav-item">
-          <a class="nav-link" href="Historia.html">
-            <i class="fas fa-history"></i> Historia
-          </a>
+          <a class="nav-link" href="Historia.html"><i class="fas fa-history me-1"></i> Historia</a>
         </li>
-
-        <!-- Ejemplo comentado, puedes activar cuando lo necesites -->
-        <!--
         <li class="nav-item">
-          <a class="nav-link" href="EstadisticasCat2012.html">
-            <i class="fas fa-chart-bar"></i> Estadísticas
-          </a>
+          <a class="nav-link" href="vision_mision.html"><i class="fas fa-file-alt me-1"></i> Desarrollo</a>
         </li>
-        -->
-
-        <li class="nav-item">
-          <a class="nav-link" href="vision_mision.html">
-            <i class="fas fa-file-alt"></i> Desarrollo deportivo
-          </a>
-        </li>
-
         <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-            data-bs-toggle="dropdown" aria-expanded="false">
-            <i class="fas fa-futbol"></i> Partidos / Entrenamiento
+          <a class="nav-link dropdown-toggle" href="#" id="desktopDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="fas fa-futbol me-1"></i> Partidos / Ent.
           </a>
-          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="desktopDropdown">
             <li><a class="dropdown-item" href="partidos.html">Calendario</a></li>
             <li><a class="dropdown-item" href="ficha.html">Plantilla</a></li>
             <li><a class="dropdown-item" href="analisis.html">Entrenamiento</a></li>
-            <li><a class="dropdown-item" href="KidsSoccerPradera.html">kidssoccer</a></li>
-            <li><a class="dropdown-item" href="torneo_suroccidente.html">Torneo suroccidente</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="KidsSoccerPradera.html">Kids Soccer</a></li>
+            <li><a class="dropdown-item" href="torneo_suroccidente.html">Torneo Suroccidente</a></li>
           </ul>
         </li>
-
         <li class="nav-item">
-          <a class="nav-link" href="contacto.html">
-            <i class="fas fa-envelope"></i> Contacto
-          </a>
+          <a class="nav-link" href="contacto.html"><i class="fas fa-envelope me-1"></i> Contacto</a>
         </li>
-        <button onclick="cerrarSesion()">Cerrar sesión</button>
-
-<script type="module">
-  import { cerrarSesion } from "../scripts/auth.js";
-  window.cerrarSesion = cerrarSesion;
-</script>
+        <!-- Botón de Cerrar Sesión para Escritorio -->
+        <li class="nav-item ms-lg-3">
+          <button id="logoutBtnDesktop" class="btn btn-logout">Cerrar sesión</button>
+        </li>
       </ul>
     </div>
   </div>
 </nav>
 
+<!-- Menú Lateral Deslizable (Off-canvas) para Móvil -->
+<div class="offcanvas offcanvas-start text-bg-dark offcanvas-nav" tabindex="-1" id="mobileMenuOffcanvas" aria-labelledby="mobileMenuLabel">
+  <div class="offcanvas-header border-bottom border-secondary">
+    <h5 class="offcanvas-title" id="mobileMenuLabel">DIBA FBC Menú</h5>
+    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body">
+    <ul class="navbar-nav flex-grow-1 pe-3">
+      <li class="nav-item">
+        <a class="nav-link fs-5" href="index.html"><i class="fas fa-home fa-fw me-2"></i>Inicio</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link fs-5" href="Historia.html"><i class="fas fa-history fa-fw me-2"></i>Historia</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link fs-5" href="vision_mision.html"><i class="fas fa-file-alt fa-fw me-2"></i>Desarrollo</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link fs-5" href="contacto.html"><i class="fas fa-envelope fa-fw me-2"></i>Contacto</a>
+      </li>
+      
+      <!-- Sección del menú desplegable adaptada para móvil -->
+      <li class="mt-3 pt-3 border-top border-secondary"><span class="nav-link disabled text-white-50">Partidos y Torneos</span></li>
+      <li><a class="dropdown-item" href="partidos.html">Calendario</a></li>
+      <li><a class="dropdown-item" href="ficha.html">Plantilla</a></li>
+      <li><a class="dropdown-item" href="analisis.html">Entrenamiento</a></li>
+      <li><a class="dropdown-item" href="KidsSoccerPradera.html">Kids Soccer</a></li>
+      <li><a class="dropdown-item" href="torneo_suroccidente.html">Torneo Suroccidente</a></li>
+    </ul>
+    
+    <!-- Botón de Cerrar Sesión para Móvil al final del menú -->
+    <div class="mt-auto pt-3 border-top border-secondary">
+        <button id="logoutBtnMobile" class="btn btn-logout w-100">Cerrar sesión</button>
+    </div>
+  </div>
+</div>
+<!-- === FIN: CÓDIGO CORREGIDO PARA layout/navbar.html === -->

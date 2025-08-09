@@ -233,107 +233,68 @@ img {
   background-color: var(--accent);
 }
 
-/* --- NAVBAR PRINCIPAL --- */
-.navbar {
-  position: fixed; /* Mantenemos el navbar pegado a la pantalla */
-  top: 0;
-  left: 0;
-  width: 100%;
-  z-index: 1030; /* Un z-index alto para que esté por encima de todo */
-  background-color: var(--primary-dark) !important; /* Forzamos el color de fondo */
-  padding: 0.5rem 1rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+/* --- 2. Navbar Principal - Ajustes --- */
+
+/* Esconde el botón hamburguesa por defecto en pantallas grandes */
+@media (min-width: 992px) {
+  .navbar-toggler {
+    display: none;
+  }
 }
 
-/* --- LOGO --- */
-.navbar-brand img {
-  width: 35px;
-  height: auto;
-  transition: transform 0.3s ease;
-}
-
-.navbar-brand img:hover {
-  transform: scale(1.1) rotate(-5deg);
-}
-
-/* --- ENLACES DE NAVEGACIÓN (Reglas más específicas para evitar !important) --- */
+/* Enlaces del navbar de escritorio (refuerzo) */
 .navbar .nav-link {
-  font-weight: 600;
-  color: rgba(255, 255, 255, 0.85); /* Un blanco un poco más suave para los enlaces */
-  margin: 0 0.25rem;
-  padding: 0.75rem 0.5rem;
-  position: relative;
-  text-decoration: none;
-  transition: color 0.3s ease;
+  padding: 0.5rem 0.75rem;
 }
 
-/* Efecto hover/activo para enlaces */
-.navbar .nav-link:hover,
-.navbar .nav-link.active {
-  color: var(--white);
-}
-
-/* Línea animada de acento */
-.navbar .nav-link::after {
-  content: '';
-  position: absolute;
-  bottom: 0.5rem; /* Ajusta la posición de la línea */
-  left: 50%;
-  transform: translateX(-50%);
-  width: 0;
-  height: 2px;
-  background-color: var(--accent);
-  transition: width 0.3s ease-in-out;
-}
-
-.navbar .nav-link:hover::after,
-.navbar .nav-link.active::after {
-  width: 60%; /* La línea aparece al interactuar */
-}
-
-/* --- DROPDOWN / SUBMENÚ (Reglas más específicas) --- */
-.navbar .dropdown-menu {
-  display: none;
-  position: absolute;
-  top: 100%;
-  left: 0;
-  background-color: var(--primary-dark);
-  min-width: 200px;
-  box-shadow: 0 8px 16px rgba(0,0,0,0.3);
-  z-index: 1031;
-  border-radius: 0 0 8px 8px; /* Redondea solo las esquinas inferiores */
-  padding: 10px 0;
+/* Estilo del botón de cerrar sesión del navbar */
+.btn-logout {
+  background-color: var(--accent, #e9d8a6);
+  color: var(--primary-dark, #002a40);
+  font-weight: bold;
+  border-radius: 20px;
+  padding: 0.375rem 1rem;
+  transition: all 0.3s ease;
   border: none;
-  border-top: 3px solid var(--accent);
-  opacity: 0;
-  transform: translateY(10px);
-  transition: opacity 0.3s ease, transform 0.3s ease;
-  pointer-events: none;
+}
+.btn-logout:hover {
+  background-color: white;
+  color: var(--primary-dark, #002a40);
+  transform: scale(1.05);
 }
 
-.navbar .nav-item.dropdown:hover .dropdown-menu {
-    display: block;
-    opacity: 1;
-    transform: translateY(0);
-    pointer-events: auto;
+
+/* --- 3. Estilos del Menú Lateral (Off-canvas) --- */
+.offcanvas-nav {
+  /* Usamos las variables que ya tienes en tu CSS para mantener consistencia */
+  background-color: var(--primary-dark, #002a40);
+  --bs-offcanvas-width: 280px; /* Ancho del menú lateral */
 }
 
-/* Items del Dropdown */
-.navbar .dropdown-item {
-  color: var(--white);
-  padding: 10px 20px;
+/* Título y cabecera del menú lateral */
+.offcanvas-nav .offcanvas-title {
+  color: var(--accent, #e9d8a6);
+  font-weight: bold;
+}
+
+/* Los enlaces dentro del menú lateral (los hace más grandes y táctiles) */
+.offcanvas-nav .nav-link, 
+.offcanvas-nav .dropdown-item {
+  color: rgba(255, 255, 255, 0.85) !important;
+  padding: 0.8rem 1rem;
+  border-radius: 5px;
+  transition: all 0.3s ease;
   font-weight: 500;
-  background-color: transparent; /* Asegura que el fondo sea transparente */
-  transition: background-color 0.3s ease, padding-left 0.3s ease;
 }
 
-/* CORRECCIÓN: Se usaban variables --darker-blue y --gold que no estaban definidas.
-   Las he reemplazado por variables que sí existen en tu paleta. */
-.navbar .dropdown-item:hover,
-.navbar .dropdown-item:focus {
-  background-color: var(--primary-light); /* Un color azul más claro al pasar el mouse */
-  color: var(--white);
-  padding-left: 25px;
+/* Efecto hover/focus para los enlaces laterales */
+.offcanvas-nav .nav-link:hover,
+.offcanvas-nav .nav-link:focus,
+.offcanvas-nav .dropdown-item:hover,
+.offcanvas-nav .dropdown-item:focus {
+  background-color: var(--primary-light, #0077b6);
+  color: white !important;
+  transform: translateX(4px);
 }
 
 /* Hero */
