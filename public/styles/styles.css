@@ -73,6 +73,7 @@ body {
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  padding-top: 5rem; /* Espacio para el navbar fijo */
 }
 
 /* Tipografía mejorada */
@@ -232,116 +233,107 @@ img {
   background-color: var(--accent);
 }
 
-/* --- Navbar Principal --- */
+/* --- NAVBAR PRINCIPAL --- */
 .navbar {
-  position: fixed;
+  position: fixed; /* Mantenemos el navbar pegado a la pantalla */
   top: 0;
   left: 0;
   width: 100%;
-  z-index: 1000;
-  background-color: var(--primary-dark);
-  padding: var(--space-sm);
-  transition: background-color var(--transition-normal); /* Transición solo al color de fondo */
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); /* Sombra más suave */
+  z-index: 1030; /* Un z-index alto para que esté por encima de todo */
+  background-color: var(--primary-dark) !important; /* Forzamos el color de fondo */
+  padding: 0.5rem 1rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
-/* --- Logo --- */
+/* --- LOGO --- */
 .navbar-brand img {
   width: 35px;
   height: auto;
-  transition: transform var(--transition-normal);
-  will-change: transform; /* Optimización para la animación */
+  transition: transform 0.3s ease;
 }
 
 .navbar-brand img:hover {
-  transform: scale(1.1) rotate(-5deg); /* Añade un toque más dinámico */
+  transform: scale(1.1) rotate(-5deg);
 }
 
-/* --- Enlaces de Navegación --- */
-.nav-link {
+/* --- ENLACES DE NAVEGACIÓN (Reglas más específicas para evitar !important) --- */
+.navbar .nav-link {
   font-weight: 600;
-  color: var(--white) !important;
-  margin: 0 var(--space-xs);
-  padding: var(--space-xs) 0;
+  color: rgba(255, 255, 255, 0.85); /* Un blanco un poco más suave para los enlaces */
+  margin: 0 0.25rem;
+  padding: 0.75rem 0.5rem;
   position: relative;
-  text-decoration: none; /* Asegura que no haya subrayado por defecto */
-  transition: color var(--transition-normal);
+  text-decoration: none;
+  transition: color 0.3s ease;
 }
 
-.nav-link::after {
+/* Efecto hover/activo para enlaces */
+.navbar .nav-link:hover,
+.navbar .nav-link.active {
+  color: var(--white);
+}
+
+/* Línea animada de acento */
+.navbar .nav-link::after {
   content: '';
   position: absolute;
-  bottom: -2px; /* Ligeramente separado para mejor visibilidad */
-  left: 50%; /* Inicia en el centro */
-  transform: translateX(-50%); /* Centra la línea */
+  bottom: 0.5rem; /* Ajusta la posición de la línea */
+  left: 50%;
+  transform: translateX(-50%);
   width: 0;
   height: 2px;
   background-color: var(--accent);
-  transition: width 0.4s ease-in-out; /* Transición más suave */
+  transition: width 0.3s ease-in-out;
 }
 
-/* Efecto de subrayado al pasar el mouse o cuando está activo */
-.nav-link:hover::after,
-.nav-link.active::after {
-  width: 100%;
+.navbar .nav-link:hover::after,
+.navbar .nav-link.active::after {
+  width: 60%; /* La línea aparece al interactuar */
 }
 
-.nav-link:hover {
-    color: var(--accent) !important; /* Cambia el color del texto al pasar el mouse */
-}
-
-
-/* --- Dropdown / Submenú --- */
-
-/* Contenedor del dropdown */
-.nav-item.dropdown {
-    position: relative;
-}
-
-.dropdown-menu {
-  display: none; /* Oculto por defecto */
+/* --- DROPDOWN / SUBMENÚ (Reglas más específicas) --- */
+.navbar .dropdown-menu {
+  display: none;
   position: absolute;
-  top: 100%; /* Se posiciona justo debajo del nav-item */
+  top: 100%;
   left: 0;
   background-color: var(--primary-dark);
-  min-width: 200px; /* Ancho mínimo un poco mayor */
-  box-shadow: 0 8px 16px rgba(0,0,0,0.2);
-  z-index: 1100; /* Mayor que el navbar para superponerse */
-  border-radius: 8px;
+  min-width: 200px;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+  z-index: 1031;
+  border-radius: 0 0 8px 8px; /* Redondea solo las esquinas inferiores */
   padding: 10px 0;
-  list-style: none; /* Remueve viñetas si se usa con <ul> */
-  border-top: 2px solid var(--accent); /* Detalle visual */
-  opacity: 0; /* Para animación de aparición */
-  transform: translateY(10px); /* Para animación de desplazamiento */
+  border: none;
+  border-top: 3px solid var(--accent);
+  opacity: 0;
+  transform: translateY(10px);
   transition: opacity 0.3s ease, transform 0.3s ease;
-  pointer-events: none; /* Evita interacciones cuando está oculto */
+  pointer-events: none;
 }
 
-/* Muestra el submenú al pasar el mouse sobre el elemento padre */
-.nav-item.dropdown:hover .dropdown-menu,
-.nav-item.dropdown:focus-within .dropdown-menu { /* Mejora para accesibilidad (teclado) */
+.navbar .nav-item.dropdown:hover .dropdown-menu {
     display: block;
     opacity: 1;
     transform: translateY(0);
-    pointer-events: auto; /* Permite interacciones al mostrarse */
+    pointer-events: auto;
 }
 
-/* --- Ítems del Dropdown --- */
-.dropdown-item {
+/* Items del Dropdown */
+.navbar .dropdown-item {
   color: var(--white);
-  padding: 12px 20px;
-  text-decoration: none;
-  display: block;
+  padding: 10px 20px;
   font-weight: 500;
-  transition: background-color 0.3s ease, color 0.3s ease, padding-left 0.3s ease;
+  background-color: transparent; /* Asegura que el fondo sea transparente */
+  transition: background-color 0.3s ease, padding-left 0.3s ease;
 }
 
-.dropdown-item:hover,
-.dropdown-item:focus { /* Añadido :focus para accesibilidad */
-  background-color: var(--darker-blue);
-  color: var(--gold);
-  padding-left: 25px; /* Pequeño desplazamiento para feedback visual */
-  outline: none; /* Remueve el borde de foco, ya que tenemos otros estilos */
+/* CORRECCIÓN: Se usaban variables --darker-blue y --gold que no estaban definidas.
+   Las he reemplazado por variables que sí existen en tu paleta. */
+.navbar .dropdown-item:hover,
+.navbar .dropdown-item:focus {
+  background-color: var(--primary-light); /* Un color azul más claro al pasar el mouse */
+  color: var(--white);
+  padding-left: 25px;
 }
 
 /* Hero */
