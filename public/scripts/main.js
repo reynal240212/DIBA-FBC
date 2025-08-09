@@ -135,3 +135,4 @@ async function signOut() {
     document.getElementById('btnBackToTop').onclick = function() {
       window.scrollTo({top:0, behavior:'smooth'});
     };
+    
