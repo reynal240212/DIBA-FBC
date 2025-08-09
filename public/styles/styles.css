@@ -955,23 +955,25 @@ img {
   letter-spacing: 1px;
   margin-top: var(--space-xs);
 }
-/* ======================================
-/* ========================
-   FOOTER - DIBA FBC
-========================= */
+/* =============================================
+   BLOQUE DE FOOTER CORREGIDO Y MEJORADO
+============================================= */
 
+/* Contenedor principal del footer */
 .footer {
-  background-color: var(--primary-dark);
-  color: var(--light-gray);
-  padding: var(--space-xl) 0;
+  /* Se añade !important para asegurar que sobreescriba cualquier clase de Bootstrap como .bg-light */
+  background-color: var(--primary-dark) !important;
+  color: rgba(255, 255, 255, 0.7); /* Un gris claro suave para el texto general, más legible que el blanco puro */
+  padding: 3rem 0; /* Asegura un padding generoso */
+  margin-top: auto; /* IMPORTANTE: empuja el footer al final de la página si el contenido es corto */
 }
 
-/* Logo dentro del footer */
+/* Logo (sin cambios necesarios) */
 .footer-logo {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: 0 auto var(--space-md);
+  margin: 0 auto var(--space-md, 1.5rem);
 }
 
 .footer-logo img {
@@ -980,19 +982,21 @@ img {
   width: auto;
 }
 
-/* Secciones de enlaces */
+/* Secciones de enlaces (sin cambios en la estructura) */
 .footer-links {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: var(--space-lg);
-  margin-bottom: var(--space-lg);
+  gap: var(--space-lg, 2rem);
+  margin-bottom: var(--space-lg, 2rem);
 }
 
+/* Títulos de las columnas de enlaces */
 .footer-links h5 {
-  color: var(--accent);
-  margin-bottom: var(--space-md);
+  color: var(--accent); /* Tu color de acento está bien aquí */
+  margin-bottom: var(--space-md, 1.5rem);
   position: relative;
-  padding-bottom: var(--space-xs);
+  padding-bottom: var(--space-xs, 0.5rem);
+  font-weight: bold;
 }
 
 .footer-links h5::after {
@@ -1005,82 +1009,77 @@ img {
   background-color: var(--accent);
 }
 
+/* Lista de enlaces (sin cambios) */
 .footer-links ul {
   list-style: none;
   padding-left: 0;
   margin: 0;
 }
-
 .footer-links li {
-  margin-bottom: var(--space-xs);
+  margin-bottom: var(--space-xs, 0.5rem);
 }
 
+/* ===== CORRECCIÓN CLAVE: ENLACES DEL FOOTER ===== */
 .footer-links a {
-  color: var(--white);
-  text-decoration: none;
-  transition: color var(--transition-fast);
+  /* Se usa !important para ganar la batalla contra el color azul por defecto de Bootstrap */
+  color: rgba(255, 255, 255, 0.8) !important;
+  text-decoration: none !important; /* También quitamos el subrayado por defecto */
+  transition: all 0.3s ease; /* Transición más completa */
 }
 
 .footer-links a:hover {
-  color: var(--accent);
-  text-decoration: underline;
+  color: var(--white) !important; /* El color se vuelve blanco puro al pasar el mouse */
+  padding-left: 5px; /* Pequeño desplazamiento a la derecha para un efecto visual agradable */
+  text-decoration: none !important;
 }
 
-/* Íconos de redes sociales */
+
+/* Íconos de redes sociales (sin cambios, tu código ya es bueno) */
 .social-links {
   display: flex;
-  gap: var(--space-sm);
-  margin-top: var(--space-md);
-  justify-content: center;
+  gap: var(--space-sm, 1rem);
+  margin-top: var(--space-md, 1.5rem);
 }
-
-.social-links a {
+/* Se añade el selector .footer para más especificidad */
+.footer .social-links a {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 40px;
-  height: 40px;
+  width: 45px;
+  height: 45px;
   background-color: rgba(255, 255, 255, 0.1);
   border-radius: 50%;
   color: var(--white);
-  transition: all var(--transition-normal);
+  transition: all var(--transition-normal, 0.3s);
+  font-size: 1.2rem;
 }
-
-.social-links a:hover {
+.footer .social-links a:hover {
   background-color: var(--accent);
   color: var(--primary-dark);
-  transform: translateY(-3px);
+  transform: translateY(-4px);
 }
 
-/* Texto del copyright */
-.copyright {
+/* Texto del copyright (se hace un poco más específico) */
+.footer .copyright {
   text-align: center;
-  padding-top: var(--space-md);
+  padding-top: var(--space-md, 1.5rem);
   border-top: 1px solid rgba(255, 255, 255, 0.1);
-  margin-top: var(--space-lg);
+  margin-top: var(--space-lg, 2rem);
   font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.6);
 }
 
-/* Estilo de texto personalizado para los enlaces legales */
-.text-warning {
-  color: var(--accent);
-}
-
-.text-warning:hover {
-  color: var(--white);
-  text-decoration: underline;
-}
-
-/* Responsive padding extra en pantallas pequeñas */
+/* Responsive (se hace más específico) */
 @media (max-width: 576px) {
   .footer {
-    text-align: center;
+    text-align: center; /* Centra todo el texto del footer en pantallas pequeñas */
   }
-  .footer-links {
-    text-align: center;
+  .footer-links h5::after {
+    left: 50%; /* Centra la línea decorativa debajo de los títulos */
+    transform: translateX(-50%);
   }
   .social-links {
-    justify-content: center;
+    justify-content: center; /* Centra los iconos de redes sociales */
   }
 }
 
