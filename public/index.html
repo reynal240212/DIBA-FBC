@@ -1,363 +1,234 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Inicio - DIBA FBC | Historia, Servicios y Más</title>
-    <link rel="icon" href="images/ESCUDO.ico" sizes="32x32" />
-
-    <meta name="description" content="Descubre la historia, los servicios y el equipo de DIBA FBC. Vive la pasión deportiva y conoce a nuestros patrocinadores, fundación y cuerpo técnico." />
-    <meta property="og:title" content="Inicio - DIBA FBC | Historia, Servicios y Más" />
-    <meta property="og:description" content="Descubre la historia, los servicios y el equipo de DIBA FBC. Vive la pasión deportiva y conoce a nuestros patrocinadores, fundación y cuerpo técnico." />
-    <meta property="og:image" content="https://diba-fbc.vercel.app/images/ESCUDO.png" />
-    <meta property="og:url" content="https://diba-fbc.vercel.app/" />
-    <meta property="og:type" content="website" />
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Inicio - DIBA FBC | Historia, Servicios y Más" />
-    <meta name="twitter:description" content="Descubre la historia, los servicios y el equipo de DIBA FBC." />
-    <meta name="twitter:image" content="https://diba-fbc.vercel.app/images/ESCUDO.png" />
-
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Arial:wght@400;700&display=swap" rel="stylesheet" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" />
-    <link rel="stylesheet" href="styles/styles.css" />
-    <link rel="stylesheet" href="styles/background-animation.css" />
-    <link rel="manifest" href="manifest.json" />
-
-    <style>
-        .background-animation {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-        }
-        #btnBackToTop {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            z-index: 1000;
-            display: none;
-        }
-        .next-match-card .team-logo {
-            width: 100px;
-            height: 100px;
-            object-fit: contain;
-        }
-        .next-match-card .vs-text {
-            font-size: 3rem;
-            font-weight: 900;
-            color: #e9ecef;
-        }
-        .table .highlight-row {
-            background-color: rgba(0, 119, 182, 0.1);
-            border-left: 4px solid #0077b6;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <title>Inicio - DIBA FBC | Historia, Servicios y Más</title>
+  <link rel="icon" href="images/ESCUDO.ico" sizes="32x32">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+  <script src="js/auth.js" defer></script>
+  <script src="js/dashboard.js" defer></script>
+  <head>
+  <!-- ... otros meta tags -->
+  <meta property="og:title" content="Inicio - DIBA FBC | Historia, Servicios y Más" />
+  <meta property="og:description" content="Descubre la historia, los servicios y el equipo de DIBA FBC. Vive la pasión deportiva y conoce a nuestros patrocinadores, fundación y cuerpo técnico." />
+  <meta property="og:image" content="https://diba-fbc.vercel.app/images/ESCUDO.png" /> <!-- URL absoluta a una imagen representativa -->
+  <meta property="og:url" content="https://diba-fbc.vercel.app/" />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Inicio - DIBA FBC | Historia, Servicios y Más" />
+  <meta name="twitter:description" content="Descubre la historia, los servicios y el equipo de DIBA FBC." />
+  <meta name="twitter:image" content="https://diba-fbc.vercel.app/images/ESCUDO.png" /> <!-- URL absoluta -->
+  <!-- ... -->
 </head>
-
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Arial:wght@400;700&display=swap" rel="stylesheet">
+  <!-- Bootstrap 5.3.2 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css"/>
+  <link rel="stylesheet" href="styles/styles.css" />
+  <link rel="stylesheet" href="styles/background-animation.css" />
+  <link rel="manifest" href="manifest.json" />
+  <style>
+    .background-animation {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
+    }
+    #btnBackToTop {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      z-index: 1000;
+      display: none;
+    }
+  </style>
+</head>
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/service-worker.js')
+      .then(reg => console.log("✅ Service Worker registrado"))
+      .catch(err => console.error("❌ Error al registrar el SW", err));
+  }
+</script>
 <body>
+  <!-- Fondo animado -->
+  <div class="background-animation">
+    <div class="cube"></div><div class="cube"></div><div class="cube"></div>
+    <div class="cube"></div><div class="cube"></div><div class="cube"></div>
+    <div class="cube"></div><div class="cube"></div><div class="cube"></div>
+    <div class="cube"></div>
+  </div>
 
-    <script>
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('/service-worker.js')
-                .then(reg => console.log("✅ Service Worker registrado"))
-                .catch(err => console.error("❌ Error al registrar el SW", err));
-        }
-    </script>
+  <!-- Botón Volver Arriba -->
+  <button id="btnBackToTop" title="Volver arriba" aria-label="Volver arriba" class="btn btn-primary btn-lg rounded-circle shadow">
+    <i class="fas fa-arrow-up"></i>
+  </button>
 
-    <div class="background-animation">
-        <div class="cube"></div>
-        <div class="cube"></div>
-        <div class="cube"></div>
-        <div class="cube"></div>
-        <div class="cube"></div>
-        <div class="cube"></div>
-        <div class="cube"></div>
-        <div class="cube"></div>
-        <div class="cube"></div>
-        <div class="cube"></div>
-    </div>
-
-    <button id="btnBackToTop" title="Volver arriba" aria-label="Volver arriba" class="btn btn-primary btn-lg rounded-circle shadow">
-        <i class="fas fa-arrow-up"></i>
-    </button>
-
-    <div id="navbar-container"></div>
-
-    <main>
-        <section id="patrocinadores" class="container my-5"></section>
-        
-        <section id="resumen-historia" class="container my-5">
-            <div class="row align-items-center">
-                <div class="col-md-6 mb-4 mb-md-0 text-center">
-                    <img src="images/ESCUDO.png" alt="Escudo de DIBA FBC" class="img-fluid rounded shadow" loading="lazy" style="max-width: 300px;" />
-                </div>
-                <div class="col-md-6">
-                    <h2 class="mb-3">Nuestra Historia</h2>
-                    <p>
-                        Fundado en <strong>2012</strong>, <strong>DIBA FBC</strong> ha forjado una trayectoria llena de éxitos y superación. El club se caracteriza por formar talentos y promover valores como la disciplina, el respeto y el trabajo en equipo.
-                    </p>
-                    <p>
-                        A lo largo de los años, hemos competido en torneos locales, dejando huella en cada temporada y construyendo un legado que trasciende más allá de las canchas.
-                    </p>
-                    <a href="Historia.html" target="_blank" class="btn btn-warning mt-3">
-                        <i class="fas fa-external-link-alt me-1"></i> Más Información
-                    </a>
-                </div>
-            </div>
-        </section>
-
-        <section id="next-match" class="container my-5">
-            <h2 class="text-center fw-bold mb-4">PRÓXIMO ENCUENTRO</h2>
-            <div class="card shadow-lg next-match-card border-0">
-                <div class="card-body p-4 p-md-5">
-                    <div class="row align-items-center text-center">
-                        <div class="col-5">
-                            <img src="images/ESCUDO.png" alt="Logo DIBA FBC" class="team-logo mb-2" />
-                            <h3 class="h4 fw-bold">DIBA FBC</h3>
-                            <span class="badge bg-primary">Local</span>
-                        </div>
-                        <div class="col-2"><span class="vs-text">VS</span></div>
-                        <div class="col-5">
-                            <img src="https://i.postimg.cc/SNwZVrC4/rival-placeholder.png" alt="Logo Rival" class="team-logo mb-2" />
-                            <h3 class="h4 fw-bold">Rival de Turno</h3>
-                            <span class="badge bg-secondary">Visitante</span>
-                        </div>
-                    </div>
-                    <hr class="my-4" />
-                    <div class="text-center">
-                        <p class="h5 mb-2"><i class="fas fa-calendar-alt text-primary me-2"></i><strong>Fecha:</strong> Sábado, 30 de Agosto</p>
-                        <p class="h5 mb-0"><i class="fas fa-clock text-primary me-2"></i><strong>Hora:</strong> 4:00 PM</p>
-                    </div>
-                </div>
-                <div class="card-footer text-center small text-muted">Torneo Suroccidente 2025</div>
-            </div>
-        </section>
-
-        <section id="servicios" class="container my-5 animate__animated animate__fadeInUp">
-            <h2 class="text-center fw-bold mb-4">NUESTROS SERVICIOS</h2>
-            <div class="row row-cols-1 row-cols-md-3 g-4 mt-4">
-                <div class="col">
-                    <div class="card h-100 shadow text-center service-card">
-                        <div class="card-body py-4">
-                            <i class="fas fa-dumbbell service-icon" aria-hidden="true"></i>
-                            <h5 class="card-title fw-semibold">Entrenamiento Profesional</h5>
-                            <p class="card-text">Ofrecemos sesiones de entrenamiento dirigidas por profesionales capacitados, enfocadas en mejorar las habilidades técnicas, tácticas y físicas de los jugadores.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="card h-100 shadow text-center">
-                        <div class="card-body">
-                            <i class="fas fa-trophy fa-2x mb-3 text-warning"></i>
-                            <h5 class="card-title">Participación en Torneos</h5>
-                            <p class="card-text">
-                                Representamos a nuestra comunidad en torneos locales, demostrando competitividad y espíritu deportivo en cada desafío.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="card h-100 shadow text-center">
-                        <div class="card-body">
-                            <i class="fas fa-users fa-2x mb-3 text-success"></i>
-                            <h5 class="card-title">Desarrollo Integral</h5>
-                            <p class="card-text">
-                                Fomentamos el desarrollo personal de nuestros jugadores, inculcando valores y liderazgo dentro y fuera del campo.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="season-dashboard" class="container my-5">
-            <div class="row g-5 align-items-start">
-                <div class="col-lg-5">
-                    <h3 class="text-center mb-4">Últimos Resultados</h3>
-                    <div class="list-group shadow-sm">
-                        <div class="list-group-item d-flex justify-content-between align-items-center p-3">
-                            <div>DIBA <span class="badge bg-success ms-2">4 - 0</span> Estrellas</div>
-                            <small class="text-muted fw-light">Suroccidente</small>
-                        </div>
-                        <div class="list-group-item d-flex justify-content-between align-items-center p-3">
-                            <div>DIBA <span class="badge bg-danger ms-2">0 - 8</span> Esc. Barranquillera</div>
-                            <small class="text-muted fw-light">Kids Soccer</small>
-                        </div>
-                        <div class="list-group-item d-flex justify-content-between align-items-center p-3">
-                            <div>DIBA <span class="badge bg-danger ms-2">2 - 3</span> OCAM</div>
-                            <small class="text-muted fw-light">Suroccidente</small>
-                        </div>
-                        <a href="analisis.html" class="list-group-item list-group-item-action text-center text-primary fw-bold">Ver todos los resultados</a>
-                    </div>
-                </div>
-                <div class="col-lg-7">
-                    <h3 class="text-center mb-4">Clasificación Kids Soccer (2014-15)</h3>
-                    <div class="table-responsive shadow-sm rounded">
-                        <table class="table table-striped table-hover mb-0">
-                            <thead class="table-dark">
-                                <tr>
-                                    <th>#</th>
-                                    <th>Equipo</th>
-                                    <th>PJ</th>
-                                    <th>DG</th>
-                                    <th>Pts</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>1</td>
-                                    <td>Amigos del Futuro</td>
-                                    <td>6</td>
-                                    <td>+21</td>
-                                    <td>13</td>
-                                </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td>Esc. B/quilla Lipaya</td>
-                                    <td>4</td>
-                                    <td>+17</td>
-                                    <td>12</td>
-                                </tr>
-                                <tr>
-                                    <td>3</td>
-                                    <td>Sport Pradera</td>
-                                    <td>4</td>
-                                    <td>+15</td>
-                                    <td>12</td>
-                                </tr>
-                                <tr class="highlight-row">
-                                    <td><strong>5</strong></td>
-                                    <td><strong>DIBA FBC</strong></td>
-                                    <td><strong>6</strong></td>
-                                    <td><strong>-7</strong></td>
-                                    <td><strong>10</strong></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <div class="card-footer text-center">
-                            <a href="KidsSoccerPradera.html" class="btn btn-sm btn-outline-dark">Ver tabla completa y análisis</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="equipo" class="container my-5 animate__animated animate__fadeInUp">
-            <h2 class="text-center mb-4">CUERPO TÉCNICO</h2>
-            <div class="row justify-content-center g-4">
-                <div class="col-md-4">
-                    <div class="card h-100 text-center shadow">
-                        <img src="images/profesor.jpg" class="card-img-top rounded-circle mx-auto mt-4" alt="Reinaldo Perez, Director Técnico" style="width: 140px; height: 140px; object-fit: cover;" loading="lazy" />
-                        <div class="card-body">
-                            <h5 class="card-title">Reinaldo Perez</h5>
-                            <p class="card-text">Director Técnico y deportivo</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card h-100 text-center shadow">
-                        <img src="images/reinaldoNavas.png" class="card-img-top rounded-circle mx-auto mt-4" alt="Reinaldo Perez Navas, Técnico" style="width: 140px; height: 140px; object-fit: cover;" loading="lazy" />
-                        <div class="card-body">
-                            <h5 class="card-title">Reinaldo Perez Navas</h5>
-                            <p class="card-text">Asistente Tecnico / Desarrollador de software</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card h-100 text-center shadow">
-                        <img src="images/carlos.png" class="card-img-top rounded-circle mx-auto mt-4" alt="Carlos Daniel Arias Montiel" style="width: 140px; height: 140px; object-fit: cover;" loading="lazy" />
-                        <div class="card-body">
-                            <h5 class="card-title">Carlos Daniel Arias Montiel</h5>
-                            <p class="card-text">Estudiante Deporte y cultura / Preparador Fisico</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="fundacion" class="container my-5">
-            <div class="row align-items-center">
-                <div class="col-md-6 mb-4 mb-md-0 text-center">
-                    <a href="https://instagram.com" target="_blank">
-                        <img src="images/unnamed.jpg" alt="funtilemi" class="img-fluid w-100 rounded shadow" loading="lazy" style="max-width:350px;" />
-                    </a>
-                </div>
-                <div class="col-md-6">
-                    <h2 class="mb-4"><i class="fas fa-hand-holding-heart me-2"></i>Fundación Tierra que Emana Leche y Miel</h2>
-                    <p>
-                        La <strong>Fundación Tierra que Emana Leche y Miel</strong> es una entidad sin ánimo de lucro, comprometida con el desarrollo y bienestar de la comunidad.
-                    </p>
-                    <p>
-                        Fundada el <strong>28 de marzo de 2016</strong>, su sede está en Barranquilla, Atlántico.
-                    </p>
-                    <a href="https://colombiapymes.com/empresas/fundacion-tierra-que-emana-leche-y-miel-sigla-funtilemi_id_EF8E1398F2821C3F" target="_blank" class="btn btn-warning mb-2">
-                        <i class="fas fa-external-link-alt me-1"></i> Más Información
-                    </a>
-                    <a href="https://www.instagram.com/funtilemi/" target="_blank" class="btn btn-warning mb-2">
-                        <i class="fab fa-instagram me-1"></i> Instagram
-                    </a>
-                </div>
-            </div>
-        </section>
-    </main>
+  <!-- Navbar -->
+  <div id="navbar-container"></div>
+  <!--Patrocinadore-->
+  <section id="patrocinadores" class="container my-5"></section>
     
-    <div id="footer-container"></div>
+  <!-- Sección Resumen de Historia -->
+  <section id="resumen-historia" class="container my-5">
+    <div class="row align-items-center">
+      <div class="col-md-6 mb-4 mb-md-0 text-center">
+        <img src="images/ESCUDO.png" alt="Escudo de DIBA FBC" class="img-fluid rounded shadow" loading="lazy" style="max-width: 300px;" />
+      </div>
+      <div class="col-md-6">
+        <h2 class="mb-3">Nuestra Historia</h2>
+        <p>
+          Fundado en <strong>2012</strong>, <strong>DIBA FBC</strong> ha forjado una trayectoria llena de éxitos y superación. El club se caracteriza por formar talentos y promover valores como la disciplina, el respeto y el trabajo en equipo.
+        </p>
+        <p>
+          A lo largo de los años, hemos competido en torneos locales, dejando huella en cada temporada y construyendo un legado que trasciende más allá de las canchas.
+        </p>
+        <a href="Historia.html" target="_blank" class="btn btn-warning mt-3">
+          <i class="fas fa-external-link-alt me-1"></i> Más Información
+        </a>
+      </div>
+    </div>
+  </section>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="scripts/loadComponents.js"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="scripts/main.js"></script>
-    <script src="scripts/script.js"></script>
+  <!-- Sección Servicios -->
+  <section id="servicios" class="container my-5 animate__animated animate__fadeInUp">
+    <h2 class="text-center fw-bold mb-4">NUESTROS SERVICIOS</h2>
+    <div class="row row-cols-1 row-cols-md-3 g-4 mt-4">
+     <!-- En la sección servicios -->
+<div class="col">
+  <div class="card h-100 shadow text-center service-card"> <!-- Añadida clase service-card -->
+    <div class="card-body py-4">
+      <i class="fas fa-dumbbell service-icon" aria-hidden="true"></i> <!-- Añadida clase service-icon y aumentado tamaño base de Bootstrap -->
+      <h5 class="card-title fw-semibold">Entrenamiento Profesional</h5>
+      <p class="card-text">...</p>
+    </div>
+  </div>
+</div>
+      <div class="col">
+        <div class="card h-100 shadow text-center">
+          <div class="card-body">
+            <i class="fas fa-trophy fa-2x mb-3 text-warning"></i>
+            <h5 class="card-title">Participación en Torneos</h5>
+            <p class="card-text">
+              Representamos a nuestra comunidad en torneos locales, demostrando competitividad y espíritu deportivo en cada desafío.
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card h-100 shadow text-center">
+          <div class="card-body">
+            <i class="fas fa-users fa-2x mb-3 text-success"></i>
+            <h5 class="card-title">Desarrollo Integral</h5>
+            <p class="card-text">
+              Fomentamos el desarrollo personal de nuestros jugadores, inculcando valores y liderazgo dentro y fuera del campo.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-    <script type="application/ld+json">
-        {
-          "@context": "https://schema.org",
-          "@type": "SportsTeam",
-          "name": "Deportivo Internacional De Barranquilla Atlántico",
-          "alternateName": "DIBA FBC",
-          "url": "https://diba-fbc.vercel.app/",
-          "logo": "https://diba-fbc.vercel.app/images/ESCUDO.png",
-          "description": "Club de fútbol fundado en 2012 en Barranquilla, enfocado en la formación de talentos y la promoción de valores deportivos como la disciplina y el trabajo en equipo.",
-          "foundingDate": "2012",
-          "sport": "Football (Soccer)",
-          "location": {
-            "@type": "Place",
-            "address": {
-              "@type": "PostalAddress",
-              "addressLocality": "Barranquilla",
-              "addressRegion": "Atlántico",
-              "addressCountry": "CO"
-            }
-          },
-          "coach": [
-            {
-              "@type": "Person",
-              "name": "Reinaldo Perez",
-              "jobTitle": "Director Técnico y Deportivo"
-            },
-            {
-              "@type": "Person",
-              "name": "Reinaldo Perez Navas",
-              "jobTitle": "Asistente Técnico"
-            },
-            {
-              "@type": "Person",
-              "name": "Carlos Daniel Arias Montiel",
-              "jobTitle": "Preparador Físico"
-            }
-          ],
-          "memberOf": {
-            "@type": "SportsLeague",
-            "name": "Liga de Fútbol del Atlántico"
-          }
-        }
-    </script>
+  <!-- Sección Equipo (Cuerpo Técnico) -->
+  <section id="equipo" class="container my-5 animate__animated animate__fadeInUp">
+    <h2 class="text-center mb-4">CUERPO TÉCNICO</h2>
+    <div class="row justify-content-center g-4">
+      <div class="col-md-4">
+        <div class="card h-100 text-center shadow">
+          <img src="images/profesor.jpg" class="card-img-top rounded-circle mx-auto mt-4" alt="Reinaldo Perez, Director Técnico" style="width: 140px; height: 140px; object-fit: cover;" loading="lazy" />
+          <div class="card-body">
+            <h5 class="card-title">Reinaldo Perez</h5>
+            <p class="card-text">Director Técnico y deportivo</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card h-100 text-center shadow">
+          <img src="images/reinaldoNavas.png" class="card-img-top rounded-circle mx-auto mt-4" alt="Reinaldo Perez Navas, Técnico" style="width: 140px; height: 140px; object-fit: cover;" loading="lazy" />
+          <div class="card-body">
+            <h5 class="card-title">Reinaldo Perez Navas</h5>
+            <p class="card-text">Asistente Tecnico / Desarrollador de software</p>
+          </div>
+        </div>
+      </div>
+      <!-- Puedes agregar más miembros aquí -->
+       <div class="col-md-4">
+        <div class="card h-100 text-center shadow">
+          <img src="images/carlos.png" class="card-img-top rounded-circle mx-auto mt-4" alt="Reinaldo Perez Navas, Técnico" style="width: 140px; height: 140px; object-fit: cover;" loading="lazy" />
+          <div class="card-body">
+            <h5 class="card-title">Carlos Daniel Arias Montiel</h5>
+            <p class="card-text">Estudiante Deporte y cultura / Preparador Fisico</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Sección Fundación -->
+  <section id="fundacion" class="container my-5">
+    <div class="row align-items-center">
+      <div class="col-md-6 mb-4 mb-md-0 text-center">
+        <a href="https://instagram.com" target="_blank">
+          <img src="images/unnamed.jpg" alt="funtilemi" class="img-fluid w-100 rounded shadow" loading="lazy" style="max-width:350px;" />
+        </a>
+      </div>
+      <div class="col-md-6">
+        <h2 class="mb-4"><i class="fas fa-hand-holding-heart me-2"></i>Fundación Tierra que Emana Leche y Miel</h2>
+        <p>
+          La <strong>Fundación Tierra que Emana Leche y Miel</strong> es una entidad sin ánimo de lucro, comprometida con el desarrollo y bienestar de la comunidad.
+        </p>
+        <p>
+          Fundada el <strong>28 de marzo de 2016</strong>, su sede está en Barranquilla, Atlántico.
+        </p>
+        <a href="https://colombiapymes.com/empresas/fundacion-tierra-que-emana-leche-y-miel-sigla-funtilemi_id_EF8E1398F2821C3F" target="_blank" class="btn btn-warning mb-2">
+          <i class="fas fa-external-link-alt me-1"></i> Más Información
+        </a>
+        <a href="https://www.instagram.com/funtilemi/" target="_blank" class="btn btn-warning mb-2">
+          <i class="fab fa-instagram me-1"></i> Instagram
+        </a>
+      </div>
+    </div>
+  </section>
+  
+  
+
+  <!-- Footer -->
+  <div id="footer-container"></div>
+  
+  <!-- Bootstrap JS Bundle (5.3.2) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="scripts/loadComponents.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="scripts/main.js"></script>
+  <script src="scripts/script.js"></script>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SportsTeam",
+  "name": "Deportivo Internacional De Barranquilla Atlántico (DIBA FBC)",
+  "alternateName": "DIBA FBC",
+  "url": "https://www.tudominio.com/",
+  "logo": "https://www.tudominio.com/images/ESCUDO.png",
+  "description": "Club de fútbol fundado en 2012, enfocado en formar talentos y promover valores deportivos.",
+  "foundingDate": "2012",
+  "sport": "Football (Soccer)",
+  "location": {
+    "@type": "Place",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Barranquilla",
+      "addressRegion": "Atlántico",
+      "addressCountry": "CO"
+    }
+  },
+  "memberOf": { // Si aplica, liga a la que pertenece
+    "@type": "SportsLeague",
+    "name": "Nombre de la Liga Local"
+  }
+  // Puedes añadir "coach", "athlete" etc.
+}
+</script>
 </body>
 </html>
