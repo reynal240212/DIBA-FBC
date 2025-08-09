@@ -1,7 +1,9 @@
-  // 🔹 Configuración de Supabase
-  const SUPABASE_URL = "https://TU_PROJECT_URL.supabase.co";
-  const SUPABASE_KEY = "TU_PUBLIC_ANON_KEY";
-  const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+ import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+
+// Configuración de Supabase (sin cambios)
+const supabaseUrl = 'https://wdnlqfiwuocmmcdowjyw.supabase.co';
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndkbmxxZml3dW9jbW1jZG93anl3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg1MjY1ODAsImV4cCI6MjA2NDEwMjU4MH0.4SCS_NRDIYLQJ1XouqW111BxkMOlwMWOjje9gFTgW_Q';
+const supabase = createClient(supabaseUrl, supabaseKey);
 
   // ===============================
   // Cargar jugadores
