@@ -1,336 +1,143 @@
 <!DOCTYPE html>
-<html lang="es" data-bs-theme="light">
+<html lang="es">
 <head>
   <meta charset="UTF-8" />
   <title>DIBA FBC - Sistema de Gestión</title>
   <meta name="description" content="Sistema de gestión para el Deportivo Internacional de Barranquilla Atlántico FBC" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <!-- Bootstrap 5.3.3 CSS -->
+  <!-- Dependencias Externas -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-  <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
-  <!-- Chart.js -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <!-- DataTables -->
   <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css">
-  <!-- Animate.css -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
 
   <style id="app-style">
+    /* ======================================
+       VARIABLES Y ESTILOS BASE DIBA FBC
+    ====================================== */
     :root {
-      --primary-color: #002a40;
-      --secondary-color: #0077b6;
-      --accent-color: #e9d8a6;
-      --light-accent: #f5f0e0;
-      --success-color: #198754;
-      --danger-color: #dc3545;
-      --warning-color: #ffc107;
-      --bs-body-bg: #f8f9fa;
+      --primary-dark: #001b72;
+      --primary: #003399;
+      --primary-darker: #0b0281;
+      --accent: #ffd700;
+      --accent-dark: #e6c300;
+      --white: #ffffff;
+      --light-gray: #f4f4f4;
+      --success: #198754;
+      --danger: #dc3545;
+      --warning: #ffc107;
+      --bs-body-bg: var(--light-gray);
     }
     
     body {
       background-color: var(--bs-body-bg);
-      min-height: 100vh;
+      font-family: 'Arial', sans-serif;
       display: flex;
       flex-direction: column;
+      min-height: 100vh;
     }
-    
-    .navbar {
-      background-color: var(--primary-color) !important;
+
+    /* ======================================
+       COMPONENTES PERSONALIZADOS
+    ====================================== */
+    /* Navbar, Headers, Footers */
+    .navbar, .card-header, .app-footer, .modal-header, .table th {
+      background-color: var(--primary) !important;
+      color: var(--white);
     }
+
+    /* Botones */
+    .btn-primary { background-color: var(--primary); border-color: var(--primary); }
+    .btn-primary:hover { background-color: var(--primary-dark); border-color: var(--primary-dark); }
+    .btn-success { background-color: var(--accent); color: var(--primary-dark) !important; border-color: var(--accent); }
+    .btn-success:hover { background-color: var(--accent-dark); border-color: var(--accent-dark); }
+    .btn-outline-primary { color: var(--primary); border-color: var(--primary); }
+    .btn-outline-primary:hover { background-color: var(--primary); color: var(--white); }
     
-    .btn-primary {
-      background-color: var(--primary-color);
-      border-color: var(--primary-color);
-    }
-    
-    .btn-primary:hover {
-      background-color: #003a5a;
-      border-color: #003a5a;
-    }
-    
-    .btn-secondary {
-      background-color: var(--secondary-color);
-      border-color: var(--secondary-color);
-    }
-    
-    .bg-primary {
-      background-color: var(--primary-color) !important;
-    }
-    
-    .bg-secondary {
-      background-color: var(--secondary-color) !important;
-    }
-    
-    .bg-accent {
-      background-color: var(--accent-color) !important;
-    }
-    
-    .text-primary {
-      color: var(--primary-color) !important;
-    }
-    
-    .text-secondary {
-      color: var(--secondary-color) !important;
-    }
-    
-    .text-accent {
-      color: var(--accent-color) !important;
-    }
-    
-    .border-primary {
-      border-color: var(--primary-color) !important;
-    }
-    
-    .card {
-      border: none;
-      box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
-      transition: transform 0.2s ease-in-out;
-    }
-    
-    .card:hover {
-      transform: translateY(-2px);
-    }
-    
-    .card-header {
-      border-bottom: none;
-      background-color: var(--primary-color);
-      color: white;
-    }
-    
-    .table th {
-      background-color: var(--primary-color);
-      color: white;
-    }
-    
-    .login-container {
-      max-width: 400px;
-      margin: 5rem auto;
-    }
-    
-    .login-card {
-      border: none;
-      border-radius: 10px;
-      box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
-    }
-    
-    .login-header {
-      background-color: var(--primary-color);
-      color: white;
-      text-align: center;
-      border-radius: 10px 10px 0 0;
-      padding: 2rem 0;
-    }
-    
-    .sidebar {
-      background-color: var(--primary-color);
-      min-height: calc(100vh - 56px);
-      width: 250px;
-    }
-    
-    .sidebar .nav-link {
-      color: rgba(255, 255, 255, 0.8);
-      padding: 0.8rem 1rem;
-      border-radius: 5px;
-      margin: 0.2rem 0;
-    }
-    
-    .sidebar .nav-link:hover {
-      background-color: rgba(255, 255, 255, 0.1);
-      color: white;
-    }
-    
-    .sidebar .nav-link.active {
-      background-color: rgba(255, 255, 255, 0.2);
-      color: white;
-    }
-    
-    .sidebar .nav-link i {
-      width: 20px;
-      text-align: center;
-      margin-right: 8px;
-    }
-    
+    /* Login */
+    .login-container { max-width: 420px; margin: 5rem auto; }
+    .login-card { border-radius: 12px; box-shadow: 0 0.5rem 1.5rem rgba(0,0,0,0.1); }
+    .login-header { border-radius: 12px 12px 0 0; padding: 2rem; background-color: var(--primary); }
+    .login-header h2 { font-family: 'Dancing Script', cursive; font-size: 2.8rem; color: var(--accent); }
+
+    /* Layout Principal */
+    #adminApp { display: none; flex-direction: column; min-height: 100vh; }
+    .sidebar { background-color: var(--primary-dark); }
+    .sidebar .nav-link { color: rgba(255, 255, 255, 0.8); }
+    .sidebar .nav-link:hover { background-color: var(--primary); color: var(--white); }
+    .sidebar .nav-link.active { background-color: var(--primary-darker); color: var(--white); font-weight: bold; }
+    .sidebar .nav-link i { width: 20px; text-align: center; margin-right: 10px; }
+    .content-wrapper { padding: 2rem; flex: 1; }
+
+    /* Tarjetas de Estadísticas */
     .stats-card {
-      background-color: white;
-      border-radius: 10px;
-      box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
-      padding: 1.5rem;
-      height: 100%;
-      transition: transform 0.2s ease-in-out;
+        border-left: 5px solid var(--primary);
+        border-radius: 8px;
+        transition: transform 0.2s, box-shadow 0.2s;
     }
-    
-    .stats-card:hover {
-      transform: translateY(-5px);
+    .stats-card:hover { transform: translateY(-5px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+    .stats-card .icon { color: var(--primary); font-size: 2.5rem; }
+    .stats-card.accent-card { border-left-color: var(--accent); }
+    .stats-card.accent-card .icon { color: var(--accent); }
+
+    /* Ocultar Vistas */
+    .view { display: none; }
+    #loading-overlay {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(255,255,255,0.7); z-index: 1099;
+      display: flex; align-items: center; justify-content: center;
     }
-    
-    .stats-card .icon {
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.5rem;
-      color: white;
-      margin-bottom: 1rem;
-    }
-    
-    .attendance-stats .icon {
-      background-color: var(--primary-color);
-    }
-    
-    .payment-stats .icon {
-      background-color: var(--success-color);
-    }
-    
-    .players-stats .icon {
-      background-color: var(--secondary-color);
-    }
-    
-    .planillas-stats .icon {
-      background-color: var(--warning-color);
-    }
-    
-    .chart-container {
-      position: relative;
-      height: 300px;
-      width: 100%;
-    }
-    
-    .toast-container {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      z-index: 1060;
-    }
-    
-    .action-btn {
-      cursor: pointer;
-      opacity: 0.7;
-      transition: opacity 0.2s;
-    }
-    
-    .action-btn:hover {
-      opacity: 1;
-    }
-    
-    .table-responsive {
-      min-height: 400px;
-    }
-    
-    .dataTables_wrapper .dataTables_paginate .paginate_button.current {
-      background: var(--primary-color) !important;
-      color: white !important;
-      border-color: var(--primary-color) !important;
-    }
-    
-    .content-wrapper {
-      flex: 1;
-      padding: 1.5rem;
-    }
-    
-    .app-footer {
-      background-color: var(--primary-color);
-      color: white;
-      padding: 1rem 0;
-      margin-top: auto;
-    }
-    
-    #loginPage {
-      display: block;
-    }
-    
-    #adminApp {
-      display: none;
-    }
-    
-    .dashboard-view, .players-view, .planillas-view, .planilla-detail-view {
-      display: none;
-    }
-    
-    .status-indicator {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      display: inline-block;
-      margin-right: 5px;
-    }
-    
-    .status-p {
-      background-color: #28a745;
-    }
-    
-    .status-a {
-      background-color: #dc3545;
-    }
-    
-    .status-e {
-      background-color: #ffc107;
-    }
-    
-    @media (max-width: 992px) {
-      .sidebar {
-        width: 100%;
-        min-height: auto;
-      }
-      
-      .sidebar .nav {
-        display: flex;
-        flex-wrap: wrap;
-      }
-      
-      .sidebar .nav-link {
-        width: auto;
-        margin: 0.2rem;
-      }
-    }
+
+    /* Tabla de Planilla Detalle */
+    #planillaDetailsTable td { vertical-align: middle; }
+    .status-select-P { background-color: #d1e7dd; border-color: #a3cfbb; }
+    .status-select-A { background-color: #f8d7da; border-color: #f1aeb5; }
+    .status-select-E { background-color: #fff3cd; border-color: #ffe69c; }
   </style>
 </head>
 
 <body>
-  <!-- Toast Notifications -->
-  <div class="toast-container">
-    <div id="appToast" class="toast align-items-center" role="alert" aria-live="assertive" aria-atomic="true">
-      <div class="d-flex">
-        <div class="toast-body">
-          <i class="fas fa-check-circle me-2"></i>
-          <span id="toastMessage">Operación completada con éxito</span>
-        </div>
-        <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
-      </div>
+  <!-- Overlay de Carga -->
+  <div id="loading-overlay">
+    <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;">
+      <span class="visually-hidden">Cargando...</span>
     </div>
   </div>
 
-  <!-- Login Screen -->
+  <!-- Contenedor de Notificaciones -->
+  <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 1100;">
+    <div id="appToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+      <div class="toast-header">
+        <strong class="me-auto" id="toastTitle">Notificación</strong>
+        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+      </div>
+      <div class="toast-body" id="toastMessage"></div>
+    </div>
+  </div>
+
+  <!-- Pantalla de Login -->
   <section id="loginPage" class="container">
     <div class="login-container">
-      <div class="login-card card">
+      <div class="login-card card animate__animated animate__fadeIn">
         <div class="login-header">
-          <img src="https://cdn.pixabay.com/photo/2016/03/29/17/14/football-1288360_960_720.png" alt="DIBA FBC Logo" class="mb-3" style="max-width: 80px;">
+          <img src="https://diba-fbc.vercel.app/images/ESCUDO.png" alt="DIBA FBC Logo" class="mb-3" style="max-width: 100px;">
           <h2>DIBA FBC</h2>
-          <p class="mb-0">Sistema de Gestión</p>
         </div>
-        <div class="card-body p-4">
+        <div class="card-body p-4 p-md-5">
+          <h4 class="card-title text-center mb-4">Iniciar Sesión</h4>
           <form id="loginForm">
             <div class="mb-3">
-              <label for="username" class="form-label">Usuario</label>
-              <div class="input-group">
-                <span class="input-group-text"><i class="fas fa-user"></i></span>
-                <input type="text" class="form-control" id="username" placeholder="Ingrese su usuario" required>
-              </div>
+              <label for="email" class="form-label">Correo Electrónico</label>
+              <input type="email" class="form-control" id="email" required>
             </div>
             <div class="mb-3">
               <label for="password" class="form-label">Contraseña</label>
-              <div class="input-group">
-                <span class="input-group-text"><i class="fas fa-lock"></i></span>
-                <input type="password" class="form-control" id="password" placeholder="Ingrese su contraseña" required>
-              </div>
+              <input type="password" class="form-control" id="password" required>
             </div>
             <div class="d-grid mt-4">
-              <button type="submit" class="btn btn-primary py-2">
-                <i class="fas fa-sign-in-alt me-2"></i> Iniciar Sesión
+              <button type="submit" class="btn btn-primary btn-lg">
+                <i class="fas fa-sign-in-alt me-2"></i> Entrar
               </button>
             </div>
           </form>
@@ -339,1214 +146,85 @@
     </div>
   </section>
 
-  <!-- Admin Application -->
-  <section id="adminApp">
-    <!-- Top Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-      <div class="container-fluid">
-        <a class="navbar-brand d-flex align-items-center" href="javascript:void(0)">
-          <img src="https://cdn.pixabay.com/photo/2016/03/29/17/14/football-1288360_960_720.png" alt="DIBA FBC Logo" class="me-2" style="max-height: 30px;">
-          <span>DIBA FBC</span>
+  <!-- Aplicación Principal -->
+  <main id="adminApp">
+    <div class="d-flex w-100 h-100">
+      <!-- Sidebar -->
+      <div class="sidebar d-flex flex-column p-3">
+        <a class="navbar-brand d-flex align-items-center text-white mb-4" href="#">
+          <img src="https://diba-fbc.vercel.app/images/ESCUDO.png" alt="DIBA FBC Logo" class="me-2" style="max-height: 40px;">
+          <span class="fs-5">DIBA FBC</span>
         </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav ms-auto">
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="javascript:void(0)" id="userDropdown" role="button" data-bs-toggle="dropdown">
-                <i class="fas fa-user-circle me-1"></i> Admin
-              </a>
-              <ul class="dropdown-menu dropdown-menu-end">
-                <li><a class="dropdown-item" href="javascript:void(0)"><i class="fas fa-user-cog me-2"></i>Perfil</a></li>
-                <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item" href="javascript:void(0)" id="logoutBtn"><i class="fas fa-sign-out-alt me-2"></i>Cerrar Sesión</a></li>
-              </ul>
-            </li>
-          </ul>
-        </div>
+        <ul class="nav nav-pills flex-column mb-auto">
+          <li class="nav-item"><a class="nav-link" href="#" data-view="dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+          <li class="nav-item"><a class="nav-link" href="#" data-view="players"><i class="fas fa-users"></i> Jugadores</a></li>
+          <li class="nav-item"><a class="nav-link" href="#" data-view="planillas"><i class="fas fa-clipboard-list"></i> Planillas</a></li>
+        </ul>
+        <hr class="text-white">
+        <button class="btn btn-danger" id="logoutBtn"><i class="fas fa-sign-out-alt me-2"></i>Cerrar Sesión</button>
       </div>
-    </nav>
 
-    <div class="container-fluid">
-      <div class="row">
-        <!-- Sidebar Navigation -->
-        <div class="col-lg-2 sidebar p-0">
-          <ul class="nav flex-column p-3">
-            <li class="nav-item">
-              <a class="nav-link active" href="javascript:void(0)" data-view="dashboard">
-                <i class="fas fa-tachometer-alt"></i> Dashboard
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="javascript:void(0)" data-view="players">
-                <i class="fas fa-users"></i> Jugadores
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="javascript:void(0)" data-view="planillas">
-                <i class="fas fa-clipboard-list"></i> Planillas
-              </a>
-            </li>
-          </ul>
-        </div>
-
-        <!-- Main Content Area -->
-        <div class="col-lg-10 content-wrapper">
-          
-          <!-- Dashboard View -->
-          <div class="dashboard-view">
-            <div class="d-flex justify-content-between align-items-center mb-4">
-              <h1 class="mb-0"><i class="fas fa-tachometer-alt me-2 text-primary"></i> Dashboard</h1>
-              <div class="d-flex gap-2">
-                <div class="input-group">
-                  <span class="input-group-text"><i class="fas fa-calendar"></i></span>
-                  <input type="date" class="form-control" id="startDate">
-                </div>
-                <div class="input-group">
-                  <span class="input-group-text"><i class="fas fa-calendar"></i></span>
-                  <input type="date" class="form-control" id="endDate">
-                </div>
-                <button id="filterDates" class="btn btn-primary">
-                  <i class="fas fa-filter me-1"></i> Filtrar
-                </button>
-              </div>
-            </div>
-
-            <!-- Stats Cards -->
-            <div class="row g-4 mb-4">
-              <div class="col-md-3">
-                <div class="stats-card attendance-stats">
-                  <div class="icon">
-                    <i class="fas fa-user-check"></i>
-                  </div>
-                  <h5>Tasa de Asistencia</h5>
-                  <h3>85%</h3>
-                  <p class="text-muted mb-0">Promedio del período</p>
-                </div>
-              </div>
-              
-              <div class="col-md-3">
-                <div class="stats-card payment-stats">
-                  <div class="icon">
-                    <i class="fas fa-dollar-sign"></i>
-                  </div>
-                  <h5>Pagos Registrados</h5>
-                  <h3>$1,250,000</h3>
-                  <p class="text-muted mb-0">Período actual</p>
-                </div>
-              </div>
-              
-              <div class="col-md-3">
-                <div class="stats-card players-stats">
-                  <div class="icon">
-                    <i class="fas fa-users"></i>
-                  </div>
-                  <h5>Total Jugadores</h5>
-                  <h3>65</h3>
-                  <p class="text-muted mb-0">Activos en el sistema</p>
-                </div>
-              </div>
-              
-              <div class="col-md-3">
-                <div class="stats-card planillas-stats">
-                  <div class="icon">
-                    <i class="fas fa-clipboard-list"></i>
-                  </div>
-                  <h5>Planillas</h5>
-                  <h3>24</h3>
-                  <p class="text-muted mb-0">Creadas este mes</p>
-                </div>
-              </div>
-            </div>
-
-            <!-- Charts -->
-            <div class="row g-4 mb-4">
-              <div class="col-md-6">
-                <div class="card h-100">
-                  <div class="card-header bg-primary text-white">
-                    <h5 class="card-title mb-0">Asistencia por Categoría</h5>
-                  </div>
-                  <div class="card-body">
-                    <div class="chart-container">
-                      <canvas id="attendanceChart"></canvas>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              
-              <div class="col-md-6">
-                <div class="card h-100">
-                  <div class="card-header bg-primary text-white">
-                    <h5 class="card-title mb-0">Pagos Mensuales</h5>
-                  </div>
-                  <div class="card-body">
-                    <div class="chart-container">
-                      <canvas id="paymentsChart"></canvas>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Recent Activity -->
-            <div class="card">
-              <div class="card-header bg-primary text-white">
-                <h5 class="card-title mb-0">Actividad Reciente</h5>
-              </div>
-              <div class="card-body p-0">
-                <div class="table-responsive">
-                  <table class="table table-hover mb-0">
-                    <thead>
-                      <tr>
-                        <th>Fecha</th>
-                        <th>Actividad</th>
-                        <th>Categoría</th>
-                        <th>Usuario</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>2025-03-15</td>
-                        <td>Planilla creada</td>
-                        <td>2012-2013</td>
-                        <td>Admin</td>
-                      </tr>
-                      <tr>
-                        <td>2025-03-14</td>
-                        <td>Jugador añadido</td>
-                        <td>2010-2011</td>
-                        <td>Admin</td>
-                      </tr>
-                      <tr>
-                        <td>2025-03-14</td>
-                        <td>Planilla modificada</td>
-                        <td>2014-2015</td>
-                        <td>Admin</td>
-                      </tr>
-                      <tr>
-                        <td>2025-03-12</td>
-                        <td>PDF generado</td>
-                        <td>2012-2013</td>
-                        <td>Admin</td>
-                      </tr>
-                      <tr>
-                        <td>2025-03-10</td>
-                        <td>Planilla creada</td>
-                        <td>2008-2009</td>
-                        <td>Admin</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Players View -->
-          <div class="players-view">
-            <div class="d-flex justify-content-between align-items-center mb-4">
-              <h1 class="mb-0"><i class="fas fa-users me-2 text-primary"></i> Gestión de Jugadores</h1>
-              <div class="d-flex gap-2">
-                <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addPlayerModal">
-                  <i class="fas fa-user-plus me-1"></i> Nuevo Jugador
-                </button>
-                <button class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#importPlayersModal">
-                  <i class="fas fa-file-import me-1"></i> Importar CSV
-                </button>
-              </div>
-            </div>
-
-            <div class="card">
-              <div class="card-header bg-primary text-white">
-                <h5 class="card-title mb-0">Lista de Jugadores</h5>
-              </div>
-              <div class="card-body">
-                <div class="table-responsive">
-                  <table id="playersTable" class="table table-striped table-hover">
-                    <thead>
-                      <tr>
-                        <th>ID</th>
-                        <th>Nombre</th>
-                        <th>Categoría</th>
-                        <th>Fecha de Nacimiento</th>
-                        <th>Contacto</th>
-                        <th>Estado</th>
-                        <th>Acciones</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>1</td>
-                        <td>Juan Pérez</td>
-                        <td>2012-2013</td>
-                        <td>2012-05-15</td>
-                        <td>315-789-4562</td>
-                        <td><span class="badge bg-success">Activo</span></td>
-                        <td>
-                          <div class="d-flex gap-2">
-                            <button class="btn btn-sm btn-primary action-btn" data-bs-toggle="modal" data-bs-target="#editPlayerModal">
-                              <i class="fas fa-edit"></i>
-                            </button>
-                            <button class="btn btn-sm btn-danger action-btn">
-                              <i class="fas fa-trash"></i>
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>2</td>
-                        <td>Carlos Rodríguez</td>
-                        <td>2010-2011</td>
-                        <td>2010-11-22</td>
-                        <td>318-456-7890</td>
-                        <td><span class="badge bg-success">Activo</span></td>
-                        <td>
-                          <div class="d-flex gap-2">
-                            <button class="btn btn-sm btn-primary action-btn" data-bs-toggle="modal" data-bs-target="#editPlayerModal">
-                              <i class="fas fa-edit"></i>
-                            </button>
-                            <button class="btn btn-sm btn-danger action-btn">
-                              <i class="fas fa-trash"></i>
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>3</td>
-                        <td>Miguel Ángel Sánchez</td>
-                        <td>2012-2013</td>
-                        <td>2012-02-28</td>
-                        <td>301-123-4567</td>
-                        <td><span class="badge bg-success">Activo</span></td>
-                        <td>
-                          <div class="d-flex gap-2">
-                            <button class="btn btn-sm btn-primary action-btn" data-bs-toggle="modal" data-bs-target="#editPlayerModal">
-                              <i class="fas fa-edit"></i>
-                            </button>
-                            <button class="btn btn-sm btn-danger action-btn">
-                              <i class="fas fa-trash"></i>
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>4</td>
-                        <td>Andrés López</td>
-                        <td>2014-2015</td>
-                        <td>2014-07-10</td>
-                        <td>300-987-6543</td>
-                        <td><span class="badge bg-warning text-dark">Inactivo</span></td>
-                        <td>
-                          <div class="d-flex gap-2">
-                            <button class="btn btn-sm btn-primary action-btn" data-bs-toggle="modal" data-bs-target="#editPlayerModal">
-                              <i class="fas fa-edit"></i>
-                            </button>
-                            <button class="btn btn-sm btn-danger action-btn">
-                              <i class="fas fa-trash"></i>
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>5</td>
-                        <td>Felipe Martínez</td>
-                        <td>2012-2013</td>
-                        <td>2012-09-03</td>
-                        <td>314-555-7890</td>
-                        <td><span class="badge bg-success">Activo</span></td>
-                        <td>
-                          <div class="d-flex gap-2">
-                            <button class="btn btn-sm btn-primary action-btn" data-bs-toggle="modal" data-bs-target="#editPlayerModal">
-                              <i class="fas fa-edit"></i>
-                            </button>
-                            <button class="btn btn-sm btn-danger action-btn">
-                              <i class="fas fa-trash"></i>
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Planillas View -->
-          <div class="planillas-view">
-            <div class="d-flex justify-content-between align-items-center mb-4">
-              <h1 class="mb-0"><i class="fas fa-clipboard-list me-2 text-primary"></i> Planillas</h1>
-              <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#createPlanillaModal">
-                <i class="fas fa-plus me-1"></i> Nueva Planilla
-              </button>
-            </div>
-
-            <div class="card mb-4">
-              <div class="card-header bg-primary text-white">
-                <h5 class="card-title mb-0">Filtrar Planillas</h5>
-              </div>
-              <div class="card-body">
-                <div class="row g-3">
-                  <div class="col-md-4">
-                    <label class="form-label">Categoría</label>
-                    <select class="form-select">
-                      <option value="">Todas</option>
-                      <option value="2012-2013">2012-2013</option>
-                      <option value="2010-2011">2010-2011</option>
-                      <option value="2014-2015">2014-2015</option>
-                    </select>
-                  </div>
-                  <div class="col-md-4">
-                    <label class="form-label">Desde</label>
-                    <input type="date" class="form-control">
-                  </div>
-                  <div class="col-md-4">
-                    <label class="form-label">Hasta</label>
-                    <input type="date" class="form-control">
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="card">
-              <div class="card-header bg-primary text-white">
-                <h5 class="card-title mb-0">Lista de Planillas</h5>
-              </div>
-              <div class="card-body">
-                <div class="table-responsive">
-                  <table id="planillasTable" class="table table-striped table-hover">
-                    <thead>
-                      <tr>
-                        <th>ID</th>
-                        <th>Fecha</th>
-                        <th>Categoría</th>
-                        <th>Jugadores</th>
-                        <th>Asistencia</th>
-                        <th>Pagos</th>
-                        <th>Acciones</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>1</td>
-                        <td>2025-03-15</td>
-                        <td>2012-2013</td>
-                        <td>20</td>
-                        <td>
-                          <div class="progress" style="height: 15px;">
-                            <div class="progress-bar bg-success" role="progressbar" style="width: 85%;" aria-valuenow="85" aria-valuemin="0" aria-valuemax="100">85%</div>
-                          </div>
-                        </td>
-                        <td>$250,000</td>
-                        <td>
-                          <div class="d-flex gap-2">
-                            <button class="btn btn-sm btn-primary action-btn view-planilla" data-id="1">
-                              <i class="fas fa-eye"></i>
-                            </button>
-                            <button class="btn btn-sm btn-danger action-btn">
-                              <i class="fas fa-trash"></i>
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>2</td>
-                        <td>2025-03-12</td>
-                        <td>2010-2011</td>
-                        <td>18</td>
-                        <td>
-                          <div class="progress" style="height: 15px;">
-                            <div class="progress-bar bg-success" role="progressbar" style="width: 90%;" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100">90%</div>
-                          </div>
-                        </td>
-                        <td>$200,000</td>
-                        <td>
-                          <div class="d-flex gap-2">
-                            <button class="btn btn-sm btn-primary action-btn view-planilla" data-id="2">
-                              <i class="fas fa-eye"></i>
-                            </button>
-                            <button class="btn btn-sm btn-danger action-btn">
-                              <i class="fas fa-trash"></i>
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>3</td>
-                        <td>2025-03-08</td>
-                        <td>2014-2015</td>
-                        <td>15</td>
-                        <td>
-                          <div class="progress" style="height: 15px;">
-                            <div class="progress-bar bg-success" role="progressbar" style="width: 75%;" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">75%</div>
-                          </div>
-                        </td>
-                        <td>$180,000</td>
-                        <td>
-                          <div class="d-flex gap-2">
-                            <button class="btn btn-sm btn-primary action-btn view-planilla" data-id="3">
-                              <i class="fas fa-eye"></i>
-                            </button>
-                            <button class="btn btn-sm btn-danger action-btn">
-                              <i class="fas fa-trash"></i>
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>4</td>
-                        <td>2025-03-05</td>
-                        <td>2012-2013</td>
-                        <td>22</td>
-                        <td>
-                          <div class="progress" style="height: 15px;">
-                            <div class="progress-bar bg-success" role="progressbar" style="width: 80%;" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100">80%</div>
-                          </div>
-                        </td>
-                        <td>$220,000</td>
-                        <td>
-                          <div class="d-flex gap-2">
-                            <button class="btn btn-sm btn-primary action-btn view-planilla" data-id="4">
-                              <i class="fas fa-eye"></i>
-                            </button>
-                            <button class="btn btn-sm btn-danger action-btn">
-                              <i class="fas fa-trash"></i>
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>5</td>
-                        <td>2025-03-01</td>
-                        <td>2010-2011</td>
-                        <td>16</td>
-                        <td>
-                          <div class="progress" style="height: 15px;">
-                            <div class="progress-bar bg-success" role="progressbar" style="width: 95%;" aria-valuenow="95" aria-valuemin="0" aria-valuemax="100">95%</div>
-                          </div>
-                        </td>
-                        <td>$150,000</td>
-                        <td>
-                          <div class="d-flex gap-2">
-                            <button class="btn btn-sm btn-primary action-btn view-planilla" data-id="5">
-                              <i class="fas fa-eye"></i>
-                            </button>
-                            <button class="btn btn-sm btn-danger action-btn">
-                              <i class="fas fa-trash"></i>
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Planilla Detail View -->
-          <div class="planilla-detail-view">
-            <div class="d-flex justify-content-between align-items-center mb-4">
-              <div>
-                <button id="backToPlanillas" class="btn btn-outline-primary mb-2">
-                  <i class="fas fa-arrow-left me-1"></i> Volver a Planillas
-                </button>
-                <h1 class="mb-0">Planilla: <span id="planillaDetailTitle">2025-03-15 (2012-2013)</span></h1>
-              </div>
-              <div class="d-flex gap-2">
-                <button id="generatePDF" class="btn btn-primary">
-                  <i class="fas fa-file-pdf me-1"></i> Generar PDF
-                </button>
-                <button id="sendEmail" class="btn btn-secondary">
-                  <i class="fas fa-envelope me-1"></i> Enviar Resumen
-                </button>
-              </div>
-            </div>
-
-            <div class="card mb-4">
-              <div class="card-body">
-                <div class="row align-items-center">
-                  <div class="col-md-6">
-                    <h5><i class="fas fa-info-circle me-2 text-primary"></i> Detalles de la Planilla</h5>
-                    <div class="row g-3">
-                      <div class="col-sm-6">
-                        <p class="mb-1"><strong>Fecha:</strong> <span id="planillaDate">2025-03-15</span></p>
-                      </div>
-                      <div class="col-sm-6">
-                        <p class="mb-1"><strong>Categoría:</strong> <span id="planillaCategory">2012-2013</span></p>
-                      </div>
-                      <div class="col-sm-6">
-                        <p class="mb-1"><strong>Total Jugadores:</strong> <span id="planillaTotalPlayers">20</span></p>
-                      </div>
-                      <div class="col-sm-6">
-                        <p class="mb-1"><strong>Última actualización:</strong> <span id="planillaLastUpdated">2025-03-15 14:30</span></p>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-md-6">
-                    <h5><i class="fas fa-chart-pie me-2 text-primary"></i> Resumen</h5>
-                    <div class="row g-3">
-                      <div class="col-sm-4">
-                        <div class="d-flex align-items-center">
-                          <span class="status-indicator status-p me-2"></span>
-                          <span><strong>Presentes:</strong> <span id="presentCount">17</span></span>
-                        </div>
-                      </div>
-                      <div class="col-sm-4">
-                        <div class="d-flex align-items-center">
-                          <span class="status-indicator status-a me-2"></span>
-                          <span><strong>Ausentes:</strong> <span id="absentCount">2</span></span>
-                        </div>
-                      </div>
-                      <div class="col-sm-4">
-                        <div class="d-flex align-items-center">
-                          <span class="status-indicator status-e me-2"></span>
-                          <span><strong>Excusados:</strong> <span id="excusedCount">1</span></span>
-                        </div>
-                      </div>
-                      <div class="col-12">
-                        <p class="mb-1"><strong>Total Pagos:</strong> <span id="totalPayments">$250,000</span></p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="card">
-              <div class="card-header bg-primary text-white">
-                <h5 class="mb-0">Registros de Jugadores</h5>
-              </div>
-              <div class="card-body p-0">
-                <div class="table-responsive">
-                  <table id="planillaDetailsTable" class="table table-striped table-hover">
-                    <thead>
-                      <tr>
-                        <th style="width: 5%;">#</th>
-                        <th style="width: 25%;">Nombre del Jugador</th>
-                        <th style="width: 15%;">Pago</th>
-                        <th style="width: 15%;">Asistencia</th>
-                        <th style="width: 40%;">Observaciones</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>1</td>
-                        <td>Juan Pérez</td>
-                        <td>
-                          <input type="text" class="form-control form-control-sm data-input" data-field="pago" value="$15,000">
-                        </td>
-                        <td>
-                          <select class="form-select form-select-sm data-input" data-field="asistencia">
-                            <option value="P" selected>Presente</option>
-                            <option value="A">Ausente</option>
-                            <option value="E">Excusa</option>
-                          </select>
-                        </td>
-                        <td>
-                          <input type="text" class="form-control form-control-sm data-input" data-field="observacion" value="Buen rendimiento">
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>2</td>
-                        <td>Carlos Rodríguez</td>
-                        <td>
-                          <input type="text" class="form-control form-control-sm data-input" data-field="pago" value="$15,000">
-                        </td>
-                        <td>
-                          <select class="form-select form-select-sm data-input" data-field="asistencia">
-                            <option value="P" selected>Presente</option>
-                            <option value="A">Ausente</option>
-                            <option value="E">Excusa</option>
-                          </select>
-                        </td>
-                        <td>
-                          <input type="text" class="form-control form-control-sm data-input" data-field="observacion" value="Muy activo">
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>3</td>
-                        <td>Miguel Ángel Sánchez</td>
-                        <td>
-                          <input type="text" class="form-control form-control-sm data-input" data-field="pago" value="$10,000">
-                        </td>
-                        <td>
-                          <select class="form-select form-select-sm data-input" data-field="asistencia">
-                            <option value="P" selected>Presente</option>
-                            <option value="A">Ausente</option>
-                            <option value="E">Excusa</option>
-                          </select>
-                        </td>
-                        <td>
-                          <input type="text" class="form-control form-control-sm data-input" data-field="observacion" value="Buen desempeño técnico">
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>4</td>
-                        <td>Andrés López</td>
-                        <td>
-                          <input type="text" class="form-control form-control-sm data-input" data-field="pago" value="$0">
-                        </td>
-                        <td>
-                          <select class="form-select form-select-sm data-input" data-field="asistencia">
-                            <option value="P">Presente</option>
-                            <option value="A" selected>Ausente</option>
-                            <option value="E">Excusa</option>
-                          </select>
-                        </td>
-                        <td>
-                          <input type="text" class="form-control form-control-sm data-input" data-field="observacion" value="No asistió">
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>5</td>
-                        <td>Felipe Martínez</td>
-                        <td>
-                          <input type="text" class="form-control form-control-sm data-input" data-field="pago" value="$15,000">
-                        </td>
-                        <td>
-                          <select class="form-select form-select-sm data-input" data-field="asistencia">
-                            <option value="P" selected>Presente</option>
-                            <option value="A">Ausente</option>
-                            <option value="E">Excusa</option>
-                          </select>
-                        </td>
-                        <td>
-                          <input type="text" class="form-control form-control-sm data-input" data-field="observacion" value="Jugador destacado">
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+      <!-- Contenido Principal -->
+      <div class="content-wrapper">
+        <!-- Vistas -->
+        <div id="dashboard-view" class="view"></div>
+        <div id="players-view" class="view"></div>
+        <div id="planillas-view" class="view"></div>
+        <div id="planilla-detail-view" class="view"></div>
       </div>
     </div>
-
-    <!-- Footer -->
-    <footer class="app-footer text-center py-3">
-      <div class="container">
-        <p class="mb-0">&copy; 2025 DIBA FBC. Todos los derechos reservados.</p>
-      </div>
-    </footer>
-  </section>
-
+  </main>
+  
   <!-- Modales -->
-  <!-- Modal para Añadir Jugador -->
-  <div class="modal fade" id="addPlayerModal" tabindex="-1" aria-labelledby="addPlayerModalLabel" aria-hidden="true">
+  <!-- Modal Jugador (Añadir/Editar) -->
+  <div class="modal fade" id="playerModal" tabindex="-1">
     <div class="modal-dialog">
       <div class="modal-content">
-        <div class="modal-header bg-primary text-white">
-          <h5 class="modal-title" id="addPlayerModalLabel">Añadir Nuevo Jugador</h5>
-          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        <div class="modal-header">
+          <h5 class="modal-title" id="playerModalLabel"></h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
         </div>
-        <div class="modal-body">
-          <form id="addPlayerForm">
-            <div class="mb-3">
-              <label for="playerName" class="form-label">Nombre Completo</label>
-              <input type="text" class="form-control" id="playerName" required>
-            </div>
-            <div class="mb-3">
-              <label for="playerCategory" class="form-label">Categoría</label>
-              <select class="form-select" id="playerCategory" required>
-                <option value="">Seleccione una categoría</option>
-                <option value="2008-2009">2008-2009</option>
-                <option value="2010-2011">2010-2011</option>
-                <option value="2012-2013">2012-2013</option>
-                <option value="2014-2015">2014-2015</option>
-              </select>
-            </div>
-            <div class="mb-3">
-              <label for="playerBirthdate" class="form-label">Fecha de Nacimiento</label>
-              <input type="date" class="form-control" id="playerBirthdate" required>
-            </div>
-            <div class="mb-3">
-              <label for="playerContact" class="form-label">Teléfono de Contacto</label>
-              <input type="tel" class="form-control" id="playerContact">
-            </div>
-            <div class="mb-3">
-              <label for="playerPhoto" class="form-label">Fotografía</label>
-              <input type="file" class="form-control" id="playerPhoto" accept="image/*">
-            </div>
-            <div class="mb-3">
-              <label for="playerStatus" class="form-label">Estado</label>
-              <select class="form-select" id="playerStatus" required>
-                <option value="active">Activo</option>
-                <option value="inactive">Inactivo</option>
-              </select>
-            </div>
-          </form>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-          <button type="button" class="btn btn-primary" id="saveNewPlayer">Guardar</button>
-        </div>
+        <form id="playerForm">
+          <div class="modal-body">
+            <input type="hidden" id="playerId">
+            <div class="mb-3"><label for="playerName" class="form-label">Nombre Completo</label><input type="text" class="form-control" id="playerName" required></div>
+            <div class="mb-3"><label for="playerCategory" class="form-label">Categoría</label><select class="form-select" id="playerCategory" required><option value="">Seleccione...</option><option value="2012/2013">2012/2013</option><option value="2014/15/16">2014/15/16</option></select></div>
+            <div class="mb-3"><label for="playerBirthdate" class="form-label">Fecha de Nacimiento</label><input type="date" class="form-control" id="playerBirthdate"></div>
+            <div class="mb-3"><label for="playerStatus" class="form-label">Estado</label><select class="form-select" id="playerStatus" required><option value="Activo">Activo</option><option value="Inactivo">Inactivo</option></select></div>
+          </div>
+          <div class="modal-footer"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button><button type="submit" class="btn btn-primary">Guardar</button></div>
+        </form>
       </div>
     </div>
   </div>
 
-  <!-- Modal para Editar Jugador -->
-  <div class="modal fade" id="editPlayerModal" tabindex="-1" aria-labelledby="editPlayerModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header bg-primary text-white">
-          <h5 class="modal-title" id="editPlayerModalLabel">Editar Jugador</h5>
-          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <form id="editPlayerForm">
-            <input type="hidden" id="editPlayerId">
-            <div class="mb-3">
-              <label for="editPlayerName" class="form-label">Nombre Completo</label>
-              <input type="text" class="form-control" id="editPlayerName" required>
-            </div>
-            <div class="mb-3">
-              <label for="editPlayerCategory" class="form-label">Categoría</label>
-              <select class="form-select" id="editPlayerCategory" required>
-                <option value="2008-2009">2008-2009</option>
-                <option value="2010-2011">2010-2011</option>
-                <option value="2012-2013">2012-2013</option>
-                <option value="2014-2015">2014-2015</option>
-              </select>
-            </div>
-            <div class="mb-3">
-              <label for="editPlayerBirthdate" class="form-label">Fecha de Nacimiento</label>
-              <input type="date" class="form-control" id="editPlayerBirthdate" required>
-            </div>
-            <div class="mb-3">
-              <label for="editPlayerContact" class="form-label">Teléfono de Contacto</label>
-              <input type="tel" class="form-control" id="editPlayerContact">
-            </div>
-            <div class="mb-3">
-              <label for="editPlayerPhoto" class="form-label">Fotografía</label>
-              <input type="file" class="form-control" id="editPlayerPhoto" accept="image/*">
-            </div>
-            <div class="mb-3">
-              <label for="editPlayerStatus" class="form-label">Estado</label>
-              <select class="form-select" id="editPlayerStatus" required>
-                <option value="active">Activo</option>
-                <option value="inactive">Inactivo</option>
-              </select>
-            </div>
-          </form>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-          <button type="button" class="btn btn-primary" id="saveEditPlayer">Actualizar</button>
-        </div>
+  <!-- Modal Planilla (Crear) -->
+  <div class="modal fade" id="planillaModal" tabindex="-1">
+      <div class="modal-dialog">
+          <div class="modal-content">
+              <div class="modal-header">
+                  <h5 class="modal-title">Crear Nueva Planilla</h5>
+                  <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+              </div>
+              <form id="planillaForm">
+                  <div class="modal-body">
+                      <div class="mb-3"><label for="planillaDate" class="form-label">Fecha</label><input type="date" class="form-control" id="planillaDate" required></div>
+                      <div class="mb-3"><label for="planillaCategory" class="form-label">Categoría</label><select class="form-select" id="planillaCategoryCreate" required><option value="">Seleccione...</option><option value="2012/2013">2012/2013</option><option value="2014/15/16">2014/15/16</option></select></div>
+                  </div>
+                  <div class="modal-footer"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button><button type="submit" class="btn btn-primary">Crear Planilla</button></div>
+              </form>
+          </div>
       </div>
-    </div>
   </div>
 
-  <!-- Modal para Importar Jugadores CSV -->
-  <div class="modal fade" id="importPlayersModal" tabindex="-1" aria-labelledby="importPlayersModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header bg-primary text-white">
-          <h5 class="modal-title" id="importPlayersModalLabel">Importar Jugadores (CSV)</h5>
-          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <form id="importPlayersForm">
-            <div class="mb-3">
-              <label for="csvFile" class="form-label">Archivo CSV</label>
-              <input type="file" class="form-control" id="csvFile" accept=".csv" required>
-            </div>
-            <div class="alert alert-info">
-              <h6 class="mb-2">Formato esperado del CSV:</h6>
-              <p class="mb-1 small">Nombre,Categoría,Fecha de Nacimiento,Teléfono</p>
-              <p class="mb-0 small">Ej: Juan Pérez,2012-2013,2012-05-15,3157894562</p>
-            </div>
-          </form>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-          <button type="button" class="btn btn-primary" id="processCSV">Importar</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Modal para Crear Nueva Planilla -->
-  <div class="modal fade" id="createPlanillaModal" tabindex="-1" aria-labelledby="createPlanillaModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header bg-primary text-white">
-          <h5 class="modal-title" id="createPlanillaModalLabel">Crear Nueva Planilla</h5>
-          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <form id="createPlanillaForm">
-            <div class="mb-3">
-              <label for="planillaDate" class="form-label">Fecha</label>
-              <input type="date" class="form-control" id="planillaDate" required>
-            </div>
-            <div class="mb-3">
-              <label for="planillaCategory" class="form-label">Categoría</label>
-              <select class="form-select" id="planillaCategory" required>
-                <option value="">Seleccione una categoría</option>
-                <option value="2008-2009">2008-2009</option>
-                <option value="2010-2011">2010-2011</option>
-                <option value="2012-2013">2012-2013</option>
-                <option value="2014-2015">2014-2015</option>
-              </select>
-            </div>
-          </form>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-          <button type="button" class="btn btn-primary" id="saveNewPlanilla">Crear Planilla</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Bootstrap Bundle JS -->
+  <!-- Scripts JS -->
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  <!-- DataTables -->
   <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
   <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
-  <!-- jQuery (needed for DataTables) -->
-  <script src="https://code.jquery.com/jquery-3.7.1.slim.min.js"></script>
-
-  <script id="app-script">
-    document.addEventListener('DOMContentLoaded', function() {
-      // Show toast notification
-      const showToast = (message, isSuccess = true) => {
-        const toast = document.getElementById('appToast');
-        const toastMessage = document.getElementById('toastMessage');
-        const icon = toastMessage.previousElementSibling;
-        
-        // Set message and icon
-        toastMessage.textContent = message;
-        icon.className = isSuccess ? 'fas fa-check-circle me-2' : 'fas fa-exclamation-circle me-2';
-        
-        // Show toast
-        const bsToast = new bootstrap.Toast(toast);
-        bsToast.show();
-      };
-      
-      // Login form submission
-      document.getElementById('loginForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        const username = document.getElementById('username').value;
-        const password = document.getElementById('password').value;
-        
-        // Simple validation (this would be replaced with actual API authentication)
-        if (username === 'admin' && password === 'admin') {
-          document.getElementById('loginPage').style.display = 'none';
-          document.getElementById('adminApp').style.display = 'block';
-          showDashboard(); // Show dashboard by default
-        } else {
-          showToast('Usuario o contraseña incorrectos', false);
-        }
-      });
-      
-      // Logout functionality
-      document.getElementById('logoutBtn').addEventListener('click', function() {
-        document.getElementById('loginPage').style.display = 'block';
-        document.getElementById('adminApp').style.display = 'none';
-        document.getElementById('username').value = '';
-        document.getElementById('password').value = '';
-      });
-      
-      // Navigation between views
-      const showDashboard = () => {
-        hideAllViews();
-        document.querySelector('.dashboard-view').style.display = 'block';
-        setActiveNavItem('dashboard');
-        initializeCharts();
-      };
-      
-      const showPlayers = () => {
-        hideAllViews();
-        document.querySelector('.players-view').style.display = 'block';
-        setActiveNavItem('players');
-        
-        // Initialize DataTables for players
-        if (!$.fn.DataTable.isDataTable('#playersTable')) {
-          $('#playersTable').DataTable({
-            language: {
-              url: '//cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json',
-            },
-            responsive: true
-          });
-        }
-      };
-      
-      const showPlanillas = () => {
-        hideAllViews();
-        document.querySelector('.planillas-view').style.display = 'block';
-        setActiveNavItem('planillas');
-        
-        // Initialize DataTables for planillas
-        if (!$.fn.DataTable.isDataTable('#planillasTable')) {
-          $('#planillasTable').DataTable({
-            language: {
-              url: '//cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json',
-            },
-            responsive: true
-          });
-        }
-      };
-      
-      const showPlanillaDetail = (id) => {
-        hideAllViews();
-        document.querySelector('.planilla-detail-view').style.display = 'block';
-        
-        // Set planilla details (this would be populated from API data in a real app)
-        document.getElementById('planillaDetailTitle').textContent = `2025-03-${15 - id} (2012-2013)`;
-        document.getElementById('planillaDate').textContent = `2025-03-${15 - id}`;
-        
-        // Initialize DataTables for planilla details if needed
-        if (!$.fn.DataTable.isDataTable('#planillaDetailsTable')) {
-          $('#planillaDetailsTable').DataTable({
-            language: {
-              url: '//cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json',
-            },
-            responsive: true,
-            paging: false,
-            info: false,
-            searching: false
-          });
-        }
-      };
-      
-      const hideAllViews = () => {
-        document.querySelector('.dashboard-view').style.display = 'none';
-        document.querySelector('.players-view').style.display = 'none';
-        document.querySelector('.planillas-view').style.display = 'none';
-        document.querySelector('.planilla-detail-view').style.display = 'none';
-      };
-      
-      const setActiveNavItem = (view) => {
-        document.querySelectorAll('.sidebar .nav-link').forEach(navLink => {
-          navLink.classList.remove('active');
-        });
-        
-        const activeNavLink = document.querySelector(`.sidebar .nav-link[data-view="${view}"]`);
-        if (activeNavLink) {
-          activeNavLink.classList.add('active');
-        }
-      };
-      
-      // Add event listeners for navigation
-      document.querySelectorAll('.sidebar .nav-link').forEach(navLink => {
-        navLink.addEventListener('click', function() {
-          const view = this.getAttribute('data-view');
-          switch (view) {
-            case 'dashboard':
-              showDashboard();
-              break;
-            case 'players':
-              showPlayers();
-              break;
-            case 'planillas':
-              showPlanillas();
-              break;
-          }
-        });
-      });
-      
-      // Add event listeners for view planilla buttons
-      document.querySelectorAll('.view-planilla').forEach(button => {
-        button.addEventListener('click', function() {
-          const id = this.getAttribute('data-id');
-          showPlanillaDetail(id);
-        });
-      });
-      
-      // Back to planillas button
-      document.getElementById('backToPlanillas').addEventListener('click', showPlanillas);
-      
-      // Initialize charts for dashboard
-      function initializeCharts() {
-        // Attendance Chart
-        const attendanceCtx = document.getElementById('attendanceChart').getContext('2d');
-        new Chart(attendanceCtx, {
-          type: 'bar',
-          data: {
-            labels: ['2008-2009', '2010-2011', '2012-2013', '2014-2015'],
-            datasets: [{
-              label: 'Asistencia (%)',
-              data: [92, 85, 88, 78],
-              backgroundColor: [
-                'rgba(0, 42, 64, 0.7)',
-                'rgba(0, 119, 182, 0.7)',
-                'rgba(0, 150, 199, 0.7)',
-                'rgba(0, 180, 216, 0.7)'
-              ],
-              borderColor: [
-                'rgba(0, 42, 64, 1)',
-                'rgba(0, 119, 182, 1)',
-                'rgba(0, 150, 199, 1)',
-                'rgba(0, 180, 216, 1)'
-              ],
-              borderWidth: 1
-            }]
-          },
-          options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-              y: {
-                beginAtZero: true,
-                max: 100
-              }
-            }
-          }
-        });
-
-        // Payments Chart
-        const paymentsCtx = document.getElementById('paymentsChart').getContext('2d');
-        new Chart(paymentsCtx, {
-          type: 'line',
-          data: {
-            labels: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun'],
-            datasets: [{
-              label: 'Pagos (en miles)',
-              data: [200, 250, 300, 280, 320, 350],
-              fill: true,
-              backgroundColor: 'rgba(0, 119, 182, 0.2)',
-              borderColor: 'rgba(0, 119, 182, 1)',
-              tension: 0.3
-            }]
-          },
-          options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-              y: {
-                beginAtZero: true
-              }
-            }
-          }
-        });
-      }
-
-      // Add player form submission
-      document.getElementById('saveNewPlayer').addEventListener('click', function() {
-        // Validate form
-        const form = document.getElementById('addPlayerForm');
-        if (form.checkValidity()) {
-          // In a real app, this would submit to an API
-          const playerName = document.getElementById('playerName').value;
-          
-          // Close modal and show success message
-          const modal = bootstrap.Modal.getInstance(document.getElementById('addPlayerModal'));
-          modal.hide();
-          
-          showToast(`Jugador "${playerName}" añadido correctamente.`);
-          
-          // Clear form
-          form.reset();
-        } else {
-          form.reportValidity();
-        }
-      });
-
-      // Edit player form submission
-      document.getElementById('saveEditPlayer').addEventListener('click', function() {
-        // Validate form
-        const form = document.getElementById('editPlayerForm');
-        if (form.checkValidity()) {
-          // In a real app, this would submit to an API
-          const playerName = document.getElementById('editPlayerName').value;
-          
-          // Close modal and show success message
-          const modal = bootstrap.Modal.getInstance(document.getElementById('editPlayerModal'));
-          modal.hide();
-          
-          showToast(`Jugador "${playerName}" actualizado correctamente.`);
-        } else {
-          form.reportValidity();
-        }
-      });
-
-      // Import CSV submission
-      document.getElementById('processCSV').addEventListener('click', function() {
-        // Validate form
-        const form = document.getElementById('importPlayersForm');
-        if (form.checkValidity()) {
-          // In a real app, this would process the CSV
-          
-          // Close modal and show success message
-          const modal = bootstrap.Modal.getInstance(document.getElementById('importPlayersModal'));
-          modal.hide();
-          
-          showToast('Jugadores importados correctamente.');
-          
-          // Clear form
-          form.reset();
-        } else {
-          form.reportValidity();
-        }
-      });
-
-      // Create planilla submission
-      document.getElementById('saveNewPlanilla').addEventListener('click', function() {
-        // Validate form
-        const form = document.getElementById('createPlanillaForm');
-        if (form.checkValidity()) {
-          // In a real app, this would submit to an API
-          const date = document.getElementById('planillaDate').value;
-          const category = document.getElementById('planillaCategory').value;
-          
-          // Close modal and show success message
-          const modal = bootstrap.Modal.getInstance(document.getElementById('createPlanillaModal'));
-          modal.hide();
-          
-          showToast(`Planilla para ${date} (${category}) creada correctamente.`);
-          
-          // Clear form
-          form.reset();
-        } else {
-          form.reportValidity();
-        }
-      });
-
-      // Generate PDF button
-      document.getElementById('generatePDF').addEventListener('click', function() {
-        showToast('PDF generado correctamente.');
-      });
-
-      // Send Email button
-      document.getElementById('sendEmail').addEventListener('click', function() {
-        showToast('Resumen enviado correctamente.');
-      });
-
-      // Date filter on dashboard
-      document.getElementById('filterDates').addEventListener('click', function() {
-        const startDate = document.getElementById('startDate').value;
-        const endDate = document.getElementById('endDate').value;
-        
-        if (startDate && endDate) {
-          showToast(`Datos filtrados del ${startDate} al ${endDate}.`);
-          // In a real app, this would refresh the dashboard with filtered data
-        } else {
-          showToast('Por favor seleccione fechas de inicio y fin.', false);
-        }
-      });
-
-      // Save data changes in planilla detail
-      document.querySelectorAll('#planillaDetailsTable .data-input').forEach(input => {
-        input.addEventListener('change', function() {
-          // In a real app, this would save to the API immediately
-          showToast('Cambio guardado automáticamente.');
-        });
-      });
-
-      // Set today's date as default for date inputs
-      const today = new Date().toISOString().split('T')[0];
-      document.getElementById('startDate').value = today;
-      document.getElementById('endDate').value = today;
-
-      // Show dashboard initially
-      showDashboard();
-    });
-  </script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  
+  <!-- Tu Lógica de la Aplicación -->
+  <script src="app.js"></script>
 </body>
 </html>
