@@ -68,7 +68,10 @@ async function filtrarPartidos() {
   const partidos = await obtenerPartidos();
   loadingSpinner.style.display = 'none';
 
-  const filtrados = partidos.filter(p => new Date(p.fecha).toISOString().split('T')[0] === fechaSeleccionada);
+  const filtrados = partidos.filter(p =>
+    new Date(p.fecha).toISOString().split('T')[0] === fechaSeleccionada
+  );
+
   if (filtrados.length === 0) {
     matchesContainer.innerHTML = '<p class="text-center text-muted">No hay partidos para la fecha seleccionada.</p>';
     return;
@@ -82,7 +85,11 @@ async function filtrarPartidos() {
       ${p.valor ? `<p><i class="fas fa-dollar-sign me-2"></i><strong>Valor:</strong> $${p.valor}</p>` : ''}
       <p><i class="fas fa-trophy me-2"></i><strong>Resultado:</strong> ${p.resultado || 'No disponible'}</p>
       <p><i class="fas fa-futbol me-2"></i><strong>Goles:</strong> ${p.goles || 'No disponible'}</p>
+      ${p.uniforme ? `<p><i class="fas fa-tshirt me-2"></i><strong>Uniforme:</strong> ${p.uniforme}</p>` : ''}
+      ${p.observaciones ? `<p><i class="fas fa-users me-2"></i><strong>Observaciones:</strong> ${p.observaciones}</p>` : ''}
+      ${p.metodo_pago ? `<p><i class="fas fa-credit-card me-2"></i><strong>Método de Pago:</strong> ${p.metodo_pago}</p>` : ''}
     `;
+
     const card = crearCard({
       tipo: 'partido',
       titulo: `${p.equipolocal} vs ${p.equipovisitante}`,
@@ -90,6 +97,7 @@ async function filtrarPartidos() {
       escudo: p.escudo,
       color: 'primary'
     });
+
     matchesContainer.appendChild(card);
   });
 }
