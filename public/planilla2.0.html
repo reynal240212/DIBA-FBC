@@ -165,57 +165,91 @@
       </div>
 
       <!-- Contenido Principal -->
-      <div class="content-wrapper">
-        <!-- Vistas -->
-        <div id="dashboard-view" class="view"></div>
-        <div id="players-view" class="view"></div>
-        <div id="planillas-view" class="view"></div>
-        <div id="planilla-detail-view" class="view"></div>
-      </div>
-    </div>
-  </main>
-  
-  <!-- Modales -->
-  <!-- Modal Jugador (Añadir/Editar) -->
-  <div class="modal fade" id="playerModal" tabindex="-1">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="playerModalLabel"></h5>
-          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-        </div>
-        <form id="playerForm">
-          <div class="modal-body">
-            <input type="hidden" id="playerId">
-            <div class="mb-3"><label for="playerName" class="form-label">Nombre Completo</label><input type="text" class="form-control" id="playerName" required></div>
-            <div class="mb-3"><label for="playerCategory" class="form-label">Categoría</label><select class="form-select" id="playerCategory" required><option value="">Seleccione...</option><option value="2012/2013">2012/2013</option><option value="2014/15/16">2014/15/16</option></select></div>
-            <div class="mb-3"><label for="playerBirthdate" class="form-label">Fecha de Nacimiento</label><input type="date" class="form-control" id="playerBirthdate"></div>
-            <div class="mb-3"><label for="playerStatus" class="form-label">Estado</label><select class="form-select" id="playerStatus" required><option value="Activo">Activo</option><option value="Inactivo">Inactivo</option></select></div>
-          </div>
-          <div class="modal-footer"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button><button type="submit" class="btn btn-primary">Guardar</button></div>
-        </form>
-      </div>
-    </div>
-  </div>
+<div class="content-wrapper">
+    <!-- Vistas que se rellenarán con JavaScript -->
+    <div id="dashboard-view" class="view"></div>
+    <div id="players-view" class="view"></div>
+    <div id="planillas-view" class="view"></div>
+    <div id="planilla-detail-view" class="view"></div>
+</div>
+</div>
+</main>
 
-  <!-- Modal Planilla (Crear) -->
-  <div class="modal fade" id="planillaModal" tabindex="-1">
-      <div class="modal-dialog">
-          <div class="modal-content">
-              <div class="modal-header">
-                  <h5 class="modal-title">Crear Nueva Planilla</h5>
-                  <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-              </div>
-              <form id="planillaForm">
-                  <div class="modal-body">
-                      <div class="mb-3"><label for="planillaDate" class="form-label">Fecha</label><input type="date" class="form-control" id="planillaDate" required></div>
-                      <div class="mb-3"><label for="planillaCategory" class="form-label">Categoría</label><select class="form-select" id="planillaCategoryCreate" required><option value="">Seleccione...</option><option value="2012/2013">2012/2013</option><option value="2014/15/16">2014/15/16</option></select></div>
-                  </div>
-                  <div class="modal-footer"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button><button type="submit" class="btn btn-primary">Crear Planilla</button></div>
-              </form>
-          </div>
-      </div>
-  </div>
+<!-- ======================================
+     MODALES DE LA APLICACIÓN
+====================================== -->
+
+<!-- Modal: Añadir/Editar Jugador (CORREGIDO) -->
+<div class="modal fade" id="playerModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="playerModalLabel"></h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <form id="playerForm">
+                <div class="modal-body">
+                    <input type="hidden" id="playerId">
+                    <div class="mb-3">
+                        <label for="playerName" class="form-label">Nombre del Jugador</label>
+                        <input type="text" class="form-control" id="playerName" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="playerCategory" class="form-label">Categoría</label>
+                        <select class="form-select" id="playerCategory" required>
+                            <option value="">Seleccione...</option>
+                            <option value="2012/2013">2012/2013</option>
+                            <option value="2014/15/16">2014/15/16</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="playerStatus" class="form-label">Estado</label>
+                        <select class="form-select" id="playerStatus" required>
+                            <option value="Activo">Activo</option>
+                            <option value="Inactivo">Inactivo</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal: Crear Nueva Planilla (SIN CAMBIOS, YA ESTABA CORRECTO) -->
+<div class="modal fade" id="planillaModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Crear Nueva Planilla</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <form id="planillaForm">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="planillaDate" class="form-label">Fecha</label>
+                        <input type="date" class="form-control" id="planillaDate" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="planillaCategoryCreate" class="form-label">Categoría</label>
+                        <select class="form-select" id="planillaCategoryCreate" required>
+                            <option value="">Seleccione...</option>
+                            <option value="2012/2013">2012/2013</option>
+                            <option value="2014/15/16">2014/15/16</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Crear Planilla</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
   <!-- Scripts JS -->
   <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
