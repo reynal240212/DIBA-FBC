@@ -2,434 +2,577 @@
 <html lang="es" data-bs-theme="light">
 <head>
   <meta charset="UTF-8" />
-  <title>Planilla General - DIBA FBC</title>
-  <meta name="author" content="REINALDO DE JESUS PEREZ NAVAS" />
-  <meta name="keywords" content="DIBA FBC, Deportivo Internacional De Barranquilla Atlántico, Fútbol, Barranquilla, Atlántico, Colombia" />
-  <meta name="description" content="Planilla interactiva para el control de jugadores del club DIBA FBC. Conoce la historia y los momentos más destacados." />
-  <meta name="robots" content="index, follow" />
+  <title>DIBA FBC - Sistema de Gestión</title>
+  <meta name="description" content="Sistema de gestión para el Deportivo Internacional de Barranquilla Atlántico FBC" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <!-- Theming -->
-  <meta name="theme-color" content="#002a40" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="#002a40" />
-  <meta name="msapplication-navbutton-color" content="#002a40" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="mobile-web-app-capable" content="yes" />
-  <meta name="HandheldFriendly" content="True" />
-  <meta name="MobileOptimized" content="320" />
-
-  <!-- Favicons -->
-  <link rel="icon" href="images/ESCUDO.ico" sizes="32x32">
-  <link rel="icon" href="https://i.postimg.cc/x8W7vwJJ/ESCUDO.png" type="image/png">
-
-  <!-- Bootstrap 5.3.3 CSS -->
+  <!-- Dependencias CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-  <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
-  <!-- Animate.css (Opcional, si se usa) -->
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
 
-  <!-- JS Libraries for PDF Generation -->
-  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.8.2/dist/jspdf.plugin.autotable.min.js"></script>
-
-  <!-- Estilos Personalizados -->
-  <style>
+  <style id="app-style">
+    /* ======================================
+       VARIABLES DE COLOR Y TIPOGRAFÍA
+    ====================================== */
     :root {
-      --primary-color: #002a40;
-      --secondary-color: #0077b6;
-      --accent-color: #e9d8a6;
-      --bs-body-bg: #f8f9fa;
+      /* Colores principales DIBA FBC */
+      --primary-dark: #001b72;
+      --primary: #003399;
+      --primary-darker: #0b0281;
+      --accent: #ffd700;
+      --accent-transparent: rgba(255, 217, 0, 0.85);
+
+      /* Escala de grises y colores de estado */
+      --white: #ffffff;
+      --light-gray: #f4f4f4;
+      --success-color: #198754;
+      --danger-color: #dc3545;
+      --warning-color: #ffc107;
+      --bs-body-bg: var(--light-gray);
     }
+
     body {
       background-color: var(--bs-body-bg);
-      padding-bottom: 5rem;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      font-family: 'Arial', sans-serif;
     }
-    .navbar {
-      background-color: var(--primary-color) !important;
+
+    /* Componentes con colores primarios */
+    .navbar, .card-header, .app-footer, .modal-header, .table th {
+      background-color: var(--primary) !important;
+      color: var(--white);
     }
-    .table-responsive {
-      max-height: 65vh;
-      overflow-y: auto;
+
+    .btn-primary {
+      background-color: var(--primary);
+      border-color: var(--primary);
+      color: var(--white);
     }
-    .table th {
-      background-color: var(--primary-color);
+
+    .btn-primary:hover {
+      background-color: var(--primary-dark);
+      border-color: var(--primary-dark);
+    }
+    
+    .btn-success {
+        background-color: var(--accent);
+        color: var(--primary-dark) !important;
+        border-color: var(--accent);
+    }
+
+    .btn-success:hover {
+        background-color: #e6c300;
+        border-color: #e6c300;
+    }
+
+    .bg-primary { background-color: var(--primary) !important; }
+    .bg-accent { background-color: var(--accent) !important; }
+    .text-primary { color: var(--primary) !important; }
+    .text-accent { color: var(--accent) !important; }
+    .border-primary { border-color: var(--primary) !important; }
+
+    .card {
+      border: none;
+      box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    }
+    
+    /* Login */
+    .login-container { max-width: 400px; margin: 5rem auto; }
+    .login-card { border: none; border-radius: 12px; box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15); }
+    .login-header {
+      background-color: var(--primary);
       color: white;
-      position: sticky;
-      top: 0;
-      z-index: 10;
+      text-align: center;
+      border-radius: 12px 12px 0 0;
+      padding: 2rem 0;
     }
-    .action-btn {
-      opacity: 0.5;
-      transition: opacity 0.2s ease-in-out;
+    .login-header h2 { font-family: 'Dancing Script', cursive; font-size: 2.5rem; }
+
+    /* Sidebar */
+    .sidebar {
+      background-color: var(--primary-dark);
+      min-height: calc(100vh - 56px);
+      width: 250px;
     }
-    tr:hover .action-btn {
-      opacity: 1;
+    .sidebar .nav-link { color: rgba(255, 255, 255, 0.8); }
+    .sidebar .nav-link:hover { background-color: var(--primary); color: var(--white); }
+    .sidebar .nav-link.active { background-color: var(--primary-darker); color: var(--white); }
+    .sidebar .nav-link i { width: 20px; text-align: center; margin-right: 8px; }
+
+    /* Stats Cards */
+    .stats-card {
+        background-color: white;
+        border-left: 5px solid var(--primary);
+        border-radius: 8px;
+        padding: 1.5rem;
+        transition: transform 0.2s;
     }
-    #generatePDF:disabled {
-      cursor: not-allowed;
+    .stats-card:hover { transform: translateY(-5px); }
+    .stats-card .icon {
+        color: var(--primary);
+        font-size: 2rem;
     }
-    .toast-container {
-      z-index: 1100;
+
+    /* DataTables */
+    .dataTables_wrapper .dataTables_paginate .paginate_button.current {
+      background: var(--primary) !important;
+      color: white !important;
+      border-color: var(--primary) !important;
     }
+
+    /* Vistas y otros */
+    .content-wrapper { flex: 1; padding: 1.5rem; }
+    #loginPage { display: block; }
+    #adminApp { display: none; }
+    .dashboard-view, .players-view, .planillas-view, .planilla-detail-view { display: none; }
+    .status-indicator { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+    .status-p { background-color: #28a745; }
+    .status-a { background-color: #dc3545; }
+    .status-e { background-color: #ffc107; }
   </style>
 </head>
 
 <body>
-  <!-- Contenedor para Notificaciones -->
+  <!-- Toast Notifications -->
   <div class="toast-container position-fixed top-0 end-0 p-3">
-    <div id="appToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-      <div class="toast-header">
-        <i class="fas fa-check-circle text-success me-2"></i>
-        <strong class="me-auto">Notificación</strong>
-        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+    <div id="appToast" class="toast align-items-center" role="alert" aria-live="assertive" aria-atomic="true">
+      <div class="d-flex">
+        <div class="toast-body"></div>
+        <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
       </div>
-      <div class="toast-body"></div>
     </div>
   </div>
 
-   <!-- Contenedor para el Navbar (se carga desde layout/navbar.html) -->
-  <div id="navbar-container"></div>
+  <!-- Login Screen -->
+  <section id="loginPage" class="container">
+    <div class="login-container">
+      <div class="login-card card">
+        <div class="login-header">
+          <img src="https://diba-fbc.vercel.app/images/ESCUDO.png" alt="DIBA FBC Logo" class="mb-3" style="max-width: 100px;">
+          <h2>DIBA FBC</h2>
+          <p class="mb-0">Sistema de Gestión</p>
+        </div>
+        <div class="card-body p-4">
+          <form id="loginForm">
+            <div class="mb-3">
+              <label for="username" class="form-label">Usuario</label>
+              <div class="input-group">
+                <span class="input-group-text"><i class="fas fa-user"></i></span>
+                <input type="text" class="form-control" id="username" value="admin" required>
+              </div>
+            </div>
+            <div class="mb-3">
+              <label for="password" class="form-label">Contraseña</label>
+              <div class="input-group">
+                <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                <input type="password" class="form-control" id="password" value="admin" required>
+              </div>
+            </div>
+            <div class="d-grid mt-4">
+              <button type="submit" class="btn btn-primary py-2">
+                <i class="fas fa-sign-in-alt me-2"></i> Iniciar Sesión
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
 
-  <main class="container py-4">
-    
-    <div class="card shadow-sm mb-4">
-      <div class="card-body">
-        <div class="row align-items-center g-3">
-          <div class="col-lg-6">
-            <h1 class="mb-1 text-primary">Planilla de Control</h1>
-            <p class="text-muted mb-0">Gestiona la asistencia, pagos y observaciones de los jugadores.</p>
-          </div>
-          <div class="col-lg-6 d-flex justify-content-lg-end gap-3 flex-wrap">
-            <div>
-              <label for="planillaDate" class="form-label fw-bold small mb-1">Fecha:</label>
-              <input type="date" class="form-control" id="planillaDate">
-            </div>
-            <div>
-              <label for="planillaCategory" class="form-label fw-bold small mb-1">Categoría:</label>
-              <input type="text" class="form-control" id="planillaCategory" placeholder="Ej: 2012-2013">
-            </div>
-          </div>
+  <!-- Admin Application -->
+  <main id="adminApp" class="d-flex flex-column">
+    <!-- Top Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+      <div class="container-fluid">
+        <a class="navbar-brand d-flex align-items-center" href="javascript:void(0)" onclick="showDashboard()">
+          <img src="https://diba-fbc.vercel.app/images/ESCUDO.png" alt="DIBA FBC Logo" class="me-2" style="max-height: 35px;">
+          <span>DIBA FBC</span>
+        </a>
+        <div class="ms-auto">
+            <a class="nav-link text-white" href="javascript:void(0)" id="logoutBtn"><i class="fas fa-sign-out-alt me-2"></i>Cerrar Sesión</a>
         </div>
       </div>
-    </div>
-    
-    <div class="row g-4 mb-4">
-      <div class="col-lg-7">
-        <div class="card h-100">
-          <div class="card-body">
-            <h5 class="card-title mb-3"><i class="fas fa-user-plus me-2 text-success"></i>Añadir Nuevo Jugador</h5>
-            <form id="addPlayerForm" class="d-flex gap-2">
-              <input type="text" id="newPlayerName" class="form-control" placeholder="Nombre completo del jugador" required>
-              <button type="submit" class="btn btn-success flex-shrink-0" aria-label="Añadir Jugador">
-                <i class="fas fa-plus me-1"></i> Añadir a la Lista
-              </button>
-            </form>
-          </div>
+    </nav>
+
+    <div class="container-fluid flex-grow-1">
+      <div class="row h-100">
+        <!-- Sidebar -->
+        <div class="col-lg-2 sidebar p-0">
+          <ul class="nav flex-column p-3">
+            <li class="nav-item">
+              <a class="nav-link active" href="javascript:void(0)" data-view="dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="javascript:void(0)" data-view="players"><i class="fas fa-users"></i> Jugadores</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="javascript:void(0)" data-view="planillas"><i class="fas fa-clipboard-list"></i> Planillas</a>
+            </li>
+          </ul>
         </div>
-      </div>
-      
-      <div class="col-lg-5">
-        <div class="card h-100">
-          <div class="card-body text-center">
-             <h5 class="card-title mb-3"><i class="fas fa-cogs me-2 text-secondary"></i>Acciones de la Planilla</h5>
-             <div class="d-grid d-sm-flex gap-2 justify-content-center">
-              <button id="generatePDF" class="btn btn-primary">
-                <span id="pdf-icon"><i class="fas fa-file-pdf"></i></span>
-                <span id="pdf-text"> Descargar PDF</span>
-              </button>
-              <button id="clearData" class="btn btn-danger" data-bs-toggle="tooltip" title="Borra pagos, asistencia y observaciones de todos los jugadores.">
-                <i class="fas fa-eraser"></i> Limpiar Datos
-              </button>
-             </div>
+
+        <!-- Main Content -->
+        <div class="col-lg-10 content-wrapper">
+          
+          <!-- Dashboard View -->
+          <div class="dashboard-view">
+            <h1 class="mb-4"><i class="fas fa-tachometer-alt me-2 text-primary"></i> Dashboard</h1>
+            <!-- Stats, Charts, etc. -->
+             <div class="alert alert-info">El dashboard está en desarrollo. ¡Próximamente verás estadísticas y gráficos aquí!</div>
           </div>
+
+          <!-- Players View -->
+          <div class="players-view">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+              <h1 class="mb-0"><i class="fas fa-users me-2 text-primary"></i> Gestión de Jugadores</h1>
+              <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#playerModal">
+                <i class="fas fa-user-plus me-1"></i> Nuevo Jugador
+              </button>
+            </div>
+            <div class="card">
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table id="playersTable" class="table table-striped table-hover w-100">
+                    <thead>
+                      <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Categoría</th>
+                        <th>Fecha de Nacimiento</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <!-- Los datos se cargarán aquí desde Supabase -->
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Planillas View (en desarrollo) -->
+          <div class="planillas-view">
+            <h1 class="mb-4"><i class="fas fa-clipboard-list me-2 text-primary"></i> Planillas</h1>
+            <div class="alert alert-warning">El módulo de planillas está en construcción.</div>
+          </div>
+
         </div>
       </div>
     </div>
 
-    <div class="card shadow-sm">
-        <div class="card-header bg-primary text-white">
-            <h5 class="mb-0"><i class="fas fa-list-ol me-2"></i>Lista de Jugadores</h5>
+    <!-- Footer -->
+    <footer class="app-footer text-center py-3">
+      <p class="mb-0">&copy; 2025 DIBA FBC. Todos los derechos reservados.</p>
+    </footer>
+  </main>
+
+  <!-- Modal para Jugador (Añadir/Editar) -->
+  <div class="modal fade" id="playerModal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="playerModalLabel">Añadir Nuevo Jugador</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
         </div>
-        <div class="card-body p-0">
-            <div class="table-responsive">
-              <table class="table table-striped table-hover mb-0" id="planillaTable">
-                <thead>
-                  <tr>
-                    <th style="width: 5%;">#</th>
-                    <th>Nombre del Jugador</th>
-                    <th style="width: 15%;">Pago</th>
-                    <th style="width: 15%;">Asistencia</th>
-                    <th style="width: 25%;">Observaciones</th>
-                    <th style="width: 5%;" class="text-center">Quitar</th>
-                  </tr>
-                </thead>
-                <tbody id="planillaBody">
-                </tbody>
-              </table>
+        <div class="modal-body">
+          <form id="playerForm">
+            <input type="hidden" id="playerId">
+            <div class="mb-3">
+              <label for="playerName" class="form-label">Nombre Completo</label>
+              <input type="text" class="form-control" id="playerName" required>
             </div>
+            <div class="mb-3">
+              <label for="playerCategory" class="form-label">Categoría</label>
+              <select class="form-select" id="playerCategory" required>
+                <option value="">Seleccione una categoría</option>
+                <option value="2012">2012</option>
+                <option value="2014-2016">2014-2016</option>
+                <option value="Otra">Otra</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label for="playerBirthdate" class="form-label">Fecha de Nacimiento</label>
+              <input type="date" class="form-control" id="playerBirthdate">
+            </div>
+            <div class="mb-3">
+              <label for="playerStatus" class="form-label">Estado</label>
+              <select class="form-select" id="playerStatus" required>
+                <option value="Activo">Activo</option>
+                <option value="Inactivo">Inactivo</option>
+              </select>
+            </div>
+          </form>
         </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="submit" class="btn btn-primary" form="playerForm">Guardar</button>
+        </div>
+      </div>
     </div>
-</main>
-  <!-- Bootstrap Bundle JS -->
+  </div>
+
+  <!-- Scripts JS -->
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
+  <script id="app-script">
+    // --- CONFIGURACIÓN DE SUPABASE ---
+    const supabaseUrl = 'https://wdnlqfiwuocmmcdowjyw.supabase.co';
+    const supabaseKey = 'eyJhbGciOiJIZGlwZWxsb3dhbmFzZSIsInJlZiI6IndkbmxxZml3dW9jbW1jZG93anl3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg1MjY1ODAsImV4cCI6MjA2NDEwMjU4MH0.4SCS_NRDIYLQJ1XouqW111BxkMOlwMWOjje9gFTgW_Q';
+    const supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
-      // --- ELEMENTOS DEL DOM ---
-      const tableBody = document.getElementById('planillaBody');
-      const addPlayerForm = document.getElementById('addPlayerForm');
-      const newPlayerNameInput = document.getElementById('newPlayerName');
-      const generatePdfBtn = document.getElementById('generatePDF');
-      const clearDataBtn = document.getElementById('clearData');
-      const dateInput = document.getElementById('planillaDate');
-      const categoryInput = document.getElementById('planillaCategory');
-      const toastElement = document.getElementById('appToast');
-      const bsToast = new bootstrap.Toast(toastElement);
+    // --- FUNCIÓN PARA POBLAR DATOS (EJECUTAR UNA VEZ) ---
+    async function poblarJugadores() {
+        const jugadoresData = [
+            // Categoría 2012
+            { nombre_completo: 'Deiyembes Manosalva', categoria: '2012', status: 'Activo' },
+            { nombre_completo: 'Dinkol Noguera', categoria: '2012', status: 'Activo' },
+            { nombre_completo: 'Juan Tobias', categoria: '2012', status: 'Activo' },
+            { nombre_completo: 'Dilan Sánchez', categoria: '2012', status: 'Activo' },
+            { nombre_completo: 'Dany Tapias', categoria: '2012', status: 'Activo' },
+            { nombre_completo: 'Daniel Rodríguez', categoria: '2012', status: 'Activo' },
+            { nombre_completo: 'Nelson Pauline', categoria: '2012', status: 'Activo' },
+            { nombre_completo: 'Santiago Mendoza', categoria: '2012', status: 'Activo' },
+            { nombre_completo: 'Oscar Lopez', categoria: '2012', status: 'Activo' },
+            // Categoría 2014-2016
+            { nombre_completo: 'Mario Pérez', categoria: '2014-2016', status: 'Activo' },
+            { nombre_completo: 'Juan Andrés Martínez', categoria: '2014-2016', status: 'Activo' },
+            { nombre_completo: 'Nayareth Celin', categoria: '2014-2016', status: 'Activo' },
+            { nombre_completo: 'Eliuth Meza', categoria: '2014-2016', status: 'Activo' },
+            { nombre_completo: 'Abraham Perez', categoria: '2014-2016', status: 'Activo' },
+            { nombre_completo: 'Rey David Arrieta', categoria: '2014-2016', status: 'Activo' },
+            { nombre_completo: 'Santy Hernandez', categoria: '2014-2016', status: 'Activo' },
+            { nombre_completo: 'Santy Tobias', categoria: '2014-2016', status: 'Activo' },
+            { nombre_completo: 'ISAAC Ventura', categoria: '2014-2016', status: 'Activo' },
+            { nombre_completo: 'Carlos Moreno', categoria: '2014-2016', status: 'Activo' },
+            { nombre_completo: 'Zaid Ricardo', categoria: '2014-2016', status: 'Activo' },
+            { nombre_completo: 'Stiven 2014', categoria: '2014-2016', status: 'Activo' },
+            { nombre_completo: 'Cristian Marcano', categoria: '2014-2016', status: 'Activo' },
+            { nombre_completo: 'ANDRES Sierra', categoria: '2014-2016', status: 'Activo' },
+            { nombre_completo: 'YESID Manzano', categoria: '2014-2016', status: 'Activo' },
+            { nombre_completo: 'Miguel Aldana', categoria: '2014-2016', status: 'Activo' },
+            { nombre_completo: 'Yojainer Villalobos', categoria: '2014-2016', status: 'Activo' },
+            { nombre_completo: 'Jesus Ricardo', categoria: '2014-2016', status: 'Activo' },
+            { nombre_completo: 'Estiben Montiel', categoria: '2014-2016', status: 'Activo' },
+            { nombre_completo: 'Angel Hernández', categoria: '2014-2016', status: 'Activo' },
+            { nombre_completo: 'Mateo Boscan', categoria: '2014-2016', status: 'Activo' },
+            { nombre_completo: 'Larson Orozco', categoria: '2014-2016', status: 'Activo' },
+            { nombre_completo: 'Josheth Aldana', categoria: '2014-2016', status: 'Activo' }
+        ];
 
-      // Inicializar tooltips de Bootstrap
-      new bootstrap.Tooltip(clearDataBtn);
+        try {
+            const { error } = await supabase.from('jugadores').insert(jugadoresData);
+            if (error) throw error;
+            showToast('¡Jugadores insertados en la base de datos con éxito!', 'success');
+        } catch (error) {
+            showToast(`Error al poblar la base de datos: ${error.message}`, 'danger');
+        }
+    }
 
-      // --- ESTADO DE LA APLICACIÓN (LA ÚNICA FUENTE DE VERDAD) ---
-      let appState = {
-        players: [],
-        data: {}, // { 'player_id': { pago: '', asistencia: '', observacion: '' } }
-        category: ''
-      };
+    document.addEventListener('DOMContentLoaded', function() {
+      let playersDataTable;
+      const playerModal = new bootstrap.Modal(document.getElementById('playerModal'));
+      const playerForm = document.getElementById('playerForm');
+      
+      // --- LÓGICA DE LA APLICACIÓN ---
 
-      // --- FUNCIONES DE MANEJO DE DATOS ---
-      const showToast = (message, isError = false) => {
-        toastElement.querySelector('.toast-body').textContent = message;
-        const icon = toastElement.querySelector('.toast-header i');
-        icon.className = isError ? 'fas fa-exclamation-circle text-danger me-2' : 'fas fa-check-circle text-success me-2';
+      // Mostrar Notificaciones (Toast)
+      const showToast = (message, type = 'success') => {
+        const toastEl = document.getElementById('appToast');
+        const toastBody = toastEl.querySelector('.toast-body');
+        toastEl.className = `toast align-items-center text-white bg-${type} border-0`;
+        toastBody.textContent = message;
+        const bsToast = new bootstrap.Toast(toastEl);
         bsToast.show();
       };
 
-      const saveState = () => {
-        appState.category = categoryInput.value;
-        localStorage.setItem('dibaFbcAppState', JSON.stringify(appState));
+      // Autenticación
+      document.getElementById('loginForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        if (document.getElementById('username').value === 'admin' && document.getElementById('password').value === 'admin') {
+          document.getElementById('loginPage').style.display = 'none';
+          document.getElementById('adminApp').style.display = 'flex';
+          showDashboard();
+        } else {
+          showToast('Usuario o contraseña incorrectos', 'danger');
+        }
+      });
+
+      // Logout
+      document.getElementById('logoutBtn').addEventListener('click', function() {
+        document.getElementById('loginPage').style.display = 'block';
+        document.getElementById('adminApp').style.display = 'none';
+      });
+
+      // Navegación entre Vistas
+      const hideAllViews = () => {
+        document.querySelectorAll('.dashboard-view, .players-view, .planillas-view').forEach(v => v.style.display = 'none');
       };
-
-      const loadState = () => {
-        const savedState = localStorage.getItem('dibaFbcAppState');
-        if (savedState) {
-          appState = JSON.parse(savedState);
-        }
-        categoryInput.value = appState.category || '';
-        if (!dateInput.value) {
-            dateInput.valueAsDate = new Date();
-        }
-      };
-
-      // --- RENDERIZADO DE LA TABLA HTML ---
-      const renderTable = () => {
-        tableBody.innerHTML = '';
-        if (appState.players.length === 0) {
-          tableBody.innerHTML = `<tr><td colspan="6" class="text-center text-muted p-4">No hay jugadores en la lista. ¡Añade uno para empezar!</td></tr>`;
-          return;
-        }
-
-        appState.players.forEach((player, index) => {
-          const playerData = appState.data[player.id] || { pago: '', asistencia: 'P', observacion: '' };
-          const row = document.createElement('tr');
-          row.dataset.playerId = player.id;
-
-          row.innerHTML = `
-            <td><b>${index + 1}</b></td>
-            <td class="fw-medium">${player.name}</td>
-            <td><input type="text" class="form-control form-control-sm data-input" data-field="pago" placeholder="$0" value="${playerData.pago}"></td>
-            <td>
-              <select class="form-select form-select-sm data-input" data-field="asistencia">
-                <option value="P" ${playerData.asistencia === 'P' ? 'selected' : ''}>Presente</option>
-                <option value="A" ${playerData.asistencia === 'A' ? 'selected' : ''}>Ausente</option>
-                <option value="E" ${playerData.asistencia === 'E' ? 'selected' : ''}>Excusa</option>
-              </select>
-            </td>
-            <td><input type="text" class="form-control form-control-sm data-input" data-field="observacion" placeholder="Sin novedad" value="${playerData.observacion}"></td>
-            <td class="text-center">
-              <button class="btn btn-sm btn-link text-danger p-0 action-btn btn-delete" aria-label="Eliminar a ${player.name}">
-                <i class="fas fa-trash-alt"></i>
-              </button>
-            </td>
-          `;
-          tableBody.appendChild(row);
+      
+      const setActiveNavItem = (view) => {
+        document.querySelectorAll('.sidebar .nav-link').forEach(link => {
+          link.classList.remove('active');
+          if (link.dataset.view === view) {
+            link.classList.add('active');
+          }
         });
       };
 
-      // --- MANEJADORES DE EVENTOS ---
-      addPlayerForm.addEventListener('submit', e => {
-        e.preventDefault();
-        const newName = newPlayerNameInput.value.trim();
-        if (newName) {
-          appState.players.push({ id: Date.now(), name: newName });
-          newPlayerNameInput.value = '';
-          saveState();
-          renderTable();
-          showToast(`Jugador "${newName}" añadido.`);
-        }
+      const showDashboard = () => {
+        hideAllViews();
+        document.querySelector('.dashboard-view').style.display = 'block';
+        setActiveNavItem('dashboard');
+      };
+      
+      const showPlayers = async () => {
+        hideAllViews();
+        document.querySelector('.players-view').style.display = 'block';
+        setActiveNavItem('players');
+        await loadPlayersData();
+      };
+
+      const showPlanillas = () => {
+        hideAllViews();
+        document.querySelector('.planillas-view').style.display = 'block';
+        setActiveNavItem('planillas');
+      };
+
+      document.querySelectorAll('.sidebar .nav-link').forEach(link => {
+        link.addEventListener('click', function() {
+          const view = this.dataset.view;
+          if (view === 'dashboard') showDashboard();
+          if (view === 'players') showPlayers();
+          if (view === 'planillas') showPlanillas();
+        });
       });
 
-      tableBody.addEventListener('click', e => {
-        if (e.target.closest('.btn-delete')) {
-          const row = e.target.closest('tr');
-          const playerId = Number(row.dataset.playerId);
-          const player = appState.players.find(p => p.id === playerId);
+      // --- FUNCIONALIDAD DE JUGADORES (CRUD) ---
 
-          if (confirm(`¿Eliminar a ${player.name} de la lista?`)) {
-            appState.players = appState.players.filter(p => p.id !== playerId);
-            delete appState.data[playerId];
-            saveState();
-            renderTable();
-            showToast(`Jugador "${player.name}" eliminado.`, true);
+      // Cargar y mostrar jugadores en DataTable
+      const loadPlayersData = async () => {
+        const { data, error } = await supabase.from('jugadores').select('*').order('id', { ascending: true });
+        
+        if (error) {
+          showToast(`Error al cargar jugadores: ${error.message}`, 'danger');
+          return;
+        }
+
+        if (playersDataTable) {
+          playersDataTable.destroy();
+        }
+
+        const tableBody = document.querySelector("#playersTable tbody");
+        tableBody.innerHTML = '';
+        data.forEach(player => {
+            const statusBadge = player.status === 'Activo' ? 'bg-success' : 'bg-warning text-dark';
+            tableBody.innerHTML += `
+                <tr data-id="${player.id}">
+                    <td>${player.id}</td>
+                    <td>${player.nombre_completo}</td>
+                    <td>${player.categoria}</td>
+                    <td>${player.fecha_nacimiento || 'No especificada'}</td>
+                    <td><span class="badge ${statusBadge}">${player.status}</span></td>
+                    <td>
+                        <button class="btn btn-sm btn-primary action-btn edit-btn" title="Editar"><i class="fas fa-edit"></i></button>
+                        <button class="btn btn-sm btn-danger action-btn delete-btn" title="Eliminar"><i class="fas fa-trash"></i></button>
+                    </td>
+                </tr>
+            `;
+        });
+        
+        playersDataTable = $('#playersTable').DataTable({
+            language: { url: '//cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json' },
+            responsive: true
+        });
+      };
+
+      // Guardar (Crear o Actualizar) un jugador
+      playerForm.addEventListener('submit', async function(e) {
+          e.preventDefault();
+          const id = document.getElementById('playerId').value;
+          const playerData = {
+              nombre_completo: document.getElementById('playerName').value,
+              categoria: document.getElementById('playerCategory').value,
+              fecha_nacimiento: document.getElementById('playerBirthdate').value || null,
+              status: document.getElementById('playerStatus').value
+          };
+          
+          let error;
+          if (id) { // Actualizar
+              const { error: updateError } = await supabase.from('jugadores').update(playerData).eq('id', id);
+              error = updateError;
+          } else { // Crear
+              const { error: insertError } = await supabase.from('jugadores').insert([playerData]);
+              error = insertError;
           }
-        }
-      });
 
-      tableBody.addEventListener('input', e => {
-        if (e.target.classList.contains('data-input')) {
-          const row = e.target.closest('tr');
-          const playerId = Number(row.dataset.playerId);
-          const field = e.target.dataset.field;
-
-          if (!appState.data[playerId]) {
-            appState.data[playerId] = { pago: '', asistencia: 'P', observacion: '' };
-          }
-          appState.data[playerId][field] = e.target.value;
-          saveState();
-        }
-      });
-
-      clearDataBtn.addEventListener('click', () => {
-        if (confirm('¿Limpiar todos los datos de pago, asistencia y observaciones? La lista de jugadores no se borrará.')) {
-          appState.data = {};
-          saveState();
-          renderTable();
-          showToast('Datos de la planilla limpiados.');
-        }
-      });
-
-      categoryInput.addEventListener('input', saveState);
-
-      // --- GENERACIÓN DE PDF ---
-      generatePdfBtn.addEventListener('click', async () => {
-        const btn = generatePdfBtn;
-        const pdfIcon = document.getElementById('pdf-icon');
-        const pdfText = document.getElementById('pdf-text');
-        const originalIconHTML = pdfIcon.innerHTML;
-        const originalTextContent = pdfText.textContent;
-
-        // Feedback visual de carga
-        btn.disabled = true;
-        pdfIcon.innerHTML = `<span class="spinner-border spinner-border-sm"></span>`;
-        pdfText.textContent = ' Generando...';
-
-        try {
-          const { jsPDF } = window.jspdf;
-          const doc = new jsPDF({ orientation: 'portrait', unit: 'pt', format: 'letter' });
-
-          // Cargar logo
-          try {
-            const logoUrl = "https://diba-fbc.vercel.app/index.html";
-            const response = await fetch(logoUrl);
-            const blob = await response.blob();
-            const imgData = await new Promise(resolve => {
-              const reader = new FileReader();
-              reader.onloadend = () => resolve(reader.result);
-              reader.readAsDataURL(blob);
-            });
-            doc.addImage(imgData, 'PNG', 40, 30, 60, 60);
-          } catch (err) {
-            console.error("Error cargando logo para PDF:", err);
-            showToast("No se pudo cargar el logo para el PDF.", true);
-          }
-
-          // Encabezados y títulos del PDF
-          doc.setFontSize(16).setFont('helvetica', 'bold').text("DIBA FBC", 115, 50);
-          doc.setFontSize(10).setFont('helvetica', 'normal');
-          doc.text("DEPORTIVO INTERNACIONAL DE BARRANQUILLA ATLANTICO", 115, 65);
-          doc.text("RESOLUCIÓN 0122 / 10-SEPT-2018", 115, 80);
-          doc.setFontSize(12).setFont('helvetica', 'bold').text("PLANILLA GENERAL DE CONTROL", doc.internal.pageSize.getWidth() / 2, 120, { align: 'center' });
-
-          // Fecha y Categoría
-          const planillaDate = dateInput.value ? new Date(dateInput.value + 'T00:00:00').toLocaleDateString('es-CO', { day: '2-digit', month: '2-digit', year: 'numeric' }) : "No especificada";
-          const planillaCategory = categoryInput.value.trim() || "No especificada";
-          doc.setFontSize(10).setFont('helvetica', 'normal');
-          doc.text(`Fecha: ${planillaDate}`, 40, 140);
-          doc.text(`Categoría: ${planillaCategory}`, doc.internal.pageSize.getWidth() - 40, 140, { align: 'right' });
-
-          // Preparar datos para la tabla del PDF
-          const head = [["#", "Nombre", "Pago", "Asistencia", "Observaciones"]];
-          let body;
-
-          if (appState.players.length === 0) {
-            body = []; // Crear tabla vacía si no hay jugadores
-            for (let i = 1; i <= 40; i++) { body.push([i, '', '', '', '']); }
+          if (error) {
+              showToast(`Error al guardar jugador: ${error.message}`, 'danger');
           } else {
-            body = appState.players.map((player, index) => {
-              const playerData = appState.data[player.id] || {};
-              const asistenciaText = { P: 'Presente', A: 'Ausente', E: 'Excusa' }[playerData.asistencia] || '';
-              return [index + 1, player.name, playerData.pago || '', asistenciaText, playerData.observacion || ''];
-            });
+              showToast(`Jugador guardado con éxito.`, 'success');
+              playerModal.hide();
+              loadPlayersData();
           }
+      });
+      
+      // Abrir modal para editar
+      $('#playersTable tbody').on('click', '.edit-btn', async function() {
+        const row = $(this).closest('tr');
+        const id = row.data('id');
+        
+        const { data, error } = await supabase.from('jugadores').select('*').eq('id', id).single();
+        if (error) {
+          showToast(`Error al obtener datos del jugador: ${error.message}`, 'danger');
+          return;
+        }
+        
+        document.getElementById('playerId').value = data.id;
+        document.getElementById('playerName').value = data.nombre_completo;
+        document.getElementById('playerCategory').value = data.categoria;
+        document.getElementById('playerBirthdate').value = data.fecha_nacimiento;
+        document.getElementById('playerStatus').value = data.status;
+        document.getElementById('playerModalLabel').textContent = 'Editar Jugador';
+        playerModal.show();
+      });
 
-          // Generar tabla en PDF
-          doc.autoTable({
-            head: head,
-            body: body,
-            startY: 160,
-            theme: 'grid',
-            headStyles: { fillColor: [0, 42, 64], textColor: 255, fontStyle: 'bold' },
-            alternateRowStyles: { fillColor: [240, 248, 255] },
-            columnStyles: {
-              0: { halign: 'center', cellWidth: 30 }, // #
-              1: { cellWidth: 'auto' }, // Nombre
-              2: { halign: 'center', cellWidth: 70 }, // Pago
-              3: { halign: 'center', cellWidth: 70 }, // Asistencia
+      // Eliminar jugador
+      $('#playersTable tbody').on('click', '.delete-btn', async function() {
+        const row = $(this).closest('tr');
+        const id = row.data('id');
+        const name = row.find('td:nth-child(2)').text();
+
+        if (confirm(`¿Estás seguro de que quieres eliminar a ${name}?`)) {
+            const { error } = await supabase.from('jugadores').delete().eq('id', id);
+
+            if (error) {
+                showToast(`Error al eliminar jugador: ${error.message}`, 'danger');
+            } else {
+                showToast('Jugador eliminado con éxito.', 'success');
+                loadPlayersData();
             }
-          });
-
-          // Pie de página en el PDF
-          const pageCount = doc.internal.getNumberOfPages();
-          for (let i = 1; i <= pageCount; i++) {
-            doc.setPage(i);
-            doc.setFontSize(8).setTextColor(150);
-            doc.text(`Página ${i} de ${pageCount}`, doc.internal.pageSize.getWidth() / 2, doc.internal.pageSize.getHeight() - 20, { align: 'center' });
-            doc.text(`Generado el ${new Date().toLocaleDateString('es-CO')} a las ${new Date().toLocaleTimeString('es-CO')}`, doc.internal.pageSize.getWidth() - 40, doc.internal.pageSize.getHeight() - 20, { align: 'right' });
-          }
-
-          // Descargar el PDF
-          const safeCategory = planillaCategory.replace(/[^a-z0-9]/gi, '_');
-          const safeDate = dateInput.value || new Date().toISOString().slice(0, 10);
-          doc.save(`Planilla_DIBA_FBC_${safeCategory}_${safeDate}.pdf`);
-          showToast('PDF generado con éxito.');
-
-        } catch (error) {
-          console.error('Error al generar el PDF:', error);
-          showToast('Ocurrió un error al generar el PDF.', true);
-        } finally {
-          // Restaurar estado del botón
-          btn.disabled = false;
-          pdfIcon.innerHTML = originalIconHTML;
-          pdfText.textContent = originalTextContent;
         }
       });
 
-      // --- INICIALIZACIÓN ---
-      loadState();
-      renderTable();
+      // Limpiar modal al cerrarse
+      document.getElementById('playerModal').addEventListener('hidden.bs.modal', function () {
+        playerForm.reset();
+        document.getElementById('playerId').value = '';
+        document.getElementById('playerModalLabel').textContent = 'Añadir Nuevo Jugador';
+      });
+
+      // Inicializar en el Dashboard
+      showDashboard();
     });
   </script>
-  <!-- Contenedor para el Footer (se carga desde layout/footer.html) -->
-  <div id="footer-container"></div>
-
-  <!-- Script para cargar componentes externos (Navbar y Footer) -->
-  <script src="scripts/loadComponents.js"></script>
-
-  <!-- Script principal (funciones y animaciones) -->
-  <script src="scripts/main.js"></script>
-  <script src="https://unpkg.com/@supabase/supabase-js"></script>
-  <script src="api/supabases.js"></script> 
-
 </body>
 </html>
