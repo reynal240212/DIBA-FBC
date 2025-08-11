@@ -987,6 +987,7 @@ img {
 
 /* Lista de enlaces (sin cambios) */
 .footer-links ul {
+  display: row;
   list-style: none;
   padding-left: 0;
   margin: 0;
