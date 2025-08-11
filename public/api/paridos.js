@@ -128,11 +128,21 @@ async function filtrarEntrenamientos() {
   const entrenamientos = await obtenerEntrenamientos();
   loadingSpinnerEntrenamiento.style.display = 'none';
 
-  const filtrados = entrenamientos.filter(e => new Date(e.fecha).toISOString().split('T')[0] === fechaSeleccionada);
+  // Ajuste para evitar desfase de fecha por UTC
+  const filtrados = entrenamientos.filter(e => {
+    const fechaLocal = new Date(e.fecha);
+    const fechaISO = fechaLocal.getFullYear() + '-' +
+      String(fechaLocal.getMonth() + 1).padStart(2, '0') + '-' +
+      String(fechaLocal.getDate()).padStart(2, '0');
+    return fechaISO === fechaSeleccionada;
+  });
+
   if (filtrados.length === 0) {
     trainingsContainer.innerHTML = '<p class="text-center text-muted">No hay entrenamientos para la fecha seleccionada.</p>';
     return;
   }
+
+  const fragment = document.createDocumentFragment();
 
   filtrados.forEach(e => {
     const cuerpo = `
@@ -147,9 +157,12 @@ async function filtrarEntrenamientos() {
       cuerpo,
       color: 'success'
     });
-    trainingsContainer.appendChild(card);
+    fragment.appendChild(card);
   });
+
+  trainingsContainer.appendChild(fragment);
 }
+
 
 inputFechaEntrenamiento.addEventListener('change', filtrarEntrenamientos);
 // ----- CLASIFICACIÓN -----
