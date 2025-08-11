@@ -931,134 +931,102 @@ img {
   letter-spacing: 1px;
   margin-top: var(--space-xs);
 }
-/* =============================================
-   BLOQUE DE FOOTER CORREGIDO Y MEJORADO
-============================================= */
-
-/* Contenedor principal del footer */
-.footer {
-  /* Se añade !important para asegurar que sobreescriba cualquier clase de Bootstrap como .bg-light */
-  background-color: var(--primary-dark) !important;
-  color: rgba(255, 255, 255, 0.7); /* Un gris claro suave para el texto general, más legible que el blanco puro */
-  padding: 3rem 0; /* Asegura un padding generoso */
-  margin-top: auto; /* IMPORTANTE: empuja el footer al final de la página si el contenido es corto */
+/* =============================
+   FOOTER ESTILOS DIBA FBC
+============================= */
+footer {
+  background-color: #001b72; /* Azul oscuro principal */
+  color: #ffffff;
+  padding: 40px 20px;
+  font-family: 'Arial', sans-serif;
 }
 
-/* Logo (sin cambios necesarios) */
-.footer-logo {
+footer a {
+  color: #ffffff;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+footer a:hover {
+  color: #ffd700; /* Dorado para resaltar */
+}
+
+.footer-container {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 0 auto var(--space-md, 1.5rem);
+  flex-wrap: wrap;
+  justify-content: space-between;
+  max-width: 1200px;
+  margin: 0 auto;
+  gap: 20px;
 }
 
-.footer-logo img {
-  display: block;
-  max-height: 60px;
-  width: auto;
+.footer-column {
+  flex: 1 1 200px;
 }
 
-/* Secciones de enlaces (sin cambios en la estructura) */
-.footer-links {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: var(--space-lg, 2rem);
-  margin-bottom: var(--space-lg, 2rem);
+.footer-column h3 {
+  font-size: 1.2rem;
+  margin-bottom: 15px;
+  border-bottom: 2px solid #ffd700;
+  padding-bottom: 5px;
 }
 
-/* Títulos de las columnas de enlaces */
-.footer-links h5 {
-  color: var(--accent); /* Tu color de acento está bien aquí */
-  margin-bottom: var(--space-md, 1.5rem);
-  position: relative;
-  padding-bottom: var(--space-xs, 0.5rem);
-  font-weight: bold;
-}
-
-.footer-links h5::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 40px;
-  height: 2px;
-  background-color: var(--accent);
-}
-
-/* Lista de enlaces (sin cambios) */
-.footer-links ul {
-  display: row;
+.footer-column ul {
   list-style: none;
-  padding-left: 0;
-  margin: 0;
-}
-.footer-links li {
-  margin-bottom: var(--space-xs, 0.5rem);
+  padding: 0;
 }
 
-/* ===== CORRECCIÓN CLAVE: ENLACES DEL FOOTER ===== */
-.footer-links a {
-  /* Se usa !important para ganar la batalla contra el color azul por defecto de Bootstrap */
-  color: rgba(255, 255, 255, 0.8) !important;
-  text-decoration: none !important; /* También quitamos el subrayado por defecto */
-  transition: all 0.3s ease; /* Transición más completa */
+.footer-column ul li {
+  margin-bottom: 10px;
 }
 
-.footer-links a:hover {
-  color: var(--white) !important; /* El color se vuelve blanco puro al pasar el mouse */
-  padding-left: 5px; /* Pequeño desplazamiento a la derecha para un efecto visual agradable */
-  text-decoration: none !important;
-}
-
-
-/* Íconos de redes sociales (sin cambios, tu código ya es bueno) */
-.social-links {
+.footer-social {
   display: flex;
-  gap: var(--space-sm, 1rem);
-  margin-top: var(--space-md, 1.5rem);
+  gap: 15px;
+  margin-top: 10px;
 }
-/* Se añade el selector .footer para más especificidad */
-.footer .social-links a {
+
+.footer-social a {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 45px;
-  height: 45px;
-  background-color: rgba(255, 255, 255, 0.1);
+  width: 40px;
+  height: 40px;
+  background-color: #003399; /* Azul intermedio */
   border-radius: 50%;
-  color: var(--white);
-  transition: all var(--transition-normal, 0.3s);
-  font-size: 1.2rem;
-}
-.footer .social-links a:hover {
-  background-color: var(--accent);
-  color: var(--primary-dark);
-  transform: translateY(-4px);
+  transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
-/* Texto del copyright (se hace un poco más específico) */
-.footer .copyright {
+.footer-social a:hover {
+  background-color: #ffd700;
+  color: #001b72;
+  transform: translateY(-3px);
+}
+
+/* Línea divisoria y derechos */
+.footer-bottom {
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
   text-align: center;
-  padding-top: var(--space-md, 1.5rem);
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-  margin-top: var(--space-lg, 2rem);
+  padding-top: 15px;
+  margin-top: 30px;
   font-size: 0.9rem;
-  color: rgba(255, 255, 255, 0.6);
+  opacity: 0.8;
 }
 
-/* Responsive (se hace más específico) */
-@media (max-width: 576px) {
-  .footer {
-    text-align: center; /* Centra todo el texto del footer en pantallas pequeñas */
+/* =============================
+   RESPONSIVE DESIGN
+============================= */
+@media (max-width: 768px) {
+  .footer-container {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
   }
-  .footer-links h5::after {
-    left: 50%; /* Centra la línea decorativa debajo de los títulos */
-    transform: translateX(-50%);
-  }
-  .social-links {
-    justify-content: center; /* Centra los iconos de redes sociales */
+  .footer-social {
+    justify-content: center;
   }
 }
+
 
 
 /* ======================================
