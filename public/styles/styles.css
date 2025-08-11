@@ -931,9 +931,6 @@ img {
   letter-spacing: 1px;
   margin-top: var(--space-xs);
 }
-/* =============================
-   FOOTER ESTILOS DIBA FBC
-============================= */
 .footer {
   background-color: #0a0a0a;
   color: white;
@@ -1043,8 +1040,6 @@ img {
     text-align: center;
   }
 }
-
-
 
 /* ======================================
        UTILIDADES
