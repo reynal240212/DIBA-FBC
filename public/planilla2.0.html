@@ -27,7 +27,9 @@
     <main id="adminApp"><div class="d-flex w-100 h-100"><div class="sidebar d-flex flex-column p-3"><a class="navbar-brand d-flex align-items-center text-white mb-4" href="#"><img src="https://diba-fbc.vercel.app/images/ESCUDO.png" alt="DIBA FBC Logo" class="me-2" style="max-height:40px"><span class="fs-5">DIBA FBC</span></a><ul class="nav nav-pills flex-column mb-auto"><li class="nav-item"><a class="nav-link" href="#" data-view="dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li><li class="nav-item"><a class="nav-link" href="#" data-view="players"><i class="fas fa-users"></i> Jugadores</a></li><li class="nav-item"><a class="nav-link" href="#" data-view="planillas"><i class="fas fa-clipboard-list"></i> Planillas</a></li></ul><hr class="text-white"><button class="btn btn-danger" id="logoutBtn"><i class="fas fa-sign-out-alt me-2"></i>Cerrar Sesión</button></div>
         <!-- Contenido Principal -->
         <div class="content-wrapper">
-            <div id="dashboard-view" class="view"></div>
+            <div id="dashboard-view" class="view">
+                <!-- El contenido se generará desde JS -->
+            </div>
             <div id="players-view" class="view"></div>
             <div id="planillas-view" class="view"></div>
             <div id="planilla-detail-view" class="view"></div>
@@ -35,76 +37,10 @@
     </div></main>
     
     <!-- Modal: Añadir/Editar Jugador -->
-    <div class="modal fade" id="playerModal" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="playerModalLabel"></h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-                </div>
-                <form id="playerForm">
-                    <div class="modal-body">
-                        <input type="hidden" id="playerId">
-                        <div class="mb-3">
-                            <label for="playerName" class="form-label">Nombre del Jugador</label>
-                            <input type="text" class="form-control" id="playerName" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="playerCategory" class="form-label">Categoría</label>
-                            <select class="form-select" id="playerCategory" required>
-                                <option value="">Seleccione...</option>
-                                <option value="2012/2013">2012/2013</option>
-                                <option value="2014/15/16">2014/15/16</option>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label for="playerStatus" class="form-label">Estado</label>
-                            <select class="form-select" id="playerStatus" required>
-                                <option value="Activo">Activo</option>
-                                <option value="Inactivo">Inactivo</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                        <button type="submit" class="btn btn-primary">Guardar</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
+    <div class="modal fade" id="playerModal" tabindex="-1"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="playerModalLabel"></h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div><form id="playerForm"><div class="modal-body"><input type="hidden" id="playerId"><div class="mb-3"><label for="playerName" class="form-label">Nombre del Jugador</label><input type="text" class="form-control" id="playerName" required></div><div class="mb-3"><label for="playerCategory" class="form-label">Categoría</label><select class="form-select" id="playerCategory" required><option value="">Seleccione...</option><option value="2012/2013">2012/2013</option><option value="2014/15/16">2014/15/16</option></select></div><div class="mb-3"><label for="playerStatus" class="form-label">Estado</label><select class="form-select" id="playerStatus" required><option value="Activo">Activo</option><option value="Inactivo">Inactivo</option></select></div></div><div class="modal-footer"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button><button type="submit" class="btn btn-primary">Guardar</button></div></form></div></div></div>
 
     <!-- Modal: Crear Nueva Planilla -->
-    <div class="modal fade" id="planillaModal" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Crear Nueva Planilla</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-                </div>
-                <form id="planillaForm">
-                    <div class="modal-body">
-                        <div class="mb-3">
-                            <label for="planillaDate" class="form-label">Fecha</label>
-                            <input type="date" class="form-control" id="planillaDate" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="planillaCategoryCreate" class="form-label">Categoría</label>
-                            <select class="form-select" id="planillaCategoryCreate" required>
-                                <option value="">Seleccione...</option>
-                                <option value="2012/2013">2012/2013</option>
-                                <option value="2014/15/16">2014/15/16</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                        <button type="submit" class="btn btn-primary">Crear Planilla</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
+    <div class="modal fade" id="planillaModal" tabindex="-1"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><h5 class="modal-title">Crear Nueva Planilla</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div><form id="planillaForm"><div class="modal-body"><div class="mb-3"><label for="planillaDate" class="form-label">Fecha</label><input type="date" class="form-control" id="planillaDate" required></div><div class="mb-3"><label for="planillaCategoryCreate" class="form-label">Categoría</label><select class="form-select" id="planillaCategoryCreate" required><option value="">Seleccione...</option><option value="2012/2013">2012/2013</option><option value="2014/15/16">2014/15/16</option></select></div></div><div class="modal-footer"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button><button type="submit" class="btn btn-primary">Crear Planilla</button></div></form></div></div></div>
     
     <!-- Scripts JS -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
@@ -112,6 +48,7 @@
     <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="api/app.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="app.js"></script>
 </body>
 </html>
