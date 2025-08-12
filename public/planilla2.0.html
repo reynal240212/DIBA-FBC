@@ -1,54 +1,326 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" data-bs-theme="light">
 <head>
-    <meta charset="UTF-8" />
-    <title>DIBA FBC - Sistema de Gestión</title>
-    <meta name="description" content="Sistema de gestión para el Deportivo Internacional de Barranquilla Atlántico FBC" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
-    <style>
-        :root{--primary-dark:#001b72;--primary:#003399;--primary-darker:#0b0281;--accent:#ffd700;--accent-dark:#e6c300;--white:#fff;--light-gray:#f4f4f4;--success:#198754;--danger:#dc3545;--warning:#ffc107;--bs-body-bg:var(--light-gray)}body{background-color:var(--bs-body-bg);font-family:'Arial',sans-serif;display:flex;flex-direction:column;min-height:100vh}.navbar,.card-header,.app-footer,.modal-header,.table th{background-color:var(--primary)!important;color:var(--white)}.btn-primary{background-color:var(--primary);border-color:var(--primary)}.btn-primary:hover{background-color:var(--primary-dark);border-color:var(--primary-dark)}.btn-success{background-color:var(--accent);color:var(--primary-dark)!important;border-color:var(--accent)}.btn-success:hover{background-color:var(--accent-dark);border-color:var(--accent-dark)}.btn-outline-primary{color:var(--primary);border-color:var(--primary)}.btn-outline-primary:hover{background-color:var(--primary);color:var(--white)}.login-container{max-width:420px;margin:5rem auto}.login-card{border-radius:12px;box-shadow:0 .5rem 1.5rem rgba(0,0,0,.1)}.login-header{border-radius:12px 12px 0 0;padding:2rem;background-color:var(--primary)}.login-header h2{font-family:'Dancing Script',cursive;font-size:2.8rem;color:var(--accent)}#adminApp{display:none;flex-direction:column;min-height:100vh}.sidebar{background-color:var(--primary-dark)}.sidebar .nav-link{color:rgba(255,255,255,.8)}.sidebar .nav-link:hover{background-color:var(--primary);color:var(--white)}.sidebar .nav-link.active{background-color:var(--primary-darker);color:var(--white);font-weight:700}.sidebar .nav-link i{width:20px;text-align:center;margin-right:10px}.content-wrapper{padding:2rem;flex:1}.stats-card{border-left:5px solid var(--primary);border-radius:8px;transition:transform .2s,box-shadow .2s}.stats-card:hover{transform:translateY(-5px);box-shadow:0 4px 12px rgba(0,0,0,.1)}.stats-card .icon{color:var(--primary);font-size:2.5rem}.stats-card.accent-card{border-left-color:var(--accent)}.stats-card.accent-card .icon{color:var(--accent)}.view{display:none}#loading-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(255,255,255,.7);z-index:1099;display:flex;align-items:center;justify-content:center}#planillaDetailsTable td{vertical-align:middle}.status-select-P{background-color:#d1e7dd;border-color:#a3cfbb}.status-select-A{background-color:#f8d7da;border-color:#f1aeb5}.status-select-E{background-color:#fff3cd;border-color:#ffe69c}
-    </style>
+  <meta charset="UTF-8" />
+  <title>Planilla General - DIBA FBC</title>
+  <meta name="author" content="REINALDO DE JESUS PEREZ NAVAS" />
+  <meta name="keywords" content="DIBA FBC, Deportivo Internacional De Barranquilla Atlántico, Fútbol, Barranquilla, Atlántico, Colombia" />
+  <meta name="robots" content="index, follow" />
+  <meta name="theme-color" content="#002a40" />
+  <link rel="icon" href="https://i.postimg.cc/x8W7vwJJ/ESCUDO.png" type="image/png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Planilla interactiva para el control de jugadores del club DIBA FBC." />
+  
+  <!-- Dependencias CSS (Bootstrap, Font Awesome) -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+  <!-- Dependencias JS para PDF -->
+  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.8.2/dist/jspdf.plugin.autotable.min.js"></script>
+  
+  <!-- Estilos Personalizados -->
+  <style>
+    :root {
+      --primary-color: #002a40;
+      --secondary-color: #005f73;
+      --accent-color: #e9d8a6;
+      --bs-body-bg: #f8f9fa;
+    }
+    body {
+      background-color: var(--bs-body-bg);
+      padding-bottom: 5rem;
+    }
+    .navbar { background-color: var(--primary-color) !important; }
+    .table-responsive { max-height: 65vh; overflow-y: auto; }
+    .table th {
+        background-color: var(--primary-color);
+        color: white;
+        position: sticky;
+        top: 0;
+        z-index: 10;
+    }
+    #generatePDF:disabled { cursor: not-allowed; }
+    .toast-container { z-index: 1100; }
+  </style>
 </head>
 <body>
-    <!-- Overlay de Carga -->
-    <div id="loading-overlay"><div class="spinner-border text-primary" role="status" style="width:3rem;height:3rem"><span class="visually-hidden">Cargando...</span></div></div>
 
-    <!-- Contenedor de Notificaciones -->
-    <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index:1100"><div id="appToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true"><div class="toast-header"><strong class="me-auto" id="toastTitle">Notificación</strong><button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button></div><div class="toast-body" id="toastMessage"></div></div></div>
+  <!-- Contenedor para Notificaciones -->
+  <div class="toast-container position-fixed top-0 end-0 p-3">
+    <div id="appToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+      <div class="toast-header"><i class="fas fa-check-circle text-success me-2"></i><strong class="me-auto">Notificación</strong><button type="button" class="btn-close" data-bs-dismiss="toast"></button></div>
+      <div class="toast-body"></div>
+    </div>
+  </div>
 
-    <!-- Pantalla de Login -->
-    <section id="loginPage" class="container"><div class="login-container"><div class="login-card card"><div class="login-header"><img src="https://diba-fbc.vercel.app/images/ESCUDO.png" alt="DIBA FBC Logo" class="mb-3" style="max-width:100px"><h2>DIBA FBC</h2></div><div class="card-body p-4 p-md-5"><h4 class="card-title text-center mb-4">Iniciar Sesión</h4><form id="loginForm"><div class="mb-3"><label for="email" class="form-label">Correo Electrónico</label><input type="email" class="form-control" id="email" required></div><div class="mb-3"><label for="password" class="form-label">Contraseña</label><input type="password" class="form-control" id="password" required></div><div class="d-grid mt-4"><button type="submit" class="btn btn-primary btn-lg"><i class="fas fa-sign-in-alt me-2"></i> Entrar</button></div></form></div></div></div></section>
+  <nav class="navbar navbar-expand-lg navbar-dark shadow-sm">
+    <div class="container">
+      <a class="navbar-brand" href="#"><img src="https://i.postimg.cc/x8W7vwJJ/ESCUDO.png" alt="DIBA FBC Logo" width="30" height="30" class="d-inline-block align-text-top me-2">DIBA FBC</a>
+    </div>
+  </nav>
 
-    <!-- Aplicación Principal -->
-    <main id="adminApp"><div class="d-flex w-100 h-100"><div class="sidebar d-flex flex-column p-3"><a class="navbar-brand d-flex align-items-center text-white mb-4" href="#"><img src="https://diba-fbc.vercel.app/images/ESCUDO.png" alt="DIBA FBC Logo" class="me-2" style="max-height:40px"><span class="fs-5">DIBA FBC</span></a><ul class="nav nav-pills flex-column mb-auto"><li class="nav-item"><a class="nav-link" href="#" data-view="dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li><li class="nav-item"><a class="nav-link" href="#" data-view="players"><i class="fas fa-users"></i> Jugadores</a></li><li class="nav-item"><a class="nav-link" href="#" data-view="planillas"><i class="fas fa-clipboard-list"></i> Planillas</a></li></ul><hr class="text-white"><button class="btn btn-danger" id="logoutBtn"><i class="fas fa-sign-out-alt me-2"></i>Cerrar Sesión</button></div>
-        <!-- Contenido Principal -->
-        <div class="content-wrapper">
-            <div id="dashboard-view" class="view">
-                <!-- El contenido se generará desde JS -->
+  <main class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+      <h1 class="mb-0 h2">Planilla General</h1>
+      <div class="d-flex gap-3 align-items-center mt-2 mt-md-0">
+          <div>
+              <label for="planillaCategory" class="form-label mb-0 fw-bold small">Categoría:</label>
+              <input type="text" class="form-control" id="planillaCategory" placeholder="Ej: 2010-2011" style="width: auto;">
+          </div>
+          <div>
+              <label for="planillaDate" class="form-label mb-0 fw-bold small">Fecha:</label>
+              <input type="date" class="form-control" id="planillaDate" style="width: auto;">
+          </div>
+      </div>
+    </div>
+    
+    <div class="card shadow-sm mb-4">
+        <div class="card-body d-flex justify-content-between align-items-center flex-wrap gap-3">
+            <form id="addPlayerForm" class="d-flex gap-2">
+                <input type="text" id="newPlayerName" class="form-control" placeholder="Nombre del nuevo jugador" required>
+                <button type="submit" class="btn btn-success"><i class="fas fa-plus"></i> Añadir</button>
+            </form>
+            <div class="d-flex gap-2">
+                <button id="generatePDF" class="btn btn-primary"><span id="pdf-icon"><i class="fas fa-file-pdf"></i></span><span id="pdf-text"> Descargar PDF</span></button>
+                <button id="clearData" class="btn btn-danger" data-bs-toggle="tooltip" title="Borra pagos, asistencia y observaciones. No borra la lista de jugadores."><i class="fas fa-eraser"></i> Limpiar Planilla</button>
             </div>
-            <div id="players-view" class="view"></div>
-            <div id="planillas-view" class="view"></div>
-            <div id="planilla-detail-view" class="view"></div>
         </div>
-    </div></main>
-    
-    <!-- Modal: Añadir/Editar Jugador -->
-    <div class="modal fade" id="playerModal" tabindex="-1"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="playerModalLabel"></h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div><form id="playerForm"><div class="modal-body"><input type="hidden" id="playerId"><div class="mb-3"><label for="playerName" class="form-label">Nombre del Jugador</label><input type="text" class="form-control" id="playerName" required></div><div class="mb-3"><label for="playerCategory" class="form-label">Categoría</label><select class="form-select" id="playerCategory" required><option value="">Seleccione...</option><option value="2012/2013">2012/2013</option><option value="2014/15/16">2014/15/16</option></select></div><div class="mb-3"><label for="playerStatus" class="form-label">Estado</label><select class="form-select" id="playerStatus" required><option value="Activo">Activo</option><option value="Inactivo">Inactivo</option></select></div></div><div class="modal-footer"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button><button type="submit" class="btn btn-primary">Guardar</button></div></form></div></div></div>
+    </div>
 
-    <!-- Modal: Crear Nueva Planilla -->
-    <div class="modal fade" id="planillaModal" tabindex="-1"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><h5 class="modal-title">Crear Nueva Planilla</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div><form id="planillaForm"><div class="modal-body"><div class="mb-3"><label for="planillaDate" class="form-label">Fecha</label><input type="date" class="form-control" id="planillaDate" required></div><div class="mb-3"><label for="planillaCategoryCreate" class="form-label">Categoría</label><select class="form-select" id="planillaCategoryCreate" required><option value="">Seleccione...</option><option value="2012/2013">2012/2013</option><option value="2014/15/16">2014/15/16</option></select></div></div><div class="modal-footer"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button><button type="submit" class="btn btn-primary">Crear Planilla</button></div></form></div></div></div>
-    
-    <!-- Scripts JS -->
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="app.js"></script>
+    <div class="table-responsive shadow-sm">
+      <table class="table table-striped table-hover table-bordered" id="planillaTable">
+        <thead class="table-dark">
+          <tr>
+            <th style="width: 5%;">#</th>
+            <th>Nombre</th>
+            <th style="width: 15%;">Pago</th>
+            <th style="width: 15%;">Asistencia</th>
+            <th style="width: 25%;">Observaciones (Entrenamiento/Partido)</th>
+            <th style="width: 5%;" class="text-center">Acción</th>
+          </tr>
+        </thead>
+        <tbody id="planillaBody"></tbody>
+      </table>
+    </div>
+  </main>
+  
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+
+      // --- ELEMENTOS DEL DOM ---
+      const tableBody = document.getElementById('planillaBody');
+      const addPlayerForm = document.getElementById('addPlayerForm');
+      const newPlayerNameInput = document.getElementById('newPlayerName');
+      const generatePdfBtn = document.getElementById('generatePDF');
+      const clearDataBtn = document.getElementById('clearData');
+      const dateInput = document.getElementById('planillaDate');
+      const categoryInput = document.getElementById('planillaCategory');
+      const toastElement = document.getElementById('appToast');
+      const bsToast = new bootstrap.Toast(toastElement);
+
+      new bootstrap.Tooltip(clearDataBtn);
+
+      // --- ESTADO DE LA APLICACIÓN ---
+      let appState = { players: [], data: {}, category: '' };
+
+      // --- FUNCIONES DE MANEJO DE ESTADO Y DATOS ---
+      const showToast = (message, isError = false) => {
+          toastElement.querySelector('.toast-body').textContent = message;
+          const icon = toastElement.querySelector('.toast-header i');
+          icon.className = isError ? 'fas fa-exclamation-circle text-danger me-2' : 'fas fa-check-circle text-success me-2';
+          bsToast.show();
+      };
+
+      const saveState = () => {
+        appState.category = categoryInput.value;
+        localStorage.setItem('dibaFbcAppState', JSON.stringify(appState));
+      };
+
+      const loadState = () => {
+        const savedState = localStorage.getItem('dibaFbcAppState');
+        if (savedState) appState = JSON.parse(savedState);
+        categoryInput.value = appState.category || '';
+        if (!dateInput.value) dateInput.valueAsDate = new Date();
+      };
+      
+      // --- RENDERIZADO DE LA TABLA HTML ---
+      const renderTable = () => {
+        tableBody.innerHTML = '';
+        if (appState.players.length === 0) {
+            tableBody.innerHTML = `<tr><td colspan="6" class="text-center text-muted p-4">No hay jugadores en la lista. ¡Añade uno para empezar!</td></tr>`;
+            return;
+        }
+        
+        appState.players.forEach((player, index) => {
+          const playerData = appState.data[player.id] || { pago: '', asistencia: 'P', observacion: '' };
+          const row = document.createElement('tr');
+          row.dataset.playerId = player.id;
+          row.innerHTML = `
+            <td><b>${index + 1}</b></td>
+            <td class="fw-medium">${player.name}</td>
+            <td><input type="text" class="form-control form-control-sm data-input" data-field="pago" placeholder="$0" value="${playerData.pago}"></td>
+            <td>
+              <select class="form-select form-select-sm data-input" data-field="asistencia">
+                <option value="P" ${playerData.asistencia === 'P' ? 'selected' : ''}>Presente</option>
+                <option value="A" ${playerData.asistencia === 'A' ? 'selected' : ''}>Ausente</option>
+                <option value="E" ${playerData.asistencia === 'E' ? 'selected' : ''}>Excusa</option>
+              </select>
+            </td>
+            <td><input type="text" class="form-control form-control-sm data-input" data-field="observacion" placeholder="Sin novedad" value="${playerData.observacion}"></td>
+            <td class="text-center">
+              <button class="btn btn-sm btn-link text-danger p-0 action-btn btn-delete"><i class="fas fa-trash-alt"></i></button>
+            </td>
+          `;
+          tableBody.appendChild(row);
+        });
+      };
+
+      // --- MANEJADORES DE EVENTOS ---
+      addPlayerForm.addEventListener('submit', e => {
+        e.preventDefault();
+        const newName = newPlayerNameInput.value.trim();
+        if (newName) {
+          appState.players.push({ id: Date.now(), name: newName });
+          newPlayerNameInput.value = '';
+          saveState();
+          renderTable();
+          showToast(`Jugador "${newName}" añadido.`);
+        }
+      });
+
+      tableBody.addEventListener('click', e => {
+        if (e.target.closest('.btn-delete')) {
+          const row = e.target.closest('tr');
+          const playerId = Number(row.dataset.playerId);
+          const player = appState.players.find(p => p.id === playerId);
+          if (confirm(`¿Eliminar a ${player.name} de la lista?`)) {
+            appState.players = appState.players.filter(p => p.id !== playerId);
+            delete appState.data[playerId];
+            saveState();
+            renderTable();
+            showToast(`Jugador "${player.name}" eliminado.`, true);
+          }
+        }
+      });
+      
+      tableBody.addEventListener('input', e => {
+        if (e.target.classList.contains('data-input')) {
+          const row = e.target.closest('tr');
+          const playerId = Number(row.dataset.playerId);
+          const field = e.target.dataset.field;
+          if (!appState.data[playerId]) appState.data[playerId] = { pago: '', asistencia: 'P', observacion: '' };
+          appState.data[playerId][field] = e.target.value;
+          saveState();
+        }
+      });
+
+      clearDataBtn.addEventListener('click', () => {
+        if (confirm('¿Limpiar todos los datos de pago, asistencia y observaciones?')) {
+            appState.data = {};
+            saveState();
+            renderTable();
+            showToast('Datos de la planilla limpiados.');
+        }
+      });
+      
+      categoryInput.addEventListener('input', saveState);
+
+      // --- GENERACIÓN DE PDF ---
+      generatePdfBtn.addEventListener('click', async () => {
+        const btn = generatePdfBtn;
+        btn.disabled = true;
+        btn.querySelector('#pdf-icon').innerHTML = `<span class="spinner-border spinner-border-sm"></span>`;
+        btn.querySelector('#pdf-text').textContent = ' Generando...';
+
+        try {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF({ orientation: 'portrait', unit: 'pt', format: 'letter' });
+            
+            const logoUrl = "images/ESCUDO.png";
+            try {
+                const response = await fetch(logoUrl);
+                const blob = await response.blob();
+                const imgData = await new Promise(resolve => {
+                    const reader = new FileReader();
+                    reader.onloadend = () => resolve(reader.result);
+                    reader.readAsDataURL(blob);
+                });
+                doc.addImage(imgData, 'PNG', 40, 30, 60, 60);
+            } catch (err) { console.error("Error cargando logo para PDF:", err); }
+
+            doc.setFontSize(16).setFont('helvetica', 'bold').text("DIBA FBC", 115, 50);
+            doc.setFontSize(10).setFont('helvetica', 'normal');
+            doc.text("DEPORTIVO INTERNACIONAL DE BARRANQUILLA ATLANTICO", 115, 65);
+            doc.text("RESOLUCIÓN 0122 / 10-SEPT-2018", 115, 80);
+            
+            doc.setFontSize(12).setFont('helvetica', 'bold').text("PLANILLA GENERAL DE CONTROL", doc.internal.pageSize.getWidth() / 2, 120, { align: 'center' });
+
+            const planillaDate = dateInput.value ? new Date(dateInput.value + 'T00:00:00').toLocaleDateString('es-CO', { day: '2-digit', month: '2-digit', year: 'numeric' }) : "No especificada";
+            const planillaCategory = categoryInput.value.trim() || "No especificada";
+            doc.setFontSize(10).setFont('helvetica', 'normal');
+            doc.text(`Fecha: ${planillaDate}`, 40, 140);
+            doc.text(`Categoría: ${planillaCategory}`, doc.internal.pageSize.getWidth() - 40, 140, { align: 'right' });
+
+            const head = [["#", "Nombre", "Pago", "Asistencia", "Observaciones"]];
+            let body;
+
+            if (appState.players.length === 0) {
+                // SI NO HAY JUGADORES, CREAR 50 FILAS VACÍAS
+                body = [];
+                for (let i = 1; i <= 50; i++) {
+                    body.push([i, '', '', '', '']); 
+                }
+            } else {
+                // SI HAY JUGADORES, USAR SUS DATOS
+                body = appState.players.map((player, index) => {
+                    const playerData = appState.data[player.id] || {};
+                    const asistenciaText = { P: 'Presente', A: 'Ausente', E: 'Excusa' }[playerData.asistencia] || '';
+                    return [index + 1, player.name, playerData.pago || '', asistenciaText, playerData.observacion || ''];
+                });
+            }
+
+            doc.autoTable({
+                head: head,
+                body: body,
+                startY: 155,
+                margin: { left: 40, right: 40 },
+                styles: { fontSize: 9, cellPadding: 5, valign: 'middle' },
+                headStyles: { fillColor: [0, 42, 64], textColor: 255, fontStyle: 'bold' },
+                alternateRowStyles: { fillColor: [240, 248, 255] },
+                columnStyles: {
+                    0: { halign: 'center', cellWidth: 30 },
+                    2: { halign: 'center', cellWidth: 70 },
+                    3: { halign: 'center', cellWidth: 70 },
+                }
+            });
+
+            const pageCount = doc.internal.getNumberOfPages();
+            for (let i = 1; i <= pageCount; i++) {
+                doc.setPage(i);
+                doc.setFontSize(8).setTextColor(150);
+                doc.text(`Página ${i} de ${pageCount}`, doc.internal.pageSize.getWidth() / 2, doc.internal.pageSize.getHeight() - 20, { align: 'center' });
+            }
+
+            doc.save(`Planilla_DIBA_FBC_${planillaCategory}_${dateInput.value}.pdf`);
+            showToast('PDF generado con éxito.');
+
+        } catch (error) {
+            console.error('Error al generar el PDF:', error);
+            showToast('Ocurrió un error al generar el PDF.', true);
+        } finally {
+            btn.disabled = false;
+            btn.querySelector('#pdf-icon').innerHTML = `<i class="fas fa-file-pdf"></i>`;
+            btn.querySelector('#pdf-text').textContent = ' Descargar PDF';
+        }
+      });
+      
+      // --- INICIALIZACIÓN ---
+      loadState();
+      renderTable();
+    });
+  </script>
 </body>
 </html>
