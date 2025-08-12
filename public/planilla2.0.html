@@ -1,49 +1,38 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" data-bs-theme="light">
 <head>
   <meta charset="UTF-8" />
-  <title>Planilla Avanzada - DIBA FBC</title>
+  <title>Planilla General - DIBA FBC</title>
   <meta name="author" content="REINALDO DE JESUS PEREZ NAVAS" />
   <meta name="keywords" content="DIBA FBC, Deportivo Internacional De Barranquilla Atlántico, Fútbol, Barranquilla, Atlántico, Colombia" />
   <meta name="robots" content="index, follow" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Planilla interactiva y avanzada para el control de jugadores del club DIBA FBC." />
-  
+  <meta name="theme-color" content="#002a40" />
   <link rel="icon" href="https://i.postimg.cc/x8W7vwJJ/ESCUDO.png" type="image/png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Planilla interactiva para el control de jugadores del club DIBA FBC." />
   
   <!-- Dependencias CSS (Bootstrap, Font Awesome) -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
 
-  <!-- Dependencias JS para PDF y CSV -->
+  <!-- Dependencias JS para PDF -->
   <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.8.2/dist/jspdf.plugin.autotable.min.js"></script>
   
+  <!-- Estilos Personalizados -->
   <style>
     :root {
       --primary-color: #002a40;
       --secondary-color: #005f73;
       --accent-color: #e9d8a6;
-      --bs-light-bg: #f8f9fa;
-      --bs-dark-bg: #1a1a1a;
-      --bs-light-body-color: #212529;
-      --bs-dark-body-color: #dee2e6;
-      --bs-light-border-color: #dee2e6;
-      --bs-dark-border-color: #495057;
-      --bs-light-card-bg: #ffffff;
-      --bs-dark-card-bg: #2c2c2c;
-    }
-    [data-bs-theme="dark"] {
-      --bs-body-bg: var(--bs-dark-bg);
-      --bs-body-color: var(--bs-dark-body-color);
-      --bs-border-color: var(--bs-dark-border-color);
-      --bs-card-bg: var(--bs-dark-card-bg);
+      --bs-body-bg: #f8f9fa;
     }
     body {
-      transition: background-color 0.3s, color 0.3s;
+      background-color: var(--bs-body-bg);
+      padding-bottom: 5rem;
     }
     .navbar { background-color: var(--primary-color) !important; }
-    .table-responsive { max-height: 60vh; overflow-y: auto; }
+    .table-responsive { max-height: 65vh; overflow-y: auto; }
     .table th {
         background-color: var(--primary-color);
         color: white;
@@ -51,109 +40,70 @@
         top: 0;
         z-index: 10;
     }
-    .editable-name { cursor: pointer; }
-    .editable-name:hover { background-color: rgba(0, 0, 0, 0.05); }
-    .stat-card {
-        background: var(--bs-card-bg);
-        border-left: 5px solid var(--primary-color);
-        transition: transform 0.2s;
+    #generatePDF:disabled { cursor: not-allowed; }
+    .toast-container { z-index: 1100; }
+    /* Estilo para la celda del nombre editable */
+    .editable-name {
+        cursor: pointer;
     }
-    .stat-card:hover { transform: translateY(-5px); }
-    .stat-card .card-title { color: var(--primary-color); font-weight: bold; }
-    [data-bs-theme="dark"] .stat-card .card-title { color: var(--accent-color); }
-    .stat-card .card-text { font-size: 2rem; font-weight: bold; }
-    .form-switch .form-check-input:focus { box-shadow: 0 0 0 0.25rem rgba(233, 216, 166, 0.5); }
-    .form-switch .form-check-input:checked { background-color: var(--accent-color); border-color: var(--accent-color); }
-    #savingStatus { font-style: italic; transition: opacity 0.5s; }
+    .editable-name:hover {
+        background-color: #e9ecef;
+    }
   </style>
 </head>
-<body data-bs-theme="light">
+<body>
+
+  <!-- Contenedor para Notificaciones -->
+  <div class="toast-container position-fixed top-0 end-0 p-3">
+    <div id="appToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+      <div class="toast-header"><i class="fas fa-check-circle text-success me-2"></i><strong class="me-auto">Notificación</strong><button type="button" class="btn-close" data-bs-dismiss="toast"></button></div>
+      <div class="toast-body"></div>
+    </div>
+  </div>
+
   <nav class="navbar navbar-expand-lg navbar-dark shadow-sm">
     <div class="container">
-      <a class="navbar-brand" href="#">
-        <img src="https://i.postimg.cc/x8W7vwJJ/ESCUDO.png" alt="DIBA FBC Logo" width="30" height="30" class="d-inline-block align-text-top me-2">
-        DIBA FBC - Planilla Avanzada
-      </a>
-      <div class="form-check form-switch text-white">
-        <input class="form-check-input" type="checkbox" role="switch" id="themeSwitcher">
-        <label class="form-check-label" for="themeSwitcher"><i class="fas fa-moon"></i></label>
-      </div>
+      <a class="navbar-brand" href="#"><img src="https://i.postimg.cc/x8W7vwJJ/ESCUDO.png" alt="DIBA FBC Logo" width="30" height="30" class="d-inline-block align-text-top me-2">DIBA FBC</a>
     </div>
   </nav>
 
   <main class="container mt-4">
-    <!-- NUEVO: Dashboard de Estadísticas -->
-    <section id="dashboard" class="mb-4">
-        <div class="row g-3">
-            <div class="col-md-6 col-lg-3">
-                <div class="card stat-card shadow-sm h-100"><div class="card-body">
-                    <h5 class="card-title text-uppercase">Jugadores</h5>
-                    <p class="card-text" id="totalPlayers">0</p>
-                </div></div>
-            </div>
-            <div class="col-md-6 col-lg-3">
-                <div class="card stat-card shadow-sm h-100"><div class="card-body">
-                    <h5 class="card-title text-uppercase">Total Recaudado</h5>
-                    <p class="card-text" id="totalPayment">$0</p>
-                </div></div>
-            </div>
-            <div class="col-12 col-lg-6">
-                <div class="card stat-card shadow-sm h-100"><div class="card-body">
-                    <h5 class="card-title text-uppercase">Asistencia</h5>
-                    <div class="d-flex justify-content-around align-items-center h-75">
-                        <div class="text-center"><p class="card-text text-success" id="totalPresent">0</p><small class="text-muted">Presentes</small></div>
-                        <div class="text-center"><p class="card-text text-danger" id="totalAbsent">0</p><small class="text-muted">Ausentes</small></div>
-                        <div class="text-center"><p class="card-text text-warning" id="totalExcused">0</p><small class="text-muted">Con Excusa</small></div>
-                    </div>
-                </div></div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Controles -->
+    <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+      <h1 class="mb-0 h2">Planilla General</h1>
+      <div class="d-flex gap-3 align-items-center mt-2 mt-md-0">
+          <div>
+              <label for="planillaCategory" class="form-label mb-0 fw-bold small">Categoría:</label>
+              <input type="text" class="form-control" id="planillaCategory" placeholder="Ej: 2010-2011" style="width: auto;">
+          </div>
+          <div>
+              <label for="planillaDate" class="form-label mb-0 fw-bold small">Fecha:</label>
+              <input type="date" class="form-control" id="planillaDate" style="width: auto;">
+          </div>
+      </div>
+    </div>
+    
     <div class="card shadow-sm mb-4">
-        <div class="card-body">
-            <div class="row g-3 align-items-end">
-                <div class="col-md-4">
-                    <label for="planillaCategory" class="form-label fw-bold">Categoría</label>
-                    <input type="text" class="form-control" id="planillaCategory" placeholder="Ej: 2010-2011">
-                </div>
-                <div class="col-md-4">
-                    <label for="planillaDate" class="form-label fw-bold">Fecha</label>
-                    <input type="date" class="form-control" id="planillaDate">
-                </div>
-                <div class="col-md-4 text-md-end">
-                    <small id="savingStatus" class="text-muted me-2"></small>
-                </div>
-            </div>
-            <hr>
-            <!-- NUEVO: Barra de Búsqueda -->
-            <div class="mb-3">
-                <div class="input-group">
-                    <span class="input-group-text"><i class="fas fa-search"></i></span>
-                    <input type="text" id="searchInput" class="form-control" placeholder="Buscar jugador por nombre...">
-                </div>
-            </div>
-            <form id="addPlayerForm" class="d-flex gap-2 mb-3">
-                <input type="text" id="newPlayerName" class="form-control" placeholder="Añadir nuevo jugador a la lista" required>
-                <button type="submit" class="btn btn-success flex-shrink-0"><i class="fas fa-plus"></i> Añadir</button>
+        <div class="card-body d-flex justify-content-between align-items-center flex-wrap gap-3">
+            <form id="addPlayerForm" class="d-flex gap-2">
+                <input type="text" id="newPlayerName" class="form-control" placeholder="Nombre del nuevo jugador" required>
+                <button type="submit" class="btn btn-success"><i class="fas fa-plus"></i> Añadir</button>
             </form>
-            <div class="d-flex justify-content-between flex-wrap gap-2">
-                 <div class="btn-group">
-                    <input type="file" id="csvFile" accept=".csv" class="d-none">
-                    <button id="importCsvBtn" class="btn btn-info"><i class="fas fa-upload"></i> Importar CSV</button>
-                    <!-- NUEVO: Exportar a CSV -->
-                    <button id="exportCsvBtn" class="btn btn-secondary"><i class="fas fa-download"></i> Exportar CSV</button>
+            
+            <div class="d-flex align-items-end gap-2">
+                <div>
+                    <label for="csvFile" class="form-label small mb-0">Cargar Jugadores (CSV)</label>
+                    <input type="file" id="csvFile" accept=".csv" class="form-control form-control-sm">
                 </div>
-                <div class="btn-group">
-                    <button id="generatePDF" class="btn btn-primary"><i class="fas fa-file-pdf"></i> Descargar PDF</button>
-                    <button id="clearData" class="btn btn-danger" data-bs-toggle="tooltip" title="Limpia solo pagos, asistencia y observaciones"><i class="fas fa-eraser"></i> Limpiar Datos</button>
-                </div>
+                <button id="importCsvBtn" class="btn btn-info btn-sm">Importar</button>
+            </div>
+
+            <div class="d-flex gap-2">
+                <button id="generatePDF" class="btn btn-primary"><span id="pdf-icon"><i class="fas fa-file-pdf"></i></span><span id="pdf-text"> Descargar PDF</span></button>
+                <button id="clearData" class="btn btn-danger" data-bs-toggle="tooltip" title="Borra pagos, asistencia y observaciones. No borra la lista de jugadores."><i class="fas fa-eraser"></i> Limpiar Planilla</button>
             </div>
         </div>
     </div>
 
-    <!-- Tabla de Jugadores -->
     <div class="table-responsive shadow-sm">
       <table class="table table-striped table-hover table-bordered" id="planillaTable">
         <thead class="table-dark">
@@ -162,7 +112,7 @@
             <th>Nombre</th>
             <th style="width: 15%;">Pago</th>
             <th style="width: 15%;">Asistencia</th>
-            <th style="width: 25%;">Observaciones</th>
+            <th style="width: 25%;">Observaciones (Entrenamiento/Partido)</th>
             <th style="width: 5%;" class="text-center">Acción</th>
           </tr>
         </thead>
@@ -171,297 +121,334 @@
     </div>
   </main>
   
-  <!-- Contenedor para Notificaciones -->
-  <div class="toast-container position-fixed bottom-0 end-0 p-3">
-    <div id="appToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-      <div class="toast-header"><strong class="me-auto" id="toastTitle"></strong><button type="button" class="btn-close" data-bs-dismiss="toast"></button></div>
-      <div class="toast-body"></div>
-    </div>
-  </div>
-  
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  
   <script>
     document.addEventListener('DOMContentLoaded', () => {
+
       // --- ELEMENTOS DEL DOM ---
-      const dom = {
-        body: document.body,
-        tableBody: document.getElementById('planillaBody'),
-        addPlayerForm: document.getElementById('addPlayerForm'),
-        newPlayerNameInput: document.getElementById('newPlayerName'),
-        generatePdfBtn: document.getElementById('generatePDF'),
-        clearDataBtn: document.getElementById('clearData'),
-        dateInput: document.getElementById('planillaDate'),
-        categoryInput: document.getElementById('planillaCategory'),
-        toastElement: document.getElementById('appToast'),
-        toastTitle: document.getElementById('toastTitle'),
-        csvFileInput: document.getElementById('csvFile'),
-        importCsvBtn: document.getElementById('importCsvBtn'),
-        exportCsvBtn: document.getElementById('exportCsvBtn'),
-        searchInput: document.getElementById('searchInput'),
-        themeSwitcher: document.getElementById('themeSwitcher'),
-        savingStatus: document.getElementById('savingStatus'),
-      };
-      const bsToast = new bootstrap.Toast(dom.toastElement);
-      new bootstrap.Tooltip(dom.clearDataBtn);
+      const tableBody = document.getElementById('planillaBody');
+      const addPlayerForm = document.getElementById('addPlayerForm');
+      const newPlayerNameInput = document.getElementById('newPlayerName');
+      const generatePdfBtn = document.getElementById('generatePDF');
+      const clearDataBtn = document.getElementById('clearData');
+      const dateInput = document.getElementById('planillaDate');
+      const categoryInput = document.getElementById('planillaCategory');
+      const toastElement = document.getElementById('appToast');
+      const bsToast = new bootstrap.Toast(toastElement);
+      const csvFileInput = document.getElementById('csvFile');
+      const importCsvBtn = document.getElementById('importCsvBtn');
+
+      new bootstrap.Tooltip(clearDataBtn);
 
       // --- ESTADO DE LA APLICACIÓN ---
-      let appState = { players: [], data: {}, category: '', theme: 'light' };
-      let saveTimeout;
+      let appState = { players: [], data: {}, category: '' };
 
-      // --- FUNCIONES DE NOTIFICACIÓN Y ESTADO ---
-      const showToast = (title, message, isError = false) => {
-          dom.toastTitle.innerHTML = `<i class="fas ${isError ? 'fa-exclamation-circle text-danger' : 'fa-check-circle text-success'} me-2"></i> ${title}`;
-          dom.toastElement.querySelector('.toast-body').textContent = message;
+      // --- FUNCIONES DE UTILIDAD ---
+      const showToast = (message, isError = false) => {
+          toastElement.querySelector('.toast-body').textContent = message;
+          const icon = toastElement.querySelector('.toast-header i');
+          icon.className = isError ? 'fas fa-exclamation-circle text-danger me-2' : 'fas fa-check-circle text-success me-2';
           bsToast.show();
       };
-      
-      const updateSavingStatus = (isSaving) => {
-        if (isSaving) {
-          dom.savingStatus.textContent = 'Guardando...';
-          dom.savingStatus.style.opacity = '1';
-        } else {
-          dom.savingStatus.textContent = 'Guardado ✔';
-          setTimeout(() => { dom.savingStatus.style.opacity = '0'; }, 2000);
-        }
-      };
 
-      // --- GESTIÓN DE ESTADO (CARGA Y GUARDADO) ---
       const saveState = () => {
-        clearTimeout(saveTimeout);
-        updateSavingStatus(true);
-        saveTimeout = setTimeout(() => {
-          appState.category = dom.categoryInput.value;
-          appState.theme = dom.body.dataset.bsTheme;
-          localStorage.setItem('dibaFbcAppState_v2', JSON.stringify(appState));
-          updateSavingStatus(false);
-        }, 500);
+        appState.category = categoryInput.value;
+        localStorage.setItem('dibaFbcAppState', JSON.stringify(appState));
       };
 
       const loadState = () => {
-        const savedState = localStorage.getItem('dibaFbcAppState_v2');
-        if (savedState) {
-          appState = JSON.parse(savedState);
-        }
-        dom.categoryInput.value = appState.category || '';
-        if (!dom.dateInput.value) dom.dateInput.valueAsDate = new Date();
-        applyTheme(appState.theme || 'light');
+        const savedState = localStorage.getItem('dibaFbcAppState');
+        if (savedState) appState = JSON.parse(savedState);
+        categoryInput.value = appState.category || '';
+        if (!dateInput.value) dateInput.valueAsDate = new Date();
       };
       
-      // --- LÓGICA DE TEMAS (MODO OSCURO/CLARO) ---
-      const applyTheme = (theme) => {
-        dom.body.dataset.bsTheme = theme;
-        dom.themeSwitcher.checked = theme === 'dark';
-        const icon = dom.themeSwitcher.nextElementSibling.querySelector('i');
-        icon.className = theme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
-      };
-
-      dom.themeSwitcher.addEventListener('change', (e) => {
-        applyTheme(e.target.checked ? 'dark' : 'light');
-        saveState();
-      });
-
-      // --- RENDERIZADO Y CÁLCULOS ---
-      const formatCurrency = (value) => {
-        if (!value || isNaN(value)) return '$0';
-        return `$${new Intl.NumberFormat('es-CO').format(value)}`;
-      };
-      
-      const updateDashboard = () => {
-        let totalPayment = 0;
-        let present = 0, absent = 0, excused = 0;
-        
-        appState.players.forEach(player => {
-            const playerData = appState.data[player.id] || {};
-            totalPayment += Number(playerData.pago) || 0;
-            switch(playerData.asistencia) {
-                case 'P': present++; break;
-                case 'A': absent++; break;
-                case 'E': excused++; break;
-            }
-        });
-
-        document.getElementById('totalPlayers').textContent = appState.players.length;
-        document.getElementById('totalPayment').textContent = formatCurrency(totalPayment);
-        document.getElementById('totalPresent').textContent = present;
-        document.getElementById('totalAbsent').textContent = absent;
-        document.getElementById('totalExcused').textContent = excused;
-      };
-
+      // --- RENDERIZADO DE LA TABLA ---
       const renderTable = () => {
-        const searchTerm = dom.searchInput.value.toLowerCase();
-        const filteredPlayers = appState.players.filter(p => p.name.toLowerCase().includes(searchTerm));
-        
-        dom.tableBody.innerHTML = '';
-        if (filteredPlayers.length === 0) {
-            const message = appState.players.length > 0 ? 'Ningún jugador coincide con la búsqueda.' : 'No hay jugadores en la lista. ¡Añade uno para empezar!';
-            dom.tableBody.innerHTML = `<tr><td colspan="6" class="text-center text-muted p-4">${message}</td></tr>`;
-        } else {
-            filteredPlayers.forEach((player, index) => {
-              const playerData = appState.data[player.id] || { pago: '', asistencia: 'P', observacion: '' };
-              const row = document.createElement('tr');
-              row.dataset.playerId = player.id;
-              row.innerHTML = `
-                <td><b>${appState.players.findIndex(p => p.id === player.id) + 1}</b></td>
-                <td class="editable-name fw-medium" title="Doble clic para editar">${player.name}</td>
-                <td><input type="text" inputmode="numeric" class="form-control form-control-sm data-input" data-field="pago" placeholder="$0" value="${playerData.pago}"></td>
-                <td>
-                  <select class="form-select form-select-sm data-input" data-field="asistencia">
-                    <option value="P" ${playerData.asistencia === 'P' ? 'selected' : ''}>Presente</option>
-                    <option value="A" ${playerData.asistencia === 'A' ? 'selected' : ''}>Ausente</option>
-                    <option value="E" ${playerData.asistencia === 'E' ? 'selected' : ''}>Excusa</option>
-                  </select>
-                </td>
-                <td><input type="text" class="form-control form-control-sm data-input" data-field="observacion" placeholder="Sin novedad" value="${playerData.observacion}"></td>
-                <td class="text-center"><button class="btn btn-sm btn-link text-danger p-0 btn-delete"><i class="fas fa-trash-alt"></i></button></td>
-              `;
-              dom.tableBody.appendChild(row);
-            });
-        }
-        updateDashboard();
-      };
-      
-      // --- MANEJADORES DE EVENTOS ---
-      const setupEventListeners = () => {
-        dom.addPlayerForm.addEventListener('submit', e => {
-            e.preventDefault();
-            const newName = dom.newPlayerNameInput.value.trim();
-            if (newName) {
-                appState.players.push({ id: Date.now(), name: newName });
-                appState.data[Date.now()] = { pago: '', asistencia: 'P', observacion: '' };
-                dom.newPlayerNameInput.value = '';
-                saveAndRender();
-                showToast('Éxito', `Jugador "${newName}" añadido.`);
-            }
-        });
-
-        dom.tableBody.addEventListener('input', e => {
-            if (e.target.classList.contains('data-input')) {
-                const row = e.target.closest('tr');
-                const playerId = Number(row.dataset.playerId);
-                const field = e.target.dataset.field;
-                let value = e.target.value;
-
-                if (field === 'pago') {
-                  value = value.replace(/\D/g, ''); // Solo números
-                }
-
-                if (!appState.data[playerId]) appState.data[playerId] = { pago: '', asistencia: 'P', observacion: '' };
-                appState.data[playerId][field] = value;
-                saveAndRender();
-            }
-        });
-
-        dom.tableBody.addEventListener('click', e => {
-            if (e.target.closest('.btn-delete')) {
-                const row = e.target.closest('tr');
-                const playerId = Number(row.dataset.playerId);
-                const player = appState.players.find(p => p.id === playerId);
-                if (confirm(`¿Eliminar a ${player.name} de la lista? Esta acción no se puede deshacer.`)) {
-                    appState.players = appState.players.filter(p => p.id !== playerId);
-                    delete appState.data[playerId];
-                    saveAndRender();
-                    showToast('Eliminado', `Jugador "${player.name}" eliminado.`, true);
-                }
-            }
-        });
-
-        dom.tableBody.addEventListener('dblclick', e => {
-            const cell = e.target.closest('.editable-name');
-            if (!cell || cell.querySelector('input')) return;
-            
-            const originalName = cell.textContent;
-            cell.innerHTML = `<input type="text" class="form-control form-control-sm" value="${originalName}" />`;
-            const input = cell.querySelector('input');
-            input.focus();
-            input.select();
-            
-            const saveChange = () => {
-                const newName = input.value.trim();
-                const row = cell.closest('tr');
-                const playerId = Number(row.dataset.playerId);
-                if (newName && newName !== originalName) {
-                    const player = appState.players.find(p => p.id === playerId);
-                    if (player) {
-                        player.name = newName;
-                        showToast('Actualizado', `Nombre cambiado a "${newName}".`);
-                    }
-                }
-                saveAndRender(); // Re-renderiza toda la tabla
-            };
-
-            input.addEventListener('blur', saveChange);
-            input.addEventListener('keydown', (e) => {
-                if (e.key === 'Enter') saveChange();
-                else if (e.key === 'Escape') renderTable();
-            });
-        });
-        
-        dom.clearDataBtn.addEventListener('click', () => {
-            if (confirm('¿Limpiar datos de pago, asistencia y observaciones? La lista de jugadores no se borrará.')) {
-                Object.keys(appState.data).forEach(playerId => {
-                    appState.data[playerId] = { pago: '', asistencia: 'P', observacion: '' };
-                });
-                saveAndRender();
-                showToast('Planilla Limpia', 'Se han reseteado los datos de la sesión.');
-            }
-        });
-        
-        // --- Búsqueda, CSV y PDF ---
-        dom.searchInput.addEventListener('input', renderTable);
-        dom.categoryInput.addEventListener('input', saveState);
-        dom.dateInput.addEventListener('input', saveState);
-
-        dom.importCsvBtn.addEventListener('click', () => dom.csvFileInput.click());
-        dom.csvFileInput.addEventListener('change', handleCsvImport);
-        dom.exportCsvBtn.addEventListener('click', handleCsvExport);
-        dom.generatePdfBtn.addEventListener('click', generatePDF);
-      };
-
-      // --- IMPORTACIÓN / EXPORTACIÓN ---
-      const handleCsvImport = () => { /* ... (código sin cambios, ya era funcional) ... */ };
-      
-      const handleCsvExport = () => {
+        tableBody.innerHTML = '';
         if (appState.players.length === 0) {
-            showToast('Vacío', 'No hay jugadores para exportar.', true);
+            tableBody.innerHTML = `<tr><td colspan="6" class="text-center text-muted p-4">No hay jugadores en la lista. ¡Añade uno para empezar o importa un archivo CSV!</td></tr>`;
             return;
         }
-        let csvContent = "data:text/csv;charset=utf-8,";
-        csvContent += "Nombre,Pago,Asistencia,Observaciones\r\n";
         
-        appState.players.forEach(player => {
-            const data = appState.data[player.id] || { pago: '', asistencia: '', observacion: '' };
-            const asistenciaText = {P: 'Presente', A: 'Ausente', E: 'Excusa'}[data.asistencia] || '';
-            const row = [player.name, data.pago, asistenciaText, `"${data.observacion}"`].join(",");
-            csvContent += row + "\r\n";
+        appState.players.forEach((player, index) => {
+          const playerData = appState.data[player.id] || { pago: '', asistencia: 'P', observacion: '' };
+          const row = document.createElement('tr');
+          row.dataset.playerId = player.id;
+          row.innerHTML = `
+            <td><b>${index + 1}</b></td>
+            <!-- CAMBIO: Se añade la clase 'editable-name' y un 'title' para indicar que se puede editar -->
+            <td class="editable-name fw-medium" title="Doble clic para editar">${player.name}</td>
+            <td><input type="text" class="form-control form-control-sm data-input" data-field="pago" placeholder="$0" value="${playerData.pago}"></td>
+            <td>
+              <select class="form-select form-select-sm data-input" data-field="asistencia">
+                <option value="P" ${playerData.asistencia === 'P' ? 'selected' : ''}>Presente</option>
+                <option value="A" ${playerData.asistencia === 'A' ? 'selected' : ''}>Ausente</option>
+                <option value="E" ${playerData.asistencia === 'E' ? 'selected' : ''}>Excusa</option>
+              </select>
+            </td>
+            <td><input type="text" class="form-control form-control-sm data-input" data-field="observacion" placeholder="Sin novedad" value="${playerData.observacion}"></td>
+            <td class="text-center">
+              <button class="btn btn-sm btn-link text-danger p-0 action-btn btn-delete"><i class="fas fa-trash-alt"></i></button>
+            </td>
+          `;
+          tableBody.appendChild(row);
         });
-
-        const encodedUri = encodeURI(csvContent);
-        const link = document.createElement("a");
-        link.setAttribute("href", encodedUri);
-        link.setAttribute("download", `export_diba_fbc_${dom.dateInput.value}.csv`);
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        showToast('Éxito', 'La planilla ha sido exportada a CSV.');
       };
-      
-      // --- GENERACIÓN DE PDF (MEJORADO) ---
-      const generatePDF = async () => { /* ... (código con lógica mejorada para incluir dashboard) ... */ };
 
+      // --- MANEJADORES DE EVENTOS ---
+      addPlayerForm.addEventListener('submit', e => {
+        e.preventDefault();
+        const newName = newPlayerNameInput.value.trim();
+        if (newName) {
+          appState.players.push({ id: Date.now(), name: newName });
+          newPlayerNameInput.value = '';
+          saveState();
+          renderTable();
+          showToast(`Jugador "${newName}" añadido.`);
+        }
+      });
+
+      // Evento para borrar jugador
+      tableBody.addEventListener('click', e => {
+        if (e.target.closest('.btn-delete')) {
+          const row = e.target.closest('tr');
+          const playerId = Number(row.dataset.playerId);
+          const player = appState.players.find(p => p.id === playerId);
+          if (confirm(`¿Eliminar a ${player.name} de la lista? Esta acción no se puede deshacer.`)) {
+            appState.players = appState.players.filter(p => p.id !== playerId);
+            delete appState.data[playerId];
+            saveState();
+            renderTable();
+            showToast(`Jugador "${player.name}" eliminado.`, true);
+          }
+        }
+      });
+      
+      // Evento para actualizar datos de pago, asistencia y observaciones
+      tableBody.addEventListener('input', e => {
+        if (e.target.classList.contains('data-input')) {
+          const row = e.target.closest('tr');
+          const playerId = Number(row.dataset.playerId);
+          const field = e.target.dataset.field;
+          if (!appState.data[playerId]) appState.data[playerId] = { pago: '', asistencia: 'P', observacion: '' };
+          appState.data[playerId][field] = e.target.value;
+          saveState();
+        }
+      });
+
+      // --- NUEVO: MANEJADOR PARA EDITAR NOMBRES ---
+      tableBody.addEventListener('dblclick', e => {
+        const cell = e.target.closest('.editable-name');
+        if (!cell) return; // Si no se hizo clic en una celda de nombre, no hacer nada
+
+        const originalName = cell.textContent;
+        const row = cell.closest('tr');
+        const playerId = Number(row.dataset.playerId);
+
+        // Reemplazar el texto con un campo de input
+        cell.innerHTML = `<input type="text" class="form-control form-control-sm" value="${originalName}" />`;
+        const input = cell.querySelector('input');
+        input.focus();
+        input.select();
+
+        // Función para guardar el cambio
+        const saveChange = () => {
+            const newName = input.value.trim();
+            if (newName && newName !== originalName) {
+                const player = appState.players.find(p => p.id === playerId);
+                if (player) {
+                    player.name = newName;
+                    saveState();
+                    showToast(`Nombre actualizado a "${newName}".`);
+                }
+            }
+            renderTable(); // Re-renderizar la tabla para restaurar la vista normal
+        };
+
+        // Guardar al perder el foco (clic fuera)
+        input.addEventListener('blur', saveChange);
+
+        // Guardar con Enter o cancelar con Escape
+        input.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                saveChange();
+            } else if (e.key === 'Escape') {
+                renderTable(); // Cancelar edición y restaurar
+            }
+        });
+      });
+
+      clearDataBtn.addEventListener('click', () => {
+        if (confirm('¿Está seguro de que desea limpiar todos los datos de pago, asistencia y observaciones? La lista de jugadores no se borrará.')) {
+            appState.data = {};
+            saveState();
+            renderTable();
+            showToast('Datos de la planilla limpiados.');
+        }
+      });
+      
+      categoryInput.addEventListener('input', saveState);
+
+      // --- IMPORTACIÓN DE CSV ---
+      const handleCsvImport = () => {
+        const file = csvFileInput.files[0];
+        if (!file) {
+            showToast('Por favor, selecciona un archivo CSV primero.', true);
+            return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            try {
+                const text = e.target.result;
+                const lines = text.split('\n').map(l => l.trim()).filter(l => l);
+                if (lines.length < 2) {
+                    showToast('El archivo CSV está vacío o no tiene datos.', true);
+                    return;
+                }
+
+                const headers = lines[0].split(',').map(h => h.trim().toLowerCase());
+                const nameIndex = headers.indexOf('nombre');
+                
+                if (nameIndex === -1) {
+                    showToast('El archivo CSV debe tener una columna "nombre".', true);
+                    return;
+                }
+                
+                const pagoIndex = headers.indexOf('pago');
+                const asistenciaIndex = headers.indexOf('asistencia');
+                const obsIndex = headers.indexOf('observaciones');
+
+                if (appState.players.length > 0 && !confirm('Esto reemplazará la lista de jugadores actual. ¿Desea continuar?')) {
+                    return;
+                }
+                
+                appState.players = [];
+                appState.data = {};
+
+                lines.slice(1).forEach((line, i) => {
+                    const cols = line.split(',');
+                    const nombre = cols[nameIndex]?.trim();
+                    if (!nombre) return;
+
+                    const id = Date.now() + i;
+                    const pago = pagoIndex !== -1 ? cols[pagoIndex]?.trim() : '';
+                    let asistencia = asistenciaIndex !== -1 ? cols[asistenciaIndex]?.trim().toUpperCase() : 'P';
+                    if (!['P', 'A', 'E'].includes(asistencia)) asistencia = 'P';
+                    const observacion = obsIndex !== -1 ? cols[obsIndex]?.trim() : '';
+
+                    appState.players.push({ id, name: nombre });
+                    appState.data[id] = { pago, asistencia, observacion };
+                });
+
+                saveState();
+                renderTable();
+                showToast(`Se importaron ${appState.players.length} jugadores desde el CSV.`);
+                csvFileInput.value = '';
+            } catch (error) {
+                showToast('Error al procesar el archivo CSV. Verifique el formato.', true);
+                console.error("Error CSV:", error);
+            }
+        };
+        reader.readAsText(file);
+      };
+
+      importCsvBtn.addEventListener('click', handleCsvImport);
+
+      // --- GENERACIÓN DE PDF ---
+      generatePdfBtn.addEventListener('click', async () => {
+        const btn = generatePdfBtn;
+        btn.disabled = true;
+        btn.querySelector('#pdf-icon').innerHTML = `<span class="spinner-border spinner-border-sm"></span>`;
+        btn.querySelector('#pdf-text').textContent = ' Generando...';
+
+        try {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF({ orientation: 'portrait', unit: 'pt', format: 'letter' });
+            
+            const logoUrl = "https://i.postimg.cc/x8W7vwJJ/ESCUDO.png";
+            try {
+                const response = await fetch(logoUrl);
+                const blob = await response.blob();
+                const imgData = await new Promise(resolve => {
+                    const reader = new FileReader();
+                    reader.onloadend = () => resolve(reader.result);
+                    reader.readAsDataURL(blob);
+                });
+                doc.addImage(imgData, 'PNG', 40, 30, 60, 60);
+            } catch (err) { console.error("Error cargando logo para PDF:", err); }
+
+            doc.setFontSize(16).setFont('helvetica', 'bold').text("DIBA FBC", 115, 50);
+            doc.setFontSize(10).setFont('helvetica', 'normal');
+            doc.text("DEPORTIVO INTERNACIONAL DE BARRANQUILLA ATLANTICO", 115, 65);
+            doc.text("RESOLUCIÓN 0122 / 10-SEPT-2018", 115, 80);
+            
+            doc.setFontSize(12).setFont('helvetica', 'bold').text("PLANILLA GENERAL DE CONTROL", doc.internal.pageSize.getWidth() / 2, 120, { align: 'center' });
+
+            const planillaDate = dateInput.value ? new Date(dateInput.value + 'T00:00:00').toLocaleDateString('es-CO', { day: '2-digit', month: '2-digit', year: 'numeric' }) : "No especificada";
+            const planillaCategory = categoryInput.value.trim() || "No especificada";
+            doc.setFontSize(10).setFont('helvetica', 'normal');
+            doc.text(`Fecha: ${planillaDate}`, 40, 140);
+            doc.text(`Categoría: ${planillaCategory}`, doc.internal.pageSize.getWidth() - 40, 140, { align: 'right' });
+
+            const head = [["#", "Nombre", "Pago", "Asistencia", "Observaciones"]];
+            let body;
+
+            if (appState.players.length === 0) {
+                body = [];
+                for (let i = 1; i <= 30; i++) {
+                    body.push([i, '', '', '', '']); 
+                }
+            } else {
+                body = appState.players.map((player, index) => {
+                    const playerData = appState.data[player.id] || {};
+                    const asistenciaText = { P: 'Presente', A: 'Ausente', E: 'Excusa' }[playerData.asistencia] || '';
+                    return [index + 1, player.name, playerData.pago || '', asistenciaText, playerData.observacion || ''];
+                });
+            }
+
+            doc.autoTable({
+                head: head,
+                body: body,
+                startY: 155,
+                margin: { left: 40, right: 40 },
+                styles: { fontSize: 9, cellPadding: 5, valign: 'middle' },
+                headStyles: { fillColor: [0, 42, 64], textColor: 255, fontStyle: 'bold' },
+                alternateRowStyles: { fillColor: [240, 248, 255] },
+                columnStyles: {
+                    0: { halign: 'center', cellWidth: 30 },
+                    2: { halign: 'center', cellWidth: 70 },
+                    3: { halign: 'center', cellWidth: 70 },
+                }
+            });
+
+            const pageCount = doc.internal.getNumberOfPages();
+            for (let i = 1; i <= pageCount; i++) {
+                doc.setPage(i);
+                doc.setFontSize(8).setTextColor(150);
+                doc.text(`Página ${i} de ${pageCount}`, doc.internal.pageSize.getWidth() / 2, doc.internal.pageSize.getHeight() - 20, { align: 'center' });
+            }
+
+            doc.save(`Planilla_DIBA_FBC_${planillaCategory}_${dateInput.value}.pdf`);
+            showToast('PDF generado con éxito.');
+
+        } catch (error) {
+            console.error('Error al generar el PDF:', error);
+            showToast('Ocurrió un error al generar el PDF.', true);
+        } finally {
+            btn.disabled = false;
+            btn.querySelector('#pdf-icon').innerHTML = `<i class="fas fa-file-pdf"></i>`;
+            btn.querySelector('#pdf-text').textContent = ' Descargar PDF';
+        }
+      });
+      
       // --- INICIALIZACIÓN ---
-      const init = () => {
-        loadState();
-        setupEventListeners();
-        renderTable();
-      };
-      
-      const saveAndRender = () => {
-        saveState();
-        renderTable();
-      };
-
-      init();
+      loadState();
+      renderTable();
     });
   </script>
+
 </body>
 </html>
