@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", function () {
   fetch("layout/footer.html")
     .then(response => response.text())
     .then(data => {
-      document.getElementById("footer-container").innerHTML = data;
+      document.getElementById("container py-4").innerHTML = data;
     })
     .catch(error => console.error("Error cargando el Footer:", error));
 
