@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
   <meta charset="UTF-8" />
   <title>Calendario - DIBA FBC</title>
@@ -9,8 +8,7 @@
   <link rel="icon" href="images/ESCUDO.ico" sizes="32x32" />
 
   <!-- Meta descripción -->
-  <meta name="description"
-    content="Consulta los partidos y entrenamientos de DIBA FBC, un recorrido lleno de pasión y logros deportivos." />
+  <meta name="description" content="Consulta los partidos y entrenamientos de DIBA FBC, un recorrido lleno de pasión y logros deportivos." />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <!-- Mejora de vista previa en redes sociales (Open Graph) -->
@@ -30,28 +28,29 @@
   <meta name="twitter:image" content="https://diba-fbc.vercel.app/images/preview.jpg" />
 
   <!-- Bootstrap CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
   <!-- Font Awesome -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
-    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <!-- Animate.css -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
   <!-- AOS (opcional) -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css"/>
   <!-- Estilos globales -->
   <link rel="stylesheet" href="styles/styles.css" />
   <link rel="stylesheet" href="styles/analisis.css" />
   <link rel="stylesheet" href="styles/background-animation.css" />
   <!-- Leaflet CSS -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-    integrity="sha256-sA+e2vfFZHtNRaSZB/vXdxNpI1OeblYF+xkAoCXYxoA=" crossorigin="" />
+  <link
+  rel="stylesheet"
+  href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+  integrity="sha256-sA+e2vfFZHtNRaSZB/vXdxNpI1OeblYF+xkAoCXYxoA="
+  crossorigin=""
+  />
 
   <!-- Leaflet JS -->
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-    integrity="sha256-o9N1jzEOkG2z0KLFm7nS5MQe8PgrKaH60p3pqYy5S0c=" crossorigin=""></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-o9N1jzEOkG2z0KLFm7nS5MQe8PgrKaH60p3pqYy5S0c="crossorigin=""></script>
 </head>
-
 <body>
   <!-- Fondo animado -->
   <div class="background-animation">
@@ -75,76 +74,82 @@
   <!-- Navbar (se carga desde layout/navbar.html) -->
   <div id="navbar-container"></div>
   <!-- HERO SECTION -->
-  <section class="hero animate__animated animate__fadeInDown d-flex align-items-center"
+  <section
+    class="hero animate__animated animate__fadeInDown d-flex align-items-center"
     style="background: linear-gradient(135deg, #002a40, #001b72), url('images/fondo.jpg') center/cover no-repeat fixed; background-blend-mode: multiply; min-height: 80vh;">
     <div class="container hero-content text-center text-white">
       <h1 class="hero-title display-4 fw-bold">CALENDARIO</h1>
       <p class="hero-subtitle lead">Programación de partidos</p>
     </div>
   </section>
-  <section class="container my-5">
-    <h2 class="text-center mb-4 text-primary">Lugar de Entrenamiento del Club</h2>
-    <div class="mapa-container">
-      <iframe
-        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3916.801711935751!2d-74.84118122607062!3d10.978334455439269!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8ef42cdd367c2453%3A0x401e8f23384cd2a6!2sParque%20La%20Pradera!5e0!3m2!1ses-419!2sco!4v1750282065919!5m2!1ses-419!2sco"
-        width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy"
-        referrerpolicy="no-referrer-when-downgrade"></iframe>
-    </div>
-  </section>
-  <!-- SECCIÓN: FILTROS Y RESULTADOS -->
-  <section class="my-5">
-    <div class="container">
-      <div class="row g-4">
-        <!-- Columna de Partidos -->
-        <div class="col-md-6">
-          <div class="card shadow-sm border-0 p-4 bg-light">
-            <div class="d-flex justify-content-between align-items-center mb-3">
-              <h2 class="h5 mb-0 text-primary"><i class="fas fa-futbol me-2"></i>PARTIDOS</h2>
-              <button class="btn btn-sm btn-outline-danger rounded-circle" id="btn-close-partidos" title="Cerrar">
-                <i class="fas fa-times"></i>
-              </button>
-            </div>
-            <div class="mb-3">
-              <label for="fecha" class="form-label fw-semibold">Selecciona una fecha</label>
-              <input type="date" id="fecha" class="form-control">
-            </div>
-            <!-- Spinner para Partidos -->
-            <div class="text-center my-3" id="loading-spinner" style="display: none;">
-              <div class="spinner-border text-primary" role="status">
-                <span class="visually-hidden">Cargando partidos...</span>
-              </div>
-            </div>
-            <!-- Contenedor de Partidos -->
-            <div id="matches-container" aria-live="polite"></div>
+ <section class="container my-5">
+  <h2 class="text-center mb-4 text-primary">Lugar de Entrenamiento del Club</h2>
+  <div class="mapa-container">
+    <iframe
+      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3916.801711935751!2d-74.84118122607062!3d10.978334455439269!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8ef42cdd367c2453%3A0x401e8f23384cd2a6!2sParque%20La%20Pradera!5e0!3m2!1ses-419!2sco!4v1750282065919!5m2!1ses-419!2sco"
+      width="100%"
+      height="450"
+      style="border:0;"
+      allowfullscreen=""
+      loading="lazy"
+      referrerpolicy="no-referrer-when-downgrade"
+    ></iframe>
+  </div>
+</section>
+ <!-- SECCIÓN: FILTROS Y RESULTADOS -->
+<section class="my-5">
+  <div class="container">
+    <div class="row g-4">
+      <!-- Columna de Partidos -->
+      <div class="col-md-6">
+        <div class="card shadow-sm border-0 p-4 bg-light">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h2 class="h5 mb-0 text-primary"><i class="fas fa-futbol me-2"></i>PARTIDOS</h2>
+            <button class="btn btn-sm btn-outline-danger rounded-circle" id="btn-close-partidos" title="Cerrar">
+              <i class="fas fa-times"></i>
+            </button>
           </div>
+          <div class="mb-3">
+            <label for="fecha" class="form-label fw-semibold">Selecciona una fecha</label>
+            <input type="date" id="fecha" class="form-control">
+          </div>
+          <!-- Spinner para Partidos -->
+          <div class="text-center my-3" id="loading-spinner" style="display: none;">
+            <div class="spinner-border text-primary" role="status">
+              <span class="visually-hidden">Cargando partidos...</span>
+            </div>
+          </div>
+          <!-- Contenedor de Partidos -->
+          <div id="matches-container" aria-live="polite"></div>
         </div>
+      </div>
 
-        <!-- Columna de Entrenamientos -->
-        <div class="col-md-6">
-          <div class="card shadow-sm border-0 p-4 bg-light">
-            <div class="d-flex justify-content-between align-items-center mb-3">
-              <h2 class="h5 mb-0 text-success"><i class="fas fa-dumbbell me-2"></i>ENTRENAMIENTOS</h2>
-              <button class="btn btn-sm btn-outline-danger rounded-circle" id="btn-close-entrenamientos" title="Cerrar">
-                <i class="fas fa-times"></i>
-              </button>
-            </div>
-            <div class="mb-3">
-              <label for="fecha-entrenamiento" class="form-label fw-semibold">Selecciona una fecha</label>
-              <input type="date" id="fecha-entrenamiento" class="form-control">
-            </div>
-            <!-- Spinner para Entrenamientos -->
-            <div class="text-center my-3" id="loading-spinner-entrenamiento" style="display: none;">
-              <div class="spinner-border text-success" role="status">
-                <span class="visually-hidden">Cargando entrenamientos...</span>
-              </div>
-            </div>
-            <!-- Contenedor de Entrenamientos -->
-            <div id="trainings-container" aria-live="polite"></div>
+      <!-- Columna de Entrenamientos -->
+      <div class="col-md-6">
+        <div class="card shadow-sm border-0 p-4 bg-light">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h2 class="h5 mb-0 text-success"><i class="fas fa-dumbbell me-2"></i>ENTRENAMIENTOS</h2>
+            <button class="btn btn-sm btn-outline-danger rounded-circle" id="btn-close-entrenamientos" title="Cerrar">
+              <i class="fas fa-times"></i>
+            </button>
           </div>
+          <div class="mb-3">
+            <label for="fecha-entrenamiento" class="form-label fw-semibold">Selecciona una fecha</label>
+            <input type="date" id="fecha-entrenamiento" class="form-control">
+          </div>
+          <!-- Spinner para Entrenamientos -->
+          <div class="text-center my-3" id="loading-spinner-entrenamiento" style="display: none;">
+            <div class="spinner-border text-success" role="status">
+              <span class="visually-hidden">Cargando entrenamientos...</span>
+            </div>
+          </div>
+          <!-- Contenedor de Entrenamientos -->
+          <div id="trainings-container" aria-live="polite"></div>
         </div>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
   <!-- Footer (se carga desde layout/footer.html) -->
   <div id="footer-container"></div>
@@ -159,9 +164,9 @@
   <script src="scripts/main.js"></script>
   <script src="scripts/script.js"></script>
 
-  <!-- Scripts -->
-  <script src="scripts/calendario.js"></script>
-
+  <!--  Script modular s -->
+  <script type="module" src="api/paridos.js"></script>
+  
   <script>
     /* --- Funcionalidad para cerrar secciones completas --- */
     document.getElementById('btn-close-partidos').addEventListener('click', () => {
@@ -172,5 +177,4 @@
     });
   </script>
 </body>
-
 </html>
