@@ -7,9 +7,13 @@ const supabase = createClient(
 
 export default async function handler(req, res) {
   try {
-    const { data, error } = await supabase.from('partidos').select('*');
-    if (error) throw error;
-    res.status(200).json(data);
+    // Datos de prueba
+    const partidosDummy = [
+      { id: 1, equipoLocal: "DIBA FBC", equipoVisitante: "Rival FC", fecha: "2025-08-20", resultado: "2-1" },
+      { id: 2, equipoLocal: "DIBA FBC", equipoVisitante: "Otro FC", fecha: "2025-08-27", resultado: "1-3" }
+    ];
+    
+    res.status(200).json(partidosDummy);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
