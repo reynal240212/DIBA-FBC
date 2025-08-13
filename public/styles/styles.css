@@ -265,46 +265,60 @@ img {
 /* ======================================
        LAYOUT PRINCIPAL
 ====================================== */
-/* Navbar */
+/* ======================================
+       LAYOUT PRINCIPAL
+====================================== */
+
+/* NAVBAR MODERNO Y ANIMADO */
 .navbar {
-  position: static;
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
-  z-index: 1000;
   background-color: var(--primary-dark);
-  padding: var(--space-sm);
-  transition: all var(--transition-normal);
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  padding: 0.75rem 1rem;
+  transition: background-color 0.4s ease, box-shadow 0.4s ease, padding 0.4s ease;
+  z-index: 1000;
+}
+
+.navbar.scrolled {
+  background-color: var(--primary);
+  box-shadow: 0 4px 12px var(--shadow-dark);
+  padding: 0.5rem 1rem;
 }
 
 .navbar-brand img {
   width: 50px;
   height: auto;
-  transition: transform var(--transition-normal);
+  transition: transform 0.3s ease;
 }
 
 .navbar-brand img:hover {
-  transform: scale(1.1);
+  transform: scale(1.1) rotate(-2deg);
 }
 
 .nav-link {
+  position: relative;
   font-weight: 600;
   color: var(--white) !important;
   margin: 0 var(--space-xs);
   padding: var(--space-xs) 0;
-  position: relative;
+  transition: color 0.3s ease;
+}
+
+.nav-link:hover {
+  color: var(--accent) !important;
 }
 
 .nav-link::after {
   content: '';
   position: absolute;
-  bottom: 0;
+  bottom: -4px;
   left: 0;
-  width: 0;
+  width: 0%;
   height: 2px;
   background-color: var(--accent);
-  transition: width var(--transition-normal);
+  transition: width 0.3s ease;
 }
 
 .nav-link:hover::after,
@@ -312,49 +326,40 @@ img {
   width: 100%;
 }
 
-/* Asegura que el submenú esté oculto por defecto */
+/* Submenús */
 .dropdown-menu {
-  display: none;
-  position: absolute;
-  /* O 'relative' dependiendo del contexto de tu nav */
-  background-color: #0d1326;
-  /* Tu --darker-blue */
-  min-width: 160px;
-  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-  z-index: 1000;
-  /* Asegura que esté por encima de otros elementos */
-  border-radius: 8px;
-  padding: 10px 0;
+  background-color: var(--primary-dark);
+  border-radius: var(--border-radius-md);
+  border: none;
+  box-shadow: 0 6px 20px var(--shadow-dark);
+  animation: dropdownFade 0.3s ease forwards;
 }
 
-/* Muestra el submenú al pasar el mouse sobre el elemento padre */
-.nav-item.dropdown:hover .dropdown-menu {
-  display: block;
-}
-
-/* Estilos para los ítems del desplegable */
 .dropdown-item {
-  color: #f8f8f8;
-  /* Tu --white */
-  padding: 12px 16px;
-  text-decoration: none;
-  display: block;
-  transition: background-color 0.3s ease;
+  color: var(--white);
+  padding: 0.6rem 1.2rem;
+  transition: background-color 0.3s ease, padding-left 0.3s ease;
 }
 
 .dropdown-item:hover {
-  background-color: #003399;
-  /* Tu --dark-blue */
-  color: #ffd700;
-  /* Tu --gold */
+  background-color: var(--accent);
+  color: var(--primary-dark);
+  padding-left: 1.5rem;
 }
 
-/* Ajustes para el nav-link principal */
-.dropdown-toggle {
-  /* Puedes añadir estilos específicos para el enlace principal si lo deseas */
-  white-space: nowrap;
-  /* Evita que el texto del botón se rompa en varias líneas */
+/* Animación para desplegable */
+@keyframes dropdownFade {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
+
+
 
 
 /* Hero */
