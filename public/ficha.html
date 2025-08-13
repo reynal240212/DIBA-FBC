@@ -1,16 +1,19 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8" />
   <title>PLANTILLA - DIBA FBC</title>
   <link rel="icon" href="images/ESCUDO.ico" type="image/x-icon">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Conoce la historia y los momentos más destacados de DIBA FBC, un recorrido lleno de pasión y logros deportivos." />
+  <meta name="description"
+    content="Conoce la historia y los momentos más destacados de DIBA FBC, un recorrido lleno de pasión y logros deportivos." />
   <!-- Bootstrap 5 CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
 
   <!-- Font Awesome -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
 
   <!-- Animate.css -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
@@ -20,55 +23,56 @@
 
   <!-- Estilos Globales -->
   <link rel="stylesheet" href="styles/styles.css" />
-  
+
   <!-- Regla adicional para forzar fondo blanco en toda la página -->
   <style>
-   /* Estilos base */
-body {
-  font-family: 'Segoe UI', sans-serif;
-  background-color: #f8f9fa;
-  color: #212529;
-}
+    /* Estilos base */
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f8f9fa;
+      color: #212529;
+    }
 
-h1 {
-  color: #001b72;
-  font-weight: bold;
-}
+    h1 {
+      color: #001b72;
+      font-weight: bold;
+    }
 
-/* Carta de jugador */
-.card {
-  border: 2px solid #001b72;
-  border-radius: 10px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s;
-}
+    /* Carta de jugador */
+    .card {
+      border: 2px solid #001b72;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s;
+    }
 
-.card:hover {
-  transform: scale(1.05);
-}
+    .card:hover {
+      transform: scale(1.05);
+    }
 
-.card img {
-  height: 150px;
-  object-fit: cover;
-  border-top-left-radius: 10px;
-  border-top-right-radius: 10px;
-}
+    .card img {
+      height: 150px;
+      object-fit: cover;
+      border-top-left-radius: 10px;
+      border-top-right-radius: 10px;
+    }
 
-.card-body {
-  background-color: #e2e8f0;
-  font-size: 14px;
-  padding: 0.5rem;
-}
+    .card-body {
+      background-color: #e2e8f0;
+      font-size: 14px;
+      padding: 0.5rem;
+    }
 
-/* Responsive grid para filas */
-.row {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-</style>
+    /* Responsive grid para filas */
+    .row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+  </style>
 
 </head>
+
 <body>
 
   <!-- Botón Volver Arriba -->
@@ -78,9 +82,10 @@ h1 {
 
   <!-- Contenedor para el Navbar (se cargará dinámicamente) -->
   <div id="navbar-container"></div>
-  
+
   <!-- HERO SECTION -->
-  <section class="hero animate__animated animate__fadeInDown" style="background: linear-gradient(135deg, #002a40, #001b72), url('images/fondo.jpg') center/cover no-repeat fixed; background-blend-mode: multiply;">
+  <section class="hero animate__animated animate__fadeInDown"
+    style="background: linear-gradient(135deg, #002a40, #001b72), url('images/fondo.jpg') center/cover no-repeat fixed; background-blend-mode: multiply;">
     <div class="container hero-content">
       <h1 class="hero-title">JUGADORES</h1>
       <p class="hero-subtitle lead">PLANTILLA.</p>
@@ -90,11 +95,12 @@ h1 {
     <h1 class="text-center mb-4">Plantilla de Jugadores</h1>
     <div id="players-container" class="d-flex flex-column gap-5"></div>
   </main>>
-  
-  
-  
+
+
+
   <!-- Contenedor para el Footer (se cargará desde layout/footer.html) -->
-  <div id="container py-4"></div>
+
+  <div id="footer-container"></div>
 
   <!-- Bootstrap JS Bundle -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
@@ -119,6 +125,7 @@ h1 {
       });
     });
   </script>
-  
+
 </body>
+
 </html>
