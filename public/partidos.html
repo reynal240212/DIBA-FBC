@@ -159,24 +159,8 @@
   <script src="scripts/main.js"></script>
   <script src="scripts/script.js"></script>
 
-  <script type="module">
-    async function cargarPartidos() {
-      const res = await fetch('/api/getPartidos');
-      const partidos = await res.json();
-      console.log(partidos);
-      // Aquí tu lógica para renderizarlos
-    }
-
-    async function cargarEntrenamientos() {
-      const res = await fetch('/api/getEntrenamientos');
-      const entrenamientos = await res.json();
-      console.log(entrenamientos);
-      // Aquí tu lógica para renderizarlos
-    }
-
-    cargarPartidos();
-    cargarEntrenamientos();
-  </script>
+  <!-- Scripts -->
+  <script src="scripts/calendario.js"></script>
 
   <script>
     /* --- Funcionalidad para cerrar secciones completas --- */
