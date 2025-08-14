@@ -1,93 +1,174 @@
 <!DOCTYPE html>
 <html lang="es" data-bs-theme="light">
+
 <head>
-  <!-- Metadatos básicos -->
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="author" content="DIBA FBC - Reinaldo Perez" />
-  <meta name="description" content="Conoce al cuerpo técnico de DIBA FBC: líderes, entrenadores y profesionales que guían a nuestro equipo hacia el éxito." />
-  <meta name="keywords" content="DIBA FBC, cuerpo técnico, entrenadores, fútbol, Barranquilla" />
-  <title>Cuerpo Técnico | DIBA FBC</title>
+    <!-- Metadatos básicos -->
+    <!-- Open Graph (Facebook, WhatsApp, LinkedIn) -->
+    <meta property="og:title" content="Cuerpo Técnico - DIBA FBC | Líderes en la Cancha" />
+    <meta property="og:description"
+        content="Conoce al cuerpo técnico de DIBA FBC: profesionales dedicados a guiar a nuestro equipo hacia el éxito con experiencia, disciplina y pasión por el fútbol." />
+    <meta property="og:image" content="https://diba-fbc.vercel.app/images/cuerpo-tecnico-banner.jpg" />
+    <!-- Usa una imagen grupal optimizada -->
+    <meta property="og:url" content="https://diba-fbc.vercel.app/cuerpo-tecnico" />
+    <meta property="og:type" content="website" />
 
-  <!-- Favicon -->
-  <link rel="icon" type="image/png" href="images/ESCUDO.png" />
+    <!-- Twitter Cards -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Cuerpo Técnico - DIBA FBC | Líderes en la Cancha" />
+    <meta name="twitter:description"
+        content="Profesionales dedicados a guiar a nuestro equipo hacia el éxito con experiencia y pasión por el fútbol." />
+    <meta name="twitter:image" content="https://diba-fbc.vercel.app/images/cuerpo-tecnico-banner.jpg" />
 
-  <!-- Bootstrap CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>Cuerpo Técnico | DIBA FBC</title>
 
-  <!-- Animaciones -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="images/ESCUDO.png" />
 
-  <!-- Estilos personalizados -->
-  <link rel="stylesheet" href="styles/styles.css" />
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Animaciones -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+
+    <!-- Estilos personalizados -->
+    <link rel="stylesheet" href="styles/styles.css" />
+
+    <style>
+        /* Encabezado deportivo con imagen */
+        header.hero {
+            background: url('images/fondo-equipo.jpg') center/cover no-repeat;
+            color: white;
+            padding: 6rem 0;
+            position: relative;
+        }
+
+        header.hero::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.55);
+        }
+
+        header.hero .container {
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Tarjetas con efecto */
+        .team-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-top: 5px solid var(--accent, #FFD700);
+        }
+
+        .team-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .team-card img {
+            border: 4px solid var(--accent, #FFD700);
+        }
+
+        .bio {
+            font-size: 0.9rem;
+            color: #555;
+            margin-top: 0.5rem;
+            text-align: justify;
+        }
+    </style>
 </head>
+
 <body>
 
-  <!-- Navbar -->
-  <div id="navbar-container"></div>
+    <!-- Navbar -->
+    <div id="navbar-container"></div>
 
-  <!-- Encabezado -->
-  <header class="py-5 bg-dark text-white text-center">
-    <div class="container">
-      <h1 class="fw-bold">Cuerpo Técnico</h1>
-      <p class="lead">Profesionales dedicados a la formación y el éxito de DIBA FBC</p>
-    </div>
-  </header>
-
-  <!-- Sección Cuerpo Técnico -->
-  <section id="equipo" class="container my-5 animate__animated animate__fadeInUp">
-    <div class="row justify-content-center g-4">
-
-      <!-- Miembro 1 -->
-      <div class="col-md-4">
-        <div class="card h-100 text-center shadow">
-          <img src="images/profesor.jpg" class="card-img-top rounded-circle mx-auto mt-4"
-            alt="Reinaldo Perez, Director Técnico" style="width: 140px; height: 140px; object-fit: cover;" loading="lazy" />
-          <div class="card-body">
-            <h5 class="card-title">Reinaldo Perez</h5>
-            <p class="card-text">Director Técnico y Deportivo</p>
-            <a href="mailto:reinaldo@dibafbc.com" class="btn btn-outline-primary btn-sm">Contactar</a>
-          </div>
+    <!-- Encabezado -->
+    <header class="hero text-center text-white">
+        <div class="container">
+            <h1 class="fw-bold display-4">Cuerpo Técnico</h1>
+            <p class="lead">Profesionales comprometidos con la excelencia deportiva</p>
         </div>
-      </div>
+    </header>
 
-      <!-- Miembro 2 -->
-      <div class="col-md-4">
-        <div class="card h-100 text-center shadow">
-          <img src="images/reinaldoNavas.png" class="card-img-top rounded-circle mx-auto mt-4"
-            alt="Reinaldo Perez Navas, Técnico" style="width: 140px; height: 140px; object-fit: cover;" loading="lazy" />
-          <div class="card-body">
-            <h5 class="card-title">Reinaldo Perez Navas</h5>
-            <p class="card-text">Asistente Técnico / Desarrollador de Software</p>
-            <a href="mailto:reinaldonavas@dibafbc.com" class="btn btn-outline-primary btn-sm">Contactar</a>
-          </div>
+    <!-- Sección Cuerpo Técnico -->
+    <section id="equipo" class="container my-5 animate__animated animate__fadeInUp">
+        <div class="row justify-content-center g-4">
+
+            <!-- Miembro 1 -->
+            <div class="col-md-4">
+                <div class="card team-card h-100 text-center shadow">
+                    <img src="images/profesor.jpg" class="card-img-top rounded-circle mx-auto mt-4"
+                        alt="Reinaldo Perez, Director Técnico" style="width: 160px; height: 160px; object-fit: cover;"
+                        loading="lazy" />
+                    <div class="card-body">
+                        <h5 class="card-title fw-bold">Reinaldo Perez</h5>
+                        <p class="text-muted">Director Técnico y Deportivo</p>
+                        <p class="bio">
+                            Con más de 15 años de experiencia en la dirección técnica, ha liderado múltiples proyectos
+                            deportivos,
+                            enfocándose en el desarrollo integral de jugadores y estrategias ganadoras.
+                            Apasionado por el fútbol formativo y el liderazgo en cancha.
+                        </p>
+                        <a href="mailto:reinaldo@dibafbc.com" class="btn btn-warning btn-sm">Contactar</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Miembro 2 -->
+            <div class="col-md-4">
+                <div class="card team-card h-100 text-center shadow">
+                    <img src="images/reinaldoNavas.png" class="card-img-top rounded-circle mx-auto mt-4"
+                        alt="Reinaldo Perez Navas, Técnico" style="width: 160px; height: 160px; object-fit: cover;"
+                        loading="lazy" />
+                    <div class="card-body">
+                        <h5 class="card-title fw-bold">Reinaldo Perez Navas</h5>
+                        <p class="text-muted">Asistente Técnico / Desarrollador de Software</p>
+                        <p class="bio">
+                            Joven estratega y desarrollador, combina la tecnología con el deporte para optimizar
+                            entrenamientos
+                            y análisis de rendimiento. Especialista en planificación táctica y gestión digital del
+                            equipo.
+                        </p>
+                        <a href="mailto:reinaldonavas@dibafbc.com" class="btn btn-warning btn-sm">Contactar</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Miembro 3 -->
+            <div class="col-md-4">
+                <div class="card team-card h-100 text-center shadow">
+                    <img src="images/carlos.png" class="card-img-top rounded-circle mx-auto mt-4"
+                        alt="Carlos Daniel Arias Montiel, Preparador Físico"
+                        style="width: 160px; height: 160px; object-fit: cover;" loading="lazy" />
+                    <div class="card-body">
+                        <h5 class="card-title fw-bold">Carlos Daniel Arias Montiel</h5>
+                        <p class="text-muted">Estudiante Deporte y Cultura / Preparador Físico</p>
+                        <p class="bio">
+                            Especialista en acondicionamiento físico y prevención de lesiones. Su enfoque en la fuerza,
+                            resistencia
+                            y recuperación ha mejorado el rendimiento de los jugadores temporada tras temporada.
+                        </p>
+                        <a href="mailto:carlosarias@dibafbc.com" class="btn btn-warning btn-sm">Contactar</a>
+                    </div>
+                </div>
+            </div>
+
         </div>
-      </div>
+    </section>
 
-      <!-- Miembro 3 -->
-      <div class="col-md-4">
-        <div class="card h-100 text-center shadow">
-          <img src="images/carlos.png" class="card-img-top rounded-circle mx-auto mt-4"
-            alt="Carlos Daniel Arias Montiel, Preparador Físico" style="width: 140px; height: 140px; object-fit: cover;" loading="lazy" />
-          <div class="card-body">
-            <h5 class="card-title">Carlos Daniel Arias Montiel</h5>
-            <p class="card-text">Estudiante Deporte y Cultura / Preparador Físico</p>
-            <a href="mailto:carlosarias@dibafbc.com" class="btn btn-outline-primary btn-sm">Contactar</a>
-          </div>
-        </div>
-      </div>
+    <!-- Patrocinadores -->
+    <div id="patrocinadores-container"></div>
 
-    </div>
-  </section>
+    <!-- Footer -->
+    <div id="footer-container"></div>
 
-  <!-- Patrocinadores -->
-  <div id="patrocinadores-container"></div>
-
-  <!-- Footer -->
-  <div id="footer-container"></div>
-
-  <!-- Scripts Bootstrap y principal -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="main.js"></script>
+    <!-- Scripts Bootstrap y principal -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="main.js"></script>
 </body>
+
 </html>
