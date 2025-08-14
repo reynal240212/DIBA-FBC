@@ -128,7 +128,6 @@ async function filtrarEntrenamientos() {
   const entrenamientos = await obtenerEntrenamientos();
   loadingSpinnerEntrenamiento.style.display = 'none';
 
-  // Ajuste para evitar desfase de fecha por UTC
   const filtrados = entrenamientos.filter(e => {
     const fechaLocal = new Date(e.fecha);
     const fechaISO = fechaLocal.getFullYear() + '-' +
@@ -163,10 +162,9 @@ async function filtrarEntrenamientos() {
   trainingsContainer.appendChild(fragment);
 }
 
-
 inputFechaEntrenamiento.addEventListener('change', filtrarEntrenamientos);
-// ----- CLASIFICACIÓN -----
 
+// ----- CLASIFICACIÓN -----
 async function obtenerClasificacion() {
   const { data, error } = await supabase
     .from('clasificacion_categoria_2014_15')
@@ -235,5 +233,51 @@ async function mostrarClasificacion() {
   container.appendChild(tabla);
 }
 
+// ----- DIBA FBC -----
+async function mostrarPartidosDIBA() {
+  const dibaContainer = document.getElementById('diba-slider');
+  if (!dibaContainer) return;
+
+  const { data, error } = await supabase
+    .from('partidos')
+    .select('*')
+    .or('equipolocal.ilike.%DIBA%,equipovisitante.ilike.%DIBA%')
+    .order('fecha', { ascending: false });
+
+  if (error) {
+    console.error('Error al obtener partidos DIBA:', error);
+    dibaContainer.innerHTML = '<p class="text-muted">No se pudieron cargar los partidos de DIBA FBC.</p>';
+    return;
+  }
+
+  if (!data.length) {
+    dibaContainer.innerHTML = '<p class="text-muted">No hay partidos recientes de DIBA FBC.</p>';
+    return;
+  }
+
+  const fragment = document.createDocumentFragment();
+
+  data.forEach(p => {
+    const cuerpo = `
+      <p><i class="fas fa-calendar-alt me-2"></i><strong>Fecha/Hora:</strong> ${formatearFecha(p.fecha)} - ${p.hora || 'Sin hora'}</p>
+      <p><i class="fas fa-map-marker-alt me-2"></i><strong>Cancha:</strong> ${p.Cancha || 'No especificada'}</p>
+      <p><i class="fas fa-trophy me-2"></i><strong>Resultado:</strong> ${p.resultado || 'Pendiente'}</p>
+    `;
+
+    const card = crearCard({
+      tipo: 'diba',
+      titulo: `${p.equipolocal} vs ${p.equipovisitante}`,
+      cuerpo,
+      escudo: p.escudo,
+      color: 'danger'
+    });
+
+    fragment.appendChild(card);
+  });
+
+  dibaContainer.appendChild(fragment);
+}
+
 // Ejecutar automáticamente al cargar la página
 mostrarClasificacion();
+mostrarPartidosDIBA();

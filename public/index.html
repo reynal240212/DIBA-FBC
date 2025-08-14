@@ -228,66 +228,24 @@
       </div>
     </div>
   </section>
-  <!-- Sección especial DIBA FBC -->
-<section class="container my-5">
-  <h2 class="fw-bold text-center mb-4">
-    <img src="https://diba-fbc.vercel.app/images/ESCUDO.png" alt="Escudo DIBA FBC" style="height: 50px; margin-right: 10px;">
-    Próximos partidos de DIBA FBC
-  </h2>
-
-  <div id="diba-slider" class="d-flex overflow-auto gap-3 pb-3">
-    <!-- Tarjetas cargadas dinámicamente -->
-  </div>
-</section>
-
-<script>
-async function obtenerPartidosDIBA() {
-  const { data, error } = await supabase
-    .from('partidos')
-    .select('*')
-    .or('equipolocal.ilike.%DIBA%,equipovisitante.ilike.%DIBA%')
-    .order('fecha', { ascending: true });
-
-  if (error) {
-    console.error('Error al obtener partidos DIBA:', error);
-    return [];
-  }
-  return data;
-}
-
-function crearTarjetaDIBA(p) {
-  return `
-    <div class="card border-0 shadow-lg text-white" style="min-width: 260px; flex: 0 0 auto; background: linear-gradient(135deg, #a50044, #004d98);">
-      <div class="card-header d-flex align-items-center gap-2 bg-transparent border-0">
-        <img src="${p.escudo || 'URL_ESCUDO_DIBA'}" alt="Escudo" class="rounded shadow" style="width: 40px; height: 40px; object-fit: contain;">
-        <h5 class="mb-0 fw-bold">${p.equipolocal} vs ${p.equipovisitante}</h5>
+  <!-- Sección DIBA FBC -->
+  <section class="container my-5">
+    <div class="row">
+      <div class="col-12 text-center mb-4">
+        <h2 class="fw-bold text-danger">
+          <i class="fas fa-futbol me-2"></i>Partidos de DIBA FBC
+        </h2>
+        <p class="text-muted">Últimos partidos y resultados del club</p>
       </div>
-      <div class="card-body fs-6">
-        <p class="mb-1"><i class="fas fa-calendar-alt me-2"></i>${formatearFecha(p.fecha)}</p>
-        <p class="mb-1"><i class="fas fa-map-marker-alt me-2"></i>${p.Cancha || 'Por definir'}</p>
-        <p class="mb-1"><i class="fas fa-clock me-2"></i>${p.hora || 'Sin hora'}</p>
-        ${p.resultado ? `<span class="badge bg-warning text-dark">${p.resultado}</span>` : ''}
+      <div class="col-12">
+        <div id="diba-slider" class="row g-4">
+          <!-- Aquí el JS insertará las tarjetas dinámicamente -->
+        </div>
       </div>
     </div>
-  `;
-}
-
-async function mostrarPartidosDIBA() {
-  const contenedor = document.getElementById('diba-slider');
-  const partidos = await obtenerPartidosDIBA();
-
-  if (partidos.length === 0) {
-    contenedor.innerHTML = `<p class="text-muted">No hay partidos próximos de DIBA FBC.</p>`;
-    return;
-  }
-
-  contenedor.innerHTML = partidos.map(crearTarjetaDIBA).join('');
-}
-
-mostrarPartidosDIBA();
-</script>
-
   </section>
+
+
   <!--Patrocinadore-->
   <div id="patrocinadores-container"></div>
 
