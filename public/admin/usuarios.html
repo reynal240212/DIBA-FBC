@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Gestión de Usuarios</title>
+    <!-- Aquí puedes enlazar tu CSS común, Bootstrap, etc. -->
+</head>
+<body>
+<h1>Gestión de Usuarios</h1>
+
+<!-- Mensajes de éxito o error -->
+<div th:if="${success_message}" th:text="${success_message}" style="color: green;"></div>
+<div th:if="${error_message}" th:text="${error_message}" style="color: red;"></div>
+
+<a th:href="@{/admin/usuarios/nuevo}">+ Crear Nuevo Usuario</a>
+
+<table border="1">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Username</th>
+        <th>Email</th>
+        <th>Nombre Completo</th>
+        <th>Roles</th>
+        <th>Acciones</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="usuario : ${usuarios}">
+        <td th:text="${usuario.id}"></td>
+        <td th:text="${usuario.username}"></td>
+        <td th:text="${usuario.email}"></td>
+        <td th:text="${usuario.nombreCompleto}"></td>
+        <td>
+            <span th:each="rol : ${usuario.roles}" th:text="${rol.nombre} + ' '"></span>
+        </td>
+        <td>
+            <!-- Aquí irían enlaces para Editar y Eliminar -->
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>
