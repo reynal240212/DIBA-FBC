@@ -2,68 +2,56 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <title>Calendario - DIBA FBC</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
+  <title>Calendario y Eventos | DIBA FBC Oficial</title>
+
+  <!-- MEJORA: Metadatos optimizados para SEO y Redes Sociales -->
+  <meta name="description" content="Consulta el calendario oficial de partidos y entrenamientos del DIBA FBC. Sigue a nuestro equipo en su recorrido por la victoria." />
+  <meta name="theme-color" content="#002a40">
+  <link rel="canonical" href="https://diba-fbc.vercel.app/calendario" />
+  
   <!-- Ícono del sitio -->
   <link rel="icon" href="images/ESCUDO.ico" sizes="32x32" />
+  <link rel="apple-touch-icon" href="images/ESCUDO-180.png"> <!-- Ícono para Apple -->
 
-  <!-- Meta descripción -->
-  <meta name="description" content="Consulta los partidos y entrenamientos de DIBA FBC, un recorrido lleno de pasión y logros deportivos." />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-
-  <!-- Mejora de vista previa en redes sociales (Open Graph) -->
-  <meta property="og:title" content="Calendario - DIBA FBC" />
-  <meta property="og:description" content="Revisa el calendario de partidos y entrenamientos de DIBA FBC." />
-  <!-- Ajusta esta URL a la ruta real de tu imagen de portada -->
-  <meta property="og:image" content="https://diba-fbc.vercel.app/images/ESCUDO.png" />
-  <!-- Ajusta esta URL al dominio donde publiques el calendario -->
+  <!-- Open Graph (para Facebook, LinkedIn, etc.) -->
+  <meta property="og:title" content="Calendario Oficial | DIBA FBC" />
+  <meta property="og:description" content="No te pierdas ningún partido. Revisa el calendario y los lugares de entrenamiento de DIBA FBC." />
+  <meta property="og:image" content="https://diba-fbc.vercel.app/images/diba-og-preview.jpg" /> <!-- MEJORA: URL de imagen específica para Open Graph -->
   <meta property="og:url" content="https://diba-fbc.vercel.app/calendario" />
   <meta property="og:type" content="website" />
+  <meta property="og:locale" content="es_CO" />
 
-  <!-- Meta tags de Twitter Card (opcional) -->
+  <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Calendario - DIBA FBC" />
-  <meta name="twitter:description" content="Revisa el calendario de partidos y entrenamientos de DIBA FBC." />
-  <!-- Ajusta esta URL a la ruta real de tu imagen de portada -->
-  <meta name="twitter:image" content="https://diba-fbc.vercel.app/images/preview.jpg" />
+  <meta name="twitter:title" content="Calendario Oficial | DIBA FBC" />
+  <meta name="twitter:description" content="No te pierdas ningún partido. Revisa el calendario y los lugares de entrenamiento de DIBA FBC." />
+  <meta name="twitter:image" content="https://diba-fbc.vercel.app/images/diba-twitter-preview.jpg" /> <!-- MEJORA: URL de imagen específica para Twitter -->
 
-  <!-- Bootstrap CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer"/>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-  <!-- Animate.css -->
+  <!-- MEJORA: Carga de estilos optimizada -->
+  <!-- Se recomienda precargar el CSS más crítico para un renderizado más rápido -->
+  <link rel="preload" href="styles/styles.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="styles/styles.css"></noscript>
+
+  <!-- Librerías CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
-  <!-- AOS (opcional) -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css"/>
-  <!-- Estilos globales -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-sA+e2vfFZHtNRaSZB/vXdxNpI1OeblYF+xkAoCXYxoA=" crossorigin="anonymous"/>
+  
+  <!-- Estilos personalizados (cargados después de las librerías para poder sobreescribir) -->
   <link rel="stylesheet" href="styles/styles.css" />
   <link rel="stylesheet" href="styles/analisis.css" />
   <link rel="stylesheet" href="styles/background-animation.css" />
-  <!-- Leaflet CSS -->
-  <link
-  rel="stylesheet"
-  href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-  integrity="sha256-sA+e2vfFZHtNRaSZB/vXdxNpI1OeblYF+xkAoCXYxoA="
-  crossorigin=""
-  />
-
-  <!-- Leaflet JS -->
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-o9N1jzEOkG2z0KLFm7nS5MQe8PgrKaH60p3pqYy5S0c="crossorigin=""></script>
 </head>
+
 <body>
   <!-- Fondo animado -->
-  <div class="background-animation">
-    <div class="cube"></div>
-    <div class="cube"></div>
-    <div class="cube"></div>
-    <div class="cube"></div>
-    <div class="cube"></div>
-    <div class="cube"></div>
-    <div class="cube"></div>
-    <div class="cube"></div>
-    <div class="cube"></div>
-    <div class="cube"></div>
+  <div class="background-animation" aria-hidden="true">
+    <!-- MEJORA: Se reduce el número de cubos si el efecto se logra con menos -->
+    <div class="cube"></div> <div class="cube"></div> <div class="cube"></div>
+    <div class="cube"></div> <div class="cube"></div>
   </div>
 
   <!-- Botón Volver Arriba -->
@@ -71,110 +59,99 @@
     <i class="fas fa-arrow-up"></i>
   </button>
 
-  <!-- Navbar (se carga desde layout/navbar.html) -->
-  <div id="navbar-container"></div>
-  <!-- HERO SECTION -->
-  <section
-    class="hero animate__animated animate__fadeInDown d-flex align-items-center"
-    style="background: linear-gradient(135deg, #002a40, #001b72), url('images/fondo.jpg') center/cover no-repeat fixed; background-blend-mode: multiply; min-height: 80vh;">
-    <div class="container hero-content text-center text-white">
-      <h1 class="hero-title display-4 fw-bold">CALENDARIO</h1>
-      <p class="hero-subtitle lead">Programación de partidos</p>
-    </div>
-  </section>
- <section class="container my-5">
-  <h2 class="text-center mb-4 text-primary">Lugar de Entrenamiento del Club</h2>
-  <div class="mapa-container">
-    <iframe
-      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3916.801711935751!2d-74.84118122607062!3d10.978334455439269!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8ef42cdd367c2453%3A0x401e8f23384cd2a6!2sParque%20La%20Pradera!5e0!3m2!1ses-419!2sco!4v1750282065919!5m2!1ses-419!2sco"
-      width="100%"
-      height="450"
-      style="border:0;"
-      allowfullscreen=""
-      loading="lazy"
-      referrerpolicy="no-referrer-when-downgrade"
-    ></iframe>
-  </div>
-</section>
- <!-- SECCIÓN: FILTROS Y RESULTADOS -->
-<section class="my-5">
-  <div class="container">
-    <div class="row g-4">
-      <!-- Columna de Partidos -->
-      <div class="col-md-6">
-        <div class="card shadow-sm border-0 p-4 bg-light">
-          <div class="d-flex justify-content-between align-items-center mb-3">
-            <h2 class="h5 mb-0 text-primary"><i class="fas fa-futbol me-2"></i>PARTIDOS</h2>
-            <button class="btn btn-sm btn-outline-danger rounded-circle" id="btn-close-partidos" title="Cerrar">
-              <i class="fas fa-times"></i>
-            </button>
-          </div>
-          <div class="mb-3">
-            <label for="fecha" class="form-label fw-semibold">Selecciona una fecha</label>
-            <input type="date" id="fecha" class="form-control">
-          </div>
-          <!-- Spinner para Partidos -->
-          <div class="text-center my-3" id="loading-spinner" style="display: none;">
-            <div class="spinner-border text-primary" role="status">
-              <span class="visually-hidden">Cargando partidos...</span>
+  <!-- Contenedores para componentes dinámicos -->
+  <header id="navbar-container"></header>
+
+  <!-- MEJORA: Uso de la etiqueta <main> para el contenido principal -->
+  <main>
+    <!-- HERO SECTION -->
+    <!-- MEJORA: Se quita el estilo en línea y se mueve a una clase CSS -->
+    <section id="hero-calendario" class="hero animate__animated animate__fadeInDown d-flex align-items-center">
+      <div class="container hero-content text-center text-white">
+        <h1 class="hero-title display-3 fw-bold">CALENDARIO OFICIAL</h1>
+        <p class="hero-subtitle lead fs-4">Sigue la programación de partidos y entrenamientos</p>
+      </div>
+    </section>
+    
+    <!-- LUGAR DE ENTRENAMIENTO -->
+    <section class="container my-5" aria-labelledby="training-location-title">
+      <h2 id="training-location-title" class="text-center mb-4 text-primary">Lugar de Entrenamiento del Club</h2>
+      <div class="mapa-container shadow rounded">
+        <!-- MEJORA: Se añade un `title` al iframe por accesibilidad -->
+        <iframe
+          title="Mapa de ubicación del Parque La Pradera, lugar de entrenamiento."
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3916.801711935751!2d-74.84118122607062!3d10.978334455439269!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8ef42cdd367c2453%3A0x401e8f23384cd2a6!2sParque%20La%20Pradera!5e0!3m2!1ses-419!2sco!4v1750282065919!5m2!1ses-419!2sco"
+          width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+        </iframe>
+      </div>
+    </section>
+
+    <!-- SECCIÓN: FILTROS Y RESULTADOS -->
+    <section class="container my-5" aria-labelledby="events-section-title">
+      <h2 id="events-section-title" class="visually-hidden">Filtros de Partidos y Entrenamientos</h2>
+      <div class="row g-4 g-lg-5">
+        <!-- Columna de Partidos -->
+        <div class="col-lg-6">
+          <article class="card shadow-sm h-100 border-0 p-4 bg-light" aria-labelledby="partidos-title">
+            <header class="d-flex justify-content-between align-items-center mb-3">
+              <h3 id="partidos-title" class="h5 mb-0 text-primary"><i class="fas fa-futbol me-2" aria-hidden="true"></i>PARTIDOS</h3>
+              <button class="btn btn-sm btn-outline-secondary rounded-circle btn-clear-results" data-target="matches-container" title="Limpiar resultados de partidos">
+                <i class="fas fa-times"></i>
+              </button>
+            </header>
+            <div class="mb-3">
+              <label for="fecha-partido" class="form-label fw-semibold">Selecciona una fecha:</label>
+              <input type="date" id="fecha-partido" class="form-control">
             </div>
-          </div>
-          <!-- Contenedor de Partidos -->
-          <div id="matches-container" aria-live="polite"></div>
+            <div class="text-center my-3" id="loading-spinner-partidos" style="display: none;">
+              <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Cargando partidos...</span>
+              </div>
+            </div>
+            <div id="matches-container" class="results-container" aria-live="polite"></div>
+          </article>
+        </div>
+
+        <!-- Columna de Entrenamientos -->
+        <div class="col-lg-6">
+          <article class="card shadow-sm h-100 border-0 p-4 bg-light" aria-labelledby="entrenamientos-title">
+            <header class="d-flex justify-content-between align-items-center mb-3">
+              <h3 id="entrenamientos-title" class="h5 mb-0 text-success"><i class="fas fa-dumbbell me-2" aria-hidden="true"></i>ENTRENAMIENTOS</h3>
+              <button class="btn btn-sm btn-outline-secondary rounded-circle btn-clear-results" data-target="trainings-container" title="Limpiar resultados de entrenamientos">
+                <i class="fas fa-times"></i>
+              </button>
+            </header>
+            <div class="mb-3">
+              <label for="fecha-entrenamiento" class="form-label fw-semibold">Selecciona una fecha:</label>
+              <input type="date" id="fecha-entrenamiento" class="form-control">
+            </div>
+            <div class="text-center my-3" id="loading-spinner-entrenamiento" style="display: none;">
+              <div class="spinner-border text-success" role="status">
+                <span class="visually-hidden">Cargando entrenamientos...</span>
+              </div>
+            </div>
+            <div id="trainings-container" class="results-container" aria-live="polite"></div>
+          </article>
         </div>
       </div>
+    </section>
+  </main>
 
-      <!-- Columna de Entrenamientos -->
-      <div class="col-md-6">
-        <div class="card shadow-sm border-0 p-4 bg-light">
-          <div class="d-flex justify-content-between align-items-center mb-3">
-            <h2 class="h5 mb-0 text-success"><i class="fas fa-dumbbell me-2"></i>ENTRENAMIENTOS</h2>
-            <button class="btn btn-sm btn-outline-danger rounded-circle" id="btn-close-entrenamientos" title="Cerrar">
-              <i class="fas fa-times"></i>
-            </button>
-          </div>
-          <div class="mb-3">
-            <label for="fecha-entrenamiento" class="form-label fw-semibold">Selecciona una fecha</label>
-            <input type="date" id="fecha-entrenamiento" class="form-control">
-          </div>
-          <!-- Spinner para Entrenamientos -->
-          <div class="text-center my-3" id="loading-spinner-entrenamiento" style="display: none;">
-            <div class="spinner-border text-success" role="status">
-              <span class="visually-hidden">Cargando entrenamientos...</span>
-            </div>
-          </div>
-          <!-- Contenedor de Entrenamientos -->
-          <div id="trainings-container" aria-live="polite"></div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
+  <footer id="footer-container" class="mt-5"></footer>
 
-  <!-- Footer (se carga desde layout/footer.html) -->
-  <div id="footer-container"></div>
-
-  <!-- Bootstrap JS Bundle -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-  <!-- Carga de componentes externos (Navbar y Footer) -->
-  <script src="scripts/loadComponents.js"></script>
-  <!-- jQuery (opcional) -->
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <!-- Scripts principales -->
-  <script src="scripts/main.js"></script>
-  <script src="scripts/script.js"></script>
-
-  <!--  Script modular s -->
-  <script type="module" src="scripts/paridos.js"></script>
+  <!-- MEJORA: Carga de scripts al final del body con `defer` para no bloquear el renderizado -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous" defer></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-o9N1jzEOkG2z0KLFm7nS5MQe8PgrKaH60p3pqYy5S0c=" crossorigin="anonymous" defer></script>
   
-  <script>
-    /* --- Funcionalidad para cerrar secciones completas --- */
-    document.getElementById('btn-close-partidos').addEventListener('click', () => {
-      document.querySelector('#matches-container').innerHTML = '';
-    });
-    document.getElementById('btn-close-entrenamientos').addEventListener('click', () => {
-      document.querySelector('#trainings-container').innerHTML = '';
-    });
-  </script>
+  <!-- MEJORA: Se elimina jQuery si no es estrictamente necesario. Scripts modulares y modernos no lo requieren. -->
+  
+  <!-- Scripts principales -->
+  <script src="scripts/main.js" defer></script>
+  <script src="scripts/loadComponents.js" defer></script>
+  <script src="scripts/paridos.js" defer></script>
+  
+  <!-- Script modular para la lógica de eventos -->
+  <script type="module" src="scripts/eventManager.js"></script>
+
 </body>
 </html>
