@@ -990,7 +990,7 @@ img {
 }
 
 .footer {
-  background-color: #133eff;
+  background-color: var(--primary-dark);
   color: rgb(255, 255, 255);
   font-family: sans-serif;
   padding-top: 2rem;
