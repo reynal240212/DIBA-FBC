@@ -262,25 +262,25 @@ img {
   background-color: var(--accent);
 }
 
-/* ======================================
-       LAYOUT PRINCIPAL
-====================================== */
-
-/* NAVBAR MODERNO Y ANIMADO */
+/* ==============================
+             NAVBAR 
+============================== */
 .navbar {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
-  background-color: var(--primary-dark);
+  background-color: #0b0d2a; /* Azul muy oscuro */
   padding: 0.75rem 1rem;
+  border-bottom: 4px solid;
+  border-image: linear-gradient(to right, #003399, #a50044) 1;
   transition: background-color 0.4s ease, box-shadow 0.4s ease, padding 0.4s ease;
   z-index: 1000;
 }
 
 .navbar.scrolled {
-  background-color: var(--primary);
-  box-shadow: 0 4px 12px var(--shadow-dark);
+  background-color: #0b0d2a;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
   padding: 0.5rem 1rem;
 }
 
@@ -296,15 +296,16 @@ img {
 
 .nav-link {
   position: relative;
-  font-weight: 600;
-  color: var(--white) !important;
+  font-weight: 700;
+  color: #fff !important;
   margin: 0 var(--space-xs);
   padding: var(--space-xs) 0;
   transition: color 0.3s ease;
+  text-transform: uppercase;
 }
 
 .nav-link:hover {
-  color: var(--accent) !important;
+  color: #ffcc00 !important; /* Dorado */
 }
 
 .nav-link::after {
@@ -314,7 +315,7 @@ img {
   left: 0;
   width: 0%;
   height: 2px;
-  background-color: var(--accent);
+  background-color: #ffcc00; /* Subrayado dorado */
   transition: width 0.3s ease;
 }
 
@@ -323,54 +324,51 @@ img {
   width: 100%;
 }
 
+/* Enlaces destacados */
+.nav-item.gold-link .nav-link {
+  color: #ffcc00 !important;
+}
+
+.nav-item.gold-link .nav-link::after {
+  background-color: #ffcc00;
+}
+
 /* Submenús */
 .dropdown-menu {
-  background-color: var(--primary-dark);
+  background-color: #0b0d2a;
   border-radius: var(--border-radius-md);
   border: none;
-  box-shadow: 0 6px 20px var(--shadow-dark);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
   animation: dropdownFade 0.3s ease forwards;
 }
 
 .dropdown-item {
-  color: var(--white);
+  color: #fff;
   padding: 0.6rem 1.2rem;
   transition: background-color 0.3s ease, padding-left 0.3s ease;
 }
 
 .dropdown-item:hover {
-  background-color: var(--accent);
-  color: var(--primary-dark);
+  background-color: #ffcc00;
+  color: #0b0d2a;
   padding-left: 1.5rem;
 }
-
-/* Animación para desplegable */
-@keyframes dropdownFade {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
 
 
 
 /* Hero */
 .hero {
   position: relative;
-  min-height: 60vh; /* antes 80vh */
-  padding: 4rem 1rem; /* espacio interno */
+  min-height: 60vh;
+  /* antes 80vh */
+  padding: 4rem 1rem;
+  /* espacio interno */
   display: flex;
   align-items: center;
   justify-content: center;
   text-align: center;
   color: var(--white);
-  background: 
+  background:
     linear-gradient(135deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.3)),
     url('images/fondo.jpg') center/cover no-repeat;
   background-blend-mode: multiply;
@@ -382,7 +380,8 @@ img {
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  min-height: 65vh; /* antes 100vh */
+  min-height: 65vh;
+  /* antes 100vh */
   position: relative;
   z-index: 1;
   display: flex;
@@ -396,7 +395,8 @@ img {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.6); /* Oscurece para mejor lectura */
+  background: rgba(0, 0, 0, 0.6);
+  /* Oscurece para mejor lectura */
   z-index: -1;
 }
 
@@ -417,7 +417,8 @@ img {
 
 .hero-title {
   font-family: var(--font-secondary);
-  font-size: 3.2rem; /* reducido para equilibrio */
+  font-size: 3.2rem;
+  /* reducido para equilibrio */
   margin-bottom: var(--space-md);
   color: var(--accent);
   text-shadow: 3px 3px 8px rgba(0, 0, 0, 0.5);
@@ -425,7 +426,8 @@ img {
 }
 
 .hero-subtitle {
-  font-size: 1.3rem; /* ligeramente reducido */
+  font-size: 1.3rem;
+  /* ligeramente reducido */
   max-width: 700px;
   margin: 0 auto var(--space-lg);
   animation: fadeInUp 1s ease;
@@ -444,6 +446,7 @@ img {
     opacity: 0;
     transform: translateY(-30px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -455,6 +458,7 @@ img {
     opacity: 0;
     transform: translateY(30px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -465,6 +469,7 @@ img {
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
   }
@@ -476,12 +481,15 @@ img {
     min-height: 50vh;
     padding: 3rem 1rem;
   }
+
   .hero-section {
     min-height: 55vh;
   }
+
   .hero-title {
     font-size: 2.5rem;
   }
+
   .hero-subtitle {
     font-size: 1.1rem;
   }
@@ -492,12 +500,15 @@ img {
     min-height: 45vh;
     padding: 2.5rem 1rem;
   }
+
   .hero-section {
     min-height: 50vh;
   }
+
   .hero-title {
     font-size: 2rem;
   }
+
   .hero-subtitle {
     font-size: 1rem;
   }
@@ -1866,6 +1877,7 @@ th {
 .timeline-item:nth-child(even) .timeline-content {
   margin-left: auto;
 }
+
 .calendario-scroll {
   scroll-snap-type: x mandatory;
   -webkit-overflow-scrolling: touch;
@@ -1882,9 +1894,10 @@ th {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   transition: transform .2s ease-in-out;
 }
+
 .card-partido:hover {
   transform: scale(1.05);
 }
@@ -1894,21 +1907,24 @@ th {
   align-items: center;
   justify-content: space-between;
 }
+
 .card-partido img {
   width: 60px;
   height: 60px;
   object-fit: contain;
 }
+
 .card-partido h5 {
   font-size: 1rem;
   font-weight: bold;
   text-align: center;
 }
+
 .card-partido .fecha {
   font-size: 0.9rem;
   margin-top: 10px;
   text-align: center;
-  background: rgba(255,255,255,0.1);
+  background: rgba(255, 255, 255, 0.1);
   padding: 5px;
   border-radius: 8px;
 }
