@@ -128,8 +128,8 @@ img {
 }
 
 .btn-primary {
-  background-color: var(--primary);
-  color: var(--white);
+  background-color: var(--accent-transparent);
+  color: var(--overlay);
 }
 
 .btn-primary:hover {
