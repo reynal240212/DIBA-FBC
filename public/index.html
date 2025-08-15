@@ -41,25 +41,36 @@
     .navbar {
       background-color: #1c1c1c;
       position: fixed;
+      /* Fija la navbar */
+      top: 0;
+      /* Arriba de la página */
+      left: 0;
+      /* Alineada a la izquierda */
+      width: 100%;
+      /* Ocupa todo el ancho */
+      z-index: 1000;
+      /* Se asegura que esté por encima de otros elementos */
+    }
+
+    /* Si quieres agregar un poco de sombra para separar del contenido */
+    .navbar {
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
     }
 
     .navbar-brand {
       color: #ffcc00 !important;
       font-weight: 700;
       font-size: 1.5rem;
-      position: fixed;
     }
 
     .navbar-nav .nav-link {
       color: #fff !important;
       font-weight: 500;
       margin-right: 15px;
-      position: fixed;
     }
 
     .navbar-nav .nav-link:hover {
       color: #ffcc00 !important;
-      position: fixed;
     }
 
     /* ===============================
