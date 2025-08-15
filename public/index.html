@@ -34,6 +34,8 @@
     body {
       font-family: 'Montserrat', sans-serif;
       background-color: #f4f4f4;
+      padding-top: 70px;
+      /* Añadido para que el contenido no quede debajo del navbar fijo */
     }
 
     .navbar {
@@ -56,23 +58,76 @@
       color: #ffcc00 !important;
     }
 
-    /* Hero */
-    .hero {
-      background-color: #1c1c1c;
-      /* negro */
-      color: #ffcc00;
-      /* dorado */
-      padding: 100px 0 60px;
-      text-align: center;
+    /* ===============================
+       NUEVO HERO DEPORTIVO (CORREGIDO)
+       =============================== */
+    .hero-deportivo {
+      position: relative;
+      background-image: url('https://images.unsplash.com/photo-1553778263-73a83bab9b83');
+      background-size: cover;
+      background-position: center;
+      padding: 8rem 0;
+      overflow: hidden;
+    }
+
+    .hero-deportivo .hero-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(10, 20, 35, 0.75);
+      z-index: 1;
+    }
+
+    .hero-deportivo .hero-content {
+      position: relative;
+      z-index: 3;
+    }
+
+    .hero-deportivo .subtitle::after {
+      content: '';
+      display: block;
+      width: 60px;
+      height: 4px;
+      background-color: #ffc107;
+      margin-top: 10px;
+    }
+
+    .hero-deportivo h1 {
+      text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
+      color: #ffc107;
+    }
+
+    .hero-deportivo .btn-warning {
+      padding: 12px 28px;
+      border-radius: 50px;
+      box-shadow: 0 4px 15px rgba(255, 193, 7, 0.4);
+      transition: all 0.3s ease;
+    }
+
+    .hero-deportivo .btn-warning:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(255, 193, 7, 0.6);
+    }
+
+    .hero-deportivo::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 50%;
+      height: 100%;
+      z-index: 2;
+      background: linear-gradient(90deg, transparent 50%, #ffc107 50.2%);
+      clip-path: polygon(100% 0, 100% 100%, 65% 100%, 45% 0);
     }
 
     /* Sección patrocinadores */
     #patrocinadores {
       padding: 80px 0;
       background: linear-gradient(180deg, #ffffff 0%, #ffcc00 100%);
-      /* blanco a dorado */
       color: #1c1c1c;
-      /* negro para el texto */
     }
 
     #patrocinadores h2 {
@@ -86,7 +141,6 @@
       font-size: 1.1rem;
       margin-bottom: 40px;
       color: #1c1c1c;
-      /* negro */
     }
 
     .carousel-item img {
@@ -94,6 +148,19 @@
       margin: auto;
       object-fit: contain;
     }
+
+    /* Card hover efecto */
+    .card-img-top.img-clickable {
+      transition: transform 0.3s, box-shadow 0.3s;
+      cursor: pointer;
+    }
+
+    .card-img-top.img-clickable:hover {
+      transform: scale(1.07) rotate(-2deg);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+      z-index: 2;
+    }
+
 
 
     /* Footer */
@@ -182,23 +249,26 @@
     </div>
   </nav>
 
- <!-- HERO DEPORTIVO -->
-<section class="hero-deportivo">
-  <div class="hero-overlay"></div>
-  <div class="container position-relative" style="z-index: 2;">
-    <div class="row align-items-center">
-      <!-- Columna de Texto -->
-      <div class="col-lg-6 col-md-8 text-white hero-content">
-        <h5 class="subtitle text-uppercase fw-bold">Club de Fútbol Amateur</h5>
-        <h1 class="display-3 fw-bolder text-uppercase animate__animated animate__fadeInLeft">DIBA FBC</h1>
-        <p class="lead my-4 animate__animated animate__fadeInUp">Forjando campeones en Barranquilla. Disciplina, pasión y talento juvenil desde la cancha del barrio hasta la gloria.</p>
-        <a href="contacto.html" class="btn btn-warning btn-lg fw-bold animate__animated animate__pulse animate__infinite">¡Únete al Equipo! <i class="fas fa-arrow-right ms-2"></i></a>
+  <!-- HERO DEPORTIVO -->
+  <section class="hero-deportivo">
+    <div class="hero-overlay"></div>
+    <div class="container position-relative" style="z-index: 2;">
+      <div class="row align-items-center">
+        <!-- Columna de Texto -->
+        <div class="col-lg-6 col-md-8 text-white hero-content">
+          <h5 class="subtitle text-uppercase fw-bold">Club de Fútbol Amateur</h5>
+          <h1 class="display-3 fw-bolder text-uppercase animate__animated animate__fadeInLeft">DIBA FBC</h1>
+          <p class="lead my-4 animate__animated animate__fadeInUp">Forjando campeones en Barranquilla. Disciplina,
+            pasión y talento juvenil desde la cancha del barrio hasta la gloria.</p>
+          <a href="contacto.html"
+            class="btn btn-warning btn-lg fw-bold animate__animated animate__pulse animate__infinite">¡Únete al Equipo!
+            <i class="fas fa-arrow-right ms-2"></i></a>
+        </div>
+        <!-- Columna vacía para dejar espacio a la imagen -->
+        <div class="col-lg-6 col-md-4"></div>
       </div>
-      <!-- Columna vacía para dejar espacio a la imagen -->
-      <div class="col-lg-6 col-md-4"></div>
     </div>
-  </div>
-</section>
+  </section>
 
   <!-- Sección Patrocinadores -->
   <section id="patrocinadores">
