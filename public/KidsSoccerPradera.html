@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,9 +12,11 @@
   <link rel="manifest" href="manifest.json" />
 
   <!-- Metadatos para Redes Sociales (SEO) -->
-  <meta name="description" content="Consulta la tabla de clasificación actualizada del Torneo Kids Soccer La Pradera para la categoría 2014-15. Sigue los resultados, goles y posiciones." />
+  <meta name="description"
+    content="Consulta la tabla de clasificación actualizada del Torneo Kids Soccer La Pradera para la categoría 2014-15. Sigue los resultados, goles y posiciones." />
   <meta property="og:title" content="Kids Soccer La Pradera - Categoría 2014-15 | DIBA FBC" />
-  <meta property="og:description" content="Consulta la tabla de clasificación del Torneo Kids Soccer La Pradera 2014-15. Resultados, goles y posiciones actualizadas." />
+  <meta property="og:description"
+    content="Consulta la tabla de clasificación del Torneo Kids Soccer La Pradera 2014-15. Resultados, goles y posiciones actualizadas." />
   <meta property="og:image" content="https://diba-fbc.vercel.app/images/kidssoccer.png" />
   <meta property="og:url" content="https://diba-fbc.vercel.app/KidsSoccerPradera.html" />
   <meta property="og:type" content="website" />
@@ -21,47 +24,125 @@
 
   <!-- Dependencias CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
 
   <!-- Estilos Personalizados -->
   <link rel="stylesheet" href="styles/styles.css" />
   <link rel="stylesheet" href="styles/background-animation.css" />
-  
+
   <!-- MEJORA: Estilos centralizados para esta página específica -->
   <style>
-    /* Estilo del Hero Section para mejor legibilidad */
-    .hero-tournament {
-      position: relative;
-      background: url('images/kidssoccer.png') no-repeat center center/cover;
-      min-height: 70vh;
-      color: white;
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background-color: #f4f4f4;
     }
-    .hero-tournament::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: linear-gradient(to top, rgba(0, 20, 30, 0.8), rgba(0, 0, 0, 0.4));
-      z-index: 1;
+
+    .navbar {
+      background-color: #1c1c1c;
     }
-    .hero-tournament .container {
-      position: relative;
-      z-index: 2;
+
+    .navbar-brand {
+      color: #ffcc00 !important;
+      font-weight: 700;
+      font-size: 1.5rem;
+    }
+
+    .navbar-nav .nav-link {
+      color: #fff !important;
+      font-weight: 500;
+      margin-right: 15px;
+    }
+
+    .navbar-nav .nav-link:hover {
+      color: #ffcc00 !important;
+    }
+
+    /* Hero */
+    .hero {
+      background-color: #1c1c1c;
+      /* negro */
+      color: #ffcc00;
+      /* dorado */
+      padding: 100px 0 60px;
+      text-align: center;
+    }
+
+    /* Sección patrocinadores */
+    #patrocinadores {
+      padding: 80px 0;
+      background: linear-gradient(180deg, #ffffff 0%, #ffcc00 100%);
+      /* blanco a dorado */
+      color: #1c1c1c;
+      /* negro para el texto */
+    }
+
+    #patrocinadores h2 {
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 15px;
+    }
+
+    #patrocinadores p {
+      font-size: 1.1rem;
+      margin-bottom: 40px;
+      color: #1c1c1c;
+      /* negro */
+    }
+
+    .carousel-item img {
+      max-height: 150px;
+      margin: auto;
+      object-fit: contain;
+    }
+
+
+    /* Footer */
+    footer {
+      background-color: #1c1c1c;
+      color: #fff;
+      padding: 40px 0;
+      text-align: center;
+    }
+
+    footer a {
+      color: #ffcc00;
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+
+    #btnBackToTop {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      z-index: 1000;
+      display: none;
     }
 
     /* Estilo para la tabla de clasificación */
     .table-classification {
       border-radius: 0.5rem;
-      overflow: hidden; /* Asegura que los bordes redondeados se apliquen a la tabla */
+      overflow: hidden;
+      /* Asegura que los bordes redondeados se apliquen a la tabla */
     }
+
     .table-classification th {
-      background-color: #002a40 !important; /* Mantiene el color oscuro de tu marca */
+      background-color: #002a40 !important;
+      /* Mantiene el color oscuro de tu marca */
       color: #ffffff;
     }
+
     .team-diba-highlight {
-        background-color: rgba(255, 215, 0, 0.15) !important; /* Un sutil resaltado dorado */
-        font-weight: bold;
+      background-color: rgba(255, 215, 0, 0.15) !important;
+      /* Un sutil resaltado dorado */
+      font-weight: bold;
     }
+
     #btnBackToTop {
       position: fixed;
       bottom: 20px;
@@ -69,53 +150,209 @@
       display: none;
       z-index: 1050;
     }
+
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background-color: #f4f4f4;
+    }
+
+    .navbar {
+      background-color: #1c1c1c;
+    }
+
+    .navbar-brand {
+      color: #ffcc00 !important;
+      font-weight: 700;
+      font-size: 1.5rem;
+    }
+
+    .navbar-nav .nav-link {
+      color: #fff !important;
+      font-weight: 500;
+      margin-right: 15px;
+    }
+
+    .navbar-nav .nav-link:hover {
+      color: #ffcc00 !important;
+    }
+
+    /* Hero */
+    .hero {
+      background-color: #1c1c1c;
+      /* negro */
+      color: #ffcc00;
+      /* dorado */
+      padding: 100px 0 60px;
+      text-align: center;
+    }
+
+    /* Sección patrocinadores */
+    #patrocinadores {
+      padding: 80px 0;
+      background: linear-gradient(180deg, #ffffff 0%, #ffcc00 100%);
+      /* blanco a dorado */
+      color: #1c1c1c;
+      /* negro para el texto */
+    }
+
+    #patrocinadores h2 {
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 15px;
+    }
+
+    #patrocinadores p {
+      font-size: 1.1rem;
+      margin-bottom: 40px;
+      color: #1c1c1c;
+      /* negro */
+    }
+
+    .carousel-item img {
+      max-height: 150px;
+      margin: auto;
+      object-fit: contain;
+    }
+
+
+    /* Footer */
+    footer {
+      background-color: #1c1c1c;
+      color: #fff;
+      padding: 40px 0;
+      text-align: center;
+    }
+
+    footer a {
+      color: #ffcc00;
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+
+    #btnBackToTop {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      z-index: 1000;
+      display: none;
+    }
   </style>
 </head>
 
 <body>
-  <!-- Fondo animado -->
-  <div class="background-animation" aria-hidden="true">
-    <div class="cube"></div><div class="cube"></div><div class="cube"></div>
-    <div class="cube"></div><div class="cube"></div>
-  </div>
-
-  <!-- Botón Volver Arriba -->
-  <a href="#" id="btnBackToTop" title="Volver arriba" class="btn btn-primary btn-lg rounded-circle shadow-lg" aria-label="Volver arriba">
-    <i class="fas fa-arrow-up"></i>
-  </a>
-
-  <!-- Navbar -->
-  <header id="navbar-container"></header>
-
-  <main>
-    <!-- HERO SECTION -->
-    <section class="hero-tournament d-flex align-items-center text-center">
-      <div class="container">
-        <h1 class="display-4 fw-bold text-shadow">Kids Soccer La Pradera</h1>
-        <p class="lead text-shadow-sm">Categoría 2014-2015</p>
-        <a href="#classification-section" class="btn btn-outline-light btn-lg mt-3" aria-label="Ver tabla de clasificación">
-          Ver Clasificación <i class="fas fa-chevron-down ms-2"></i>
-        </a>
+  <!-- Navbar NUEVO añadido -->
+  <nav class="navbar navbar-expand-lg navbar-dark fixed-top custom-navbar">
+    <div class="container">
+      <a class="navbar-brand d-flex align-items-center" href="index.html">
+        <img src="images/ESCUDO.png" alt="Logo DIBA FBC" height="50" />
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link" href="index.html">INICIO</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">CLUB</a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="Historia.html">Historia</a></li>
+              <li><a class="dropdown-item" href="escudo.html">Escudo</a></li>
+            </ul>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="vision_mision.html">VISION Y MISION</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">PARTIDOS</a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="ficha.html">Plantilla</a></li>
+              <li><a class="dropdown-item" href="partidos.html">Partidos / Entrenamiento</a></li>
+              <li><a class="dropdown-item" href="analisis.html">Estadísticas</a></li>
+              <li><a class="dropdown-item" href="KidsSoccerPradera.html">Torneo Kids SOCCER</a></li>
+              <li><a class="dropdown-item" href="torneo_suroccidente.html">Torneo SurOccidente</a></li>
+            </ul>
+          </li>
+          <li class="nav-item gold-link">
+            <a class="nav-link" href="contacto.html">CONTACTO</a>
+          </li>
+          <li class="nav-item gold-link">
+            <a class="nav-link" href="ayuda.html">AYUDA</a>
+          </li>
+        </ul>
       </div>
-    </section>
-
-    <!-- Clasificación -->
-    <section id="classification-section" class="container my-5">
-      <div class="text-center mb-5">
-        <h2 class="text-primary fw-bold">Tabla de Clasificación</h2>
-        <p class="text-muted">Posiciones actualizadas del torneo.</p>
+      <div class="search-icon">
+        <i class="fas fa-search"></i>
       </div>
-      
-      <div id="loading-clasificacion" class="text-center py-5">
-        <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
-          <span class="visually-hidden">Cargando...</span>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="container">
+      <h1 class="display-4 fw-bold">Bienvenidos a DIBA FBC</h1>
+      <p class="lead">Apoyando el talento juvenil y el fútbol amateur en Barranquilla</p>
+    </div>
+  </section>
+
+  <!-- Sección Patrocinadores -->
+  <section id="patrocinadores">
+    <div class="container text-center">
+      <h2>Nuestros Patrocinadores</h2>
+      <p>Agradecemos el valioso apoyo de estas empresas e instituciones:</p>
+
+      <div id="sponsorCarousel" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+          <div class="carousel-item active">
+            <img src="https://okeysport.com/cdn/shop/files/Logo_OKEY.svg?v=1721155737&width=200" class="d-block"
+              alt="Okeysport">
+          </div>
+          <div class="carousel-item"><img src="ruta/a/muebles_jk_logo.png" class="d-block" alt="Muebles JK"></div>
+          <div class="carousel-item"><img
+              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRoC0lRamC7nK2jL0HVJ5UlcJzvIAKVE3rSdQ&s"
+              class="d-block" alt="Calzado Orpiz"></div>
+          <div class="carousel-item"><img src="ruta/a/ferremateriales_js_logo.png" class="d-block"
+              alt="Ferremateriales J&S"></div>
+          <div class="carousel-item"><img src="ruta/a/jj_abogados_logo.png" class="d-block" alt="J&J Abogados"></div>
+          <div class="carousel-item"><img
+              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSBgXunsRCvEZzg1E26yG5iBdQ0rnNoNKQUHg&s"
+              class="d-block" alt="Chiro Deportes"></div>
         </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#sponsorCarousel" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Anterior</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#sponsorCarousel" data-bs-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Siguiente</span>
+        </button>
       </div>
-      
-      <div id="clasificacion-container" class="shadow-lg table-classification">
-        <!-- La tabla se insertará aquí dinámicamente -->
+    </div>
+  </section>
+
+  <!-- Clasificación -->
+  <section id="classification-section" class="container my-5">
+    <div class="text-center mb-5">
+      <h2 class="text-primary fw-bold">Tabla de Clasificación</h2>
+      <p class="text-muted">Posiciones actualizadas del torneo.</p>
+    </div>
+
+    <div id="loading-clasificacion" class="text-center py-5">
+      <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+        <span class="visually-hidden">Cargando...</span>
       </div>
-    </section>
+    </div>
+
+    <div id="clasificacion-container" class="shadow-lg table-classification">
+      <!-- La tabla se insertará aquí dinámicamente -->
+    </div>
+  </section>
   </main>
 
   <!-- Footer -->
@@ -139,7 +376,7 @@
     const spinner = document.getElementById('loading-clasificacion');
 
     function renderTable(data) {
-        const tablaHTML = `
+      const tablaHTML = `
         <div class="table-responsive">
           <table class="table table-striped table-hover mb-0 text-center align-middle">
             <thead>
@@ -181,7 +418,7 @@
           container.innerHTML = '<div class="alert alert-info text-center">No hay datos de clasificación disponibles en este momento.</div>';
           return;
         }
-        
+
         renderTable(data);
       } catch (error) {
         console.error('Error al obtener clasificación:', error);
@@ -197,12 +434,13 @@
       btnBackToTop.style.display = window.scrollY > 200 ? 'block' : 'none';
     });
     btnBackToTop.addEventListener('click', (e) => {
-        e.preventDefault();
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     });
 
     // Iniciar carga de datos
     document.addEventListener('DOMContentLoaded', obtenerClasificacion);
   </script>
 </body>
+
 </html>

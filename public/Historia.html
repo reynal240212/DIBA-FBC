@@ -27,6 +27,7 @@
 
   <!-- Estilos globales -->
   <link rel="stylesheet" href="styles/styles.css" />
+
   <style>
     /* Mejora visual para el fondo animado */
     .background-animation {
@@ -93,37 +94,122 @@
       }
     }
 
-    /* Hero mejora */
-    .hero {
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background-color: #f4f4f4;
+      padding-top: 70px;
+      /* Añadido para que el contenido no quede debajo del navbar fijo */
+    }
+
+    .navbar {
+      background-color: #1c1c1c;
+    }
+
+    .navbar-brand {
+      color: #ffcc00 !important;
+      font-weight: 700;
+      font-size: 1.5rem;
+    }
+
+    .navbar-nav .nav-link {
+      color: #fff !important;
+      font-weight: 500;
+      margin-right: 15px;
+    }
+
+    .navbar-nav .nav-link:hover {
+      color: #ffcc00 !important;
+    }
+
+    /* ===============================
+       NUEVO HERO DEPORTIVO (CORREGIDO)
+       =============================== */
+    .hero-deportivo {
       position: relative;
+      background-image: url('https://images.unsplash.com/photo-1553778263-73a83bab9b83');
+      background-size: cover;
+      background-position: center;
+      padding: 8rem 0;
+      overflow: hidden;
+    }
+
+    .hero-deportivo .hero-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(10, 20, 35, 0.75);
       z-index: 1;
-      min-height: 80vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: linear-gradient(135deg, #002a40cc, #001b72cc), url('images/fondo.jpg') center/cover no-repeat fixed;
-      background-blend-mode: multiply;
     }
 
-    .hero-content {
-      background: rgba(0, 0, 0, 0.35);
-      border-radius: 1rem;
-      padding: 2rem 1rem;
-      box-shadow: 0 4px 32px rgba(0, 0, 0, 0.2);
-      display: inline-block;
-      animation: fadeInUp 1.2s;
+    .hero-deportivo .hero-content {
+      position: relative;
+      z-index: 3;
     }
 
-    @keyframes fadeInUp {
-      from {
-        opacity: 0;
-        transform: translateY(40px);
-      }
+    .hero-deportivo .subtitle::after {
+      content: '';
+      display: block;
+      width: 60px;
+      height: 4px;
+      background-color: #ffc107;
+      margin-top: 10px;
+    }
 
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+    .hero-deportivo h1 {
+      text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
+      color: #ffc107;
+    }
+
+    .hero-deportivo .btn-warning {
+      padding: 12px 28px;
+      border-radius: 50px;
+      box-shadow: 0 4px 15px rgba(255, 193, 7, 0.4);
+      transition: all 0.3s ease;
+    }
+
+    .hero-deportivo .btn-warning:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(255, 193, 7, 0.6);
+    }
+
+    .hero-deportivo::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 50%;
+      height: 100%;
+      z-index: 2;
+      background: linear-gradient(90deg, transparent 50%, #ffc107 50.2%);
+      clip-path: polygon(100% 0, 100% 100%, 65% 100%, 45% 0);
+    }
+
+    /* Sección patrocinadores */
+    #patrocinadores {
+      padding: 80px 0;
+      background: linear-gradient(180deg, #ffffff 0%, #ffcc00 100%);
+      color: #1c1c1c;
+    }
+
+    #patrocinadores h2 {
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 15px;
+    }
+
+    #patrocinadores p {
+      font-size: 1.1rem;
+      margin-bottom: 40px;
+      color: #1c1c1c;
+    }
+
+    .carousel-item img {
+      max-height: 150px;
+      margin: auto;
+      object-fit: contain;
     }
 
     /* Card hover efecto */
@@ -165,35 +251,126 @@
 </head>
 
 <body>
-  <!-- Fondo animado -->
-  <div class="background-animation">
-    <div class="cube"></div>
-    <div class="cube"></div>
-    <div class="cube"></div>
-    <div class="cube"></div>
-    <div class="cube"></div>
-  </div>
+  <!-- Service Worker (Opcional, si no lo usas puedes quitarlo) -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/service-worker.js')
+        .then(reg => console.log("✅ Service Worker registrado"))
+        .catch(err => console.error("❌ Error al registrar el SW", err));
+    }
+  </script>
 
-  <!-- Botón Volver Arriba -->
-  <button id="btnBackToTop" class="btn btn-primary position-fixed bottom-0 end-0 m-4 rounded-circle shadow"
-    title="Volver arriba" style="z-index:1050;width:48px;height:48px;display:none;">
-    <i class="fas fa-arrow-up"></i>
-  </button>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+    <div class="container">
+      <a class="navbar-brand d-flex align-items-center" href="index.html">
+        <img src="images/ESCUDO.png" alt="Logo DIBA FBC" height="50" class="me-2" />
+        DIBA FBC
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link" href="index.html">INICIO</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">CLUB</a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="Historia.html">Historia</a></li>
+              <li><a class="dropdown-item" href="escudo.html">Escudo</a></li>
+            </ul>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="vision_mision.html">VISION Y MISION</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">PARTIDOS</a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="ficha.html">Plantilla</a></li>
+              <li><a class="dropdown-item" href="partidos.html">Partidos / Entrenamiento</a></li>
+              <li><a class="dropdown-item" href="analisis.html">Estadísticas</a></li>
+              <li><a class="dropdown-item" href="KidsSoccerPradera.html">Torneo Kids SOCCER</a></li>
+              <li><a class="dropdown-item" href="torneo_suroccidente.html">Torneo SurOccidente</a></li>
+            </ul>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="contacto.html">CONTACTO</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="ayuda.html">AYUDA</a>
+          </li>
+        </ul>
+        <div class="search-icon ms-3 text-white" style="cursor: pointer;">
+          <i class="fas fa-search"></i>
+        </div>
+      </div>
+    </div>
+  </nav>
 
-  <!-- Contenedor para el Navbar (se carga desde layout/navbar.html) -->
-  <div id="navbar-container"></div>
-
-  <!-- HERO SECTION -->
-  <section class="hero animate__animated animate__fadeInDown d-flex align-items-center">
-    <div class="container hero-content text-center text-white py-5">
-      <h1 class="hero-title display-4 fw-bold animate__animated animate__fadeInDown">Explora Nuestro Mundo</h1>
-      <p class="hero-subtitle lead animate__animated animate__fadeInUp">Descubre los momentos históricos y logros que
-        han definido a DIBA FBC. Un recorrido lleno de pasión y victorias.</p>
-      <a href="#timeline-heading"
-        class="btn btn-outline-light btn-lg mt-4 animate__animated animate__pulse animate__infinite">Ver Momentos
-        Destacados <i class="fas fa-chevron-down"></i></a>
+  <!-- HERO DEPORTIVO -->
+  <section class="hero-deportivo">
+    <div class="hero-overlay"></div>
+    <div class="container position-relative" style="z-index: 2;">
+      <div class="row align-items-center">
+        <!-- Columna de Texto -->
+        <div class="col-lg-6 col-md-8 text-white hero-content">
+          <h5 class="subtitle text-uppercase fw-bold">Club Deportivo Internacional De Barranquilla Atlantico</h5>
+          <h1 class="display-3 fw-bolder text-uppercase animate__animated animate__fadeInLeft">DIBA FBC</h1>
+          <spa class="lead my-4 animate__animated animate__fadeInUp">Forjando campeones en Barranquilla. 
+            Disciplina,
+            pasión y talento juvenil desde la cancha del barrio hasta la gloria.</p>
+          <a href="contacto.html"
+            class="btn btn-warning btn-lg fw-bold animate__animated animate__pulse animate__infinite">¡Únete al Equipo!
+            <i class="fas fa-arrow-right ms-2"></i></a>
+        </div>
+        <!-- Columna vacía para dejar espacio a la imagen -->
+        <div class="col-lg-6 col-md-4"></div>
+      </div>
     </div>
   </section>
+
+  <!-- Sección Patrocinadores -->
+  <section id="patrocinadores">
+    <div class="container text-center">
+      <h2>Nuestros Patrocinadores</h2>
+      <p>Agradecemos el valioso apoyo de estas empresas e instituciones:</p>
+      <div id="sponsorCarousel" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+          <div class="carousel-item active">
+            <img src="https://okeysport.com/cdn/shop/files/Logo_OKEY.svg?v=1721155737&width=200" class="d-block w-100"
+              alt="Okeysport">
+          </div>
+          <div class="carousel-item"><img src="images/sponsors/muebles_jk_logo.png" class="d-block w-100"
+              alt="Muebles JK"></div>
+          <div class="carousel-item"><img
+              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRoC0lRamC7nK2jL0HVJ5UlcJzvIAKVE3rSdQ&s"
+              class="d-block w-100" alt="Calzado Orpiz"></div>
+          <div class="carousel-item"><img src="images/sponsors/ferremateriales_js_logo.png" class="d-block w-100"
+              alt="Ferremateriales J&S"></div>
+          <div class="carousel-item"><img src="images/sponsors/jj_abogados_logo.png" class="d-block w-100"
+              alt="J&J Abogados"></div>
+          <div class="carousel-item"><img
+              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSBgXunsRCvEZzg1E26yG5iBdQ0rnNoNKQUHg&s"
+              class="d-block w-100" alt="Chiro Deportes"></div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#sponsorCarousel" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Anterior</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#sponsorCarousel" data-bs-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Siguiente</span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================= -->
+  <!-- INICIA EL CONTENIDO QUE FALTABA -->
+  <!-- ============================================= -->
 
   <!-- TIMELINE / MOMENTOS DESTACADOS -->
   <section class="timeline-section py-5 animate__animated animate__fadeInUp" role="region"
@@ -283,7 +460,7 @@
         </div>
         <div class="col">
           <div class="card h-100 border-0 shadow-sm">
-            <a href="images/categoria 2003 y 2002.jpg" data-lightbox="timeline" data-title="Categoría 2003 y 2002">
+            <a href="images/categoria 2003 y 2002.jpg" data-lightbox="timeline" data-title="Categoría 2003 y 2002 (2)">
               <img src="images/categoria 2003 y 2002.jpg" class="card-img-top img-fluid img-clickable rounded"
                 alt="Categoría 2003 y 2002">
             </a>
@@ -330,11 +507,16 @@
     <div class="container">
       <h2 id="videos-heading" class="text-center mb-5 text-primary fw-bold">DIBA FBC VIDEOS</h2>
       <div class="row g-4 justify-content-center">
-        <blockquote class="instagram-media" data-instgrm-captioned data-instgrm-permalink="https://www.instagram.com/p/DMIdIXFuEjU/?utm_source=ig_embed&amp;utm_campaign=loading" data-instgrm-version="14" style=" background:#FFF; border:0; border-radius:3px; box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15); margin: 1px; max-width:540px; min-width:326px; padding:0; width:99.375%; width:-webkit-calc(100% - 2px); width:calc(100% - 2px);"><div style="padding:16px;"> <a href="https://www.instagram.com/p/DMIdIXFuEjU/?utm_source=ig_embed&amp;utm_campaign=loading" style=" background:#FFFFFF; line-height:0; padding:0 0; text-align:center; text-decoration:none; width:100%;" target="_blank"> <div style=" display: flex; flex-direction: row; align-items: center;"> <div style="background-color: #F4F4F4; border-radius: 50%; flex-grow: 0; height: 40px; margin-right: 14px; width: 40px;"></div> <div style="display: flex; flex-direction: column; flex-grow: 1; justify-content: center;"> <div style=" background-color: #F4F4F4; border-radius: 4px; flex-grow: 0; height: 14px; margin-bottom: 6px; width: 100px;"></div> <div style=" background-color: #F4F4F4; border-radius: 4px; flex-grow: 0; height: 14px; width: 60px;"></div></div></div><div style="padding: 19% 0;"></div> <div style="display:block; height:50px; margin:0 auto 12px; width:50px;"><svg width="50px" height="50px" viewBox="0 0 60 60" version="1.1" xmlns="https://www.w3.org/2000/svg" xmlns:xlink="https://www.w3.org/1999/xlink"><g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><g transform="translate(-511.000000, -20.000000)" fill="#000000"><g><path d="M556.869,30.41 C554.814,30.41 553.148,32.076 553.148,34.131 C553.148,36.186 554.814,37.852 556.869,37.852 C558.924,37.852 560.59,36.186 560.59,34.131 C560.59,32.076 558.924,30.41 556.869,30.41 M541,60.657 C535.114,60.657 530.342,55.887 530.342,50 C530.342,44.114 535.114,39.342 541,39.342 C546.887,39.342 551.658,44.114 551.658,50 C551.658,55.887 546.887,60.657 541,60.657 M541,33.886 C532.1,33.886 524.886,41.1 524.886,50 C524.886,58.899 532.1,66.113 541,66.113 C549.9,66.113 557.115,58.899 557.115,50 C557.115,41.1 549.9,33.886 541,33.886 M565.378,62.101 C565.244,65.022 564.756,66.606 564.346,67.663 C563.803,69.06 563.154,70.057 562.106,71.106 C561.058,72.155 560.06,72.803 558.662,73.347 C557.607,73.757 556.021,74.244 553.102,74.378 C549.944,74.521 548.997,74.552 541,74.552 C533.003,74.552 532.056,74.521 528.898,74.378 C525.979,74.244 524.393,73.757 523.338,73.347 C521.94,72.803 520.942,72.155 519.894,71.106 C518.846,70.057 518.197,69.06 517.654,67.663 C517.244,66.606 516.755,65.022 516.623,62.101 C516.479,58.943 516.448,57.996 516.448,50 C516.448,42.003 516.479,41.056 516.623,37.899 C516.755,34.978 517.244,33.391 517.654,32.338 C518.197,30.938 518.846,29.942 519.894,28.894 C520.942,27.846 521.94,27.196 523.338,26.654 C524.393,26.244 525.979,25.756 528.898,25.623 C532.057,25.479 533.004,25.448 541,25.448 C548.997,25.448 549.943,25.479 553.102,25.623 C556.021,25.756 557.607,26.244 558.662,26.654 C560.06,27.196 561.058,27.846 562.106,28.894 C563.154,29.942 563.803,30.938 564.346,32.338 C564.756,33.391 565.244,34.978 565.378,37.899 C565.522,41.056 565.552,42.003 565.552,50 C565.552,57.996 565.522,58.943 565.378,62.101 M570.82,37.631 C570.674,34.438 570.167,32.258 569.425,30.349 C568.659,28.377 567.633,26.702 565.965,25.035 C564.297,23.368 562.623,22.342 560.652,21.575 C558.743,20.834 556.562,20.326 553.369,20.18 C550.169,20.033 549.148,20 541,20 C532.853,20 531.831,20.033 528.631,20.18 C525.438,20.326 523.257,20.834 521.349,21.575 C519.376,22.342 517.703,23.368 516.035,25.035 C514.368,26.702 513.342,28.377 512.574,30.349 C511.834,32.258 511.326,34.438 511.181,37.631 C511.035,40.831 511,41.851 511,50 C511,58.147 511.035,59.17 511.181,62.369 C511.326,65.562 511.834,67.743 512.574,69.651 C513.342,71.625 514.368,73.296 516.035,74.965 C517.703,76.634 519.376,77.658 521.349,78.425 C523.257,79.167 525.438,79.673 528.631,79.82 C531.831,79.965 532.853,80.001 541,80.001 C549.148,80.001 550.169,79.965 553.369,79.82 C556.562,79.673 558.743,79.167 560.652,78.425 C562.623,77.658 564.297,76.634 565.965,74.965 C567.633,73.296 568.659,71.625 569.425,69.651 C570.167,67.743 570.674,65.562 570.82,62.369 C570.966,59.17 571,58.147 571,50 C571,41.851 570.966,40.831 570.82,37.631"></path></g></g></g></svg></div><div style="padding-top: 8px;"> <div style=" color:#3897f0; font-family:Arial,sans-serif; font-size:14px; font-style:normal; font-weight:550; line-height:18px;">Ver esta publicación en Instagram</div></div><div style="padding: 12.5% 0;"></div> <div style="display: flex; flex-direction: row; margin-bottom: 14px; align-items: center;"><div> <div style="background-color: #F4F4F4; border-radius: 50%; height: 12.5px; width: 12.5px; transform: translateX(0px) translateY(7px);"></div> <div style="background-color: #F4F4F4; height: 12.5px; transform: rotate(-45deg) translateX(3px) translateY(1px); width: 12.5px; flex-grow: 0; margin-right: 14px; margin-left: 2px;"></div> <div style="background-color: #F4F4F4; border-radius: 50%; height: 12.5px; width: 12.5px; transform: translateX(9px) translateY(-18px);"></div></div><div style="margin-left: 8px;"> <div style=" background-color: #F4F4F4; border-radius: 50%; flex-grow: 0; height: 20px; width: 20px;"></div> <div style=" width: 0; height: 0; border-top: 2px solid transparent; border-left: 6px solid #f4f4f4; border-bottom: 2px solid transparent; transform: translateX(16px) translateY(-4px) rotate(30deg)"></div></div><div style="margin-left: auto;"> <div style=" width: 0px; border-top: 8px solid #F4F4F4; border-right: 8px solid transparent; transform: translateY(16px);"></div> <div style=" background-color: #F4F4F4; flex-grow: 0; height: 12px; width: 16px; transform: translateY(-4px);"></div> <div style=" width: 0; height: 0; border-top: 8px solid #F4F4F4; border-left: 8px solid transparent; transform: translateY(-4px) translateX(8px);"></div></div></div> <div style="display: flex; flex-direction: column; flex-grow: 1; justify-content: center; margin-bottom: 24px;"> <div style=" background-color: #F4F4F4; border-radius: 4px; flex-grow: 0; height: 14px; margin-bottom: 6px; width: 224px;"></div> <div style=" background-color: #F4F4F4; border-radius: 4px; flex-grow: 0; height: 14px; width: 144px;"></div></div></a><p style=" color:#c9c8cd; font-family:Arial,sans-serif; font-size:14px; line-height:17px; margin-bottom:0; margin-top:8px; overflow:hidden; padding:8px 0 7px; text-align:center; text-overflow:ellipsis; white-space:nowrap;"><a href="https://www.instagram.com/p/DMIdIXFuEjU/?utm_source=ig_embed&amp;utm_campaign=loading" style=" color:#c9c8cd; font-family:Arial,sans-serif; font-size:14px; font-style:normal; font-weight:normal; line-height:17px; text-decoration:none;" target="_blank">Una publicación compartida de Deportivo Internacional De Barranquilla Atlántico (@dibafbc)</a></p></div></blockquote>
-<script async src="//www.instagram.com/embed.js"></script>
+        <!-- Los videos de Instagram se colocan aquí -->
         <div class="col-12 col-md-6 col-lg-4">
-          <blockquote class="instagram-media" data-instgrm-captioned data-instgrm-permalink="https://www.instagram.com/reel/DMIdTUHOgda/?utm_source=ig_embed&amp;utm_campaign=loading" data-instgrm-version="14" style=" background:#FFF; border:0; border-radius:3px; box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15); margin: 1px; max-width:540px; min-width:326px; padding:0; width:99.375%; width:-webkit-calc(100% - 2px); width:calc(100% - 2px);"><div style="padding:16px;"> <a href="https://www.instagram.com/reel/DMIdTUHOgda/?utm_source=ig_embed&amp;utm_campaign=loading" style=" background:#FFFFFF; line-height:0; padding:0 0; text-align:center; text-decoration:none; width:100%;" target="_blank"> <div style=" display: flex; flex-direction: row; align-items: center;"> <div style="background-color: #F4F4F4; border-radius: 50%; flex-grow: 0; height: 40px; margin-right: 14px; width: 40px;"></div> <div style="display: flex; flex-direction: column; flex-grow: 1; justify-content: center;"> <div style=" background-color: #F4F4F4; border-radius: 4px; flex-grow: 0; height: 14px; margin-bottom: 6px; width: 100px;"></div> <div style=" background-color: #F4F4F4; border-radius: 4px; flex-grow: 0; height: 14px; width: 60px;"></div></div></div><div style="padding: 19% 0;"></div> <div style="display:block; height:50px; margin:0 auto 12px; width:50px;"><svg width="50px" height="50px" viewBox="0 0 60 60" version="1.1" xmlns="https://www.w3.org/2000/svg" xmlns:xlink="https://www.w3.org/1999/xlink"><g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><g transform="translate(-511.000000, -20.000000)" fill="#000000"><g><path d="M556.869,30.41 C554.814,30.41 553.148,32.076 553.148,34.131 C553.148,36.186 554.814,37.852 556.869,37.852 C558.924,37.852 560.59,36.186 560.59,34.131 C560.59,32.076 558.924,30.41 556.869,30.41 M541,60.657 C535.114,60.657 530.342,55.887 530.342,50 C530.342,44.114 535.114,39.342 541,39.342 C546.887,39.342 551.658,44.114 551.658,50 C551.658,55.887 546.887,60.657 541,60.657 M541,33.886 C532.1,33.886 524.886,41.1 524.886,50 C524.886,58.899 532.1,66.113 541,66.113 C549.9,66.113 557.115,58.899 557.115,50 C557.115,41.1 549.9,33.886 541,33.886 M565.378,62.101 C565.244,65.022 564.756,66.606 564.346,67.663 C563.803,69.06 563.154,70.057 562.106,71.106 C561.058,72.155 560.06,72.803 558.662,73.347 C557.607,73.757 556.021,74.244 553.102,74.378 C549.944,74.521 548.997,74.552 541,74.552 C533.003,74.552 532.056,74.521 528.898,74.378 C525.979,74.244 524.393,73.757 523.338,73.347 C521.94,72.803 520.942,72.155 519.894,71.106 C518.846,70.057 518.197,69.06 517.654,67.663 C517.244,66.606 516.755,65.022 516.623,62.101 C516.479,58.943 516.448,57.996 516.448,50 C516.448,42.003 516.479,41.056 516.623,37.899 C516.755,34.978 517.244,33.391 517.654,32.338 C518.197,30.938 518.846,29.942 519.894,28.894 C520.942,27.846 521.94,27.196 523.338,26.654 C524.393,26.244 525.979,25.756 528.898,25.623 C532.057,25.479 533.004,25.448 541,25.448 C548.997,25.448 549.943,25.479 553.102,25.623 C556.021,25.756 557.607,26.244 558.662,26.654 C560.06,27.196 561.058,27.846 562.106,28.894 C563.154,29.942 563.803,30.938 564.346,32.338 C564.756,33.391 565.244,34.978 565.378,37.899 C565.522,41.056 565.552,42.003 565.552,50 C565.552,57.996 565.522,58.943 565.378,62.101 M570.82,37.631 C570.674,34.438 570.167,32.258 569.425,30.349 C568.659,28.377 567.633,26.702 565.965,25.035 C564.297,23.368 562.623,22.342 560.652,21.575 C558.743,20.834 556.562,20.326 553.369,20.18 C550.169,20.033 549.148,20 541,20 C532.853,20 531.831,20.033 528.631,20.18 C525.438,20.326 523.257,20.834 521.349,21.575 C519.376,22.342 517.703,23.368 516.035,25.035 C514.368,26.702 513.342,28.377 512.574,30.349 C511.834,32.258 511.326,34.438 511.181,37.631 C511.035,40.831 511,41.851 511,50 C511,58.147 511.035,59.17 511.181,62.369 C511.326,65.562 511.834,67.743 512.574,69.651 C513.342,71.625 514.368,73.296 516.035,74.965 C517.703,76.634 519.376,77.658 521.349,78.425 C523.257,79.167 525.438,79.673 528.631,79.82 C531.831,79.965 532.853,80.001 541,80.001 C549.148,80.001 550.169,79.965 553.369,79.82 C556.562,79.673 558.743,79.167 560.652,78.425 C562.623,77.658 564.297,76.634 565.965,74.965 C567.633,73.296 568.659,71.625 569.425,69.651 C570.167,67.743 570.674,65.562 570.82,62.369 C570.966,59.17 571,58.147 571,50 C571,41.851 570.966,40.831 570.82,37.631"></path></g></g></g></svg></div><div style="padding-top: 8px;"> <div style=" color:#3897f0; font-family:Arial,sans-serif; font-size:14px; font-style:normal; font-weight:550; line-height:18px;">Ver esta publicación en Instagram</div></div><div style="padding: 12.5% 0;"></div> <div style="display: flex; flex-direction: row; margin-bottom: 14px; align-items: center;"><div> <div style="background-color: #F4F4F4; border-radius: 50%; height: 12.5px; width: 12.5px; transform: translateX(0px) translateY(7px);"></div> <div style="background-color: #F4F4F4; height: 12.5px; transform: rotate(-45deg) translateX(3px) translateY(1px); width: 12.5px; flex-grow: 0; margin-right: 14px; margin-left: 2px;"></div> <div style="background-color: #F4F4F4; border-radius: 50%; height: 12.5px; width: 12.5px; transform: translateX(9px) translateY(-18px);"></div></div><div style="margin-left: 8px;"> <div style=" background-color: #F4F4F4; border-radius: 50%; flex-grow: 0; height: 20px; width: 20px;"></div> <div style=" width: 0; height: 0; border-top: 2px solid transparent; border-left: 6px solid #f4f4f4; border-bottom: 2px solid transparent; transform: translateX(16px) translateY(-4px) rotate(30deg)"></div></div><div style="margin-left: auto;"> <div style=" width: 0px; border-top: 8px solid #F4F4F4; border-right: 8px solid transparent; transform: translateY(16px);"></div> <div style=" background-color: #F4F4F4; flex-grow: 0; height: 12px; width: 16px; transform: translateY(-4px);"></div> <div style=" width: 0; height: 0; border-top: 8px solid #F4F4F4; border-left: 8px solid transparent; transform: translateY(-4px) translateX(8px);"></div></div></div> <div style="display: flex; flex-direction: column; flex-grow: 1; justify-content: center; margin-bottom: 24px;"> <div style=" background-color: #F4F4F4; border-radius: 4px; flex-grow: 0; height: 14px; margin-bottom: 6px; width: 224px;"></div> <div style=" background-color: #F4F4F4; border-radius: 4px; flex-grow: 0; height: 14px; width: 144px;"></div></div></a><p style=" color:#c9c8cd; font-family:Arial,sans-serif; font-size:14px; line-height:17px; margin-bottom:0; margin-top:8px; overflow:hidden; padding:8px 0 7px; text-align:center; text-overflow:ellipsis; white-space:nowrap;"><a href="https://www.instagram.com/reel/DMIdTUHOgda/?utm_source=ig_embed&amp;utm_campaign=loading" style=" color:#c9c8cd; font-family:Arial,sans-serif; font-size:14px; font-style:normal; font-weight:normal; line-height:17px; text-decoration:none;" target="_blank">Una publicación compartida de Deportivo Internacional De Barranquilla Atlántico (@dibafbc)</a></p></div></blockquote>
-          <script async src="//www.instagram.com/embed.js"></script>
+          <blockquote class="instagram-media w-100" data-instgrm-captioned
+            data-instgrm-permalink="https://www.instagram.com/p/DMIdIXFuEjU/?utm_source=ig_embed&amp;utm_campaign=loading"
+            data-instgrm-version="14"></blockquote>
+        </div>
+        <div class="col-12 col-md-6 col-lg-4">
+          <blockquote class="instagram-media w-100" data-instgrm-captioned
+            data-instgrm-permalink="https://www.instagram.com/reel/DMIdTUHOgda/?utm_source=ig_embed&amp;utm_campaign=loading"
+            data-instgrm-version="14"></blockquote>
         </div>
         <div class="col-12 col-md-6 col-lg-4">
           <blockquote class="instagram-media w-100" data-instgrm-captioned
@@ -356,87 +538,34 @@
             data-instgrm-permalink="https://www.instagram.com/p/C823YDzRN-X/?utm_source=ig_embed&amp;utm_campaign=loading"
             data-instgrm-version="14"></blockquote>
         </div>
-        <div class="col-12 col-md-6 col-lg-4">
-          <blockquote class="instagram-media w-100" data-instgrm-captioned
-            data-instgrm-permalink="https://www.instagram.com/reel/DB9U8sbxzS1/?utm_source=ig_embed&amp;utm_campaign=loading"
-            data-instgrm-version="14"></blockquote>
-        </div>
-        <div class="col-12 col-md-6 col-lg-4">
-          <blockquote class="instagram-media w-100" data-instgrm-captioned
-            data-instgrm-permalink="https://www.instagram.com/reel/C7ch7lJPrzD/?utm_source=ig_embed&amp;utm_campaign=loading"
-            data-instgrm-version="14"></blockquote>
-        </div>
-        <div class="col-12 col-md-6 col-lg-4">
-          <blockquote class="instagram-media w-100" data-instgrm-captioned
-            data-instgrm-permalink="https://www.instagram.com/reel/C826d-Px6is/?utm_source=ig_embed&amp;utm_campaign=loading"
-            data-instgrm-version="14"></blockquote>
-        </div>
-        <div class="col-12 col-md-6 col-lg-4">
-          <blockquote class="instagram-media w-100" data-instgrm-captioned
-            data-instgrm-permalink="https://www.instagram.com/reel/DB9WaeSRRmp/?utm_source=ig_embed&amp;utm_campaign=loading"
-            data-instgrm-version="14"></blockquote>
-        </div>
-        <div class="col-12 col-md-6 col-lg-4">
-          <blockquote class="instagram-media w-100" data-instgrm-captioned
-            data-instgrm-permalink="https://www.instagram.com/reel/DG_4cDzuOM9/?utm_source=ig_embed&amp;utm_campaign=loading"
-            data-instgrm-version="14"></blockquote>
-        </div>
-        <div class="col-12 col-md-6 col-lg-4">
-          <blockquote class="instagram-media w-100" data-instgrm-captioned
-            data-instgrm-permalink="https://www.instagram.com/reel/DHpgOfwBRyA/?utm_source=ig_embed&amp;utm_campaign=loading"
-            data-instgrm-version="14"></blockquote>
-        </div>
       </div>
       <script async src="//www.instagram.com/embed.js"></script>
     </div>
   </section>
 
-  <!-- Modal para ver la imagen en grande (reemplazado por Lightbox2) -->
-  <!-- <div class="modal fade" id="lightboxModal" tabindex="-1" aria-labelledby="lightboxModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg">
-      <div class="modal-content bg-transparent border-0">
-        <div class="modal-body p-0">
-          <img src="" class="img-fluid w-100 rounded" id="lightboxImage" alt="">
-        </div>
-      </div>
-    </div>
-  </div> -->
+  <!-- Botón Volver Arriba -->
+  <button id="btnBackToTop" class="btn btn-primary position-fixed bottom-0 end-0 m-4 rounded-circle shadow"
+    title="Volver arriba" style="z-index:1050; width:48px; height:48px; display:none;">
+    <i class="fas fa-arrow-up"></i>
+  </button>
+
+  <!-- Contenedor para el Footer (se carga desde layout/footer.html) -->
+  <div id="footer-container"></div>
+
 
   <!-- Bootstrap JS Bundle (5.3.2) -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-
   <!-- Lightbox2 JS -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/js/lightbox.min.js"></script>
-
   <!-- AOS Animations -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
   <script>
     AOS.init({ once: true, duration: 800 });
   </script>
-
-  <!-- Script para mostrar/ocultar botón volver arriba -->
-  <script>
-    const btnBackToTop = document.getElementById('btnBackToTop');
-    window.addEventListener('scroll', function () {
-      if (window.scrollY > 300) {
-        btnBackToTop.style.display = 'block';
-      } else {
-        btnBackToTop.style.display = 'none';
-      }
-    });
-    btnBackToTop.addEventListener('click', function () {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
-  </script>
-
-  <!-- Contenedor para el Footer (se carga desde layout/footer.html) -->
-  <div id="footer-container"></div>
-
-  <!-- Script para cargar componentes externos (Navbar y Footer) -->
+  <!-- Scripts personalizados -->
+  <script src="scripts/main.js"></script>
   <script src="scripts/loadComponents.js"></script>
 
-  <!-- Script principal (funciones y animaciones) -->
-  <script src="scripts/main.js"></script>
 </body>
 
 </html>
