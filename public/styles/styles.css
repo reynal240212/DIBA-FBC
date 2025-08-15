@@ -1692,3 +1692,148 @@ th {
     height: 150px;
   }
 }
+/* ===============================================
+   ESTILOS PARA LA TABLA DE GOLEADORES
+=============================================== */
+
+.goleadores-container {
+  /* Imagen de fondo. ¡Cambia la URL por una imagen tuya! */
+  background-image: url('https://images.unsplash.com/photo-1579952363873-27f3bade9f55');
+  background-size: cover;
+  background-position: center;
+  padding: 2rem 1rem;
+  border-radius: 12px;
+  position: relative;
+  overflow: hidden;
+}
+
+.goleadores-content {
+  background-color: rgba(0, 27, 114, 0.92); /* Azul oscuro semi-transparente */
+  padding: 2rem;
+  border-radius: 8px;
+  color: white;
+  font-family: 'Arial Black', sans-serif; /* Fuente de alto impacto */
+}
+
+/* --- Encabezado --- */
+.goleadores-header {
+  text-align: center;
+  margin-bottom: 2rem;
+  position: relative;
+}
+
+.header-accent {
+  width: 150px;
+  height: 6px;
+  background-color: #ffd700; /* Amarillo dorado */
+  margin: 0 auto 1.5rem auto;
+  border-radius: 3px;
+}
+
+.goleadores-header h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #ffffff;
+  letter-spacing: 1px;
+}
+
+.goleadores-header h1 {
+  font-size: 2.5rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  color: #c8ff00; /* Verde lima brillante */
+  letter-spacing: 2px;
+  margin-top: 0.5rem;
+}
+
+/* --- Lista de Goleadores --- */
+.goleadores-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem; /* Espacio entre cada jugador */
+}
+
+.goleador-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #001b72; /* Un azul un poco más claro que el fondo */
+  padding: 0.75rem 1.5rem;
+  border-radius: 10px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.goleador-item:hover {
+  transform: scale(1.02);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+}
+
+.player-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.player-info .escudo {
+  width: 45px;
+  height: 45px;
+  object-fit: contain;
+  background-color: rgba(255, 255, 255, 0.9);
+  border-radius: 8px;
+  padding: 4px;
+}
+
+.player-name {
+  font-size: 1.1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.team-name {
+  font-size: 0.8rem;
+  font-weight: 400;
+  color: #cccccc;
+  text-transform: uppercase;
+}
+
+.goal-count {
+  font-size: 2rem;
+  font-weight: 900;
+  color: white;
+  min-width: 50px;
+  text-align: right;
+}
+
+/* --- Footer --- */
+.goleadores-footer {
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.goleadores-footer img {
+  height: 40px;
+  opacity: 0.8;
+}
+
+/* Responsividad para móviles */
+@media (max-width: 576px) {
+  .goleadores-content {
+    padding: 1.5rem;
+  }
+  .goleadores-header h1 {
+    font-size: 1.8rem;
+  }
+  .goleadores-header h2 {
+    font-size: 1.2rem;
+  }
+  .goleador-item {
+    padding: 0.5rem 1rem;
+  }
+  .player-name {
+    font-size: 0.9rem;
+  }
+  .goal-count {
+    font-size: 1.5rem;
+  }
+}

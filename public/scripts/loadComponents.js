@@ -136,4 +136,59 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 });
+async function mostrarGoleadores() {
+  const container = document.getElementById('goleadores-list');
+  const spinner = document.getElementById('loading-goleadores');
+
+  // Muestra el spinner de carga
+  spinner.style.display = 'block';
+
+  // 1. Obtiene los datos de la tabla 'goleadores' de Supabase
+  const { data, error } = await supabase
+    .from('goleadores')
+    .select('*')
+    // Opcional: Filtra por categoría si lo necesitas
+    // .eq('categoria', '2014-2015') 
+    .order('goles', { ascending: false }); // Ordena de mayor a menor número de goles
+
+  // Oculta el spinner
+  spinner.style.display = 'none';
+
+  if (error) {
+    console.error('Error al obtener goleadores:', error);
+    container.innerHTML = '<p class="text-light text-center">No se pudo cargar la tabla de goleadores.</p>';
+    return;
+  }
+  
+  if (data.length === 0) {
+    container.innerHTML = '<p class="text-light text-center">No hay datos de goleadores disponibles.</p>';
+    return;
+  }
+
+  // 2. Limpia el contenedor antes de añadir los nuevos datos
+  container.innerHTML = '';
+
+  // 3. Crea y añade el HTML para cada goleador
+  data.forEach(goleador => {
+    const item = document.createElement('div');
+    item.className = 'goleador-item';
+
+    // Rellena la plantilla con los datos de Supabase
+    item.innerHTML = `
+      <div class="player-info">
+        <img src="${goleador.escudo_url || 'images/default_escudo.png'}" alt="Escudo de ${goleador.equipo}" class="escudo">
+        <div>
+          <div class="player-name">${goleador.nombre_jugador}</div>
+          <div class="team-name">${goleador.equipo}</div>
+        </div>
+      </div>
+      <div class="goal-count">${goleador.goles}</div>
+    `;
+
+    container.appendChild(item);
+  });
+}
+
+// Llama a la función cuando la página se cargue
+document.addEventListener('DOMContentLoaded', mostrarGoleadores);
 
