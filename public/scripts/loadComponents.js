@@ -23,6 +23,8 @@ document.addEventListener("DOMContentLoaded", function () {
   // Cargar Navbar y Footer
   loadComponent("navbar-container", "layout/navbar.html");
   loadComponent("footer-container", "layout/footer.html");
+  // Cargar Patrocinadores y Hero
+  loadComponent("hero-container", "layout/hero.html");
   loadComponent("patrocinadores-container", "layout/patrocinadores.html");
 
   // Ajustar padding del body según altura del navbar fijo
