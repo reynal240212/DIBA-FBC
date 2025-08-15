@@ -43,8 +43,223 @@
 <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Roboto:wght@400;700&display=swap"
     rel="stylesheet">
 
+<style>
+    /* ======================================
+            VARIABLES Y ESTILOS PERSONALIZADOS
+        ====================================== */
+    :root {
+        /* Paleta de colores DIBA FBC */
+        --diba-blue-dark: #001b72;
+        --diba-blue: #003399;
+        --diba-gold: #ffd700;
+        --diba-light-gray: #f8f9fa;
+        --diba-text: #343a40;
+
+        /* Fuentes */
+        --font-primary: 'Roboto', 'Arial', sans-serif;
+        --font-secondary: 'Dancing Script', cursive;
+    }
+
+    body {
+        font-family: var(--font-primary);
+        background-color: var(--diba-light-gray);
+        color: var(--diba-text);
+    }
+
+    .background-animation {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+    }
+
+    #btnBackToTop {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        z-index: 1000;
+        display: none;
+    }
+
+    .hero-section {
+        background-image: url('images/kidssoccer.png');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        min-height: 100vh;
+        position: relative;
+        z-index: 1;
+        display: flex;
+        justify-content: center;
+    }
+
+    .hero-section::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.6);
+        /* Oscurece para mejor lectura */
+        z-index: -1;
+    }
 
 
+
+    /* Título Principal */
+    .main-title {
+        font-family: var(--font-secondary);
+        font-size: 3.5rem;
+        color: var(--diba-blue-dark);
+    }
+
+    /* Contenedor principal de la lista */
+    .fixture-wrapper {
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Cabecera del Mes */
+    .month-header {
+        background-color: var(--diba-blue-dark);
+        color: white;
+        /* Corregido: Usar 'white' en lugar de '--white' */
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+
+    /* Estilos de cada partido */
+    .fixture-item {
+        transition: background-color 0.3s ease;
+    }
+
+    .fixture-item:hover {
+        background-color: #fdfdfd;
+    }
+
+    .team-name {
+        font-weight: bold;
+        font-size: 1.1rem;
+    }
+
+    .badge-image {
+        width: 40px;
+        height: 40px;
+    }
+
+    .score {
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--diba-blue-dark);
+    }
+
+    .result-badge {
+        font-size: 0.8rem;
+        padding: 0.3em 0.6em;
+    }
+
+    .scorers-info {
+        background-color: var(--diba-light-gray);
+        font-size: 0.9rem;
+        border-top: 1px dashed #ddd;
+    }
+
+    .scorers-info strong {
+        color: var(--diba-blue-dark);
+    }
+
+    body {
+        font-family: 'Montserrat', sans-serif;
+        background-color: #f4f4f4;
+    }
+
+    .navbar {
+        background-color: #1c1c1c;
+    }
+
+    .navbar-brand {
+        color: #ffcc00 !important;
+        font-weight: 700;
+        font-size: 1.5rem;
+    }
+
+    .navbar-nav .nav-link {
+        color: #fff !important;
+        font-weight: 500;
+        margin-right: 15px;
+    }
+
+    .navbar-nav .nav-link:hover {
+        color: #ffcc00 !important;
+    }
+
+    /* Hero */
+    .hero {
+        background-color: #1c1c1c;
+        /* negro */
+        color: #ffcc00;
+        /* dorado */
+        padding: 100px 0 60px;
+        text-align: center;
+    }
+
+    /* Sección patrocinadores */
+    #patrocinadores {
+        padding: 80px 0;
+        background: linear-gradient(180deg, #ffffff 0%, #ffcc00 100%);
+        /* blanco a dorado */
+        color: #1c1c1c;
+        /* negro para el texto */
+    }
+
+    #patrocinadores h2 {
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 15px;
+    }
+
+    #patrocinadores p {
+        font-size: 1.1rem;
+        margin-bottom: 40px;
+        color: #1c1c1c;
+        /* negro */
+    }
+
+    .carousel-item img {
+        max-height: 150px;
+        margin: auto;
+        object-fit: contain;
+    }
+
+
+    /* Footer */
+    footer {
+        background-color: #1c1c1c;
+        color: #fff;
+        padding: 40px 0;
+        text-align: center;
+    }
+
+    footer a {
+        color: #ffcc00;
+        text-decoration: none;
+    }
+
+    footer a:hover {
+        text-decoration: underline;
+    }
+
+    #btnBackToTop {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        z-index: 1000;
+        display: none;
+    }
+</style>
 </head>
 
 <body>

@@ -41,11 +41,9 @@
         .catch(err => console.error("❌ Error al registrar el SW", err));
     }
   </script>
-  <!-- Contenedor para la barra de navegación -->
-  <header id="navbar-container"></header>
-  <section id="hero-container"></section>
-  <!-- Contenedor para los patrocinadores -->
-  <section id="patrocinadores-container"></section>
+  <div id="navbar-container"></div>
+  <div id="hero-container"></div>
+  <div id="patrocinadores-container"></div>
 
 
 
@@ -158,17 +156,8 @@
     </div>
   </section>
 
-  <!-- Footer -->
-  <footer>
-    <div class="container">
-      <p>&copy; 2025 DIBA FBC. Todos los derechos reservados.</p>
-      <p>Visita nuestros patrocinadores:
-        <a href="https://okeysport.com" target="_blank">Okeysport</a>,
-        <a href="#">Muebles JK</a>,
-        <a href="#">Calzado Orpiz</a>
-      </p>
-    </div>
-  </footer>
+  <!-- Contenedor para el Footer (se carga desde layout/footer.html) -->
+  <div id="footer-container"></div>
 
   <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>

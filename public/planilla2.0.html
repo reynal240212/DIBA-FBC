@@ -1,16 +1,18 @@
 <!DOCTYPE html>
 <html lang="es" data-bs-theme="light">
+
 <head>
   <meta charset="UTF-8" />
   <title>Planilla General - DIBA FBC</title>
   <meta name="author" content="REINALDO DE JESUS PEREZ NAVAS" />
-  <meta name="keywords" content="DIBA FBC, Deportivo Internacional De Barranquilla Atlántico, Fútbol, Barranquilla, Atlántico, Colombia" />
+  <meta name="keywords"
+    content="DIBA FBC, Deportivo Internacional De Barranquilla Atlántico, Fútbol, Barranquilla, Atlántico, Colombia" />
   <meta name="robots" content="index, follow" />
   <meta name="theme-color" content="#002a40" />
   <link rel="icon" href="https://i.postimg.cc/x8W7vwJJ/ESCUDO.png" type="image/png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="Planilla interactiva para el control de jugadores del club DIBA FBC." />
-  
+
   <!-- Dependencias CSS (Bootstrap, Font Awesome) -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
@@ -18,7 +20,7 @@
   <!-- Dependencias JS para PDF -->
   <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.8.2/dist/jspdf.plugin.autotable.min.js"></script>
-  
+
   <!-- Estilos Personalizados -->
   <style>
     :root {
@@ -27,38 +29,63 @@
       --accent-color: #e9d8a6;
       --bs-body-bg: #f8f9fa;
     }
+
     body {
       background-color: var(--bs-body-bg);
       padding-bottom: 5rem;
     }
-    .navbar { background-color: var(--primary-color) !important; }
-    .table-responsive { max-height: 65vh; overflow-y: auto; }
-    .table th {
-        background-color: var(--primary-color);
-        color: white;
-        position: sticky;
-        top: 0;
-        z-index: 10;
+
+    .navbar {
+      background-color: var(--primary-color) !important;
     }
-    #generatePDF:disabled { cursor: not-allowed; }
-    .toast-container { z-index: 1100; }
-    .editable-name { cursor: pointer; }
-    .editable-name:hover { background-color: #e9ecef; }
+
+    .table-responsive {
+      max-height: 65vh;
+      overflow-y: auto;
+    }
+
+    .table th {
+      background-color: var(--primary-color);
+      color: white;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    #generatePDF:disabled {
+      cursor: not-allowed;
+    }
+
+    .toast-container {
+      z-index: 1100;
+    }
+
+    .editable-name {
+      cursor: pointer;
+    }
+
+    .editable-name:hover {
+      background-color: #e9ecef;
+    }
   </style>
 </head>
+
 <body>
 
   <!-- Contenedor para Notificaciones -->
   <div class="toast-container position-fixed top-0 end-0 p-3">
     <div id="appToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-      <div class="toast-header"><i class="fas fa-check-circle text-success me-2"></i><strong class="me-auto">Notificación</strong><button type="button" class="btn-close" data-bs-dismiss="toast"></button></div>
+      <div class="toast-header"><i class="fas fa-check-circle text-success me-2"></i><strong
+          class="me-auto">Notificación</strong><button type="button" class="btn-close" data-bs-dismiss="toast"></button>
+      </div>
       <div class="toast-body"></div>
     </div>
   </div>
 
   <nav class="navbar navbar-expand-lg navbar-dark shadow-sm">
     <div class="container">
-      <a class="navbar-brand" href="#"><img src="https://i.postimg.cc/x8W7vwJJ/ESCUDO.png" alt="DIBA FBC Logo" width="30" height="30" class="d-inline-block align-text-top me-2">DIBA FBC</a>
+      <a class="navbar-brand" href="#"><img src="https://i.postimg.cc/x8W7vwJJ/ESCUDO.png" alt="DIBA FBC Logo"
+          width="30" height="30" class="d-inline-block align-text-top me-2">DIBA FBC</a>
     </div>
   </nav>
 
@@ -66,33 +93,38 @@
     <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
       <h1 class="mb-0 h2">Planilla General</h1>
       <div class="d-flex gap-3 align-items-center mt-2 mt-md-0">
-          <div>
-              <!-- MEJORA: Campo de selección para la categoría -->
-              <label for="categorySelect" class="form-label mb-0 fw-bold small">Categoría:</label>
-              <select class="form-select" id="categorySelect" style="width: auto;">
-                  <!-- Las opciones se cargarán con JavaScript -->
-              </select>
-          </div>
-          <div>
-              <label for="planillaDate" class="form-label mb-0 fw-bold small">Fecha:</label>
-              <input type="date" class="form-control" id="planillaDate" style="width: auto;">
-          </div>
+        <div>
+          <!-- MEJORA: Campo de selección para la categoría -->
+          <label for="categorySelect" class="form-label mb-0 fw-bold small">Categoría:</label>
+          <select class="form-select" id="categorySelect" style="width: auto;">
+            <!-- Las opciones se cargarán con JavaScript -->
+          </select>
+        </div>
+        <div>
+          <label for="planillaDate" class="form-label mb-0 fw-bold small">Fecha:</label>
+          <input type="date" class="form-control" id="planillaDate" style="width: auto;">
+        </div>
       </div>
     </div>
-    
+
     <div class="card shadow-sm mb-4">
-        <div class="card-body d-flex justify-content-between align-items-center flex-wrap gap-3">
-            <form id="addPlayerForm" class="d-flex gap-2">
-                <input type="text" id="newPlayerName" class="form-control" placeholder="Nombre del nuevo jugador" required>
-                <button type="submit" class="btn btn-success"><i class="fas fa-plus"></i> Añadir</button>
-            </form>
-            
-            <div class="d-flex gap-2">
-                <button id="generatePDF" class="btn btn-primary"><span id="pdf-icon"><i class="fas fa-file-pdf"></i></span><span id="pdf-text"> Descargar PDF</span></button>
-                <button id="clearData" class="btn btn-warning" data-bs-toggle="tooltip" title="Borra pagos y asistencia de la categoría actual."><i class="fas fa-eraser"></i> Limpiar Planilla</button>
-                <button id="deleteCategory" class="btn btn-danger" data-bs-toggle="tooltip" title="Elimina PERMANENTEMENTE la categoría actual y todos sus jugadores."><i class="fas fa-trash-alt"></i> Borrar Categoría</button>
-            </div>
+      <div class="card-body d-flex justify-content-between align-items-center flex-wrap gap-3">
+        <form id="addPlayerForm" class="d-flex gap-2">
+          <input type="text" id="newPlayerName" class="form-control" placeholder="Nombre del nuevo jugador" required>
+          <button type="submit" class="btn btn-success"><i class="fas fa-plus"></i> Añadir</button>
+        </form>
+
+        <div class="d-flex gap-2">
+          <button id="generatePDF" class="btn btn-primary"><span id="pdf-icon"><i
+                class="fas fa-file-pdf"></i></span><span id="pdf-text"> Descargar PDF</span></button>
+          <button id="clearData" class="btn btn-warning" data-bs-toggle="tooltip"
+            title="Borra pagos y asistencia de la categoría actual."><i class="fas fa-eraser"></i> Limpiar
+            Planilla</button>
+          <button id="deleteCategory" class="btn btn-danger" data-bs-toggle="tooltip"
+            title="Elimina PERMANENTEMENTE la categoría actual y todos sus jugadores."><i class="fas fa-trash-alt"></i>
+            Borrar Categoría</button>
         </div>
+      </div>
     </div>
 
     <div class="table-responsive shadow-sm">
@@ -111,9 +143,9 @@
       </table>
     </div>
   </main>
-  
+
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  
+
   <script>
     document.addEventListener('DOMContentLoaded', () => {
 
@@ -143,7 +175,7 @@
       const categorySelect = document.getElementById('categorySelect');
       const toastElement = document.getElementById('appToast');
       const bsToast = new bootstrap.Toast(toastElement);
-      
+
       new bootstrap.Tooltip(clearDataBtn);
       new bootstrap.Tooltip(deleteCategoryBtn);
 
@@ -152,10 +184,10 @@
 
       // --- FUNCIONES DE MANEJO DEL ESTADO ---
       const showToast = (message, isError = false) => {
-          toastElement.querySelector('.toast-body').textContent = message;
-          const icon = toastElement.querySelector('.toast-header i');
-          icon.className = isError ? 'fas fa-exclamation-circle text-danger me-2' : 'fas fa-check-circle text-success me-2';
-          bsToast.show();
+        toastElement.querySelector('.toast-body').textContent = message;
+        const icon = toastElement.querySelector('.toast-header i');
+        icon.className = isError ? 'fas fa-exclamation-circle text-danger me-2' : 'fas fa-check-circle text-success me-2';
+        bsToast.show();
       };
 
       const saveState = () => {
@@ -181,17 +213,17 @@
         }
         if (!dateInput.value) dateInput.valueAsDate = new Date();
       };
-      
+
       const updateCategoryDropdown = () => {
         const currentSelection = appState.currentCategory;
         categorySelect.innerHTML = '';
         const categories = Object.keys(appState.categories).sort();
 
         categories.forEach(cat => {
-            const option = document.createElement('option');
-            option.value = cat;
-            option.textContent = cat;
-            categorySelect.appendChild(option);
+          const option = document.createElement('option');
+          option.value = cat;
+          option.textContent = cat;
+          categorySelect.appendChild(option);
         });
 
         // Opción para añadir una nueva categoría
@@ -204,15 +236,15 @@
       };
 
       const getCurrentCategoryState = () => {
-          return appState.categories[appState.currentCategory];
+        return appState.categories[appState.currentCategory];
       };
 
       // --- RENDERIZADO DE LA TABLA ---
       const renderTable = () => {
         const currentCategoryState = getCurrentCategoryState();
         if (!currentCategoryState) {
-            tableBody.innerHTML = `<tr><td colspan="6" class="text-center text-muted p-4">Seleccione o cree una categoría.</td></tr>`;
-            return;
+          tableBody.innerHTML = `<tr><td colspan="6" class="text-center text-muted p-4">Seleccione o cree una categoría.</td></tr>`;
+          return;
         }
 
         tableBody.innerHTML = '';
@@ -220,10 +252,10 @@
         const categoryData = currentCategoryState.data;
 
         if (players.length === 0) {
-            tableBody.innerHTML = `<tr><td colspan="6" class="text-center text-muted p-4">No hay jugadores en esta categoría. ¡Añade uno para empezar!</td></tr>`;
-            return;
+          tableBody.innerHTML = `<tr><td colspan="6" class="text-center text-muted p-4">No hay jugadores en esta categoría. ¡Añade uno para empezar!</td></tr>`;
+          return;
         }
-        
+
         players.forEach((player, index) => {
           const playerData = categoryData[player.id] || { pago: '', asistencia: 'P', observacion: '' };
           const row = document.createElement('tr');
@@ -252,24 +284,24 @@
 
       // Cambiar de categoría
       categorySelect.addEventListener('change', () => {
-          const selectedValue = categorySelect.value;
-          if (selectedValue === 'new') {
-              const newCategoryName = prompt("Introduce el nombre para la nueva categoría:");
-              if (newCategoryName && !appState.categories[newCategoryName]) {
-                  appState.categories[newCategoryName] = { players: [], data: {} };
-                  appState.currentCategory = newCategoryName;
-                  updateCategoryDropdown();
-              } else if (newCategoryName) {
-                  alert("Esa categoría ya existe.");
-                  categorySelect.value = appState.currentCategory;
-              } else {
-                  categorySelect.value = appState.currentCategory;
-              }
+        const selectedValue = categorySelect.value;
+        if (selectedValue === 'new') {
+          const newCategoryName = prompt("Introduce el nombre para la nueva categoría:");
+          if (newCategoryName && !appState.categories[newCategoryName]) {
+            appState.categories[newCategoryName] = { players: [], data: {} };
+            appState.currentCategory = newCategoryName;
+            updateCategoryDropdown();
+          } else if (newCategoryName) {
+            alert("Esa categoría ya existe.");
+            categorySelect.value = appState.currentCategory;
           } else {
-              appState.currentCategory = selectedValue;
+            categorySelect.value = appState.currentCategory;
           }
-          saveState();
-          renderTable();
+        } else {
+          appState.currentCategory = selectedValue;
+        }
+        saveState();
+        renderTable();
       });
 
       // Añadir jugador a la categoría actual
@@ -288,18 +320,18 @@
 
       // Borrar categoría
       deleteCategoryBtn.addEventListener('click', () => {
-          const categoryToDelete = appState.currentCategory;
-          if (confirm(`¿Está SEGURO de que quiere borrar PERMANENTEMENTE la categoría "${categoryToDelete}" y todos sus jugadores? Esta acción no se puede deshacer.`)) {
-              delete appState.categories[categoryToDelete];
-              const remainingCategories = Object.keys(appState.categories);
-              appState.currentCategory = remainingCategories.length > 0 ? remainingCategories[0] : null;
-              saveState();
-              updateCategoryDropdown();
-              renderTable();
-              showToast(`Categoría "${categoryToDelete}" eliminada.`, true);
-          }
+        const categoryToDelete = appState.currentCategory;
+        if (confirm(`¿Está SEGURO de que quiere borrar PERMANENTEMENTE la categoría "${categoryToDelete}" y todos sus jugadores? Esta acción no se puede deshacer.`)) {
+          delete appState.categories[categoryToDelete];
+          const remainingCategories = Object.keys(appState.categories);
+          appState.currentCategory = remainingCategories.length > 0 ? remainingCategories[0] : null;
+          saveState();
+          updateCategoryDropdown();
+          renderTable();
+          showToast(`Categoría "${categoryToDelete}" eliminada.`, true);
+        }
       });
-      
+
       // Eventos en la tabla (borrar jugador, editar nombre, actualizar datos)
       tableBody.addEventListener('click', e => {
         if (e.target.closest('.btn-delete')) {
@@ -307,7 +339,7 @@
           const playerId = Number(row.dataset.playerId);
           const currentCategoryState = getCurrentCategoryState();
           const playerIndex = currentCategoryState.players.findIndex(p => p.id === playerId);
-          
+
           if (playerIndex > -1) {
             const playerName = currentCategoryState.players[playerIndex].name;
             if (confirm(`¿Eliminar a ${playerName} de la lista?`)) {
@@ -320,7 +352,7 @@
           }
         }
       });
-      
+
       tableBody.addEventListener('input', e => {
         if (e.target.classList.contains('data-input')) {
           const row = e.target.closest('tr');
@@ -348,34 +380,34 @@
         input.select();
 
         const saveChange = () => {
-            const newName = input.value.trim();
-            if (newName && newName !== originalName) {
-                const player = getCurrentCategoryState().players.find(p => p.id === playerId);
-                if (player) {
-                    player.name = newName;
-                    saveState();
-                    showToast(`Nombre actualizado a "${newName}".`);
-                }
+          const newName = input.value.trim();
+          if (newName && newName !== originalName) {
+            const player = getCurrentCategoryState().players.find(p => p.id === playerId);
+            if (player) {
+              player.name = newName;
+              saveState();
+              showToast(`Nombre actualizado a "${newName}".`);
             }
-            renderTable();
+          }
+          renderTable();
         };
 
         input.addEventListener('blur', saveChange);
         input.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter') saveChange();
-            else if (e.key === 'Escape') renderTable();
+          if (e.key === 'Enter') saveChange();
+          else if (e.key === 'Escape') renderTable();
         });
       });
 
       clearDataBtn.addEventListener('click', () => {
         if (confirm(`¿Limpiar pagos y observaciones de la categoría "${appState.currentCategory}"? La lista de jugadores no se borrará.`)) {
-            getCurrentCategoryState().data = {};
-            saveState();
-            renderTable();
-            showToast(`Datos de la planilla "${appState.currentCategory}" limpiados.`);
+          getCurrentCategoryState().data = {};
+          saveState();
+          renderTable();
+          showToast(`Datos de la planilla "${appState.currentCategory}" limpiados.`);
         }
       });
-      
+
       // --- GENERACIÓN DE PDF (adaptado a la nueva estructura) ---
       generatePdfBtn.addEventListener('click', async () => {
         // ... (El código de generación de PDF se mantiene igual, pero ahora usará los datos de la categoría actual)
@@ -383,82 +415,82 @@
         btn.disabled = true;
         btn.querySelector('#pdf-icon').innerHTML = `<span class="spinner-border spinner-border-sm"></span>`;
         btn.querySelector('#pdf-text').textContent = ' Generando...';
-        
+
         const currentCategoryState = getCurrentCategoryState();
         const players = currentCategoryState.players;
         const categoryData = currentCategoryState.data;
         const planillaCategory = appState.currentCategory || "No especificada";
 
         try {
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF({ orientation: 'portrait', unit: 'pt', format: 'letter' });
-            
-            // Carga de logo...
-            const logoUrl = "https://i.postimg.cc/x8W7vwJJ/ESCUDO.png";
-            try {
-                const response = await fetch(logoUrl);
-                const blob = await response.blob();
-                const imgData = await new Promise(resolve => {
-                    const reader = new FileReader();
-                    reader.onloadend = () => resolve(reader.result);
-                    reader.readAsDataURL(blob);
-                });
-                doc.addImage(imgData, 'PNG', 40, 30, 60, 60);
-            } catch (err) { console.error("Error cargando logo para PDF:", err); }
+          const { jsPDF } = window.jspdf;
+          const doc = new jsPDF({ orientation: 'portrait', unit: 'pt', format: 'letter' });
 
-            // Encabezados...
-            doc.setFontSize(16).setFont('helvetica', 'bold').text("DIBA FBC", 115, 50);
-            doc.setFontSize(10).setFont('helvetica', 'normal');
-            doc.text("DEPORTIVO INTERNACIONAL DE BARRANQUILLA ATLANTICO", 115, 65);
-            doc.text("RESOLUCIÓN 0122 / 10-SEPT-2018", 115, 80);
-            doc.setFontSize(12).setFont('helvetica', 'bold').text("PLANILLA GENERAL DE CONTROL", doc.internal.pageSize.getWidth() / 2, 120, { align: 'center' });
-
-            const planillaDate = dateInput.value ? new Date(dateInput.value + 'T00:00:00').toLocaleDateString('es-CO', { day: '2-digit', month: '2-digit', year: 'numeric' }) : "No especificada";
-            doc.setFontSize(10).setFont('helvetica', 'normal');
-            doc.text(`Fecha: ${planillaDate}`, 40, 140);
-            doc.text(`Categoría: ${planillaCategory}`, doc.internal.pageSize.getWidth() - 40, 140, { align: 'right' });
-
-            // Cuerpo de la tabla
-            const head = [["#", "Nombre", "Pago", "Asistencia", "Observaciones"]];
-            const body = players.map((player, index) => {
-                const pData = categoryData[player.id] || {};
-                const asistenciaText = { P: 'Presente', A: 'Ausente', E: 'Excusa' }[pData.asistencia] || '';
-                return [index + 1, player.name, pData.pago || '', asistenciaText, pData.observacion || ''];
+          // Carga de logo...
+          const logoUrl = "https://i.postimg.cc/x8W7vwJJ/ESCUDO.png";
+          try {
+            const response = await fetch(logoUrl);
+            const blob = await response.blob();
+            const imgData = await new Promise(resolve => {
+              const reader = new FileReader();
+              reader.onloadend = () => resolve(reader.result);
+              reader.readAsDataURL(blob);
             });
+            doc.addImage(imgData, 'PNG', 40, 30, 60, 60);
+          } catch (err) { console.error("Error cargando logo para PDF:", err); }
 
-            if (body.length === 0) {
-                for (let i = 1; i <= 30; i++) body.push([i, '', '', '', '']); 
-            }
+          // Encabezados...
+          doc.setFontSize(16).setFont('helvetica', 'bold').text("DIBA FBC", 115, 50);
+          doc.setFontSize(10).setFont('helvetica', 'normal');
+          doc.text("DEPORTIVO INTERNACIONAL DE BARRANQUILLA ATLANTICO", 115, 65);
+          doc.text("RESOLUCIÓN 0122 / 10-SEPT-2018", 115, 80);
+          doc.setFontSize(12).setFont('helvetica', 'bold').text("PLANILLA GENERAL DE CONTROL", doc.internal.pageSize.getWidth() / 2, 120, { align: 'center' });
 
-            doc.autoTable({
-                head: head, body: body, startY: 155, margin: { left: 40, right: 40 },
-                styles: { fontSize: 9, cellPadding: 5, valign: 'middle' },
-                headStyles: { fillColor: [0, 42, 64], textColor: 255, fontStyle: 'bold' },
-                alternateRowStyles: { fillColor: [240, 248, 255] },
-                columnStyles: { 0: { halign: 'center', cellWidth: 30 }, 2: { halign: 'center', cellWidth: 70 }, 3: { halign: 'center', cellWidth: 70 } }
-            });
+          const planillaDate = dateInput.value ? new Date(dateInput.value + 'T00:00:00').toLocaleDateString('es-CO', { day: '2-digit', month: '2-digit', year: 'numeric' }) : "No especificada";
+          doc.setFontSize(10).setFont('helvetica', 'normal');
+          doc.text(`Fecha: ${planillaDate}`, 40, 140);
+          doc.text(`Categoría: ${planillaCategory}`, doc.internal.pageSize.getWidth() - 40, 140, { align: 'right' });
 
-            // Pie de página...
-            const pageCount = doc.internal.getNumberOfPages();
-            for (let i = 1; i <= pageCount; i++) {
-                doc.setPage(i);
-                doc.setFontSize(8).setTextColor(150);
-                doc.text(`Página ${i} de ${pageCount}`, doc.internal.pageSize.getWidth() / 2, doc.internal.pageSize.getHeight() - 20, { align: 'center' });
-            }
+          // Cuerpo de la tabla
+          const head = [["#", "Nombre", "Pago", "Asistencia", "Observaciones"]];
+          const body = players.map((player, index) => {
+            const pData = categoryData[player.id] || {};
+            const asistenciaText = { P: 'Presente', A: 'Ausente', E: 'Excusa' }[pData.asistencia] || '';
+            return [index + 1, player.name, pData.pago || '', asistenciaText, pData.observacion || ''];
+          });
 
-            doc.save(`Planilla_DIBA_FBC_${planillaCategory.replace('/', '-')}_${dateInput.value}.pdf`);
-            showToast('PDF generado con éxito.');
+          if (body.length === 0) {
+            for (let i = 1; i <= 30; i++) body.push([i, '', '', '', '']);
+          }
+
+          doc.autoTable({
+            head: head, body: body, startY: 155, margin: { left: 40, right: 40 },
+            styles: { fontSize: 9, cellPadding: 5, valign: 'middle' },
+            headStyles: { fillColor: [0, 42, 64], textColor: 255, fontStyle: 'bold' },
+            alternateRowStyles: { fillColor: [240, 248, 255] },
+            columnStyles: { 0: { halign: 'center', cellWidth: 30 }, 2: { halign: 'center', cellWidth: 70 }, 3: { halign: 'center', cellWidth: 70 } }
+          });
+
+          // Pie de página...
+          const pageCount = doc.internal.getNumberOfPages();
+          for (let i = 1; i <= pageCount; i++) {
+            doc.setPage(i);
+            doc.setFontSize(8).setTextColor(150);
+            doc.text(`Página ${i} de ${pageCount}`, doc.internal.pageSize.getWidth() / 2, doc.internal.pageSize.getHeight() - 20, { align: 'center' });
+          }
+
+          doc.save(`Planilla_DIBA_FBC_${planillaCategory.replace('/', '-')}_${dateInput.value}.pdf`);
+          showToast('PDF generado con éxito.');
 
         } catch (error) {
-            console.error('Error al generar el PDF:', error);
-            showToast('Ocurrió un error al generar el PDF.', true);
+          console.error('Error al generar el PDF:', error);
+          showToast('Ocurrió un error al generar el PDF.', true);
         } finally {
-            btn.disabled = false;
-            btn.querySelector('#pdf-icon').innerHTML = `<i class="fas fa-file-pdf"></i>`;
-            btn.querySelector('#pdf-text').textContent = ' Descargar PDF';
+          btn.disabled = false;
+          btn.querySelector('#pdf-icon').innerHTML = `<i class="fas fa-file-pdf"></i>`;
+          btn.querySelector('#pdf-text').textContent = ' Descargar PDF';
         }
       });
-      
+
       // --- INICIALIZACIÓN DE LA APLICACIÓN ---
       loadState();
       updateCategoryDropdown();
@@ -467,4 +499,5 @@
   </script>
 
 </body>
+
 </html>

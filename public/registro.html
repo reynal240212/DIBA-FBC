@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -8,7 +9,8 @@
   <!-- ... otros meta tags -->
   <meta property="og:title" content="" />
   <meta property="og:description" content="" />
-  <meta property="og:image" content="https://diba-fbc.vercel.app/images/ESCUDO.png" /> <!-- URL absoluta a una imagen representativa -->
+  <meta property="og:image" content="https://diba-fbc.vercel.app/images/ESCUDO.png" />
+  <!-- URL absoluta a una imagen representativa -->
   <meta property="og:url" content="https://diba-fbc.vercel.app/" />
   <meta property="og:type" content="website" />
   <meta name="twitter:card" content="summary_large_image" />
@@ -128,123 +130,124 @@
   <script type="module">
     import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
 
-const supabaseUrl = "https://wdnlqfiwuocmmcdowjyw.supabase.co";
-const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndkbmxxZml3dW9jbW1jZG93anl3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg1MjY1ODAsImV4cCI6MjA2NDEwMjU4MH0.4SCS_NRDIYLQJ1XouqW111BxkMOlwMWOjje9gFTgW_Q";
-const supabase = createClient(supabaseUrl, supabaseKey);
+    const supabaseUrl = "https://wdnlqfiwuocmmcdowjyw.supabase.co";
+    const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndkbmxxZml3dW9jbW1jZG93anl3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg1MjY1ODAsImV4cCI6MjA2NDEwMjU4MH0.4SCS_NRDIYLQJ1XouqW111BxkMOlwMWOjje9gFTgW_Q";
+    const supabase = createClient(supabaseUrl, supabaseKey);
 
-async function handleRegistro(e) {
-  e.preventDefault();
+    async function handleRegistro(e) {
+      e.preventDefault();
 
-  // ... (Toda tu validación de campos Nombre, Apellido, Correo y Clave se mantiene igual) ...
+      // ... (Toda tu validación de campos Nombre, Apellido, Correo y Clave se mantiene igual) ...
 
-  const Nombre = document.getElementById("nombre").value;
-  if (!Nombre) {
-    alert("❌ Por favor, ingresa un nombre.");
-    return;
-  }
-  if (Nombre.length > 50) {
-    alert("❌ El nombre no puede tener más de 50 caracteres.");
-    return;
-  }
-  if (!/^[a-zA-Z\s]+$/.test(Nombre)) {
-    alert("❌ El nombre solo puede contener letras y espacios.");
-    return;
-  }
-  const apellido = document.getElementById("apellido").value;
-  if (!apellido) {
-    alert("❌ Por favor, ingresa un apellido.");
-    return;
-  }
-  if (apellido.length > 50) {
-    alert("❌ El apellido no puede tener más de 50 caracteres.");
-    return;
-  }
-  if (!/^[a-zA-Z\s]+$/.test(apellido)) {
-    alert("❌ El apellido solo puede contener letras y espacios.");
-    return;
-  }
+      const Nombre = document.getElementById("nombre").value;
+      if (!Nombre) {
+        alert("❌ Por favor, ingresa un nombre.");
+        return;
+      }
+      if (Nombre.length > 50) {
+        alert("❌ El nombre no puede tener más de 50 caracteres.");
+        return;
+      }
+      if (!/^[a-zA-Z\s]+$/.test(Nombre)) {
+        alert("❌ El nombre solo puede contener letras y espacios.");
+        return;
+      }
+      const apellido = document.getElementById("apellido").value;
+      if (!apellido) {
+        alert("❌ Por favor, ingresa un apellido.");
+        return;
+      }
+      if (apellido.length > 50) {
+        alert("❌ El apellido no puede tener más de 50 caracteres.");
+        return;
+      }
+      if (!/^[a-zA-Z\s]+$/.test(apellido)) {
+        alert("❌ El apellido solo puede contener letras y espacios.");
+        return;
+      }
 
-  const correo = document.getElementById("correo").value;
-  if (!correo) {
-    alert("❌ Por favor, ingresa un correo electrónico.");
-    return;
-  }
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(correo)) {
-    alert("❌ Por favor, ingresa un correo electrónico válido.");
-    return;
-  }
-  if (correo.length > 100) {
-    alert("❌ El correo electrónico no puede tener más de 100 caracteres.");
-    return;
-  }
-  if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(correo)) {
-    alert("❌ El correo electrónico no es válido.");
-    return;
-  }
+      const correo = document.getElementById("correo").value;
+      if (!correo) {
+        alert("❌ Por favor, ingresa un correo electrónico.");
+        return;
+      }
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(correo)) {
+        alert("❌ Por favor, ingresa un correo electrónico válido.");
+        return;
+      }
+      if (correo.length > 100) {
+        alert("❌ El correo electrónico no puede tener más de 100 caracteres.");
+        return;
+      }
+      if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(correo)) {
+        alert("❌ El correo electrónico no es válido.");
+        return;
+      }
 
-  const clave = document.getElementById("clave").value;
-  if (!clave) {
-    alert("❌ Por favor, ingresa una contraseña.");
-    return;
-  }
-  // Tu validación de longitud de contraseña está un poco confusa.
-  // Si quieres que sea exactamente 8 caracteres:
-  if (clave.length !== 8) {
-    alert("❌ La contraseña debe tener exactamente 8 caracteres.");
-    return;
-  }
-  // Si quieres que sea *al menos* 8 caracteres:
-  // if (clave.length < 8) {
-  //   alert("❌ La contraseña debe tener al menos 8 caracteres.");
-  //   return;
-  // }
+      const clave = document.getElementById("clave").value;
+      if (!clave) {
+        alert("❌ Por favor, ingresa una contraseña.");
+        return;
+      }
+      // Tu validación de longitud de contraseña está un poco confusa.
+      // Si quieres que sea exactamente 8 caracteres:
+      if (clave.length !== 8) {
+        alert("❌ La contraseña debe tener exactamente 8 caracteres.");
+        return;
+      }
+      // Si quieres que sea *al menos* 8 caracteres:
+      // if (clave.length < 8) {
+      //   alert("❌ La contraseña debe tener al menos 8 caracteres.");
+      //   return;
+      // }
 
-  if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8}$/.test(clave)) { // Aquí también ajusté el regex para 8 caracteres
-    alert("❌ La contraseña debe tener al menos una letra mayúscula, una minúscula, un número y ser de 8 caracteres.");
-    return;
-  }
+      if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8}$/.test(clave)) { // Aquí también ajusté el regex para 8 caracteres
+        alert("❌ La contraseña debe tener al menos una letra mayúscula, una minúscula, un número y ser de 8 caracteres.");
+        return;
+      }
 
 
-  // --- CAMBIO CLAVE AQUÍ ---
-  // Intentamos registrar al usuario directamente.
-  // Supabase maneja el error si el correo ya existe.
-  const { data, error } = await supabase.auth.signUp({
-    email: correo,
-    password: clave,
-    options: {
-        data: {
+      // --- CAMBIO CLAVE AQUÍ ---
+      // Intentamos registrar al usuario directamente.
+      // Supabase maneja el error si el correo ya existe.
+      const { data, error } = await supabase.auth.signUp({
+        email: correo,
+        password: clave,
+        options: {
+          data: {
             nombre: Nombre, // Agregamos el nombre y apellido como metadata del usuario
             apellido: apellido,
+          },
         },
-    },
-  });
+      });
 
-  if (error) {
-    if (error.message.includes("User already registered")) { // Mensaje de error común para correo duplicado
-      alert("❌ El correo electrónico ya está registrado. Por favor, utiliza otro.");
-    } else {
-      alert("❌ Error al registrar: " + error.message);
+      if (error) {
+        if (error.message.includes("User already registered")) { // Mensaje de error común para correo duplicado
+          alert("❌ El correo electrónico ya está registrado. Por favor, utiliza otro.");
+        } else {
+          alert("❌ Error al registrar: " + error.message);
+        }
+        return;
+      }
+
+      // Supabase retornará null para el `user` si el correo de confirmación es enviado.
+      // `data.user` será null si se requiere confirmación por email.
+      // `data.session` también será null en este caso.
+      if (data.user || data.session) {
+        alert("✅ Registro exitoso. Has iniciado sesión automáticamente.");
+        window.location.href = "login.html"; // O a donde quieras redirigirlo después del registro exitoso e inicio de sesión
+      } else {
+        alert("✅ Registro exitoso. Por favor, revisa tu correo para confirmar tu cuenta.");
+        window.location.href = "login.html"; // Redirigir al login para que espere la confirmación
+      }
     }
-    return;
-  }
 
-  // Supabase retornará null para el `user` si el correo de confirmación es enviado.
-  // `data.user` será null si se requiere confirmación por email.
-  // `data.session` también será null en este caso.
-  if (data.user || data.session) {
-      alert("✅ Registro exitoso. Has iniciado sesión automáticamente.");
-      window.location.href = "login.html"; // O a donde quieras redirigirlo después del registro exitoso e inicio de sesión
-  } else {
-      alert("✅ Registro exitoso. Por favor, revisa tu correo para confirmar tu cuenta.");
-      window.location.href = "login.html"; // Redirigir al login para que espere la confirmación
-  }
-}
-
-document.addEventListener("DOMContentLoaded", () => {
-  document.getElementById("registroForm").addEventListener("submit", handleRegistro);
-});
+    document.addEventListener("DOMContentLoaded", () => {
+      document.getElementById("registroForm").addEventListener("submit", handleRegistro);
+    });
   </script>
 </head>
+
 <body>
   <!-- Header -->
   <header>
@@ -290,4 +293,5 @@ document.addEventListener("DOMContentLoaded", () => {
     <p>&copy; 2025 DIBA FBC. Todos los derechos reservados.</p>
   </footer>
 </body>
+
 </html>
