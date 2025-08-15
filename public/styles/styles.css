@@ -285,7 +285,7 @@ img {
 }
 
 .navbar-brand img {
-  width: 50px;
+  width: 200px;
   height: auto;
   transition: transform 0.3s ease;
 }
