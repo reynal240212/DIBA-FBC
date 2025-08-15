@@ -1,9 +1,9 @@
 /* ================================
-   CARGA DE COMPONENTES Y LÓGICA PRINCIPAL
+   CARGA DE COMPONENTES COMUNES
 =================================== */
 document.addEventListener("DOMContentLoaded", function () {
 
-  // --- CARGA DE COMPONENTES COMUNES (NAVBAR, FOOTER, ETC.) ---
+  // Función para cargar un componente en un contenedor
   function loadComponent(containerId, filePath) {
     const container = document.getElementById(containerId);
     if (!container) return;
@@ -20,88 +20,176 @@ document.addEventListener("DOMContentLoaded", function () {
       .catch((error) => console.error(error));
   }
 
+  // Cargar Navbar y Footer
   loadComponent("navbar-container", "layout/navbar.html");
   loadComponent("footer-container", "layout/footer.html");
   loadComponent("hero-container", "layout/hero.html");
   loadComponent("patrocinadores-container", "layout/patrocinadores.html");
 
+  // Ajustar padding del body según altura del navbar fijo
   const navbar = document.querySelector(".navbar");
   if (navbar) {
     document.body.style.paddingTop = navbar.offsetHeight + "px";
   }
 
-
-  // --- CARGA DE CARTAS DE JUGADORES ---
+  // ================================
+  // CARGA DE CARTAS DE JUGADORES
+  // ================================
   const playersContainer = document.getElementById("players-container");
   if (playersContainer) {
-    // ... (Tu código de playersData y categories no necesita cambios, lo omito por brevedad)
+
     const playersData = [
       { name: "Dilan sanchez", imageUrl: "images/jugadores/dilan_sanchez.jpg" },
-      // ... resto de jugadores
+      { name: "Juan t", imageUrl: "images/jugadores/juan_t.jpg" },
+      { name: "Dinkol", imageUrl: "images/jugadores/dinkol.jpg" },
+      { name: "Dany", imageUrl: "images/jugadores/danny.jpg" },
+      { name: "Miguel", imageUrl: "images/jugadores/migue.jpg" },
+      { name: "Rodríguez", imageUrl: "images/jugadores/rodriguez.jpg" },
+      { name: "Nelson", imageUrl: "images/jugadores/nelson.png" },
+      { name: "Santiago", imageUrl: "images/jugadores/mendoza.jpg" },
+      { name: "Josept", imageUrl: "images/jugadores/josept.jpg" },
+      { name: "Hernández angel", imageUrl: "images/jugadores/hernandez_angel.jpg" },
+      { name: "Oscar", imageUrl: "images/jugadores/oscar.jpg" },
+      { name: "Yojainer", imageUrl: "images/jugadores/yojainer.jpg" },
+      { name: "Jesus", imageUrl: "images/jugadores/jesus.jpg" },
+      { name: "Mateo", imageUrl: "images/jugadores/mateo.jpg" },
+      { name: "Dilan correa", imageUrl: "images/jugadores/dilan_correa.jpg" },
+      { name: "Estiben Montiel", imageUrl: "images/jugadores/EstibenMontiel.jpg" },
+      { name: "Mario", imageUrl: "images/mario sin fondo.png" },
+      { name: "Juan Andrés", imageUrl: "images/jugadores/juan_andres.jpg" },
+      { name: "Jhoyfran", imageUrl: "images/jugadores/jhoyfran.jpg" },
+      { name: "Nayareth", imageUrl: "images/jugadores/nayareth.jpg" },
+      { name: "Eliuth", imageUrl: "images/jugadores/eliut.jpg" },
+      { name: "Abraham", imageUrl: "images/jugadores/abraham.jpg" },
+      { name: "Rey David", imageUrl: "images/jugadores/rey_david.jpg" },
+      { name: "Santy h", imageUrl: "images/jugadores/santy_h.jpg" },
+      { name: "Santy t", imageUrl: "images/jugadores/santy_t.jpg" },
+      { name: "ISAAC", imageUrl: "images/jugadores/isaac.jpg" },
+      { name: "Carlos", imageUrl: "images/jugadores/carlos.jpg" },
+      { name: "Zaid", imageUrl: "images/jugadores/zaid.jpg" },
+      { name: "Estiben Gomez", imageUrl: "images/jugadores/estibengomez.jpg" },
+      { name: "Cristian Marcano", imageUrl: "images/jugadores/cristian_marcano.jpg" },
+      { name: "Yesid Manzano", imageUrl: "images/jugadores/yesid.jpg" },
+      { name: "Sebastian Castro", imageUrl: "images/jugadores/sebastian_castro.jpg" },
+      { name: "Andrés sierra", imageUrl: "images/jugadores/andres_sierra.jpg" }
     ];
+
     const categories = [
-      { id: "categoria-2012-2013", title: "Categoría 2012/13", players: [ /* ... */] },
-      { id: "categoria-2014-2015-2016", title: "Categoría 2014/15/16", players: [ /* ... */] }
+      {
+        id: "categoria-2012-2013",
+        title: "Categoría 2012/13",
+        players: [
+          "Dilan sanchez", "Juan t", "Dinkol", "Dany", "Miguel",
+          "Rodríguez", "Nelson", "Santiago", "Josept", "Hernández angel",
+          "Oscar", "Yojainer", "Jesus", "Mateo", "Dilan correa", "Estiben Montiel"
+        ]
+      },
+      {
+        id: "categoria-2014-2015-2016",
+        title: "Categoría 2014/15/16",
+        players: [
+          "Mario", "Juan Andrés", "Jhoyfran", "Nayareth", "Eliuth",
+          "Abraham", "Rey David", "Santy h", "Santy t", "ISAAC",
+          "Carlos", "Zaid", "Estiben Gomez", "Cristian Marcano", "Yesid Manzano", "Sebastian Castro", "Andrés sierra"
+        ]
+      }
     ];
-    // ... (Tu bucle forEach para crear las cartas tampoco necesita cambios)
+
+    const defaultImageUrl = "https://placehold.co/150x150/e2e8f0/000000?text=Jugador";
+
+    // Crear cartas por categoría
+    categories.forEach(category => {
+      const section = document.createElement("section");
+      section.id = category.id;
+
+      const heading = document.createElement("h2");
+      heading.textContent = category.title;
+      section.appendChild(heading);
+
+      const row = document.createElement("div");
+      row.classList.add("row");
+
+      category.players.forEach(playerName => {
+        const player = playersData.find(p => p.name.toLowerCase() === playerName.toLowerCase());
+        const imageUrl = player ? player.imageUrl : defaultImageUrl;
+
+        const card = document.createElement("div");
+        card.classList.add("card", "m-2");
+        card.style.width = "150px";
+
+        const img = document.createElement("img");
+        img.src = imageUrl;
+        img.alt = playerName;
+        img.classList.add("card-img-top");
+
+        const cardBody = document.createElement("div");
+        cardBody.classList.add("card-body", "p-2", "text-center");
+        cardBody.innerHTML = `<strong style="font-size: 14px;">${playerName}</strong>`;
+
+        card.appendChild(img);
+        card.appendChild(cardBody);
+        row.appendChild(card);
+      });
+
+      section.appendChild(row);
+      playersContainer.appendChild(section);
+    });
   }
-
-
-  // --- CARGA DE GOLEADORES DESDE SUPABASE ---
   async function mostrarGoleadores() {
-    // Primero, asegúrate de que el contenedor exista en la página actual
-    const container = document.getElementById('goleadores-list');
-    const spinner = document.getElementById('loading-goleadores');
+  const container = document.getElementById('goleadores-list');
+  const spinner = document.getElementById('loading-goleadores');
 
-    // Si no hay contenedor, no hagas nada.
-    if (!container || !spinner) {
-      return;
-    }
+  // Muestra el spinner de carga
+  spinner.style.display = 'block';
 
-    spinner.style.display = 'block';
+  // 1. Obtiene los datos de la tabla 'goleadores' de Supabase
+  const { data, error } = await supabase
+    .from('goleadores')
+    .select('*')
+    // Opcional: Filtra por categoría si lo necesitas
+    // .eq('categoria', '2014-2015') 
+    .order('goles', { ascending: false }); // Ordena de mayor a menor número de goles
 
-    try {
-      // 'supabase' debería ser visible aquí porque se define antes de que este script se ejecute
-      const { data, error, status } = await supabase
-        .from('goleadores')
-        .select('*')
-        .order('goles', { ascending: false });
+  // Oculta el spinner
+  spinner.style.display = 'none';
 
-      if (error && status !== 406) {
-        throw error;
-      }
-
-      spinner.style.display = 'none';
-      container.innerHTML = ''; // Limpiar contenedor
-
-      if (data && data.length > 0) {
-        data.forEach(goleador => {
-          const item = document.createElement('div');
-          item.className = 'goleador-item';
-          item.innerHTML = `
-                    <div class="player-info">
-                        <img src="${goleador.escudo_url || 'images/default_escudo.png'}" alt="Escudo de ${goleador.equipo}" class="escudo">
-                        <div>
-                            <div class="player-name">${goleador.nombre_jugador}</div>
-                            <div class="team-name">${goleador.equipo}</div>
-                        </div>
-                    </div>
-                    <div class="goal-count">${goleador.goles}</div>
-                `;
-          container.appendChild(item);
-        });
-      } else {
-        container.innerHTML = '<p class="text-light text-center">No hay datos de goleadores disponibles.</p>';
-      }
-    } catch (error) {
-      console.error('Error al obtener goleadores:', error);
-      spinner.style.display = 'none';
-      container.innerHTML = `<p class="text-light text-center">Error al cargar datos: ${error.message}</p>`;
-    }
+  if (error) {
+    console.error('Error al obtener goleadores:', error);
+    container.innerHTML = '<p class="text-light text-center">No se pudo cargar la tabla de goleadores.</p>';
+    return;
+  }
+  
+  if (data.length === 0) {
+    container.innerHTML = '<p class="text-light text-center">No hay datos de goleadores disponibles.</p>';
+    return;
   }
 
-  // Ahora, llama a la función para cargar los goleadores.
-  // Esta se ejecutará solo si la página tiene el contenedor de goleadores.
-  mostrarGoleadores();
+  // 2. Limpia el contenedor antes de añadir los nuevos datos
+  container.innerHTML = '';
 
-}); // <-- AQUÍ CIERRA EL ÚNICO Y GRAN 'DOMContentLoaded'
+  // 3. Crea y añade el HTML para cada goleador
+  data.forEach(goleador => {
+    const item = document.createElement('div');
+    item.className = 'goleador-item';
+
+    // Rellena la plantilla con los datos de Supabase
+    item.innerHTML = `
+      <div class="player-info">
+        <img src="${goleador.escudo_url || 'images/default_escudo.png'}" alt="Escudo de ${goleador.equipo}" class="escudo">
+        <div>
+          <div class="player-name">${goleador.nombre_jugador}</div>
+          <div class="team-name">${goleador.equipo}</div>
+        </div>
+      </div>
+      <div class="goal-count">${goleador.goles}</div>
+    `;
+
+    container.appendChild(item);
+  });
+}
+
+// Llama a la función cuando la página se cargue
+document.addEventListener('DOMContentLoaded', mostrarGoleadores);
+});
+
+
