@@ -159,7 +159,7 @@ async function mostrarGoleadores() {
     container.innerHTML = '<p class="text-light text-center">No se pudo cargar la tabla de goleadores.</p>';
     return;
   }
-  
+
   if (data.length === 0) {
     container.innerHTML = '<p class="text-light text-center">No hay datos de goleadores disponibles.</p>';
     return;
