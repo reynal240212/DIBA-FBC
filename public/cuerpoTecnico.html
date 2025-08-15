@@ -32,53 +32,6 @@
 
     <!-- Estilos personalizados -->
     <link rel="stylesheet" href="styles/styles.css" />
-
-    <style>
-        /* Encabezado deportivo con imagen */
-        header.hero {
-            background: url('images/fondo-equipo.jpg') center/cover no-repeat;
-            color: white;
-            padding: 6rem 0;
-            position: relative;
-        }
-
-        header.hero::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.55);
-        }
-
-        header.hero .container {
-            position: relative;
-            z-index: 2;
-        }
-
-        /* Tarjetas con efecto */
-        .team-card {
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            border-top: 5px solid var(--accent, #FFD700);
-        }
-
-        .team-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.2);
-        }
-
-        .team-card img {
-            border: 4px solid var(--accent, #FFD700);
-        }
-
-        .bio {
-            font-size: 0.9rem;
-            color: #555;
-            margin-top: 0.5rem;
-            text-align: justify;
-        }
-    </style>
 </head>
 
 <body>
