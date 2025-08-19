@@ -28,72 +28,7 @@
   <!-- Estilos globales -->
   <link rel="stylesheet" href="styles/styles.css" />
 
-  <style>
-    /* Mejora visual para el fondo animado */
-    .background-animation {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      z-index: 0;
-      overflow: hidden;
-      pointer-events: none;
-    }
-
-    .cube {
-      position: absolute;
-      width: 60px;
-      height: 60px;
-      background: rgba(0, 42, 64, 0.15);
-      border-radius: 20%;
-      animation: floatCube 12s infinite linear;
-    }
-
-    .cube:nth-child(1) {
-      left: 10vw;
-      top: 20vh;
-      animation-delay: 0s;
-    }
-
-    .cube:nth-child(2) {
-      left: 70vw;
-      top: 10vh;
-      animation-delay: 2s;
-    }
-
-    .cube:nth-child(3) {
-      left: 40vw;
-      top: 60vh;
-      animation-delay: 4s;
-    }
-
-    .cube:nth-child(4) {
-      left: 80vw;
-      top: 80vh;
-      animation-delay: 6s;
-    }
-
-    .cube:nth-child(5) {
-      left: 20vw;
-      top: 75vh;
-      animation-delay: 8s;
-    }
-
-    @keyframes floatCube {
-      0% {
-        transform: translateY(0) scale(1);
-      }
-
-      50% {
-        transform: translateY(-60px) scale(1.2);
-      }
-
-      100% {
-        transform: translateY(0) scale(1);
-      }
-    }
-  </style>
+  
 </head>
 
 <body>
