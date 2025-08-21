@@ -65,7 +65,22 @@
 
 
       </div>
-      <div class="rating-scale">
+      
+
+     
+
+      <!-- Contenedor para la lista (se llenará con JavaScript) -->
+      <div id="goleadores-list" class="goleadores-list">
+        <!-- Un spinner de carga que se mostrará mientras se obtienen los datos -->
+        <div id="loading-goleadores" class="text-center">
+          <div class="spinner-border text-light" role="status">
+            <span class="visually-hidden">Cargando...</span>
+          </div>
+        </div>
+      </div>
+    </div> <!-- Cierre de .goleadores-content -->
+  </div> 
+  <div class="rating-scale">
         <div class="rating-item">
           <div class="rating-value grey">—</div>
           <div class="rating-description">&lt;10MIN</div>
@@ -98,20 +113,21 @@
 
 
       <div class="gradient-bar"></div>
+  <!-- Sección Estadistica de partido -->
+   <table>
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Nombre</th>
+                <th>Pago</th>
+                <th>Calificación</th>
+                <th>Observaciones</th>
+            </tr>
+        </thead>
+        <tbody id="tbody-calificaciones">
+            </tbody>
+    </table>
 
-     
-
-      <!-- Contenedor para la lista (se llenará con JavaScript) -->
-      <div id="goleadores-list" class="goleadores-list">
-        <!-- Un spinner de carga que se mostrará mientras se obtienen los datos -->
-        <div id="loading-goleadores" class="text-center">
-          <div class="spinner-border text-light" role="status">
-            <span class="visually-hidden">Cargando...</span>
-          </div>
-        </div>
-      </div>
-    </div> <!-- Cierre de .goleadores-content -->
-  </div> <!-- Cierre de .goleadores-container -->
 
   <!-- Sección Resumen de Historia -->
   <section id="resumen-historia" class="container my-5">
@@ -128,21 +144,7 @@
       </div>
     </div>
   </section>
-  <!-- Sección Estadistica de partido -->
-   <table>
-        <thead>
-            <tr>
-                <th>#</th>
-                <th>Nombre</th>
-                <th>Pago</th>
-                <th>Calificación</th>
-                <th>Observaciones</th>
-            </tr>
-        </thead>
-        <tbody id="tbody-calificaciones">
-            </tbody>
-    </table>
-
+  
   <!-- Sección Servicios -->
   <section id="servicios" class="container my-5 animate__animated animate__fadeInUp">
     <h2 class="text-center fw-bold mb-4">Nuestros Servicios</h2>
