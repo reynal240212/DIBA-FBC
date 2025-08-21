@@ -101,100 +101,90 @@ document.addEventListener("DOMContentLoaded", function () {
     categories.forEach(category => {
       const section = document.createElement("section");
       section.id = category.id;
+
       const heading = document.createElement("h2");
       heading.textContent = category.title;
       section.appendChild(heading);
+
       const row = document.createElement("div");
       row.classList.add("row");
+
       category.players.forEach(playerName => {
         const player = playersData.find(p => p.name.toLowerCase() === playerName.toLowerCase());
         const imageUrl = player ? player.imageUrl : defaultImageUrl;
+
         const card = document.createElement("div");
         card.classList.add("card", "m-2");
         card.style.width = "150px";
+
         const img = document.createElement("img");
         img.src = imageUrl;
         img.alt = playerName;
         img.classList.add("card-img-top");
+
         const cardBody = document.createElement("div");
         cardBody.classList.add("card-body", "p-2", "text-center");
         cardBody.innerHTML = `<strong style="font-size: 14px;">${playerName}</strong>`;
+
         card.appendChild(img);
         card.appendChild(cardBody);
         row.appendChild(card);
       });
+
       section.appendChild(row);
       playersContainer.appendChild(section);
     });
   }
+  // Arreglo de objetos con los datos de la tabla
+const datosJugadores = [
+  { numero: 1, nombre: "Juan T", pago: "x", calificacion: 8.0, observaciones: "" },
+  { numero: 2, nombre: "Santiago N.", pago: "Nogue", calificacion: 7.5, observaciones: "" },
+  { numero: 3, nombre: "Stiven M", pago: "x", calificacion: 7.5, observaciones: "" },
+  { numero: 4, nombre: "Joseph A", pago: "x", calificacion: 7.5, observaciones: "" },
+  { numero: 5, nombre: "Miguel A", pago: "x", calificacion: 7.5, observaciones: "" },
+  { numero: 6, nombre: "Dilan S", pago: "Nogue", calificacion: 8.0, observaciones: "" },
+  { numero: 7, nombre: "Larzon B.", pago: "x", calificacion: 7.5, observaciones: "" },
+  { numero: 8, nombre: "Rodríguez", pago: "x", calificacion: 8.0, observaciones: "" },
+  { numero: 9, nombre: "Yojainer", pago: "x", calificacion: 7.5, observaciones: "" },
+  { numero: 10, nombre: "Dany", pago: "x", calificacion: 8.0, observaciones: "" },
+  { numero: 11, nombre: "Jesús", pago: "x", calificacion: 7.5, observaciones: "" }
+];
 
-  // ================================
-  // --- CÓDIGO AÑADIDO ---
-  // CARGA DE TABLA DE GOLEADORES
-  // ================================
+// Función para generar la tabla dinámicamente
+function generarTabla() {
+  const tbody = document.getElementById('tbody-calificaciones');
 
-  // Definimos una función asíncrona para cargar los goleadores
-  async function cargarYMostrarGoleadores() {
-    const container = document.getElementById('goleadores-list');
-    const spinner = document.getElementById('loading-goleadores');
+  datosJugadores.forEach(jugador => {
+    // Crea una nueva fila (tr) por cada jugador
+    const fila = document.createElement('tr');
 
-    // Si no estamos en una página con la tabla de goleadores, no hacemos nada.
-    if (!container || !spinner) {
-      return;
-    }
+    // Crea y llena las celdas (td)
+    const celdaNumero = document.createElement('td');
+    celdaNumero.textContent = jugador.numero;
+    fila.appendChild(celdaNumero);
 
-    spinner.style.display = 'block';
+    const celdaNombre = document.createElement('td');
+    celdaNombre.textContent = jugador.nombre;
+    fila.appendChild(celdaNombre);
 
-    try {
-      // Importamos dinámicamente el cliente de Supabase y lo creamos.
-      // Esto soluciona el error 'supabase is not defined'.
-      const { createClient } = await import('https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm');
-      const supabaseUrl = 'https://wdnlqfiwuocmmcdowjyw.supabase.co';
-      const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndkbmxxZml3dW9jbW1jZG93anl3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg1MjY1ODAsImV4cCI6MjA2NDEwMjU4MH0.4SCS_NRDIYLQJ1XouqW111BxkMOlwMWOjje9gFTgW_Q';
-      const supabase = createClient(supabaseUrl, supabaseKey);
+    const celdaPago = document.createElement('td');
+    celdaPago.textContent = jugador.pago;
+    fila.appendChild(celdaPago);
 
-      // Obtenemos los datos de la tabla 'goleadores'
-      const { data, error } = await supabase
-        .from('goleadores')
-        .select('*')
-        .order('goles', { ascending: false });
+    const celdaCalificacion = document.createElement('td');
+    celdaCalificacion.textContent = jugador.calificacion.toFixed(1);
+    fila.appendChild(celdaCalificacion);
 
-      if (error) {
-        throw error; // Si hay un error, lo lanzamos para que lo capture el 'catch'
-      }
+    const celdaObservaciones = document.createElement('td');
+    celdaObservaciones.textContent = jugador.observaciones;
+    fila.appendChild(celdaObservaciones);
 
-      spinner.style.display = 'none';
-      container.innerHTML = ''; // Limpiamos el spinner
+    // Agrega la fila completa al cuerpo de la tabla
+    tbody.appendChild(fila);
+  });
+}
 
-      if (data.length > 0) {
-        // Si hay datos, los mostramos
-        data.forEach(goleador => {
-          const item = document.createElement('div');
-          item.className = 'goleador-item';
-          item.innerHTML = `
-            <div class="player-info">
-              <img src="${goleador.escudo_url || 'images/default_escudo.png'}" alt="Escudo de ${goleador.equipo}" class="escudo">
-              <div>
-                <div class="player-name">${goleador.nombre_jugador}</div>
-                <div class="team-name">${goleador.equipo}</div>
-              </div>
-            </div>
-            <div class="goal-count">${goleador.goles}</div>
-          `;
-          container.appendChild(item);
-        });
-      } else {
-        // Si no hay datos, mostramos un mensaje
-        container.innerHTML = '<p class="text-light text-center">No hay datos de goleadores disponibles.</p>';
-      }
-    } catch (error) {
-      console.error('Error al obtener goleadores:', error);
-      spinner.style.display = 'none';
-      container.innerHTML = `<p class="text-light text-center">Error al cargar datos: ${error.message}</p>`;
-    }
-  }
-
-  // Llamamos a la función para que se ejecute
-  cargarYMostrarGoleadores();
-  
+// Llama a la función cuando la página se carga
+document.addEventListener('DOMContentLoaded', generarTabla);
 });
+

@@ -235,33 +235,44 @@ img {
 
 /* --- Estilos Generales del Navbar --- */
 .custom-navbar {
-  background-color: #1c1c1c; /* Fondo oscuro, puedes cambiarlo a un negro puro #000 si prefieres */
-  padding: 8px 0; /* Relleno vertical reducido para una barra más delgada */
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4); /* Sombra suave para destacar */
+  background-color: #1c1c1c;
+  /* Fondo oscuro, puedes cambiarlo a un negro puro #000 si prefieres */
+  padding: 8px 0;
+  /* Relleno vertical reducido para una barra más delgada */
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+  /* Sombra suave para destacar */
   transition: all 0.3s ease-in-out;
-  border-bottom: 1px solid #333; /* Línea sutil en la parte inferior */
+  border-bottom: 1px solid #333;
+  /* Línea sutil en la parte inferior */
 }
 
 /* --- Logo --- */
 .custom-navbar .navbar-brand img {
-  height: 45px; /* Altura del logo reducida */
+  height: 45px;
+  /* Altura del logo reducida */
   transition: transform 0.3s ease;
 }
 
 .custom-navbar .navbar-brand img:hover {
-  transform: scale(1.08); /* Efecto de crecimiento sutil */
+  transform: scale(1.08);
+  /* Efecto de crecimiento sutil */
 }
 
 /* --- Enlaces de Navegación --- */
 .custom-navbar .navbar-nav .nav-link {
-  color: #f0f0f0; /* Un blanco ligeramente menos intenso */
-  font-weight: 500; /* Un grosor de fuente más refinado */
+  color: #f0f0f0;
+  /* Un blanco ligeramente menos intenso */
+  font-weight: 500;
+  /* Un grosor de fuente más refinado */
   text-transform: uppercase;
   letter-spacing: 1px;
-  font-size: 0.85rem; /* Tamaño de fuente más compacto */
-  padding: 8px 16px; /* Relleno ajustado para los enlaces */
+  font-size: 0.85rem;
+  /* Tamaño de fuente más compacto */
+  padding: 8px 16px;
+  /* Relleno ajustado para los enlaces */
   margin: 0 4px;
-  border-radius: 5px; /* Bordes ligeramente redondeados para un toque moderno */
+  border-radius: 5px;
+  /* Bordes ligeramente redondeados para un toque moderno */
   position: relative;
   transition: color 0.3s ease, background-color 0.3s ease;
 }
@@ -269,17 +280,22 @@ img {
 /* Efecto al pasar el mouse sobre los enlaces */
 .custom-navbar .navbar-nav .nav-link:hover,
 .custom-navbar .navbar-nav .nav-link.active {
-  color: #ffcc00; /* Color dorado de acento */
-  background-color: rgba(255, 255, 255, 0.05); /* Un fondo muy sutil */
+  color: #ffcc00;
+  /* Color dorado de acento */
+  background-color: rgba(255, 255, 255, 0.05);
+  /* Un fondo muy sutil */
 }
 
 /* --- Menú Desplegable (Dropdown) --- */
 .custom-navbar .dropdown-menu {
-  background-color: #222; /* Fondo del desplegable ligeramente diferente */
-  border: 1px solid #444; /* Borde sutil */
+  background-color: #222;
+  /* Fondo del desplegable ligeramente diferente */
+  border: 1px solid #444;
+  /* Borde sutil */
   border-radius: 8px;
   margin-top: 10px;
-  padding: 8px 0; /* Relleno vertical en el contenedor del desplegable */
+  padding: 8px 0;
+  /* Relleno vertical en el contenedor del desplegable */
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
 }
 
@@ -287,14 +303,16 @@ img {
   color: #f0f0f0;
   font-weight: 500;
   font-size: 0.85rem;
-  padding: 10px 24px; /* Relleno para que los ítems sean fáciles de clickear */
+  padding: 10px 24px;
+  /* Relleno para que los ítems sean fáciles de clickear */
   transition: all 0.2s ease;
 }
 
 .custom-navbar .dropdown-item:hover,
 .custom-navbar .dropdown-item:focus {
   background-color: #ffcc00;
-  color: #1c1c1c; /* Texto oscuro para un excelente contraste */
+  color: #1c1c1c;
+  /* Texto oscuro para un excelente contraste */
 }
 
 /* --- Ícono de Búsqueda --- */
@@ -329,8 +347,10 @@ img {
 @media (max-width: 991.98px) {
   .custom-navbar .navbar-collapse {
     margin-top: 10px;
-    background-color: rgba(28, 28, 28, 0.95); /* Fondo semitransparente */
-    backdrop-filter: blur(5px); /* Efecto de desenfoque para un look premium */
+    background-color: rgba(28, 28, 28, 0.95);
+    /* Fondo semitransparente */
+    backdrop-filter: blur(5px);
+    /* Efecto de desenfoque para un look premium */
     border-radius: 8px;
     padding: 16px;
     border: 1px solid #444;
@@ -365,6 +385,7 @@ img {
   position: relative;
   z-index: 3;
 }
+
 #patrocinadores {
   padding: 80px 0;
   background: linear-gradient(180deg, #ffffff 0%, #ffcc00 100%);
@@ -707,9 +728,11 @@ img {
   0% {
     box-shadow: 0 0 0 0 rgba(255, 68, 68, 0.7);
   }
+
   70% {
     box-shadow: 0 0 0 10px rgba(255, 68, 68, 0);
   }
+
   100% {
     box-shadow: 0 0 0 0 rgba(255, 68, 68, 0);
   }
@@ -1574,6 +1597,7 @@ th {
   .hero-title {
     font-size: 3rem;
   }
+
   .hero-subtitle {
     font-size: 1.25rem;
   }
@@ -1584,33 +1608,42 @@ th {
     --space-xl: 2rem;
     --space-lg: 1.5rem;
   }
+
   h1 {
     font-size: 2rem;
   }
+
   h2 {
     font-size: 1.75rem;
   }
+
   h3 {
     font-size: 1.5rem;
   }
+
   .hero {
     min-height: 70vh;
   }
+
   .hero-title {
     font-size: 2.5rem;
   }
+
   .hero-buttons {
     flex-direction: column;
     gap: var(--space-sm);
   }
+
   .footer-links {
     grid-template-columns: 1fr;
   }
+
   .footer-bottom {
     flex-direction: column;
     gap: 0.5rem;
     text-align: center;
   }
+
   .mapa-container iframe {
     height: 300px;
   }
@@ -1620,10 +1653,12 @@ th {
   .fixture-result .score {
     font-size: 1.05rem;
   }
+
   .fixture-item .team-logo {
     width: 36px;
     height: 36px;
   }
+
   .fixture-item .team-name {
     font-size: 1.05rem;
   }
@@ -1633,10 +1668,12 @@ th {
   .fixture-result .score {
     font-size: 1.15rem;
   }
+
   .fixture-date .day,
   .fixture-date .hour {
     font-size: 1rem;
   }
+
   .vs {
     font-size: 1.1rem;
   }
@@ -1646,18 +1683,22 @@ th {
   :root {
     --space-md: 1rem;
   }
+
   .hero-title {
     font-size: 2rem;
   }
+
   .hero-subtitle {
     font-size: 1rem;
   }
+
   .team-member img,
   .player-photo {
     width: 150px;
     height: 150px;
   }
 }
+
 /* ===============================================
    ESTILOS PARA LA TABLA DE GOLEADORES
 =============================================== */
@@ -1674,11 +1715,13 @@ th {
 }
 
 .goleadores-content {
-  background-color: rgba(0, 27, 114, 0.92); /* Azul oscuro semi-transparente */
+  background-color: rgba(0, 27, 114, 0.92);
+  /* Azul oscuro semi-transparente */
   padding: 2rem;
   border-radius: 8px;
   color: white;
-  font-family: 'Arial Black', sans-serif; /* Fuente de alto impacto */
+  font-family: 'Arial Black', sans-serif;
+  /* Fuente de alto impacto */
 }
 
 /* --- Encabezado --- */
@@ -1691,7 +1734,8 @@ th {
 .header-accent {
   width: 150px;
   height: 6px;
-  background-color: #ffd700; /* Amarillo dorado */
+  background-color: #ffd700;
+  /* Amarillo dorado */
   margin: 0 auto 1.5rem auto;
   border-radius: 3px;
 }
@@ -1708,7 +1752,8 @@ th {
   font-size: 2.5rem;
   font-weight: 900;
   text-transform: uppercase;
-  color: #c8ff00; /* Verde lima brillante */
+  color: #c8ff00;
+  /* Verde lima brillante */
   letter-spacing: 2px;
   margin-top: 0.5rem;
 }
@@ -1717,14 +1762,16 @@ th {
 .goleadores-list {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem; /* Espacio entre cada jugador */
+  gap: 0.75rem;
+  /* Espacio entre cada jugador */
 }
 
 .goleador-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #001b72; /* Un azul un poco más claro que el fondo */
+  background-color: #001b72;
+  /* Un azul un poco más claro que el fondo */
   padding: 0.75rem 1.5rem;
   border-radius: 10px;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
@@ -1732,7 +1779,7 @@ th {
 
 .goleador-item:hover {
   transform: scale(1.02);
-  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
 }
 
 .player-info {
@@ -1787,19 +1834,90 @@ th {
   .goleadores-content {
     padding: 1.5rem;
   }
+
   .goleadores-header h1 {
     font-size: 1.8rem;
   }
+
   .goleadores-header h2 {
     font-size: 1.2rem;
   }
+
   .goleador-item {
     padding: 0.5rem 1rem;
   }
+
   .player-name {
     font-size: 0.9rem;
   }
+
   .goal-count {
     font-size: 1.5rem;
   }
+}
+
+
+/* Rating Scale Styles */
+.rating-scale {
+  display: flex;
+  justify-content: center;
+  margin-top: 50px;
+  gap: 60px;
+  margin-bottom: 20px;
+}
+
+
+.rating-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+
+.rating-value {
+  width: 50px;
+  height: 30px;
+  border-radius: 5px;
+  color: white;
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+
+.rating-description {
+  font-size: 0.8em;
+  color: #555;
+  text-align: center;
+}
+
+
+.rating-value.grey {
+  background-color: #555;
+}
+
+.rating-value.red {
+  background-color: #e74c3c;
+}
+
+.rating-value.orange {
+  background-color: #e67e22;
+}
+
+.rating-value.dark-orange {
+  background-color: #f39c12;
+}
+
+.rating-value.light-green {
+  background-color: #90ee90;
+}
+
+.rating-value.green {
+  background-color: #27ae60;
+}
+
+.rating-value.blue {
+  background-color: #3498db;
 }

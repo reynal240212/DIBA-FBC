@@ -43,7 +43,7 @@
     }
   </script>
   <div id="navbar-container"></div>
-  
+
   <div id="hero-container"></div>
   <div id="patrocinadores-container"></div>
 
@@ -65,6 +65,41 @@
 
 
       </div>
+      <div class="rating-scale">
+        <div class="rating-item">
+          <div class="rating-value grey">—</div>
+          <div class="rating-description">&lt;10MIN</div>
+        </div>
+        <div class="rating-item">
+          <div class="rating-value red">5.1</div>
+          <div class="rating-description">0.0–5.9</div>
+        </div>
+        <div class="rating-item">
+          <div class="rating-value orange">6.2</div>
+          <div class="rating-description">6.0–6.4</div>
+        </div>
+        <div class="rating-item">
+          <div class="rating-value dark-orange">6.7</div>
+          <div class="rating-description">6.5–6.9</div>
+        </div>
+        <div class="rating-item">
+          <div class="rating-value light-green">7.2</div>
+          <div class="rating-description">7.0–7.9</div>
+        </div>
+        <div class="rating-item">
+          <div class="rating-value green">8.5</div>
+          <div class="rating-description">8.0–10</div>
+        </div>
+        <div class="rating-item">
+          <div class="rating-value blue">10</div>
+          <div class="rating-description">BEST</div>
+        </div>
+      </div>
+
+
+      <div class="gradient-bar"></div>
+
+     
 
       <!-- Contenedor para la lista (se llenará con JavaScript) -->
       <div id="goleadores-list" class="goleadores-list">
@@ -93,6 +128,20 @@
       </div>
     </div>
   </section>
+  <!-- Sección Estadistica de partido -->
+   <table>
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Nombre</th>
+                <th>Pago</th>
+                <th>Calificación</th>
+                <th>Observaciones</th>
+            </tr>
+        </thead>
+        <tbody id="tbody-calificaciones">
+            </tbody>
+    </table>
 
   <!-- Sección Servicios -->
   <section id="servicios" class="container my-5 animate__animated animate__fadeInUp">
