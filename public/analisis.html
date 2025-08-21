@@ -7,110 +7,125 @@
 
   <!-- Ícono del sitio -->
   <link rel="icon" href="images/ESCUDO.ico" sizes="32x32" />
+
+  <!-- Estilos -->
   <link rel="stylesheet" href="styles/analisis.css" />
   <link rel="stylesheet" href="styles/styles.css" />
 
-  <!-- Meta descripción -->
+  <!-- Meta etiquetas -->
   <meta name="description" content="Análisis detallado del rendimiento, estadísticas y resultados de DIBA FBC." />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <!-- Bootstrap CSS -->
+  <!-- Bibliotecas Externas -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
-  <!-- Font Awesome para íconos -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-  <!-- Bootstrap Icons -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" />
 
 </head>
 
 <body>
+  <!-- Contenedores para componentes cargados dinámicamente -->
   <div id="navbar-container"></div>
   <div id="hero-container"></div>
   <div id="patrocinadores-container"></div>
 
+  <!-- ================= CONTENIDO PRINCIPAL REORGANIZADO ================= -->
+  <main class="container py-5 mt-4">
 
-  <!-- ================= CONTENIDO PRINCIPAL (REORGANIZADO) ================= -->
-  <div class="container" style="padding-top: 80px; padding-bottom: 40px;">
-
-    <!-- ========= SECCIÓN 1: ANÁLISIS TORNEO SUROCCIDENTE 2025 ========= -->
+    <!-- ========= SECCIÓN 1: ANÁLISIS DEL TORNEO SUROCCIDENTE 2025 ========= -->
     <section id="suroccidente-2025" class="mb-5">
-      <h2 class="text-center mb-4">Análisis de Rendimiento: Torneo Suroccidente 2025</h2>
+      <header class="text-center mb-4">
+        <h2>Análisis de Rendimiento: Torneo Suroccidente 2025</h2>
+        <hr class="w-50 mx-auto">
+      </header>
 
       <!-- Estadísticas Generales -->
-      <div class="row stats-section mb-4">
-        <div class="col-6 col-md-3 stat-item">
-          <p>Victorias</p>
-          <h1 class="stat-number">50%</h1>
-          <p class="stat-season">5 de 10 partidos</p>
+      <div class="row text-center stats-section mb-4 g-3">
+        <div class="col-6 col-md-3">
+          <div class="stat-item p-3 rounded">
+            <p class="mb-1">Victorias</p>
+            <h1 class="stat-number">50%</h1>
+            <p class="stat-season text-muted">5 de 10 partidos</p>
+          </div>
         </div>
-        <div class="col-6 col-md-3 stat-item">
-          <p>Empates</p>
-          <h1 class="stat-number">30%</h1>
-          <p class="stat-season">3 de 10 partidos</p>
+        <div class="col-6 col-md-3">
+          <div class="stat-item p-3 rounded">
+            <p class="mb-1">Empates</p>
+            <h1 class="stat-number">30%</h1>
+            <p class="stat-season text-muted">3 de 10 partidos</p>
+          </div>
         </div>
-        <div class="col-6 col-md-3 stat-item">
-          <p>Derrotas</p>
-          <h1 class="stat-number">20%</h1>
-          <p class="stat-season">2 de 10 partidos</p>
+        <div class="col-6 col-md-3">
+          <div class="stat-item p-3 rounded">
+            <p class="mb-1">Derrotas</p>
+            <h1 class="stat-number">20%</h1>
+            <p class="stat-season text-muted">2 de 10 partidos</p>
+          </div>
         </div>
-        <div class="col-6 col-md-3 stat-item">
-          <p>Goles / Partido</p>
-          <h1 class="stat-number">2.1</h1>
-          <p class="stat-season">21 goles en 10 partidos</p>
+        <div class="col-6 col-md-3">
+          <div class="stat-item p-3 rounded">
+            <p class="mb-1">Goles / Partido</p>
+            <h1 class="stat-number">2.1</h1>
+            <p class="stat-season text-muted">21 goles en 10 partidos</p>
+          </div>
         </div>
       </div>
 
-      <div class="row">
-        <!-- Columna Izquierda: Resultados y Goleadores -->
+      <div class="row g-4">
+        <!-- Columna de Resultados y Goleadores -->
         <div class="col-lg-6">
-          <!-- Últimos Resultados -->
-          <div class="content-section mb-4">
-            <h4><i class="bi bi-calendar-event-fill"></i> Últimos Resultados</h4>
-            <ul class="results-list">
-              <li><span>Diba 4 - Estrellas Roja 0</span> <span class="result-badge result-win">Victoria</span></li>
-              <li><span>Diba 2 - Ocam 3</span> <span class="result-badge result-loss">Derrota</span></li>
-              <li><span>Diba 3 - Eparquio 1</span> <span class="result-badge result-win">Victoria</span></li>
-              <li><span>Diba 1 - Barranquillera 0</span> <span class="result-badge result-win">Victoria</span></li>
-              <li><span>Diba 3 - Promesas 3</span> <span class="result-badge result-draw">Empate</span></li>
-              <li><span>Diba 1 - Estrella Roja 1</span> <span class="result-badge result-draw">Empate</span></li>
-              <li><span>Diba 4 - Promesas 0</span> <span class="result-badge result-win">Victoria</span></li>
-              <li><span>Diba 0 - Ballesteros 3</span> <span class="result-badge result-loss">Derrota</span></li>
-              <li><span>Diba 2 - Ocam 0</span> <span class="result-badge result-win">Victoria</span></li>
-              <li><span>Diba 1 - Eparquio 1</span> <span class="result-badge result-draw">Empate</span></li>
-            </ul>
-          </div>
-          <!-- Goleadores -->
-          <div class="content-section">
-            <h4><i class="bi bi-trophy-fill"></i> Goleadores del Torneo</h4>
-            <ul class="goalscorers-list">
-              <li><span>Dilan</span> <span class="goals">5 Goles</span></li>
-              <li><span>Rodríguez</span> <span class="goals">4 Goles</span></li>
-              <li><span>Santiago</span> <span class="goals">4 Goles</span></li>
-              <li><span>Yojainer</span> <span class="goals">3 Goles</span></li>
-              <li><span>Joseph</span> <span class="goals">2 Goles</span></li>
-              <li><span>Nelson</span> <span class="goals">1 Gol</span></li>
-              <li><span>Juan T</span> <span class="goals">1 Gol</span></li>
-            </ul>
-          </div>
-        </div>
-        <!-- Columna Derecha: Análisis Táctico -->
-        <div class="col-lg-6">
-          <div class="content-section">
-            <h4><i class="bi bi-clipboard2-data-fill"></i> Análisis Táctico</h4>
-            <div class="analysis-card mb-3">
-              <h5><i class="bi bi-graph-up-arrow icon-strength"></i> Fortalezas</h5>
-              <ul>
-                <li>Equipo ofensivo sólido (promedio 2.1 goles/partido).</li>
-                <li>Buena capacidad para competir y ganar (5 victorias en 10 partidos).</li>
+          <div class="card h-100">
+            <div class="card-body">
+              <h4 class="card-title"><i class="bi bi-calendar-event-fill me-2"></i>Últimos Resultados</h4>
+              <ul class="list-group list-group-flush results-list">
+                <li class="list-group-item d-flex justify-content-between align-items-center">Diba 4 - Estrellas Roja 0 <span class="result-badge result-win">Victoria</span></li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">Diba 2 - Ocam 3 <span class="result-badge result-loss">Derrota</span></li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">Diba 3 - Eparquio 1 <span class="result-badge result-win">Victoria</span></li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">Diba 1 - Barranquillera 0 <span class="result-badge result-win">Victoria</span></li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">Diba 3 - Promesas 3 <span class="result-badge result-draw">Empate</span></li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">Diba 1 - Estrella Roja 1 <span class="result-badge result-draw">Empate</span></li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">Diba 4 - Promesas 0 <span class="result-badge result-win">Victoria</span></li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">Diba 0 - Ballesteros 3 <span class="result-badge result-loss">Derrota</span></li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">Diba 2 - Ocam 0 <span class="result-badge result-win">Victoria</span></li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">Diba 1 - Eparquio 1 <span class="result-badge result-draw">Empate</span></li>
               </ul>
             </div>
-            <div class="analysis-card">
-              <h5><i class="bi bi-graph-down-arrow icon-weakness"></i> Debilidades a Mejorar</h5>
-              <ul>
-                <li>Mejorar consistencia para cerrar partidos (3 empates, 2 derrotas).</li>
-                <li>Dificultades puntuales en ataque (ej. 0-3 vs Ballesteros).</li>
-                <li>Reducir goles en contra (12 goles en 10 partidos).</li>
+          </div>
+        </div>
+        <!-- Columna de Goleadores y Análisis Táctico -->
+        <div class="col-lg-6">
+          <div class="card mb-4">
+            <div class="card-body">
+              <h4 class="card-title"><i class="bi bi-trophy-fill me-2"></i>Goleadores del Torneo</h4>
+              <ul class="list-group list-group-flush goalscorers-list">
+                <li class="list-group-item d-flex justify-content-between"><span>Dilan</span> <span class="goals">5 Goles</span></li>
+                <li class="list-group-item d-flex justify-content-between"><span>Rodríguez</span> <span class="goals">4 Goles</span></li>
+                <li class="list-group-item d-flex justify-content-between"><span>Santiago</span> <span class="goals">4 Goles</span></li>
+                <li class="list-group-item d-flex justify-content-between"><span>Yojainer</span> <span class="goals">3 Goles</span></li>
+                <li class="list-group-item d-flex justify-content-between"><span>Joseph</span> <span class="goals">2 Goles</span></li>
+                <li class="list-group-item d-flex justify-content-between"><span>Nelson</span> <span class="goals">1 Gol</span></li>
+                <li class="list-group-item d-flex justify-content-between"><span>Juan T</span> <span class="goals">1 Gol</span></li>
               </ul>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-body">
+              <h4 class="card-title"><i class="bi bi-clipboard2-data-fill me-2"></i>Análisis Táctico</h4>
+              <div class="analysis-card mb-3">
+                <h5><i class="bi bi-graph-up-arrow icon-strength"></i> Fortalezas</h5>
+                <ul>
+                  <li>Equipo ofensivo sólido (promedio 2.1 goles/partido).</li>
+                  <li>Buena capacidad para competir y ganar (5 victorias en 10 partidos).</li>
+                </ul>
+              </div>
+              <div class="analysis-card">
+                <h5><i class="bi bi-graph-down-arrow icon-weakness"></i> Debilidades a Mejorar</h5>
+                <ul>
+                  <li>Mejorar consistencia para cerrar partidos (3 empates, 2 derrotas).</li>
+                  <li>Dificultades puntuales en ataque (ej. 0-3 vs Ballesteros).</li>
+                  <li>Reducir goles en contra (12 goles en 10 partidos).</li>
+                </ul>
+              </div>
             </div>
           </div>
         </div>
@@ -119,114 +134,202 @@
 
     <hr class="my-5">
 
-    <!-- ========= SECCIÓN 2: ANÁLISIS TORNEO KIDSSOCCER LA PRADERA ========= -->
+    <!-- ========= SECCIÓN 2: ANÁLISIS DEL TORNEO KIDSSOCCER LA PRADERA ========= -->
     <section id="kidssoccer" class="mb-5">
-      <h2 class="text-center mb-4">Análisis de Rendimiento: Torneo Kidssoccer La Pradera</h2>
-      <h3 class="text-center text-muted mb-4 h5">Categorías 2014/2015/2016</h3>
+      <header class="text-center mb-4">
+        <h2>Análisis de Rendimiento: Torneo Kidssoccer La Pradera</h2>
+        <h3 class="text-muted h5">Categorías 2014/2015/2016</h3>
+        <hr class="w-50 mx-auto">
+      </header>
 
       <!-- Estadísticas Generales -->
-      <div class="row stats-section mb-4">
-        <div class="col-6 col-md-3 stat-item">
-          <p>Victorias</p>
-          <h1 class="stat-number">60%</h1>
-          <p class="stat-season">3 de 5 partidos</p>
+      <div class="row text-center stats-section mb-4 g-3">
+        <div class="col-6 col-md-3">
+          <div class="stat-item p-3 rounded">
+            <p class="mb-1">Victorias</p>
+            <h1 class="stat-number">60%</h1>
+            <p class="stat-season text-muted">3 de 5 partidos</p>
+          </div>
         </div>
-        <div class="col-6 col-md-3 stat-item">
-          <p>Empates</p>
-          <h1 class="stat-number">0%</h1>
-          <p class="stat-season">0 de 5 partidos</p>
+        <div class="col-6 col-md-3">
+          <div class="stat-item p-3 rounded">
+            <p class="mb-1">Empates</p>
+            <h1 class="stat-number">0%</h1>
+            <p class="stat-season text-muted">0 de 5 partidos</p>
+          </div>
         </div>
-        <div class="col-6 col-md-3 stat-item">
-          <p>Derrotas</p>
-          <h1 class="stat-number">40%</h1>
-          <p class="stat-season">2 de 5 partidos</p>
+        <div class="col-6 col-md-3">
+          <div class="stat-item p-3 rounded">
+            <p class="mb-1">Derrotas</p>
+            <h1 class="stat-number">40%</h1>
+            <p class="stat-season text-muted">2 de 5 partidos</p>
+          </div>
         </div>
-        <div class="col-6 col-md-3 stat-item">
-          <p>Goles / Partido</p>
-          <h1 class="stat-number">2.0</h1>
-          <p class="stat-season">10 goles en 5 partidos</p>
+        <div class="col-6 col-md-3">
+          <div class="stat-item p-3 rounded">
+            <p class="mb-1">Goles / Partido</p>
+            <h1 class="stat-number">2.0</h1>
+            <p class="stat-season text-muted">10 goles en 5 partidos</p>
+          </div>
         </div>
       </div>
 
-      <div class="row">
-        <!-- Columna Izquierda: Resultados y Goleadores -->
+      <div class="row g-4">
+        <!-- Columna Izquierda: Resultados y Análisis -->
         <div class="col-lg-6">
-          <!-- Últimos Resultados -->
-          <div class="content-section mb-4">
-            <h4><i class="bi bi-calendar-event-fill"></i> Últimos Resultados</h4>
-            <ul class="results-list">
-              <li><span>Diba 0 - Escue Barranquillera 8</span> <span class="result-badge result-loss">Derrota</span>
-              </li>
-              <li><span>Diba 0 - Amigos del Futuro 3</span> <span class="result-badge result-loss">Derrota</span></li>
-              <li><span>Diba 4 - Nuevo Horizonte 0</span> <span class="result-badge result-win">Victoria</span></li>
-              <li><span>Diba 3 - Quiroz 0</span> <span class="result-badge result-win">Victoria</span></li>
-              <li><span>Diba 3 - La Maciá 0</span> <span class="result-badge result-win">Victoria</span></li>
-            </ul>
+          <div class="card mb-4">
+            <div class="card-body">
+              <h4 class="card-title"><i class="bi bi-calendar-event-fill me-2"></i>Últimos Resultados</h4>
+              <ul class="list-group list-group-flush results-list">
+                <li class="list-group-item d-flex justify-content-between align-items-center">Diba 0 - Escue Barranquillera 8 <span class="result-badge result-loss">Derrota</span></li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">Diba 0 - Amigos del Futuro 3 <span class="result-badge result-loss">Derrota</span></li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">Diba 4 - Nuevo Horizonte 0 <span class="result-badge result-win">Victoria</span></li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">Diba 3 - Quiroz 0 <span class="result-badge result-win">Victoria</span></li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">Diba 3 - La Maciá 0 <span class="result-badge result-win">Victoria</span></li>
+              </ul>
+            </div>
           </div>
-          <!-- Goleadores -->
-          <div class="content-section">
-            <h4><i class="bi bi-trophy-fill"></i> Goleadores Cat. 2014/2015/2016</h4>
-            <ul class="goalscorers-list">
-              <li><span>Sebastián</span> <span class="goals">4 Goles</span></li>
-              <li><span>Rey David</span> <span class="goals">2 Goles</span></li>
-              <li><span>Juan</span> <span class="goals">2 Goles</span></li>
-              <li><span>Isaac</span> <span class="goals">1 Gol</span></li>
-              <li><span>Mario</span> <span class="goals">1 Gol</span></li>
-            </ul>
+          <div class="card">
+            <div class="card-body">
+              <h4 class="card-title"><i class="bi bi-clipboard2-data-fill me-2"></i>Análisis Táctico</h4>
+              <div class="analysis-card mb-3">
+                <h5><i class="bi bi-graph-up-arrow icon-strength"></i> Fortalezas</h5>
+                <ul>
+                  <li>El equipo ha demostrado <strong>capacidad ofensiva</strong>, con un promedio de <strong>2.0 goles por partido</strong>.</li>
+                  <li>Buena capacidad para competir y <strong>ganar (3 victorias en 5 partidos)</strong>.</li>
+                  <li>Actuaciones ofensivas sólidas en partidos clave.</li>
+                </ul>
+              </div>
+              <div class="analysis-card">
+                <h5><i class="bi bi-graph-down-arrow icon-weakness"></i> Debilidades a Mejorar</h5>
+                <ul>
+                  <li><strong>Defensa inconsistente:</strong> Se han recibido <strong>11 goles en 5 partidos</strong> (promedio de 2.2 en contra).</li>
+                  <li><strong>Resultados dispares:</strong> La variabilidad en los marcadores sugiere falta de consistencia.</li>
+                </ul>
+              </div>
+            </div>
           </div>
         </div>
-        <!-- Columna Derecha: Análisis Táctico y otros goleadores -->
+        <!-- Columna Derecha: Goleadores por Categoría -->
         <div class="col-lg-6">
-          <!-- Análisis Táctico -->
-          <div class="content-section mb-4">
-            <h4><i class="bi bi-clipboard2-data-fill"></i> Análisis Táctico</h4>
-            <div class="analysis-card mb-3">
-              <h5><i class="bi bi-graph-up-arrow icon-strength"></i> Fortalezas</h5>
-              <ul>
-                <li>El equipo ha demostrado **capacidad ofensiva**, con un promedio de **2.0 goles por partido**.</li>
-                <li>Buena capacidad para competir y **ganar (3 victorias en 5 partidos)**.</li>
-                <li>Actuaciones ofensivas sólidas en partidos clave.</li>
-              </ul>
-            </div>
-            <div class="analysis-card">
-              <h5><i class="bi bi-graph-down-arrow icon-weakness"></i> Debilidades a Mejorar</h5>
-              <ul>
-                <li>**Defensa inconsistente:** Se han recibido **11 goles en 5 partidos** (promedio de 2.2 en contra).
-                </li>
-                <li>**Resultados dispares:** La variabilidad en los marcadores sugiere falta de consistencia.</li>
+          <div class="card mb-4">
+            <div class="card-body">
+              <h4 class="card-title"><i class="bi bi-trophy-fill me-2"></i>Goleadores Cat. 2014/2015/2016</h4>
+              <ul class="list-group list-group-flush goalscorers-list">
+                <li class="list-group-item d-flex justify-content-between"><span>Sebastián</span> <span class="goals">4 Goles</span></li>
+                <li class="list-group-item d-flex justify-content-between"><span>Rey David</span> <span class="goals">2 Goles</span></li>
+                <li class="list-group-item d-flex justify-content-between"><span>Juan</span> <span class="goals">2 Goles</span></li>
+                <li class="list-group-item d-flex justify-content-between"><span>Isaac</span> <span class="goals">1 Gol</span></li>
+                <li class="list-group-item d-flex justify-content-between"><span>Mario</span> <span class="goals">1 Gol</span></li>
               </ul>
             </div>
           </div>
-          <!-- Goleadores Categoría 2012 -->
-          <div class="content-section">
-            <h4><i class="bi bi-trophy-fill"></i> Goleadores Cat. 2012</h4>
-            <ul class="goalscorers-list">
-              <li><span>Sebastián</span> <span class="goals">4 Goles</span></li>
-              <li><span>Rey David</span> <span class="goals">2 Goles</span></li>
-              <li><span>Juan </span> <span class="goals">2 Goles</span></li>
-              <li><span>Isaac Ventura</span> <span class="goals">1 Gol</span></li>
-              <li><span>Mario</span> <span class="goals">1 Gol</span></li>
-            </ul>
+          <div class="card">
+            <div class="card-body">
+              <h4 class="card-title"><i class="bi bi-trophy-fill me-2"></i>Goleadores Cat. 2012</h4>
+              <ul class="list-group list-group-flush goalscorers-list">
+                <li class="list-group-item d-flex justify-content-between"><span>Sebastián</span> <span class="goals">4 Goles</span></li>
+                <li class="list-group-item d-flex justify-content-between"><span>Rey David</span> <span class="goals">2 Goles</span></li>
+                <li class="list-group-item d-flex justify-content-between"><span>Juan</span> <span class="goals">2 Goles</span></li>
+                <li class="list-group-item d-flex justify-content-between"><span>Isaac Ventura</span> <span class="goals">1 Gol</span></li>
+                <li class="list-group-item d-flex justify-content-between"><span>Mario</span> <span class="goals">1 Gol</span></li>
+              </ul>
+            </div>
           </div>
         </div>
       </div>
     </section>
 
-  </div>
+    <!-- ========= SECCIÓN 3: CONTROL Y CALIFICACIONES ========= -->
+    <section id="control-general" class="mb-5">
+      <header class="text-center mb-4">
+        <h2>Control y Calificaciones</h2>
+        <hr class="w-50 mx-auto">
+      </header>
 
-  <!-- ================= FOOTER (SIN CAMBIOS) ================= -->
+      <div class="row g-4">
+        <!-- Columna de la Planilla de Control -->
+        <div class="col-lg-7">
+          <div class="card h-100">
+            <div class="card-body">
+              <div class="control-header mb-3 text-center">
+                <h3 class="card-title">Planilla General de Control</h3>
+                <p class="text-muted">Fecha: 17/08/25</p>
+              </div>
+              <div class="table-responsive">
+                <table class="table table-striped table-hover control-table">
+                  <thead class="table-dark">
+                    <tr>
+                      <th scope="col">#</th>
+                      <th scope="col">Nombre</th>
+                      <th scope="col" class="text-center">Calificación</th>
+                    </tr>
+                  </thead>
+                  <tbody id="tbody-calificaciones">
+                    <!-- Las filas se insertarán aquí dinámicamente -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Columna de la Escala de Calificación -->
+        <div class="col-lg-5">
+          <div class="card h-100">
+            <div class="card-body">
+              <h4 class="card-title text-center mb-4">Escala de Calificación</h4>
+              <div class="rating-scale">
+                <div class="rating-item">
+                  <div class="rating-value grey">—</div>
+                  <div class="rating-description">&lt;10MIN</div>
+                </div>
+                <div class="rating-item">
+                  <div class="rating-value red">5.1</div>
+                  <div class="rating-description">0.0–5.9</div>
+                </div>
+                <div class="rating-item">
+                  <div class="rating-value orange">6.2</div>
+                  <div class="rating-description">6.0–6.4</div>
+                </div>
+                <div class="rating-item">
+                  <div class="rating-value dark-orange">6.7</div>
+                  <div class="rating-description">6.5–6.9</div>
+                </div>
+                <div class="rating-item">
+                  <div class="rating-value light-green">7.2</div>
+                  <div class="rating-description">7.0–7.9</div>
+                </div>
+                <div class="rating-item">
+                  <div class="rating-value green">8.5</div>
+                  <div class="rating-description">8.0–10</div>
+                </div>
+                <div class="rating-item">
+                  <div class="rating-value blue">10</div>
+                  <div class="rating-description">BEST</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ================= FOOTER ================= -->
   <div id="footer-container"></div>
 
-  <!-- Scripts (SIN CAMBIOS) -->
+  <!-- Scripts -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
   <script src="scripts/loadComponents.js"></script>
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="scripts/main.js"></script>
   <script src="scripts/script.js"></script>
+
+  <!-- Datos Estructurados JSON-LD -->
   <script type="application/ld+json">
     {}
   </script>
-
 </body>
 
 </html>
