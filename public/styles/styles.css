@@ -1921,3 +1921,83 @@ th {
 .rating-value.blue {
   background-color: #3498db;
 }
+/* ===============================================
+   ESTILOS PARA LA TABLA DE CALIFICACIONES (MINIMALISTA)
+=============================================== */
+
+/* Contenedor principal para la tabla */
+.calificaciones-container {
+  background-color: #ffffff;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08); /* Sombra sutil */
+  color: #333333;
+  font-family: 'Inter', sans-serif; /* Usa una fuente similar a la del sitio */
+  max-width: 900px;
+  margin: 20px auto;
+  border: 1px solid #e0e0e0;
+}
+
+/* Encabezado y títulos */
+.calificaciones-header {
+  text-align: left;
+  margin-bottom: 2rem;
+}
+
+.calificaciones-header h1 {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #111111;
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+}
+
+.calificaciones-header p {
+  font-size: 0.9rem;
+  color: #666666;
+  margin-top: 0;
+}
+
+/* Estilos de la tabla */
+.calificaciones-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+/* Estilos para el encabezado de la tabla (thead) */
+.calificaciones-table thead {
+  border-bottom: 2px solid #e0e0e0;
+}
+
+.calificaciones-table th {
+  font-weight: 500;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  color: #666666;
+  padding: 12px 15px;
+  text-align: left;
+  background-color: #f8f8f8;
+}
+
+/* Estilos para el cuerpo de la tabla (tbody) */
+.calificaciones-table tbody tr {
+  transition: background-color 0.2s ease;
+}
+
+.calificaciones-table tbody tr:hover {
+  background-color: #f5f5f5;
+}
+
+/* Estilos para las celdas (td) */
+.calificaciones-table td {
+  padding: 12px 15px;
+  border-bottom: 1px solid #f0f0f0;
+  color: #444444;
+}
+
+/* Estilos para la calificación */
+.calificacion-item {
+  font-weight: 600;
+  text-align: center;
+  width: 100px; /* Ancho fijo para la columna de calificación */
+}
