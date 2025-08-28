@@ -357,35 +357,6 @@ img {
   }
 }
 
-.hero-deportivo {
-  position: relative;
-  height: 100vh;
-  overflow: hidden;
-}
-
-.hero-deportivo .carousel-item {
-  height: 100vh;
-  background-size: cover;
-  background-position: center;
-  transition: transform 1s ease, opacity 1s ease;
-}
-
-.hero-deportivo .hero-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgb(0, 0, 0);
-  opacity: 0.6;
-  z-index: 1;
-}
-
-.hero-deportivo .hero-content {
-  position: relative;
-  z-index: 3;
-}
-
 #patrocinadores {
   padding: 80px 0;
   background: linear-gradient(180deg, #ffffff 0%, #ffcc00 100%);
@@ -1593,61 +1564,59 @@ th {
   border-radius: 8px;
 }
 
-@media (max-width: 992px) {
-  .hero-title {
-    font-size: 3rem;
-  }
-
-  .hero-subtitle {
-    font-size: 1.25rem;
-  }
+/* Estilos para la sección hero */
+.hero-deportivo {
+  position: relative;
+  /* Esencial para posicionar el pseudo-elemento */
+  background: url('../images/estadio.jpg') no-repeat center center/cover;
+  /* Imagen de fondo */
+  height: 100vh;
+  /* O la altura que desees, por ejemplo, 700px */
+  display: flex;
+  /* Para centrar el contenido vertical y horizontalmente */
+  align-items: center;
+  /* Centrado vertical */
+  justify-content: center;
+  /* Centrado horizontal */
+  z-index: 1;
+  /* Asegura que la sección esté por encima del pseudo-elemento */
 }
 
-@media (max-width: 768px) {
-  :root {
-    --space-xl: 2rem;
-    --space-lg: 1.5rem;
-  }
-
-  h1 {
-    font-size: 2rem;
-  }
-
-  h2 {
-    font-size: 1.75rem;
-  }
-
-  h3 {
-    font-size: 1.5rem;
-  }
-
-  .hero {
-    min-height: 70vh;
-  }
-
-  .hero-title {
-    font-size: 2.5rem;
-  }
-
-  .hero-buttons {
-    flex-direction: column;
-    gap: var(--space-sm);
-  }
-
-  .footer-links {
-    grid-template-columns: 1fr;
-  }
-
-  .footer-bottom {
-    flex-direction: column;
-    gap: 0.5rem;
-    text-align: center;
-  }
-
-  .mapa-container iframe {
-    height: 300px;
-  }
+/* Pseudo-elemento para el overlay */
+.hero-deportivo::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  /* Color y opacidad del overlay */
+  z-index: -1;
+  /* Posiciona el overlay detrás del contenido */
 }
+
+/* Estilos para el contenido, si necesitas ajustarlos */
+.hero-content {
+  position: relative;
+  z-index: 2;
+  /* Asegura que el contenido esté por encima del overlay */
+}
+
+.footer-links {
+  grid-template-columns: 1fr;
+}
+
+.footer-bottom {
+  flex-direction: column;
+  gap: 0.5rem;
+  text-align: center;
+}
+
+.mapa-container iframe {
+  height: 300px;
+}
+
 
 @media (min-width: 576px) {
   .fixture-result .score {
@@ -1921,6 +1890,7 @@ th {
 .rating-value.blue {
   background-color: #3498db;
 }
+
 /* ===============================================
    ESTILOS PARA LA TABLA DE CALIFICACIONES (MINIMALISTA)
 =============================================== */
@@ -1930,9 +1900,11 @@ th {
   background-color: #ffffff;
   padding: 30px;
   border-radius: 12px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08); /* Sombra sutil */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  /* Sombra sutil */
   color: #333333;
-  font-family: 'Inter', sans-serif; /* Usa una fuente similar a la del sitio */
+  font-family: 'Inter', sans-serif;
+  /* Usa una fuente similar a la del sitio */
   max-width: 900px;
   margin: 20px auto;
   border: 1px solid #e0e0e0;
@@ -1999,5 +1971,21 @@ th {
 .calificacion-item {
   font-weight: 600;
   text-align: center;
-  width: 100px; /* Ancho fijo para la columna de calificación */
+  width: 100px;
+  /* Ancho fijo para la columna de calificación */
+}
+
+/* Estilos para la sección de indumentaria */
+.indumentaria-seccion {
+  background-color: #f8f9fa;
+  /* Un color de fondo gris claro para diferenciar la sección */
+}
+
+/* Si quieres que la imagen tenga un efecto al pasar el mouse */
+.indumentaria-seccion img {
+  transition: transform 0.3s ease-in-out;
+}
+
+.indumentaria-seccion img:hover {
+  transform: scale(1.02);
 }
