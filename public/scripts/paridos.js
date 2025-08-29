@@ -276,7 +276,12 @@ async function mostrarPartidosDIBA() {
   });
 
   dibaContainer.appendChild(fragment);
+
+  
+
+    
 }
+
 
 // Ejecutar automáticamente al cargar la página
 mostrarClasificacion();
