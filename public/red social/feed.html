@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>DIBA FBC | Feed</title>
+    <link rel="icon" href="../images/ESCUDO.ico" sizes="32x32">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta property="og:title" content="DIBA FBC | Inicio, Historia y Patrocinadores" />
+    <meta property="og:description" content="Descubre la historia, servicios, equipo y patrocinadores de DIBA FBC." />
+    <meta property="og:image" content="https://diba-fbc.vercel.app/images/ESCUDO.png" />
+    <meta property="og:url" content="https://diba-fbc.vercel.app/" />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="DIBA FBC | Inicio, Historia y Patrocinadores" />
+    <meta name="twitter:description" content="Club de fútbol amateur en Barranquilla. Conoce nuestro equipo y patrocinadores." />
+    <meta name="twitter:image" content="https://diba-fbc.vercel.app/images/ESCUDO.png" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" />
+    <link rel="stylesheet" href="styles/styles.css" />
+    <link rel="stylesheet" href="styles/socialDIBA.css" />
+    <link rel="stylesheet" href="styles/background-animation.css" />
+    <link rel="manifest" href="manifest.json" />
+
+    <style>
+        /* Estilos CSS adicionales para la estructura de 3 columnas */
+        body {
+            background-color: #ffffff; /* Fondo oscuro */
+        }
+        .main-content {
+            display: flex;
+            justify-content: center; /* Centra las columnas horizontalmente */
+            padding-top: 70px;
+        }
+        .left-column,
+        .right-column {
+            width: 25%;
+            padding: 20px;
+            display: none; /* Ocultar en dispositivos pequeños */
+        }
+        .center-column {
+            width: 50%;
+            padding: 20px;
+        }
+        @media (min-width: 992px) {
+            .left-column,
+            .right-column {
+                display: block; /* Mostrar en pantallas grandes */
+            }
+        }
+        .sidebar-item {
+            display: flex;
+            align-items: center;
+            padding: 10px 15px;
+            color: #ccc;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: background-color 0.3s;
+        }
+        .sidebar-item:hover {
+            background-color: #333;
+        }
+        .sidebar-item i {
+            width: 20px;
+            margin-right: 15px;
+        }
+        .right-column-card {
+            background-color: #2a2a2a;
+            color: #fff;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/service-worker.js')
+                .then(reg => console.log("✅ Service Worker registrado"))
+                .catch(err => console.error("❌ Error al registrar el SW", err));
+        }
+    </script>
+
+   <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top shadow-sm">
+        <div class="container-fluid d-flex justify-content-between align-items-center">
+
+            <div class="d-flex align-items-center">
+                <a class="navbar-brand me-3" href="index.html">
+                    <img src="../images/ESCUDO.png" alt="Logo DIBA FBC" height="30" width="30" />
+                </a>
+                <form class="d-none d-md-flex">
+                    <input class="form-control form-control-sm bg-secondary border-0 text-white" type="search"
+                        placeholder="Buscar en DIBA" aria-label="Buscar"><button
+                        class="btn btn-outline-success btn-sm ms-2" type="submit">Buscar</button>
+
+                </form>
+            </div>
+
+            <ul class="navbar-nav mx-auto d-flex flex-row gap-3">
+                <li class="nav-item">
+                    <a class="nav-link active" href="index.html" aria-label="Inicio">
+                        <i class="fas fa-home fs-5"></i>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="partidos.html" aria-label="Partidos">
+                        <i class="fas fa-soccer-ball fs-5"></i>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="ficha.html" aria-label="Equipo">
+                        <i class="fas fa-users fs-5"></i>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="analisis.html" aria-label="Análisis">
+                        <i class="fas fa-chart-bar fs-5"></i>
+                    </a>
+                </li>
+            </ul>
+
+            <ul class="navbar-nav d-flex flex-row gap-3">
+                <li class="nav-item">
+                    <a class="nav-link" href="mensajes.html" aria-label="Mensajes">
+                        <i class="fas fa-envelope fs-5"></i>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="notificaciones.html" class="nav-link position-relative" aria-label="Notificaciones">
+                        <i class="fas fa-bell fs-5"></i>
+                        <span
+                            class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"></span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="perfil.html" aria-label="Perfil">
+                        <img src="images/avatar.png" class="rounded-circle" alt="Perfil" width="35" height="35">
+                    </a>
+
+                </li>
+            </ul>
+
+        </div>
+    </nav>
+    <!--nav lateral izquierdo-->
+    <div class="d-flex" style="padding-top: 70px;">
+        <div class="bg-light border-end vh-100" id="sidebar-wrapper">
+            <div sclass="sidebar-heading text-center py-4 primary-text fs-4 fw-bold text-uppercase border-bottom">
+
+            </div>
+            <div class="list-group list-group-flush">
+                <a href="feed.html" class="list-group-item list-group-item-action bg-light"><i
+                        class="fas fa-home me-2"></i>Feed</a>
+                <a href="partidos.html" class="list-group-item list-group-item-action bg-light"><i
+                        class="fas fa-soccer-ball me-2"></i>Partidos</a>
+                <a href="ficha.html" class="list-group-item list-group-item-action bg-light"><i
+                        class="fas fa-users me-2"></i>Equipo</a>
+                <a href="analisis.html" class="list-group-item list-group-item-action bg-light"><i
+                        class="fas fa-chart-bar me-2"></i>Análisis</a>
+                <a href="mensajes.html" class="list-group-item list-group-item-action bg-light"><i
+                        class="fas fa-envelope me-2"></i>Mensajes</a>
+                <a href="notificaciones.html" class="list-group-item list-group-item-action bg-light"><i
+                        class="fas fa-bell me-2"></i>Notificaciones</a>
+                <div class="div" style="gap: 200px;">
+                    <a href="perfil.html" class="list-group-item list-group-item-action bg-light"><i
+                            class="fas fa-user me-2"></i>Perfil</a>
+                    <a href="configuracion.html" class="list-group-item list-group-item-action bg-light"><i
+                            class="fas fa-cog me-2"></i>Configuración</a>
+                    <a href="index.html" class="list-group-item list-group-item-action bg-light"><i
+                            class="fas fa-sign-out-alt me-2"></i>Cerrar Sesión</a>
+                </div>
+            </div>
+        </div>
+    
+    <main class="main-content container-fluid">
+       
+        <div class="center-column">
+            <div class="post-creator-card card mb-4">
+                <div class="card-body">
+                    <div class="d-flex align-items-center mb-3">
+                        <img src="images/avatar.png" alt="Avatar de usuario" class="rounded-circle me-3" width="50" height="50">
+                        <form id="post-form" class="w-100">
+                            <input type="text" id="post-text" class="form-control form-control-lg rounded-pill" placeholder="¿Qué estás pensando, Reynaldo?" aria-label="Escribe tu publicación">
+                        </form>
+                    </div>
+                    <div class="post-options d-flex justify-content-around border-top pt-3">
+                        <button class="btn btn-sm btn-light text-danger">
+                            <i class="fas fa-video me-2"></i>Video en vivo
+                        </button>
+                        <button class="btn btn-sm btn-light text-success">
+                            <i class="fas fa-image me-2"></i>Foto/video
+                        </button>
+                        <button class="btn btn-sm btn-light text-info">
+                            <i class="fas fa-magic me-2"></i>Reel
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <main class="feed-container">
+                </main>
+        </div>
+
+       
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="scripts/loadComponents.js"></script>
+    <script src="scripts/main.js"></script>
+    <script src="scripts/social.js"></script>
+</body>
+
+</html>

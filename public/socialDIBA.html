@@ -28,20 +28,55 @@
 </head>
 <body class="min-h-screen bg-gray-50">
     <!-- Navigation -->
-    <nav class="bg-white shadow-lg fixed w-full top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-16">
-                <div class="flex items-center">
-                    <div class="flex-shrink-0 flex items-center">
-                        <span class="text-2xl font-bold text-blue-700">Diba FBC</span>
-                    </div>
-                </div>
-                <div class="flex items-center space-x-4" id="nav-buttons">
-                    <!-- Buttons will be dynamically added here -->
-                </div>
-            </div>
-        </div>
-    </nav>
+    <!-- Navbar NUEVO añadido -->
+  <nav class="navbar navbar-expand-lg navbar-dark fixed-top custom-navbar">
+    <div class="container">
+      <a class="navbar-brand d-flex align-items-center" href="index.html">
+        <img src="images/ESCUDO.png" alt="Logo DIBA FBC" height="50" />
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link" href="index.html">INICIO</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">CLUB</a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="Historia.html">Historia</a></li>
+              <li><a class="dropdown-item" href="escudo.html">Escudo</a></li>
+            </ul>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="vision_mision.html">VISION Y MISION</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">PARTIDOS</a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="ficha.html">Plantilla</a></li>
+              <li><a class="dropdown-item" href="partidos.html">Partidos / Entrenamiento</a></li>
+              <li><a class="dropdown-item" href="analisis.html">Estadísticas</a></li>
+              <li><a class="dropdown-item" href="KidsSoccerPradera.html">Torneo Kids SOCCER</a></li>
+              <li><a class="dropdown-item" href="torneo_suroccidente.html">Torneo SurOccidente</a></li>
+            </ul>
+          </li>
+          <li class="nav-item gold-link">
+            <a class="nav-link" href="contacto.html">CONTACTO</a>
+          </li>
+          <li class="nav-item gold-link">
+            <a class="nav-link" href="ayuda.html">AYUDA</a>
+          </li>
+        </ul>
+      </div>
+      <div class="search-icon">
+        <i class="fas fa-search"></i>
+      </div>
+    </div>
+  </nav>
+
 
     <!-- Main Content -->
     <main class="pt-16 min-h-screen">
@@ -96,173 +131,16 @@
                         <input class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" 
                                id="register-password" type="password" placeholder="••••••••">
                     </div>
-                    <button onclick="register()" class="w-full bg-blue-600 text-white font-bold py-2 px-4 rounded-md hover:bg-blue-700 transition duration-300">
+                    <button id="register" onclick="register()" class="w-full bg-blue-600 text-white font-bold py-2 px-4 rounded-md hover:bg-blue-700 transition duration-300">
                         Crear Cuenta
                     </button>
                     <p class="text-center text-sm text-gray-600 mt-4">
                         ¿Ya tienes cuenta? 
-                        <a href="#" onclick="showLogin()" class="text-blue-600 hover:underline">Inicia sesión aquí</a>
+                        <a href="" onclick="showLogin()" class="text-blue-600 hover:underline">Inicia sesión aquí</a>
                     </p>
                 </div>
             </div>
         </section>
-
-        <!-- Dashboard Section -->
-        <section id="dashboard-section" class="hidden">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-                <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
-                    <!-- Sidebar -->
-                    <div class="lg:col-span-1">
-                        <div class="bg-white rounded-lg shadow-md p-6 mb-6">
-                            <div class="text-center">
-                                <img id="profile-avatar" src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/ecef19a1-c5bb-40eb-8074-d010cccd2f01.png" alt="Foto de perfil del jugador" class="w-24 h-24 rounded-full mx-auto mb-4 border-4 border-blue-200">
-                                <h3 id="profile-name" class="text-xl font-bold text-gray-800"></h3>
-                                <p id="profile-email" class="text-gray-600 text-sm"></p>
-                                <div class="mt-4 flex justify-center space-x-4">
-                                    <span class="text-gray-700">
-                                        <span id="player-role" class="font-bold">Jugador</span>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Perfil de Jugador - Adaptado -->
-                        <div class="bg-white rounded-lg shadow-md p-6 mb-6">
-                            <h4 class="font-bold text-lg mb-4">Estadísticas de Jugador</h4>
-                            <div id="player-stats" class="space-y-2 text-gray-700">
-                                <p>Goles: <span class="font-bold">0</span></p>
-                                <p>Asistencias: <span class="font-bold">0</span></p>
-                                <p>Partidos Jugados: <span class="font-bold">0</span></p>
-                                <p>Asistencia a Prácticas: <span class="font-bold">0%</span></p>
-                                <p>Estado de Pago: <span class="font-bold text-green-600">Al día</span></p>
-                                <button onclick="viewFullProfile()" class="mt-4 w-full bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-300">Ver Perfil Completo</button>
-                            </div>
-                        </div>
-
-                        <div class="bg-white rounded-lg shadow-md p-6">
-                            <h4 class="font-bold text-lg mb-4">Próximos Eventos</h4>
-                            <div id="upcoming-events" class="space-y-3">
-                                <!-- Prácticas y partidos se cargarán aquí -->
-                                <div class="p-3 bg-blue-50 rounded-lg">
-                                    <p class="font-medium text-blue-800">Práctica: Lunes 18:00</p>
-                                    <p class="text-sm text-gray-600">Canchas Diba FBC</p>
-                                </div>
-                                <div class="p-3 bg-blue-50 rounded-lg">
-                                    <p class="font-medium text-blue-800">Partido: Sábado 10:00 vs Los Leones</p>
-                                    <p class="text-sm text-gray-600">Estadio Municipal</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Main Content -->
-                    <div class="lg:col-span-2">
-                        <!-- Create Post (Noticias del Equipo) -->
-                        <div class="bg-white rounded-lg shadow-md p-6 mb-6">
-                            <div class="flex items-start space-x-4">
-                                <img id="current-user-avatar" src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/d05fd329-25a8-4d82-badc-6107eeb07740.png" alt="Tu foto de perfil" class="w-12 h-12 rounded-full">
-                                <div class="flex-1">
-                                    <textarea id="post-content" placeholder="Comparte una noticia del equipo..." 
-                                              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none" 
-                                              rows="3"></textarea>
-                                    <div class="flex justify-between items-center mt-3">
-                                        <button class="text-gray-500 hover:text-blue-600">
-                                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                                            </svg>
-                                        </button>
-                                        <button onclick="createPost()" class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition duration-300">
-                                            Publicar Noticia
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Posts Feed (Noticias/Comunicados del Equipo) -->
-                        <div id="posts-container" class="space-y-6">
-                            <!-- Posts will be loaded here -->
-                            <div class="bg-white rounded-lg shadow-md p-6 card-hover">
-                                <div class="flex items-start space-x-4 mb-4">
-                                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/d05fd329-25a8-4d82-badc-6107eeb07740.png" alt="Foto de perfil de Entrenador" class="w-12 h-12 rounded-full">
-                                    <div>
-                                        <h4 class="font-bold">Entrenador Diba</h4>
-                                        <p class="text-sm text-gray-600">Hace 10 minutos</p>
-                                    </div>
-                                </div>
-                                <p class="text-gray-800 mb-4">¡Gran entrenamiento hoy chicos! Seguimos mejorando. 💪</p>
-                                <div class="flex items-center justify-between text-sm text-gray-600">
-                                    <div class="flex items-center space-x-4">
-                                        <button class="flex items-center space-x-1 hover:text-blue-600">
-                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
-                                            </svg>
-                                            <span>5</span>
-                                        </button>
-                                        <button class="flex items-center space-x-1 hover:text-blue-600">
-                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
-                                            </svg>
-                                            <span>2</span>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Right Sidebar -->
-                    <div class="lg:col-span-1">
-                        <!-- Notifications -->
-                        <div class="bg-white rounded-lg shadow-md p-6 mb-6">
-                            <h4 class="font-bold text-lg mb-4">Notificaciones del Equipo</h4>
-                            <div id="notifications" class="space-y-3">
-                                <!-- Notifications will be loaded here -->
-                                <div class="p-3 bg-red-50 rounded-lg">
-                                    <p class="text-sm text-red-800 font-medium">¡ATENCIÓN! Entrenamiento cancelado por lluvia hoy.</p>
-                                    <p class="text-xs text-gray-500">Hace 5 minutos</p>
-                                </div>
-                                <div class="p-3 bg-green-50 rounded-lg">
-                                    <p class="text-sm text-green-800 font-medium">Recordatorio: Pago de cuota de mayo vence el viernes.</p>
-                                    <p class="text-xs text-gray-500">Hace 1 hora</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Galería de Fotos y Videos -->
-                        <div class="bg-white rounded-lg shadow-md p-6">
-                            <h4 class="font-bold text-lg mb-4">Galería del Equipo</h4>
-                            <div id="media-gallery" class="grid grid-cols-2 gap-4">
-                                <!-- Imágenes y videos se cargarán aquí -->
-                                <img src="https://via.placeholder.com/150/2E86C1/FFFFFF?text=Partido+1" alt="Foto de partido" class="w-full h-auto rounded-lg object-cover">
-                                <img src="https://via.placeholder.com/150/1A5276/FFFFFF?text=Entrenamiento" alt="Foto de entrenamiento" class="w-full h-auto rounded-lg object-cover">
-                                <img src="https://via.placeholder.com/150/5DADE2/FFFFFF?text=Celebración" alt="Foto de celebración" class="w-full h-auto rounded-lg object-cover">
-                                <button onclick="openGallery()" class="col-span-2 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-300 mt-2">Ver Galería Completa</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Chat Modal (para mensajes directos entre miembros del equipo) -->
-        <div id="chat-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
-            <div class="absolute right-4 bottom-4 w-80 bg-white rounded-lg shadow-xl">
-                <div class="flex items-center justify-between p-4 border-b">
-                    <h3 class="font-bold">Chat del Equipo</h3>
-                    <button onclick="closeChat()" class="text-gray-500 hover:text-gray-700">✕</button>
-                </div>
-                <div id="chat-messages" class="h-64 p-4 overflow-y-auto">
-                    <!-- Chat messages will be loaded here -->
-                </div>
-                <div class="p-4 border-t">
-                    <input id="chat-input" type="text" placeholder="Escribe un mensaje..." 
-                           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                </div>
-            </div>
-        </div>
-    </main>
-
     <script>
         // Supabase Configuration
         const SUPABASE_URL = 'https://wdnlqfiwuocmmcdowjyw.supabase.co'; // Reemplaza con tu URL de Supabase
