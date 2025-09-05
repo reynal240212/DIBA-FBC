@@ -83,28 +83,6 @@
         }
     </style>
 
-    <!-- =============================================================== -->
-    <!-- CAMBIO #1: INCLUIR LA LIBRERÍA DE SUPABASE JS                   -->
-    <!-- =============================================================== -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-    <!-- =============================================================== -->
-    <!-- CAMBIO #2: INICIALIZAR EL CLIENTE DE SUPABASE                   -->
-    <!--         ¡NO OLVIDES REEMPLAZAR TUS CLAVES!                      -->
-    <!-- =============================================================== -->
-    <script>
-        // --- ¡IMPORTANTE! REEMPLAZA ESTOS VALORES CON LOS DE TU PROYECTO SUPABASE ---
-        const SUPABASE_URL = 'https://TU_PROYECTO_URL.supabase.co'; // Ejemplo: 'https://abcdefghijk.supabase.co'
-        const SUPABASE_ANON_KEY = 'TU_CLAVE_ANON_PUBLICA'; // Ejemplo: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFiY2RlZmdo...'
-
-        // Inicializa el cliente de Supabase
-        const supabase = Supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-        // Puedes verificar si la inicialización fue exitosa (opcional)
-        // console.log('Supabase client initialized:', supabase);
-    </script>
-    <!-- =============================================================== -->
-
 </head>
 
 <body>
