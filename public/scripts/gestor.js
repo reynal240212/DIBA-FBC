@@ -1,31 +1,66 @@
 // Usamos una función asíncrona que se ejecuta a sí misma (IIFE).
-// Esto crea un "entorno" privado y seguro para nuestro código.
 (async () => {
   // ===============================================================
   // PASO 1: CARGA E INICIALIZACIÓN DE DEPENDENCIAS
-  // El código esperará aquí hasta que Supabase esté listo.
   // ===============================================================
   let supabase;
   try {
-    // Importamos dinámicamente la función 'createClient' desde la librería de Supabase.
-    // El 'await' pausa la ejecución hasta que la librería se haya cargado.
     const { createClient } = await import('https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm');
-
-    // Ahora que es seguro, inicializamos el cliente.
     const SUPABASE_URL = "https://wdnlqfiwuocmmcdowjyw.supabase.co";
     const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndkbmxxZml3dW9jbW1jZG93anl3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg1MjY1ODAsImV4cCI6MjA2NDEwMjU4MH0.4SCS_NRDIYLQJ1XouqW111BxkMOlwMWOjje9gFTgW_Q";
     supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
   } catch (error) {
-    // Si la librería o la inicialización fallan, la app no puede funcionar.
     console.error("Error fatal: No se pudo cargar o inicializar Supabase.", error);
     alert("Error crítico: No se pudo conectar con la base de datos. Por favor, recarga la página.");
-    return; // Detenemos la ejecución del script.
+    return;
   }
 
   // ===============================================================
+  // 🔑 PASO EXTRA: AUTENTICACIÓN
+  // ===============================================================
+  const authContainer = document.getElementById("authContainer");
+  const appContainer = document.getElementById("appContainer");
+  const loginBtn = document.getElementById("loginBtn");
+  const signupBtn = document.getElementById("signupBtn");
+  const logoutBtn = document.getElementById("logoutBtn");
+
+  async function checkSession() {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (session) {
+      authContainer?.classList.add("d-none");
+      appContainer?.classList.remove("d-none");
+    } else {
+      authContainer?.classList.remove("d-none");
+      appContainer?.classList.add("d-none");
+    }
+  }
+
+  loginBtn?.addEventListener("click", async () => {
+    const email = document.getElementById("emailInput").value;
+    const password = document.getElementById("passwordInput").value;
+    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    if (error) alert("Error al iniciar sesión: " + error.message);
+    else checkSession();
+  });
+
+  signupBtn?.addEventListener("click", async () => {
+    const email = document.getElementById("emailInput").value;
+    const password = document.getElementById("passwordInput").value;
+    const { error } = await supabase.auth.signUp({ email, password });
+    if (error) alert("Error al registrarse: " + error.message);
+    else alert("Registro exitoso. Revisa tu correo.");
+  });
+
+  logoutBtn?.addEventListener("click", async () => {
+    await supabase.auth.signOut();
+    checkSession();
+  });
+
+  // Al iniciar la app, comprobamos si ya hay sesión activa
+  await checkSession();
+
+  // ===============================================================
   // PASO 2: REFERENCIAS A LOS ELEMENTOS DEL DOM
-  // Se ejecutan solo si Supabase se inicializó correctamente.
   // ===============================================================
   const dropZone = document.getElementById("dropZone");
   const fileInput = document.getElementById("newDocument");
@@ -34,10 +69,8 @@
   const fileListContainer = document.getElementById("fileListContainer");
 
   // ===============================================================
-  // PASO 3: DEFINICIÓN DE FUNCIONES DE LA APLICACIÓN
-  // (El código de tus funciones no cambia, solo vive aquí dentro)
+  // PASO 3: FUNCIONES DE LA APLICACIÓN
   // ===============================================================
-
   async function loadInitialFiles() {
     const { data: documents, error } = await supabase
       .from("documents")
@@ -76,15 +109,15 @@
     fileEntry.dataset.id = doc.id;
     fileEntry.className = "list-group-item d-flex justify-content-between align-items-center";
     const signButtonHtml = doc.is_signed
-      ? `<button type="button" class="btn btn-success btn-sm" title="Documento Firmado" disabled><i class="fas fa-check"></i> Firmado</button>`
-      : `<button type="button" class="btn btn-outline-success btn-sm sign-btn" title="Firmar documento"><i class="fas fa-pen-to-square"></i></button>`;
+      ? `<button type="button" class="btn btn-success btn-sm" disabled><i class="fas fa-check"></i> Firmado</button>`
+      : `<button type="button" class="btn btn-outline-success btn-sm sign-btn"><i class="fas fa-pen-to-square"></i></button>`;
     if (doc.is_signed) {
       fileEntry.classList.add("signed-success");
     }
     fileEntry.innerHTML = `
       <span><i class="far fa-file-alt me-2"></i>${doc.file_name}</span>
       <div class="btn-group" role="group">
-        <a href="${publicUrlData.publicUrl}" target="_blank" class="btn btn-outline-secondary btn-sm" title="Ver documento"><i class="fas fa-eye"></i></a>
+        <a href="${publicUrlData.publicUrl}" target="_blank" class="btn btn-outline-secondary btn-sm"><i class="fas fa-eye"></i></a>
         ${signButtonHtml}
       </div>
     `;
@@ -92,10 +125,9 @@
   }
 
   // ===============================================================
-  // PASO 4: ASIGNACIÓN DE MANEJADORES DE EVENTOS
+  // PASO 4: MANEJADORES DE EVENTOS
   // ===============================================================
-
-  fileListContainer.addEventListener("click", async function (event) {
+  fileListContainer?.addEventListener("click", async function (event) {
     const signButton = event.target.closest(".sign-btn");
     if (!signButton) return;
     signButton.disabled = true;
@@ -106,7 +138,6 @@
       if (error) throw error;
       signButton.classList.replace("btn-outline-success", "btn-success");
       signButton.innerHTML = `<i class="fas fa-check"></i> Firmado`;
-      signButton.title = "Documento Firmado";
       fileEntryRow.classList.add("signed-success");
     } catch (error) {
       console.error("Error al firmar el documento:", error.message);
@@ -115,26 +146,24 @@
     }
   });
 
-  selectFileBtn.addEventListener("click", () => fileInput.click());
-  dropZone.addEventListener("click", (e) => {
-    if (e.target.id !== "selectFileBtn") fileInput.click();
-  });
-  fileInput.addEventListener("change", () => {
+  selectFileBtn?.addEventListener("click", () => fileInput.click());
+  dropZone?.addEventListener("click", (e) => { if (e.target.id !== "selectFileBtn") fileInput.click(); });
+  fileInput?.addEventListener("change", () => {
     if (fileInput.files.length > 0) {
       handleFileUpload(fileInput.files[0]);
       fileInput.value = "";
     }
   });
   ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-    dropZone.addEventListener(eventName, (e) => { e.preventDefault(); e.stopPropagation(); }, false);
+    dropZone?.addEventListener(eventName, (e) => { e.preventDefault(); e.stopPropagation(); }, false);
   });
   ['dragenter', 'dragover'].forEach(eventName => {
-    dropZone.addEventListener(eventName, () => dropZone.classList.add("drag-over"), false);
+    dropZone?.addEventListener(eventName, () => dropZone.classList.add("drag-over"), false);
   });
   ['dragleave', 'drop'].forEach(eventName => {
-    dropZone.addEventListener(eventName, () => dropZone.classList.remove("drag-over"), false);
+    dropZone?.addEventListener(eventName, () => dropZone.classList.remove("drag-over"), false);
   });
-  dropZone.addEventListener("drop", (e) => {
+  dropZone?.addEventListener("drop", (e) => {
     const files = e.dataTransfer.files;
     if (files.length > 0) handleFileUpload(files[0]);
   }, false);
@@ -144,4 +173,4 @@
   // ===============================================================
   loadInitialFiles();
 
-})(); // Los paréntesis finales () ejecutan la función inmediatamente.
+})();
