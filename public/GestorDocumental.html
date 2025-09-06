@@ -57,6 +57,9 @@
             border-left: 4px solid #28a745;
         }
 
+        /* =============================================================== */
+        /* NUEVO: ESTILOS PARA LA ZONA DE "ARRASTRAR Y SOLTAR"             */
+        /* =============================================================== */
         #dropZone {
             border: 2px dashed #ccc;
             border-radius: 10px;
@@ -70,6 +73,7 @@
         #dropZone.drag-over {
             border-color: var(--diba-color-primario);
             background-color: #eaf1fb;
+            /* Un azul muy claro */
         }
 
         #dropZone .drop-zone-icon {
@@ -77,105 +81,93 @@
             color: var(--diba-color-primario);
             margin-bottom: 1rem;
         }
-
-        /* Formulario login */
-        #authContainer {
-            max-width: 400px;
-            margin: 100px auto;
-            padding: 30px;
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            background: #fff;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-        }
     </style>
+
 </head>
 
 <body>
-    <!-- FORM LOGIN -->
-    <div id="authContainer" class="d-none">
-        <h2 class="text-center mb-4">Acceder a DIBA FBC</h2>
-        <div class="mb-3">
-            <label for="emailInput" class="form-label">Correo</label>
-            <input type="email" id="emailInput" class="form-control" placeholder="ejemplo@correo.com">
-        </div>
-        <div class="mb-3">
-            <label for="passwordInput" class="form-label">Contraseña</label>
-            <input type="password" id="passwordInput" class="form-control" placeholder="********">
-        </div>
-        <button id="loginBtn" class="btn btn-diba-primary w-100 mb-2">Iniciar Sesión</button>
-        <button id="signupBtn" class="btn btn-outline-secondary w-100">Registrarse</button>
-    </div>
-
-    <!-- CONTENIDO ORIGINAL (se muestra solo si hay sesión) -->
-    <div id="appContainer" class="d-none">
-        <header>
-            <nav class="navbar navbar-expand-lg navbar-dark fixed-top custom-navbar">
-                <div class="container">
-                    <a class="navbar-brand d-flex align-items-center" href="dashboard.html">
-                        <img src="images/ESCUDO.png" alt="Logo DIBA FBC" height="50" />
-                        <span class="ms-2">Gestor DIBA FBC</span>
-                    </a>
-                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation"><span
-                            class="navbar-toggler-icon"></span></button>
-                    <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
-                        <ul class="navbar-nav">
-                            <li class="nav-item"><a class="nav-link" href="dashboard.html">INICIO</a></li>
-                            <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" id="docsDropdown"
-                                    role="button" data-bs-toggle="dropdown" aria-expanded="false">DOCUMENTOS</a>
-                                <ul class="dropdown-menu" aria-labelledby="docsDropdown">
-                                    <li><a class="dropdown-item" href="subir.html">Subir Documento</a></li>
-                                    <li><a class="dropdown-item" href="listar.html">Ver Todos</a></li>
-                                    <li><a class="dropdown-item" href="firmas.html">Pendientes de Firma</a></li>
-                                    <li><a class="dropdown-item" href="plantillas.html">Plantillas</a></li>
-                                </ul>
-                            </li>
-                            <li class="nav-item"><a class="nav-link" href="reportes.html">REPORTES</a></li>
-                            <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#"
-                                    id="usersDropdown" role="button" data-bs-toggle="dropdown"
-                                    aria-expanded="false">USUARIOS</a>
-                                <ul class="dropdown-menu" aria-labelledby="usersDropdown">
-                                    <li><a class="dropdown-item" href="roles.html">Roles y Permisos</a></li>
-                                    <li><a class="dropdown-item" href="usuarios.html">Lista de Usuarios</a></li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="d-flex align-items-center">
-                        <button id="logoutBtn" class="btn btn-danger ms-2">Cerrar Sesión</button>
-                    </div>
+    <header>
+        <!-- Navbar (sin cambios) -->
+        <nav class="navbar navbar-expand-lg navbar-dark fixed-top custom-navbar">
+            <div class="container"><a class="navbar-brand d-flex align-items-center" href="dashboard.html"><img
+                        src="images/ESCUDO.png" alt="Logo DIBA FBC" height="50" /><span class="ms-2">Gestor DIBA
+                        FBC</span></a><button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false"
+                    aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+                <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+                    <ul class="navbar-nav">
+                        <li class="nav-item"><a class="nav-link" href="dashboard.html">INICIO</a></li>
+                        <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" id="docsDropdown"
+                                role="button" data-bs-toggle="dropdown" aria-expanded="false">DOCUMENTOS</a>
+                            <ul class="dropdown-menu" aria-labelledby="docsDropdown">
+                                <li><a class="dropdown-item" href="subir.html">Subir Documento</a></li>
+                                <li><a class="dropdown-item" href="listar.html">Ver Todos</a></li>
+                                <li><a class="dropdown-item" href="firmas.html">Pendientes de Firma</a></li>
+                                <li><a class="dropdown-item" href="plantillas.html">Plantillas</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item"><a class="nav-link" href="reportes.html">REPORTES</a></li>
+                        <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" id="usersDropdown"
+                                role="button" data-bs-toggle="dropdown" aria-expanded="false">USUARIOS</a>
+                            <ul class="dropdown-menu" aria-labelledby="usersDropdown">
+                                <li><a class="dropdown-item" href="roles.html">Roles y Permisos</a></li>
+                                <li><a class="dropdown-item" href="usuarios.html">Lista de Usuarios</a></li>
+                            </ul>
+                        </li>
+                        <!-- <li class="nav-item gold-link"><a class="nav-link" href="ayuda.html">AYUDA</a></li> -->
+                    </ul>
                 </div>
-            </nav>
-        </header>
+                <div class="d-flex align-items-center"><button class="btn btn-dark" type="button" aria-label="Buscar"
+                        title="Buscar"><i class="fas fa-search" aria-hidden="true"></i></button><button
+                        class="btn btn-dark ms-2" type="button" aria-label="Perfil de usuario"
+                        title="Perfil de usuario"><i class="fas fa-user-circle" aria-hidden="true"></i></button></div>
+            </div>
+        </nav>
+    </header>
 
-        <main class="container mt-4 pt-5">
-            <section aria-labelledby="main-heading">
-                <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
-                    <h1 class="mb-0 h2" id="main-heading">Gestor Documental</h1>
+    <main class="container mt-4 pt-5">
+        <section aria-labelledby="main-heading">
+            <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+                <h1 class="mb-0 h2" id="main-heading">Gestor Documental</h1>
+                <div class="d-flex gap-3 align-items-center mt-2 mt-md-0" role="group"
+                    aria-label="Filtros de documentos">
+                    <div><label for="docTypeSelect" class="form-label mb-0 fw-bold small">Tipo:</label><select
+                            class="form-select form-select-sm w-auto" id="docTypeSelect">
+                            <option selected>Todos</option>
+                            <option value="administrativo">Administrativos</option>
+                            <option value="legal">Legales</option>
+                            <option value="deportivo">Deportivos</option>
+                        </select></div>
+                    <div><label for="docDate" class="form-label mb-0 fw-bold small">Fecha:</label><input type="date"
+                            class="form-control form-control-sm w-auto" id="docDate"></div>
                 </div>
+            </div>
 
-                <div class="card shadow-sm mb-4">
-                    <div class="card-body">
-                        <input type="file" id="newDocument" class="d-none" accept=".pdf,.doc,.docx,.jpg,.png">
-                        <div id="dropZone">
-                            <div class="drop-zone-icon"><i class="fas fa-file-upload"></i></div>
-                            <h3 class="h5">Subir Documentos</h3>
-                            <p class="text-muted">Arrastra y suelta un archivo aquí, o</p>
-                            <button type="button" id="selectFileBtn" class="btn btn-diba-primary">
-                                Seleccionar Documento
-                            </button>
-                        </div>
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <input type="file" id="newDocument" class="d-none" accept=".pdf,.doc,.docx,.jpg,.png">
+
+                    <div id="dropZone">
+                        <div class="drop-zone-icon"><i class="fas fa-file-upload"></i></div>
+                        <h3 class="h5">Subir Documentos</h3>
+                        <p class="text-muted">Arrastra y suelta un archivo aquí, o</p>
+                        <button type="button" id="selectFileBtn" class="btn btn-diba-primary">Seleccionar
+                            Documento</button>
                     </div>
                 </div>
+            </div>
+
+            <section id="uploadedFilesSection" class="d-none" aria-labelledby="uploaded-heading">
+                <h2 id="uploaded-heading" class="h4 mb-3">Documentos Cargados</h2>
+                <div class="list-group" id="fileListContainer"></div>
             </section>
-        </main>
-    </div>
+        </section>
+    </main>
 
-    <!-- Scripts principales -->
+    <!-- ESTO SÍ FUNCIONARÍA -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="scripts/gestor.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script> <!-- 1. Primero, cargo la librería -->
+    <script src="scripts/gestor.js"></script> <!-- 2. Después, ejecuto mi código que la usa -->
 </body>
 
 </html>
