@@ -33,6 +33,78 @@
 
 </head>
 
+<style>
+        .card-image-section {
+            border: none;
+            overflow: hidden;
+        }
+        .card-body-content {
+            padding: 2rem;
+        }
+        
+        /* Estilos para las tarjetas de imagen */
+        .image-card {
+            position: relative;
+            border-radius: 0.75rem; /* Bordes redondeados */
+            overflow: hidden;
+            height: 350px; /* Altura fija para las tarjetas de imagen */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra sutil */
+            transition: transform 0.3s ease-in-out; /* Transición para el hover */
+        }
+
+        .image-card:hover {
+            transform: translateY(-5px); /* Efecto de elevación al pasar el ratón */
+        }
+
+        .image-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Cubrir el área sin distorsionar */
+            filter: brightness(0.8); /* Oscurecer un poco la imagen para que el texto resalte */
+        }
+
+        .image-card-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 1.5rem;
+            color: white;
+            /* Degradado de abajo hacia arriba */
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0) 100%);
+        }
+
+        .image-card-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .image-card-subtitle {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        /* Animación de entrada suave (fade-in) para el texto y las imágenes */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 1s ease-out forwards;
+        }
+
+        .text-center-desktop {
+            text-align: center;
+        }
+
+        @media (min-width: 992px) { /* breakpoint de desktop */
+            .text-center-desktop {
+                text-align: left;
+            }
+        }
+    </style>
 <body>
   <!-- Service Worker -->
   <script>
@@ -80,84 +152,43 @@
     </div> <!-- Cierre de .goleadores-content -->
   </div> <!-- Cierre de .goleadores-container -->
 
-  <style>
-    .card-image-section {
-      border: none;
-      overflow: hidden;
-    }
 
-    .card-body-content {
-      padding: 2rem;
-    }
-
-    /* Estilo para las imágenes estáticas */
-    .img-static img {
-      width: 100%;
-      height: auto;
-      border-radius: 0.25rem;
-    }
-
-    /* Animación de entrada suave (fade-in) para el texto y las imágenes */
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    .animate-fade-in {
-      animation: fadeIn 1s ease-out forwards;
-    }
-
-    .text-center-desktop {
-      text-align: center;
-    }
-
-    @media (min-width: 992px) {
-
-      /* breakpoint de desktop */
-      .text-center-desktop {
-        text-align: left;
-      }
-    }
-  </style>
-  </head>
-
-  <body>
-
-    <div class="container my-5">
-      <div class="card card-image-section shadow-lg mb-4">
+   <div class="container my-5">
+    <div class="card card-image-section shadow-lg mb-4">
         <div class="row g-0">
-          <div class="col-lg-5 order-lg-1">
-            <div class="card-body card-body-content d-flex flex-column justify-content-center animate-fade-in">
-              <h2 class="card-title text-primary fw-bold text-center-desktop">¡Convocatoria Oficial: Nos Vemos en la
-                Cancha!</h2>
-              <p class="card-text animate-fade-in">
-                ¡Atención, equipo! Este **viernes, 12 de septiembre de 2025**, tenemos nuestro próximo entrenamiento. La
-                cita es a las **3:20 PM** en el **Parque Nuevo de la Pradera**, listos para saltar a la cancha.
-                Recuerden llevar el uniforme completo de **Costa Azul** y la cuota de entrenamiento de **$2000**.
-                ¡Esperamos a todos los convocados listos para darlo todo!
-              </p>
+            <div class="col-lg-5 order-lg-1">
+                <div class="card-body card-body-content d-flex flex-column justify-content-center animate-fade-in">
+                    <h2 class="card-title text-primary fw-bold text-center-desktop">¡Convocatoria Oficial: Nos Vemos en la Cancha!</h2>
+                    <p class="card-text animate-fade-in">
+                        ¡Atención, equipo! Este **viernes, 12 de septiembre de 2025**, tenemos nuestro próximo entrenamiento. La cita es a las **3:20 PM** en el **Parque Nuevo de la Pradera**, listos para saltar a la cancha. Recuerden llevar el uniforme completo de **Costa Azul** y la cuota de entrenamiento de **$2000**. ¡Esperamos a todos los convocados listos para darlo todo!
+                    </p>
+                </div>
             </div>
-          </div>
+            <div class="col-lg-7 order-lg-2 d-flex align-items-center justify-content-center bg-light rounded-end p-3">
+                <div class="row g-3">
+                    <div class="col-md-6 d-flex justify-content-center animate-fade-in">
+                        <div class="image-card w-100">
+                            <img src="images/falyer1.png" alt="Imagen del equipo 1">
+                            <div class="image-card-overlay">
+                                <div class="image-card-title">Equipo Principal</div>
+                                <div class="image-card-subtitle">¡Listos para el partido!</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 d-flex justify-content-center animate-fade-in">
+                        <div class="image-card w-100">
+                            <img src="images/flayer2.png" alt="Imagen del equipo 2">
+                            <div class="image-card-overlay">
+                                <div class="image-card-title">Próximo Entrenamiento</div>
+                                <div class="image-card-subtitle">¡No te lo pierdas!</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
-    <div class="col-lg-7 order-lg-2 d-flex align-items-center justify-content-center bg-dark rounded-end p-3">
-      <div class="row g-2">
-        <div class="col-6">
-          <img src="images/falyer1.png" class="img-fluid animate-fade-in" alt="Imagen del equipo 1">
-        </div>
-        <div class="col-6">
-          <img src="images/flayer2.png" class="img-fluid animate-fade-in" alt="Imagen del equipo 2">
-        </div>
-      </div>
-    </div>
+</div>
 
     <!-- Sección Resumen de Historia -->
     <section id="resumen-historia" class="container my-5">
