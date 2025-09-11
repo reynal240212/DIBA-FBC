@@ -46,50 +46,17 @@
 
   <div id="hero-container"></div>
   <div id="patrocinadores-container"></div>
-  
-<div class="container my-5">
-    <div class="card card-image-section shadow-lg mb-4">
-        <div class="row g-0">
-            <div class="col-lg-7 order-lg-2">
-                <div class="card-body card-body-content d-flex flex-column justify-content-center animate-fade-in">
-                    <h2 class="card-title text-primary fw-bold text-center-desktop">¡Convocatoria Oficial: Nos Vemos en la Cancha!</h2>
-                    <p class="card-text animate-fade-in">
-                        ¡Atención, equipo! Este **viernes, 12 de septiembre de 2025**, tenemos nuestro próximo entrenamiento. La cita es a las **3:20 PM** en el **Parque Nuevo de la Pradera**, listos para saltar a la cancha. Recuerden llevar el uniforme completo de **Costa Azul** y la cuota de entrenamiento de **$2000**. ¡Esperamos a todos los convocados listos para darlo todo!
-                    </p>
-                </div>
-            </div>
-            <div class="col-lg-5 order-lg-1 d-flex align-items-center justify-content-center bg-dark rounded-start">
-                <div id="convocatoriaCarousel" class="carousel slide w-100" data-bs-ride="carousel" data-bs-interval="3000">
-                    <div class="carousel-inner rounded">
-                        <div class="carousel-item active">
-                            <img src="images/falyer1.png" class="d-block" alt="Imagen del equipo 1">
-                        </div>
-                        <div class="carousel-item">
-                            <img src="images/flayer2.png" class="d-block" alt="Imagen del equipo 2">
-                        </div>
-                    </div>
-                    <button class="carousel-control-prev" type="button" data-bs-target="#convocatoriaCarousel" data-bs-slide="prev">
-                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Anterior</span>
-                    </button>
-                    <button class="carousel-control-next" type="button" data-bs-target="#convocatoriaCarousel" data-bs-slide="next">
-                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Siguiente</span>
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+
+
 
   <!-- =============================================== -->
   <!--         SECCIÓN TABLA DE GOLEADORES             -->
   <!-- =============================================== -->
-  <!-- <div class="goleadores-container">
-    <div class="goleadores-content"> -->
+  <div class="goleadores-container">
+    <div class="goleadores-content">
 
       <!--  Encabezado  -->
-       <div class="goleadores-header">
+      <div class="goleadores-header">
         <div class="header-accent"></div>
         <h2>CATEGORÍA 2014-2015</h2>
         <h1>TABLA DE GOLEADORES</h1>
@@ -99,7 +66,7 @@
         </div>
 
 
-      </div> 
+      </div>
 
       <!-- Contenedor para la lista (se llenará con JavaScript) -->
       <div id="goleadores-list" class="goleadores-list">
@@ -112,6 +79,70 @@
       </div>
     </div> <!-- Cierre de .goleadores-content -->
   </div> <!-- Cierre de .goleadores-container -->
+
+  <style>
+        .card-image-section {
+            border: none;
+            overflow: hidden;
+        }
+        .card-body-content {
+            padding: 2rem;
+        }
+        
+        /* Estilo para las imágenes estáticas */
+        .img-static img {
+            width: 100%;
+            height: auto;
+            border-radius: 0.25rem;
+        }
+
+        /* Animación de entrada suave (fade-in) para el texto y las imágenes */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 1s ease-out forwards;
+        }
+
+        .text-center-desktop {
+            text-align: center;
+        }
+
+        @media (min-width: 992px) { /* breakpoint de desktop */
+            .text-center-desktop {
+                text-align: left;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container my-5">
+    <div class="card card-image-section shadow-lg mb-4">
+        <div class="row g-0">
+            <div class="col-lg-5 order-lg-1">
+                <div class="card-body card-body-content d-flex flex-column justify-content-center animate-fade-in">
+                    <h2 class="card-title text-primary fw-bold text-center-desktop">¡Convocatoria Oficial: Nos Vemos en la Cancha!</h2>
+                    <p class="card-text animate-fade-in">
+                        ¡Atención, equipo! Este **viernes, 12 de septiembre de 2025**, tenemos nuestro próximo entrenamiento. La cita es a las **3:20 PM** en el **Parque Nuevo de la Pradera**, listos para saltar a la cancha. Recuerden llevar el uniforme completo de **Costa Azul** y la cuota de entrenamiento de **$2000**. ¡Esperamos a todos los convocados listos para darlo todo!
+                    </p>
+                </div>
+            </div>
+            <div class="col-lg-7 order-lg-2 d-flex align-items-center justify-content-center bg-dark rounded-end p-3">
+                <div class="row g-2">
+                    <div class="col-6">
+                        <img src="images/falyer1.png" class="img-fluid animate-fade-in" alt="Imagen del equipo 1">
+                    </div>
+                    <div class="col-6">
+                        <img src="images/flayer2.png" class="img-fluid animate-fade-in" alt="Imagen del equipo 2">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
   <!-- Sección Resumen de Historia -->
   <section id="resumen-historia" class="container my-5">
