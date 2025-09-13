@@ -196,46 +196,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Llamamos a la función para que se ejecute
   cargarYMostrarGoleadores();
-  /* ================================
-  --- CÓDIGO AÑADIDO ---
-  CARGA DE NOTICIAS
-=================================== */
-
-// Array con la información de las noticias
-const noticias = [{
-  imagen: 'images/jugadores/rodriguez.jpg',
-  titulo: 'Jugador De la Semana'
-}, ];
-
-const carrusel = document.querySelector('.noticias-carrusel');
-
-// Si el carrusel existe en la página, procedemos a generar las tarjetas
-if (carrusel) {
-
-  // Función para crear el HTML de una tarjeta de noticia
-  const crearTarjetaNoticia = (noticia) => {
-    return `
-      <a href="#" class="noticia-card">
-          <div class="noticia-etiqueta">NEW</div>
-          <img src="${noticia.imagen}" alt="${noticia.titulo}">
-          <div class="noticia-overlay">
-              <p class="noticia-titulo">${noticia.titulo}</p>
-          </div>
-      </a>
-    `;
-  };
-
-  // Generar y renderizar las tarjetas en el carrusel
-  const renderizarNoticias = () => {
-    let htmlContent = '';
-    noticias.forEach(noticia => {
-      htmlContent += crearTarjetaNoticia(noticia);
-    });
-    carrusel.innerHTML = htmlContent;
-  };
-
-  // Llama a la función principal para mostrar las noticias
-  renderizarNoticias();
-}
+  
   
 });
