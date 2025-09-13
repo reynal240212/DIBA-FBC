@@ -203,29 +203,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
 // Array con la información de las noticias
 const noticias = [{
-  imagen: 'images/noticia1.jpg',
-  titulo: 'Última sesión previa al Valencia'
-}, {
-  imagen: 'images/noticia2.jpg',
-  titulo: 'Así ha sido la recuperación de Bernal'
-}, {
-  imagen: 'images/noticia3.jpg',
-  titulo: 'Adivina el jugador por su trayectoria'
-}, {
-  imagen: 'images/noticia4.jpg',
-  titulo: 'Este fin de semana no te lo pierdas'
-}, {
-  imagen: 'images/noticia5.jpg',
-  titulo: 'Últimos goles Valencia'
-}, {
-  imagen: 'images/noticia6.jpg',
-  titulo: '¿Dónde ha jugado más partidos?'
-}, {
-  imagen: 'images/noticia7.jpg',
-  titulo: 'Bona Diada - El Barça conmemora la Diada'
-}, {
-  imagen: 'images/noticia8.jpg',
-  titulo: 'Vibra con los nuevos cracks del Palau'
+  imagen: 'images/jugadores/rodriguez.jpg',
+  titulo: 'Jugador De la Semana'
 }, ];
 
 const carrusel = document.querySelector('.noticias-carrusel');
