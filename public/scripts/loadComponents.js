@@ -196,5 +196,67 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Llamamos a la función para que se ejecute
   cargarYMostrarGoleadores();
+  /* ================================
+  --- CÓDIGO AÑADIDO ---
+  CARGA DE NOTICIAS
+=================================== */
+
+// Array con la información de las noticias
+const noticias = [{
+  imagen: 'images/noticia1.jpg',
+  titulo: 'Última sesión previa al Valencia'
+}, {
+  imagen: 'images/noticia2.jpg',
+  titulo: 'Así ha sido la recuperación de Bernal'
+}, {
+  imagen: 'images/noticia3.jpg',
+  titulo: 'Adivina el jugador por su trayectoria'
+}, {
+  imagen: 'images/noticia4.jpg',
+  titulo: 'Este fin de semana no te lo pierdas'
+}, {
+  imagen: 'images/noticia5.jpg',
+  titulo: 'Últimos goles Valencia'
+}, {
+  imagen: 'images/noticia6.jpg',
+  titulo: '¿Dónde ha jugado más partidos?'
+}, {
+  imagen: 'images/noticia7.jpg',
+  titulo: 'Bona Diada - El Barça conmemora la Diada'
+}, {
+  imagen: 'images/noticia8.jpg',
+  titulo: 'Vibra con los nuevos cracks del Palau'
+}, ];
+
+const carrusel = document.querySelector('.noticias-carrusel');
+
+// Si el carrusel existe en la página, procedemos a generar las tarjetas
+if (carrusel) {
+
+  // Función para crear el HTML de una tarjeta de noticia
+  const crearTarjetaNoticia = (noticia) => {
+    return `
+      <a href="#" class="noticia-card">
+          <div class="noticia-etiqueta">NEW</div>
+          <img src="${noticia.imagen}" alt="${noticia.titulo}">
+          <div class="noticia-overlay">
+              <p class="noticia-titulo">${noticia.titulo}</p>
+          </div>
+      </a>
+    `;
+  };
+
+  // Generar y renderizar las tarjetas en el carrusel
+  const renderizarNoticias = () => {
+    let htmlContent = '';
+    noticias.forEach(noticia => {
+      htmlContent += crearTarjetaNoticia(noticia);
+    });
+    carrusel.innerHTML = htmlContent;
+  };
+
+  // Llama a la función principal para mostrar las noticias
+  renderizarNoticias();
+}
   
 });
