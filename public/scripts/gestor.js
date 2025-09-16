@@ -9,6 +9,27 @@
     const SUPABASE_URL = "https://wdnlqfiwuocmmcdowjyw.supabase.co";
     const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndkbmxxZml3dW9jbW1jZG93anl3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg1MjY1ODAsImV4cCI6MjA2NDEwMjU4MH0.4SCS_NRDIYLQJ1XouqW111BxkMOlwMWOjje9gFTgW_Q";
     supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    // 🔒 Protección de ruta
+    const { data: { session } } = await supabase.auth.getSession();
+    const usuario = localStorage.getItem("usuario");
+    if (!session && !usuario) {
+      window.location.href = "login.html";
+      return; // detenemos ejecución
+    }
+
+    // 🚪 Lógica de Cerrar Sesión
+    document.addEventListener("DOMContentLoaded", () => {
+      const logoutBtn = document.getElementById("logout-btn");
+      if (logoutBtn) {
+        logoutBtn.addEventListener("click", async () => {
+          localStorage.removeItem("usuario");
+          await supabase.auth.signOut();
+          window.location.href = "login.html";
+        });
+      }
+    });
+
   } catch (error) {
     console.error("Error fatal: No se pudo cargar o inicializar Supabase.", error);
     alert("Error crítico: No se pudo conectar con la base de datos. Por favor, recarga la página.");
@@ -22,7 +43,6 @@
   const appContainer = document.getElementById("appContainer");
   const loginBtn = document.getElementById("loginBtn");
   const signupBtn = document.getElementById("signupBtn");
-  const logoutBtn = document.getElementById("logoutBtn");
 
   async function checkSession() {
     const { data: { session } } = await supabase.auth.getSession();
@@ -49,11 +69,6 @@
     const { error } = await supabase.auth.signUp({ email, password });
     if (error) alert("Error al registrarse: " + error.message);
     else alert("Registro exitoso. Revisa tu correo.");
-  });
-
-  logoutBtn?.addEventListener("click", async () => {
-    await supabase.auth.signOut();
-    checkSession();
   });
 
   // Al iniciar la app, comprobamos si ya hay sesión activa
