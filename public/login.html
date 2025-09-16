@@ -1,162 +1,179 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Login - DIBA FBC</title>
-  <link rel="shortcut icon" href="images/ESCUDO.ico" type="image/x-icon" />
-  
-  <!-- Open Graph -->
-  <meta property="og:image" content="https://diba-fbc.vercel.app/images/ESCUDO.png" />
-  <meta property="og:url" content="https://diba-fbc.vercel.app/" />
-  <meta property="og:type" content="website" />
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="INICIO DE SESIÓN" />
-  <meta name="twitter:image" content="https://diba-fbc.vercel.app/images/ESCUDO.png" />
+  <meta charset="UTF-8">
+  <title>Acceso - DIBA FBC</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
 
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
-      font-family: 'Arial', sans-serif;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      background: url('https://img.freepik.com/vector-gratis/fondo-conexion-degradado_52683-116652.jpg?semt=ais_hybrid') no-repeat center center fixed;
+      background: url('https://cdn.britannica.com/51/190751-050-147B93F7/soccer-ball-goal.jpg') no-repeat center center fixed;
       background-size: cover;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      padding: 1rem;
+      position: relative;
     }
-    header {
-      background-color: rgba(255, 255, 255, 0.9);
-      padding: 10px 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+    body::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.6);
+      z-index: -1;
     }
-    header .logo img { width: 50px; }
-    nav ul { list-style: none; display: flex; gap: 20px; }
-    nav ul li a {
-      text-decoration: none; color: #001b72; font-weight: bold; transition: color 0.3s;
+    .auth-container { position: relative; z-index: 1; }
+    .auth-card {
+      max-width: 450px;
+      width: 100%;
+      margin: 2rem auto;
+      border: none;
+      border-radius: 12px;
+      background-color: rgba(255, 255, 255, 0.98);
+      backdrop-filter: blur(5px);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
-    nav ul li a:hover { color: #ffc107; }
-    main {
-      flex: 1; display: flex; justify-content: center; align-items: center; padding: 20px;
+    .auth-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.2);
     }
-    .login-section {
-      background: #fff; padding: 30px; border-radius: 8px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-      width: 100%; max-width: 400px;
+    .animate__animated { --animate-duration: 0.8s; }
+    .nav-tabs { border-bottom: 0; }
+    .nav-tabs .nav-link {
+      border: none;
+      border-bottom: 2px solid transparent;
+      color: #6c757d;
+      font-weight: 600;
     }
-    .login-section h2 {
-      text-align: center; margin-bottom: 20px; color: #001b72;
+    .nav-tabs .nav-link.active {
+      color: #0d6efd;
+      border-color: #0d6efd;
+      background-color: transparent;
     }
-    .login-section form div { margin-bottom: 15px; }
-    .login-section label {
-      display: block; margin-bottom: 5px; font-weight: bold; color: #001b72;
-    }
-    .login-section input {
-      width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px;
-    }
-    .login-section button {
-      width: 100%; padding: 10px; background-color: #001b72; color: #fff;
-      border: none; border-radius: 4px; cursor: pointer; font-size: 16px;
-      transition: background-color 0.3s;
-    }
-    .login-section button:hover { background-color: #ffc107; }
-    footer {
-      background-color: rgba(255,255,255,0.9);
-      text-align: center; padding: 15px; font-size: 14px;
-    }
+    .btn-submit .spinner-border { width: 1.2rem; height: 1.2rem; }
   </style>
-
-  <script type="module">
-    import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
-
-    const supabaseUrl = "https://wdnlqfiwuocmmcdowjyw.supabase.co";
-    const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndkbmxxZml3dW9jbW1jZG93anl3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg1MjY1ODAsImV4cCI6MjA2NDEwMjU4MH0.4SCS_NRDIYLQJ1XouqW111BxkMOlwMWOjje9gFTgW_Q";
-    const supabase = createClient(supabaseUrl, supabaseKey);
-
-    async function handleLogin(e) {
-      e.preventDefault();
-
-      const correo = document.getElementById("correo").value.trim();
-      const clave = document.getElementById("clave").value.trim();
-
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email: correo,
-        password: clave,
-      });
-
-      if (error) {
-        alert("❌ Error al iniciar sesión: " + error.message);
-        return;
-      }
-
-      // Buscar datos del usuario y su rol
-      const { data: userData, error: userError } = await supabase
-        .from("usuarios")
-        .select("usuario, rol_id, roles:rol_id(name)")
-        .eq("id", data.user.id)
-        .single();
-
-      if (userError) {
-        alert("⚠ No se pudo obtener el rol: " + userError.message);
-        return;
-      }
-
-      // Guardar en localStorage
-      localStorage.setItem("usuario", JSON.stringify({
-        id: data.user.id,
-        correo: correo,
-        usuario: userData.usuario,
-        rol: userData.roles?.name || "sin rol"
-      }));
-
-      alert(`✅ Bienvenido ${userData.usuario}, rol: ${userData.roles?.name}`);
-
-      // Redirigir según el rol
-      if (userData.roles?.name === "admin") {
-        window.location.href = "/admin/usuarios.html";
-      } else {
-        window.location.href = "index.html";
-      }
-    }
-
-    document.addEventListener("DOMContentLoaded", () => {
-      document.getElementById("loginForm").addEventListener("submit", handleLogin);
-    });
-  </script>
 </head>
 <body>
-  <header>
-    <div class="logo">
-      <img src="images/ESCUDO.ico" alt="Logo DIBA FBC" loading="lazy" />
-    </div>
-    <nav>
-      <ul>
-        <li><a href="login.html">Login</a></li>
-        <li><a href="registro.html">Registro</a></li>
+  <div class="container auth-container d-flex align-items-center justify-content-center min-vh-100">
+    <div class="card auth-card shadow-lg p-4 animate__animated animate__fadeInUp">
+      
+      <h2 class="h3 text-center mb-3 fw-bold">Bienvenido a DIBA FBC</h2>
+      
+      <div id="alert-container"></div>
+
+      <!-- Solo login -->
+      <ul class="nav nav-tabs nav-fill mb-4" id="authTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+          <button class="nav-link active" id="login-tab" data-bs-toggle="tab" data-bs-target="#login-pane" type="button" role="tab">Iniciar Sesión</button>
+        </li>
       </ul>
-    </nav>
-  </header>
 
-  <main>
-    <section class="login-section">
-      <h2>Iniciar Sesión</h2>
-      <form id="loginForm">
-        <div>
-          <label for="correo">Correo:</label>
-          <input type="email" id="correo" name="correo" required />
+      <div class="tab-content" id="authTabsContent">
+        <div class="tab-pane fade show active" id="login-pane" role="tabpanel">
+          <form id="login-form" novalidate>
+            <div class="mb-3">
+              <label for="login-username" class="form-label">Usuario</label>
+              <input type="text" class="form-control" id="login-username" required placeholder="Tu usuario">
+            </div>
+            <div class="mb-4">
+              <label for="login-password" class="form-label">Contraseña</label>
+              <input type="password" class="form-control" id="login-password" required placeholder="••••••••">
+            </div>
+            <button type="submit" id="login-button" class="btn btn-primary w-100 fw-bold btn-submit">
+              <span class="button-text">Iniciar Sesión</span>
+              <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+            </button>
+          </form>
         </div>
-        <div>
-          <label for="clave">Contraseña:</label>
-          <input type="password" id="clave" name="clave" required />
-        </div>
-        <button type="submit">Entrar</button>
-      </form>
-    </section>
-  </main>
+      </div>
+    </div>
+  </div>
 
-  <footer>
-    <p>&copy; 2025 DIBA FBC. Todos los derechos reservados.</p>
-  </footer>
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Supabase JS -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  
+ <script>
+  // --- 1. CONFIGURACIÓN ---
+  const SUPABASE_URL = 'https://wdnlqfiwuocmmcdowjyw.supabase.co';
+  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndkbmxxZml3dW9jbW1jZG93anl3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg1MjY1ODAsImV4cCI6MjA2NDEwMjU4MH0.4SCS_NRDIYLQJ1XouqW111BxkMOlwMWOjje9gFTgW_Q'; // tu anon key real
+  const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  // --- 2. ELEMENTOS DOM ---
+  const loginForm = document.getElementById('login-form');
+  const loginButton = document.getElementById('login-button');
+  const alertContainer = document.getElementById('alert-container');
+
+  // --- 3. FUNCIONES ---
+  function showAlert(message, type = 'danger') {
+    const alertHTML = `
+      <div class="alert alert-${type} alert-dismissible fade show" role="alert">
+        ${message}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+      </div>
+    `;
+    alertContainer.innerHTML = alertHTML;
+  }
+
+  function setLoading(button, isLoading, originalText = '') {
+    const buttonText = button.querySelector('.button-text');
+    const spinner = button.querySelector('.spinner-border');
+    
+    if (isLoading) {
+      button.disabled = true;
+      buttonText.textContent = 'Procesando...';
+      spinner.classList.remove('d-none');
+    } else {
+      button.disabled = false;
+      buttonText.textContent = originalText;
+      spinner.classList.add('d-none');
+    }
+  }
+
+  // --- 4. LOGIN ---
+  loginForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    alertContainer.innerHTML = '';
+    setLoading(loginButton, true, 'Iniciar Sesión');
+
+    const username = document.getElementById('login-username').value.trim();
+    const password = document.getElementById('login-password').value.trim();
+
+    try {
+      const { data, error } = await supabaseClient
+        .from('usuarios')
+        .select('*')
+        .eq('username', username)
+        .eq('password', password)
+        .single();
+
+      if (error || !data) {
+        throw new Error("Usuario o contraseña incorrectos");
+      }
+
+      // Guardamos sesión en localStorage (manual)
+      localStorage.setItem("usuario", JSON.stringify(data));
+
+      showAlert('¡Inicio de sesión exitoso! Redirigiendo...', 'success');
+      setTimeout(() => { window.location.href = 'GestorDocumental.html'; }, 1500);
+
+    } catch (err) {
+      console.error(err);
+      showAlert('Credenciales incorrectas. Verifica tu usuario y contraseña.', 'danger');
+      setLoading(loginButton, false, 'Iniciar Sesión');
+    }
+  });
+
+  // --- 5. VERIFICAR SESIÓN AL ENTRAR ---
+  document.addEventListener('DOMContentLoaded', () => {
+    const usuario = localStorage.getItem("usuario");
+    if (usuario) {
+      window.location.href = 'index.html';
+    }
+  });
+</script>
 </body>
 </html>
