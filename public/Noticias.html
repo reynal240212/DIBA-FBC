@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>DIBA FBC | Inicio, Historia y Patrocinadores</title>
+  <link rel="icon" href="images/ESCUDO.ico" sizes="32x32">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Meta tags para redes -->
+  <meta property="og:title" content="DIBA FBC | Inicio, Historia y Patrocinadores" />
+  <meta property="og:description" content="Descubre la historia, servicios, equipo y patrocinadores de DIBA FBC." />
+  <meta property="og:image" content="https://diba-fbc.vercel.app/images/ESCUDO.png" />
+  <meta property="og:url" content="https://diba-fbc.vercel.app/" />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="DIBA FBC | Inicio, Historia y Patrocinadores" />
+  <meta name="twitter:description"
+    content="Club de fútbol amateur en Barranquilla. Conoce nuestro equipo y patrocinadores." />
+  <meta name="twitter:image" content="https://diba-fbc.vercel.app/images/ESCUDO.png" />
+
+  <!-- Fonts y CSS -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" />
+  <link rel="stylesheet" href="styles/styles.css" />
+  <link rel="stylesheet" href="styles/background-animation.css" />
+  <link rel="manifest" href="manifest.json" />
+
+</head>
+
+<style>
+  .card-image-section {
+    border: none;
+    overflow: hidden;
+  }
+
+  .card-body-content {
+    padding: 2rem;
+  }
+
+  /* Estilos para las tarjetas de imagen */
+  .image-card {
+    position: relative;
+    border-radius: 0.75rem;
+    /* Bordes redondeados */
+    overflow: hidden;
+    height: 350px;
+    /* Altura fija para las tarjetas de imagen */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    /* Sombra sutil */
+    transition: transform 0.3s ease-in-out;
+    /* Transición para el hover */
+  }
+
+  .image-card:hover {
+    transform: translateY(-5px);
+    /* Efecto de elevación al pasar el ratón */
+  }
+
+  .image-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* Cubrir el área sin distorsionar */
+    filter: brightness(0.8);
+    /* Oscurecer un poco la imagen para que el texto resalte */
+  }
+
+  .image-card-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 1.5rem;
+    color: white;
+    /* Degradado de abajo hacia arriba */
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0) 100%);
+  }
+
+  .image-card-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+  }
+
+  .image-card-subtitle {
+    font-size: 0.9rem;
+    opacity: 0.8;
+  }
+
+  /* Animación de entrada suave (fade-in) para el texto y las imágenes */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-fade-in {
+    animation: fadeIn 1s ease-out forwards;
+  }
+
+  .text-center-desktop {
+    text-align: center;
+  }
+
+  @media (min-width: 992px) {
+
+    /* breakpoint de desktop */
+    .text-center-desktop {
+      text-align: left;
+    }
+  }
+</style>
+
+<body>
+  <!-- Service Worker -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/service-worker.js')
+        .then(reg => console.log("SW registrado:", reg))
+        .catch(err => console.error("Error registrando SW:", err));
+    }
+  </script>
+  <div id="navbar-container"></div>
+  <div id="hero-container"></div>
+  <div id="patrocinadores-container"></div>
+
+
+  </div>
+  </div>
+  </section>
+  <section>
+    <div class="container my-5">
+      <h1 class="text-center fw-bold mb-4">
+        PARTIDO DE ELIMINACIÓN DIRECTA – TORNEO KIDSSOCCER LA PRADERA Categoria 2014/15
+      </h1>
+
+      <p class="text-center text-muted mb-4 fs-6">
+        📅 Fecha: Sábado, 27 de septiembre de 2025
+      </p>
+
+      <div class="text-center my-4">
+        <img src="images/2014_2015.jpg" alt="Categoría 2014-2015" class="img-fluid rounded-3 shadow-lg">
+      </div>
+
+      <p class="text-left mb-4 fs-5">
+        Nuestros talentosos jugadores de la <strong>categoría 2014/15</strong> afrontan hoy un
+        trascendental encuentro de <strong>eliminación directa</strong> en el prestigioso torneo
+        <em>KIDSSOCCER La Pradera</em>. Esta cita deportiva representa una oportunidad única para
+        que nuestros jóvenes futbolistas demuestren todo su esfuerzo, disciplina y pasión por el
+        juego, reflejando el trabajo en equipo que ha sido la base de su crecimiento durante la
+        temporada.
+      </p>
+
+      <p class="text-left mb-4 fs-5">
+        Extendemos una cordial invitación a toda la comunidad, familiares y amigos para que
+        acompañen a nuestros jugadores en este emocionante desafío. Su apoyo desde las gradas
+        será el motor que impulse a nuestros chicos a dejarlo todo en la cancha.
+        <strong>¡Vamos DIBA FBC, juntos hacia la victoria!</strong>
+      </p>
+
+      <div class="text-center my-4">
+        <img src="images/jugadores/yesid.jpg" alt="Goleador Yesid" class="img-fluid rounded-3 shadow-lg">
+      </div>
+
+      <p class="text-left mb-4 fs-5">
+        En esta jornada decisiva, todas las miradas estarán puestas en nuestro goleador
+        <strong>Yesid</strong>, quien se ha consolidado como una de las piezas clave del equipo
+        gracias a su garra, habilidad y compromiso dentro del campo. Con una trayectoria
+        sobresaliente a lo largo de la temporada, su liderazgo y capacidad de definición serán
+        determinantes en las aspiraciones del club.
+        <strong>Confiamos en que Yesid y todo el plantel dejarán en alto el nombre de DIBA FBC.</strong>
+      </p>
+    </div>
+  </section>
+  <section>
+    <div class="container my-5">
+      <h1 class="text-center fw-bold mb-4 text-uppercase">
+        SEMIFINAL – TORNEO SUROCCIDENTE BARRANQUILLA Categoria 2012/13
+      </h1>
+
+      <p class="text-center fs-4 mb-3 d-flex align-items-center justify-content-center gap-3">
+  <strong>
+    <img src="images/ESCUDO.png" 
+         alt="Escudo DIBA FBC" 
+         class="img-fluid" 
+         style="max-height: 80px;">
+  </strong>
+  <span class="fw-bold fs-3">🆚</span>
+  <strong>
+    <img src="https://scontent.ftkd1-1.fna.fbcdn.net/v/t39.30808-6/458187833_1047143467104788_4520351497237448140_n.jpg?_nc_cat=102&ccb=1-7&_nc_sid=6ee11a&_nc_eui2=AeG4dH833sI2AMsBjCufN0GN2-JrDI0V21Lb4msMjRXbUlSYVhYWcfCcoDJry6veTGVx4zTPezbqQVYGo-3D8QAx&_nc_ohc=KrBRDgeeAHAQ7kNvwHETokV&_nc_oc=Adl7N8LnuGKO47VwFS2taEYHb2yhGbIlxrZZYRtwknnLjZD338kfhuk49c278nWYqDI&_nc_zt=23&_nc_ht=scontent.ftkd1-1.fna&_nc_gid=F2DVDT8_T6F-wEfy7R1riA&oh=00_AfYnPe4Bu94XgWclqFsC6b2ka0Y4qPk6ns0FEgnl08DsvQ&oe=68DDDF32" 
+         alt="Escudo OCAM" 
+         class="img-fluid" 
+         style="max-height: 80px;">
+  </strong>
+</p>
+
+
+      <p class="text-center text-muted fs-6 mb-4">
+        📅 Sábado, 27 de septiembre de 2025 <br>
+        📍 Cancha Polideportivo de la 27
+      </p>
+
+
+
+      <h3 class="fw-bold text-left mb-3">Convocados:</h3>
+      <ul class="list-group list-group-flush mb-4 fs-5">
+        <li class="list-group-item">Juan Tobías</li>
+        <li class="list-group-item">Dilan Sánchez</li>
+        <li class="list-group-item">Dany Tapias</li>
+        <li class="list-group-item">Daniel Rodríguez</li>
+        <li class="list-group-item">Nelson Pauline</li>
+        <li class="list-group-item">Santiago Mendoza</li>
+        <li class="list-group-item">Oscar López</li>
+        <li class="list-group-item">Miguel Aldana</li>
+        <li class="list-group-item">Yojainer Villalobos</li>
+        <li class="list-group-item">Jesús Ricardo</li>
+        <li class="list-group-item">Ángel Hernández</li>
+        <li class="list-group-item">Larson Orozco</li>
+        <li class="list-group-item">Joseph Aldana</li>
+        <li class="list-group-item">Mateo Boscán</li>
+        <li class="list-group-item">Jesús A. Camargo</li>
+        <li class="list-group-item">Steven Cabarcas</li>
+        <li class="list-group-item">Isaac Ventura</li>
+        <li class="list-group-item">Eliuth Meza</li>
+        <li class="list-group-item">Zaid Ricardo</li>
+      </ul>
+      <div class="container my-5">
+  <div class="text-center my-4">
+    <img src="images/jugadores/dyaln sanchez.jpg" 
+         alt="Goleador Dylan Sánchez" 
+         class="img-fluid rounded-3 shadow-lg">
+  </div>
+
+  <h3 class="fw-bold text-left mb-3">Dylan Sánchez – Goleador Categoría 2012</h3>
+  <p class="text-left fs-5">
+    Con apenas 13 años, <strong>Dylan Sánchez</strong> se ha consolidado como uno de los jugadores 
+    más decisivos de la categoría 2012. Su instinto goleador, velocidad y precisión frente al arco 
+    lo han convertido en una pieza fundamental para <strong>DIBA FBC</strong>, siendo responsable de 
+    gran parte de los triunfos alcanzados durante la temporada.
+  </p>
+  <p class="text-left fs-5">
+    Dylan no solo brilla por sus goles, sino también por su entrega y compromiso en cada partido. 
+    Su capacidad para liderar en el campo inspira a sus compañeros y refleja el trabajo constante 
+    que realiza dentro y fuera de los entrenamientos. 
+    <br><br>
+    ⚽ <em>Confiamos en que Dylan seguirá dejando huella con su talento y será clave en las metas 
+    que nuestro equipo se ha propuesto alcanzar.</em>
+  </p>
+</div>
+
+
+      <p class="text-left fs-5">
+        Esta semifinal es un momento clave en el camino de <strong>DIBA FBC</strong>.
+        Con un equipo lleno de talento, compromiso y pasión, nuestros jugadores saldrán a darlo
+        todo en la cancha. Invitamos a toda la comunidad, familiares y seguidores a
+        <strong>acompañar y alentar</strong> a los convocados en este reto decisivo.
+        <br><br>
+        ⚽ <em>¡Vamos DIBA FBC, la victoria está en nuestras manos!</em>
+      </p>
+    </div>
+  </section>
+
+
+
+  <!-- Contenedor para el Footer (se carga desde layout/footer.html) -->
+  <div id="footer-container"></div>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="scripts/loadComponents.js"></script>
+  <script src="scripts/main.js"></script>
+
+</body>
+
+</html>
