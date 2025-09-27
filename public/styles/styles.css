@@ -1568,7 +1568,7 @@ th {
 .hero-deportivo {
   position: relative;
   /* Esencial para posicionar el pseudo-elemento */
-  background: url('../images/estadio.jpg') no-repeat center center/cover;
+  background: url('../images/vision\ board.png') no-repeat center center/cover;
   /* Imagen de fondo */
   height: 100vh;
   /* O la altura que desees, por ejemplo, 700px */
