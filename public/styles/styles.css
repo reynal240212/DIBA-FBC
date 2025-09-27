@@ -1570,6 +1570,7 @@ th {
   /* Esencial para posicionar el pseudo-elemento */
   background: url('../images/visionboard.png') no-repeat center center/cover;
   /* Imagen de fondo */
+  width: 100vh;
   height: 100vh;
   /* O la altura que desees, por ejemplo, 700px */
   display: flex;
