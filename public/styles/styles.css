@@ -28,6 +28,9 @@
   --draw-color: #ffc107;
   --loss-color: #dc3545;
   --text-color: #333;
+  --goleadores-bg: rgba(0, 0, 0, 0.92);
+  --goleadores-header-accent: #ffd700;
+  --goleadores-header-title: #f5dd0a;
 }
 
 *,
@@ -901,7 +904,9 @@ img {
 }
 
 .footer-links {
-  display: grid;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: 2rem;
   padding: 0 2rem;
@@ -1568,9 +1573,8 @@ th {
 .hero-deportivo {
   position: relative;
   /* Esencial para posicionar el pseudo-elemento */
-  background: url('../images/visionboard.png') no-repeat center center/cover;
+  background: url('../images/estadio.jpg') no-repeat center center/cover;
   /* Imagen de fondo */
-  width: 100vh;
   height: 100vh;
   /* O la altura que desees, por ejemplo, 700px */
   display: flex;
@@ -1685,7 +1689,7 @@ th {
 }
 
 .goleadores-content {
-  background-color: rgba(0, 27, 114, 0.92);
+  background-color: var(--goleadores-bg);
   /* Azul oscuro semi-transparente */
   padding: 2rem;
   border-radius: 8px;
@@ -1704,7 +1708,7 @@ th {
 .header-accent {
   width: 150px;
   height: 6px;
-  background-color: #ffd700;
+  background-color: var(--goleadores-header-accent);
   /* Amarillo dorado */
   margin: 0 auto 1.5rem auto;
   border-radius: 3px;
@@ -1714,7 +1718,7 @@ th {
   font-size: 1.5rem;
   font-weight: 700;
   text-transform: uppercase;
-  color: #ffffff;
+  color: #000000;
   letter-spacing: 1px;
 }
 
@@ -1722,7 +1726,7 @@ th {
   font-size: 2.5rem;
   font-weight: 900;
   text-transform: uppercase;
-  color: #c8ff00;
+  color: var(--goleadores-header-title);
   /* Verde lima brillante */
   letter-spacing: 2px;
   margin-top: 0.5rem;
@@ -1740,7 +1744,7 @@ th {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #001b72;
+  background-color: var(--accent-transparent);
   /* Un azul un poco más claro que el fondo */
   padding: 0.75rem 1.5rem;
   border-radius: 10px;
@@ -1989,4 +1993,35 @@ th {
 
 .indumentaria-seccion img:hover {
   transform: scale(1.02);
+}
+
+.match-card {
+  max-width: 420px;
+  background: #fdd835;
+  /* Amarillo estilo Bundesliga */
+  border-radius: 12px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+}
+
+.match-header {
+  background: #000;
+  color: #fff;
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+
+.match-body {
+  color: #000;
+}
+
+.team-logo {
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+}
+
+.score {
+  font-size: 2rem;
+  font-weight: 900;
 }
