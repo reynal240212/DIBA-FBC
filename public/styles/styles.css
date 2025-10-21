@@ -360,52 +360,106 @@ img {
   }
 }
 
+:root {
+  /* Define una variable para el color primario de acento */
+  --color-acento: #ff9900;
+  /* Define una variable para la transición */
+  --transition-normal: 0.5s ease-in-out;
+}
+
 #patrocinadores {
+  /* Fondo con un gradiente más suave y moderno, usando la variable de acento */
+  background: linear-gradient(180deg, #ffffff 0%, #fff9e6 40%, var(--color-acento) 150%);
   padding: 80px 0;
-  background: linear-gradient(180deg, #ffffff 0%, #ffcc00 100%);
   color: #1c1c1c;
 }
 
 #patrocinadores h2 {
-  font-weight: 700;
+  /* Fuente más grande y un espaciado más sutil */
+  font-weight: 800;
   text-transform: uppercase;
-  letter-spacing: 1px;
-  margin-bottom: 15px;
+  letter-spacing: 2px;
+  margin-bottom: 10px;
+  color: #333;
 }
 
 #patrocinadores p {
-  font-size: 1.1rem;
-  margin-bottom: 40px;
-  color: #1c1c1c;
+  font-size: 1.15rem;
+  margin-bottom: 50px;
+  color: #555;
 }
 
-#patrocinadores .col-6 a img {
+/* Estilos para el grupo de logos dentro de cada item del carrusel */
+#sponsorCarousel .logo-group img {
+  /* Máxima altura y ancho más controlado para responsividad */
+  max-height: 100px;
+  width: auto;
+  max-width: 25%;
+  /* Asegura que no se salgan, si usas d-flex justify-content-around */
+  margin: 10px;
+
+  /* Efecto inicial de 'apagado' */
   filter: grayscale(100%);
-  opacity: 0.7;
+  opacity: 0.6;
   transition: all var(--transition-normal);
-}
-
-#patrocinadores .col-6 a:hover img {
-  filter: grayscale(0%);
-  opacity: 1;
-  transform: scale(1.1);
-}
-
-.carousel-item img {
-  max-height: 150px;
-  margin: auto;
-  object-fit: contain;
-}
-
-.card-img-top.img-clickable {
-  transition: transform 0.3s, box-shadow 0.3s;
   cursor: pointer;
 }
 
-.card-img-top.img-clickable:hover {
-  transform: scale(1.07) rotate(-2deg);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
-  z-index: 2;
+/* Efecto al pasar el mouse: 'encender' el color y pequeña elevación */
+#sponsorCarousel .logo-group img:hover {
+  filter: grayscale(0%);
+  opacity: 1;
+  transform: scale(1.05);
+  /* Ligeramente más grande */
+}
+
+/* Estilos para los controles del carrusel (flechas) */
+#sponsorCarousel .carousel-control-prev-icon,
+#sponsorCarousel .carousel-control-next-icon {
+  /* Hace las flechas visibles sobre el fondo claro */
+  background-image: none;
+  background-color: rgba(0, 0, 0, 0.4);
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  opacity: 0.8;
+}
+
+/* Color de icono de Bootstrap (para que aparezca la flecha) */
+#sponsorCarousel .carousel-control-prev::before {
+  content: '<';
+  color: white;
+  font-size: 1rem;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+#sponsorCarousel .carousel-control-next::before {
+  content: '>';
+  color: white;
+  font-size: 1rem;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* Medias Query para hacer la sección Responsiva */
+
+/* En pantallas pequeñas, muestra solo 1 o 2 logos */
+@media (max-width: 768px) {
+  #sponsorCarousel .logo-group {
+    /* Fuerza a que los logos se muestren verticalmente o en grupos de 2 */
+    flex-wrap: wrap;
+  }
+
+  #sponsorCarousel .logo-group img {
+    max-width: 40%;
+    /* Dos logos por fila */
+    margin: 15px;
+  }
 }
 
 #resumen-historia {
