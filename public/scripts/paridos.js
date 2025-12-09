@@ -1,9 +1,13 @@
-import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+// public/scripts/paridos.js
+
+// Supabase desde CDN UMD (ver HTML)
+// Usamos el global `supabase` que expone createClient
+const { createClient } = window.supabase;
 
 // Configuración de Supabase
 const supabaseUrl = 'https://wdnlqfiwuocmmcdowjyw.supabase.co';
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndkbmxxZml3dW9jbW1jZG93anl3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg1MjY1ODAsImV4cCI6MjA2NDEwMjU4MH0.4SCS_NRDIYLQJ1XouqW111BxkMOlwMWOjje9gFTgW_Q';
-const supabase = createClient(supabaseUrl, supabaseKey);
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndkbmxxZml3dW9jbW1jZG93anl3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg1MjY1ODAsImV4cCI6MjA2NDEwMjU4MH0.4SCS_NRDIYLQJ1XouqW111BxkMOlwMWOjje9gFTgW_Q'; // anon key pública
+const supabaseClient = createClient(supabaseUrl, supabaseKey);
 
 // Selectores
 const inputFecha = document.getElementById('fecha');
@@ -14,11 +18,12 @@ const trainingsContainer = document.getElementById('trainings-container');
 const loadingSpinnerEntrenamiento = document.getElementById('loading-spinner-entrenamiento');
 
 // Helper para formatear fecha
-const formatearFecha = fechaISO => new Date(fechaISO).toLocaleDateString('es-CO', {
-  year: 'numeric',
-  month: 'long',
-  day: 'numeric'
-});
+const formatearFecha = fechaISO =>
+  new Date(fechaISO).toLocaleDateString('es-CO', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  });
 
 // Crear tarjetas
 function crearCard({ tipo, titulo, cuerpo, escudo = null, color = 'primary' }) {
@@ -46,7 +51,7 @@ function crearCard({ tipo, titulo, cuerpo, escudo = null, color = 'primary' }) {
 
 // ----- PARTIDOS -----
 async function obtenerPartidos() {
-  const { data, error } = await supabase.from('partidos').select('*');
+  const { data, error } = await supabaseClient.from('partidos').select('*');
   if (error) {
     console.error('Error al obtener partidos:', error);
     return [];
@@ -102,11 +107,13 @@ async function filtrarPartidos() {
   });
 }
 
-inputFecha.addEventListener('change', filtrarPartidos);
+if (inputFecha) {
+  inputFecha.addEventListener('change', filtrarPartidos);
+}
 
 // ----- ENTRENAMIENTOS -----
 async function obtenerEntrenamientos() {
-  const { data, error } = await supabase.from('entrenamientos').select('*');
+  const { data, error } = await supabaseClient.from('entrenamientos').select('*');
   if (error) {
     console.error('Error al obtener entrenamientos:', error);
     return [];
@@ -130,7 +137,8 @@ async function filtrarEntrenamientos() {
 
   const filtrados = entrenamientos.filter(e => {
     const fechaLocal = new Date(e.fecha);
-    const fechaISO = fechaLocal.getFullYear() + '-' +
+    const fechaISO =
+      fechaLocal.getFullYear() + '-' +
       String(fechaLocal.getMonth() + 1).padStart(2, '0') + '-' +
       String(fechaLocal.getDate()).padStart(2, '0');
     return fechaISO === fechaSeleccionada;
@@ -162,11 +170,13 @@ async function filtrarEntrenamientos() {
   trainingsContainer.appendChild(fragment);
 }
 
-inputFechaEntrenamiento.addEventListener('change', filtrarEntrenamientos);
+if (inputFechaEntrenamiento) {
+  inputFechaEntrenamiento.addEventListener('change', filtrarEntrenamientos);
+}
 
 // ----- CLASIFICACIÓN -----
 async function obtenerClasificacion() {
-  const { data, error } = await supabase
+  const { data, error } = await supabaseClient
     .from('clasificacion_categoria_2014_15')
     .select('*')
     .order('posicion', { ascending: true });
@@ -183,13 +193,15 @@ async function mostrarClasificacion() {
   const container = document.getElementById('clasificacion-container');
   const spinner = document.getElementById('loading-clasificacion');
 
+  if (!container || !spinner) return;
+
   spinner.style.display = 'block';
   container.innerHTML = '';
 
   const datos = await obtenerClasificacion();
   spinner.style.display = 'none';
 
-  if (datos.length === 0) {
+  if (!datos.length) {
     container.innerHTML = '<p class="text-center text-muted">No hay datos de clasificación disponibles.</p>';
     return;
   }
@@ -213,7 +225,9 @@ async function mostrarClasificacion() {
       </tr>
     </thead>
     <tbody>
-      ${datos.map(e => `
+      ${datos
+        .map(
+          e => `
         <tr class="${e.equipo.toLowerCase().includes('diba') ? 'table-danger fw-bold' : ''}">
           <td>${e.posicion}</td>
           <td>${e.equipo}</td>
@@ -226,7 +240,9 @@ async function mostrarClasificacion() {
           <td>${e.goles_contra}</td>
           <td>${e.diferencia}</td>
         </tr>
-      `).join('')}
+      `
+        )
+        .join('')}
     </tbody>
   `;
 
@@ -238,7 +254,7 @@ async function mostrarPartidosDIBA() {
   const dibaContainer = document.getElementById('diba-slider');
   if (!dibaContainer) return;
 
-  const { data, error } = await supabase
+  const { data, error } = await supabaseClient
     .from('partidos')
     .select('*')
     .or('equipolocal.ilike.%DIBA%,equipovisitante.ilike.%DIBA%')
@@ -276,13 +292,10 @@ async function mostrarPartidosDIBA() {
   });
 
   dibaContainer.appendChild(fragment);
-
-  
-
-    
 }
 
-
 // Ejecutar automáticamente al cargar la página
-mostrarClasificacion();
-mostrarPartidosDIBA();
+document.addEventListener('DOMContentLoaded', () => {
+  mostrarClasificacion();
+  mostrarPartidosDIBA();
+});

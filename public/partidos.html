@@ -230,12 +230,18 @@
     integrity="sha256-o9N1jzEOkG2z0KLFm7nS5MQe8PgrKaH60p3pqYy5S0c=" crossorigin=""></script>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
+  <!-- Tu código general -->
   <script src="scripts/loadComponents.js"></script>
   <script src="scripts/main.js"></script>
   <script src="scripts/script.js"></script>
-  <script type="module" src="scripts/paridos.js"></script>
 
-  <!-- Script en línea (se mantiene para no afectar la lógica actual) -->
+  <!-- Supabase desde CDN UMD (sin +esm) -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <!-- Lógica de calendario / partidos (ya SIN type="module") -->
+  <script src="scripts/paridos.js"></script>
+
+  <!-- Script en línea para los botones de cerrar -->
   <script>
     document.getElementById('btn-close-partidos').addEventListener('click', () => {
       document.querySelector('#matches-container').innerHTML = '';
@@ -245,5 +251,4 @@
     });
   </script>
 </body>
-
 </html>
