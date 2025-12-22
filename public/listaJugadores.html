@@ -1,227 +1,305 @@
 <!DOCTYPE html>
-<html lang="es" data-bs-theme="light">
+<html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <title>Lista Jugadores - DIBA FBC</title>
-  <meta name="author" content="REINALDO DE JESUS PEREZ NAVAS" />
-  <meta name="keywords" content="DIBA FBC, Barranquilla, Fútbol, Jugadores" />
-  <meta name="theme-color" content="#002a40" />
-  <link rel="icon" href="https://i.postimg.cc/x8W7vwJJ/ESCUDO.png" type="image/png">
+  <title>DIBA FBC - Sistema de Gestión Deportiva</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="https://i.postimg.cc/x8W7vwJJ/ESCUDO.png" type="image/png">
 
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
 
   <style>
+    /* VARIABLES DE MARCA DIBA FBC */
     :root {
-      --primary-color: #002a40;
-      --secondary-color: #005f73;
-      --bs-body-bg: #f8f9fa;
+      --diba-dark: #002a40;
+      --diba-gold: #c5a059;
+      --diba-light: #f8f9fa;
+      --diba-white: #ffffff;
     }
-    body { background-color: var(--bs-body-bg); }
-    .navbar { background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)) !important; }
-    .list-group-item {
-      border-left: 4px solid var(--primary-color);
-      transition: all 0.2s;
+
+    /* --- ESTILOS NAVEGADOR (FRONTEND) --- */
+    body { 
+      background-color: #eef2f5; 
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+      color: var(--diba-dark);
     }
-    .list-group-item:hover { 
-      background-color: #e9f4ff !important; 
-      transform: translateX(5px);
-      box-shadow: 0 2px 8px rgba(0,42,64,0.15);
+    
+    .navbar { 
+      background: var(--diba-dark) !important; 
+      border-bottom: 3px solid var(--diba-gold);
     }
-    .loading { opacity: 0.6; pointer-events: none; }
-    .stats-card { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
+
+    .dashboard-card {
+      border: none;
+      border-radius: 15px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      transition: transform 0.2s;
+    }
+
+    .btn-print {
+      background-color: var(--diba-gold);
+      color: var(--diba-white);
+      font-weight: bold;
+      border: none;
+    }
+
+    .btn-print:hover { 
+      background-color: #a38446; 
+      color: var(--diba-white); 
+    }
+
+    .table-container { 
+      background: var(--diba-white); 
+      border-radius: 12px; 
+      padding: 25px; 
+      margin-bottom: 40px;
+    }
+
+    /* Ocultar elementos exclusivos de impresión en la web */
+    #print-header, .print-only { display: none; }
+
+    /* --- ESTILOS DE IMPRESIÓN (PLANILLA FORMAL) --- */
+    @media print {
+      /* Propiedades de color para compatibilidad total */
+      * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+
+      /* Ocultar interfaz web */
+      .no-print, .navbar, .btn, .stats-row { display: none !important; }
+      
+      body { 
+        background-color: white !important; 
+        margin: 0; 
+        padding: 0; 
+      }
+
+      .container { 
+        max-width: 100% !important; 
+        width: 100% !important; 
+        margin: 0 !important; 
+        padding: 0.5cm !important;
+      }
+
+      /* Mostrar cabecera técnica */
+      #print-header { 
+        display: block !important; 
+        width: 100%;
+        margin-bottom: 15px;
+      }
+
+      .planilla-table {
+        width: 100% !important;
+        border-collapse: collapse !important;
+        margin-top: 0;
+      }
+
+      /* Bordes negros y texto nítido como en la imagen de referencia */
+      .planilla-table th, 
+      .planilla-table td {
+        border: 1px solid #000 !important;
+        padding: 8px 6px !important;
+        color: black !important;
+        font-size: 9.5pt !important;
+      }
+
+      .planilla-table th {
+        background-color: #eeeeee !important;
+        text-transform: uppercase;
+        font-weight: bold;
+      }
+
+      /* Estructura del encabezado de la planilla */
+      .header-grid {
+        display: grid;
+        grid-template-columns: 2fr 1fr 1fr;
+        border: 2px solid #000;
+        margin-bottom: 10px;
+      }
+
+      .header-item {
+        border-right: 1px solid #000;
+        padding: 6px;
+        font-size: 9pt;
+      }
+
+      .header-item:last-child { border-right: none; }
+      
+      .label-box { 
+        font-weight: bold; 
+        text-transform: uppercase; 
+        font-size: 7.5pt; 
+        display: block; 
+        border-bottom: 1px solid #ccc; 
+        margin-bottom: 3px; 
+      }
+
+      .escudo-print { width: 65px; height: 65px; }
+      
+      /* Forzar que las celdas vacías tengan altura para firmar */
+      .firma-cell { height: 35px; }
+    }
   </style>
 </head>
 
 <body>
-  <!-- Toast -->
-  <div class="toast-container position-fixed top-0 end-0 p-3">
-    <div id="appToast" class="toast" role="alert">
-      <div class="toast-header">
-        <i class="fas fa-check-circle text-success me-2"></i>
-        <strong class="me-auto">DIBA FBC</strong>
-        <button type="button" class="btn-close" data-bs-dismiss="toast"></button>
-      </div>
-      <div class="toast-body"></div>
-    </div>
-  </div>
 
-  <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg navbar-dark shadow-lg">
+  <nav class="navbar navbar-expand-lg navbar-dark shadow no-print">
     <div class="container">
-      <a class="navbar-brand fw-bold" href="#">
-        <img src="https://i.postimg.cc/x8W7vwJJ/ESCUDO.png" alt="DIBA FBC" width="30" height="30" class="me-2">
-        DIBA FBC
+      <a class="navbar-brand d-flex align-items-center" href="#">
+        <img src="https://i.postimg.cc/x8W7vwJJ/ESCUDO.png" width="45" height="45" class="me-2">
+        <div class="lh-1">
+          <span class="fw-bold d-block">DIBA FBC</span>
+          <small style="font-size: 0.7rem; color: var(--diba-gold);">SISTEMA DE CONTROL DEPORTIVO</small>
+        </div>
       </a>
+      <div class="d-flex gap-2">
+        <button id="refreshBtn" class="btn btn-outline-light btn-sm px-3">
+          <i class="fas fa-sync-alt me-1"></i> Sincronizar
+        </button>
+        <button onclick="window.print()" class="btn btn-print btn-sm px-3">
+          <i class="fas fa-file-pdf me-1"></i> Imprimir Planilla
+        </button>
+      </div>
     </div>
   </nav>
 
-  <main class="container mt-4 mb-5">
-    <!-- Stats Card -->
-    <div class="row mb-4">
-      <div class="col-md-3">
-        <div class="card stats-card shadow-lg">
-          <div class="card-body text-center p-3">
-            <i class="fas fa-users fa-2x mb-2 opacity-75"></i>
-            <h3 id="totalJugadores" class="mb-0">0</h3>
-            <small>Total Jugadores</small>
+  <main class="container mt-4">
+    
+    <div class="row mb-4 stats-row no-print">
+      <div class="col-md-4">
+        <div class="card dashboard-card p-3 bg-white">
+          <div class="d-flex align-items-center">
+            <div class="rounded-circle bg-primary bg-opacity-10 p-3 me-3">
+              <i class="fas fa-user-check text-primary fa-2x"></i>
+            </div>
+            <div>
+              <h2 id="totalCount" class="mb-0 fw-bold">0</h2>
+              <p class="text-muted small mb-0">Jugadores Activos</p>
+            </div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Controls -->
-    <div class="card shadow-sm mb-4">
-      <div class="card-body d-flex justify-content-between align-items-center flex-wrap gap-2">
-        <h2 class="mb-0"><i class="fas fa-list me-2"></i>Lista de Jugadores</h2>
-        <div class="d-flex gap-2">
-          <button id="refreshBtn" class="btn btn-outline-primary">
-            <i class="fas fa-sync-alt"></i> Recargar
-          </button>
-          <button id="printBtn" class="btn btn-primary">
-            <i class="fas fa-print"></i> Imprimir
-          </button>
+    <div id="print-header">
+      <div class="d-flex align-items-center justify-content-between border-bottom border-dark pb-3 mb-3">
+        <img src="https://i.postimg.cc/x8W7vwJJ/ESCUDO.png" class="escudo-print">
+        <div class="text-center">
+          <h3 class="mb-0 fw-bold">DEPORTIVO INTERNACIONAL DE BARRANQUILLA (DIBA FBC)</h3>
+          <p class="mb-0 small fw-bold">PLANILLA DE CONTROL, ASISTENCIA Y SEGUIMIENTO DEPORTIVO</p>
+        </div>
+        <div style="width: 65px;"></div> </div>
+
+      <div class="header-grid">
+        <div class="header-item">
+          <span class="label-box">Entrenador Responsable:</span>
+          REINALDO DE JESUS PEREZ NAVAS
+        </div>
+        <div class="header-item">
+          <span class="label-box">Lugar / Sede:</span>
+          BARRANQUILLA, ATLÁNTICO
+        </div>
+        <div class="header-item">
+          <span class="label-box">Fecha (DD/MM/AAAA):</span>
+          ____ / ____ / 2025
         </div>
       </div>
     </div>
 
-    <!-- Lista -->
-    <div class="card shadow-lg">
-      <div class="list-group list-group-flush" id="jugadoresList">
-        <div class="list-group-item text-center p-5 bg-light">
-          <i class="fas fa-spinner fa-spin fa-2x text-muted mb-3"></i>
-          <p class="text-muted mb-0">Cargando jugadores desde Supabase...</p>
-        </div>
+    <div class="table-container shadow-sm">
+      <div class="d-flex justify-content-between align-items-center mb-3 no-print">
+        <h5 class="fw-bold m-0"><i class="fas fa-users-cog me-2"></i>Base de Datos de Jugadores</h5>
+        <span class="badge bg-secondary">Orden Alfabético</span>
+      </div>
+
+      <div class="table-responsive">
+        <table class="table table-hover planilla-table">
+          <thead>
+            <tr>
+              <th style="width: 5%" class="text-center">N°</th>
+              <th style="width: 40%">Nombre Completo del Jugador</th>
+              <th style="width: 15%">Cédula / Tarjeta</th>
+              <th style="width: 20%">Barrio de Residencia</th>
+              <th style="width: 20%" class="no-screen">Firma de Asistencia</th>
+            </tr>
+          </thead>
+          <tbody id="dataBody">
+            </tbody>
+        </table>
+      </div>
+      
+      <div class="mt-4 d-flex justify-content-between no-screen" style="border-top: 1px solid #000; padding-top: 10px;">
+        <p class="small">DIBA FBC - "Formando Talento con Disciplina"</p>
+        <p class="small">Firma Entrenador: ___________________________</p>
       </div>
     </div>
   </main>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  
   <script type="module">
     import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
 
-    // ⚠️ CONFIGURA TUS DATOS
     const SUPABASE_URL = 'https://wdnlqfiwuocmmcdowjyw.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndkbmxxZml3dW9jbW1jZG93anl3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg1MjY1ODAsImV4cCI6MjA2NDEwMjU4MH0.4SCS_NRDIYLQJ1XouqW111BxkMOlwMWOjje9gFTgW_Q';
 
-    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);  // inicialización correcta [web:25]
-    
-    // DOM
-    const jugadoresList = document.getElementById('jugadoresList');
-    const totalJugadores = document.getElementById('totalJugadores');
-    const refreshBtn = document.getElementById('refreshBtn');
-    const printBtn = document.getElementById('printBtn');
-    const toastElement = document.getElementById('appToast');
-    const bsToast = new bootstrap.Toast(toastElement);
+    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    // Toast
-    const showToast = (msg, isError = false) => {
-      toastElement.querySelector('.toast-body').textContent = msg;
-      const icon = toastElement.querySelector('.toast-header i');
-      icon.className = isError ? 'fas fa-exclamation-circle text-danger me-2' : 'fas fa-check-circle text-success me-2';
-      bsToast.show();
-    };
+    async function cargarBaseDeDatos() {
+      const body = document.getElementById('dataBody');
+      const totalDisplay = document.getElementById('totalCount');
+      
+      body.innerHTML = '<tr><td colspan="5" class="text-center py-5"><i class="fas fa-spinner fa-spin me-2"></i> Accediendo a la base de datos...</td></tr>';
 
-    // Cargar datos
-    const loadJugadores = async () => {
       try {
-        document.body.classList.add('loading');
-        refreshBtn.disabled = true;
-        refreshBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Cargando...';
-
         const { data, error } = await supabase
           .from('identificacion')
-          .select('numero, nombre, apellidos, lugar_nacimiento') // lugar_nacimiento como "barrio"
-          .order('apellidos', { ascending: true })
-          .order('nombre', { ascending: true });  // select y order válidos [web:33]
+          .select('numero, nombre, apellidos, lugar_nacimiento')
+          .order('apellidos', { ascending: true });
 
         if (error) throw error;
 
-        const jugadores = (data || [])
-          .map(row => ({
-            cedula: row.numero,
-            nombre: row.nombre || '',
-            apellidos: row.apellidos || '',
-            barrio: row.lugar_nacimiento || 'No especificado'
-          }))
-          .filter(j => j.nombre || j.apellidos);
+        totalDisplay.innerText = data.length;
 
-        renderLista(jugadores);
-        showToast(`✅ ${jugadores.length} jugadores cargados`);
+        // Generar filas con datos reales
+        let htmlRows = data.map((jugador, index) => `
+          <tr>
+            <td class="text-center fw-bold">${index + 1}</td>
+            <td class="text-uppercase">${jugador.nombre} ${jugador.apellidos}</td>
+            <td class="text-nowrap">${jugador.numero}</td>
+            <td>${jugador.lugar_nacimiento || '---'}</td>
+            <td class="no-screen firma-cell"></td>
+          </tr>
+        `).join('');
 
-      } catch (error) {
-        console.error('Error:', error);
-        jugadoresList.innerHTML = `
-          <div class="list-group-item text-center p-5 text-danger">
-            <i class="fas fa-exclamation-triangle fa-2x mb-3"></i>
-            <h5>Error de conexión</h5>
-            <p class="mb-2">${error.message}</p>
-            <small>Verifica URL/key y políticas RLS en Supabase</small>
-          </div>`;
-        showToast('❌ Error conectando con Supabase', true);
-      } finally {
-        document.body.classList.remove('loading');
-        refreshBtn.disabled = false;
-        refreshBtn.innerHTML = '<i class="fas fa-sync-alt"></i> Recargar';
+        // Agregar 8 filas vacías para registros manuales (útil en campo)
+        for(let i=1; i<=8; i++) {
+          htmlRows += `
+            <tr class="firma-cell">
+              <td class="text-center text-muted">${data.length + i}</td>
+              <td></td><td></td><td></td><td></td>
+            </tr>
+          `;
+        }
+
+        body.innerHTML = htmlRows;
+
+      } catch (err) {
+        body.innerHTML = `
+          <tr>
+            <td colspan="5" class="text-center py-5 text-danger">
+              <i class="fas fa-exclamation-triangle fa-2x mb-2"></i><br>
+              Error al cargar datos: ${err.message}
+            </td>
+          </tr>`;
       }
-    };
-
-    // Render lista
-    const renderLista = (jugadores) => {
-      totalJugadores.textContent = jugadores.length;
-      
-      if (!jugadores.length) {
-        jugadoresList.innerHTML = `
-          <div class="list-group-item text-center p-5 text-muted">
-            <i class="fas fa-users-slash fa-3x mb-3 opacity-50"></i>
-            <h5>No hay jugadores</h5>
-            <p class="mb-0">La tabla identificacion está vacía</p>
-          </div>`;
-        return;
-      }
-
-      jugadoresList.innerHTML = jugadores.map(jugador => {
-        const inicialNombre = jugador.nombre ? jugador.nombre.charAt(0) : '';
-        const inicialApellido = jugador.apellidos ? jugador.apellidos.charAt(0) : '';
-        const iniciales = (inicialNombre + inicialApellido) || '?';
-
-        return `
-        <div class="list-group-item d-flex align-items-center p-3">
-          <div class="flex-shrink-0 me-3">
-            <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center" style="width:50px;height:50px;font-weight:bold;font-size:0.9em;">
-              ${iniciales}
-            </div>
-          </div>
-          <div class="flex-grow-1">
-            <h6 class="mb-1 fw-bold">${jugador.nombre} ${jugador.apellidos}</h6>
-            <div class="row g-2 text-sm">
-              <div class="col-md-3">
-                <strong>C.C:</strong> ${jugador.cedula}
-              </div>
-              <div class="col-md-5">
-                <strong>Barrio:</strong> ${jugador.barrio}
-              </div>
-            </div>
-          </div>
-          <div class="text-end text-muted small">
-            <i class="fas fa-user-circle"></i>
-          </div>
-        </div>`;
-      }).join('');
-    };
-
-    // Imprimir
-    printBtn.onclick = () => {
-      window.print();
-    };
+    }
 
     // Eventos
-    refreshBtn.onclick = loadJugadores;
-
-    // Init
-    loadJugadores();
+    document.getElementById('refreshBtn').onclick = cargarBaseDeDatos;
+    window.onload = cargarBaseDeDatos;
   </script>
+
 </body>
 </html>
