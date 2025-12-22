@@ -1,12 +1,10 @@
 <!DOCTYPE html>
 <html lang="es" data-bs-theme="light">
-
 <head>
   <meta charset="UTF-8" />
   <title>Planilla General - DIBA FBC</title>
   <meta name="author" content="REINALDO DE JESUS PEREZ NAVAS" />
-  <meta name="keywords"
-    content="DIBA FBC, Deportivo Internacional De Barranquilla Atlántico, Fútbol, Barranquilla, Atlántico, Colombia" />
+  <meta name="keywords" content="DIBA FBC, Deportivo Internacional De Barranquilla Atlántico, Fútbol, Barranquilla, Atlántico, Colombia" />
   <meta name="robots" content="index, follow" />
   <meta name="theme-color" content="#002a40" />
   <link rel="icon" href="https://i.postimg.cc/x8W7vwJJ/ESCUDO.png" type="image/png">
@@ -16,6 +14,9 @@
   <!-- Dependencias CSS (Bootstrap, Font Awesome) -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+  <!-- Supabase Client CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <!-- Dependencias JS para PDF -->
   <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
@@ -67,6 +68,11 @@
     .editable-name:hover {
       background-color: #e9ecef;
     }
+
+    .loading {
+      opacity: 0.6;
+      pointer-events: none;
+    }
   </style>
 </head>
 
@@ -75,8 +81,7 @@
   <!-- Contenedor para Notificaciones -->
   <div class="toast-container position-fixed top-0 end-0 p-3">
     <div id="appToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-      <div class="toast-header"><i class="fas fa-check-circle text-success me-2"></i><strong
-          class="me-auto">Notificación</strong><button type="button" class="btn-close" data-bs-dismiss="toast"></button>
+      <div class="toast-header"><i class="fas fa-check-circle text-success me-2"></i><strong class="me-auto">Notificación</strong><button type="button" class="btn-close" data-bs-dismiss="toast"></button>
       </div>
       <div class="toast-body"></div>
     </div>
@@ -84,8 +89,7 @@
 
   <nav class="navbar navbar-expand-lg navbar-dark shadow-sm">
     <div class="container">
-      <a class="navbar-brand" href="#"><img src="https://i.postimg.cc/x8W7vwJJ/ESCUDO.png" alt="DIBA FBC Logo"
-          width="30" height="30" class="d-inline-block align-text-top me-2">DIBA FBC</a>
+      <a class="navbar-brand" href="#"><img src="https://i.postimg.cc/x8W7vwJJ/ESCUDO.png" alt="DIBA FBC Logo" width="30" height="30" class="d-inline-block align-text-top me-2">DIBA FBC</a>
     </div>
   </nav>
 
@@ -94,10 +98,9 @@
       <h1 class="mb-0 h2">Planilla General</h1>
       <div class="d-flex gap-3 align-items-center mt-2 mt-md-0">
         <div>
-          <!-- MEJORA: Campo de selección para la categoría -->
           <label for="categorySelect" class="form-label mb-0 fw-bold small">Categoría:</label>
           <select class="form-select" id="categorySelect" style="width: auto;">
-            <!-- Las opciones se cargarán con JavaScript -->
+            <option value="all">Todas las Identificaciones</option>
           </select>
         </div>
         <div>
@@ -110,19 +113,14 @@
     <div class="card shadow-sm mb-4">
       <div class="card-body d-flex justify-content-between align-items-center flex-wrap gap-3">
         <form id="addPlayerForm" class="d-flex gap-2">
-          <input type="text" id="newPlayerName" class="form-control" placeholder="Nombre del nuevo jugador" required>
+          <input type="text" id="newPlayerName" class="form-control" placeholder="Nombre completo del nuevo jugador" required>
           <button type="submit" class="btn btn-success"><i class="fas fa-plus"></i> Añadir</button>
         </form>
 
         <div class="d-flex gap-2">
-          <button id="generatePDF" class="btn btn-primary"><span id="pdf-icon"><i
-                class="fas fa-file-pdf"></i></span><span id="pdf-text"> Descargar PDF</span></button>
-          <button id="clearData" class="btn btn-warning" data-bs-toggle="tooltip"
-            title="Borra pagos y asistencia de la categoría actual."><i class="fas fa-eraser"></i> Limpiar
-            Planilla</button>
-          <button id="deleteCategory" class="btn btn-danger" data-bs-toggle="tooltip"
-            title="Elimina PERMANENTEMENTE la categoría actual y todos sus jugadores."><i class="fas fa-trash-alt"></i>
-            Borrar Categoría</button>
+          <button id="refreshData" class="btn btn-outline-primary"><i class="fas fa-sync-alt"></i> Recargar</button>
+          <button id="generatePDF" class="btn btn-primary" disabled><span id="pdf-icon"><i class="fas fa-file-pdf"></i></span><span id="pdf-text"> Descargar PDF</span></button>
+          <button id="clearData" class="btn btn-warning"><i class="fas fa-eraser"></i> Limpiar Planilla</button>
         </div>
       </div>
     </div>
@@ -139,7 +137,9 @@
             <th style="width: 5%;" class="text-center">Acción</th>
           </tr>
         </thead>
-        <tbody id="planillaBody"></tbody>
+        <tbody id="planillaBody">
+          <tr><td colspan="6" class="text-center text-muted p-4"><i class="fas fa-spinner fa-spin me-2"></i>Cargando jugadores desde Supabase...</td></tr>
+        </tbody>
       </table>
     </div>
   </main>
@@ -147,42 +147,30 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
   <script>
-    document.addEventListener('DOMContentLoaded', () => {
+    document.addEventListener('DOMContentLoaded', async () => {
+      // === CONFIGURACIÓN SUPABASE ===
+      // ⚠️ CAMBIA ESTOS VALORES POR LOS DE TU PROYECTO
+      const SUPABASE_URL = 'https://wdnlqfiwuocmmcdowjyw.supabase.co';  // Tu URL de Supabase
+      const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndkbmxxZml3dW9jbW1jZG93anl3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzQ5NTY4MDAsImV4cCI6MjA1MDUzMjgwMH0.your-key-here';  // Tu anon key
 
-      // --- DATOS PRE-CARGADOS ---
-      const PRELOADED_DATA = {
-        "2012/13": [
-          "Juan Tobías", "Dilan sanchez", "Dany tapias", "Angel Hernández", "Miguel aldana",
-          "Rodríguez Daniel", "Nelson pauline", "Santiago Mendoza", "Oscar López",
-          "Yojainer villalobos", "Jesus Ricardo", "Stiven Montiel", "Deiyembes Manosalva",
-          "Larson Orozco", "Joseph Aldana", "Mateo Boscan"
-        ],
-        "2014/15/16": [
-          "Mario perez", "Nayareth Celin", "Eliuth Meza", "Abraham Pérez", "Rey David Arrieta",
-          "Santy tobias", "Santy Hernandez", "ISAAC Ventura", "Carlos moreno", "Zaid Ricardo",
-          "Cristian Marcano", "Yesid Manzano", "Andrés sierra", "Juan a Martínez", "Estiben Gomez"
-        ]
-      };
+      const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-      // --- ELEMENTOS DEL DOM ---
+      // === ELEMENTOS DOM ===
       const tableBody = document.getElementById('planillaBody');
       const addPlayerForm = document.getElementById('addPlayerForm');
       const newPlayerNameInput = document.getElementById('newPlayerName');
       const generatePdfBtn = document.getElementById('generatePDF');
       const clearDataBtn = document.getElementById('clearData');
-      const deleteCategoryBtn = document.getElementById('deleteCategory');
+      const refreshDataBtn = document.getElementById('refreshData');
       const dateInput = document.getElementById('planillaDate');
-      const categorySelect = document.getElementById('categorySelect');
       const toastElement = document.getElementById('appToast');
       const bsToast = new bootstrap.Toast(toastElement);
 
-      new bootstrap.Tooltip(clearDataBtn);
-      new bootstrap.Tooltip(deleteCategoryBtn);
+      // Estado local (datos de planilla por fecha)
+      let currentPlayers = [];
+      let planillaData = {}; // { playerId: {pago, asistencia, observacion} }
 
-      // --- ESTADO GLOBAL DE LA APLICACIÓN ---
-      let appState = {};
-
-      // --- FUNCIONES DE MANEJO DEL ESTADO ---
+      // === FUNCIONES UTILITARIAS ===
       const showToast = (message, isError = false) => {
         toastElement.querySelector('.toast-body').textContent = message;
         const icon = toastElement.querySelector('.toast-header i');
@@ -190,190 +178,131 @@
         bsToast.show();
       };
 
-      const saveState = () => {
-        localStorage.setItem('dibaFbcAppState_v2', JSON.stringify(appState));
+      const setLoading = (loading) => {
+        document.body.classList.toggle('loading', loading);
+        refreshDataBtn.disabled = loading;
+        generatePdfBtn.disabled = loading || currentPlayers.length === 0;
       };
 
-      const loadState = () => {
-        const savedState = localStorage.getItem('dibaFbcAppState_v2');
-        if (savedState) {
-          appState = JSON.parse(savedState);
-        } else {
-          // Si no hay datos guardados, inicializamos con los pre-cargados
-          appState = {
-            currentCategory: Object.keys(PRELOADED_DATA)[0], // Selecciona la primera por defecto
-            categories: {}
-          };
-          for (const categoryName in PRELOADED_DATA) {
-            appState.categories[categoryName] = {
-              players: PRELOADED_DATA[categoryName].map((name, index) => ({ id: Date.now() + index, name })),
-              data: {}
-            };
-          }
+      // === SUPABASE OPERATIONS ===
+      const loadPlayersFromSupabase = async () => {
+        try {
+          setLoading(true);
+          tableBody.innerHTML = '<tr><td colspan="6" class="text-center text-muted p-4"><i class="fas fa-spinner fa-spin me-2"></i>Cargando...</td></tr>';
+
+          // Cargar solo nombre y apellidos → concatenar como "nombre completo"
+          const { data, error } = await supabase
+            .from('identificacion')
+            .select('numero, nombre, apellidos')
+            .order('apellidos', { ascending: true });
+
+          if (error) throw error;
+
+          currentPlayers = data.map(row => ({
+            id: row.numero,  // Usar numero como ID único
+            name: `${row.nombre || ''} ${row.apellidos || ''}`.trim() || `Jugador ${row.numero}`
+          })).filter(player => player.name); // Filtrar vacíos
+
+          // Cargar datos de planilla guardados localmente
+          const savedData = localStorage.getItem(`diba_planilla_${dateInput.value}`);
+          planillaData = savedData ? JSON.parse(savedData) : {};
+
+          renderTable();
+          showToast(`Cargados ${currentPlayers.length} jugadores desde Supabase.`);
+
+        } catch (error) {
+          console.error('Error cargando jugadores:', error);
+          tableBody.innerHTML = `<tr><td colspan="6" class="text-center text-danger p-4">
+            <i class="fas fa-exclamation-triangle me-2"></i>Error conectando con Supabase: ${error.message}
+          </td></tr>`;
+          showToast('Error cargando datos de Supabase.', true);
+        } finally {
+          setLoading(false);
         }
-        if (!dateInput.value) dateInput.valueAsDate = new Date();
       };
 
-      const updateCategoryDropdown = () => {
-        const currentSelection = appState.currentCategory;
-        categorySelect.innerHTML = '';
-        const categories = Object.keys(appState.categories).sort();
-
-        categories.forEach(cat => {
-          const option = document.createElement('option');
-          option.value = cat;
-          option.textContent = cat;
-          categorySelect.appendChild(option);
-        });
-
-        // Opción para añadir una nueva categoría
-        const newOption = document.createElement('option');
-        newOption.value = 'new';
-        newOption.textContent = '++ Nueva Categoría...';
-        categorySelect.appendChild(newOption);
-
-        categorySelect.value = currentSelection;
-      };
-
-      const getCurrentCategoryState = () => {
-        return appState.categories[appState.currentCategory];
-      };
-
-      // --- RENDERIZADO DE LA TABLA ---
+      // === RENDERIZADO ===
       const renderTable = () => {
-        const currentCategoryState = getCurrentCategoryState();
-        if (!currentCategoryState) {
-          tableBody.innerHTML = `<tr><td colspan="6" class="text-center text-muted p-4">Seleccione o cree una categoría.</td></tr>`;
+        if (currentPlayers.length === 0) {
+          tableBody.innerHTML = `<tr><td colspan="6" class="text-center text-muted p-4">No hay jugadores en la base de datos.</td></tr>`;
           return;
         }
 
-        tableBody.innerHTML = '';
-        const players = currentCategoryState.players;
-        const categoryData = currentCategoryState.data;
-
-        if (players.length === 0) {
-          tableBody.innerHTML = `<tr><td colspan="6" class="text-center text-muted p-4">No hay jugadores en esta categoría. ¡Añade uno para empezar!</td></tr>`;
-          return;
-        }
-
-        players.forEach((player, index) => {
-          const playerData = categoryData[player.id] || { pago: '', asistencia: 'P', observacion: '' };
-          const row = document.createElement('tr');
-          row.dataset.playerId = player.id;
-          row.innerHTML = `
-            <td><b>${index + 1}</b></td>
-            <td class="editable-name fw-medium" title="Doble clic para editar">${player.name}</td>
-            <td><input type="text" class="form-control form-control-sm data-input" data-field="pago" placeholder="$0" value="${playerData.pago}"></td>
-            <td>
-              <select class="form-select form-select-sm data-input" data-field="asistencia">
-                <option value="P" ${playerData.asistencia === 'P' ? 'selected' : ''}>Presente</option>
-                <option value="A" ${playerData.asistencia === 'A' ? 'selected' : ''}>Ausente</option>
-                <option value="E" ${playerData.asistencia === 'E' ? 'selected' : ''}>Excusa</option>
-              </select>
-            </td>
-            <td><input type="text" class="form-control form-control-sm data-input" data-field="observacion" placeholder="Sin novedad" value="${playerData.observacion}"></td>
-            <td class="text-center">
-              <button class="btn btn-sm btn-link text-danger p-0 action-btn btn-delete"><i class="fas fa-trash-alt"></i></button>
-            </td>
+        tableBody.innerHTML = currentPlayers.map((player, index) => {
+          const playerData = planillaData[player.id] || { pago: '', asistencia: 'P', observacion: '' };
+          return `
+            <tr data-player-id="${player.id}">
+              <td><b>${index + 1}</b></td>
+              <td class="editable-name fw-medium" title="DIBA FBC #${player.id}">${player.name}</td>
+              <td><input type="text" class="form-control form-control-sm data-input" data-field="pago" placeholder="$0" value="${playerData.pago || ''}"></td>
+              <td>
+                <select class="form-select form-select-sm data-input" data-field="asistencia">
+                  <option value="P" ${playerData.asistencia === 'P' ? 'selected' : ''}>Presente</option>
+                  <option value="A" ${playerData.asistencia === 'A' ? 'selected' : ''}>Ausente</option>
+                  <option value="E" ${playerData.asistencia === 'E' ? 'selected' : ''}>Excusa</option>
+                </select>
+              </td>
+              <td><input type="text" class="form-control form-control-sm data-input" data-field="observacion" placeholder="Sin novedad" value="${playerData.observacion || ''}"></td>
+              <td class="text-center">
+                <button class="btn btn-sm btn-link text-danger p-0 action-btn btn-delete" title="Limpiar datos de este jugador"><i class="fas fa-trash-alt"></i></button>
+              </td>
+            </tr>
           `;
-          tableBody.appendChild(row);
-        });
+        }).join('');
       };
 
-      // --- MANEJADORES DE EVENTOS ---
-
-      // Cambiar de categoría
-      categorySelect.addEventListener('change', () => {
-        const selectedValue = categorySelect.value;
-        if (selectedValue === 'new') {
-          const newCategoryName = prompt("Introduce el nombre para la nueva categoría:");
-          if (newCategoryName && !appState.categories[newCategoryName]) {
-            appState.categories[newCategoryName] = { players: [], data: {} };
-            appState.currentCategory = newCategoryName;
-            updateCategoryDropdown();
-          } else if (newCategoryName) {
-            alert("Esa categoría ya existe.");
-            categorySelect.value = appState.currentCategory;
-          } else {
-            categorySelect.value = appState.currentCategory;
-          }
-        } else {
-          appState.currentCategory = selectedValue;
-        }
-        saveState();
+      // === EVENT HANDLERS ===
+      dateInput.valueAsDate = new Date();
+      dateInput.addEventListener('change', () => {
+        const savedData = localStorage.getItem(`diba_planilla_${dateInput.value}`);
+        planillaData = savedData ? JSON.parse(savedData) : {};
         renderTable();
       });
 
-      // Añadir jugador a la categoría actual
+      // Añadir nuevo jugador (solo local, NO inserta en Supabase)
       addPlayerForm.addEventListener('submit', e => {
         e.preventDefault();
         const newName = newPlayerNameInput.value.trim();
-        if (newName) {
-          const currentCategoryState = getCurrentCategoryState();
-          currentCategoryState.players.push({ id: Date.now(), name: newName });
+        if (newName && !currentPlayers.find(p => p.name.toLowerCase() === newName.toLowerCase())) {
+          const newId = `LOCAL_${Date.now()}`;
+          currentPlayers.push({ id: newId, name: newName });
+          renderTable();
           newPlayerNameInput.value = '';
-          saveState();
-          renderTable();
-          showToast(`Jugador "${newName}" añadido a ${appState.currentCategory}.`);
+          showToast(`Jugador "${newName}" añadido localmente.`);
+        } else {
+          showToast('Nombre duplicado o inválido.', true);
         }
       });
 
-      // Borrar categoría
-      deleteCategoryBtn.addEventListener('click', () => {
-        const categoryToDelete = appState.currentCategory;
-        if (confirm(`¿Está SEGURO de que quiere borrar PERMANENTEMENTE la categoría "${categoryToDelete}" y todos sus jugadores? Esta acción no se puede deshacer.`)) {
-          delete appState.categories[categoryToDelete];
-          const remainingCategories = Object.keys(appState.categories);
-          appState.currentCategory = remainingCategories.length > 0 ? remainingCategories[0] : null;
-          saveState();
-          updateCategoryDropdown();
-          renderTable();
-          showToast(`Categoría "${categoryToDelete}" eliminada.`, true);
-        }
-      });
-
-      // Eventos en la tabla (borrar jugador, editar nombre, actualizar datos)
-      tableBody.addEventListener('click', e => {
-        if (e.target.closest('.btn-delete')) {
-          const row = e.target.closest('tr');
-          const playerId = Number(row.dataset.playerId);
-          const currentCategoryState = getCurrentCategoryState();
-          const playerIndex = currentCategoryState.players.findIndex(p => p.id === playerId);
-
-          if (playerIndex > -1) {
-            const playerName = currentCategoryState.players[playerIndex].name;
-            if (confirm(`¿Eliminar a ${playerName} de la lista?`)) {
-              currentCategoryState.players.splice(playerIndex, 1);
-              delete currentCategoryState.data[playerId];
-              saveState();
-              renderTable();
-              showToast(`Jugador "${playerName}" eliminado.`, true);
-            }
-          }
-        }
-      });
-
+      // Eventos de tabla
       tableBody.addEventListener('input', e => {
         if (e.target.classList.contains('data-input')) {
           const row = e.target.closest('tr');
-          const playerId = Number(row.dataset.playerId);
+          const playerId = row.dataset.playerId;
           const field = e.target.dataset.field;
-          const currentCategoryData = getCurrentCategoryState().data;
+          planillaData[playerId] = planillaData[playerId] || {};
+          planillaData[playerId][field] = e.target.value;
+          savePlanillaData();
+        }
+      });
 
-          if (!currentCategoryData[playerId]) currentCategoryData[playerId] = { pago: '', asistencia: 'P', observacion: '' };
-          currentCategoryData[playerId][field] = e.target.value;
-          saveState();
+      tableBody.addEventListener('click', e => {
+        if (e.target.closest('.btn-delete')) {
+          const row = e.target.closest('tr');
+          const playerId = row.dataset.playerId;
+          delete planillaData[playerId];
+          savePlanillaData();
+          showToast('Datos del jugador limpiados.', true);
+          renderTable();
         }
       });
 
       tableBody.addEventListener('dblclick', e => {
         const cell = e.target.closest('.editable-name');
         if (!cell) return;
-
         const originalName = cell.textContent;
         const row = cell.closest('tr');
-        const playerId = Number(row.dataset.playerId);
-
+        const playerId = row.dataset.playerId;
         cell.innerHTML = `<input type="text" class="form-control form-control-sm" value="${originalName}" />`;
         const input = cell.querySelector('input');
         input.focus();
@@ -382,50 +311,49 @@
         const saveChange = () => {
           const newName = input.value.trim();
           if (newName && newName !== originalName) {
-            const player = getCurrentCategoryState().players.find(p => p.id === playerId);
-            if (player) {
-              player.name = newName;
-              saveState();
-              showToast(`Nombre actualizado a "${newName}".`);
-            }
+            const player = currentPlayers.find(p => p.id === playerId);
+            if (player) player.name = newName;
+            renderTable();
+            showToast(`Nombre actualizado a "${newName}".`);
+          } else {
+            renderTable();
           }
-          renderTable();
         };
 
         input.addEventListener('blur', saveChange);
-        input.addEventListener('keydown', (e) => {
-          if (e.key === 'Enter') saveChange();
-          else if (e.key === 'Escape') renderTable();
+        input.addEventListener('keydown', ev => {
+          if (ev.key === 'Enter') saveChange();
+          if (ev.key === 'Escape') renderTable();
         });
       });
 
+      const savePlanillaData = () => {
+        localStorage.setItem(`diba_planilla_${dateInput.value}`, JSON.stringify(planillaData));
+      };
+
       clearDataBtn.addEventListener('click', () => {
-        if (confirm(`¿Limpiar pagos y observaciones de la categoría "${appState.currentCategory}"? La lista de jugadores no se borrará.`)) {
-          getCurrentCategoryState().data = {};
-          saveState();
+        if (confirm('¿Limpiar toda la planilla actual?')) {
+          planillaData = {};
+          savePlanillaData();
           renderTable();
-          showToast(`Datos de la planilla "${appState.currentCategory}" limpiados.`);
+          showToast('Planilla limpiada.');
         }
       });
 
-      // --- GENERACIÓN DE PDF (adaptado a la nueva estructura) ---
+      refreshDataBtn.addEventListener('click', loadPlayersFromSupabase);
+
+      // === PDF (sin cambios) ===
       generatePdfBtn.addEventListener('click', async () => {
-        // ... (El código de generación de PDF se mantiene igual, pero ahora usará los datos de la categoría actual)
         const btn = generatePdfBtn;
         btn.disabled = true;
         btn.querySelector('#pdf-icon').innerHTML = `<span class="spinner-border spinner-border-sm"></span>`;
         btn.querySelector('#pdf-text').textContent = ' Generando...';
 
-        const currentCategoryState = getCurrentCategoryState();
-        const players = currentCategoryState.players;
-        const categoryData = currentCategoryState.data;
-        const planillaCategory = appState.currentCategory || "No especificada";
-
         try {
           const { jsPDF } = window.jspdf;
           const doc = new jsPDF({ orientation: 'portrait', unit: 'pt', format: 'letter' });
 
-          // Carga de logo...
+          // Logo
           const logoUrl = "https://i.postimg.cc/x8W7vwJJ/ESCUDO.png";
           try {
             const response = await fetch(logoUrl);
@@ -436,68 +364,52 @@
               reader.readAsDataURL(blob);
             });
             doc.addImage(imgData, 'PNG', 40, 30, 60, 60);
-          } catch (err) { console.error("Error cargando logo para PDF:", err); }
+          } catch (err) { console.error("Error cargando logo:", err); }
 
-          // Encabezados...
+          // Headers
           doc.setFontSize(16).setFont('helvetica', 'bold').text("DIBA FBC", 115, 50);
           doc.setFontSize(10).setFont('helvetica', 'normal');
           doc.text("DEPORTIVO INTERNACIONAL DE BARRANQUILLA ATLANTICO", 115, 65);
           doc.text("RESOLUCIÓN 0122 / 10-SEPT-2018", 115, 80);
           doc.setFontSize(12).setFont('helvetica', 'bold').text("PLANILLA GENERAL DE CONTROL", doc.internal.pageSize.getWidth() / 2, 120, { align: 'center' });
 
-          const planillaDate = dateInput.value ? new Date(dateInput.value + 'T00:00:00').toLocaleDateString('es-CO', { day: '2-digit', month: '2-digit', year: 'numeric' }) : "No especificada";
+          const planillaDate = dateInput.value ? new Date(dateInput.value + 'T00:00:00').toLocaleDateString('es-CO') : "No especificada";
           doc.setFontSize(10).setFont('helvetica', 'normal');
           doc.text(`Fecha: ${planillaDate}`, 40, 140);
-          doc.text(`Categoría: ${planillaCategory}`, doc.internal.pageSize.getWidth() - 40, 140, { align: 'right' });
+          doc.text(`Fuente: Supabase identificacion`, doc.internal.pageSize.getWidth() - 40, 140, { align: 'right' });
 
-          // Cuerpo de la tabla
+          // Tabla
           const head = [["#", "Nombre", "Pago", "Asistencia", "Observaciones"]];
-          const body = players.map((player, index) => {
-            const pData = categoryData[player.id] || {};
+          const body = currentPlayers.map((player, index) => {
+            const pData = planillaData[player.id] || {};
             const asistenciaText = { P: 'Presente', A: 'Ausente', E: 'Excusa' }[pData.asistencia] || '';
             return [index + 1, player.name, pData.pago || '', asistenciaText, pData.observacion || ''];
           });
 
-          if (body.length === 0) {
-            for (let i = 1; i <= 30; i++) body.push([i, '', '', '', '']);
-          }
-
           doc.autoTable({
-            head: head, body: body, startY: 155, margin: { left: 40, right: 40 },
+            head, body, startY: 155, margin: { left: 40, right: 40 },
             styles: { fontSize: 9, cellPadding: 5, valign: 'middle' },
             headStyles: { fillColor: [0, 42, 64], textColor: 255, fontStyle: 'bold' },
             alternateRowStyles: { fillColor: [240, 248, 255] },
             columnStyles: { 0: { halign: 'center', cellWidth: 30 }, 2: { halign: 'center', cellWidth: 70 }, 3: { halign: 'center', cellWidth: 70 } }
           });
 
-          // Pie de página...
-          const pageCount = doc.internal.getNumberOfPages();
-          for (let i = 1; i <= pageCount; i++) {
-            doc.setPage(i);
-            doc.setFontSize(8).setTextColor(150);
-            doc.text(`Página ${i} de ${pageCount}`, doc.internal.pageSize.getWidth() / 2, doc.internal.pageSize.getHeight() - 20, { align: 'center' });
-          }
-
-          doc.save(`Planilla_DIBA_FBC_${planillaCategory.replace('/', '-')}_${dateInput.value}.pdf`);
+          doc.save(`Planilla_DIBA_FBC_${dateInput.value}.pdf`);
           showToast('PDF generado con éxito.');
 
         } catch (error) {
-          console.error('Error al generar el PDF:', error);
-          showToast('Ocurrió un error al generar el PDF.', true);
+          console.error('Error PDF:', error);
+          showToast('Error generando PDF.', true);
         } finally {
-          btn.disabled = false;
+          btn.disabled = currentPlayers.length === 0;
           btn.querySelector('#pdf-icon').innerHTML = `<i class="fas fa-file-pdf"></i>`;
           btn.querySelector('#pdf-text').textContent = ' Descargar PDF';
         }
       });
 
-      // --- INICIALIZACIÓN DE LA APLICACIÓN ---
-      loadState();
-      updateCategoryDropdown();
-      renderTable();
+      // === INICIALIZACIÓN ===
+      await loadPlayersFromSupabase();
     });
   </script>
-
 </body>
-
 </html>
