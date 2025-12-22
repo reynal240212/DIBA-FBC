@@ -1,268 +1,315 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8" />
-  <title>DIBA FBC - Gestión Profesional</title>
+  <title>DIBA FBC - Sistema Profesional de Gestión</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="icon" href="https://i.postimg.cc/x8W7vwJJ/ESCUDO.png" type="image/png">
 
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 
   <style>
     :root {
-      --diba-dark: #001f2f;
-      --diba-accent: #c5a059;
-      --diba-success: #198754;
-      --bg-gradient: linear-gradient(135deg, #f0f4f8 0%, #d7e2e9 100%);
+      --diba-dark: #002a40;
+      --diba-gold: #c5a059;
+      --diba-light: #f8f9fa;
+      --diba-white: #ffffff;
     }
 
-    body { 
-      background: var(--bg-gradient);
-      font-family: 'Inter', sans-serif;
-      min-height: 100vh;
+    body {
+      background-color: #f0f2f5;
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      color: var(--diba-dark);
     }
 
-    /* --- COMPONENTES WEB --- */
-    .navbar { 
+    /* INTERFAZ WEB */
+    .navbar {
       background: var(--diba-dark) !important;
-      border-bottom: 4px solid var(--diba-accent);
-      padding: 1rem 0;
+      border-bottom: 4px solid var(--diba-gold);
     }
 
-    .stats-card {
+    .card-stats {
       border: none;
-      border-radius: 16px;
-      background: white;
-      transition: all 0.3s ease;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-    }
-
-    .stats-card:hover { transform: translateY(-5px); }
-
-    .search-box {
-      border-radius: 50px;
-      padding-left: 20px;
-      border: 2px solid #e0e0e0;
-    }
-
-    .btn-action {
-      border-radius: 8px;
-      font-weight: 600;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
       transition: 0.3s;
     }
 
-    /* --- ESTILOS DE IMPRESIÓN MEJORADOS --- */
+    .table-container {
+      background: white;
+      border-radius: 15px;
+      padding: 25px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    }
+
+    .filter-group {
+      background: #fff;
+      padding: 15px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      border: 1px solid #ddd;
+    }
+
+    .category-badge {
+      font-size: 0.75rem;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-weight: bold;
+    }
+
+    .cat-1213 {
+      background: #e3f2fd;
+      color: #1976d2;
+    }
+
+    .cat-141516 {
+      background: #f1f8e9;
+      color: #388e3c;
+    }
+
+    /* ESTILOS DE IMPRESIÓN */
     @media print {
-      @page { size: letter; margin: 0.8cm; }
-      
-      .no-print { display: none !important; }
-      body { background: white !important; padding: 0; }
-      
-      #print-header { display: block !important; border-bottom: 2px solid #000; padding-bottom: 10px; }
-      
-      .planilla-table { width: 100% !important; border: 2px solid #000 !important; }
-      .planilla-table th { 
-        background-color: #f2f2f2 !important; 
-        border: 1px solid #000 !important;
-        font-size: 8pt !important;
-        text-align: center;
-      }
-      .planilla-table td { 
-        border: 1px solid #000 !important; 
-        font-size: 9pt !important;
-        padding: 6px !important;
+      @page {
+        size: letter;
+        margin: 0.8cm;
       }
 
-      .watermark {
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%) rotate(-45deg);
-        font-size: 80pt;
-        color: rgba(0,0,0,0.03);
-        z-index: -1;
-        white-space: nowrap;
+      * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+
+      .no-print {
+        display: none !important;
+      }
+
+      body {
+        background-color: white !important;
+      }
+
+      .container {
+        max-width: 100% !important;
+        width: 100% !important;
+        margin: 0 !important;
+      }
+
+      #print-header {
+        display: block !important;
+        margin-bottom: 10px;
+      }
+
+      .planilla-table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+
+      .planilla-table th,
+      .planilla-table td {
+        border: 1.5px solid #000 !important;
+        padding: 7px;
+        font-size: 9.5pt;
+        color: black !important;
+      }
+
+      .planilla-table th {
+        background-color: #eeeeee !important;
+        text-transform: uppercase;
+      }
+
+      .header-grid {
+        display: grid;
+        grid-template-columns: 1.5fr 1fr 1fr;
+        border: 2px solid #000;
+        margin-bottom: 10px;
+      }
+
+      .header-item {
+        border-right: 1px solid #000;
+        padding: 6px;
+        font-size: 9pt;
+      }
+
+      .label-box {
+        font-weight: bold;
+        text-transform: uppercase;
+        font-size: 7pt;
+        display: block;
+        border-bottom: 1px solid #000;
+        margin-bottom: 2px;
       }
     }
 
-    .no-screen { display: none; }
-    @media print { .no-screen { display: table-cell !important; } }
+    #print-header {
+      display: none;
+    }
+
+    .no-screen {
+      display: none;
+    }
+
+    @media print {
+      .no-screen {
+        display: table-cell !important;
+      }
+    }
   </style>
 </head>
 
 <body>
 
-  <nav class="navbar navbar-dark no-print sticky-top shadow-sm">
+  <nav class="navbar navbar-dark shadow no-print sticky-top">
     <div class="container">
       <a class="navbar-brand d-flex align-items-center" href="#">
-        <img src="https://i.postimg.cc/x8W7vwJJ/ESCUDO.png" width="50" class="me-3">
+        <img src="https://i.postimg.cc/x8W7vwJJ/ESCUDO.png" width="45" class="me-2">
         <div>
-          <h5 class="fw-bold mb-0">DIBA FBC BARRANQUILLA</h5>
-          <small class="text-white-50">Panel de Administración v2.1</small>
+          <span class="fw-bold d-block">DIBA FBC</span>
+          <small style="font-size: 0.65rem; color: var(--diba-gold);">GESTIÓN DE CATEGORÍAS</small>
         </div>
       </a>
-      <div class="d-flex gap-2">
-        <button id="refreshBtn" class="btn btn-outline-light btn-action">
-          <i class="fas fa-sync-alt"></i>
-        </button>
-        <button onclick="window.print()" class="btn btn-warning btn-action text-dark px-4">
-          <i class="fas fa-print me-2"></i>Generar PDF
-        </button>
-      </div>
+      <button onclick="window.print()" class="btn btn-warning fw-bold"><i class="fas fa-print me-2"></i>Imprimir
+        Planilla</button>
     </div>
   </nav>
 
-  <div class="container py-4">
-    
-    <div class="row g-3 mb-4 no-print">
-      <div class="col-md-3">
-        <div class="stats-card p-3 d-flex align-items-center">
-          <div class="bg-primary bg-opacity-10 p-3 rounded-3 me-3">
-            <i class="fas fa-users text-primary fa-lg"></i>
-          </div>
-          <div>
-            <h3 id="totalCount" class="mb-0 fw-bold">0</h3>
-            <small class="text-muted">Total Jugadores</small>
-          </div>
-        </div>
-      </div>
-      
-      <div class="col-md-6">
-        <div class="stats-card p-3 h-100 d-flex align-items-center">
-          <div class="input-group">
-            <span class="input-group-text bg-white border-end-0 search-box"><i class="fas fa-search text-muted"></i></span>
-            <input type="text" id="searchInput" class="form-control border-start-0 search-box" placeholder="Buscar por nombre, apellido o ID...">
-          </div>
-        </div>
-      </div>
+  <main class="container mt-4 mb-5">
 
-      <div class="col-md-3">
-        <select id="categoryFilter" class="form-select h-100 rounded-3 border-2 shadow-sm">
-          <option value="all">Todas las Categorías</option>
-          <option value="2012">Categoría 2012</option>
-          <option value="2013">Categoría 2013</option>
-          <option value="2014">Categoría 2014</option>
-        </select>
+    <div class="row g-3 no-print">
+      <div class="col-md-4">
+        <div class="card card-stats p-3 h-100">
+          <div class="d-flex align-items-center">
+            <div class="bg-primary bg-opacity-10 p-3 rounded-circle me-3">
+              <i class="fas fa-users text-primary fa-xl"></i>
+            </div>
+            <div>
+              <h3 id="totalCount" class="mb-0 fw-bold">0</h3>
+              <small class="text-muted">Total Jugadores</small>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-8">
+        <div class="filter-group h-100 d-flex align-items-center">
+          <div class="row w-100">
+            <div class="col-md-6">
+              <label class="small fw-bold text-muted">FILTRAR POR CATEGORÍA:</label>
+              <select id="catFilter" class="form-select border-primary shadow-sm">
+                <option value="todos">Mostrar todos los jugadores</option>
+                <option value="2012/13">Categoría 2012 / 2013 (Convocados)</option>
+                <option value="2014/15/16">Categoría 2014 / 2015 / 2016</option>
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label class="small fw-bold text-muted">BUSCAR NOMBRE:</label>
+              <input type="text" id="nameSearch" class="form-control" placeholder="Escriba para filtrar...">
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
-    <div id="print-header" class="no-screen">
-      <div class="row align-items-center">
-        <div class="col-2 text-center">
-          <img src="https://i.postimg.cc/x8W7vwJJ/ESCUDO.png" width="80">
+    <div id="print-header">
+      <div class="d-flex align-items-center justify-content-between border-bottom border-dark pb-2 mb-2">
+        <img src="https://i.postimg.cc/x8W7vwJJ/ESCUDO.png" width="65">
+        <div class="text-center">
+          <h4 class="mb-0 fw-bold">DIBA FBC - BARRANQUILLA</h4>
+          <p class="mb-0 small fw-bold">PLANILLA DE ASISTENCIA - CATEGORÍA <span id="catTitle">GENERAL</span></p>
         </div>
-        <div class="col-8 text-center">
-          <h4 class="fw-bold mb-0">DEPORTIVO INTERNACIONAL DE BARRANQUILLA (DIBA FBC)</h4>
-          <p class="mb-1 small">Reconocimiento Deportivo Resol. 0122 - NIT: 900.XXX.XXX-X</p>
-          <div class="d-inline-block border border-dark px-3 py-1 rounded">
-            <strong>PLANILLA DE ASISTENCIA Y CONTROL TÉCNICO</strong>
-          </div>
-        </div>
-        <div class="col-2 text-end small">
-          Página 1 de 1<br>
-          v.2025
-        </div>
+        <div style="width: 65px;"></div>
       </div>
-      <div class="row mt-3 border border-dark g-0 text-center small">
-        <div class="col-4 border-end border-dark p-2"><strong>ENTRENADOR:</strong> REINALDO PEREZ</div>
-        <div class="col-4 border-end border-dark p-2"><strong>CATEGORÍA:</strong> <span id="catDisplay">TODAS</span></div>
-        <div class="col-4 p-2"><strong>FECHA:</strong> ____ / ____ / 2025</div>
+
+      <div class="header-grid">
+        <div class="header-item"><span class="label-box">Entrenador:</span>REINALDO PEREZ NAVAS</div>
+        <div class="header-item"><span class="label-box">Sede:</span>BARRANQUILLA</div>
+        <div class="header-item"><span class="label-box">Fecha:</span>____ / ____ / 2025</div>
       </div>
     </div>
 
-    <div class="card border-0 shadow-lg overflow-hidden">
+    <div class="table-container mt-3">
       <div class="table-responsive">
-        <table class="table table-hover mb-0 planilla-table align-middle">
-          <thead class="bg-light">
+        <table class="table table-hover align-middle planilla-table">
+          <thead class="table-dark">
             <tr>
-              <th width="50" class="text-center">#</th>
-              <th>Nombre Completo del Deportista</th>
-              <th width="150">Identificación</th>
-              <th width="180">Barrio / Procedencia</th>
-              <th width="100" class="no-print text-center">Nacimiento</th>
-              <th width="180" class="no-screen">Firma / Observación</th>
+              <th style="width: 5%" class="text-center">N°</th>
+              <th style="width: 35%">Nombre Completo</th>
+              <th style="width: 15%">Identificación</th>
+              <th style="width: 20%" class="no-print">Categoría</th>
+              <th style="width: 25%" class="no-screen">Firma / Asistencia</th>
             </tr>
           </thead>
           <tbody id="dataBody">
-            </tbody>
+          </tbody>
         </table>
       </div>
     </div>
-
-    <div class="watermark no-screen">DIBA FBC</div>
-  </div>
+  </main>
 
   <script type="module">
     import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
 
-    const supabase = createClient(
-      'https://wdnlqfiwuocmmcdowjyw.supabase.co',
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndkbmxxZml3dW9jbW1jZG93anl3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg1MjY1ODAsImV4cCI6MjA2NDEwMjU4MH0.4SCS_NRDIYLQJ1XouqW111BxkMOlwMWOjje9gFTgW_Q'
-    );
+    const supabase = createClient('https://wdnlqfiwuocmmcdowjyw.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndkbmxxZml3dW9jbW1jZG93anl3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg1MjY1ODAsImV4cCI6MjA2NDEwMjU4MH0.4SCS_NRDIYLQJ1XouqW111BxkMOlwMWOjje9gFTgW_Q');
 
-    let baseData = [];
+    const cat1213Names = ["Dinkoll", "Juan Tobías", "Dilan", "Dany", "Angel", "Miguel", "Rodríguez", "Nelson", "Santiago", "Oscar", "Yojainer", "Larson", "Joseph", "Mateo", "Siteven", "Sebastian lugo", "Robert", "Jonier", "Ces cristiano", "Antony", "Esteban", "Santiago lopez"];
+    const cat141516Names = ["Mario", "Eliuth", "Abraham", "Rey David", "Santy", "ISAAC", "Carlos", "Cristian", "Andrés", "Juan a", "Estiben", "Eneldo", "Moisés Caballero", "Sebastian castro", "JoyFran"];
 
-    async function fetchData() {
-      const body = document.getElementById('dataBody');
-      body.innerHTML = '<tr><td colspan="6" class="text-center py-5 text-muted"><div class="spinner-border spinner-border-sm me-2"></div>Sincronizando con Supabase...</td></tr>';
-      
-      try {
-        const { data, error } = await supabase
-          .from('identificacion')
-          .select('*')
-          .order('apellidos', { ascending: true });
+    let allPlayers = [];
 
-        if (error) throw error;
-        baseData = data;
-        renderData(data);
-        document.getElementById('totalCount').innerText = data.length;
-      } catch (err) {
-        body.innerHTML = `<tr><td colspan="6" class="text-center text-danger">Error: ${err.message}</td></tr>`;
-      }
+    async function cargarDatos() {
+      const { data, error } = await supabase.from('identificacion').select('*').order('apellidos', { ascending: true });
+      if (error) return;
+      allPlayers = data;
+      renderTable();
     }
 
-    function renderData(data) {
-      const body = document.getElementById('dataBody');
-      const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-      const catFilter = document.getElementById('categoryFilter').value;
+    function getCategory(player) {
+      const fullName = `${player.nombre} ${player.apellidos}`.toLowerCase();
+      if (cat1213Names.some(n => fullName.includes(n.toLowerCase()))) return "2012/13";
+      if (cat141516Names.some(n => fullName.includes(n.toLowerCase()))) return "2014/15/16";
+      return "Sin Categoría";
+    }
 
-      const filtered = data.filter(j => {
-        const matchesSearch = `${j.nombre} ${j.apellidos} ${j.numero}`.toLowerCase().includes(searchTerm);
-        const year = j.fecha_nacimiento ? j.fecha_nacimiento.substring(0,4) : '';
-        const matchesCat = catFilter === 'all' || year === catFilter;
-        return matchesSearch && matchesCat;
+    function renderTable() {
+      const filter = document.getElementById('catFilter').value;
+      const search = document.getElementById('nameSearch').value.toLowerCase();
+      const body = document.getElementById('dataBody');
+
+      const filtered = allPlayers.filter(p => {
+        const cat = getCategory(p);
+        const nameMatch = `${p.nombre} ${p.apellidos}`.toLowerCase().includes(search);
+        const catMatch = filter === 'todos' || cat === filter;
+        return nameMatch && catMatch;
       });
 
-      body.innerHTML = filtered.map((j, i) => `
-        <tr>
-          <td class="text-center fw-bold text-muted">${i + 1}</td>
-          <td class="fw-semibold text-uppercase">${j.nombre} ${j.apellidos}</td>
-          <td class="text-nowrap">${j.numero}</td>
-          <td>${j.lugar_nacimiento || '<span class="text-muted opacity-50">No reg.</span>'}</td>
-          <td class="no-print text-center"><span class="badge bg-light text-dark border">${j.fecha_nacimiento || '---'}</span></td>
-          <td class="no-screen border-start" style="height:42px"></td>
-        </tr>
-      `).join('');
+      document.getElementById('totalCount').innerText = filtered.length;
+      document.getElementById('catTitle').innerText = filter === 'todos' ? 'GENERAL' : filter;
 
-      // Filas vacías solo en impresión
-      if(window.matchMedia('print').matches || true) {
-        for(let i=1; i<=5; i++) {
-          body.innerHTML += `<tr class="no-screen"><td class="text-center text-muted">${filtered.length + i}</td><td></td><td></td><td></td><td></td></tr>`;
+      body.innerHTML = filtered.map((p, i) => {
+        const cat = getCategory(p);
+        const badgeClass = cat === '2012/13' ? 'cat-1213' : (cat === '2014/15/16' ? 'cat-141516' : 'bg-light');
+        return `
+          <tr>
+            <td class="text-center fw-bold">${i + 1}</td>
+            <td class="text-uppercase fw-semibold">${p.nombre} ${p.apellidos}</td>
+            <td class="text-nowrap">${p.numero}</td>
+            <td class="no-print"><span class="category-badge ${badgeClass}">${cat}</span></td>
+            <td class="no-screen" style="height: 38px;"></td>
+          </tr>
+        `;
+      }).join('');
+
+      // Filas vacías adicionales en la impresión
+      if (filtered.length > 0) {
+        for (let i = 1; i <= 5; i++) {
+          body.innerHTML += `<tr class="no-screen"><td class="text-center">${filtered.length + i}</td><td></td><td></td><td></td></tr>`;
         }
       }
     }
 
-    // Eventos de Filtrado
-    document.getElementById('searchInput').addEventListener('input', () => renderData(baseData));
-    document.getElementById('categoryFilter').addEventListener('change', (e) => {
-      document.getElementById('catDisplay').innerText = e.target.value.toUpperCase();
-      renderData(baseData);
-    });
-    document.getElementById('refreshBtn').onclick = fetchData;
-
-    window.onload = fetchData;
+    document.getElementById('catFilter').onchange = renderTable;
+    document.getElementById('nameSearch').oninput = renderTable;
+    window.onload = cargarDatos;
   </script>
 </body>
+
 </html>
