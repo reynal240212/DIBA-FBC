@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="es" data-bs-theme="light">
 <head>
+  <!-- HEAD igual que antes... -->
   <meta charset="UTF-8" />
   <title>Planilla General - DIBA FBC</title>
   <meta name="author" content="REINALDO DE JESUS PEREZ NAVAS" />
@@ -11,78 +12,33 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="Planilla interactiva para el control de jugadores del club DIBA FBC." />
 
-  <!-- Dependencias CSS (Bootstrap, Font Awesome) -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
-
-  <!-- Supabase Client CDN -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-  <!-- Dependencias JS para PDF -->
+  
+  <!-- PDF libs -->
   <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.8.2/dist/jspdf.plugin.autotable.min.js"></script>
 
-  <!-- Estilos Personalizados -->
   <style>
-    :root {
-      --primary-color: #002a40;
-      --secondary-color: #005f73;
-      --accent-color: #e9d8a6;
-      --bs-body-bg: #f8f9fa;
-    }
-
-    body {
-      background-color: var(--bs-body-bg);
-      padding-bottom: 5rem;
-    }
-
-    .navbar {
-      background-color: var(--primary-color) !important;
-    }
-
-    .table-responsive {
-      max-height: 65vh;
-      overflow-y: auto;
-    }
-
-    .table th {
-      background-color: var(--primary-color);
-      color: white;
-      position: sticky;
-      top: 0;
-      z-index: 10;
-    }
-
-    #generatePDF:disabled {
-      cursor: not-allowed;
-    }
-
-    .toast-container {
-      z-index: 1100;
-    }
-
-    .editable-name {
-      cursor: pointer;
-    }
-
-    .editable-name:hover {
-      background-color: #e9ecef;
-    }
-
-    .loading {
-      opacity: 0.6;
-      pointer-events: none;
-    }
+    /* Estilos iguales que antes */
+    :root { --primary-color: #002a40; --secondary-color: #005f73; --accent-color: #e9d8a6; --bs-body-bg: #f8f9fa; }
+    body { background-color: var(--bs-body-bg); padding-bottom: 5rem; }
+    .navbar { background-color: var(--primary-color) !important; }
+    .table-responsive { max-height: 65vh; overflow-y: auto; }
+    .table th { background-color: var(--primary-color); color: white; position: sticky; top: 0; z-index: 10; }
+    #generatePDF:disabled, #refreshData:disabled { cursor: not-allowed; }
+    .toast-container { z-index: 1100; }
+    .editable-name { cursor: pointer; }
+    .editable-name:hover { background-color: #e9ecef; }
+    .loading { opacity: 0.6; pointer-events: none; }
   </style>
 </head>
 
 <body>
-
-  <!-- Contenedor para Notificaciones -->
+  <!-- HTML BODY igual que antes hasta <main> -->
   <div class="toast-container position-fixed top-0 end-0 p-3">
-    <div id="appToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-      <div class="toast-header"><i class="fas fa-check-circle text-success me-2"></i><strong class="me-auto">Notificación</strong><button type="button" class="btn-close" data-bs-dismiss="toast"></button>
-      </div>
+    <div id="appToast" class="toast" role="alert">
+      <div class="toast-header"><i class="fas fa-check-circle text-success me-2"></i><strong class="me-auto">Notificación</strong><button type="button" class="btn-close" data-bs-dismiss="toast"></button></div>
       <div class="toast-body"></div>
     </div>
   </div>
@@ -98,12 +54,6 @@
       <h1 class="mb-0 h2">Planilla General</h1>
       <div class="d-flex gap-3 align-items-center mt-2 mt-md-0">
         <div>
-          <label for="categorySelect" class="form-label mb-0 fw-bold small">Categoría:</label>
-          <select class="form-select" id="categorySelect" style="width: auto;">
-            <option value="all">Todas las Identificaciones</option>
-          </select>
-        </div>
-        <div>
           <label for="planillaDate" class="form-label mb-0 fw-bold small">Fecha:</label>
           <input type="date" class="form-control" id="planillaDate" style="width: auto;">
         </div>
@@ -116,11 +66,10 @@
           <input type="text" id="newPlayerName" class="form-control" placeholder="Nombre completo del nuevo jugador" required>
           <button type="submit" class="btn btn-success"><i class="fas fa-plus"></i> Añadir</button>
         </form>
-
         <div class="d-flex gap-2">
           <button id="refreshData" class="btn btn-outline-primary"><i class="fas fa-sync-alt"></i> Recargar</button>
-          <button id="generatePDF" class="btn btn-primary" disabled><span id="pdf-icon"><i class="fas fa-file-pdf"></i></span><span id="pdf-text"> Descargar PDF</span></button>
-          <button id="clearData" class="btn btn-warning"><i class="fas fa-eraser"></i> Limpiar Planilla</button>
+          <button id="generatePDF" class="btn btn-primary" disabled><i class="fas fa-file-pdf me-1"></i>Descargar PDF</button>
+          <button id="clearData" class="btn btn-warning"><i class="fas fa-eraser"></i> Limpiar</button>
         </div>
       </div>
     </div>
@@ -128,17 +77,10 @@
     <div class="table-responsive shadow-sm">
       <table class="table table-striped table-hover table-bordered" id="planillaTable">
         <thead class="table-dark">
-          <tr>
-            <th style="width: 5%;">#</th>
-            <th>Nombre</th>
-            <th style="width: 15%;">Pago</th>
-            <th style="width: 15%;">Asistencia</th>
-            <th style="width: 25%;">Observaciones</th>
-            <th style="width: 5%;" class="text-center">Acción</th>
-          </tr>
+          <tr><th style="width: 5%;">#</th><th>Nombre</th><th style="width: 15%;">Pago</th><th style="width: 15%;">Asistencia</th><th style="width: 25%;">Observaciones</th><th style="width: 5%;" class="text-center">Acción</th></tr>
         </thead>
         <tbody id="planillaBody">
-          <tr><td colspan="6" class="text-center text-muted p-4"><i class="fas fa-spinner fa-spin me-2"></i>Cargando jugadores desde Supabase...</td></tr>
+          <tr><td colspan="6" class="text-center text-muted p-4"><i class="fas fa-spinner fa-spin me-2"></i>Iniciando...</td></tr>
         </tbody>
       </table>
     </div>
@@ -146,270 +88,262 @@
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', async () => {
-      // === CONFIGURACIÓN SUPABASE ===
-      // ⚠️ CAMBIA ESTOS VALORES POR LOS DE TU PROYECTO
-      const SUPABASE_URL = 'https://wdnlqfiwuocmmcdowjyw.supabase.co';  // Tu URL de Supabase
-      const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndkbmxxZml3dW9jbW1jZG93anl3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzQ5NTY4MDAsImV4cCI6MjA1MDUzMjgwMH0.your-key-here';  // Tu anon key
+  <script type="module">
+    // === SUPABASE ESM IMPORT (SOLUCIÓN AL ERROR) ===
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
 
-      const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    // ⚠️ CONFIGURA TUS DATOS AQUÍ
+    const SUPABASE_URL = 'https://wdnlqfiwuocmmcdowjyw.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndkbmxxZml3dW9jbW1jZG93anl3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzQ5NTY4MDAsImV4cCI6MjA1MDUzMjgwMH0.TU_ANON_KEY_AQUI';
 
-      // === ELEMENTOS DOM ===
-      const tableBody = document.getElementById('planillaBody');
-      const addPlayerForm = document.getElementById('addPlayerForm');
-      const newPlayerNameInput = document.getElementById('newPlayerName');
-      const generatePdfBtn = document.getElementById('generatePDF');
-      const clearDataBtn = document.getElementById('clearData');
-      const refreshDataBtn = document.getElementById('refreshData');
-      const dateInput = document.getElementById('planillaDate');
-      const toastElement = document.getElementById('appToast');
-      const bsToast = new bootstrap.Toast(toastElement);
+    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-      // Estado local (datos de planilla por fecha)
-      let currentPlayers = [];
-      let planillaData = {}; // { playerId: {pago, asistencia, observacion} }
+    // === DOM ELEMENTS ===
+    const tableBody = document.getElementById('planillaBody');
+    const addPlayerForm = document.getElementById('addPlayerForm');
+    const newPlayerNameInput = document.getElementById('newPlayerName');
+    const generatePdfBtn = document.getElementById('generatePDF');
+    const clearDataBtn = document.getElementById('clearData');
+    const refreshDataBtn = document.getElementById('refreshData');
+    const dateInput = document.getElementById('planillaDate');
+    const toastElement = document.getElementById('appToast');
+    const bsToast = new bootstrap.Toast(toastElement);
 
-      // === FUNCIONES UTILITARIAS ===
-      const showToast = (message, isError = false) => {
-        toastElement.querySelector('.toast-body').textContent = message;
-        const icon = toastElement.querySelector('.toast-header i');
-        icon.className = isError ? 'fas fa-exclamation-circle text-danger me-2' : 'fas fa-check-circle text-success me-2';
-        bsToast.show();
-      };
+    let currentPlayers = [];
+    let planillaData = {};
 
-      const setLoading = (loading) => {
-        document.body.classList.toggle('loading', loading);
-        refreshDataBtn.disabled = loading;
-        generatePdfBtn.disabled = loading || currentPlayers.length === 0;
-      };
+    // === UTILIDADES ===
+    const showToast = (message, isError = false) => {
+      toastElement.querySelector('.toast-body').textContent = message;
+      const icon = toastElement.querySelector('.toast-header i');
+      icon.className = isError ? 'fas fa-exclamation-circle text-danger me-2' : 'fas fa-check-circle text-success me-2';
+      bsToast.show();
+    };
 
-      // === SUPABASE OPERATIONS ===
-      const loadPlayersFromSupabase = async () => {
-        try {
-          setLoading(true);
-          tableBody.innerHTML = '<tr><td colspan="6" class="text-center text-muted p-4"><i class="fas fa-spinner fa-spin me-2"></i>Cargando...</td></tr>';
+    // === SUPABASE LOAD ===
+    const loadPlayersFromSupabase = async () => {
+      try {
+        document.body.classList.add('loading');
+        tableBody.innerHTML = '<tr><td colspan="6" class="text-center p-4"><i class="fas fa-spinner fa-spin me-2"></i>Cargando jugadores...</td></tr>';
 
-          // Cargar solo nombre y apellidos → concatenar como "nombre completo"
-          const { data, error } = await supabase
-            .from('identificacion')
-            .select('numero, nombre, apellidos')
-            .order('apellidos', { ascending: true });
+        const { data, error } = await supabase
+          .from('identificacion')
+          .select('numero, nombre, apellidos')
+          .order('apellidos', { ascending: true });
 
-          if (error) throw error;
+        if (error) throw error;
 
-          currentPlayers = data.map(row => ({
-            id: row.numero,  // Usar numero como ID único
-            name: `${row.nombre || ''} ${row.apellidos || ''}`.trim() || `Jugador ${row.numero}`
-          })).filter(player => player.name); // Filtrar vacíos
+        currentPlayers = data
+          .map(row => ({
+            id: row.numero,
+            name: [row.nombre, row.apellidos].filter(Boolean).join(' ') || `Jugador ${row.numero}`
+          }))
+          .filter(p => p.name);
 
-          // Cargar datos de planilla guardados localmente
-          const savedData = localStorage.getItem(`diba_planilla_${dateInput.value}`);
-          planillaData = savedData ? JSON.parse(savedData) : {};
-
-          renderTable();
-          showToast(`Cargados ${currentPlayers.length} jugadores desde Supabase.`);
-
-        } catch (error) {
-          console.error('Error cargando jugadores:', error);
-          tableBody.innerHTML = `<tr><td colspan="6" class="text-center text-danger p-4">
-            <i class="fas fa-exclamation-triangle me-2"></i>Error conectando con Supabase: ${error.message}
-          </td></tr>`;
-          showToast('Error cargando datos de Supabase.', true);
-        } finally {
-          setLoading(false);
-        }
-      };
-
-      // === RENDERIZADO ===
-      const renderTable = () => {
-        if (currentPlayers.length === 0) {
-          tableBody.innerHTML = `<tr><td colspan="6" class="text-center text-muted p-4">No hay jugadores en la base de datos.</td></tr>`;
-          return;
-        }
-
-        tableBody.innerHTML = currentPlayers.map((player, index) => {
-          const playerData = planillaData[player.id] || { pago: '', asistencia: 'P', observacion: '' };
-          return `
-            <tr data-player-id="${player.id}">
-              <td><b>${index + 1}</b></td>
-              <td class="editable-name fw-medium" title="DIBA FBC #${player.id}">${player.name}</td>
-              <td><input type="text" class="form-control form-control-sm data-input" data-field="pago" placeholder="$0" value="${playerData.pago || ''}"></td>
-              <td>
-                <select class="form-select form-select-sm data-input" data-field="asistencia">
-                  <option value="P" ${playerData.asistencia === 'P' ? 'selected' : ''}>Presente</option>
-                  <option value="A" ${playerData.asistencia === 'A' ? 'selected' : ''}>Ausente</option>
-                  <option value="E" ${playerData.asistencia === 'E' ? 'selected' : ''}>Excusa</option>
-                </select>
-              </td>
-              <td><input type="text" class="form-control form-control-sm data-input" data-field="observacion" placeholder="Sin novedad" value="${playerData.observacion || ''}"></td>
-              <td class="text-center">
-                <button class="btn btn-sm btn-link text-danger p-0 action-btn btn-delete" title="Limpiar datos de este jugador"><i class="fas fa-trash-alt"></i></button>
-              </td>
-            </tr>
-          `;
-        }).join('');
-      };
-
-      // === EVENT HANDLERS ===
-      dateInput.valueAsDate = new Date();
-      dateInput.addEventListener('change', () => {
-        const savedData = localStorage.getItem(`diba_planilla_${dateInput.value}`);
-        planillaData = savedData ? JSON.parse(savedData) : {};
+        loadPlanillaData();
         renderTable();
-      });
+        showToast(`✅ ${currentPlayers.length} jugadores cargados desde Supabase`);
 
-      // Añadir nuevo jugador (solo local, NO inserta en Supabase)
-      addPlayerForm.addEventListener('submit', e => {
-        e.preventDefault();
-        const newName = newPlayerNameInput.value.trim();
-        if (newName && !currentPlayers.find(p => p.name.toLowerCase() === newName.toLowerCase())) {
-          const newId = `LOCAL_${Date.now()}`;
-          currentPlayers.push({ id: newId, name: newName });
-          renderTable();
-          newPlayerNameInput.value = '';
-          showToast(`Jugador "${newName}" añadido localmente.`);
-        } else {
-          showToast('Nombre duplicado o inválido.', true);
+      } catch (error) {
+        console.error('Error Supabase:', error);
+        tableBody.innerHTML = `<tr><td colspan="6" class="text-center text-danger p-4">
+          <i class="fas fa-exclamation-triangle me-2"></i>Error: ${error.message}
+          <br><small>Verifica URL/key y políticas RLS</small>
+        </td></tr>`;
+        showToast('❌ Error conectando con Supabase', true);
+      } finally {
+        document.body.classList.remove('loading');
+      }
+    };
+
+    const loadPlanillaData = () => {
+      const key = `diba_planilla_${dateInput.value}`;
+      planillaData = JSON.parse(localStorage.getItem(key) || '{}');
+    };
+
+    const savePlanillaData = () => {
+      const key = `diba_planilla_${dateInput.value}`;
+      localStorage.setItem(key, JSON.stringify(planillaData));
+    };
+
+    const renderTable = () => {
+      if (!currentPlayers.length) {
+        tableBody.innerHTML = '<tr><td colspan="6" class="text-center text-muted p-4">No hay jugadores en Supabase</td></tr>';
+        generatePdfBtn.disabled = true;
+        return;
+      }
+
+      generatePdfBtn.disabled = false;
+      tableBody.innerHTML = currentPlayers.map((player, i) => {
+        const data = planillaData[player.id] || { pago: '', asistencia: 'P', observacion: '' };
+        return `
+          <tr data-player-id="${player.id}">
+            <td><b>${i + 1}</b></td>
+            <td class="editable-name fw-medium" title="DIBA #${player.id}">${player.name}</td>
+            <td><input type="text" class="form-control form-control-sm data-input" data-field="pago" placeholder="$0" value="${data.pago || ''}"></td>
+            <td>
+              <select class="form-select form-select-sm data-input" data-field="asistencia">
+                <option value="P" ${data.asistencia === 'P' ? 'selected' : ''}>Presente</option>
+                <option value="A" ${data.asistencia === 'A' ? 'selected' : ''}>Ausente</option>
+                <option value="E" ${data.asistencia === 'E' ? 'selected' : ''}>Excusa</option>
+              </select>
+            </td>
+            <td><input type="text" class="form-control form-control-sm data-input" data-field="observacion" placeholder="Sin novedad" value="${data.observacion || ''}"></td>
+            <td class="text-center">
+              <button class="btn btn-sm btn-link text-danger p-0 btn-delete" title="Limpiar datos"><i class="fas fa-trash-alt"></i></button>
+            </td>
+          </tr>`;
+      }).join('');
+    };
+
+    // === EVENTOS ===
+    dateInput.valueAsDate = new Date();
+    dateInput.addEventListener('change', () => {
+      loadPlanillaData();
+      renderTable();
+    });
+
+    addPlayerForm.addEventListener('submit', e => {
+      e.preventDefault();
+      const name = newPlayerNameInput.value.trim();
+      if (name && !currentPlayers.find(p => p.name.toLowerCase() === name.toLowerCase())) {
+        currentPlayers.push({ id: `LOCAL_${Date.now()}`, name });
+        newPlayerNameInput.value = '';
+        renderTable();
+        showToast(`➕ "${name}" añadido localmente`);
+      } else {
+        showToast('❌ Nombre duplicado', true);
+      }
+    });
+
+    tableBody.addEventListener('input', e => {
+      if (e.target.classList.contains('data-input')) {
+        const row = e.target.closest('tr');
+        const id = row.dataset.playerId;
+        const field = e.target.dataset.field;
+        planillaData[id] = planillaData[id] || {};
+        planillaData[id][field] = e.target.value;
+        savePlanillaData();
+      }
+    });
+
+    tableBody.addEventListener('click', e => {
+      if (e.target.closest('.btn-delete')) {
+        const row = e.target.closest('tr');
+        const id = row.dataset.playerId;
+        delete planillaData[id];
+        savePlanillaData();
+        renderTable();
+        showToast('🗑️ Datos limpiados');
+      }
+    });
+
+    // Doble click editar nombre
+    tableBody.addEventListener('dblclick', e => {
+      const cell = e.target.closest('.editable-name');
+      if (!cell) return;
+      
+      const original = cell.textContent;
+      const row = cell.closest('tr');
+      const id = row.dataset.playerId;
+      
+      const input = document.createElement('input');
+      input.type = 'text';
+      input.className = 'form-control form-control-sm';
+      input.value = original;
+      cell.textContent = '';
+      cell.appendChild(input);
+      input.focus();
+      input.select();
+
+      const save = () => {
+        const newName = input.value.trim();
+        const player = currentPlayers.find(p => p.id === id);
+        if (player && newName && newName !== original) {
+          player.name = newName;
+          showToast(`✏️ "${newName}" actualizado`);
         }
-      });
-
-      // Eventos de tabla
-      tableBody.addEventListener('input', e => {
-        if (e.target.classList.contains('data-input')) {
-          const row = e.target.closest('tr');
-          const playerId = row.dataset.playerId;
-          const field = e.target.dataset.field;
-          planillaData[playerId] = planillaData[playerId] || {};
-          planillaData[playerId][field] = e.target.value;
-          savePlanillaData();
-        }
-      });
-
-      tableBody.addEventListener('click', e => {
-        if (e.target.closest('.btn-delete')) {
-          const row = e.target.closest('tr');
-          const playerId = row.dataset.playerId;
-          delete planillaData[playerId];
-          savePlanillaData();
-          showToast('Datos del jugador limpiados.', true);
-          renderTable();
-        }
-      });
-
-      tableBody.addEventListener('dblclick', e => {
-        const cell = e.target.closest('.editable-name');
-        if (!cell) return;
-        const originalName = cell.textContent;
-        const row = cell.closest('tr');
-        const playerId = row.dataset.playerId;
-        cell.innerHTML = `<input type="text" class="form-control form-control-sm" value="${originalName}" />`;
-        const input = cell.querySelector('input');
-        input.focus();
-        input.select();
-
-        const saveChange = () => {
-          const newName = input.value.trim();
-          if (newName && newName !== originalName) {
-            const player = currentPlayers.find(p => p.id === playerId);
-            if (player) player.name = newName;
-            renderTable();
-            showToast(`Nombre actualizado a "${newName}".`);
-          } else {
-            renderTable();
-          }
-        };
-
-        input.addEventListener('blur', saveChange);
-        input.addEventListener('keydown', ev => {
-          if (ev.key === 'Enter') saveChange();
-          if (ev.key === 'Escape') renderTable();
-        });
-      });
-
-      const savePlanillaData = () => {
-        localStorage.setItem(`diba_planilla_${dateInput.value}`, JSON.stringify(planillaData));
+        renderTable();
       };
 
-      clearDataBtn.addEventListener('click', () => {
-        if (confirm('¿Limpiar toda la planilla actual?')) {
-          planillaData = {};
-          savePlanillaData();
-          renderTable();
-          showToast('Planilla limpiada.');
-        }
-      });
-
-      refreshDataBtn.addEventListener('click', loadPlayersFromSupabase);
-
-      // === PDF (sin cambios) ===
-      generatePdfBtn.addEventListener('click', async () => {
-        const btn = generatePdfBtn;
-        btn.disabled = true;
-        btn.querySelector('#pdf-icon').innerHTML = `<span class="spinner-border spinner-border-sm"></span>`;
-        btn.querySelector('#pdf-text').textContent = ' Generando...';
-
-        try {
-          const { jsPDF } = window.jspdf;
-          const doc = new jsPDF({ orientation: 'portrait', unit: 'pt', format: 'letter' });
-
-          // Logo
-          const logoUrl = "https://i.postimg.cc/x8W7vwJJ/ESCUDO.png";
-          try {
-            const response = await fetch(logoUrl);
-            const blob = await response.blob();
-            const imgData = await new Promise(resolve => {
-              const reader = new FileReader();
-              reader.onloadend = () => resolve(reader.result);
-              reader.readAsDataURL(blob);
-            });
-            doc.addImage(imgData, 'PNG', 40, 30, 60, 60);
-          } catch (err) { console.error("Error cargando logo:", err); }
-
-          // Headers
-          doc.setFontSize(16).setFont('helvetica', 'bold').text("DIBA FBC", 115, 50);
-          doc.setFontSize(10).setFont('helvetica', 'normal');
-          doc.text("DEPORTIVO INTERNACIONAL DE BARRANQUILLA ATLANTICO", 115, 65);
-          doc.text("RESOLUCIÓN 0122 / 10-SEPT-2018", 115, 80);
-          doc.setFontSize(12).setFont('helvetica', 'bold').text("PLANILLA GENERAL DE CONTROL", doc.internal.pageSize.getWidth() / 2, 120, { align: 'center' });
-
-          const planillaDate = dateInput.value ? new Date(dateInput.value + 'T00:00:00').toLocaleDateString('es-CO') : "No especificada";
-          doc.setFontSize(10).setFont('helvetica', 'normal');
-          doc.text(`Fecha: ${planillaDate}`, 40, 140);
-          doc.text(`Fuente: Supabase identificacion`, doc.internal.pageSize.getWidth() - 40, 140, { align: 'right' });
-
-          // Tabla
-          const head = [["#", "Nombre", "Pago", "Asistencia", "Observaciones"]];
-          const body = currentPlayers.map((player, index) => {
-            const pData = planillaData[player.id] || {};
-            const asistenciaText = { P: 'Presente', A: 'Ausente', E: 'Excusa' }[pData.asistencia] || '';
-            return [index + 1, player.name, pData.pago || '', asistenciaText, pData.observacion || ''];
-          });
-
-          doc.autoTable({
-            head, body, startY: 155, margin: { left: 40, right: 40 },
-            styles: { fontSize: 9, cellPadding: 5, valign: 'middle' },
-            headStyles: { fillColor: [0, 42, 64], textColor: 255, fontStyle: 'bold' },
-            alternateRowStyles: { fillColor: [240, 248, 255] },
-            columnStyles: { 0: { halign: 'center', cellWidth: 30 }, 2: { halign: 'center', cellWidth: 70 }, 3: { halign: 'center', cellWidth: 70 } }
-          });
-
-          doc.save(`Planilla_DIBA_FBC_${dateInput.value}.pdf`);
-          showToast('PDF generado con éxito.');
-
-        } catch (error) {
-          console.error('Error PDF:', error);
-          showToast('Error generando PDF.', true);
-        } finally {
-          btn.disabled = currentPlayers.length === 0;
-          btn.querySelector('#pdf-icon').innerHTML = `<i class="fas fa-file-pdf"></i>`;
-          btn.querySelector('#pdf-text').textContent = ' Descargar PDF';
-        }
-      });
-
-      // === INICIALIZACIÓN ===
-      await loadPlayersFromSupabase();
+      input.onblur = save;
+      input.onkeydown = ev => {
+        if (ev.key === 'Enter') save();
+        if (ev.key === 'Escape') renderTable();
+      };
     });
+
+    clearDataBtn.onclick = () => {
+      if (confirm('¿Limpiar TODA la planilla?')) {
+        planillaData = {};
+        savePlanillaData();
+        renderTable();
+        showToast('🧹 Planilla limpiada');
+      }
+    };
+
+    refreshDataBtn.onclick = loadPlayersFromSupabase;
+
+    // === PDF GENERATION ===
+    generatePdfBtn.onclick = async () => {
+      const btn = generatePdfBtn;
+      btn.disabled = true;
+      btn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span>Generando...';
+
+      try {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+
+        // Logo
+        try {
+          const logo = await fetch('https://i.postimg.cc/x8W7vwJJ/ESCUDO.png');
+          const blob = await logo.blob();
+          const reader = new FileReader();
+          reader.readAsDataURL(blob);
+          await new Promise(r => reader.onload = r);
+          doc.addImage(reader.result, 'PNG', 40, 30, 60, 60);
+        } catch (e) { console.error('Logo error:', e); }
+
+        // Headers
+        doc.setFontSize(16).setFont('helvetica', 'bold').text('DIBA FBC', 115, 50);
+        doc.setFontSize(10).text('DEPORTIVO INTERNACIONAL DE BARRANQUILLA ATLÁNTICO', 115, 65);
+        doc.text('RESOLUCIÓN 0122 / 10-SEPT-2018', 115, 80);
+        doc.setFontSize(12).setFont('helvetica', 'bold').text('PLANILLA GENERAL DE CONTROL', 297/2, 120, { align: 'center' });
+
+        const fecha = dateInput.value ? new Date(dateInput.value).toLocaleDateString('es-CO') : 'Sin fecha';
+        doc.setFontSize(10).setFont('helvetica', 'normal');
+        doc.text(`Fecha: ${fecha}`, 40, 140);
+        doc.text(`Fuente: Supabase (${currentPlayers.length} jugadores)`, 297 - 40, 140, { align: 'right' });
+
+        // Tabla PDF
+        const head = [['#', 'Nombre', 'Pago', 'Asistencia', 'Observaciones']];
+        const body = currentPlayers.map((p, i) => {
+          const d = planillaData[p.id] || {};
+          return [i+1, p.name, d.pago || '', 
+            {P:'Presente', A:'Ausente', E:'Excusa'}[d.asistencia] || '', 
+            d.observacion || ''];
+        });
+
+        doc.autoTable({ head, body, startY: 155, margin: {left:40, right:40},
+          styles: {fontSize:9, cellPadding:5}, 
+          headStyles: {fillColor:[0,42,64], textColor:255, fontStyle:'bold'},
+          columnStyles: {0:{halign:'center', cellWidth:30}, 2:{halign:'center', cellWidth:70}, 3:{halign:'center'}}
+        });
+
+        doc.save(`Planilla_DIBA_${dateInput.value}.pdf`);
+        showToast('📄 PDF generado correctamente');
+
+      } catch (error) {
+        console.error('PDF Error:', error);
+        showToast('❌ Error generando PDF', true);
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-file-pdf me-1"></i>Descargar PDF';
+      }
+    };
+
+    // === INIT ===
+    loadPlayersFromSupabase();
   </script>
 </body>
 </html>
