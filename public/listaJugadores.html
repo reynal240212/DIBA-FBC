@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="es" data-bs-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <title>Lista Jugadores - DIBA FBC</title>
+  <meta name="author" content="REINALDO DE JESUS PEREZ NAVAS" />
+  <meta name="keywords" content="DIBA FBC, Barranquilla, Fútbol, Jugadores" />
+  <meta name="theme-color" content="#002a40" />
+  <link rel="icon" href="https://i.postimg.cc/x8W7vwJJ/ESCUDO.png" type="image/png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+  <style>
+    :root {
+      --primary-color: #002a40;
+      --secondary-color: #005f73;
+      --bs-body-bg: #f8f9fa;
+    }
+    body { background-color: var(--bs-body-bg); }
+    .navbar { background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)) !important; }
+    .list-group-item {
+      border-left: 4px solid var(--primary-color);
+      transition: all 0.2s;
+    }
+    .list-group-item:hover { 
+      background-color: #e9f4ff !important; 
+      transform: translateX(5px);
+      box-shadow: 0 2px 8px rgba(0,42,64,0.15);
+    }
+    .loading { opacity: 0.6; pointer-events: none; }
+    .stats-card { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
+  </style>
+</head>
+
+<body>
+  <!-- Toast -->
+  <div class="toast-container position-fixed top-0 end-0 p-3">
+    <div id="appToast" class="toast" role="alert">
+      <div class="toast-header"><i class="fas fa-check-circle text-success me-2"></i><strong class="me-auto">DIBA FBC</strong><button type="button" class="btn-close" data-bs-dismiss="toast"></button></div>
+      <div class="toast-body"></div>
+    </div>
+  </div>
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark shadow-lg">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="#">
+        <img src="https://i.postimg.cc/x8W7vwJJ/ESCUDO.png" alt="DIBA FBC" width="30" height="30" class="me-2">
+        DIBA FBC
+      </a>
+    </div>
+  </nav>
+
+  <main class="container mt-4 mb-5">
+    <!-- Stats Card -->
+    <div class="row mb-4">
+      <div class="col-md-3">
+        <div class="card stats-card shadow-lg">
+          <div class="card-body text-center p-3">
+            <i class="fas fa-users fa-2x mb-2 opacity-75"></i>
+            <h3 id="totalJugadores" class="mb-0">0</h3>
+            <small>Total Jugadores</small>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Controls -->
+    <div class="card shadow-sm mb-4">
+      <div class="card-body d-flex justify-content-between align-items-center flex-wrap gap-2">
+        <h2 class="mb-0"><i class="fas fa-list me-2"></i>Lista de Jugadores</h2>
+        <div class="d-flex gap-2">
+          <button id="refreshBtn" class="btn btn-outline-primary">
+            <i class="fas fa-sync-alt"></i> Recargar
+          </button>
+          <button id="printBtn" class="btn btn-primary">
+            <i class="fas fa-print"></i> Imprimir
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Lista -->
+    <div class="card shadow-lg">
+      <div class="list-group list-group-flush" id="jugadoresList">
+        <div class="list-group-item text-center p-5 bg-light">
+          <i class="fas fa-spinner fa-spin fa-2x text-muted mb-3"></i>
+          <p class="text-muted mb-0">Cargando jugadores desde Supabase...</p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  
+  <script type="module">
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+
+    // ⚠️ CONFIGURA TUS DATOS
+    const SUPABASE_URL = 'https://wdnlqfiwuocmmcdowjyw.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndkbmxxZml3dW9jbW1jZG93anl3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzQ5NTY4MDAsImV4cCI6MjA1MDUzMjgwMH0.TU_ANON_KEY_AQUI';
+
+    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    
+    // DOM
+    const jugadoresList = document.getElementById('jugadoresList');
+    const totalJugadores = document.getElementById('totalJugadores');
+    const refreshBtn = document.getElementById('refreshBtn');
+    const printBtn = document.getElementById('printBtn');
+    const toastElement = document.getElementById('appToast');
+    const bsToast = new bootstrap.Toast(toastElement);
+
+    // Toast
+    const showToast = (msg, isError = false) => {
+      toastElement.querySelector('.toast-body').textContent = msg;
+      const icon = toastElement.querySelector('.toast-header i');
+      icon.className = isError ? 'fas fa-exclamation-circle text-danger me-2' : 'fas fa-check-circle text-success me-2';
+      bsToast.show();
+    };
+
+    // Cargar datos
+    const loadJugadores = async () => {
+      try {
+        document.body.classList.add('loading');
+        refreshBtn.disabled = true;
+        refreshBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Cargando...';
+
+        const { data, error } = await supabase
+          .from('identificacion')
+          .select('numero, nombre, apellidos, lugar_nacimiento') // lugar_nacimiento como "barrio"
+          .order('apellidos', { ascending: true })
+          .order('nombre', { ascending: true });
+
+        if (error) throw error;
+
+        const jugadores = data
+          .map(row => ({
+            cedula: row.numero,
+            nombre: row.nombre || '',
+            apellidos: row.apellidos || '',
+            barrio: row.lugar_nacimiento || 'No especificado'
+          }))
+          .filter(j => j.nombre || j.apellidos); // Solo con nombre/apellido
+
+        renderLista(jugadores);
+        showToast(`✅ ${jugadores.length} jugadores cargados`);
+
+      } catch (error) {
+        console.error('Error:', error);
+        jugadoresList.innerHTML = `
+          <div class="list-group-item text-center p-5 text-danger">
+            <i class="fas fa-exclamation-triangle fa-2x mb-3"></i>
+            <h5>Error de conexión</h5>
+            <p class="mb-2">${error.message}</p>
+            <small>Verifica URL/key y políticas RLS en Supabase</small>
+          </div>`;
+        showToast('❌ Error conectando con Supabase', true);
+      } finally {
+        document.body.classList.remove('loading');
+        refreshBtn.disabled = false;
+        refreshBtn.innerHTML = '<i class="fas fa-sync-alt"></i> Recargar';
+      }
+    };
+
+    // Render lista
+    const renderLista = (jugadores) => {
+      totalJugadores.textContent = jugadores.length;
+      
+      if (!jugadores.length) {
+        jugadoresList.innerHTML = `
+          <div class="list-group-item text-center p-5 text-muted">
+            <i class="fas fa-users-slash fa-3x mb-3 opacity-50"></i>
+            <h5>No hay jugadores</h5>
+            <p class="mb-0">La tabla identificacion está vacía</p>
+          </div>`;
+        return;
+      }
+
+      jugadoresList.innerHTML = jugadores.map(jugador => `
+        <div class="list-group-item d-flex align-items-center p-3">
+          <div class="flex-shrink-0 me-3">
+            <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center" style="width:50px;height:50px;font-weight:bold;font-size:0.9em;">
+              ${jugador.nombre.charAt(0)}${jugador.apellidos.charAt(0)}
+            </div>
+          </div>
+          <div class="flex-grow-1">
+            <h6 class="mb-1 fw-bold">${jugador.nombre} ${jugador.apellidos}</h6>
+            <div class="row g-2 text-sm">
+              <div class="col-md-3">
+                <strong>C.C:</strong> ${jugador.cedula}
+              </div>
+              <div class="col-md-5">
+                <strong>Barrio:</strong> ${jugador.barrio}
+              </div>
+            </div>
+          </div>
+          <div class="text-end text-muted small">
+            <i class="fas fa-user-circle"></i>
+          </div>
+        </div>
+      `).join('');
+    };
+
+    // Imprimir
+    printBtn.onclick = () => {
+      window.print();
+    };
+
+    // Eventos
+    refreshBtn.onclick = loadJugadores;
+
+    // Init
+    loadJugadores();
+  </script>
+</body>
+</html>
