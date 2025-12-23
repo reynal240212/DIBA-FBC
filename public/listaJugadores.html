@@ -205,108 +205,126 @@
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script type="module">
-    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+  import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
 
-    const supabase = createClient('https://wdnlqfiwuocmmcdowjyw.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndkbmxxZml3dW9jbW1jZG93anl3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg1MjY1ODAsImV4cCI6MjA2NDEwMjU4MH0.4SCS_NRDIYLQJ1XouqW111BxkMOlwMWOjje9gFTgW_Q');
+  const supabase = createClient('https://wdnlqfiwuocmmcdowjyw.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndkbmxxZml3dW9jbW1jZG93anl3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg1MjY1ODAsImV4cCI6MjA2NDEwMjU4MH0.4SCS_NRDIYLQJ1XouqW111BxkMOlwMWOjje9gFTgW_Q');
 
-    let players = [];
-    const modalEdit = new bootstrap.Modal('#modalEdit');
+  let players = [];
+  const modalEditElement = document.getElementById('modalEdit');
+  const modalEdit = new bootstrap.Modal(modalEditElement);
 
-    async function fetchData() {
-      // Nota: Asumo que tienes una columna 'estado' (boolean o string). 
-      // Si no la tienes, eliminar el .eq('estado', 'activo')
-      const { data } = await supabase.from('identificacion').select('*').order('apellidos');
-      players = data || [];
-      render();
+  async function fetchData() {
+    const { data, error } = await supabase.from('identificacion').select('*').order('apellidos');
+    if (error) {
+      console.error('Error:', error);
+      return;
     }
+    players = data || [];
+    render();
+  }
 
-    function render() {
-      const filter = document.getElementById('catFilter').value;
-      const search = document.getElementById('nameSearch').value.toLowerCase();
-      const body = document.getElementById('dataBody');
+  function render() {
+    const filter = document.getElementById('catFilter').value;
+    const search = document.getElementById('nameSearch').value.toLowerCase();
+    const body = document.getElementById('dataBody');
 
-      const filtered = players.filter(p => {
-        const year = p.fecha_nacimiento ? parseInt(p.fecha_nacimiento.substring(0, 4)) : 0;
-        let group = (year === 2012 || year === 2013) ? "2012/13" : (year >= 2014 && year <= 2016) ? "2014/15/16" : "Otro";
+    const filtered = players.filter(p => {
+      const year = p.fecha_nacimiento ? parseInt(p.fecha_nacimiento.substring(0, 4)) : 0;
+      let group = (year === 2012 || year === 2013) ? "2012/13" : (year >= 2014 && year <= 2016) ? "2014/15/16" : "Otro";
+      
+      const matchesFilter = filter === 'todos' || group === filter;
+      const matchesSearch = `${p.nombre} ${p.apellidos} ${p.numero}`.toLowerCase().includes(search);
+      return matchesFilter && matchesSearch;
+    });
 
-        const matchesFilter = filter === 'todos' || group === filter;
-        const matchesSearch = `${p.nombre} ${p.apellidos} ${p.numero} ${p.id}`.toLowerCase().includes(search);
-        return matchesFilter && matchesSearch;
-      });
+    body.innerHTML = filtered.map((p, i) => `
+      <tr onclick="window.openEdit('${p.id}')">
+        <td class="fw-bold text-muted">${i + 1}</td>
+        <td class="text-uppercase">${p.nombre} ${p.apellidos}</td>
+        <td>${p.numero}</td>
+        <td class="no-print">${p.fecha_nacimiento?.substring(0,4) || 'S/D'}</td>
+        <td class="no-screen" style="border: 1px solid #000; height: 40px;"></td>
+      </tr>
+    `).join('');
+  }
 
-      body.innerHTML = filtered.map((p, i) => `
-        <tr onclick="openEdit(${p.id})">
-          <td class="fw-bold text-muted">${i + 1}</td>
-          <td class="text-uppercase">${p.nombre} ${p.apellidos}</td>
-          <td>${p.numero}</td>
-          <td class="no-print">${p.fecha_nacimiento?.substring(0, 4) || 'S/D'}</td>
-          <td class="no-screen" style="border: 1px solid #000; height: 40px;"></td>
-        </tr>
-      `).join('');
-    }
-
-    // --- ACCIONES ---
-
-    window.openEdit = (id) => {
-      const p = players.find(x => x.id === id);
+  // Hacer la función accesible globalmente para el onclick de la tabla
+  window.openEdit = (id) => {
+    // IMPORTANTE: Convertimos id a String para comparar correctamente
+    const p = players.find(x => String(x.id) === String(id));
+    
+    if (p) {
       const form = document.getElementById('formEdit');
       form.id.value = p.id;
       form.nombre.value = p.nombre;
       form.apellidos.value = p.apellidos;
       form.numero.value = p.numero;
       modalEdit.show();
+    } else {
+      console.error("No se encontró el jugador con ID:", id);
+    }
+  };
+
+  // AGREGAR JUGADOR
+  document.getElementById('formAdd').onsubmit = async (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    const nuevo = Object.fromEntries(formData);
+    
+    const { error } = await supabase.from('identificacion').insert([nuevo]);
+    if (error) {
+      alert("Error al guardar: " + error.message);
+    } else {
+      e.target.reset();
+      bootstrap.Modal.getInstance(document.getElementById('modalAdd')).hide();
+      await fetchData();
+    }
+  };
+
+  // ACTUALIZAR JUGADOR
+  document.getElementById('formEdit').onsubmit = async (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    const data = Object.fromEntries(formData);
+    const targetId = data.id; // Extraemos el ID
+    
+    // Eliminamos el ID del objeto que se enviará a actualizar (no se debe actualizar la PK)
+    const updateData = {
+      nombre: data.nombre,
+      apellidos: data.apellidos,
+      numero: data.numero
     };
 
-    // Agregar
-    document.getElementById('formAdd').onsubmit = async (e) => {
-      e.preventDefault();
-      const formData = new FormData(e.target);
-      const nuevo = Object.fromEntries(formData);
+    const { error } = await supabase
+      .from('identificacion')
+      .update(updateData)
+      .eq('id', targetId);
 
-      const { error } = await supabase.from('identificacion').insert([nuevo]);
-      if (error) alert("Error al agregar");
-      else {
-        e.target.reset();
-        bootstrap.Modal.getInstance('#modalAdd').hide();
-        fetchData();
-      }
-    };
+    if (error) {
+      alert("Error al actualizar: " + error.message);
+    } else {
+      modalEdit.hide();
+      await fetchData();
+    }
+  };
 
-    // Editar
-    document.getElementById('formEdit').onsubmit = async (e) => {
-      e.preventDefault();
-      const formData = new FormData(e.target);
-      const data = Object.fromEntries(formData);
-      const id = data.id;
-      delete data.id;
-
-      const { error } = await supabase.from('identificacion').update(data).eq('id', id);
-      if (error) alert("Error al actualizar");
+  // ELIMINAR / INACTIVAR
+  document.getElementById('btnInactivate').onclick = async () => {
+    const id = document.getElementById('formEdit').id.value;
+    if(confirm("¿Seguro que desea eliminar a este deportista?")) {
+      const { error } = await supabase.from('identificacion').delete().eq('id', id);
+      if (error) alert("Error: " + error.message);
       else {
         modalEdit.hide();
-        fetchData();
+        await fetchData();
       }
-    };
+    }
+  };
 
-    // Inactivar (Borrar o cambiar estado)
-    document.getElementById('btnInactivate').onclick = async () => {
-      const id = document.getElementById('formEdit').id.value;
-      if (confirm("¿Seguro que desea eliminar/inactivar a este deportista?")) {
-        // Opción A: Borrar físicamente
-        const { error } = await supabase.from('identificacion').delete().eq('id', id);
-
-        if (error) alert("Error");
-        else {
-          modalEdit.hide();
-          fetchData();
-        }
-      }
-    };
-
-    document.getElementById('catFilter').onchange = render;
-    document.getElementById('nameSearch').oninput = render;
-    window.onload = fetchData;
-  </script>
+  document.getElementById('catFilter').onchange = render;
+  document.getElementById('nameSearch').oninput = render;
+  window.onload = fetchData;
+</script>
 </body>
 
 </html>
