@@ -8,7 +8,7 @@
 
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 
   <style>
     :root {
@@ -16,16 +16,14 @@
       --diba-dark: #001f2f;
       --diba-gold: #c5a059;
       --bg-light: #f8f9fc;
-      --accent-color: #4e73df;
     }
 
     body {
       font-family: 'Inter', sans-serif;
       background-color: var(--bg-light);
-      overflow-x: hidden;
     }
 
-    /* Estructura del Panel */
+    /* Layout Dashboard */
     #wrapper {
       display: flex;
     }
@@ -35,42 +33,18 @@
       min-height: 100vh;
       background: var(--diba-dark);
       color: white;
-      transition: all 0.3s;
       position: fixed;
+      transition: 0.3s;
+      z-index: 1000;
     }
 
     #content {
       width: calc(100% - var(--sidebar-width));
       margin-left: var(--sidebar-width);
       padding: 30px;
+      transition: 0.3s;
     }
 
-    .nav-link {
-      color: rgba(255, 255, 255, 0.7);
-      padding: 15px 25px;
-      border-left: 4px solid transparent;
-    }
-
-    .nav-link:hover,
-    .nav-link.active {
-      color: white;
-      background: rgba(255, 255, 255, 0.05);
-      border-left: 4px solid var(--diba-gold);
-    }
-
-    /* Tarjetas de Estadísticas */
-    .stat-card {
-      border: none;
-      border-radius: 12px;
-      box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.1);
-      transition: transform 0.2s;
-    }
-
-    .stat-card:hover {
-      transform: translateY(-5px);
-    }
-
-    /* Estilo de la Tabla */
     .data-card {
       background: white;
       border-radius: 15px;
@@ -78,60 +52,47 @@
       box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.05);
     }
 
-    .table thead th {
-      background-color: #f8f9fc;
-      color: #4e73df;
-      text-transform: uppercase;
-      font-size: 0.75rem;
-      letter-spacing: 0.05em;
-      border-bottom: 2px solid #e3e6f0;
-    }
-
     .avatar-circle {
-      width: 35px;
-      height: 35px;
-      background: #e3e6f0;
+      width: 38px;
+      height: 38px;
+      background: var(--diba-gold);
+      color: white;
       border-radius: 50%;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      margin-right: 10px;
+      margin-right: 12px;
       font-weight: bold;
-      color: var(--diba-dark);
     }
 
-    /* Modales Estilizados */
-    .modal-content {
-      border: none;
-      border-radius: 15px;
-    }
-
-    .modal-header {
-      border-bottom: none;
-      padding: 25px 25px 10px;
-    }
-
-    .modal-footer {
-      border-top: none;
-      padding: 10px 25px 25px;
+    /* Botón flotante para móviles */
+    .mobile-add {
+      display: none;
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 999;
     }
 
     @media (max-width: 992px) {
       #sidebar {
-        margin-left: calc(-1 * var(--sidebar-width));
+        transform: translateX(-100%);
       }
 
       #content {
         width: 100%;
         margin-left: 0;
       }
+
+      .mobile-add {
+        display: block;
+      }
     }
 
     @media print {
 
       #sidebar,
-      .no-print,
-      .btn-add {
+      .no-print {
         display: none !important;
       }
 
@@ -139,11 +100,6 @@
         margin-left: 0;
         padding: 0;
         width: 100%;
-      }
-
-      .data-card {
-        box-shadow: none;
-        padding: 0;
       }
     }
   </style>
@@ -154,97 +110,63 @@
   <div id="wrapper">
     <nav id="sidebar" class="no-print">
       <div class="p-4 text-center">
-        <img src="images/ESCUDO.png" alt="Logo" style="width: 80px; margin-bottom: 15px;">
-        <h6 class="fw-bold mb-0">DIBA FBC</h6>
-        <small class="text-muted">Administración</small>
+        <h5 class="fw-bold mb-0 text-white">DIBA FBC</h5>
+        <p class="text-muted small">Panel Administrativo</p>
       </div>
-      <div class="mt-4">
-        <a href="#" class="nav-link active"><i class="fas fa-users me-2"></i> Jugadores</a>
-        <a href="#" class="nav-link"><i class="fas fa-calendar-alt me-2"></i> Asistencia</a>
-        <a href="#" class="nav-link"><i class="fas fa-file-invoice me-2"></i> Planillas</a>
-        <div class="px-4 mt-5">
-          <hr class="text-muted">
-        </div>
-        <a href="javascript:window.print()" class="nav-link text-warning"><i class="fas fa-print me-2"></i> Imprimir
-          Reporte</a>
+      <div class="mt-3">
+        <a href="#"
+          class="nav-link text-white p-3 px-4 bg-primary bg-opacity-25 border-start border-4 border-warning"><i
+            class="fas fa-users me-2"></i> Jugadores</a>
+        <a href="javascript:window.print()" class="nav-link text-white-50 p-3 px-4"><i class="fas fa-print me-2"></i>
+          Imprimir Reporte</a>
       </div>
     </nav>
 
     <main id="content">
-      <div class="d-flex justify-content-between align-items-center mb-4 no-print">
-        <h4 class="fw-bold text-gray-800">Gestión de Deportistas</h4>
-        <button class="btn btn-primary shadow-sm px-4" onclick="openAddModal()">
-          <i class="fas fa-plus me-2"></i> Nuevo Jugador
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+          <h3 class="fw-bold text-dark mb-0">Gestión de Jugadores</h3>
+          <p class="text-muted">Base de datos técnica oficial</p>
+        </div>
+        <button class="btn btn-primary shadow-sm no-print px-4 py-2" onclick="window.openAddModal()">
+          <i class="fas fa-plus me-2"></i> Nuevo Registro
         </button>
-      </div>
-
-      <div class="row mb-4 no-print">
-        <div class="col-md-4">
-          <div class="card stat-card p-3 border-left-primary">
-            <div class="d-flex align-items-center justify-content-between">
-              <div>
-                <p class="text-xs font-weight-bold text-primary text-uppercase mb-1">Total Inscritos</p>
-                <h3 class="fw-bold mb-0" id="totalCount">0</h3>
-              </div>
-              <i class="fas fa-user-friends fa-2x text-gray-300"></i>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="card stat-card p-3">
-            <div class="d-flex align-items-center justify-content-between">
-              <div>
-                <p class="text-xs font-weight-bold text-success text-uppercase mb-1">Cat. 2012/13</p>
-                <h3 class="fw-bold mb-0" id="cat1Count">0</h3>
-              </div>
-              <i class="fas fa-futbol fa-2x text-gray-300"></i>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="card stat-card p-3">
-            <div class="d-flex align-items-center justify-content-between">
-              <div>
-                <p class="text-xs font-weight-bold text-info text-uppercase mb-1">Cat. 2014/15/16</p>
-                <h3 class="fw-bold mb-0" id="cat2Count">0</h3>
-              </div>
-              <i class="fas fa-running fa-2x text-gray-300"></i>
-            </div>
-          </div>
-        </div>
       </div>
 
       <div class="data-card">
         <div class="row g-3 mb-4 no-print">
           <div class="col-md-8">
             <div class="input-group">
-              <span class="input-group-text bg-white border-end-0"><i class="fas fa-search text-muted"></i></span>
+              <span class="input-group-text bg-white border-end-0 text-muted"><i class="fas fa-search"></i></span>
               <input type="text" id="nameSearch" class="form-control border-start-0 ps-0 shadow-none"
-                placeholder="Buscar por nombre, apellido o documento...">
+                placeholder="Buscar por nombre o documento...">
             </div>
           </div>
           <div class="col-md-4">
             <select id="catFilter" class="form-select shadow-none">
               <option value="todos">Todas las categorías</option>
-              <option value="2012/13">2012 / 2013</option>
-              <option value="2014/15/16">2014 / 2015 / 2016</option>
+              <option value="2012/13">Cat. 2012 / 2013</option>
+              <option value="2014/15/16">Cat. 2014 / 2015 / 2016</option>
             </select>
           </div>
         </div>
 
         <div class="table-responsive">
-          <table class="table table-hover align-middle">
-            <thead>
+          <table class="table table-hover align-middle" id="mainTable">
+            <thead class="table-light">
               <tr>
                 <th width="5%">N°</th>
-                <th width="40%">Deportista</th>
-                <th width="15%">Documento</th>
+                <th width="45%">Jugador</th>
+                <th width="20%">Documento</th>
                 <th width="10%" class="no-print text-center">Año</th>
-                <th width="15%" class="no-print text-center">Acciones</th>
+                <th width="20%" class="no-print text-center">Acciones</th>
                 <th width="15%" class="no-screen">Firma</th>
               </tr>
             </thead>
             <tbody id="dataBody">
+              <tr>
+                <td colspan="5" class="text-center py-5 text-muted">Cargando jugadores...</td>
+              </tr>
             </tbody>
           </table>
         </div>
@@ -254,32 +176,32 @@
 
   <div class="modal fade" id="modalEdit" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
-      <form id="formEdit" class="modal-content shadow-lg">
+      <form id="formEdit" class="modal-content border-0 shadow-lg">
         <input type="hidden" id="edit_id">
-        <div class="modal-header">
-          <h5 class="fw-bold">Detalles del Jugador</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        <div class="modal-header bg-dark text-white p-4">
+          <h5 class="fw-bold mb-0">Actualizar Información</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
         </div>
-        <div class="modal-body">
+        <div class="modal-body p-4">
           <div class="row g-3">
             <div class="col-6">
-              <label class="form-label small fw-bold">Nombres</label>
+              <label class="form-label small fw-bold">NOMBRES</label>
               <input type="text" id="edit_nombre" class="form-control" required>
             </div>
             <div class="col-6">
-              <label class="form-label small fw-bold">Apellidos</label>
+              <label class="form-label small fw-bold">APELLIDOS</label>
               <input type="text" id="edit_apellidos" class="form-control" required>
             </div>
             <div class="col-12">
-              <label class="form-label small fw-bold">Número de Documento</label>
+              <label class="form-label small fw-bold">N° DOCUMENTO</label>
               <input type="text" id="edit_numero" class="form-control" required>
             </div>
           </div>
         </div>
-        <div class="modal-footer flex-column">
-          <button type="submit" class="btn btn-primary w-100">Actualizar Información</button>
-          <button type="button" onclick="deletePlayer()" class="btn btn-link text-danger mt-2 small">Eliminar del
-            sistema</button>
+        <div class="modal-footer p-4 pt-0 flex-column">
+          <button type="submit" class="btn btn-primary w-100 py-2">Guardar Cambios</button>
+          <button type="button" onclick="window.deletePlayer()" class="btn btn-link text-danger mt-2 small">Eliminar
+            este registro definitivamente</button>
         </div>
       </form>
     </div>
@@ -287,39 +209,40 @@
 
   <div class="modal fade" id="modalAdd" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
-      <form id="formAdd" class="modal-content shadow-lg">
-        <div class="modal-header">
-          <h5 class="fw-bold">Nuevo Registro</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      <form id="formAdd" class="modal-content border-0 shadow-lg">
+        <div class="modal-header bg-primary text-white p-4">
+          <h5 class="fw-bold mb-0">Inscribir Jugador</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
         </div>
-        <div class="modal-body">
+        <div class="modal-body p-4">
           <div class="row g-3">
             <div class="col-6">
-              <label class="form-label small fw-bold">Nombres</label>
-              <input type="text" name="nombre" class="form-control" placeholder="Ej: Juan" required>
+              <label class="form-label small fw-bold">NOMBRES</label>
+              <input type="text" name="nombre" class="form-control" placeholder="Nombre" required>
             </div>
             <div class="col-6">
-              <label class="form-label small fw-bold">Apellidos</label>
-              <input type="text" name="apellidos" class="form-control" placeholder="Ej: Pérez" required>
+              <label class="form-label small fw-bold">APELLIDOS</label>
+              <input type="text" name="apellidos" class="form-control" placeholder="Apellido" required>
             </div>
             <div class="col-12">
-              <label class="form-label small fw-bold">Documento</label>
-              <input type="text" name="numero" class="form-control" placeholder="C.C. o T.I." required>
+              <label class="form-label small fw-bold">N° DOCUMENTO</label>
+              <input type="text" name="numero" class="form-control" placeholder="DNI / TI / CC" required>
             </div>
             <div class="col-12">
-              <label class="form-label small fw-bold">Fecha de Nacimiento</label>
+              <label class="form-label small fw-bold">FECHA NACIMIENTO</label>
               <input type="date" name="fecha_nacimiento" class="form-control" required>
             </div>
           </div>
         </div>
-        <div class="modal-footer">
-          <button type="submit" class="btn btn-primary w-100">Inscribir Jugador</button>
+        <div class="modal-footer p-4 pt-0">
+          <button type="submit" class="btn btn-primary w-100 py-2">Crear Registro</button>
         </div>
       </form>
     </div>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
   <script type="module">
     import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
 
@@ -330,20 +253,10 @@
     const bsModalAdd = new bootstrap.Modal('#modalAdd');
 
     async function loadData() {
-      // IMPORTANTE: Asegúrate de que 'id' sea el nombre de tu columna primaria en Supabase
-      const { data, error } = await supabase.from('identificacion').select('*').order('apellidos');
-      if (error) return console.error("Error cargando:", error);
-
+      const { data, error } = await supabase.from('identificacion').select('*').order('apellidos', { ascending: true });
+      if (error) { console.error(error); return; }
       players = data || [];
-      updateStats();
       renderTable();
-    }
-
-    function updateStats() {
-      document.getElementById('totalCount').innerText = players.length;
-      const countCat = (years) => players.filter(p => years.includes(p.fecha_nacimiento?.substring(0, 4))).length;
-      document.getElementById('cat1Count').innerText = countCat(['2012', '2013']);
-      document.getElementById('cat2Count').innerText = countCat(['2014', '2015', '2016']);
     }
 
     function renderTable() {
@@ -359,110 +272,87 @@
       });
 
       body.innerHTML = '';
+      if (filtered.length === 0) {
+        body.innerHTML = '<tr><td colspan="5" class="text-center py-4">No se encontraron resultados</td></tr>';
+        return;
+      }
+
       filtered.forEach((p, i) => {
         const tr = document.createElement('tr');
-        // Verificación de ID para depuración
-        if (!p.id) console.warn("Advertencia: El registro no tiene columna 'id'. Revisa tu tabla en Supabase.");
-
         tr.innerHTML = `
-        <td class="text-muted small">${i + 1}</td>
-        <td>
-          <div class="d-flex align-items-center">
-            <div class="avatar-circle">${p.nombre.charAt(0).toUpperCase()}</div>
-            <div class="fw-bold">${p.nombre} ${p.apellidos}</div>
-          </div>
-        </td>
-        <td><span class="badge bg-light text-dark border">${p.numero}</span></td>
-        <td class="no-print text-center text-muted">${p.fecha_nacimiento?.substring(0, 4) || '-'}</td>
-        <td class="no-print text-center">
-          <button class="btn btn-sm btn-white border shadow-sm btn-edit-trigger"><i class="fas fa-edit text-primary"></i></button>
-        </td>
-        <td class="no-screen" style="border: 1px solid #000; height: 40px;"></td>
-      `;
-
-        // Asignamos el evento pasando el objeto completo
-        tr.querySelector('.btn-edit-trigger').onclick = () => showEdit(p);
+          <td class="text-muted small">${i + 1}</td>
+          <td>
+            <div class="d-flex align-items-center">
+              <div class="avatar-circle">${p.nombre.charAt(0).toUpperCase()}</div>
+              <div class="fw-semibold text-dark">${p.nombre} ${p.apellidos}</div>
+            </div>
+          </td>
+          <td><span class="badge bg-light text-dark border fw-normal px-2">${p.numero}</span></td>
+          <td class="no-print text-center text-muted small">${p.fecha_nacimiento?.substring(0, 4) || '-'}</td>
+          <td class="no-print text-center">
+            <button class="btn btn-sm btn-outline-primary border-0 btn-edit"><i class="fas fa-pen-to-square"></i></button>
+          </td>
+          <td class="no-screen" style="border: 1px solid #000; height: 40px;"></td>
+        `;
+        // El evento se asigna directamente aquí para evitar conflictos de "undefined"
+        tr.querySelector('.btn-edit').onclick = () => window.showEdit(p);
         body.appendChild(tr);
       });
     }
 
+    // EXPONER FUNCIONES A WINDOW (Crucial para que funcionen los botones)
     window.showEdit = (player) => {
-      // Evitamos el error de undefined limpiando el modal
       document.getElementById('formEdit').reset();
-
-      // Verificamos que el ID exista antes de asignar
-      if (player.id !== undefined && player.id !== null) {
-        document.getElementById('modalEdit').removeAttribute('aria-hidden');
-        document.getElementById('edit_id').value = player.id;
-        document.getElementById('edit_nombre').value = player.nombre;
-        document.getElementById('edit_apellidos').value = player.apellidos;
-        document.getElementById('edit_numero').value = player.numero;
-        bsModalEdit.show();
-      } else {
-        alert("Error: Este registro no tiene un ID válido en la base de datos.");
-      }
+      document.getElementById('edit_id').value = player.id;
+      document.getElementById('edit_nombre').value = player.nombre;
+      document.getElementById('edit_apellidos').value = player.apellidos;
+      document.getElementById('edit_numero').value = player.numero;
+      bsModalEdit.show();
     };
 
     window.openAddModal = () => {
-      document.getElementById('modalAdd').removeAttribute('aria-hidden');
       document.getElementById('formAdd').reset();
       bsModalAdd.show();
     };
 
-    // ACTUALIZAR
+    window.deletePlayer = async () => {
+      const id = document.getElementById('edit_id').value;
+      if (confirm("¿Seguro que deseas eliminar este registro?")) {
+        const { error } = await supabase.from('identificacion').delete().eq('id', id);
+        if (!error) { bsModalEdit.hide(); loadData(); }
+      }
+    };
+
+    // Form Events
     document.getElementById('formEdit').onsubmit = async (e) => {
       e.preventDefault();
       const id = document.getElementById('edit_id').value;
-
-      if (!id || id === "undefined") {
-        alert("Error crítico: No se puede actualizar un registro sin ID.");
-        return;
-      }
-
       const { error } = await supabase.from('identificacion').update({
         nombre: document.getElementById('edit_nombre').value,
         apellidos: document.getElementById('edit_apellidos').value,
         numero: document.getElementById('edit_numero').value
       }).eq('id', id);
 
-      if (!error) {
-        bsModalEdit.hide();
-        await loadData();
-      } else {
-        alert("Error de Supabase: " + error.message);
-      }
+      if (!error) { bsModalEdit.hide(); loadData(); }
+      else alert("Error al actualizar");
     };
 
-    // AGREGAR
     document.getElementById('formAdd').onsubmit = async (e) => {
       e.preventDefault();
-      const data = Object.fromEntries(new FormData(e.target));
+      const formData = new FormData(e.target);
+      const data = Object.fromEntries(formData);
       const { error } = await supabase.from('identificacion').insert([data]);
-      if (!error) {
-        bsModalAdd.hide();
-        await loadData();
-      } else {
-        alert("Error al insertar: " + error.message);
-      }
+      if (!error) { bsModalAdd.hide(); loadData(); }
+      else alert("Error al guardar");
     };
 
-    // ELIMINAR
-    window.deletePlayer = async () => {
-      const id = document.getElementById('edit_id').value;
-      if (!id || id === "undefined") return;
-
-      if (confirm("¿Eliminar permanentemente?")) {
-        const { error } = await supabase.from('identificacion').delete().eq('id', id);
-        if (!error) {
-          bsModalEdit.hide();
-          await loadData();
-        }
-      }
-    };
-
+    // Filtros
     document.getElementById('catFilter').onchange = renderTable;
     document.getElementById('nameSearch').oninput = renderTable;
+
+    // Inicializar
     window.onload = loadData;
+
   </script>
 </body>
 
