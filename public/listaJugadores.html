@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
   <meta charset="UTF-8" />
   <title>DIBA FBC - Panel de Control</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
+  <!-- Bootstrap & Icons -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
@@ -18,9 +18,14 @@
       --bg-light: #f8f9fc;
     }
 
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       font-family: 'Inter', sans-serif;
       background-color: var(--bg-light);
+      margin: 0;
     }
 
     /* Layout Dashboard */
@@ -63,6 +68,12 @@
       justify-content: center;
       margin-right: 12px;
       font-weight: bold;
+      text-transform: uppercase;
+    }
+
+    /* Fila de firma solo para impresión */
+    .no-screen {
+      display: none;
     }
 
     /* Botón flotante para móviles */
@@ -90,9 +101,9 @@
     }
 
     @media print {
-
       #sidebar,
-      .no-print {
+      .no-print,
+      .mobile-add {
         display: none !important;
       }
 
@@ -101,45 +112,59 @@
         padding: 0;
         width: 100%;
       }
+
+      .no-screen {
+        display: table-cell !important;
+      }
     }
   </style>
 </head>
-
 <body>
 
   <div id="wrapper">
+    <!-- SIDEBAR -->
     <nav id="sidebar" class="no-print">
       <div class="p-4 text-center">
         <h5 class="fw-bold mb-0 text-white">DIBA FBC</h5>
-        <p class="text-muted small">Panel Administrativo</p>
+        <p class="text-muted small mb-0">Panel Administrativo</p>
       </div>
       <div class="mt-3">
-        <a href="#"
-          class="nav-link text-white p-3 px-4 bg-primary bg-opacity-25 border-start border-4 border-warning"><i
-            class="fas fa-users me-2"></i> Jugadores</a>
-        <a href="javascript:window.print()" class="nav-link text-white-50 p-3 px-4"><i class="fas fa-print me-2"></i>
-          Imprimir Reporte</a>
+        <a href="#" class="nav-link text-white p-3 px-4 bg-primary bg-opacity-25 border-start border-4 border-warning">
+          <i class="fas fa-users me-2"></i> Jugadores
+        </a>
+        <a href="javascript:window.print()" class="nav-link text-white-50 p-3 px-4">
+          <i class="fas fa-print me-2"></i> Imprimir Reporte
+        </a>
       </div>
     </nav>
 
+    <!-- CONTENIDO PRINCIPAL -->
     <main id="content">
       <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
           <h3 class="fw-bold text-dark mb-0">Gestión de Jugadores</h3>
-          <p class="text-muted">Base de datos técnica oficial</p>
+          <p class="text-muted mb-0">Base de datos técnica oficial</p>
         </div>
-        <button class="btn btn-primary shadow-sm no-print px-4 py-2" onclick="window.openAddModal()">
+        <button class="btn btn-primary shadow-sm no-print px-4 py-2" type="button" onclick="window.openAddModal()">
           <i class="fas fa-plus me-2"></i> Nuevo Registro
         </button>
       </div>
 
       <div class="data-card">
+        <!-- Filtros -->
         <div class="row g-3 mb-4 no-print">
           <div class="col-md-8">
             <div class="input-group">
-              <span class="input-group-text bg-white border-end-0 text-muted"><i class="fas fa-search"></i></span>
-              <input type="text" id="nameSearch" class="form-control border-start-0 ps-0 shadow-none"
-                placeholder="Buscar por nombre o documento...">
+              <span class="input-group-text bg-white border-end-0 text-muted">
+                <i class="fas fa-search"></i>
+              </span>
+              <input
+                type="text"
+                id="nameSearch"
+                class="form-control border-start-0 ps-0 shadow-none"
+                placeholder="Buscar por nombre o documento..."
+                autocomplete="off"
+              >
             </div>
           </div>
           <div class="col-md-4">
@@ -151,6 +176,7 @@
           </div>
         </div>
 
+        <!-- Tabla -->
         <div class="table-responsive">
           <table class="table table-hover align-middle" id="mainTable">
             <thead class="table-light">
@@ -165,7 +191,9 @@
             </thead>
             <tbody id="dataBody">
               <tr>
-                <td colspan="5" class="text-center py-5 text-muted">Cargando jugadores...</td>
+                <td colspan="5" class="text-center py-5 text-muted">
+                  Cargando jugadores...
+                </td>
               </tr>
             </tbody>
           </table>
@@ -174,63 +202,75 @@
     </main>
   </div>
 
-  <div class="modal fade" id="modalEdit" tabindex="-1">
+  <!-- Botón flotante en móvil -->
+  <button
+    class="btn btn-primary rounded-circle mobile-add no-print"
+    type="button"
+    onclick="window.openAddModal()"
+  >
+    <i class="fas fa-plus"></i>
+  </button>
+
+  <!-- MODAL EDITAR -->
+  <div class="modal fade" id="modalEdit" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
       <form id="formEdit" class="modal-content border-0 shadow-lg">
         <input type="hidden" id="edit_id">
         <div class="modal-header bg-dark text-white p-4">
           <h5 class="fw-bold mb-0">Actualizar Información</h5>
-          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
         </div>
         <div class="modal-body p-4">
           <div class="row g-3">
             <div class="col-6">
-              <label class="form-label small fw-bold">NOMBRES</label>
+              <label class="form-label small fw-bold" for="edit_nombre">NOMBRES</label>
               <input type="text" id="edit_nombre" class="form-control" required>
             </div>
             <div class="col-6">
-              <label class="form-label small fw-bold">APELLIDOS</label>
+              <label class="form-label small fw-bold" for="edit_apellidos">APELLIDOS</label>
               <input type="text" id="edit_apellidos" class="form-control" required>
             </div>
             <div class="col-12">
-              <label class="form-label small fw-bold">N° DOCUMENTO</label>
+              <label class="form-label small fw-bold" for="edit_numero">N° DOCUMENTO</label>
               <input type="text" id="edit_numero" class="form-control" required>
             </div>
           </div>
         </div>
         <div class="modal-footer p-4 pt-0 flex-column">
           <button type="submit" class="btn btn-primary w-100 py-2">Guardar Cambios</button>
-          <button type="button" onclick="window.deletePlayer()" class="btn btn-link text-danger mt-2 small">Eliminar
-            este registro definitivamente</button>
+          <button type="button" class="btn btn-link text-danger mt-2 small" onclick="window.deletePlayer()">
+            Eliminar este registro definitivamente
+          </button>
         </div>
       </form>
     </div>
   </div>
 
-  <div class="modal fade" id="modalAdd" tabindex="-1">
+  <!-- MODAL AGREGAR -->
+  <div class="modal fade" id="modalAdd" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
       <form id="formAdd" class="modal-content border-0 shadow-lg">
         <div class="modal-header bg-primary text-white p-4">
           <h5 class="fw-bold mb-0">Inscribir Jugador</h5>
-          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
         </div>
         <div class="modal-body p-4">
           <div class="row g-3">
             <div class="col-6">
-              <label class="form-label small fw-bold">NOMBRES</label>
-              <input type="text" name="nombre" class="form-control" placeholder="Nombre" required>
+              <label class="form-label small fw-bold" for="add_nombre">NOMBRES</label>
+              <input type="text" id="add_nombre" name="nombre" class="form-control" placeholder="Nombre" required>
             </div>
             <div class="col-6">
-              <label class="form-label small fw-bold">APELLIDOS</label>
-              <input type="text" name="apellidos" class="form-control" placeholder="Apellido" required>
+              <label class="form-label small fw-bold" for="add_apellidos">APELLIDOS</label>
+              <input type="text" id="add_apellidos" name="apellidos" class="form-control" placeholder="Apellido" required>
             </div>
             <div class="col-12">
-              <label class="form-label small fw-bold">N° DOCUMENTO</label>
-              <input type="text" name="numero" class="form-control" placeholder="DNI / TI / CC" required>
+              <label class="form-label small fw-bold" for="add_numero">N° DOCUMENTO</label>
+              <input type="text" id="add_numero" name="numero" class="form-control" placeholder="DNI / TI / CC" required>
             </div>
             <div class="col-12">
-              <label class="form-label small fw-bold">FECHA NACIMIENTO</label>
-              <input type="date" name="fecha_nacimiento" class="form-control" required>
+              <label class="form-label small fw-bold" for="add_fecha_nacimiento">FECHA NACIMIENTO</label>
+              <input type="date" id="add_fecha_nacimiento" name="fecha_nacimiento" class="form-control" required>
             </div>
           </div>
         </div>
@@ -241,119 +281,215 @@
     </div>
   </div>
 
+  <!-- JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
   <script type="module">
     import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
 
-    const supabase = createClient('https://wdnlqfiwuocmmcdowjyw.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndkbmxxZml3dW9jbW1jZG93anl3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg1MjY1ODAsImV4cCI6MjA2NDEwMjU4MH0.4SCS_NRDIYLQJ1XouqW111BxkMOlwMWOjje9gFTgW_Q');
+    // IMPORTANTE: en producción, usa variables de entorno para la URL y la KEY
+    const SUPABASE_URL = 'https://wdnlqfiwuocmmcdowjyw.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndkbmxxZml3dW9jbW1jZG93anl3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg1MjY1ODAsImV4cCI6MjA2NDEwMjU4MH0.4SCS_NRDIYLQJ1XouqW111BxkMOlwMWOjje9gFTgW_Q';
+
+    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY); // [web:6]
 
     let players = [];
+
     const bsModalEdit = new bootstrap.Modal('#modalEdit');
     const bsModalAdd = new bootstrap.Modal('#modalAdd');
 
+    const dataBody = document.getElementById('dataBody');
+    const catFilter = document.getElementById('catFilter');
+    const nameSearch = document.getElementById('nameSearch');
+
+    // Cargar datos
     async function loadData() {
-      const { data, error } = await supabase.from('identificacion').select('*').order('apellidos', { ascending: true });
-      if (error) { console.error(error); return; }
+      dataBody.innerHTML = `
+        <tr>
+          <td colspan="5" class="text-center py-4 text-muted">
+            Cargando jugadores...
+          </td>
+        </tr>
+      `;
+
+      const { data, error } = await supabase
+        .from('identificacion')
+        .select('*')
+        .order('apellidos', { ascending: true });
+
+      if (error) {
+        console.error(error);
+        dataBody.innerHTML = `
+          <tr>
+            <td colspan="5" class="text-center py-4 text-danger">
+              Error al cargar jugadores
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
       players = data || [];
       renderTable();
     }
 
-    function renderTable() {
-      const filter = document.getElementById('catFilter').value;
-      const search = document.getElementById('nameSearch').value.toLowerCase();
-      const body = document.getElementById('dataBody');
+    function getCategoryByYear(year) {
+      if (year === '2012' || year === '2013') return '2012/13';
+      if (['2014', '2015', '2016'].includes(year)) return '2014/15/16';
+      return 'Otro';
+    }
 
-      const filtered = players.filter(p => {
-        const year = p.fecha_nacimiento ? p.fecha_nacimiento.substring(0, 4) : '0';
-        let group = (year === '2012' || year === '2013') ? "2012/13" : (['2014', '2015', '2016'].includes(year)) ? "2014/15/16" : "Otro";
-        return (filter === 'todos' || group === filter) &&
-          (`${p.nombre} ${p.apellidos} ${p.numero}`.toLowerCase().includes(search));
+    function renderTable() {
+      const filter = catFilter.value;
+      const search = nameSearch.value.trim().toLowerCase();
+
+      const filtered = players.filter((p) => {
+        const year = p.fecha_nacimiento ? String(p.fecha_nacimiento).substring(0, 4) : '0';
+        const group = getCategoryByYear(year);
+
+        const text = `${p.nombre || ''} ${p.apellidos || ''} ${p.numero || ''}`.toLowerCase();
+
+        const matchFilter = filter === 'todos' || group === filter;
+        const matchSearch = !search || text.includes(search);
+
+        return matchFilter && matchSearch;
       });
 
-      body.innerHTML = '';
+      dataBody.innerHTML = '';
+
       if (filtered.length === 0) {
-        body.innerHTML = '<tr><td colspan="5" class="text-center py-4">No se encontraron resultados</td></tr>';
+        dataBody.innerHTML = `
+          <tr>
+            <td colspan="5" class="text-center py-4">
+              No se encontraron resultados
+            </td>
+          </tr>
+        `;
         return;
       }
 
-      filtered.forEach((p, i) => {
+      filtered.forEach((p, index) => {
+        const year = p.fecha_nacimiento ? String(p.fecha_nacimiento).substring(0, 4) : '-';
         const tr = document.createElement('tr');
+
         tr.innerHTML = `
-          <td class="text-muted small">${i + 1}</td>
+          <td class="text-muted small">${index + 1}</td>
           <td>
             <div class="d-flex align-items-center">
-              <div class="avatar-circle">${p.nombre.charAt(0).toUpperCase()}</div>
-              <div class="fw-semibold text-dark">${p.nombre} ${p.apellidos}</div>
+              <div class="avatar-circle">${(p.nombre || '?').charAt(0).toUpperCase()}</div>
+              <div class="fw-semibold text-dark">${p.nombre || ''} ${p.apellidos || ''}</div>
             </div>
           </td>
-          <td><span class="badge bg-light text-dark border fw-normal px-2">${p.numero}</span></td>
-          <td class="no-print text-center text-muted small">${p.fecha_nacimiento?.substring(0, 4) || '-'}</td>
+          <td>
+            <span class="badge bg-light text-dark border fw-normal px-2">${p.numero || ''}</span>
+          </td>
+          <td class="no-print text-center text-muted small">${year}</td>
           <td class="no-print text-center">
-            <button class="btn btn-sm btn-outline-primary border-0 btn-edit"><i class="fas fa-pen-to-square"></i></button>
+            <button class="btn btn-sm btn-outline-primary border-0 btn-edit" type="button">
+              <i class="fas fa-pen-to-square"></i>
+            </button>
           </td>
           <td class="no-screen" style="border: 1px solid #000; height: 40px;"></td>
         `;
-        // El evento se asigna directamente aquí para evitar conflictos de "undefined"
+
         tr.querySelector('.btn-edit').onclick = () => window.showEdit(p);
-        body.appendChild(tr);
+        dataBody.appendChild(tr);
       });
     }
 
-    // EXPONER FUNCIONES A WINDOW (Crucial para que funcionen los botones)
+    // Exponer funciones a window
     window.showEdit = (player) => {
-      document.getElementById('formEdit').reset();
+      const formEdit = document.getElementById('formEdit');
+      formEdit.reset();
+
       document.getElementById('edit_id').value = player.id;
-      document.getElementById('edit_nombre').value = player.nombre;
-      document.getElementById('edit_apellidos').value = player.apellidos;
-      document.getElementById('edit_numero').value = player.numero;
+      document.getElementById('edit_nombre').value = player.nombre || '';
+      document.getElementById('edit_apellidos').value = player.apellidos || '';
+      document.getElementById('edit_numero').value = player.numero || '';
+
       bsModalEdit.show();
     };
 
     window.openAddModal = () => {
-      document.getElementById('formAdd').reset();
+      const formAdd = document.getElementById('formAdd');
+      formAdd.reset();
       bsModalAdd.show();
     };
 
     window.deletePlayer = async () => {
       const id = document.getElementById('edit_id').value;
-      if (confirm("¿Seguro que deseas eliminar este registro?")) {
-        const { error } = await supabase.from('identificacion').delete().eq('id', id);
-        if (!error) { bsModalEdit.hide(); loadData(); }
+      if (!id) return;
+
+      const confirmed = window.confirm('¿Seguro que deseas eliminar este registro?');
+      if (!confirmed) return;
+
+      const { error } = await supabase
+        .from('identificacion')
+        .delete()
+        .eq('id', id);
+
+      if (error) {
+        alert('Error al eliminar el registro');
+        console.error(error);
+        return;
       }
+
+      bsModalEdit.hide();
+      await loadData();
     };
 
-    // Form Events
-    document.getElementById('formEdit').onsubmit = async (e) => {
+    // Eventos formularios
+    document.getElementById('formEdit').addEventListener('submit', async (e) => {
       e.preventDefault();
+
       const id = document.getElementById('edit_id').value;
-      const { error } = await supabase.from('identificacion').update({
-        nombre: document.getElementById('edit_nombre').value,
-        apellidos: document.getElementById('edit_apellidos').value,
-        numero: document.getElementById('edit_numero').value
-      }).eq('id', id);
+      if (!id) return;
 
-      if (!error) { bsModalEdit.hide(); loadData(); }
-      else alert("Error al actualizar");
-    };
+      const nombre = document.getElementById('edit_nombre').value.trim();
+      const apellidos = document.getElementById('edit_apellidos').value.trim();
+      const numero = document.getElementById('edit_numero').value.trim();
 
-    document.getElementById('formAdd').onsubmit = async (e) => {
+      const { error } = await supabase
+        .from('identificacion')
+        .update({ nombre, apellidos, numero })
+        .eq('id', id);
+
+      if (error) {
+        alert('Error al actualizar');
+        console.error(error);
+        return;
+      }
+
+      bsModalEdit.hide();
+      await loadData();
+    });
+
+    document.getElementById('formAdd').addEventListener('submit', async (e) => {
       e.preventDefault();
+
       const formData = new FormData(e.target);
-      const data = Object.fromEntries(formData);
-      const { error } = await supabase.from('identificacion').insert([data]);
-      if (!error) { bsModalAdd.hide(); loadData(); }
-      else alert("Error al guardar");
-    };
+      const data = Object.fromEntries(formData.entries());
+
+      const { error } = await supabase
+        .from('identificacion')
+        .insert([data]);
+
+      if (error) {
+        alert('Error al guardar');
+        console.error(error);
+        return;
+      }
+
+      bsModalAdd.hide();
+      await loadData();
+    });
 
     // Filtros
-    document.getElementById('catFilter').onchange = renderTable;
-    document.getElementById('nameSearch').oninput = renderTable;
+    catFilter.addEventListener('change', renderTable);
+    nameSearch.addEventListener('input', renderTable);
 
     // Inicializar
-    window.onload = loadData;
-
+    window.addEventListener('load', loadData);
   </script>
 </body>
-
 </html>
