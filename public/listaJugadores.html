@@ -330,8 +330,10 @@
     const bsModalAdd = new bootstrap.Modal('#modalAdd');
 
     async function loadData() {
-      const { data, error } = await supabase.from('identificacion').select('*').order('apellidos', { ascending: true });
-      if (error) return console.error(error);
+      // IMPORTANTE: Asegúrate de que 'id' sea el nombre de tu columna primaria en Supabase
+      const { data, error } = await supabase.from('identificacion').select('*').order('apellidos');
+      if (error) return console.error("Error cargando:", error);
+
       players = data || [];
       updateStats();
       renderTable();
@@ -359,34 +361,46 @@
       body.innerHTML = '';
       filtered.forEach((p, i) => {
         const tr = document.createElement('tr');
-        const initial = p.nombre.charAt(0).toUpperCase();
+        // Verificación de ID para depuración
+        if (!p.id) console.warn("Advertencia: El registro no tiene columna 'id'. Revisa tu tabla en Supabase.");
+
         tr.innerHTML = `
-          <td class="text-muted small">${i + 1}</td>
-          <td>
-            <div class="d-flex align-items-center">
-              <div class="avatar-circle">${initial}</div>
-              <div class="fw-bold">${p.nombre} ${p.apellidos}</div>
-            </div>
-          </td>
-          <td><span class="badge bg-light text-dark border">${p.numero}</span></td>
-          <td class="no-print text-center text-muted">${p.fecha_nacimiento?.substring(0, 4) || '-'}</td>
-          <td class="no-print text-center">
-            <button class="btn btn-sm btn-white border shadow-sm btn-edit" title="Editar"><i class="fas fa-edit text-primary"></i></button>
-          </td>
-          <td class="no-screen" style="border: 1px solid #000; height: 40px;"></td>
-        `;
-        tr.querySelector('.btn-edit').onclick = () => showEdit(p);
+        <td class="text-muted small">${i + 1}</td>
+        <td>
+          <div class="d-flex align-items-center">
+            <div class="avatar-circle">${p.nombre.charAt(0).toUpperCase()}</div>
+            <div class="fw-bold">${p.nombre} ${p.apellidos}</div>
+          </div>
+        </td>
+        <td><span class="badge bg-light text-dark border">${p.numero}</span></td>
+        <td class="no-print text-center text-muted">${p.fecha_nacimiento?.substring(0, 4) || '-'}</td>
+        <td class="no-print text-center">
+          <button class="btn btn-sm btn-white border shadow-sm btn-edit-trigger"><i class="fas fa-edit text-primary"></i></button>
+        </td>
+        <td class="no-screen" style="border: 1px solid #000; height: 40px;"></td>
+      `;
+
+        // Asignamos el evento pasando el objeto completo
+        tr.querySelector('.btn-edit-trigger').onclick = () => showEdit(p);
         body.appendChild(tr);
       });
     }
 
     window.showEdit = (player) => {
-      document.getElementById('modalEdit').removeAttribute('aria-hidden');
-      document.getElementById('edit_id').value = player.id;
-      document.getElementById('edit_nombre').value = player.nombre;
-      document.getElementById('edit_apellidos').value = player.apellidos;
-      document.getElementById('edit_numero').value = player.numero;
-      bsModalEdit.show();
+      // Evitamos el error de undefined limpiando el modal
+      document.getElementById('formEdit').reset();
+
+      // Verificamos que el ID exista antes de asignar
+      if (player.id !== undefined && player.id !== null) {
+        document.getElementById('modalEdit').removeAttribute('aria-hidden');
+        document.getElementById('edit_id').value = player.id;
+        document.getElementById('edit_nombre').value = player.nombre;
+        document.getElementById('edit_apellidos').value = player.apellidos;
+        document.getElementById('edit_numero').value = player.numero;
+        bsModalEdit.show();
+      } else {
+        alert("Error: Este registro no tiene un ID válido en la base de datos.");
+      }
     };
 
     window.openAddModal = () => {
@@ -395,30 +409,54 @@
       bsModalAdd.show();
     };
 
+    // ACTUALIZAR
     document.getElementById('formEdit').onsubmit = async (e) => {
       e.preventDefault();
       const id = document.getElementById('edit_id').value;
+
+      if (!id || id === "undefined") {
+        alert("Error crítico: No se puede actualizar un registro sin ID.");
+        return;
+      }
+
       const { error } = await supabase.from('identificacion').update({
         nombre: document.getElementById('edit_nombre').value,
         apellidos: document.getElementById('edit_apellidos').value,
         numero: document.getElementById('edit_numero').value
       }).eq('id', id);
 
-      if (!error) { bsModalEdit.hide(); loadData(); }
+      if (!error) {
+        bsModalEdit.hide();
+        await loadData();
+      } else {
+        alert("Error de Supabase: " + error.message);
+      }
     };
 
+    // AGREGAR
     document.getElementById('formAdd').onsubmit = async (e) => {
       e.preventDefault();
       const data = Object.fromEntries(new FormData(e.target));
       const { error } = await supabase.from('identificacion').insert([data]);
-      if (!error) { bsModalAdd.hide(); loadData(); }
+      if (!error) {
+        bsModalAdd.hide();
+        await loadData();
+      } else {
+        alert("Error al insertar: " + error.message);
+      }
     };
 
+    // ELIMINAR
     window.deletePlayer = async () => {
       const id = document.getElementById('edit_id').value;
-      if (confirm("¿Estás seguro de eliminar permanentemente este registro?")) {
+      if (!id || id === "undefined") return;
+
+      if (confirm("¿Eliminar permanentemente?")) {
         const { error } = await supabase.from('identificacion').delete().eq('id', id);
-        if (!error) { bsModalEdit.hide(); loadData(); }
+        if (!error) {
+          bsModalEdit.hide();
+          await loadData();
+        }
       }
     };
 
