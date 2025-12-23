@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8" />
-  <title>DIBA FBC - Sistema Profesional de Gestión</title>
+  <title>DIBA FBC - Gestión Automatizada</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="icon" href="https://i.postimg.cc/x8W7vwJJ/ESCUDO.png" type="image/png">
 
@@ -14,108 +14,66 @@
     :root {
       --diba-dark: #002a40;
       --diba-gold: #c5a059;
-      --diba-light: #f8f9fa;
-      --diba-white: #ffffff;
     }
 
     body {
       background-color: #f0f2f5;
-      font-family: 'Segoe UI', system-ui, sans-serif;
-      color: var(--diba-dark);
+      font-family: 'Segoe UI', sans-serif;
     }
 
-    /* INTERFAZ WEB */
+    /* ESTILOS WEB */
     .navbar {
       background: var(--diba-dark) !important;
       border-bottom: 4px solid var(--diba-gold);
     }
 
-    .card-stats {
-      border: none;
-      border-radius: 12px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-      transition: 0.3s;
-    }
-
     .table-container {
       background: white;
       border-radius: 15px;
-      padding: 25px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-    }
-
-    .filter-group {
-      background: #fff;
-      padding: 15px;
-      border-radius: 10px;
-      margin-bottom: 20px;
-      border: 1px solid #ddd;
+      padding: 20px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
     }
 
     .category-badge {
       font-size: 0.75rem;
-      padding: 4px 10px;
+      padding: 5px 12px;
       border-radius: 20px;
       font-weight: bold;
     }
 
-    .cat-1213 {
+    .cat-blue {
       background: #e3f2fd;
       color: #1976d2;
+      border: 1px solid #1976d2;
     }
 
-    .cat-141516 {
+    .cat-green {
       background: #f1f8e9;
       color: #388e3c;
+      border: 1px solid #388e3c;
     }
 
-    /* ESTILOS DE IMPRESIÓN */
+    /* ESTILOS IMPRESIÓN */
     @media print {
       @page {
         size: letter;
-        margin: 0.8cm;
-      }
-
-      * {
-        -webkit-print-color-adjust: exact !important;
-        print-color-adjust: exact !important;
+        margin: 0.5cm;
       }
 
       .no-print {
         display: none !important;
       }
 
-      body {
-        background-color: white !important;
-      }
-
-      .container {
-        max-width: 100% !important;
-        width: 100% !important;
-        margin: 0 !important;
-      }
-
       #print-header {
         display: block !important;
-        margin-bottom: 10px;
-      }
-
-      .planilla-table {
-        width: 100%;
-        border-collapse: collapse;
       }
 
       .planilla-table th,
       .planilla-table td {
-        border: 1.5px solid #000 !important;
-        padding: 7px;
-        font-size: 9.5pt;
-        color: black !important;
-      }
-
-      .planilla-table th {
-        background-color: #eeeeee !important;
-        text-transform: uppercase;
+        border: 1px solid #000 !important;
+        padding: 6px !important;
+        font-size: 9pt !important;
+        color: #000 !important;
       }
 
       .header-grid {
@@ -127,8 +85,8 @@
 
       .header-item {
         border-right: 1px solid #000;
-        padding: 6px;
-        font-size: 9pt;
+        padding: 5px;
+        font-size: 8pt;
       }
 
       .label-box {
@@ -141,10 +99,7 @@
       }
     }
 
-    #print-header {
-      display: none;
-    }
-
+    #print-header,
     .no-screen {
       display: none;
     }
@@ -160,82 +115,61 @@
 <body>
 
   <nav class="navbar navbar-dark shadow no-print sticky-top">
-    <div class="container">
+    <div class="container d-flex justify-content-between">
       <a class="navbar-brand d-flex align-items-center" href="#">
-        <img src="https://i.postimg.cc/x8W7vwJJ/ESCUDO.png" width="45" class="me-2">
-        <div>
-          <span class="fw-bold d-block">DIBA FBC</span>
-          <small style="font-size: 0.65rem; color: var(--diba-gold);">GESTIÓN DE CATEGORÍAS</small>
-        </div>
+        <img src="https://i.postimg.cc/x8W7vwJJ/ESCUDO.png" width="40" class="me-2">
+        <span class="fw-bold">DIBA FBC</span>
       </a>
-      <button onclick="window.print()" class="btn btn-warning fw-bold"><i class="fas fa-print me-2"></i>Imprimir
-        Planilla</button>
+      <button onclick="window.print()" class="btn btn-warning btn-sm fw-bold">IMPRIMIR PLANILLA</button>
     </div>
   </nav>
 
-  <main class="container mt-4 mb-5">
-
-    <div class="row g-3 no-print">
-      <div class="col-md-4">
-        <div class="card card-stats p-3 h-100">
-          <div class="d-flex align-items-center">
-            <div class="bg-primary bg-opacity-10 p-3 rounded-circle me-3">
-              <i class="fas fa-users text-primary fa-xl"></i>
-            </div>
-            <div>
-              <h3 id="totalCount" class="mb-0 fw-bold">0</h3>
-              <small class="text-muted">Total Jugadores</small>
-            </div>
-          </div>
+  <main class="container mt-4">
+    <div class="row g-2 mb-4 no-print">
+      <div class="col-md-6">
+        <div class="card p-3 shadow-sm border-0">
+          <label class="small fw-bold mb-1">FILTRAR POR CATEGORÍA:</label>
+          <select id="catFilter" class="form-select border-primary">
+            <option value="todos">Todos los Jugadores (General)</option>
+            <option value="2012/13">Categoría 2012 / 2013</option>
+            <option value="2014/15/16">Categoría 2014 / 2015 / 2016</option>
+          </select>
         </div>
       </div>
-      <div class="col-md-8">
-        <div class="filter-group h-100 d-flex align-items-center">
-          <div class="row w-100">
-            <div class="col-md-6">
-              <label class="small fw-bold text-muted">FILTRAR POR CATEGORÍA:</label>
-              <select id="catFilter" class="form-select border-primary shadow-sm">
-                <option value="todos">Mostrar todos los jugadores</option>
-                <option value="2012/13">Categoría 2012 / 2013</option>
-                <option value="2014/15/16">Categoría 2014 / 2015 / 2016</option>
-              </select>
-            </div>
-            <div class="col-md-6">
-              <label class="small fw-bold text-muted">BUSCAR NOMBRE:</label>
-              <input type="text" id="nameSearch" class="form-control" placeholder="Escriba para filtrar...">
-            </div>
-          </div>
+      <div class="col-md-6">
+        <div class="card p-3 shadow-sm border-0">
+          <label class="small fw-bold mb-1">BUSCAR POR NOMBRE O ID:</label>
+          <input type="text" id="nameSearch" class="form-control" placeholder="Escriba aquí...">
         </div>
       </div>
     </div>
 
     <div id="print-header">
-      <div class="d-flex align-items-center justify-content-between border-bottom border-dark pb-2 mb-2">
-        <img src="https://i.postimg.cc/x8W7vwJJ/ESCUDO.png" width="65">
+      <div class="d-flex align-items-center justify-content-between mb-2">
+        <img src="https://i.postimg.cc/x8W7vwJJ/ESCUDO.png" width="60">
         <div class="text-center">
-          <h4 class="mb-0 fw-bold">DIBA FBC - BARRANQUILLA</h4>
-          <p class="mb-0 small fw-bold">PLANILLA DE ASISTENCIA - CATEGORÍA <span id="catTitle">GENERAL</span></p>
+          <h4 class="fw-bold mb-0">DEPORTIVO INTERNACIONAL DE BARRANQUILLA</h4>
+          <p class="small mb-0 fw-bold">PLANILLA DE ASISTENCIA - <span id="catTitle">GENERAL</span></p>
         </div>
-        <div style="width: 65px;"></div>
+        <div style="width: 60px;"></div>
       </div>
-
       <div class="header-grid">
-        <div class="header-item"><span class="label-box">Entrenador:</span>REINALDO PEREZ NAVAS</div>
-        <div class="header-item"><span class="label-box">Sede:</span>BARRANQUILLA</div>
-        <div class="header-item"><span class="label-box">Fecha:</span>____ / ____ / 2025</div>
+        <div class="header-item"><span class="label-box">Entrenador:</span> REINALDO PEREZ NAVAS</div>
+        <div class="header-item"><span class="label-box">Sede:</span> BARRANQUILLA</div>
+        <div class="header-item"><span class="label-box">Fecha:</span> ____ / ____ / 2025</div>
       </div>
     </div>
 
-    <div class="table-container mt-3">
+    <div class="table-container">
       <div class="table-responsive">
         <table class="table table-hover align-middle planilla-table">
           <thead class="table-dark">
             <tr>
-              <th style="width: 5%" class="text-center">N°</th>
-              <th style="width: 35%">Nombre Completo</th>
-              <th style="width: 15%">Identificación</th>
-              <th style="width: 20%" class="no-print">Categoría</th>
-              <th style="width: 25%" class="no-screen">Firma / Asistencia</th>
+              <th width="5%" class="text-center">N°</th>
+              <th width="40%">Deportista</th>
+              <th width="15%">Identificación</th>
+              <th width="15%" class="no-print">Año/Cat</th>
+              <th width="25%" class="no-screen">Firma</th>
             </tr>
           </thead>
           <tbody id="dataBody">
@@ -250,65 +184,55 @@
 
     const supabase = createClient('https://wdnlqfiwuocmmcdowjyw.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndkbmxxZml3dW9jbW1jZG93anl3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg1MjY1ODAsImV4cCI6MjA2NDEwMjU4MH0.4SCS_NRDIYLQJ1XouqW111BxkMOlwMWOjje9gFTgW_Q');
 
-    const cat1213Names = ["Dinkoll", "Juan Tobías", "Dilan", "Dany", "Angel", "Miguel", "Rodríguez", "Nelson", "Santiago", "Oscar", "Yojainer", "Larson", "Joseph", "Mateo", "Siteven", "Sebastian lugo", "Robert", "Jonier", "Ces cristiano", "Antony", "Esteban", "Santiago lopez"];
-    const cat141516Names = ["Mario", "Eliuth", "Abraham", "Rey David", "Santy", "ISAAC", "Carlos", "Cristian", "Andrés", "Juan a", "Estiben", "Eneldo", "Moisés Caballero", "Sebastian castro", "JoyFran"];
-
     let allPlayers = [];
 
-    async function cargarDatos() {
-      const { data, error } = await supabase.from('identificacion').select('*').order('apellidos', { ascending: true });
-      if (error) return;
-      allPlayers = data;
-      renderTable();
+    async function cargar() {
+      const { data } = await supabase.from('identificacion').select('*').order('apellidos');
+      allPlayers = data || [];
+      render();
     }
 
-    function getCategory(player) {
-      const fullName = `${player.nombre} ${player.apellidos}`.toLowerCase();
-      if (cat1213Names.some(n => fullName.includes(n.toLowerCase()))) return "2012/13";
-      if (cat141516Names.some(n => fullName.includes(n.toLowerCase()))) return "2014/15/16";
-      return "Sin Categoría";
-    }
-
-    function renderTable() {
+    function render() {
       const filter = document.getElementById('catFilter').value;
       const search = document.getElementById('nameSearch').value.toLowerCase();
       const body = document.getElementById('dataBody');
 
       const filtered = allPlayers.filter(p => {
-        const cat = getCategory(p);
-        const nameMatch = `${p.nombre} ${p.apellidos}`.toLowerCase().includes(search);
-        const catMatch = filter === 'todos' || cat === filter;
-        return nameMatch && catMatch;
+        // Lógica: Sacar el año de la fecha de nacimiento (Ej: "2012-05-10" -> 2012)
+        const year = p.fecha_nacimiento ? parseInt(p.fecha_nacimiento.split('-')[0]) : 0;
+        let playerCat = "Sin Cat";
+
+        if (year === 2012 || year === 2013) playerCat = "2012/13";
+        else if (year >= 2014) playerCat = "2014/15/16";
+
+        const matchesFilter = filter === 'todos' || playerCat === filter;
+        const matchesSearch = `${p.nombre} ${p.apellidos} ${p.numero}`.toLowerCase().includes(search);
+
+        return matchesFilter && matchesSearch;
       });
 
-      document.getElementById('totalCount').innerText = filtered.length;
-      document.getElementById('catTitle').innerText = filter === 'todos' ? 'GENERAL' : filter;
+      document.getElementById('catTitle').innerText = filter.toUpperCase();
 
       body.innerHTML = filtered.map((p, i) => {
-        const cat = getCategory(p);
-        const badgeClass = cat === '2012/13' ? 'cat-1213' : (cat === '2014/15/16' ? 'cat-141516' : 'bg-light');
+        const year = p.fecha_nacimiento ? p.fecha_nacimiento.split('-')[0] : '---';
+        const catLabel = (year == 2012 || year == 2013) ? '2012/13' : '2014/15/16';
+        const badge = (year == 2012 || year == 2013) ? 'cat-blue' : 'cat-green';
+
         return `
           <tr>
             <td class="text-center fw-bold">${i + 1}</td>
             <td class="text-uppercase fw-semibold">${p.nombre} ${p.apellidos}</td>
-            <td class="text-nowrap">${p.numero}</td>
-            <td class="no-print"><span class="category-badge ${badgeClass}">${cat}</span></td>
-            <td class="no-screen" style="height: 38px;"></td>
+            <td>${p.numero}</td>
+            <td class="no-print"><span class="category-badge ${badge}">${year} (${catLabel})</span></td>
+            <td class="no-screen" style="height: 35px;"></td>
           </tr>
         `;
       }).join('');
-
-      // Filas vacías adicionales en la impresión
-      if (filtered.length > 0) {
-        for (let i = 1; i <= 5; i++) {
-          body.innerHTML += `<tr class="no-screen"><td class="text-center">${filtered.length + i}</td><td></td><td></td><td></td></tr>`;
-        }
-      }
     }
 
-    document.getElementById('catFilter').onchange = renderTable;
-    document.getElementById('nameSearch').oninput = renderTable;
-    window.onload = cargarDatos;
+    document.getElementById('catFilter').onchange = render;
+    document.getElementById('nameSearch').oninput = render;
+    window.onload = cargar;
   </script>
 </body>
 
