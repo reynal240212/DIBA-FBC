@@ -3,24 +3,14 @@
 
 <head>
   <meta charset="UTF-8" />
-  <title>DIBA FBC - Control de Categorías</title>
+  <title>DIBA FBC - Gestión de Categorías</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
-  <meta name="description" content="Sistema de control de categorías y generación de planillas técnicas para DIBA FBC Barranquilla.">
-  <meta name="author" content="DIBA FBC">
-  <meta name="theme-color" content="#002a40">
 
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://diba-fbc.vercel.app/">
-  <meta property="og:title" content="DIBA FBC - Control de Categorías">
-  <meta property="og:description" content="Gestión técnica y planillas de jugadores de DIBA FBC Barranquilla.">
-  <meta property="og:image" content="images/ESCUDO.png"> <meta property="twitter:card" content="summary_large_image">
-  <meta property="twitter:title" content="DIBA FBC - Control de Categorías">
-  <meta property="twitter:description" content="Gestión técnica y planillas de jugadores de DIBA FBC Barranquilla.">
-  <meta property="twitter:image" content="images/ESCUDO.png">
+  <meta name="description" content="Sistema de gestión técnica DIBA FBC Barranquilla.">
+  <meta property="og:title" content="DIBA FBC - Control">
+  <meta property="og:image" content="images/ESCUDO.png">
 
   <link rel="icon" href="images/ESCUDO.ico" type="image/x-icon">
-  
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
 
@@ -47,24 +37,26 @@
       box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
     }
 
-    .badge-cat {
-      font-size: 0.75rem;
-      padding: 5px 10px;
-      border-radius: 6px;
-      font-weight: bold;
-      border: 1px solid;
+    /* Estilo para filas interactivas */
+    tbody tr {
+      cursor: pointer;
+      transition: 0.2s;
     }
 
-    .cat-2012-13 {
-      background: #e3f2fd;
-      color: #0d47a1;
-      border-color: #0d47a1;
+    tbody tr:hover {
+      background-color: #f0f4f8 !important;
     }
 
-    .cat-2014-16 {
-      background: #e8f5e9;
-      color: #1b5e20;
-      border-color: #1b5e20;
+    .btn-add {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      font-size: 24px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+      z-index: 1000;
     }
 
     @media print {
@@ -74,18 +66,6 @@
 
       #print-header {
         display: block !important;
-      }
-
-      .planilla-table td {
-        border: 1px solid #000 !important;
-        font-size: 10pt !important;
-        padding: 8px !important;
-      }
-
-      .planilla-table th {
-        background: #eee !important;
-        border: 1px solid #000 !important;
-        color: black !important;
       }
     }
 
@@ -106,18 +86,18 @@
 
   <nav class="navbar navbar-dark no-print mb-4">
     <div class="container d-flex justify-content-between">
-      <span class="navbar-brand fw-bold">DIBA FBC - CATEGORÍAS</span>
-      <button onclick="window.print()" class="btn btn-warning fw-bold shadow-sm">IMPRIMIR PLANILLA</button>
+      <span class="navbar-brand fw-bold">DIBA FBC - GESTIÓN</span>
+      <button onclick="window.print()" class="btn btn-warning fw-bold">IMPRIMIR PLANILLA</button>
     </div>
   </nav>
 
-  <div class="container">
+  <div class="container pb-5">
     <div class="row g-3 mb-4 no-print">
       <div class="col-md-6">
         <div class="card p-3 border-0 shadow-sm">
-          <label class="fw-bold small mb-2 text-muted">SELECCIONAR GRUPO:</label>
-          <select id="catFilter" class="form-select form-select-lg border-2">
-            <option value="todos">Mostrar Todos (Base de Datos completa)</option>
+          <label class="fw-bold small mb-2 text-muted">FILTRAR GRUPO:</label>
+          <select id="catFilter" class="form-select border-2">
+            <option value="todos">Todos los Activos</option>
             <option value="2012/13">Categoría 2012 / 2013</option>
             <option value="2014/15/16">Categoría 2014 / 2015 / 2016</option>
           </select>
@@ -125,52 +105,117 @@
       </div>
       <div class="col-md-6">
         <div class="card p-3 border-0 shadow-sm">
-          <label class="fw-bold small mb-2 text-muted">BUSCADOR RÁPIDO:</label>
-          <input type="text" id="nameSearch" class="form-control form-control-lg border-2"
-            placeholder="Nombre o Cédula...">
+          <label class="fw-bold small mb-2 text-muted">BUSCAR DEPORTISTA:</label>
+          <input type="text" id="nameSearch" class="form-control border-2" placeholder="Nombre o Cédula...">
         </div>
       </div>
     </div>
 
-    <div id="print-header">
-      <div class="text-center mb-3">
-        <h3 class="fw-bold mb-0">DIBA FBC - BARRANQUILLA</h3>
-        <p class="mb-0 fw-bold">PLANILLA TÉCNICA: CATEGORÍA <span id="catTitle">GENERAL</span></p>
-        <p class="mb-0 fw-bold">RESOLUCION 0122 - 10 - SEPT - 2018</p>
-        <p class="small">Fecha: ____/____/2025 | Sede: Barranquilla</p>
-      </div>
-    </div>
-
     <div class="table-container shadow-sm">
+      <div id="print-header" class="text-center mb-4">
+        <h3 class="fw-bold">DIBA FBC - BARRANQUILLA</h3>
+        <p>PLANILLA TÉCNICA - CATEGORÍA <span id="catTitle">GENERAL</span></p>
+      </div>
+
       <div class="table-responsive">
-        <table class="table table-hover align-middle planilla-table">
+        <table class="table table-hover align-middle">
           <thead class="table-dark">
             <tr>
-              <th width="5%" class="text-center">N°</th>
-              <th width="45%">Nombre del Deportista</th>
+              <th width="5%">N°</th>
+              <th width="40%">Nombre Completo</th>
               <th width="20%">Documento</th>
-              <th width="15%" class="no-print text-center">Año / Grupo</th>
+              <th width="20%" class="no-print">Año</th>
               <th width="15%" class="no-screen">Firma</th>
             </tr>
           </thead>
-          <tbody id="dataBody">
-            </tbody>
+          <tbody id="dataBody"></tbody>
         </table>
       </div>
     </div>
   </div>
 
+  <button class="btn btn-primary btn-add no-print" data-bs-toggle="modal" data-bs-target="#modalAdd">
+    <i class="fas fa-plus"></i>
+  </button>
+
+  <div class="modal fade" id="modalAdd" tabindex="-1">
+    <div class="modal-dialog">
+      <form id="formAdd" class="modal-content">
+        <div class="modal-header bg-primary text-white">
+          <h5 class="modal-title">Nuevo Deportista</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label class="form-label">Nombres</label>
+            <input type="text" name="nombre" class="form-control" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Apellidos</label>
+            <input type="text" name="apellidos" class="form-control" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Documento (ID)</label>
+            <input type="text" name="numero" class="form-control" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Fecha de Nacimiento</label>
+            <input type="date" name="fecha_nacimiento" class="form-control" required>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary w-100">Guardar Jugador</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="modal fade" id="modalEdit" tabindex="-1">
+    <div class="modal-dialog">
+      <form id="formEdit" class="modal-content">
+        <input type="hidden" name="id">
+        <div class="modal-header bg-dark text-white">
+          <h5 class="modal-title">Gestionar Deportista</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label class="form-label">Nombres</label>
+            <input type="text" name="nombre" class="form-control" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Apellidos</label>
+            <input type="text" name="apellidos" class="form-control" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Documento</label>
+            <input type="text" name="numero" class="form-control" required>
+          </div>
+          <hr>
+          <button type="button" id="btnInactivate" class="btn btn-outline-danger btn-sm w-100">
+            <i class="fas fa-user-slash"></i> Marcar como Inactivo
+          </button>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-success w-100">Actualizar Datos</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script type="module">
     import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
 
-    // Tu configuración actual de Supabase
     const supabase = createClient('https://wdnlqfiwuocmmcdowjyw.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndkbmxxZml3dW9jbW1jZG93anl3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg1MjY1ODAsImV4cCI6MjA2NDEwMjU4MH0.4SCS_NRDIYLQJ1XouqW111BxkMOlwMWOjje9gFTgW_Q');
 
     let players = [];
+    const modalEdit = new bootstrap.Modal('#modalEdit');
 
-    async function init() {
-      const { data, error } = await supabase.from('identificacion').select('*').order('apellidos');
-      if (error) console.error('Error cargando datos:', error);
+    async function fetchData() {
+      // Nota: Asumo que tienes una columna 'estado' (boolean o string). 
+      // Si no la tienes, eliminar el .eq('estado', 'activo')
+      const { data } = await supabase.from('identificacion').select('*').order('apellidos');
       players = data || [];
       render();
     }
@@ -182,38 +227,85 @@
 
       const filtered = players.filter(p => {
         const year = p.fecha_nacimiento ? parseInt(p.fecha_nacimiento.substring(0, 4)) : 0;
-        let group = "Otro";
-
-        if (year === 2012 || year === 2013) group = "2012/13";
-        else if (year >= 2014 && year <= 2016) group = "2014/15/16";
+        let group = (year === 2012 || year === 2013) ? "2012/13" : (year >= 2014 && year <= 2016) ? "2014/15/16" : "Otro";
 
         const matchesFilter = filter === 'todos' || group === filter;
-        const matchesSearch = `${p.nombre} ${p.apellidos} ${p.numero}`.toLowerCase().includes(search);
+        const matchesSearch = `${p.nombre} ${p.apellidos} ${p.numero} ${p.id}`.toLowerCase().includes(search);
         return matchesFilter && matchesSearch;
       });
 
-      document.getElementById('catTitle').innerText = filter.toUpperCase();
-
-      body.innerHTML = filtered.map((p, i) => {
-        const year = p.fecha_nacimiento ? p.fecha_nacimiento.substring(0, 4) : 'S/D';
-        const group = (year == 2012 || year == 2013) ? '2012/13' : '2014/15/16';
-        const css = (year == 2012 || year == 2013) ? 'cat-2012-13' : 'cat-2014-16';
-
-        return `
-          <tr>
-            <td class="text-center fw-bold text-muted">${i + 1}</td>
-            <td class="text-uppercase fw-semibold">${p.nombre} ${p.apellidos}</td>
-            <td class="text-nowrap">${p.numero}</td>
-            <td class="no-print text-center"><span class="badge-cat ${css}">${year} (${group})</span></td>
-            <td class="no-screen" style="height: 35px; border: 1px solid #000;"></td>
-          </tr>
-        `;
-      }).join('');
+      body.innerHTML = filtered.map((p, i) => `
+        <tr onclick="openEdit(${p.id})">
+          <td class="fw-bold text-muted">${i + 1}</td>
+          <td class="text-uppercase">${p.nombre} ${p.apellidos}</td>
+          <td>${p.numero}</td>
+          <td class="no-print">${p.fecha_nacimiento?.substring(0, 4) || 'S/D'}</td>
+          <td class="no-screen" style="border: 1px solid #000; height: 40px;"></td>
+        </tr>
+      `).join('');
     }
+
+    // --- ACCIONES ---
+
+    window.openEdit = (id) => {
+      const p = players.find(x => x.id === id);
+      const form = document.getElementById('formEdit');
+      form.id.value = p.id;
+      form.nombre.value = p.nombre;
+      form.apellidos.value = p.apellidos;
+      form.numero.value = p.numero;
+      modalEdit.show();
+    };
+
+    // Agregar
+    document.getElementById('formAdd').onsubmit = async (e) => {
+      e.preventDefault();
+      const formData = new FormData(e.target);
+      const nuevo = Object.fromEntries(formData);
+
+      const { error } = await supabase.from('identificacion').insert([nuevo]);
+      if (error) alert("Error al agregar");
+      else {
+        e.target.reset();
+        bootstrap.Modal.getInstance('#modalAdd').hide();
+        fetchData();
+      }
+    };
+
+    // Editar
+    document.getElementById('formEdit').onsubmit = async (e) => {
+      e.preventDefault();
+      const formData = new FormData(e.target);
+      const data = Object.fromEntries(formData);
+      const id = data.id;
+      delete data.id;
+
+      const { error } = await supabase.from('identificacion').update(data).eq('id', id);
+      if (error) alert("Error al actualizar");
+      else {
+        modalEdit.hide();
+        fetchData();
+      }
+    };
+
+    // Inactivar (Borrar o cambiar estado)
+    document.getElementById('btnInactivate').onclick = async () => {
+      const id = document.getElementById('formEdit').id.value;
+      if (confirm("¿Seguro que desea eliminar/inactivar a este deportista?")) {
+        // Opción A: Borrar físicamente
+        const { error } = await supabase.from('identificacion').delete().eq('id', id);
+
+        if (error) alert("Error");
+        else {
+          modalEdit.hide();
+          fetchData();
+        }
+      }
+    };
 
     document.getElementById('catFilter').onchange = render;
     document.getElementById('nameSearch').oninput = render;
-    window.onload = init;
+    window.onload = fetchData;
   </script>
 </body>
 
