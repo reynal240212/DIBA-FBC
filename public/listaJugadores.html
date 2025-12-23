@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8" />
   <title>DIBA FBC - Panel de Control</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <!-- Bootstrap & Icons -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
@@ -28,7 +28,6 @@
       margin: 0;
     }
 
-    /* Layout Dashboard */
     #wrapper {
       display: flex;
     }
@@ -71,18 +70,18 @@
       text-transform: uppercase;
     }
 
-    /* Fila de firma solo para impresión */
     .no-screen {
       display: none;
     }
 
-    /* Botón flotante para móviles */
     .mobile-add {
       display: none;
       position: fixed;
       bottom: 20px;
       right: 20px;
       z-index: 999;
+      width: 56px;
+      height: 56px;
     }
 
     @media (max-width: 992px) {
@@ -101,6 +100,7 @@
     }
 
     @media print {
+
       #sidebar,
       .no-print,
       .mobile-add {
@@ -116,16 +116,32 @@
       .no-screen {
         display: table-cell !important;
       }
+
+      .data-card {
+        box-shadow: none;
+        border: 1px solid #ddd;
+      }
+    }
+
+    .nav-link {
+      display: block;
+      text-decoration: none;
+      transition: 0.2s;
+    }
+
+    .nav-link:hover {
+      background: rgba(255, 255, 255, 0.1) !important;
     }
   </style>
 </head>
+
 <body>
 
   <div id="wrapper">
     <!-- SIDEBAR -->
     <nav id="sidebar" class="no-print">
       <div class="p-4 text-center">
-        <h5 class="fw-bold mb-0 text-white">DIBA FBC</h5>
+        <h5 class="fw-bold mb-1 text-white">DIBA FBC</h5>
         <p class="text-muted small mb-0">Panel Administrativo</p>
       </div>
       <div class="mt-3">
@@ -138,33 +154,28 @@
       </div>
     </nav>
 
-    <!-- CONTENIDO PRINCIPAL -->
+    <!-- CONTENIDO -->
     <main id="content">
       <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
           <h3 class="fw-bold text-dark mb-0">Gestión de Jugadores</h3>
           <p class="text-muted mb-0">Base de datos técnica oficial</p>
         </div>
-        <button class="btn btn-primary shadow-sm no-print px-4 py-2" type="button" onclick="window.openAddModal()">
+        <button class="btn btn-primary shadow-sm no-print px-4 py-2" onclick="window.openAddModal()">
           <i class="fas fa-plus me-2"></i> Nuevo Registro
         </button>
       </div>
 
       <div class="data-card">
-        <!-- Filtros -->
+        <!-- FILTROS -->
         <div class="row g-3 mb-4 no-print">
           <div class="col-md-8">
             <div class="input-group">
               <span class="input-group-text bg-white border-end-0 text-muted">
                 <i class="fas fa-search"></i>
               </span>
-              <input
-                type="text"
-                id="nameSearch"
-                class="form-control border-start-0 ps-0 shadow-none"
-                placeholder="Buscar por nombre o documento..."
-                autocomplete="off"
-              >
+              <input type="text" id="nameSearch" class="form-control border-start-0 ps-0 shadow-none"
+                placeholder="Buscar por nombre o documento..." autocomplete="off">
             </div>
           </div>
           <div class="col-md-4">
@@ -176,7 +187,7 @@
           </div>
         </div>
 
-        <!-- Tabla -->
+        <!-- TABLA -->
         <div class="table-responsive">
           <table class="table table-hover align-middle" id="mainTable">
             <thead class="table-light">
@@ -191,9 +202,7 @@
             </thead>
             <tbody id="dataBody">
               <tr>
-                <td colspan="5" class="text-center py-5 text-muted">
-                  Cargando jugadores...
-                </td>
+                <td colspan="6" class="text-center py-5 text-muted">Cargando jugadores...</td>
               </tr>
             </tbody>
           </table>
@@ -202,23 +211,19 @@
     </main>
   </div>
 
-  <!-- Botón flotante en móvil -->
-  <button
-    class="btn btn-primary rounded-circle mobile-add no-print"
-    type="button"
-    onclick="window.openAddModal()"
-  >
-    <i class="fas fa-plus"></i>
+  <!-- BOTÓN MÓVIL -->
+  <button class="btn btn-primary rounded-circle mobile-add no-print shadow-lg" onclick="window.openAddModal()">
+    <i class="fas fa-plus fs-5"></i>
   </button>
 
   <!-- MODAL EDITAR -->
   <div class="modal fade" id="modalEdit" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
       <form id="formEdit" class="modal-content border-0 shadow-lg">
-        <input type="hidden" id="edit_id">
+        <input type="hidden" id="edit_pk">
         <div class="modal-header bg-dark text-white p-4">
           <h5 class="fw-bold mb-0">Actualizar Información</h5>
-          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
         </div>
         <div class="modal-body p-4">
           <div class="row g-3">
@@ -237,9 +242,11 @@
           </div>
         </div>
         <div class="modal-footer p-4 pt-0 flex-column">
-          <button type="submit" class="btn btn-primary w-100 py-2">Guardar Cambios</button>
+          <button type="submit" class="btn btn-primary w-100 py-2">
+            <i class="fas fa-save me-2"></i>Guardar Cambios
+          </button>
           <button type="button" class="btn btn-link text-danger mt-2 small" onclick="window.deletePlayer()">
-            Eliminar este registro definitivamente
+            <i class="fas fa-trash me-1"></i>Eliminar permanentemente
           </button>
         </div>
       </form>
@@ -252,21 +259,21 @@
       <form id="formAdd" class="modal-content border-0 shadow-lg">
         <div class="modal-header bg-primary text-white p-4">
           <h5 class="fw-bold mb-0">Inscribir Jugador</h5>
-          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
         </div>
         <div class="modal-body p-4">
           <div class="row g-3">
             <div class="col-6">
               <label class="form-label small fw-bold" for="add_nombre">NOMBRES</label>
-              <input type="text" id="add_nombre" name="nombre" class="form-control" placeholder="Nombre" required>
+              <input type="text" id="add_nombre" name="nombre" class="form-control" required>
             </div>
             <div class="col-6">
               <label class="form-label small fw-bold" for="add_apellidos">APELLIDOS</label>
-              <input type="text" id="add_apellidos" name="apellidos" class="form-control" placeholder="Apellido" required>
+              <input type="text" id="add_apellidos" name="apellidos" class="form-control" required>
             </div>
             <div class="col-12">
               <label class="form-label small fw-bold" for="add_numero">N° DOCUMENTO</label>
-              <input type="text" id="add_numero" name="numero" class="form-control" placeholder="DNI / TI / CC" required>
+              <input type="text" id="add_numero" name="numero" class="form-control" required>
             </div>
             <div class="col-12">
               <label class="form-label small fw-bold" for="add_fecha_nacimiento">FECHA NACIMIENTO</label>
@@ -275,67 +282,63 @@
           </div>
         </div>
         <div class="modal-footer p-4 pt-0">
-          <button type="submit" class="btn btn-primary w-100 py-2">Crear Registro</button>
+          <button type="submit" class="btn btn-primary w-100 py-2">
+            <i class="fas fa-user-plus me-2"></i>Crear Registro
+          </button>
         </div>
       </form>
     </div>
   </div>
 
-  <!-- JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
   <script type="module">
     import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
 
-    // IMPORTANTE: en producción, usa variables de entorno para la URL y la KEY
     const SUPABASE_URL = 'https://wdnlqfiwuocmmcdowjyw.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndkbmxxZml3dW9jbW1jZG93anl3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg1MjY1ODAsImV4cCI6MjA2NDEwMjU4MH0.4SCS_NRDIYLQJ1XouqW111BxkMOlwMWOjje9gFTgW_Q';
 
-    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY); // [web:6]
-
+    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     let players = [];
 
     const bsModalEdit = new bootstrap.Modal('#modalEdit');
     const bsModalAdd = new bootstrap.Modal('#modalAdd');
-
     const dataBody = document.getElementById('dataBody');
     const catFilter = document.getElementById('catFilter');
     const nameSearch = document.getElementById('nameSearch');
 
-    // Cargar datos
+    // 🔧 USA 'numero' COMO PRIMARY KEY (cámbialo si tu PK es diferente)
+    const PRIMARY_KEY = 'numero';
+
+    function formatDateForSupabase(dateString) {
+      if (!dateString) return null;
+      const date = new Date(dateString + 'T00:00:00');
+      return isNaN(date.getTime()) ? null : date.toISOString();
+    }
+
     async function loadData() {
-      dataBody.innerHTML = `
-        <tr>
-          <td colspan="5" class="text-center py-4 text-muted">
-            Cargando jugadores...
-          </td>
-        </tr>
-      `;
+      dataBody.innerHTML = '<tr><td colspan="6" class="text-center py-5 text-muted">Cargando jugadores...</td></tr>';
 
-      const { data, error } = await supabase
-        .from('identificacion')
-        .select('*')
-        .order('apellidos', { ascending: true });
+      try {
+        const { data, error } = await supabase
+          .from('identificacion')
+          .select('*')
+          .order('apellidos', { ascending: true });
 
-      if (error) {
-        console.error(error);
-        dataBody.innerHTML = `
-          <tr>
-            <td colspan="5" class="text-center py-4 text-danger">
-              Error al cargar jugadores
-            </td>
-          </tr>
-        `;
-        return;
+        if (error) throw error;
+        players = data || [];
+        renderTable();
+      } catch (error) {
+        console.error('Error:', error);
+        dataBody.innerHTML = `<tr><td colspan="6" class="text-center py-5 text-danger">Error: ${error.message}</td></tr>`;
       }
-
-      players = data || [];
-      renderTable();
     }
 
     function getCategoryByYear(year) {
-      if (year === '2012' || year === '2013') return '2012/13';
-      if (['2014', '2015', '2016'].includes(year)) return '2014/15/16';
+      if (!year || year.length < 4) return 'Otro';
+      const y = year.toString().substring(0, 4);
+      if (y === '2012' || y === '2013') return '2012/13';
+      if (['2014', '2015', '2016'].includes(y)) return '2014/15/16';
       return 'Otro';
     }
 
@@ -344,152 +347,135 @@
       const search = nameSearch.value.trim().toLowerCase();
 
       const filtered = players.filter((p) => {
-        const year = p.fecha_nacimiento ? String(p.fecha_nacimiento).substring(0, 4) : '0';
+        const year = p.fecha_nacimiento ? new Date(p.fecha_nacimiento).getFullYear()?.toString() || '0' : '0';
         const group = getCategoryByYear(year);
-
         const text = `${p.nombre || ''} ${p.apellidos || ''} ${p.numero || ''}`.toLowerCase();
-
-        const matchFilter = filter === 'todos' || group === filter;
-        const matchSearch = !search || text.includes(search);
-
-        return matchFilter && matchSearch;
+        return (filter === 'todos' || group === filter) && (!search || text.includes(search));
       });
 
-      dataBody.innerHTML = '';
+      dataBody.innerHTML = filtered.length === 0
+        ? '<tr><td colspan="6" class="text-center py-5">No se encontraron resultados</td></tr>'
+        : '';
 
-      if (filtered.length === 0) {
-        dataBody.innerHTML = `
-          <tr>
-            <td colspan="5" class="text-center py-4">
-              No se encontraron resultados
-            </td>
-          </tr>
-        `;
-        return;
-      }
-
-      filtered.forEach((p, index) => {
-        const year = p.fecha_nacimiento ? String(p.fecha_nacimiento).substring(0, 4) : '-';
+      filtered.forEach((p, i) => {
+        const year = p.fecha_nacimiento ? new Date(p.fecha_nacimiento).getFullYear() : '-';
         const tr = document.createElement('tr');
-
         tr.innerHTML = `
-          <td class="text-muted small">${index + 1}</td>
+          <td class="text-muted small">${i + 1}</td>
           <td>
             <div class="d-flex align-items-center">
               <div class="avatar-circle">${(p.nombre || '?').charAt(0).toUpperCase()}</div>
               <div class="fw-semibold text-dark">${p.nombre || ''} ${p.apellidos || ''}</div>
             </div>
           </td>
-          <td>
-            <span class="badge bg-light text-dark border fw-normal px-2">${p.numero || ''}</span>
-          </td>
+          <td><span class="badge bg-light text-dark border fw-normal px-2 py-1">${p.numero || ''}</span></td>
           <td class="no-print text-center text-muted small">${year}</td>
           <td class="no-print text-center">
-            <button class="btn btn-sm btn-outline-primary border-0 btn-edit" type="button">
+            <button class="btn btn-sm btn-outline-primary border-0" type="button" onclick="window.showEdit(${JSON.stringify(p)})">
               <i class="fas fa-pen-to-square"></i>
             </button>
           </td>
-          <td class="no-screen" style="border: 1px solid #000; height: 40px;"></td>
+          <td class="no-screen" style="border: 1px solid #000; height: 50px;"></td>
         `;
-
-        tr.querySelector('.btn-edit').onclick = () => window.showEdit(p);
         dataBody.appendChild(tr);
       });
     }
 
-    // Exponer funciones a window
+    // 🌟 FUNCIONES GLOBALES
     window.showEdit = (player) => {
-      const formEdit = document.getElementById('formEdit');
-      formEdit.reset();
-
-      document.getElementById('edit_id').value = player.id;
+      document.getElementById('formEdit').reset();
+      document.getElementById('edit_pk').value = player[PRIMARY_KEY] || '';
       document.getElementById('edit_nombre').value = player.nombre || '';
       document.getElementById('edit_apellidos').value = player.apellidos || '';
       document.getElementById('edit_numero').value = player.numero || '';
-
       bsModalEdit.show();
     };
 
     window.openAddModal = () => {
-      const formAdd = document.getElementById('formAdd');
-      formAdd.reset();
+      document.getElementById('formAdd').reset();
       bsModalAdd.show();
     };
 
     window.deletePlayer = async () => {
-      const id = document.getElementById('edit_id').value;
-      if (!id) return;
+      const pkValue = document.getElementById('edit_pk').value;
+      if (!pkValue || !confirm('¿Eliminar este jugador permanentemente?')) return;
 
-      const confirmed = window.confirm('¿Seguro que deseas eliminar este registro?');
-      if (!confirmed) return;
+      try {
+        const { error } = await supabase
+          .from('identificacion')
+          .delete()
+          .eq(PRIMARY_KEY, pkValue);
 
-      const { error } = await supabase
-        .from('identificacion')
-        .delete()
-        .eq('id', id);
-
-      if (error) {
-        alert('Error al eliminar el registro');
-        console.error(error);
-        return;
+        if (error) throw error;
+        bsModalEdit.hide();
+        loadData();
+      } catch (error) {
+        alert(`Error al eliminar: ${error.message}`);
       }
-
-      bsModalEdit.hide();
-      await loadData();
     };
 
-    // Eventos formularios
+    // FORM EDITAR
     document.getElementById('formEdit').addEventListener('submit', async (e) => {
       e.preventDefault();
+      const pkValue = document.getElementById('edit_pk').value;
 
-      const id = document.getElementById('edit_id').value;
-      if (!id) return;
+      const formData = {
+        nombre: document.getElementById('edit_nombre').value.trim(),
+        apellidos: document.getElementById('edit_apellidos').value.trim(),
+        numero: document.getElementById('edit_numero').value.trim()
+      };
 
-      const nombre = document.getElementById('edit_nombre').value.trim();
-      const apellidos = document.getElementById('edit_apellidos').value.trim();
-      const numero = document.getElementById('edit_numero').value.trim();
-
-      const { error } = await supabase
-        .from('identificacion')
-        .update({ nombre, apellidos, numero })
-        .eq('id', id);
-
-      if (error) {
-        alert('Error al actualizar');
-        console.error(error);
+      if (!formData.nombre || !formData.apellidos || !formData.numero || !pkValue) {
+        alert('Todos los campos son obligatorios');
         return;
       }
 
-      bsModalEdit.hide();
-      await loadData();
+      try {
+        const { error } = await supabase
+          .from('identificacion')
+          .update(formData)
+          .eq(PRIMARY_KEY, pkValue);
+
+        if (error) throw error;
+        bsModalEdit.hide();
+        loadData();
+        alert('✅ Actualizado correctamente');
+      } catch (error) {
+        alert(`Error: ${error.message}`);
+      }
     });
 
+    // FORM AGREGAR
     document.getElementById('formAdd').addEventListener('submit', async (e) => {
       e.preventDefault();
 
       const formData = new FormData(e.target);
-      const data = Object.fromEntries(formData.entries());
+      const data = Object.fromEntries(formData);
 
-      const { error } = await supabase
-        .from('identificacion')
-        .insert([data]);
+      data.fecha_nacimiento = formatDateForSupabase(data.fecha_nacimiento);
 
-      if (error) {
-        alert('Error al guardar');
-        console.error(error);
+      if (!data.nombre?.trim() || !data.apellidos?.trim() || !data.numero?.trim() || !data.fecha_nacimiento) {
+        alert('Todos los campos son obligatorios');
         return;
       }
 
-      bsModalAdd.hide();
-      await loadData();
+      try {
+        const { error } = await supabase.from('identificacion').insert([data]);
+        if (error) throw error;
+
+        bsModalAdd.hide();
+        loadData();
+        alert('✅ Jugador registrado correctamente');
+      } catch (error) {
+        alert(`Error al guardar: ${error.message}`);
+      }
     });
 
-    // Filtros
+    // EVENTOS
     catFilter.addEventListener('change', renderTable);
     nameSearch.addEventListener('input', renderTable);
-
-    // Inicializar
     window.addEventListener('load', loadData);
   </script>
 </body>
+
 </html>
