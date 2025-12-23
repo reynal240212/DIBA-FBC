@@ -37,14 +37,12 @@
       box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
     }
 
-    /* Estilo para filas interactivas */
     tbody tr {
-      cursor: pointer;
       transition: 0.2s;
     }
 
     tbody tr:hover {
-      background-color: #f0f4f8 !important;
+      background-color: #f8f9fa !important;
     }
 
     .btn-add {
@@ -59,6 +57,7 @@
       z-index: 1000;
     }
 
+    /* Ocultar acciones en impresión */
     @media print {
       .no-print {
         display: none !important;
@@ -122,9 +121,10 @@
           <thead class="table-dark">
             <tr>
               <th width="5%">N°</th>
-              <th width="40%">Nombre Completo</th>
-              <th width="20%">Documento</th>
-              <th width="20%" class="no-print">Año</th>
+              <th width="35%">Nombre Completo</th>
+              <th width="15%">Documento</th>
+              <th width="10%" class="no-print">Año</th>
+              <th width="20%" class="no-print text-center">Acciones</th>
               <th width="15%" class="no-screen">Firma</th>
             </tr>
           </thead>
@@ -146,26 +146,16 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
         </div>
         <div class="modal-body">
-          <div class="mb-3">
-            <label class="form-label">Nombres</label>
-            <input type="text" name="nombre" class="form-control" required>
-          </div>
-          <div class="mb-3">
-            <label class="form-label">Apellidos</label>
-            <input type="text" name="apellidos" class="form-control" required>
-          </div>
-          <div class="mb-3">
-            <label class="form-label">Documento (ID)</label>
-            <input type="text" name="numero" class="form-control" required>
-          </div>
-          <div class="mb-3">
-            <label class="form-label">Fecha de Nacimiento</label>
-            <input type="date" name="fecha_nacimiento" class="form-control" required>
-          </div>
+          <div class="mb-3"><label class="form-label">Nombres</label><input type="text" name="nombre"
+              class="form-control" required></div>
+          <div class="mb-3"><label class="form-label">Apellidos</label><input type="text" name="apellidos"
+              class="form-control" required></div>
+          <div class="mb-3"><label class="form-label">Documento</label><input type="text" name="numero"
+              class="form-control" required></div>
+          <div class="mb-3"><label class="form-label">Fecha Nacimiento</label><input type="date" name="fecha_nacimiento"
+              class="form-control" required></div>
         </div>
-        <div class="modal-footer">
-          <button type="submit" class="btn btn-primary w-100">Guardar Jugador</button>
-        </div>
+        <div class="modal-footer"><button type="submit" class="btn btn-primary w-100">Guardar Jugador</button></div>
       </form>
     </div>
   </div>
@@ -175,29 +165,19 @@
       <form id="formEdit" class="modal-content">
         <input type="hidden" name="id">
         <div class="modal-header bg-dark text-white">
-          <h5 class="modal-title">Gestionar Deportista</h5>
+          <h5 class="modal-title">Editar Deportista</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
         </div>
         <div class="modal-body">
-          <div class="mb-3">
-            <label class="form-label">Nombres</label>
-            <input type="text" name="nombre" class="form-control" required>
-          </div>
-          <div class="mb-3">
-            <label class="form-label">Apellidos</label>
-            <input type="text" name="apellidos" class="form-control" required>
-          </div>
-          <div class="mb-3">
-            <label class="form-label">Documento</label>
-            <input type="text" name="numero" class="form-control" required>
-          </div>
-          <hr>
-          <button type="button" id="btnInactivate" class="btn btn-outline-danger btn-sm w-100">
-            <i class="fas fa-user-slash"></i> Marcar como Inactivo
-          </button>
+          <div class="mb-3"><label class="form-label">Nombres</label><input type="text" name="nombre"
+              class="form-control" required></div>
+          <div class="mb-3"><label class="form-label">Apellidos</label><input type="text" name="apellidos"
+              class="form-control" required></div>
+          <div class="mb-3"><label class="form-label">Documento</label><input type="text" name="numero"
+              class="form-control" required></div>
         </div>
         <div class="modal-footer">
-          <button type="submit" class="btn btn-success w-100">Actualizar Datos</button>
+          <button type="submit" class="btn btn-success w-100">Guardar Cambios</button>
         </div>
       </form>
     </div>
@@ -205,126 +185,92 @@
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script type="module">
-  import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
 
-  const supabase = createClient('https://wdnlqfiwuocmmcdowjyw.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndkbmxxZml3dW9jbW1jZG93anl3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg1MjY1ODAsImV4cCI6MjA2NDEwMjU4MH0.4SCS_NRDIYLQJ1XouqW111BxkMOlwMWOjje9gFTgW_Q');
+    const supabase = createClient('https://wdnlqfiwuocmmcdowjyw.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndkbmxxZml3dW9jbW1jZG93anl3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg1MjY1ODAsImV4cCI6MjA2NDEwMjU4MH0.4SCS_NRDIYLQJ1XouqW111BxkMOlwMWOjje9gFTgW_Q');
 
-  let players = [];
-  const modalEditElement = document.getElementById('modalEdit');
-  const modalEdit = new bootstrap.Modal(modalEditElement);
+    let players = [];
+    const modalEdit = new bootstrap.Modal('#modalEdit');
 
-  async function fetchData() {
-    const { data, error } = await supabase.from('identificacion').select('*').order('apellidos');
-    if (error) {
-      console.error('Error:', error);
-      return;
+    async function fetchData() {
+      const { data, error } = await supabase.from('identificacion').select('*').order('apellidos');
+      if (error) return console.error(error);
+      players = data || [];
+      render();
     }
-    players = data || [];
-    render();
-  }
 
-  function render() {
-    const filter = document.getElementById('catFilter').value;
-    const search = document.getElementById('nameSearch').value.toLowerCase();
-    const body = document.getElementById('dataBody');
+    function render() {
+      const filter = document.getElementById('catFilter').value;
+      const search = document.getElementById('nameSearch').value.toLowerCase();
+      const body = document.getElementById('dataBody');
 
-    const filtered = players.filter(p => {
-      const year = p.fecha_nacimiento ? parseInt(p.fecha_nacimiento.substring(0, 4)) : 0;
-      let group = (year === 2012 || year === 2013) ? "2012/13" : (year >= 2014 && year <= 2016) ? "2014/15/16" : "Otro";
-      
-      const matchesFilter = filter === 'todos' || group === filter;
-      const matchesSearch = `${p.nombre} ${p.apellidos} ${p.numero}`.toLowerCase().includes(search);
-      return matchesFilter && matchesSearch;
-    });
+      const filtered = players.filter(p => {
+        const year = p.fecha_nacimiento ? parseInt(p.fecha_nacimiento.substring(0, 4)) : 0;
+        let group = (year === 2012 || year === 2013) ? "2012/13" : (year >= 2014 && year <= 2016) ? "2014/15/16" : "Otro";
+        const matchesFilter = filter === 'todos' || group === filter;
+        const matchesSearch = `${p.nombre} ${p.apellidos} ${p.numero}`.toLowerCase().includes(search);
+        return matchesFilter && matchesSearch;
+      });
 
-    body.innerHTML = filtered.map((p, i) => `
-      <tr onclick="window.openEdit('${p.id}')">
-        <td class="fw-bold text-muted">${i + 1}</td>
-        <td class="text-uppercase">${p.nombre} ${p.apellidos}</td>
-        <td>${p.numero}</td>
-        <td class="no-print">${p.fecha_nacimiento?.substring(0,4) || 'S/D'}</td>
-        <td class="no-screen" style="border: 1px solid #000; height: 40px;"></td>
-      </tr>
-    `).join('');
-  }
-
-  // Hacer la función accesible globalmente para el onclick de la tabla
-  window.openEdit = (id) => {
-    // IMPORTANTE: Convertimos id a String para comparar correctamente
-    const p = players.find(x => String(x.id) === String(id));
-    
-    if (p) {
-      const form = document.getElementById('formEdit');
-      form.id.value = p.id;
-      form.nombre.value = p.nombre;
-      form.apellidos.value = p.apellidos;
-      form.numero.value = p.numero;
-      modalEdit.show();
-    } else {
-      console.error("No se encontró el jugador con ID:", id);
+      body.innerHTML = filtered.map((p, i) => `
+        <tr>
+          <td class="fw-bold text-muted">${i + 1}</td>
+          <td class="text-uppercase">${p.nombre} ${p.apellidos}</td>
+          <td>${p.numero}</td>
+          <td class="no-print">${p.fecha_nacimiento?.substring(0, 4) || 'S/D'}</td>
+          <td class="no-print text-center">
+            <button class="btn btn-sm btn-outline-primary me-1" onclick="window.openEdit('${p.id}')">
+              <i class="fas fa-edit"></i>
+            </button>
+            <button class="btn btn-sm btn-outline-danger" onclick="window.deletePlayer('${p.id}')">
+              <i class="fas fa-user-slash"></i>
+            </button>
+          </td>
+          <td class="no-screen" style="border: 1px solid #000; height: 40px;"></td>
+        </tr>
+      `).join('');
     }
-  };
 
-  // AGREGAR JUGADOR
-  document.getElementById('formAdd').onsubmit = async (e) => {
-    e.preventDefault();
-    const formData = new FormData(e.target);
-    const nuevo = Object.fromEntries(formData);
-    
-    const { error } = await supabase.from('identificacion').insert([nuevo]);
-    if (error) {
-      alert("Error al guardar: " + error.message);
-    } else {
-      e.target.reset();
-      bootstrap.Modal.getInstance(document.getElementById('modalAdd')).hide();
-      await fetchData();
-    }
-  };
-
-  // ACTUALIZAR JUGADOR
-  document.getElementById('formEdit').onsubmit = async (e) => {
-    e.preventDefault();
-    const formData = new FormData(e.target);
-    const data = Object.fromEntries(formData);
-    const targetId = data.id; // Extraemos el ID
-    
-    // Eliminamos el ID del objeto que se enviará a actualizar (no se debe actualizar la PK)
-    const updateData = {
-      nombre: data.nombre,
-      apellidos: data.apellidos,
-      numero: data.numero
+    window.openEdit = (id) => {
+      const p = players.find(x => String(x.id) === String(id));
+      if (p) {
+        const form = document.getElementById('formEdit');
+        form.id.value = p.id;
+        form.nombre.value = p.nombre;
+        form.apellidos.value = p.apellidos;
+        form.numero.value = p.numero;
+        modalEdit.show();
+      }
     };
 
-    const { error } = await supabase
-      .from('identificacion')
-      .update(updateData)
-      .eq('id', targetId);
-
-    if (error) {
-      alert("Error al actualizar: " + error.message);
-    } else {
-      modalEdit.hide();
-      await fetchData();
-    }
-  };
-
-  // ELIMINAR / INACTIVAR
-  document.getElementById('btnInactivate').onclick = async () => {
-    const id = document.getElementById('formEdit').id.value;
-    if(confirm("¿Seguro que desea eliminar a este deportista?")) {
-      const { error } = await supabase.from('identificacion').delete().eq('id', id);
-      if (error) alert("Error: " + error.message);
-      else {
-        modalEdit.hide();
-        await fetchData();
+    window.deletePlayer = async (id) => {
+      if (confirm("¿Seguro que desea eliminar/inactivar a este deportista?")) {
+        const { error } = await supabase.from('identificacion').delete().eq('id', id);
+        if (error) alert("Error");
+        else await fetchData();
       }
-    }
-  };
+    };
 
-  document.getElementById('catFilter').onchange = render;
-  document.getElementById('nameSearch').oninput = render;
-  window.onload = fetchData;
-</script>
+    document.getElementById('formAdd').onsubmit = async (e) => {
+      e.preventDefault();
+      const data = Object.fromEntries(new FormData(e.target));
+      const { error } = await supabase.from('identificacion').insert([data]);
+      if (!error) { e.target.reset(); bootstrap.Modal.getInstance('#modalAdd').hide(); await fetchData(); }
+    };
+
+    document.getElementById('formEdit').onsubmit = async (e) => {
+      e.preventDefault();
+      const data = Object.fromEntries(new FormData(e.target));
+      const id = data.id;
+      delete data.id;
+      const { error } = await supabase.from('identificacion').update(data).eq('id', id);
+      if (!error) { modalEdit.hide(); await fetchData(); }
+    };
+
+    document.getElementById('catFilter').onchange = render;
+    document.getElementById('nameSearch').oninput = render;
+    window.onload = fetchData;
+  </script>
 </body>
 
 </html>
