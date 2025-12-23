@@ -3,64 +3,147 @@
 
 <head>
   <meta charset="UTF-8" />
-  <title>DIBA FBC - Gestión Correcta</title>
+  <title>DIBA FBC - Panel de Control</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
 
   <style>
     :root {
-      --diba-dark: #002a40;
+      --sidebar-width: 260px;
+      --diba-dark: #001f2f;
       --diba-gold: #c5a059;
+      --bg-light: #f8f9fc;
+      --accent-color: #4e73df;
     }
 
     body {
-      background-color: #f4f7f6;
-      font-family: 'Segoe UI', sans-serif;
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg-light);
+      overflow-x: hidden;
     }
 
-    .navbar {
-      background: var(--diba-dark) !important;
-      border-bottom: 4px solid var(--diba-gold);
+    /* Estructura del Panel */
+    #wrapper {
+      display: flex;
     }
 
-    .table-container {
-      background: white;
-      border-radius: 12px;
-      padding: 20px;
-      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
-    }
-
-    .btn-add {
+    #sidebar {
+      width: var(--sidebar-width);
+      min-height: 100vh;
+      background: var(--diba-dark);
+      color: white;
+      transition: all 0.3s;
       position: fixed;
-      bottom: 30px;
-      right: 30px;
-      width: 60px;
-      height: 60px;
+    }
+
+    #content {
+      width: calc(100% - var(--sidebar-width));
+      margin-left: var(--sidebar-width);
+      padding: 30px;
+    }
+
+    .nav-link {
+      color: rgba(255, 255, 255, 0.7);
+      padding: 15px 25px;
+      border-left: 4px solid transparent;
+    }
+
+    .nav-link:hover,
+    .nav-link.active {
+      color: white;
+      background: rgba(255, 255, 255, 0.05);
+      border-left: 4px solid var(--diba-gold);
+    }
+
+    /* Tarjetas de Estadísticas */
+    .stat-card {
+      border: none;
+      border-radius: 12px;
+      box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.1);
+      transition: transform 0.2s;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-5px);
+    }
+
+    /* Estilo de la Tabla */
+    .data-card {
+      background: white;
+      border-radius: 15px;
+      padding: 25px;
+      box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.05);
+    }
+
+    .table thead th {
+      background-color: #f8f9fc;
+      color: #4e73df;
+      text-transform: uppercase;
+      font-size: 0.75rem;
+      letter-spacing: 0.05em;
+      border-bottom: 2px solid #e3e6f0;
+    }
+
+    .avatar-circle {
+      width: 35px;
+      height: 35px;
+      background: #e3e6f0;
       border-radius: 50%;
-      font-size: 24px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-      z-index: 1000;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 10px;
+      font-weight: bold;
+      color: var(--diba-dark);
+    }
+
+    /* Modales Estilizados */
+    .modal-content {
+      border: none;
+      border-radius: 15px;
+    }
+
+    .modal-header {
+      border-bottom: none;
+      padding: 25px 25px 10px;
+    }
+
+    .modal-footer {
+      border-top: none;
+      padding: 10px 25px 25px;
+    }
+
+    @media (max-width: 992px) {
+      #sidebar {
+        margin-left: calc(-1 * var(--sidebar-width));
+      }
+
+      #content {
+        width: 100%;
+        margin-left: 0;
+      }
     }
 
     @media print {
-      .no-print {
+
+      #sidebar,
+      .no-print,
+      .btn-add {
         display: none !important;
       }
-    }
 
-    #print-header,
-    .no-screen {
-      display: none;
-    }
-
-    @media print {
-      .no-screen {
-        display: table-cell !important;
+      #content {
+        margin-left: 0;
+        padding: 0;
+        width: 100%;
       }
 
-      #print-header {
-        display: block !important;
+      .data-card {
+        box-shadow: none;
+        padding: 0;
       }
     }
   </style>
@@ -68,81 +151,169 @@
 
 <body>
 
-  <nav class="navbar navbar-dark no-print mb-4">
-    <div class="container d-flex justify-content-between">
-      <span class="navbar-brand fw-bold">DIBA FBC - GESTIÓN</span>
-      <button onclick="window.print()" class="btn btn-warning fw-bold">IMPRIMIR PLANILLA</button>
-    </div>
-  </nav>
+  <div id="wrapper">
+    <nav id="sidebar" class="no-print">
+      <div class="p-4 text-center">
+        <img src="images/ESCUDO.png" alt="Logo" style="width: 80px; margin-bottom: 15px;">
+        <h6 class="fw-bold mb-0">DIBA FBC</h6>
+        <small class="text-muted">Administración</small>
+      </div>
+      <div class="mt-4">
+        <a href="#" class="nav-link active"><i class="fas fa-users me-2"></i> Jugadores</a>
+        <a href="#" class="nav-link"><i class="fas fa-calendar-alt me-2"></i> Asistencia</a>
+        <a href="#" class="nav-link"><i class="fas fa-file-invoice me-2"></i> Planillas</a>
+        <div class="px-4 mt-5">
+          <hr class="text-muted">
+        </div>
+        <a href="javascript:window.print()" class="nav-link text-warning"><i class="fas fa-print me-2"></i> Imprimir
+          Reporte</a>
+      </div>
+    </nav>
 
-  <div class="container pb-5">
-    <div class="row g-3 mb-4 no-print">
-      <div class="col-md-6">
-        <select id="catFilter" class="form-select border-2">
-          <option value="todos">Todos los Activos</option>
-          <option value="2012/13">2012 / 2013</option>
-          <option value="2014/15/16">2014 / 2015 / 2016</option>
-        </select>
-      </div>
-      <div class="col-md-6">
-        <input type="text" id="nameSearch" class="form-control border-2" placeholder="Buscar por nombre o cédula...">
-      </div>
-    </div>
-
-    <div class="table-container shadow-sm">
-      <div id="print-header" class="text-center mb-4">
-        <h3>DIBA FBC - BARRANQUILLA</h3>
-        <p>PLANILLA TÉCNICA - CATEGORÍA <span id="catTitle">GENERAL</span></p>
+    <main id="content">
+      <div class="d-flex justify-content-between align-items-center mb-4 no-print">
+        <h4 class="fw-bold text-gray-800">Gestión de Deportistas</h4>
+        <button class="btn btn-primary shadow-sm px-4" onclick="openAddModal()">
+          <i class="fas fa-plus me-2"></i> Nuevo Jugador
+        </button>
       </div>
 
-      <div class="table-responsive">
-        <table class="table table-hover align-middle">
-          <thead class="table-dark">
-            <tr>
-              <th>N°</th>
-              <th>Nombre Completo</th>
-              <th>Documento</th>
-              <th class="no-print">Año</th>
-              <th class="no-print text-center">Acciones</th>
-              <th class="no-screen">Firma</th>
-            </tr>
-          </thead>
-          <tbody id="dataBody"></tbody>
-        </table>
+      <div class="row mb-4 no-print">
+        <div class="col-md-4">
+          <div class="card stat-card p-3 border-left-primary">
+            <div class="d-flex align-items-center justify-content-between">
+              <div>
+                <p class="text-xs font-weight-bold text-primary text-uppercase mb-1">Total Inscritos</p>
+                <h3 class="fw-bold mb-0" id="totalCount">0</h3>
+              </div>
+              <i class="fas fa-user-friends fa-2x text-gray-300"></i>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card stat-card p-3">
+            <div class="d-flex align-items-center justify-content-between">
+              <div>
+                <p class="text-xs font-weight-bold text-success text-uppercase mb-1">Cat. 2012/13</p>
+                <h3 class="fw-bold mb-0" id="cat1Count">0</h3>
+              </div>
+              <i class="fas fa-futbol fa-2x text-gray-300"></i>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card stat-card p-3">
+            <div class="d-flex align-items-center justify-content-between">
+              <div>
+                <p class="text-xs font-weight-bold text-info text-uppercase mb-1">Cat. 2014/15/16</p>
+                <h3 class="fw-bold mb-0" id="cat2Count">0</h3>
+              </div>
+              <i class="fas fa-running fa-2x text-gray-300"></i>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
+
+      <div class="data-card">
+        <div class="row g-3 mb-4 no-print">
+          <div class="col-md-8">
+            <div class="input-group">
+              <span class="input-group-text bg-white border-end-0"><i class="fas fa-search text-muted"></i></span>
+              <input type="text" id="nameSearch" class="form-control border-start-0 ps-0 shadow-none"
+                placeholder="Buscar por nombre, apellido o documento...">
+            </div>
+          </div>
+          <div class="col-md-4">
+            <select id="catFilter" class="form-select shadow-none">
+              <option value="todos">Todas las categorías</option>
+              <option value="2012/13">2012 / 2013</option>
+              <option value="2014/15/16">2014 / 2015 / 2016</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="table-responsive">
+          <table class="table table-hover align-middle">
+            <thead>
+              <tr>
+                <th width="5%">N°</th>
+                <th width="40%">Deportista</th>
+                <th width="15%">Documento</th>
+                <th width="10%" class="no-print text-center">Año</th>
+                <th width="15%" class="no-print text-center">Acciones</th>
+                <th width="15%" class="no-screen">Firma</th>
+              </tr>
+            </thead>
+            <tbody id="dataBody">
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
   </div>
 
-  <button class="btn btn-primary btn-add no-print" onclick="openAddModal()">
-    <i class="fas fa-plus"></i>
-  </button>
-
   <div class="modal fade" id="modalEdit" tabindex="-1">
-    <div class="modal-dialog">
-      <form id="formEdit" class="modal-content">
-        <input type="hidden" id="edit_id" name="id">
-        <div class="modal-header bg-dark text-white">
-          <h5 class="modal-title">Datos del Deportista</h5>
-          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+    <div class="modal-dialog modal-dialog-centered">
+      <form id="formEdit" class="modal-content shadow-lg">
+        <input type="hidden" id="edit_id">
+        <div class="modal-header">
+          <h5 class="fw-bold">Detalles del Jugador</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
         </div>
         <div class="modal-body">
-          <div class="mb-3">
-            <label class="form-label fw-bold text-muted small">NOMBRES</label>
-            <input type="text" id="edit_nombre" name="nombre" class="form-control" required>
-          </div>
-          <div class="mb-3">
-            <label class="form-label fw-bold text-muted small">APELLIDOS</label>
-            <input type="text" id="edit_apellidos" name="apellidos" class="form-control" required>
-          </div>
-          <div class="mb-3">
-            <label class="form-label fw-bold text-muted small">DOCUMENTO</label>
-            <input type="text" id="edit_numero" name="numero" class="form-control" required>
+          <div class="row g-3">
+            <div class="col-6">
+              <label class="form-label small fw-bold">Nombres</label>
+              <input type="text" id="edit_nombre" class="form-control" required>
+            </div>
+            <div class="col-6">
+              <label class="form-label small fw-bold">Apellidos</label>
+              <input type="text" id="edit_apellidos" class="form-control" required>
+            </div>
+            <div class="col-12">
+              <label class="form-label small fw-bold">Número de Documento</label>
+              <input type="text" id="edit_numero" class="form-control" required>
+            </div>
           </div>
         </div>
         <div class="modal-footer flex-column">
-          <button type="submit" class="btn btn-success w-100 mb-2">Guardar Cambios</button>
-          <button type="button" onclick="deleteCurrentPlayer()" class="btn btn-link text-danger btn-sm">Eliminar
-            registro definitivamente</button>
+          <button type="submit" class="btn btn-primary w-100">Actualizar Información</button>
+          <button type="button" onclick="deletePlayer()" class="btn btn-link text-danger mt-2 small">Eliminar del
+            sistema</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="modal fade" id="modalAdd" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <form id="formAdd" class="modal-content shadow-lg">
+        <div class="modal-header">
+          <h5 class="fw-bold">Nuevo Registro</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <div class="row g-3">
+            <div class="col-6">
+              <label class="form-label small fw-bold">Nombres</label>
+              <input type="text" name="nombre" class="form-control" placeholder="Ej: Juan" required>
+            </div>
+            <div class="col-6">
+              <label class="form-label small fw-bold">Apellidos</label>
+              <input type="text" name="apellidos" class="form-control" placeholder="Ej: Pérez" required>
+            </div>
+            <div class="col-12">
+              <label class="form-label small fw-bold">Documento</label>
+              <input type="text" name="numero" class="form-control" placeholder="C.C. o T.I." required>
+            </div>
+            <div class="col-12">
+              <label class="form-label small fw-bold">Fecha de Nacimiento</label>
+              <input type="date" name="fecha_nacimiento" class="form-control" required>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary w-100">Inscribir Jugador</button>
         </div>
       </form>
     </div>
@@ -155,98 +326,105 @@
     const supabase = createClient('https://wdnlqfiwuocmmcdowjyw.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndkbmxxZml3dW9jbW1jZG93anl3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg1MjY1ODAsImV4cCI6MjA2NDEwMjU4MH0.4SCS_NRDIYLQJ1XouqW111BxkMOlwMWOjje9gFTgW_Q');
 
     let players = [];
-    const modalEdit = new bootstrap.Modal('#modalEdit');
+    const bsModalEdit = new bootstrap.Modal('#modalEdit');
+    const bsModalAdd = new bootstrap.Modal('#modalAdd');
 
-    async function fetchData() {
+    async function loadData() {
       const { data, error } = await supabase.from('identificacion').select('*').order('apellidos', { ascending: true });
-      if (error) return console.error("Error Supabase:", error);
+      if (error) return console.error(error);
       players = data || [];
-      render();
+      updateStats();
+      renderTable();
     }
 
-    function render() {
+    function updateStats() {
+      document.getElementById('totalCount').innerText = players.length;
+      const countCat = (years) => players.filter(p => years.includes(p.fecha_nacimiento?.substring(0, 4))).length;
+      document.getElementById('cat1Count').innerText = countCat(['2012', '2013']);
+      document.getElementById('cat2Count').innerText = countCat(['2014', '2015', '2016']);
+    }
+
+    function renderTable() {
       const filter = document.getElementById('catFilter').value;
       const search = document.getElementById('nameSearch').value.toLowerCase();
       const body = document.getElementById('dataBody');
 
       const filtered = players.filter(p => {
-        const year = p.fecha_nacimiento ? parseInt(p.fecha_nacimiento.substring(0, 4)) : 0;
-        let group = (year === 2012 || year === 2013) ? "2012/13" : (year >= 2014 && year <= 2016) ? "2014/15/16" : "Otro";
-        const matchesFilter = filter === 'todos' || group === filter;
-        const matchesSearch = `${p.nombre} ${p.apellidos} ${p.numero}`.toLowerCase().includes(search);
-        return matchesFilter && matchesSearch;
+        const year = p.fecha_nacimiento ? p.fecha_nacimiento.substring(0, 4) : '0';
+        let group = (year === '2012' || year === '2013') ? "2012/13" : (['2014', '2015', '2016'].includes(year)) ? "2014/15/16" : "Otro";
+        return (filter === 'todos' || group === filter) &&
+          (`${p.nombre} ${p.apellidos} ${p.numero}`.toLowerCase().includes(search));
       });
 
-      body.innerHTML = ''; // Limpiar tabla
+      body.innerHTML = '';
       filtered.forEach((p, i) => {
         const tr = document.createElement('tr');
+        const initial = p.nombre.charAt(0).toUpperCase();
         tr.innerHTML = `
-          <td class="fw-bold text-muted">${i + 1}</td>
-          <td class="text-uppercase">${p.nombre} ${p.apellidos}</td>
-          <td>${p.numero}</td>
-          <td class="no-print">${p.fecha_nacimiento?.substring(0, 4) || 'S/D'}</td>
+          <td class="text-muted small">${i + 1}</td>
+          <td>
+            <div class="d-flex align-items-center">
+              <div class="avatar-circle">${initial}</div>
+              <div class="fw-bold">${p.nombre} ${p.apellidos}</div>
+            </div>
+          </td>
+          <td><span class="badge bg-light text-dark border">${p.numero}</span></td>
+          <td class="no-print text-center text-muted">${p.fecha_nacimiento?.substring(0, 4) || '-'}</td>
           <td class="no-print text-center">
-            <button class="btn btn-sm btn-primary px-3 edit-btn">
-              <i class="fas fa-edit"></i> Editar
-            </button>
+            <button class="btn btn-sm btn-white border shadow-sm btn-edit" title="Editar"><i class="fas fa-edit text-primary"></i></button>
           </td>
           <td class="no-screen" style="border: 1px solid #000; height: 40px;"></td>
         `;
-
-        // Asignar el evento click al botón de esta fila específica
-        tr.querySelector('.edit-btn').onclick = () => openEditModal(p);
+        tr.querySelector('.btn-edit').onclick = () => showEdit(p);
         body.appendChild(tr);
       });
     }
 
-    // FUNCIÓN CLAVE: Abre el modal y LIMPIA los datos viejos con el nuevo objeto 'p'
-    function openEditModal(player) {
-      document.getElementById('formEdit').reset(); // Limpiar rastro anterior
+    window.showEdit = (player) => {
+      document.getElementById('modalEdit').removeAttribute('aria-hidden');
       document.getElementById('edit_id').value = player.id;
       document.getElementById('edit_nombre').value = player.nombre;
       document.getElementById('edit_apellidos').value = player.apellidos;
       document.getElementById('edit_numero').value = player.numero;
-      modalEdit.show();
-    }
+      bsModalEdit.show();
+    };
 
-    // ACTUALIZAR
+    window.openAddModal = () => {
+      document.getElementById('modalAdd').removeAttribute('aria-hidden');
+      document.getElementById('formAdd').reset();
+      bsModalAdd.show();
+    };
+
     document.getElementById('formEdit').onsubmit = async (e) => {
       e.preventDefault();
       const id = document.getElementById('edit_id').value;
-      const updateData = {
+      const { error } = await supabase.from('identificacion').update({
         nombre: document.getElementById('edit_nombre').value,
         apellidos: document.getElementById('edit_apellidos').value,
         numero: document.getElementById('edit_numero').value
-      };
+      }).eq('id', id);
 
-      const { error } = await supabase.from('identificacion').update(updateData).eq('id', id);
-
-      if (error) {
-        alert("Error al actualizar: " + error.message);
-      } else {
-        modalEdit.hide();
-        await fetchData(); // Refrescar lista completa
-      }
+      if (!error) { bsModalEdit.hide(); loadData(); }
     };
 
-    // ELIMINAR
-    window.deleteCurrentPlayer = async () => {
+    document.getElementById('formAdd').onsubmit = async (e) => {
+      e.preventDefault();
+      const data = Object.fromEntries(new FormData(e.target));
+      const { error } = await supabase.from('identificacion').insert([data]);
+      if (!error) { bsModalAdd.hide(); loadData(); }
+    };
+
+    window.deletePlayer = async () => {
       const id = document.getElementById('edit_id').value;
-      if (confirm("¿Seguro que deseas eliminar a este jugador de la base de datos?")) {
+      if (confirm("¿Estás seguro de eliminar permanentemente este registro?")) {
         const { error } = await supabase.from('identificacion').delete().eq('id', id);
-        if (!error) {
-          modalEdit.hide();
-          await fetchData();
-        }
+        if (!error) { bsModalEdit.hide(); loadData(); }
       }
     };
 
-    // Filtros
-    document.getElementById('catFilter').onchange = render;
-    document.getElementById('nameSearch').oninput = render;
-
-    // Inicio
-    window.onload = fetchData;
+    document.getElementById('catFilter').onchange = renderTable;
+    document.getElementById('nameSearch').oninput = renderTable;
+    window.onload = loadData;
   </script>
 </body>
 
