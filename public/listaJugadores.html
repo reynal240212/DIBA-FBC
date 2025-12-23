@@ -3,14 +3,8 @@
 
 <head>
   <meta charset="UTF-8" />
-  <title>DIBA FBC - Gestión de Categorías</title>
+  <title>DIBA FBC - Gestión Correcta</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-  <meta name="description" content="Sistema de gestión técnica DIBA FBC Barranquilla.">
-  <meta property="og:title" content="DIBA FBC - Control">
-  <meta property="og:image" content="images/ESCUDO.png">
-
-  <link rel="icon" href="images/ESCUDO.ico" type="image/x-icon">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
 
@@ -37,14 +31,6 @@
       box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
     }
 
-    tbody tr {
-      transition: 0.2s;
-    }
-
-    tbody tr:hover {
-      background-color: #f8f9fa !important;
-    }
-
     .btn-add {
       position: fixed;
       bottom: 30px;
@@ -57,14 +43,9 @@
       z-index: 1000;
     }
 
-    /* Ocultar acciones en impresión */
     @media print {
       .no-print {
         display: none !important;
-      }
-
-      #print-header {
-        display: block !important;
       }
     }
 
@@ -76,6 +57,10 @@
     @media print {
       .no-screen {
         display: table-cell !important;
+      }
+
+      #print-header {
+        display: block !important;
       }
     }
   </style>
@@ -93,26 +78,20 @@
   <div class="container pb-5">
     <div class="row g-3 mb-4 no-print">
       <div class="col-md-6">
-        <div class="card p-3 border-0 shadow-sm">
-          <label class="fw-bold small mb-2 text-muted">FILTRAR GRUPO:</label>
-          <select id="catFilter" class="form-select border-2">
-            <option value="todos">Todos los Activos</option>
-            <option value="2012/13">Categoría 2012 / 2013</option>
-            <option value="2014/15/16">Categoría 2014 / 2015 / 2016</option>
-          </select>
-        </div>
+        <select id="catFilter" class="form-select border-2">
+          <option value="todos">Todos los Activos</option>
+          <option value="2012/13">2012 / 2013</option>
+          <option value="2014/15/16">2014 / 2015 / 2016</option>
+        </select>
       </div>
       <div class="col-md-6">
-        <div class="card p-3 border-0 shadow-sm">
-          <label class="fw-bold small mb-2 text-muted">BUSCAR DEPORTISTA:</label>
-          <input type="text" id="nameSearch" class="form-control border-2" placeholder="Nombre o Cédula...">
-        </div>
+        <input type="text" id="nameSearch" class="form-control border-2" placeholder="Buscar por nombre o cédula...">
       </div>
     </div>
 
     <div class="table-container shadow-sm">
       <div id="print-header" class="text-center mb-4">
-        <h3 class="fw-bold">DIBA FBC - BARRANQUILLA</h3>
+        <h3>DIBA FBC - BARRANQUILLA</h3>
         <p>PLANILLA TÉCNICA - CATEGORÍA <span id="catTitle">GENERAL</span></p>
       </div>
 
@@ -120,12 +99,12 @@
         <table class="table table-hover align-middle">
           <thead class="table-dark">
             <tr>
-              <th width="5%">N°</th>
-              <th width="35%">Nombre Completo</th>
-              <th width="15%">Documento</th>
-              <th width="10%" class="no-print">Año</th>
-              <th width="20%" class="no-print text-center">Acciones</th>
-              <th width="15%" class="no-screen">Firma</th>
+              <th>N°</th>
+              <th>Nombre Completo</th>
+              <th>Documento</th>
+              <th class="no-print">Año</th>
+              <th class="no-print text-center">Acciones</th>
+              <th class="no-screen">Firma</th>
             </tr>
           </thead>
           <tbody id="dataBody"></tbody>
@@ -134,50 +113,36 @@
     </div>
   </div>
 
-  <button class="btn btn-primary btn-add no-print" data-bs-toggle="modal" data-bs-target="#modalAdd">
+  <button class="btn btn-primary btn-add no-print" onclick="openAddModal()">
     <i class="fas fa-plus"></i>
   </button>
-
-  <div class="modal fade" id="modalAdd" tabindex="-1">
-    <div class="modal-dialog">
-      <form id="formAdd" class="modal-content">
-        <div class="modal-header bg-primary text-white">
-          <h5 class="modal-title">Nuevo Deportista</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-        </div>
-        <div class="modal-body">
-          <div class="mb-3"><label class="form-label">Nombres</label><input type="text" name="nombre"
-              class="form-control" required></div>
-          <div class="mb-3"><label class="form-label">Apellidos</label><input type="text" name="apellidos"
-              class="form-control" required></div>
-          <div class="mb-3"><label class="form-label">Documento</label><input type="text" name="numero"
-              class="form-control" required></div>
-          <div class="mb-3"><label class="form-label">Fecha Nacimiento</label><input type="date" name="fecha_nacimiento"
-              class="form-control" required></div>
-        </div>
-        <div class="modal-footer"><button type="submit" class="btn btn-primary w-100">Guardar Jugador</button></div>
-      </form>
-    </div>
-  </div>
 
   <div class="modal fade" id="modalEdit" tabindex="-1">
     <div class="modal-dialog">
       <form id="formEdit" class="modal-content">
-        <input type="hidden" name="id">
+        <input type="hidden" id="edit_id" name="id">
         <div class="modal-header bg-dark text-white">
-          <h5 class="modal-title">Editar Deportista</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          <h5 class="modal-title">Datos del Deportista</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
         </div>
         <div class="modal-body">
-          <div class="mb-3"><label class="form-label">Nombres</label><input type="text" name="nombre"
-              class="form-control" required></div>
-          <div class="mb-3"><label class="form-label">Apellidos</label><input type="text" name="apellidos"
-              class="form-control" required></div>
-          <div class="mb-3"><label class="form-label">Documento</label><input type="text" name="numero"
-              class="form-control" required></div>
+          <div class="mb-3">
+            <label class="form-label fw-bold text-muted small">NOMBRES</label>
+            <input type="text" id="edit_nombre" name="nombre" class="form-control" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-bold text-muted small">APELLIDOS</label>
+            <input type="text" id="edit_apellidos" name="apellidos" class="form-control" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-bold text-muted small">DOCUMENTO</label>
+            <input type="text" id="edit_numero" name="numero" class="form-control" required>
+          </div>
         </div>
-        <div class="modal-footer">
-          <button type="submit" class="btn btn-success w-100">Guardar Cambios</button>
+        <div class="modal-footer flex-column">
+          <button type="submit" class="btn btn-success w-100 mb-2">Guardar Cambios</button>
+          <button type="button" onclick="deleteCurrentPlayer()" class="btn btn-link text-danger btn-sm">Eliminar
+            registro definitivamente</button>
         </div>
       </form>
     </div>
@@ -193,8 +158,8 @@
     const modalEdit = new bootstrap.Modal('#modalEdit');
 
     async function fetchData() {
-      const { data, error } = await supabase.from('identificacion').select('*').order('apellidos');
-      if (error) return console.error(error);
+      const { data, error } = await supabase.from('identificacion').select('*').order('apellidos', { ascending: true });
+      if (error) return console.error("Error Supabase:", error);
       players = data || [];
       render();
     }
@@ -212,63 +177,75 @@
         return matchesFilter && matchesSearch;
       });
 
-      body.innerHTML = filtered.map((p, i) => `
-        <tr>
+      body.innerHTML = ''; // Limpiar tabla
+      filtered.forEach((p, i) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
           <td class="fw-bold text-muted">${i + 1}</td>
           <td class="text-uppercase">${p.nombre} ${p.apellidos}</td>
           <td>${p.numero}</td>
           <td class="no-print">${p.fecha_nacimiento?.substring(0, 4) || 'S/D'}</td>
           <td class="no-print text-center">
-            <button class="btn btn-sm btn-outline-primary me-1" onclick="window.openEdit('${p.id}')">
-              <i class="fas fa-edit"></i>
-            </button>
-            <button class="btn btn-sm btn-outline-danger" onclick="window.deletePlayer('${p.id}')">
-              <i class="fas fa-user-slash"></i>
+            <button class="btn btn-sm btn-primary px-3 edit-btn">
+              <i class="fas fa-edit"></i> Editar
             </button>
           </td>
           <td class="no-screen" style="border: 1px solid #000; height: 40px;"></td>
-        </tr>
-      `).join('');
+        `;
+
+        // Asignar el evento click al botón de esta fila específica
+        tr.querySelector('.edit-btn').onclick = () => openEditModal(p);
+        body.appendChild(tr);
+      });
     }
 
-    window.openEdit = (id) => {
-      const p = players.find(x => String(x.id) === String(id));
-      if (p) {
-        const form = document.getElementById('formEdit');
-        form.id.value = p.id;
-        form.nombre.value = p.nombre;
-        form.apellidos.value = p.apellidos;
-        form.numero.value = p.numero;
-        modalEdit.show();
-      }
-    };
+    // FUNCIÓN CLAVE: Abre el modal y LIMPIA los datos viejos con el nuevo objeto 'p'
+    function openEditModal(player) {
+      document.getElementById('formEdit').reset(); // Limpiar rastro anterior
+      document.getElementById('edit_id').value = player.id;
+      document.getElementById('edit_nombre').value = player.nombre;
+      document.getElementById('edit_apellidos').value = player.apellidos;
+      document.getElementById('edit_numero').value = player.numero;
+      modalEdit.show();
+    }
 
-    window.deletePlayer = async (id) => {
-      if (confirm("¿Seguro que desea eliminar/inactivar a este deportista?")) {
-        const { error } = await supabase.from('identificacion').delete().eq('id', id);
-        if (error) alert("Error");
-        else await fetchData();
-      }
-    };
-
-    document.getElementById('formAdd').onsubmit = async (e) => {
-      e.preventDefault();
-      const data = Object.fromEntries(new FormData(e.target));
-      const { error } = await supabase.from('identificacion').insert([data]);
-      if (!error) { e.target.reset(); bootstrap.Modal.getInstance('#modalAdd').hide(); await fetchData(); }
-    };
-
+    // ACTUALIZAR
     document.getElementById('formEdit').onsubmit = async (e) => {
       e.preventDefault();
-      const data = Object.fromEntries(new FormData(e.target));
-      const id = data.id;
-      delete data.id;
-      const { error } = await supabase.from('identificacion').update(data).eq('id', id);
-      if (!error) { modalEdit.hide(); await fetchData(); }
+      const id = document.getElementById('edit_id').value;
+      const updateData = {
+        nombre: document.getElementById('edit_nombre').value,
+        apellidos: document.getElementById('edit_apellidos').value,
+        numero: document.getElementById('edit_numero').value
+      };
+
+      const { error } = await supabase.from('identificacion').update(updateData).eq('id', id);
+
+      if (error) {
+        alert("Error al actualizar: " + error.message);
+      } else {
+        modalEdit.hide();
+        await fetchData(); // Refrescar lista completa
+      }
     };
 
+    // ELIMINAR
+    window.deleteCurrentPlayer = async () => {
+      const id = document.getElementById('edit_id').value;
+      if (confirm("¿Seguro que deseas eliminar a este jugador de la base de datos?")) {
+        const { error } = await supabase.from('identificacion').delete().eq('id', id);
+        if (!error) {
+          modalEdit.hide();
+          await fetchData();
+        }
+      }
+    };
+
+    // Filtros
     document.getElementById('catFilter').onchange = render;
     document.getElementById('nameSearch').oninput = render;
+
+    // Inicio
     window.onload = fetchData;
   </script>
 </body>
