@@ -164,6 +164,7 @@ img {
 }
 
 .card {
+  cursor: pointer;
   border: none;
   border-radius: var(--border-radius-md);
   overflow: hidden;

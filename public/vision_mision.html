@@ -7,114 +7,113 @@
   <link rel="icon" href="images/ESCUDO.ico" type="image/x-icon">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- Bootstrap CSS (versión unificada) -->
+  <!-- Fuentes y CSS Externos -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-
-  <!-- Font Awesome (opcional) -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
-    integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
-    crossorigin="anonymous" referrerpolicy="no-referrer">
-
-  <!-- Animate.css para animaciones -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
-
-  <!-- Hoja de estilos personalizada -->
   <link rel="stylesheet" href="styles/styles.css">
 
-
   <style>
+    :root {
+      --primary-gold: #ffcc00;
+      --dark-bg: #1c1c1c;
+      --soft-gray: #f8f9fa;
+      --transition: all 0.3s ease;
+    }
+
     body {
       font-family: 'Montserrat', sans-serif;
-      background-color: #f4f4f4;
+      background-color: #ffffff;
+      color: #333;
     }
 
-    .navbar {
-      background-color: #1c1c1c;
-    }
-
-    .navbar-brand {
-      color: #ffcc00 !important;
-      font-weight: 700;
-      font-size: 1.5rem;
-    }
-
-    .navbar-nav .nav-link {
-      color: #fff !important;
-      font-weight: 500;
-      margin-right: 15px;
-    }
-
-    .navbar-nav .nav-link:hover {
-      color: #ffcc00 !important;
-    }
-
-    /* Hero */
-    .hero {
-      background-color: #1c1c1c;
-      /* negro */
-      color: #ffcc00;
-      /* dorado */
-      padding: 100px 0 60px;
-      text-align: center;
-    }
-
-    /* Sección patrocinadores */
-    #patrocinadores {
-      padding: 80px 0;
-      background: linear-gradient(180deg, #ffffff 0%, #ffcc00 100%);
-      /* blanco a dorado */
-      color: #1c1c1c;
-      /* negro para el texto */
-    }
-
-    #patrocinadores h2 {
-      font-weight: 700;
+    /* Estilización de Títulos */
+    .section-title {
+      font-weight: 800;
       text-transform: uppercase;
-      letter-spacing: 1px;
-      margin-bottom: 15px;
-    }
-
-    #patrocinadores p {
-      font-size: 1.1rem;
+      position: relative;
+      padding-bottom: 15px;
       margin-bottom: 40px;
-      color: #1c1c1c;
-      /* negro */
     }
 
-    .carousel-item img {
-      max-height: 150px;
-      margin: auto;
-      object-fit: contain;
+    .section-title::after {
+      content: '';
+      position: absolute;
+      width: 80px;
+      height: 4px;
+      background-color: var(--primary-gold);
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
     }
 
-
-    /* Footer */
-    footer {
-      background-color: #1c1c1c;
-      color: #fff;
-      padding: 40px 0;
-      text-align: center;
+    /* Tarjetas de Misión y Visión */
+    .info-card {
+      background: #fff;
+      border: none;
+      border-radius: 15px;
+      padding: 30px;
+      height: 100%;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+      transition: var(--transition);
+      border-bottom: 4px solid transparent;
     }
 
-    footer a {
-      color: #ffcc00;
-      text-decoration: none;
+    .info-card:hover {
+      transform: translateY(-10px);
+      border-bottom: 4px solid var(--primary-gold);
+      box-shadow: 0 15px 40px rgba(0,0,0,0.1);
     }
 
-    footer a:hover {
-      text-decoration: underline;
+    .info-card .icon-box {
+      width: 60px;
+      height: 60px;
+      background: var(--primary-gold);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+      font-size: 1.5rem;
+      color: var(--dark-bg);
     }
 
-    #btnBackToTop {
-      position: fixed;
-      bottom: 30px;
-      right: 30px;
-      z-index: 1000;
-      display: none;
+    /* Lista de Objetivos Mejorada */
+    .objective-item {
+      background: var(--soft-gray);
+      border-left: 5px solid var(--primary-gold);
+      margin-bottom: 10px;
+      padding: 15px 20px;
+      border-radius: 0 10px 10px 0;
+      transition: var(--transition);
+    }
+
+    .objective-item:hover {
+      background: #e9ecef;
+      padding-left: 30px;
+    }
+
+    /* Frase Final */
+    .quote-section {
+      background: var(--dark-bg);
+      color: white;
+      padding: 60px 20px;
+      border-radius: 20px;
+      margin-top: 50px;
+    }
+
+    .quote-text {
+      font-size: 1.5rem;
+      font-style: italic;
+      font-weight: 300;
+    }
+
+    .quote-text span {
+      color: var(--primary-gold);
+      font-weight: 700;
     }
   </style>
-
-
 </head>
 
 <body>
@@ -123,83 +122,92 @@
   <div id="hero-container"></div>
   <div id="patrocinadores-container"></div>
 
-
-
-
-  <section>
-    <!-- CONTENIDO PRINCIPAL -->
-    <div class="container content animate__animated animate__fadeInUp mt-5">
-      <h2 class="text-center mb-4">Club Deportivo D.I.B.A. FBC</h2>
-
-      <p class="lead">
-        El <strong>Club Deportivo D.I.B.A. FBC</strong> es un organismo deportivo adscrito al sistema nacional del
-        deporte,
-        que genera acciones en busca de mejorar la condición de vida de los niños y niñas de Barranquilla
-        a través de la práctica del fútbol.
+  <!-- CONTENIDO PRINCIPAL -->
+  <main class="container py-5 animate__animated animate__fadeIn">
+    
+    <header class="text-center mb-5">
+      <h2 class="section-title">Club Deportivo D.I.B.A. FBC</h2>
+      <p class="lead mx-auto" style="max-width: 800px;">
+        Somos un organismo adscrito al <strong>Sistema Nacional del Deporte</strong>, comprometidos con transformar vidas en Barranquilla a través del fútbol base y la formación integral.
       </p>
+    </header>
 
+    <div class="row g-4 mb-5">
       <!-- Misión -->
-      <h4 class="mt-4">Misión</h4>
-      <p>
-        Velar por la formación integral de los jóvenes deportistas, promoviendo valores de disciplina,
-        trabajo en equipo y respeto, contribuyendo así al desarrollo personal y social de cada uno
-        de nuestros integrantes.
-      </p>
+      <div class="col-md-6 col-lg-4">
+        <div class="info-card">
+          <div class="icon-box"><i class="fas fa-bullseye"></i></div>
+          <h4>Misión</h4>
+          <p class="text-muted">
+            Velar por la formación integral de jóvenes deportistas, promoviendo valores de disciplina, trabajo en equipo y respeto, contribuyendo al desarrollo personal y social de nuestros integrantes.
+          </p>
+        </div>
+      </div>
 
       <!-- Visión -->
-      <h4 class="mt-4">Visión</h4>
-      <p>
-        Ser un club reconocido a nivel regional y nacional por la excelencia deportiva y la gestión
-        administrativa, formando futbolistas y ciudadanos con altos estándares de compromiso,
-        responsabilidad y espíritu competitivo.
-      </p>
+      <div class="col-md-6 col-lg-4">
+        <div class="info-card">
+          <div class="icon-box"><i class="fas fa-eye"></i></div>
+          <h4>Visión</h4>
+          <p class="text-muted">
+            Ser un club referente a nivel regional y nacional por nuestra excelencia deportiva y administrativa, formando ciudadanos con altos estándares de responsabilidad y espíritu competitivo.
+          </p>
+        </div>
+      </div>
 
-      <!-- Objetivo -->
-      <h4 class="mt-4">Objetivo</h4>
-      <p>
-        Desarrollar el proceso de preparación de los deportistas del club, orientado hacia la obtención
-        de logros competitivos y la formación integral. Impulsar el crecimiento del fútbol de base,
-        fortaleciendo la calidad deportiva y humana de cada jugador.
-      </p>
+      <!-- Objetivo General -->
+      <div class="col-md-12 col-lg-4">
+        <div class="info-card">
+          <div class="icon-box"><i class="fas fa-trophy"></i></div>
+          <h4>Objetivo</h4>
+          <p class="text-muted">
+            Consolidar procesos de preparación orientados a logros competitivos y formación humana, fortaleciendo la calidad del fútbol de base en cada categoría.
+          </p>
+        </div>
+      </div>
+    </div>
 
-      <!-- Objetivos Específicos -->
-      <h4 class="mt-4">Objetivos Específicos</h4>
-      <ul class="list-group mb-4">
-        <li class="list-group-item">
-          <i class="fas fa-check-circle text-success me-2"></i>
-          Ampliar la parte de instrucción y preparación física en las diferentes categorías.
-        </li>
-        <li class="list-group-item">
-          <i class="fas fa-check-circle text-success me-2"></i>
-          Desarrollar proyectos formativos que promuevan el sentido de pertenencia y el trabajo en equipo.
-        </li>
-        <li class="list-group-item">
-          <i class="fas fa-check-circle text-success me-2"></i>
-          Involucrar activamente a padres y representantes en las labores de apoyo y motivación.
-        </li>
-        <li class="list-group-item">
-          <i class="fas fa-check-circle text-success me-2"></i>
-          Adaptar la metodología de entrenamiento a las reglamentarias de las ligas locales y nacionales.
-        </li>
-      </ul>
+    <!-- Objetivos Específicos -->
+    <section class="row align-items-center mt-5">
+      <div class="col-lg-6">
+        <h3 class="fw-bold mb-4"><i class="fas fa-list-check me-2 text-warning"></i>Ejes Estratégicos</h3>
+        <div class="objective-item d-flex align-items-center">
+          <i class="fas fa-running me-3 text-warning"></i>
+          <span>Instrucción técnica y preparación física avanzada por categorías.</span>
+        </div>
+        <div class="objective-item d-flex align-items-center">
+          <i class="fas fa-users me-3 text-warning"></i>
+          <span>Fomento del sentido de pertenencia y trabajo colaborativo.</span>
+        </div>
+        <div class="objective-item d-flex align-items-center">
+          <i class="fas fa-hands-helping me-3 text-warning"></i>
+          <span>Vinculación activa de padres en el proceso motivacional.</span>
+        </div>
+        <div class="objective-item d-flex align-items-center">
+          <i class="fas fa-clipboard-check me-3 text-warning"></i>
+          <span>Alineación metodológica con ligas locales y nacionales.</span>
+        </div>
+      </div>
+      <div class="col-lg-6 text-center d-none d-lg-block">
+        <!-- Imagen decorativa o Escudo -->
+        <img src="images/placeholder-soccer.png" alt="Entrenamiento" class="img-fluid rounded-circle shadow" style="max-height: 350px;">
+      </div>
+    </section>
 
-      <p class="text-center fst-italic">
-        “El fútbol no es sólo un deporte, es una escuela de vida que enseña valores y forja el carácter.”
+    <!-- Frase Inspiracional -->
+    <div class="quote-section text-center animate__animated animate__pulse animate__infinite">
+      <p class="quote-text">
+        "El fútbol no es sólo un deporte, es una <span>escuela de vida</span> que enseña valores y forja el carácter."
       </p>
     </div>
-  </section>
 
-  <!-- Contenedor para el Footer (se cargará desde layout/footer.html) -->
+  </main>
+
   <div id="footer-container"></div>
 
-  <!-- Bootstrap JS Bundle (incluye Popper) -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js">
-  </script>
-
-  <!-- Script para cargar componentes externos (Navbar y Footer) -->
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
   <script src="scripts/loadComponents.js"></script>
-
-  <!-- Script principal (funciones y animaciones) -->
   <script src="scripts/main.js"></script>
 </body>
 
