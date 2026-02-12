@@ -26,9 +26,9 @@ document.addEventListener("DOMContentLoaded", function () {
   loadComponent("patrocinadores-container", "layout/patrocinadores.html");
   loadComponent("footer-container", "layout/footer.html");
 
-  /* ================================
-     CARGA DE JUGADORES (CORREGIDO)
-  =================================== */
+  /* ==============================================
+     CARGA DE JUGADORES (ANCHO Y GRID CORREGIDO)
+  ================================================= */
   const playersContainer = document.getElementById("players-container");
   if (playersContainer) {
     const playersData = [
@@ -84,15 +84,17 @@ document.addEventListener("DOMContentLoaded", function () {
 
     categories.forEach((category) => {
       const section = document.createElement("section");
-      section.className = "mb-12";
+      section.className = "mb-12 w-full"; // Asegura el ancho total de la sección
+
       section.innerHTML = `
         <div class="flex items-center mb-6 px-4">
-          <h2 class="text-xl font-bold text-slate-800 uppercase tracking-tight">${category.title}</h2>
+          <h2 class="text-xl font-extrabold text-slate-800 uppercase tracking-tight">${category.title}</h2>
           <div class="flex-grow h-px bg-slate-200 ml-4"></div>
         </div>
       `;
 
       const grid = document.createElement("div");
+      // CORRECCIÓN: grid-cols-2 en móvil para que las tarjetas no se compriman
       grid.className = "grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6 px-4 w-full";
 
       category.players.forEach((playerName) => {
@@ -100,14 +102,21 @@ document.addEventListener("DOMContentLoaded", function () {
         const imageUrl = player ? player.imageUrl : defaultImageUrl;
 
         const card = document.createElement("article");
-        card.className = "bg-white rounded-lg shadow-sm border border-slate-200 overflow-hidden hover:shadow-md transition-all";
+        card.setAttribute("data-aos", "fade-up");
+        // CORRECCIÓN: w-full y altura mínima para que la tarjeta sea rectangular y no una cápsula
+        card.className = "w-full flex flex-col bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden hover:shadow-md transition-all duration-300";
+
         card.innerHTML = `
-          <div class="h-40 sm:h-48 overflow-hidden bg-slate-100">
-            <img src="${imageUrl}" alt="${playerName}" class="w-full h-full object-cover object-top" onerror="this.src='${defaultImageUrl}'">
+          <div class="h-44 sm:h-52 overflow-hidden bg-slate-100">
+            <img src="${imageUrl}" alt="${playerName}" 
+                 class="w-full h-full object-cover object-top hover:scale-105 transition-transform duration-500" 
+                 onerror="this.src='${defaultImageUrl}'">
           </div>
-          <div class="p-2 text-center">
-            <p class="text-[9px] font-bold text-blue-600 uppercase">Diba FBC</p>
-            <h3 class="text-xs font-bold text-slate-800 truncate uppercase">${playerName}</h3>
+          <div class="p-3 text-center bg-white">
+            <p class="text-[10px] font-bold text-blue-600 uppercase mb-1">Diba FBC</p>
+            <h3 class="text-xs font-bold text-slate-800 uppercase leading-tight min-h-[2.5rem] flex items-center justify-center">
+              ${playerName}
+            </h3>
           </div>
         `;
         grid.appendChild(card);
@@ -137,23 +146,22 @@ document.addEventListener("DOMContentLoaded", function () {
 
       data.forEach((goleador) => {
         const item = document.createElement("div");
-        // CORRECCIÓN: Clases de Tailwind en lugar de CSS externo
-        item.className = "flex items-center justify-between p-3 border-b border-slate-100 hover:bg-slate-50";
+        item.className = "flex items-center justify-between p-4 border-b border-slate-100 hover:bg-slate-50 transition-colors";
         item.innerHTML = `
           <div class="flex items-center gap-3">
-            <img src="${goleador.escudo_url || 'images/default_escudo.png'}" class="w-8 h-8 object-contain">
+            <img src="${goleador.escudo_url || 'images/default_escudo.png'}" class="w-10 h-10 object-contain">
             <div>
               <div class="text-sm font-bold text-slate-900">${goleador.nombre_jugador}</div>
               <div class="text-[10px] text-slate-500 uppercase">${goleador.equipo}</div>
             </div>
           </div>
-          <div class="bg-blue-600 text-white font-bold py-1 px-3 rounded-full text-xs">${goleador.goles}</div>
+          <div class="bg-blue-600 text-white font-black py-1 px-4 rounded-full text-xs shadow-sm">${goleador.goles}</div>
         `;
         container.appendChild(item);
       });
     } catch (err) {
       spinner.style.display = "none";
-      container.innerHTML = `<p class="text-center text-red-500 text-sm">Error: ${err.message}</p>`;
+      container.innerHTML = `<p class="text-center text-red-500 text-sm p-4">Error al cargar datos.</p>`;
     }
   }
   cargarYMostrarGoleadores();
