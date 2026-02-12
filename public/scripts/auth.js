@@ -1,79 +1,68 @@
 import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
 
-// 1. Configuración de Supabase
 const SUPABASE_URL = "https://wdnlqfiwuocmmcdowjyw.supabase.co";
-const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."; // Tu Key completa
+const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...";
 const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-// 2. Lógica del Formulario (Se ejecuta solo si existe el formulario en la página)
 document.addEventListener('DOMContentLoaded', () => {
-    const loginForm = document.getElementById('login-form');
-    if (loginForm) {
-        loginForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            
-            const loginButton = document.getElementById('login-button');
-            const spinner = loginButton.querySelector('.spinner');
-            const btnText = loginButton.querySelector('.button-text');
+  const loginForm = document.getElementById('login-form');
+  if (loginForm) {
+    loginForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
 
-            // Estado de carga UI
-            loginButton.disabled = true;
-            spinner?.classList.remove('hidden');
-            if(btnText) btnText.textContent = "Validando...";
+      const loginButton = document.getElementById('login-button');
+      const spinner = loginButton.querySelector('.spinner');
+      const btnText = loginButton.querySelector('.button-text');
 
-            const username = document.getElementById('login-username').value.trim();
-            const password = document.getElementById('login-password').value.trim();
+      loginButton.disabled = true;
+      spinner?.classList.remove('hidden');
+      if (btnText) btnText.textContent = "Validando...";
 
-            try {
-                // Consulta a la tabla 'users'
-                const { data: user, error } = await supabase
-                    .from('users')
-                    .select('id, username, password, role, full_name')
-                    .eq('username', username)
-                    .eq('password', password)
-                    .single();
+      const username = document.getElementById('login-username').value.trim();
+      const password = document.getElementById('login-password').value.trim();
 
-                if (error || !user) throw new Error("Credenciales incorrectas");
+      try {
+        // CAMBIO CLAVE: Se usa 'password_hash' para coincidir con tu tabla 'users'
+        const { data: user, error } = await supabase
+          .from('users')
+          .select('id, username, password_hash, role, full_name')
+          .eq('username', username)
+          .eq('password_hash', password)
+          .single();
 
-                // Guardar sesión
-                localStorage.setItem("usuario", JSON.stringify(user));
+        if (error || !user) throw new Error("Credenciales incorrectas");
 
-                // Redirección inteligente
-                if (user.role === 'admin') {
-                    window.location.href = "GestorDocumental.html";
-                } else {
-                    window.location.href = "MisDocumentos.html";
-                }
+        localStorage.setItem("usuario", JSON.stringify(user));
 
-            } catch (err) {
-                alert("Error: " + err.message);
-                loginButton.disabled = false;
-                spinner?.classList.add('hidden');
-                if(btnText) btnText.textContent = "Iniciar Sesión";
-            }
-        });
-    }
+        if (user.role === 'admin') {
+          window.location.href = "GestorDocumental.html";
+        } else {
+          window.location.href = "MisDocumentos.html";
+        }
+
+      } catch (err) {
+        alert("Error: " + err.message);
+        loginButton.disabled = false;
+        spinner?.classList.add('hidden');
+        if (btnText) btnText.textContent = "Iniciar Sesión";
+      }
+    });
+  }
 });
 
-// 3. Funciones de Protección (Para usar en otras páginas)
 export async function verificarSesion(rolRequerido = null) {
-    const usuarioLocal = JSON.parse(localStorage.getItem("usuario"));
-
-    if (!usuarioLocal) {
-        window.location.href = "login.html";
-        return;
-    }
-
-    if (rolRequerido && usuarioLocal.role !== rolRequerido) {
-        alert("Acceso restringido.");
-        window.location.href = usuarioLocal.role === 'admin' 
-            ? "GestorDocumental.html" 
-            : "MisDocumentos.html";
-    }
+  const usuarioLocal = JSON.parse(localStorage.getItem("usuario"));
+  if (!usuarioLocal) {
+    window.location.href = "login.html";
+    return;
+  }
+  if (rolRequerido && usuarioLocal.role !== rolRequerido) {
+    window.location.href = usuarioLocal.role === 'admin' ? "GestorDocumental.html" : "MisDocumentos.html";
+  }
 }
 
 export async function cerrarSesion() {
-    localStorage.removeItem("usuario");
-    await supabase.auth.signOut();
-    window.location.href = "login.html";
+  localStorage.removeItem("usuario");
+  await supabase.auth.signOut();
+  window.location.href = "login.html";
 }
