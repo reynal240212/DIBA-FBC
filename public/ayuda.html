@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -9,10 +10,7 @@
   <meta name="description" content="Centro de Ayuda y Preguntas Frecuentes del club DIBA FBC" />
   <!-- Open Graph y Twitter -->
   <meta property="og:title" content="Centro de Ayuda - DIBA FBC" />
-  <meta
-    property="og:description"
-    content="Encuentra respuestas a las preguntas más comunes sobre el club DIBA FBC."
-  />
+  <meta property="og:description" content="Encuentra respuestas a las preguntas más comunes sobre el club DIBA FBC." />
   <meta property="og:image" content="https://diba-fbc.vercel.app/images/ESCUDO.png" />
   <meta property="og:url" content="https://diba-fbc.vercel.app/ayuda.html" />
   <meta property="og:type" content="website" />
@@ -22,22 +20,13 @@
   <script src="https://cdn.tailwindcss.com"></script>
 
   <!-- Font Awesome -->
-  <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
-  />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
 
   <!-- Animate.css -->
-  <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
-  />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
 
   <!-- AOS -->
-  <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css"
-  />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" />
 
   <!-- Estilos globales -->
   <link rel="stylesheet" href="styles/styles.css" />
@@ -51,41 +40,28 @@
   <main class="max-w-4xl mx-auto px-4 my-10">
     <h1
       class="text-3xl md:text-4xl font-bold text-center mb-4 flex items-center justify-center gap-3 animate__animated animate__fadeInDown"
-      data-aos="fade-down"
-    >
+      data-aos="fade-down">
       <i class="fas fa-life-ring text-blue-600"></i>
       Centro de Ayuda / FAQs
     </h1>
 
-    <p
-      class="text-center text-slate-600 mb-8 max-w-2xl mx-auto animate__animated animate__fadeInUp"
-      data-aos="fade-up"
-    >
+    <p class="text-center text-slate-600 mb-8 max-w-2xl mx-auto animate__animated animate__fadeInUp" data-aos="fade-up">
       Encuentra aquí respuestas a las preguntas más comunes sobre el club DIBA FBC.
     </p>
 
     <!-- FAQ Accordion -->
-    <section
-      class="space-y-3 animate__animated animate__fadeInUp"
-      id="faqAccordion"
-      data-aos="fade-up"
-    >
+    <section class="space-y-3 animate__animated animate__fadeInUp" id="faqAccordion" data-aos="fade-up">
       <!-- Pregunta 1 -->
       <article class="bg-white rounded-xl shadow-sm border border-slate-200">
-        <button
-          type="button"
+        <button type="button"
           class="w-full flex justify-between items-center px-4 py-3 text-left text-sm md:text-base font-semibold text-slate-800"
-          onclick="toggleFaq('faq1')"
-        >
+          onclick="toggleFaq('faq1')">
           <span>¿Cómo puedo inscribirme al club?</span>
           <span id="icon-faq1" class="text-slate-500 transition-transform">
             <i class="fas fa-chevron-down"></i>
           </span>
         </button>
-        <div
-          id="faq1"
-          class="max-h-0 overflow-hidden transition-all duration-300 ease-in-out"
-        >
+        <div id="faq1" class="max-h-0 overflow-hidden transition-all duration-300 ease-in-out">
           <div class="px-4 pb-4 pt-1 text-sm md:text-base text-slate-700">
             Puedes inscribirte acercándote al
             <strong>Parque La Pradera</strong> durante los entrenamientos
@@ -97,20 +73,15 @@
 
       <!-- Pregunta 2 -->
       <article class="bg-white rounded-xl shadow-sm border border-slate-200">
-        <button
-          type="button"
+        <button type="button"
           class="w-full flex justify-between items-center px-4 py-3 text-left text-sm md:text-base font-semibold text-slate-800"
-          onclick="toggleFaq('faq2')"
-        >
+          onclick="toggleFaq('faq2')">
           <span>¿Cuáles son los horarios de entrenamiento?</span>
           <span id="icon-faq2" class="text-slate-500 transition-transform">
             <i class="fas fa-chevron-down"></i>
           </span>
         </button>
-        <div
-          id="faq2"
-          class="max-h-0 overflow-hidden transition-all duration-300 ease-in-out"
-        >
+        <div id="faq2" class="max-h-0 overflow-hidden transition-all duration-300 ease-in-out">
           <div class="px-4 pb-4 pt-1 text-sm md:text-base text-slate-700 space-y-4">
             <p>
               Los entrenamientos se realizan en diferentes días y horarios según la categoría.
@@ -129,13 +100,8 @@
               <div class="overflow-hidden rounded-xl border border-slate-200 shadow-sm">
                 <iframe
                   src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3916.801711935751!2d-74.84118122607062!3d10.978334455439269!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8ef42cdd367c2453%3A0x401e8f23384cd2a6!2sParque%20La%20Pradera!5e0!3m2!1ses-419!2sco!4v1750282065919!5m2!1ses-419!2sco"
-                  width="100%"
-                  height="350"
-                  style="border:0;"
-                  allowfullscreen=""
-                  loading="lazy"
-                  referrerpolicy="no-referrer-when-downgrade"
-                ></iframe>
+                  width="100%" height="350" style="border:0;" allowfullscreen="" loading="lazy"
+                  referrerpolicy="no-referrer-when-downgrade"></iframe>
               </div>
             </section>
           </div>
@@ -144,20 +110,15 @@
 
       <!-- Pregunta 3 -->
       <article class="bg-white rounded-xl shadow-sm border border-slate-200">
-        <button
-          type="button"
+        <button type="button"
           class="w-full flex justify-between items-center px-4 py-3 text-left text-sm md:text-base font-semibold text-slate-800"
-          onclick="toggleFaq('faq3')"
-        >
+          onclick="toggleFaq('faq3')">
           <span>¿Qué necesito para unirme?</span>
           <span id="icon-faq3" class="text-slate-500 transition-transform">
             <i class="fas fa-chevron-down"></i>
           </span>
         </button>
-        <div
-          id="faq3"
-          class="max-h-0 overflow-hidden transition-all duration-300 ease-in-out"
-        >
+        <div id="faq3" class="max-h-0 overflow-hidden transition-all duration-300 ease-in-out">
           <div class="px-4 pb-4 pt-1 text-sm md:text-base text-slate-700">
             Debes llevar copia del registro de nacimiento, uniforme oficial DIBA FBC
             y cumplir con el pago de inscripción.
@@ -167,20 +128,15 @@
 
       <!-- Pregunta 4 -->
       <article class="bg-white rounded-xl shadow-sm border border-slate-200">
-        <button
-          type="button"
+        <button type="button"
           class="w-full flex justify-between items-center px-4 py-3 text-left text-sm md:text-base font-semibold text-slate-800"
-          onclick="toggleFaq('faq4')"
-        >
+          onclick="toggleFaq('faq4')">
           <span>¿Cómo puedo pagar?</span>
           <span id="icon-faq4" class="text-slate-500 transition-transform">
             <i class="fas fa-chevron-down"></i>
           </span>
         </button>
-        <div
-          id="faq4"
-          class="max-h-0 overflow-hidden transition-all duration-300 ease-in-out"
-        >
+        <div id="faq4" class="max-h-0 overflow-hidden transition-all duration-300 ease-in-out">
           <div class="px-4 pb-4 pt-1 text-sm md:text-base text-slate-700">
             Puedes pagar en efectivo directamente con los responsables del club en el lugar de entrenamiento.
           </div>
@@ -192,11 +148,13 @@
   <!-- Footer -->
   <div id="footer-container"></div>
 
-  <!-- Scripts -->
+  <!-- Scripts propios -->
+  <script src="scripts/navbar.js"></script>
   <script src="scripts/loadComponents.js"></script>
+  <script src="scripts/main.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
   <script>
-    AOS.init();
+    AOS.init({ once: true, duration: 800 });
   </script>
 
   <!-- Lógica simple del accordion -->
@@ -230,5 +188,7 @@
       toggleFaq('faq1');
     });
   </script>
+
 </body>
+
 </html>
