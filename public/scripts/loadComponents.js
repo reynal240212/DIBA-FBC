@@ -2,7 +2,6 @@
    CARGA DE COMPONENTES COMUNES
 =================================== */
 document.addEventListener("DOMContentLoaded", function () {
-  // Función para cargar un componente en un contenedor
   function loadComponent(containerId, filePath, callback) {
     const container = document.getElementById(containerId);
     if (!container) return;
@@ -14,33 +13,22 @@ document.addEventListener("DOMContentLoaded", function () {
       })
       .then((data) => {
         container.innerHTML = data;
-        console.log(`✅ ${filePath} cargado correctamente`);
-        if (typeof callback === "function") {
-          callback();
-        }
+        if (typeof callback === "function") callback();
       })
       .catch((error) => console.error(error));
   }
 
-  // ================================
-  // CARGA DE NAVBAR, HERO, PATROCINADORES Y FOOTER
-  // ================================
+  // Carga de Layout
   loadComponent("navbar-container", "layout/navbar.html", () => {
-    // Inicializar comportamiento del navbar Tailwind (mobile + dropdowns)
-    if (typeof initNavbar === "function") {
-      initNavbar();
-    } else {
-      console.warn("⚠️ initNavbar no está definido. Asegúrate de incluir scripts/navbar.js antes de loadComponents.js");
-    }
+    if (typeof initNavbar === "function") initNavbar();
   });
-
   loadComponent("hero-container", "layout/hero.html");
   loadComponent("patrocinadores-container", "layout/patrocinadores.html");
   loadComponent("footer-container", "layout/footer.html");
 
-  // ================================
-  // CARGA DE CARTAS DE JUGADORES (Tailwind 100%)
-  // ================================
+  /* ================================
+     CARGA DE JUGADORES (CORREGIDO)
+  =================================== */
   const playersContainer = document.getElementById("players-container");
   if (playersContainer) {
     const playersData = [
@@ -83,145 +71,90 @@ document.addEventListener("DOMContentLoaded", function () {
       {
         id: "categoria-2012-2013",
         title: "Categoría 2012/13",
-        players: [
-          "Dilan sanchez", "Juan t", "Dinkol", "Dany", "Miguel",
-          "Rodríguez", "Nelson", "Santiago", "Josept", "Hernández angel",
-          "Oscar", "Yojainer", "Jesus", "Mateo", "Dilan correa", "Estiben Montiel"
-        ]
+        players: ["Dilan sanchez", "Juan t", "Dinkol", "Dany", "Miguel", "Rodríguez", "Nelson", "Santiago", "Josept", "Hernández angel", "Oscar", "Yojainer", "Jesus", "Mateo", "Dilan correa", "Estiben Montiel"]
       },
       {
         id: "categoria-2014-2015-2016",
         title: "Categoría 2014/15/16",
-        players: [
-          "Mario", "Juan Andrés", "Jhoyfran", "Nayareth", "Eliuth",
-          "Abraham", "Rey David", "Santy h", "Santy t", "ISAAC",
-          "Carlos", "Zaid", "Estiben Gomez", "Cristian Marcano", "Yesid Manzano",
-          "Sebastian Castro", "Andrés sierra"
-        ]
+        players: ["Mario", "Juan Andrés", "Jhoyfran", "Nayareth", "Eliuth", "Abraham", "Rey David", "Santy h", "Santy t", "ISAAC", "Carlos", "Zaid", "Estiben Gomez", "Cristian Marcano", "Yesid Manzano", "Sebastian Castro", "Andrés sierra"]
       }
     ];
 
-    const defaultImageUrl =
-      "https://placehold.co/150x150/e2e8f0/000000?text=Jugador";
+    const defaultImageUrl = "https://placehold.co/300x400/e2e8f0/64748b?text=Jugador";
 
     categories.forEach((category) => {
       const section = document.createElement("section");
-      section.id = category.id;
-      section.className = "mb-16 animate__animated animate__fadeIn"; // Animación de entrada
-
-      // Título de la categoría con una línea decorativa
+      section.className = "mb-12";
       section.innerHTML = `
-    <div class="flex items-center mb-8 px-4">
-      <h2 class="text-2xl font-extrabold text-slate-800 uppercase tracking-wider">${category.title}</h2>
-      <div class="flex-grow h-px bg-slate-300 ml-4"></div>
-    </div>
-  `;
+        <div class="flex items-center mb-6 px-4">
+          <h2 class="text-xl font-bold text-slate-800 uppercase tracking-tight">${category.title}</h2>
+          <div class="flex-grow h-px bg-slate-200 ml-4"></div>
+        </div>
+      `;
 
       const grid = document.createElement("div");
-      grid.className = "grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6 px-4";
+      grid.className = "grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 px-4";
 
       category.players.forEach((playerName) => {
-        const player = playersData.find(
-          (p) => p.name.toLowerCase() === playerName.toLowerCase()
-        );
+        const player = playersData.find(p => p.name.toLowerCase() === playerName.toLowerCase());
         const imageUrl = player ? player.imageUrl : defaultImageUrl;
 
-        // Crear el elemento de la tarjeta con clases mejoradas
         const card = document.createElement("article");
-        card.setAttribute("data-aos", "fade-up"); // Integración con AOS
-        card.className = `
-      group relative bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-2xl 
-      transition-all duration-300 border border-slate-100 hover:-translate-y-2
-    `;
-
+        card.className = "bg-white rounded-lg shadow-sm border border-slate-200 overflow-hidden hover:shadow-md transition-all";
         card.innerHTML = `
-      <div class="aspect-[3/4] overflow-hidden bg-slate-200 relative">
-        <img 
-          src="${imageUrl}" 
-          alt="${playerName}" 
-          class="w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-500"
-          onerror="this.src='${defaultImageUrl}'"
-        >
-        <div class="absolute inset-0 bg-gradient-to-t from-slate-900/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-      </div>
-      
-      <div class="p-3 text-center relative bg-white">
-        <p class="text-[11px] font-bold text-blue-600 uppercase tracking-tighter mb-1">Diba FBC</p>
-        <h3 class="text-sm font-bold text-slate-800 leading-tight truncate px-1">
-          ${playerName}
-        </h3>
-      </div>
-    `;
-
+          <div class="h-40 sm:h-48 overflow-hidden bg-slate-100">
+            <img src="${imageUrl}" alt="${playerName}" class="w-full h-full object-cover object-top" onerror="this.src='${defaultImageUrl}'">
+          </div>
+          <div class="p-2 text-center">
+            <p class="text-[9px] font-bold text-blue-600 uppercase">Diba FBC</p>
+            <h3 class="text-xs font-bold text-slate-800 truncate uppercase">${playerName}</h3>
+          </div>
+        `;
         grid.appendChild(card);
       });
-
       section.appendChild(grid);
       playersContainer.appendChild(section);
     });
   }
 
-
-  // ================================
-  // CARGA DE TABLA DE GOLEADORES
-  // ================================
+  /* ================================
+     TABLA DE GOLEADORES (CORREGIDO)
+  =================================== */
   async function cargarYMostrarGoleadores() {
     const container = document.getElementById("goleadores-list");
     const spinner = document.getElementById("loading-goleadores");
-
     if (!container || !spinner) return;
 
-    spinner.style.display = "block";
-
     try {
-      const { createClient } = await import(
-        "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm"
-      );
+      const { createClient } = await import("https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm");
+      const supabase = createClient("https://wdnlqfiwuocmmcdowjyw.supabase.co", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...");
 
-      const supabaseUrl = "https://wdnlqfiwuocmmcdowjyw.supabase.co";
-      const supabaseKey =
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndkbmxxZml3dW9jbW1jZG93anl3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg1MjY1ODAsImV4cCI6MjA2NDEwMjU4MH0.4SCS_NRDIYLQJ1XouqW111BxkMOlwMWOjje9gFTgW_Q";
-
-      const supabase = createClient(supabaseUrl, supabaseKey);
-
-      const { data, error } = await supabase
-        .from("goleadores")
-        .select("*")
-        .order("goles", { ascending: false });
-
+      const { data, error } = await supabase.from("goleadores").select("*").order("goles", { ascending: false });
       if (error) throw error;
 
       spinner.style.display = "none";
       container.innerHTML = "";
 
-      if (data && data.length > 0) {
-        data.forEach((goleador) => {
-          const item = document.createElement("div");
-          item.className = "goleador-item";
-          item.innerHTML = `
-            <div class="player-info">
-              <img src="${goleador.escudo_url || "images/default_escudo.png"}"
-                   alt="Escudo de ${goleador.equipo}" class="escudo">
-              <div>
-                <div class="player-name">${goleador.nombre_jugador}</div>
-                <div class="team-name">${goleador.equipo}</div>
-              </div>
+      data.forEach((goleador) => {
+        const item = document.createElement("div");
+        // CORRECCIÓN: Clases de Tailwind en lugar de CSS externo
+        item.className = "flex items-center justify-between p-3 border-b border-slate-100 hover:bg-slate-50";
+        item.innerHTML = `
+          <div class="flex items-center gap-3">
+            <img src="${goleador.escudo_url || 'images/default_escudo.png'}" class="w-8 h-8 object-contain">
+            <div>
+              <div class="text-sm font-bold text-slate-900">${goleador.nombre_jugador}</div>
+              <div class="text-[10px] text-slate-500 uppercase">${goleador.equipo}</div>
             </div>
-            <div class="goal-count">${goleador.goles}</div>
-          `;
-          container.appendChild(item);
-        });
-      } else {
-        container.innerHTML =
-          '<p class="text-light text-center">No hay datos de goleadores disponibles.</p>';
-      }
-    } catch (error) {
-      console.error("Error al obtener goleadores:", error);
+          </div>
+          <div class="bg-blue-600 text-white font-bold py-1 px-3 rounded-full text-xs">${goleador.goles}</div>
+        `;
+        container.appendChild(item);
+      });
+    } catch (err) {
       spinner.style.display = "none";
-      const msg = error && error.message ? error.message : "Error desconocido";
-      container.innerHTML = `<p class="text-light text-center">Error al cargar datos: ${msg}</p>`;
+      container.innerHTML = `<p class="text-center text-red-500 text-sm">Error: ${err.message}</p>`;
     }
   }
-
   cargarYMostrarGoleadores();
 });
