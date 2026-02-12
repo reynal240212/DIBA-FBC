@@ -2,9 +2,8 @@
    CARGA DE COMPONENTES COMUNES
 =================================== */
 document.addEventListener("DOMContentLoaded", function () {
-
   // Función para cargar un componente en un contenedor
-  function loadComponent(containerId, filePath) {
+  function loadComponent(containerId, filePath, callback) {
     const container = document.getElementById(containerId);
     if (!container) return;
 
@@ -16,28 +15,34 @@ document.addEventListener("DOMContentLoaded", function () {
       .then((data) => {
         container.innerHTML = data;
         console.log(`✅ ${filePath} cargado correctamente`);
+        if (typeof callback === "function") {
+          callback();
+        }
       })
       .catch((error) => console.error(error));
   }
 
-  // Cargar Navbar y Footer
-  loadComponent("navbar-container", "layout/navbar.html");
-  loadComponent("footer-container", "layout/footer.html");
+  // ================================
+  // CARGA DE NAVBAR, HERO, PATROCINADORES Y FOOTER
+  // ================================
+  loadComponent("navbar-container", "layout/navbar.html", () => {
+    // Inicializar comportamiento del navbar Tailwind (mobile + dropdowns)
+    if (typeof initNavbar === "function") {
+      initNavbar();
+    } else {
+      console.warn("⚠️ initNavbar no está definido. Asegúrate de incluir scripts/navbar.js antes de loadComponents.js");
+    }
+  });
+
   loadComponent("hero-container", "layout/hero.html");
   loadComponent("patrocinadores-container", "layout/patrocinadores.html");
-
-  // Ajustar padding del body según altura del navbar fijo
-  const navbar = document.querySelector(".navbar");
-  if (navbar) {
-    document.body.style.paddingTop = navbar.offsetHeight + "px";
-  }
+  loadComponent("footer-container", "layout/footer.html");
 
   // ================================
-  // CARGA DE CARTAS DE JUGADORES
+  // CARGA DE CARTAS DE JUGADORES (Tailwind 100%)
   // ================================
   const playersContainer = document.getElementById("players-container");
   if (playersContainer) {
-
     const playersData = [
       { name: "Dilan sanchez", imageUrl: "images/jugadores/dilan_sanchez.jpg" },
       { name: "Juan t", imageUrl: "images/jugadores/juan_t.jpg" },
@@ -90,90 +95,105 @@ document.addEventListener("DOMContentLoaded", function () {
         players: [
           "Mario", "Juan Andrés", "Jhoyfran", "Nayareth", "Eliuth",
           "Abraham", "Rey David", "Santy h", "Santy t", "ISAAC",
-          "Carlos", "Zaid", "Estiben Gomez", "Cristian Marcano", "Yesid Manzano", "Sebastian Castro", "Andrés sierra"
+          "Carlos", "Zaid", "Estiben Gomez", "Cristian Marcano", "Yesid Manzano",
+          "Sebastian Castro", "Andrés sierra"
         ]
       }
     ];
 
-    const defaultImageUrl = "https://placehold.co/150x150/e2e8f0/000000?text=Jugador";
+    const defaultImageUrl =
+      "https://placehold.co/150x150/e2e8f0/000000?text=Jugador";
 
-    // Crear cartas por categoría
-    categories.forEach(category => {
+    categories.forEach((category) => {
       const section = document.createElement("section");
       section.id = category.id;
+      section.className = "max-w-6xl mx-auto px-4 mb-10";
+
       const heading = document.createElement("h2");
       heading.textContent = category.title;
+      heading.className =
+        "text-2xl font-bold text-slate-900 mb-4 text-center md:text-left";
       section.appendChild(heading);
-      const row = document.createElement("div");
-      row.classList.add("row");
-      category.players.forEach(playerName => {
-        const player = playersData.find(p => p.name.toLowerCase() === playerName.toLowerCase());
+
+      const grid = document.createElement("div");
+      grid.className =
+        "grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4";
+
+      category.players.forEach((playerName) => {
+        const player = playersData.find(
+          (p) => p.name.toLowerCase() === playerName.toLowerCase()
+        );
         const imageUrl = player ? player.imageUrl : defaultImageUrl;
-        const card = document.createElement("div");
-        card.classList.add("card", "m-2");
-        card.style.width = "150px";
+
+        const card = document.createElement("article");
+        card.className =
+          "bg-white rounded-xl shadow-md border border-slate-200 overflow-hidden " +
+          "hover:shadow-lg hover:-translate-y-1 transition transform duration-200";
+
         const img = document.createElement("img");
         img.src = imageUrl;
         img.alt = playerName;
-        img.classList.add("card-img-top");
+        img.className = "w-full h-32 object-cover";
+
         const cardBody = document.createElement("div");
-        cardBody.classList.add("card-body", "p-2", "text-center");
-        cardBody.innerHTML = `<strong style="font-size: 14px;">${playerName}</strong>`;
+        cardBody.className = "px-2 py-2 text-center bg-slate-100";
+
+        const nameEl = document.createElement("p");
+        nameEl.textContent = playerName;
+        nameEl.className = "text-xs font-semibold text-slate-900 leading-tight";
+
+        cardBody.appendChild(nameEl);
         card.appendChild(img);
         card.appendChild(cardBody);
-        row.appendChild(card);
+        grid.appendChild(card);
       });
-      section.appendChild(row);
+
+      section.appendChild(grid);
       playersContainer.appendChild(section);
     });
   }
 
+
   // ================================
-  // --- CÓDIGO AÑADIDO ---
   // CARGA DE TABLA DE GOLEADORES
   // ================================
-
-  // Definimos una función asíncrona para cargar los goleadores
   async function cargarYMostrarGoleadores() {
-    const container = document.getElementById('goleadores-list');
-    const spinner = document.getElementById('loading-goleadores');
+    const container = document.getElementById("goleadores-list");
+    const spinner = document.getElementById("loading-goleadores");
 
-    // Si no estamos en una página con la tabla de goleadores, no hacemos nada.
-    if (!container || !spinner) {
-      return;
-    }
+    if (!container || !spinner) return;
 
-    spinner.style.display = 'block';
+    spinner.style.display = "block";
 
     try {
-      // Importamos dinámicamente el cliente de Supabase y lo creamos.
-      // Esto soluciona el error 'supabase is not defined'.
-      const { createClient } = await import('https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm');
-      const supabaseUrl = 'https://wdnlqfiwuocmmcdowjyw.supabase.co';
-      const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndkbmxxZml3dW9jbW1jZG93anl3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg1MjY1ODAsImV4cCI6MjA2NDEwMjU4MH0.4SCS_NRDIYLQJ1XouqW111BxkMOlwMWOjje9gFTgW_Q';
+      const { createClient } = await import(
+        "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm"
+      );
+
+      const supabaseUrl = "https://wdnlqfiwuocmmcdowjyw.supabase.co";
+      const supabaseKey =
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndkbmxxZml3dW9jbW1jZG93anl3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg1MjY1ODAsImV4cCI6MjA2NDEwMjU4MH0.4SCS_NRDIYLQJ1XouqW111BxkMOlwMWOjje9gFTgW_Q";
+
       const supabase = createClient(supabaseUrl, supabaseKey);
 
-      // Obtenemos los datos de la tabla 'goleadores'
       const { data, error } = await supabase
-        .from('goleadores')
-        .select('*')
-        .order('goles', { ascending: false });
+        .from("goleadores")
+        .select("*")
+        .order("goles", { ascending: false });
 
-      if (error) {
-        throw error; // Si hay un error, lo lanzamos para que lo capture el 'catch'
-      }
+      if (error) throw error;
 
-      spinner.style.display = 'none';
-      container.innerHTML = ''; // Limpiamos el spinner
+      spinner.style.display = "none";
+      container.innerHTML = "";
 
-      if (data.length > 0) {
-        // Si hay datos, los mostramos
-        data.forEach(goleador => {
-          const item = document.createElement('div');
-          item.className = 'goleador-item';
+      if (data && data.length > 0) {
+        data.forEach((goleador) => {
+          const item = document.createElement("div");
+          item.className = "goleador-item";
           item.innerHTML = `
             <div class="player-info">
-              <img src="${goleador.escudo_url || 'images/default_escudo.png'}" alt="Escudo de ${goleador.equipo}" class="escudo">
+              <img src="${goleador.escudo_url || "images/default_escudo.png"}"
+                   alt="Escudo de ${goleador.equipo}" class="escudo">
               <div>
                 <div class="player-name">${goleador.nombre_jugador}</div>
                 <div class="team-name">${goleador.equipo}</div>
@@ -184,18 +204,16 @@ document.addEventListener("DOMContentLoaded", function () {
           container.appendChild(item);
         });
       } else {
-        // Si no hay datos, mostramos un mensaje
-        container.innerHTML = '<p class="text-light text-center">No hay datos de goleadores disponibles.</p>';
+        container.innerHTML =
+          '<p class="text-light text-center">No hay datos de goleadores disponibles.</p>';
       }
     } catch (error) {
-      console.error('Error al obtener goleadores:', error);
-      spinner.style.display = 'none';
-      container.innerHTML = `<p class="text-light text-center">Error al cargar datos: ${error.message}</p>`;
+      console.error("Error al obtener goleadores:", error);
+      spinner.style.display = "none";
+      const msg = error && error.message ? error.message : "Error desconocido";
+      container.innerHTML = `<p class="text-light text-center">Error al cargar datos: ${msg}</p>`;
     }
   }
 
-  // Llamamos a la función para que se ejecute
   cargarYMostrarGoleadores();
-  
-  
 });

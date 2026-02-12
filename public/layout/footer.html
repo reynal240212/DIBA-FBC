@@ -1,60 +1,83 @@
-<!-- Footer -->
-<footer class="footer">
+<footer class="bg-slate-900 text-slate-100 pt-10 pb-6 mt-12">
   <!-- Redes Sociales -->
-  <div class="social-top">
-    <h5>Síguenos en las redes sociales</h5>
-    <div class="social-cards">
-      <a href="https://www.facebook.com/share/1BstQ1tQXQ/" class="social-card facebook">
-        <i class="fab fa-facebook-f"></i>
-        <span>DIBA FBC</span>
-      </a>
-      <a href="https://www.instagram.com/dibafbc?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" class="social-card instagram">
-        <i class="fab fa-instagram"></i>
-        <span>@dibafbc</span>
-      </a>
+  <div class="max-w-6xl mx-auto px-4">
+    <div class="text-center mb-8">
+      <h5 class="text-lg font-semibold mb-4">
+        Síguenos en las redes sociales
+      </h5>
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+        <a
+          href="https://www.facebook.com/share/1BstQ1tQXQ/"
+          target="_blank" rel="noopener noreferrer"
+          class="flex items-center gap-3 px-5 py-3 rounded-lg bg-slate-800 hover:bg-slate-700
+                 text-slate-50 text-sm font-semibold shadow transition"
+        >
+          <i class="fab fa-facebook-f text-blue-400"></i>
+          <span>DIBA FBC</span>
+        </a>
+        <a
+          href="https://www.instagram.com/dibafbc?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw=="
+          target="_blank" rel="noopener noreferrer"
+          class="flex items-center gap-3 px-5 py-3 rounded-lg bg-slate-800 hover:bg-slate-700
+                 text-slate-50 text-sm font-semibold shadow transition"
+        >
+          <i class="fab fa-instagram text-pink-400"></i>
+          <span>@dibafbc</span>
+        </a>
+      </div>
     </div>
-  </div>
 
-  <!-- Enlaces -->
-  <div class="footer-links">
-    <div>
-      <h6>Sobre el Club</h6>
-      <ul>
-        <li><a href="aviso.legal.html">Aviso Legal</a></li>
-        <li><a href="politica.privacidad.html">Política de Privacidad</a></li>
-        <li><a href="cookies.html">Política de Cookies</a></li>
-        <li><a href="accesibilidad.html">Accesibilidad</a></li>
-        <li><a href="contacto.html">Contáctenos</a></li>
-        <li><a href="ayuda.html">Centro de Ayuda / FAQs</a></li>
-        <li><a href="consentimiento.html">Gestión del Consentimiento</a></li>
-        <li><a href="opciones.html">Consent Choices</a></li>
-      </ul>
-    </div>
-    <div>
-      <h6>Club</h6>
-      <ul>
-        <li><a href="Historia.html">Historia</a></li>
-        <li><a href="escudo.html">Escudo</a></li>
-        <li><a href="#">Himno</a></li>
-        <li><a href="cuerpoTecnico.html">Equipo Técnico</a></li>
-      </ul>
-    </div>
-  </div>
+    <!-- Enlaces -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 border-t border-slate-800 pt-8">
+      <div>
+        <h6 class="text-sm font-semibold mb-3 uppercase tracking-wide text-slate-300">
+          Sobre el Club
+        </h6>
+        <ul class="space-y-1 text-sm">
+          <li><a href="aviso.legal.html" class="hover:text-amber-400 transition">Aviso Legal</a></li>
+          <li><a href="politica.privacidad.html" class="hover:text-amber-400 transition">Política de Privacidad</a></li>
+          <li><a href="cookies.html" class="hover:text-amber-400 transition">Política de Cookies</a></li>
+          <li><a href="accesibilidad.html" class="hover:text-amber-400 transition">Accesibilidad</a></li>
+          <li><a href="contacto.html" class="hover:text-amber-400 transition">Contáctenos</a></li>
+          <li><a href="ayuda.html" class="hover:text-amber-400 transition">Centro de Ayuda / FAQs</a></li>
+          <li><a href="consentimiento.html" class="hover:text-amber-400 transition">Gestión del Consentimiento</a></li>
+          <li><a href="opciones.html" class="hover:text-amber-400 transition">Consent Choices</a></li>
+        </ul>
+      </div>
 
-  <!-- Footer Inferior -->
-  <div class="footer-bottom">
-    <div class="footer-logo">
-      <img src="images/ESCUDO.png" alt="DIBA FBC">
-      <span>DIBA FBC</span>
+      <div>
+        <h6 class="text-sm font-semibold mb-3 uppercase tracking-wide text-slate-300">
+          Club
+        </h6>
+        <ul class="space-y-1 text-sm">
+          <li><a href="Historia.html" class="hover:text-amber-400 transition">Historia</a></li>
+          <li><a href="escudo.html" class="hover:text-amber-400 transition">Escudo</a></li>
+          <li><a href="#" class="hover:text-amber-400 transition">Himno</a></li>
+          <li><a href="cuerpoTecnico.html" class="hover:text-amber-400 transition">Equipo Técnico</a></li>
+        </ul>
+      </div>
     </div>
-    <p>© 2025 DIBA FBC. Todos los derechos reservados.</p>
-    <div class="legal-links">
-      <a href="aviso.legal.html">Términos legales</a>
-      <a href="politica.privacidad.html">Política de Privacidad</a>
-      <a href="cookies.html">Cookies</a>
-      <a href="accesibilidad.html">Accesibilidad</a>
+
+    <!-- Footer Inferior -->
+    <div class="mt-8 pt-6 border-t border-slate-800 flex flex-col md:flex-row items-center justify-between gap-4 text-xs md:text-sm">
+      <div class="flex items-center gap-2">
+        <img src="images/ESCUDO.png" alt="DIBA FBC" class="h-8 w-auto" />
+        <span class="font-semibold">DIBA FBC</span>
+      </div>
+
+      <p class="text-slate-400 text-center md:text-left">
+        © 2025 DIBA FBC. Todos los derechos reservados.
+      </p>
+
+      <div class="flex flex-wrap items-center justify-center gap-3 text-slate-400">
+        <a href="aviso.legal.html" class="hover:text-amber-400 transition">Términos legales</a>
+        <span class="hidden md:inline">•</span>
+        <a href="politica.privacidad.html" class="hover:text-amber-400 transition">Política de Privacidad</a>
+        <span class="hidden md:inline">•</span>
+        <a href="cookies.html" class="hover:text-amber-400 transition">Cookies</a>
+        <span class="hidden md:inline">•</span>
+        <a href="accesibilidad.html" class="hover:text-amber-400 transition">Accesibilidad</a>
+      </div>
     </div>
   </div>
 </footer>
-
-  

@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
   <meta charset="UTF-8" />
   <title>DIBA FBC | Inicio, Historia y Patrocinadores</title>
@@ -16,114 +15,44 @@
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="DIBA FBC | Inicio, Historia y Patrocinadores" />
   <meta name="twitter:description"
-    content="Club de fútbol amateur en Barranquilla. Conoce nuestro equipo y patrocinadores." />
+        content="Club de fútbol amateur en Barranquilla. Conoce nuestro equipo y patrocinadores." />
   <meta name="twitter:image" content="https://diba-fbc.vercel.app/images/ESCUDO.png" />
 
-  <!-- Fonts y CSS -->
+  <!-- Fonts y librerías extra -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" />
-  <link rel="stylesheet" href="styles/styles.css" />
-  <link rel="stylesheet" href="styles/background-animation.css" />
   <link rel="manifest" href="manifest.json" />
 
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    body {
+      font-family: 'Montserrat', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    }
+
+    @keyframes fadeInUpSoft {
+      from {
+        opacity: 0;
+        transform: translateY(16px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .animate-fade-in-soft {
+      animation: fadeInUpSoft 0.9s ease-out forwards;
+    }
+  </style>
 </head>
 
-<style>
-  .card-image-section {
-    border: none;
-    overflow: hidden;
-  }
-
-  .card-body-content {
-    padding: 2rem;
-  }
-
-  /* Estilos para las tarjetas de imagen */
-  .image-card {
-    position: relative;
-    border-radius: 0.75rem;
-    /* Bordes redondeados */
-    overflow: hidden;
-    height: 350px;
-    /* Altura fija para las tarjetas de imagen */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    /* Sombra sutil */
-    transition: transform 0.3s ease-in-out;
-    /* Transición para el hover */
-  }
-
-  .image-card:hover {
-    transform: translateY(-5px);
-    /* Efecto de elevación al pasar el ratón */
-  }
-
-  .image-card img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    /* Cubrir el área sin distorsionar */
-    filter: brightness(0.8);
-    /* Oscurecer un poco la imagen para que el texto resalte */
-  }
-
-  .image-card-overlay {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    padding: 1.5rem;
-    color: white;
-    /* Degradado de abajo hacia arriba */
-    background: linear-gradient(to top, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0) 100%);
-  }
-
-  .image-card-title {
-    font-size: 1.5rem;
-    font-weight: bold;
-    margin-bottom: 0.5rem;
-  }
-
-  .image-card-subtitle {
-    font-size: 0.9rem;
-    opacity: 0.8;
-  }
-
-  /* Animación de entrada suave (fade-in) para el texto y las imágenes */
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  .animate-fade-in {
-    animation: fadeIn 1s ease-out forwards;
-  }
-
-  .text-center-desktop {
-    text-align: center;
-  }
-
-  @media (min-width: 992px) {
-
-    /* breakpoint de desktop */
-    .text-center-desktop {
-      text-align: left;
-    }
-  }
-</style>
-
-<body>
+<body class="bg-slate-50 text-slate-900">
   <!-- Service Worker -->
   <script>
     if ('serviceWorker' in navigator) {
@@ -132,246 +61,306 @@
         .catch(err => console.error("Error registrando SW:", err));
     }
   </script>
+
+  <!-- Layout principal (navbar/hero/patrocinadores cargados por JS) -->
   <div id="navbar-container"></div>
   <div id="hero-container"></div>
   <div id="patrocinadores-container"></div>
 
+  <!-- Sección Noticias -->
+  <section id="noticias" class="py-14">
+    <div class="max-w-6xl mx-auto px-4">
+      <header class="text-center mb-10">
+        <p class="text-xs font-semibold tracking-[0.2em] text-blue-600 uppercase mb-2">
+          Actualidad
+        </p>
+        <h2 class="text-3xl md:text-4xl font-bold text-slate-900 tracking-tight">
+          Noticias del Club
+        </h2>
+        <p class="mt-3 text-sm md:text-base text-slate-600 max-w-xl mx-auto">
+          Lo más reciente sobre nuestra indumentaria, símbolos y novedades de DIBA FBC.
+        </p>
+      </header>
 
-  </div>
-  </div>
-  </section>
-  <section id="noticias">
-  <div class="container my-5">
-    <h2 class="text-center fw-bold mb-4">Noticias</h2>
-    <div class="row g-4">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Tarjeta 5 -->
+        <a
+          href="noticias.html#jugador10"
+          class="group block rounded-2xl overflow-hidden bg-slate-900/90 relative shadow-md shadow-slate-900/30
+                 ring-1 ring-slate-800/80 hover:ring-blue-500/80 transition-all duration-300 animate-fade-in-soft"
+        >
+          <div class="relative h-80">
+            <img
+              src="images/Jugador10Indumentaria.jpg"
+              alt="Jugador 10 con indumentaria oficial de DIBA FBC"
+              class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105 brightness-95"
+            />
+            <div class="absolute inset-x-0 bottom-0 p-4 bg-gradient-to-t from-black/80 via-black/40 to-transparent">
+              <h3 class="text-lg font-semibold text-white drop-shadow-sm">
+                Jugador 10
+              </h3>
+              <p class="mt-1 text-xs text-slate-100/85">
+                Nuestro talento luciendo la indumentaria oficial del club.
+              </p>
+            </div>
+          </div>
+        </a>
 
-      <!-- Tarjeta 1
-      <div class="col-12 col-sm-6 col-lg-4">
-        <a href="Noticias.html#partido-eliminacion" class="text-decoration-none">
-          <div class="position-relative image-card animate-fade-in h-100">
-            <img src="images/kidssoccer.png" alt="Partido Eliminación" class="img-fluid rounded-3 shadow w-100">
-            <div class="position-absolute bottom-0 start-0 end-0 p-3 bg-dark bg-opacity-75 rounded-bottom">
-              <h3 class="h5 fw-bold text-white text-shadow">Partido de Eliminación</h3>
-              <p class="mb-0 text-light small">
-                Nuestros jugadores de la categoría 2014/15 afrontan un partido clave de eliminación en el torneo KIDSSOCCER.
+        <!-- Tarjeta 6 -->
+        <a
+          href="noticias.html#jugador10-tras"
+          class="group block rounded-2xl overflow-hidden bg-slate-900/90 relative shadow-md shadow-slate-900/30
+                 ring-1 ring-slate-800/80 hover:ring-blue-500/80 transition-all duration-300 animate-fade-in-soft"
+        >
+          <div class="relative h-80">
+            <img
+              src="images/Jugador10Atrasindumentaria.jpg"
+              alt="Vista trasera de la indumentaria oficial de DIBA FBC"
+              class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105 brightness-95"
+            />
+            <div class="absolute inset-x-0 bottom-0 p-4 bg-gradient-to-t from-black/80 via-black/40 to-transparent">
+              <h3 class="text-lg font-semibold text-white drop-shadow-sm">
+                Jugador 10 - Vista Trasera
+              </h3>
+              <p class="mt-1 text-xs text-slate-100/85">
+                Detalle de la espalda del uniforme oficial, con número y escudo.
+              </p>
+            </div>
+          </div>
+        </a>
+
+        <!-- Tarjeta 7 - Bandera de DIBA -->
+        <a
+          href="noticias.html#bandera"
+          class="group block rounded-2xl overflow-hidden bg-slate-900/90 relative shadow-md shadow-slate-900/30
+                 ring-1 ring-slate-800/80 hover:ring-blue-500/80 transition-all duration-300 animate-fade-in-soft"
+        >
+          <div class="relative h-80">
+            <img
+              src="images/Bandera.jpg"
+              alt="Bandera oficial de DIBA FBC"
+              class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105 brightness-95"
+            />
+            <div class="absolute inset-x-0 bottom-0 p-4 bg-gradient-to-t from-black/80 via-black/40 to-transparent">
+              <h3 class="text-lg font-semibold text-white drop-shadow-sm">
+                Bandera de DIBA
+              </h3>
+              <p class="mt-1 text-xs text-slate-100/85">
+                Símbolo de identidad, unión y orgullo para toda la familia DIBA.
               </p>
             </div>
           </div>
         </a>
       </div>
 
-      Tarjeta con video
-      <div class="col-12 col-sm-6 col-lg-4">
-        <a href="Noticias.html#dia-partido" class="text-decoration-none">
-          <div class="position-relative image-card animate-fade-in h-100">
-            <video class="img-fluid rounded-3 shadow w-100" autoplay loop muted playsinline>
-              <source src="video/diba_ocam.mp4" type="video/mp4">
-              Tu navegador no soporta videos HTML5.
-            </video>
-            <div class="position-absolute bottom-0 start-0 end-0 p-3 bg-dark bg-opacity-75 rounded-bottom">
-              <h3 class="h5 fw-bold text-white">Día de Partido – Semifinal Categoría 2012</h3>
-              <p class="mb-0 text-light small">La emoción del juego en cada momento.</p>
-            </div>
-          </div>
+      <div class="mt-10 flex justify-center">
+        <a
+          href="Noticias.html"
+          class="inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-full
+                 bg-blue-600 text-white text-sm font-semibold shadow-sm shadow-blue-500/40
+                 hover:bg-blue-700 focus:outline-none focus:ring-2
+                 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-slate-50
+                 transition-colors"
+        >
+          Ver todas las noticias
+          <i class="fas fa-arrow-right text-xs"></i>
         </a>
       </div>
-
-      Tarjeta 3
-      <div class="col-12 col-sm-6 col-lg-4">
-        <a href="Noticias.html#goleador-dylan" class="text-decoration-none">
-          <div class="position-relative image-card animate-fade-in h-100">
-            <img src="images/jugadores/dyaln sanchez.jpg" alt="Goleador Dylan Sánchez" class="img-fluid rounded-3 shadow w-100">
-            <div class="position-absolute bottom-0 start-0 end-0 p-3 bg-dark bg-opacity-75 rounded-bottom">
-              <h3 class="h5 fw-bold text-white">Dylan Sánchez – Categoría 2012</h3>
-              <p class="mb-0 text-light small">Nuestro goleador se prepara para dejar huella en la cancha.</p>
-            </div>
-          </div>
-        </a>
-      </div>
-
-       Tarjeta 4 
-      <div class="col-12 col-sm-6 col-lg-4">
-        <a href="Noticias.html#goleador-yesid" class="text-decoration-none">
-          <div class="position-relative image-card animate-fade-in h-100">
-            <img src="images/jugadores/yesid.jpg" alt="Yesid Categoría 2014" class="img-fluid rounded-3 shadow w-100">
-            <div class="position-absolute bottom-0 start-0 end-0 p-3 bg-dark bg-opacity-75 rounded-bottom">
-              <h3 class="h5 fw-bold text-white">Yesid – Categoría 2014</h3>
-              <p class="mb-0 text-light small">Nuestro goleador se prepara para dejar huella en la cancha.</p>
-            </div>
-          </div>
-        </a>
-      </div> -->
-
-        <!-- Tarjeta 5 -->
-        <div class="col-12 col-sm-6 col-lg-4">
-          <a href="noticias.html#jugador10" class="text-decoration-none">
-            <div class="position-relative image-card animate-fade-in h-100">
-              <img src="images/Jugador10Indumentaria.jpg" alt="Jugador 10 Indumentaria" class="img-fluid rounded-3 shadow w-100">
-              <div class="position-absolute bottom-0 start-0 end-0 p-3 bg-dark bg-opacity-75 rounded-bottom">
-                <h3 class="h5 fw-bold text-white text-shadow">Jugador 10</h3>
-                <p class="mb-0 text-light small">Nuestro talento en indumentaria oficial.</p>
-              </div>
-            </div>
-          </a>
-        </div>
-                <!-- Tarjeta 6 -->
-        <div class="col-12 col-sm-6 col-lg-4">
-          <a href="noticias.html#jugador10-tras" class="text-decoration-none">
-            <div class="position-relative image-card animate-fade-in h-100">
-              <img src="images/Jugador10Atrasindumentaria.jpg" alt="Jugador 10 Trasera Indumentaria" class="img-fluid rounded-3 shadow w-100">
-              <div class="position-absolute bottom-0 start-0 end-0 p-3 bg-dark bg-opacity-75 rounded-bottom">
-                <h3 class="h5 fw-bold text-white text-shadow">Jugador 10 - Vista Trasera</h3>
-                <p class="mb-0 text-light small">Detalles de nuestro uniforme oficial desde atrás.</p>
-              </div>
-            </div>
-          </a>
-        </div>
-                <!-- Tarjeta 7 - Bandera de DIBA -->
-        <div class="col-12 col-sm-6 col-lg-4">
-          <a href="noticias.html#bandera" class="text-decoration-none">
-            <div class="position-relative image-card animate-fade-in h-100">
-              <img src="images/Bandera.jpg" alt="Bandera de DIBA FBC" class="img-fluid rounded-3 shadow w-100">
-              <div class="position-absolute bottom-0 start-0 end-0 p-3 bg-dark bg-opacity-75 rounded-bottom">
-                <h3 class="h5 fw-bold text-white text-shadow">Bandera de DIBA</h3>
-                <p class="mb-0 text-light small">Súmbolo de identidad y orgullo de nuestra institución.</p>
-              </div>
-            </div>
-          </a>
-        </div>
-      
-
     </div>
-    <button class=""></button> <a href="Noticias.html" class="btn btn-primary mt-4">Ver todas las noticias</a>
-  </div>
-</section>
-
-
+  </section>
 
   <!-- Sección Servicios -->
-  <section id="servicios" class="container my-5 animate__animated animate__fadeInUp">
-    <h2 class="text-center fw-bold mb-4">Nuestros Servicios</h2>
-    <div class="row row-cols-1 row-cols-md-3 g-4 mt-4">
-      <div class="col">
-        <div class="card h-100 shadow text-center">
-          <div class="card-body py-4">
-            <i class="fas fa-dumbbell fa-2x mb-3"></i>
-            <h5 class="card-title fw-semibold">Entrenamiento Profesional</h5>
-            <p class="card-text">Programas de preparación física y técnica para potenciar el rendimiento.</p>
-          </div>
+  <section id="servicios" class="py-14 bg-white">
+    <div class="max-w-6xl mx-auto px-4">
+      <header class="text-center mb-10">
+        <p class="text-xs font-semibold tracking-[0.2em] text-blue-600 uppercase mb-2">
+          Lo que ofrecemos
+        </p>
+        <h2 class="text-3xl md:text-4xl font-bold text-slate-900">
+          Nuestros Servicios
+        </h2>
+        <p class="mt-3 text-sm md:text-base text-slate-600 max-w-xl mx-auto">
+          Formación integral para jugadores, con enfoque en rendimiento deportivo y valores humanos.
+        </p>
+      </header>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-4">
+        <div class="bg-slate-900 text-slate-50 rounded-2xl shadow-md shadow-slate-900/30 p-8 flex flex-col items-center text-center">
+          <span class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-slate-800 mb-4">
+            <i class="fas fa-dumbbell text-xl"></i>
+          </span>
+          <h3 class="text-lg font-semibold mb-2">Entrenamiento Profesional</h3>
+          <p class="text-sm text-slate-200">
+            Programas de preparación física y técnica diseñados para potenciar el rendimiento de cada jugador.
+          </p>
         </div>
-      </div>
-      <div class="col">
-        <div class="card h-100 shadow text-center">
-          <div class="card-body py-4">
-            <i class="fas fa-trophy fa-2x mb-3 text-warning"></i>
-            <h5 class="card-title">Participación en Torneos</h5>
-            <p class="card-text">Representamos a nuestra comunidad en torneos locales con espíritu deportivo.</p>
-          </div>
+
+        <div class="bg-white rounded-2xl shadow-md p-8 flex flex-col items-center text-center border border-slate-100">
+          <span class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-amber-100 mb-4">
+            <i class="fas fa-trophy text-xl text-amber-500"></i>
+          </span>
+          <h3 class="text-lg font-semibold mb-2">Participación en Torneos</h3>
+          <p class="text-sm text-slate-600">
+            Representamos a nuestra comunidad en torneos locales con disciplina, respeto y espíritu deportivo.
+          </p>
         </div>
-      </div>
-      <div class="col">
-        <div class="card h-100 shadow text-center">
-          <div class="card-body py-4">
-            <i class="fas fa-users fa-2x mb-3 text-success"></i>
-            <h5 class="card-title">Desarrollo Integral</h5>
-            <p class="card-text">Fomentamos valores y liderazgo dentro y fuera del campo.</p>
-          </div>
+
+        <div class="bg-white rounded-2xl shadow-md p-8 flex flex-col items-center text-center border border-slate-100">
+          <span class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-emerald-100 mb-4">
+            <i class="fas fa-users text-xl text-emerald-500"></i>
+          </span>
+          <h3 class="text-lg font-semibold mb-2">Desarrollo Integral</h3>
+          <p class="text-sm text-slate-600">
+            Fomentamos valores, compañerismo y liderazgo dentro y fuera de la cancha.
+          </p>
         </div>
       </div>
     </div>
   </section>
 
   <!-- Sección Equipo -->
-  <section id="equipo" class="container my-5 animate__animated animate__fadeInUp">
-    <h2 class="text-center mb-4">Cuerpo Técnico</h2>
-    <div class="row justify-content-center g-4">
-      <div class="col-md-4">
-        <div class="card h-100 text-center shadow">
-          <img src="images/profesor.jpg" class="card-img-top rounded-circle mx-auto mt-4"
-            style="width: 140px; height: 140px; object-fit: cover;" />
-          <div class="card-body">
-            <h5 class="card-title">Reinaldo Perez</h5>
-            <p class="card-text">Director Técnico y deportivo</p>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-4">
-        <div class="card h-100 text-center shadow">
-          <img src="images/reinaldoNavas.png" class="card-img-top rounded-circle mx-auto mt-4"
-            style="width: 140px; height: 140px; object-fit: cover;" />
-          <div class="card-body">
-            <h5 class="card-title">Reinaldo Perez Navas</h5>
-            <p class="card-text">Asistente Técnico / Desarrollador de software</p>
-          </div>
-        </div>
-      </div>
-    
-  </section>
-  <section class="indumentaria-seccion py-5">
-    <div class="container-xl">
-      <div class="row text-center mb-5">
-        <div class="col-12">
-          <h2 class="display-4 fw-bold text-uppercase">Nuestra Indumentaria</h2>
-          <p class="lead text-muted">Conoce las camisetas oficiales que visten a nuestros campeones en cada partido.
-          </p>
-        </div>
-      </div>
-      <div class="row align-items-center justify-content-center g-4">
+  <section id="equipo" class="py-14 bg-slate-100">
+    <div class="max-w-4xl mx-auto px-4">
+      <header class="text-center mb-10">
+        <p class="text-xs font-semibold tracking-[0.2em] text-blue-600 uppercase mb-2">
+          Staff
+        </p>
+        <h2 class="text-3xl md:text-4xl font-bold text-slate-900">
+          Cuerpo Técnico
+        </h2>
+        <p class="mt-3 text-sm md:text-base text-slate-600 max-w-lg mx-auto">
+          Profesionales que lideran el proyecto deportivo y formativo de DIBA FBC.
+        </p>
+      </header>
 
-        <div class="col-12 col-md-6 text-center">
-          <img src="images/DIBA_UNIFORMEHOMENAJE A BARRANQUILLA.jpg" class="img-fluid rounded-3 shadow-lg"
-            alt="Indumentaria oficial de local de DIBA FBC">
-        </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 justify-items-center">
+        <article class="bg-white rounded-2xl shadow-md p-6 w-full max-w-sm text-center border border-slate-100">
+          <img
+            src="images/profesor.jpg"
+            alt="Director Técnico de DIBA FBC"
+            class="w-28 h-28 rounded-full object-cover mx-auto mt-2 mb-4 ring-2 ring-blue-500/60"
+          />
+          <h3 class="text-lg font-semibold">Reinaldo Perez</h3>
+          <p class="text-sm text-slate-600 mt-1">Director Técnico y Deportivo</p>
+        </article>
 
-        <div class="col-12 col-md-6 text-center text-md-start">
-          <h3 class="fw-bold mb-3">La Piel de los Campeones</h3>
-          <p class="text-muted mb-4">
-            La indumentaria de DIBA FBC es más que una camiseta: es un símbolo de identidad y pasión. El diseño, en
-            tonos azules, representa la disciplina y la seriedad con la que afrontamos cada desafío. Confeccionada con
-            tecnología de última generación, garantiza comodidad y rendimiento en la cancha, mientras que los escudos
-            del club y los patrocinadores reflejan nuestro compromiso con la comunidad.
-          </p>
-          <p class="text-muted">
-            Cada costura cuenta una historia de esfuerzo y dedicación, desde los barrios de Barranquilla hasta las
-            victorias más gloriosas.
-          </p>
-        </div>
-
+        <article class="bg-white rounded-2xl shadow-md p-6 w-full max-w-sm text-center border border-slate-100">
+          <img
+            src="images/reinaldoNavas.png"
+            alt="Asistente Técnico de DIBA FBC"
+            class="w-28 h-28 rounded-full object-cover mx-auto mt-2 mb-4 ring-2 ring-blue-500/60"
+          />
+          <h3 class="text-lg font-semibold">Reinaldo Perez Navas</h3>
+          <p class="text-sm text-slate-600 mt-1">Asistente Técnico / Desarrollador de software</p>
+        </article>
       </div>
     </div>
-  </section>>
+  </section>
+
+  <!-- Sección Indumentaria -->
+  <section class="py-14 bg-white">
+    <div class="max-w-6xl mx-auto px-4">
+      <div class="text-center mb-10">
+        <p class="text-xs font-semibold tracking-[0.2em] text-blue-600 uppercase mb-2">
+          Uniforme oficial
+        </p>
+        <h2 class="text-3xl md:text-4xl font-bold uppercase tracking-wide text-slate-900">
+          Nuestra Indumentaria
+        </h2>
+        <p class="mt-4 text-base md:text-lg text-slate-600 max-w-2xl mx-auto">
+          Conoce las camisetas oficiales que visten a nuestros jugadores en cada compromiso.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+        <div class="flex justify-center">
+          <img
+            src="images/DIBA_UNIFORMEHOMENAJE A BARRANQUILLA.jpg"
+            class="max-w-md w-full rounded-2xl shadow-lg shadow-slate-900/20"
+            alt="Indumentaria oficial de local de DIBA FBC"
+          />
+        </div>
+
+        <div class="text-center md:text-left">
+          <h3 class="text-2xl md:text-3xl font-bold mb-3 text-slate-900">
+            La Piel de los Campeones
+          </h3>
+          <p class="text-slate-600 mb-4 text-sm md:text-base leading-relaxed">
+            La indumentaria de DIBA FBC es más que una camiseta: es un símbolo de identidad y pasión.
+            El diseño, en tonos azules, representa la disciplina y la seriedad con la que afrontamos
+            cada desafío. Confeccionada con tecnología de última generación, garantiza comodidad y
+            rendimiento en la cancha, mientras que el escudo y los patrocinadores reflejan nuestro
+            compromiso con la comunidad.
+          </p>
+          <p class="text-slate-600 text-sm md:text-base leading-relaxed">
+            Cada costura cuenta una historia de esfuerzo y dedicación, desde los barrios de Barranquilla
+            hasta las victorias más importantes del club.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
 
   <!-- Sección Fundación -->
-  <section id="fundacion" class="container my-5">
-    <div class="row align-items-center">
-      <div class="col-md-6 mb-4 mb-md-0 text-center">
-        <a href="https://instagram.com/funtilemi" target="_blank">
-          <img src="images/unnamed.jpg" alt="Fundación Tierra que Emana Leche y Miel" class="img-fluid rounded shadow"
-            style="max-width:350px;" />
-        </a>
-      </div>
-      <div class="col-md-6">
-        <h2 class="mb-4"><i class="fas fa-hand-holding-heart me-2"></i>Fundación Tierra que Emana Leche y Miel</h2>
-        <p>Entidad sin ánimo de lucro, comprometida con el desarrollo y bienestar de la comunidad en Barranquilla.</p>
-        <p>Fundada el <strong>28 de marzo de 2016</strong>.</p>
-        <a href="https://colombiapymes.com/empresas/fundacion-tierra-que-emana-leche-y-miel-sigla-funtilemi_id_EF8E1398F2821C3F"
-          target="_blank" class="btn btn-warning mb-2"><i class="fas fa-external-link-alt me-1"></i> Más
-          Información</a>
-        <a href="https://www.instagram.com/funtilemi/" target="_blank" class="btn btn-warning mb-2"><i
-            class="fab fa-instagram me-1"></i> Instagram</a>
+  <section id="fundacion" class="py-14 bg-slate-50">
+    <div class="max-w-6xl mx-auto px-4">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+        <div class="flex justify-center md:justify-start">
+          <a href="https://instagram.com/funtilemi" target="_blank" rel="noopener noreferrer">
+            <img
+              src="images/unnamed.jpg"
+              alt="Logo de la Fundación Tierra que Emana Leche y Miel"
+              class="max-w-xs w-full rounded-2xl shadow-md shadow-slate-900/20"
+            />
+          </a>
+        </div>
+
+        <div>
+          <h2 class="text-2xl md:text-3xl font-bold mb-4 text-slate-900 flex items-center gap-2">
+            <i class="fas fa-hand-holding-heart text-rose-500"></i>
+            Fundación Tierra que Emana Leche y Miel
+          </h2>
+          <p class="text-slate-600 mb-3 text-sm md:text-base leading-relaxed">
+            Entidad sin ánimo de lucro, comprometida con el desarrollo y bienestar de la comunidad en Barranquilla.
+          </p>
+          <p class="text-slate-600 mb-4 text-sm md:text-base">
+            Fundada el <strong>28 de marzo de 2016</strong>.
+          </p>
+          <div class="flex flex-wrap gap-3">
+            <a
+              href="https://colombiapymes.com/empresas/fundacion-tierra-que-emana-leche-y-miel-sigla-funtilemi_id_EF8E1398F2821C3F"
+              target="_blank" rel="noopener noreferrer"
+              class="inline-flex items-center px-4 py-2 rounded-full bg-amber-500 text-white text-sm font-semibold
+                     hover:bg-amber-600 shadow-sm shadow-amber-500/40 transition-colors"
+            >
+              <i class="fas fa-external-link-alt mr-2 text-xs"></i>
+              Más Información
+            </a>
+            <a
+              href="https://www.instagram.com/funtilemi/"
+              target="_blank" rel="noopener noreferrer"
+              class="inline-flex items-center px-4 py-2 rounded-full bg-amber-500 text-white text-sm font-semibold
+                     hover:bg-amber-600 shadow-sm shadow-amber-500/40 transition-colors"
+            >
+              <i class="fab fa-instagram mr-2 text-sm"></i>
+              Instagram
+            </a>
+          </div>
+        </div>
       </div>
     </div>
   </section>
+<!-- Footer -->
+<div id="footer-container"></div>
 
-  <!-- Contenedor para el Footer (se carga desde layout/footer.html) -->
-  <div id="footer-container"></div>
-
-  <!-- Scripts -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="scripts/loadComponents.js"></script>
-  <script src="scripts/main.js"></script>
-
+<!-- Scripts propios -->
+<script src="scripts/navbar.js"></script>
+<script src="scripts/loadComponents.js"></script>
+<script src="scripts/main.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+<script>
+  AOS.init({ once: true, duration: 800 });
+</script>
 </body>
-
-
 </html>
+

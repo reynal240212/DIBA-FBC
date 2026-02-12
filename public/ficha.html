@@ -1,119 +1,76 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
   <meta charset="UTF-8" />
   <title>PLANTILLA - DIBA FBC</title>
   <link rel="icon" href="images/ESCUDO.ico" type="image/x-icon">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description"
-    content="Conoce la historia y los momentos más destacados de DIBA FBC, un recorrido lleno de pasión y logros deportivos." />
-  <!-- Bootstrap 5 CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+        content="Plantilla de jugadores de DIBA FBC por categorías y posiciones." />
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script> [web:14]
 
   <!-- Font Awesome -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
-    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
 
   <!-- Animate.css -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
 
-  <!-- AOS para efectos de scroll (opcional) -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" />
+  <!-- AOS -->
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" />
 
-  <!-- Estilos Globales -->
+  <!-- Estilos globales -->
   <link rel="stylesheet" href="styles/styles.css" />
 
-  <!-- Regla adicional para forzar fondo blanco en toda la página -->
   <style>
-    /* Estilos base */
     body {
-      font-family: 'Segoe UI', sans-serif;
-      background-color: #f8f9fa;
-      color: #212529;
-    }
-
-    h1 {
-      color: #001b72;
-      font-weight: bold;
-    }
-
-    /* Carta de jugador */
-    .card {
-      border: 2px solid #001b72;
-      border-radius: 10px;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-      transition: transform 0.3s;
-    }
-
-    .card:hover {
-      transform: scale(1.05);
-    }
-
-    .card img {
-      height: 150px;
-      object-fit: cover;
-      border-top-left-radius: 10px;
-      border-top-right-radius: 10px;
-    }
-
-    .card-body {
-      background-color: #e2e8f0;
-      font-size: 14px;
-      padding: 0.5rem;
-    }
-
-    /* Responsive grid para filas */
-    .row {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
+      font-family: 'Montserrat', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     }
   </style>
-
 </head>
 
-<body>
+<body class="bg-slate-50 text-slate-900">
+  <!-- Service Worker (opcional) -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/service-worker.js')
+        .then(reg => console.log("SW registrado:", reg))
+        .catch(err => console.error("Error registrando SW:", err));
+    }
+  </script>
+
+  <!-- Layout común -->
   <div id="navbar-container"></div>
   <div id="hero-container"></div>
   <div id="patrocinadores-container"></div>
 
-  <main class="">
-    <h1 class="text-center mb-4">Plantilla de Jugadores</h1>
-    <div id="players-container" class="d-flex flex-column gap-5"></div>
-  </main>>
+  <!-- Contenido de la página Plantilla -->
+  <main class="py-10">
+    <div class="max-w-6xl mx-auto px-4">
+      <h1 class="text-center mb-8 text-3xl md:text-4xl font-bold text-slate-900">
+        Plantilla de Jugadores
+      </h1>
 
+      <!-- Aquí se insertan las categorías y cartas con Tailwind desde loadComponents.js -->
+      <div id="players-container" class="space-y-10"></div>
+    </div>
+  </main>
 
+  <!-- Footer común -->
+  <div id="footer-container"></div>
 
-
-  <!-- Bootstrap JS Bundle -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-  <!-- Script para cargar componentes externos (Navbar y Footer) -->
+  <!-- Scripts -->
+  <script src="scripts/navbar.js"></script>
   <script src="scripts/loadComponents.js"></script>
-  <!-- Script principal (funciones y animaciones) -->
   <script src="scripts/main.js"></script>
-
-  <!-- Script para alternar categorías y otros efectos -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
   <script>
-    // Alternar categorías
-    const btns = document.querySelectorAll('.category-buttons .btn');
-    const containers = document.querySelectorAll('.category-container');
-
-    btns.forEach(btn => {
-      btn.addEventListener('click', () => {
-        btns.forEach(b => b.classList.remove('active'));
-        containers.forEach(cont => cont.classList.remove('active'));
-        btn.classList.add('active');
-        const id = btn.getAttribute('data-category');
-        document.getElementById(id).classList.add('active', 'animate__animated', 'animate__fadeIn');
-      });
-    });
+    AOS.init({ once: true, duration: 800 });
   </script>
-
-  <!-- Contenedor para el Footer (se cargará desde layout/footer.html) -->
-
-  <div id="footer-container"></div>s
-
 </body>
-
 </html>
