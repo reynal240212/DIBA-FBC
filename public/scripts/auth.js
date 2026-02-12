@@ -1,7 +1,7 @@
 import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
 
 const SUPABASE_URL = "https://wdnlqfiwuocmmcdowjyw.supabase.co";
-const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndkbmxxZml3dW9jbW1jZG93anl3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg1MjY1ODAsImV4cCI6MjA2NDEwMjU4MH0.4SCS_NRDIYLQJ1XouqW111BxkMOlwMWOjje9gFTgW_Q";
+const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."; // Tu clave actual
 const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -22,7 +22,6 @@ document.addEventListener('DOMContentLoaded', () => {
       const password = document.getElementById('login-password').value.trim();
 
       try {
-        // CAMBIO CLAVE: Se usa 'password_hash' para coincidir con tu tabla 'users'
         const { data: user, error } = await supabase
           .from('users')
           .select('id, username, password_hash, role, full_name')
@@ -34,10 +33,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
         localStorage.setItem("usuario", JSON.stringify(user));
 
+        // RUTAS CORREGIDAS: Usamos rutas absolutas y Clean URLs (sin .html)
         if (user.role === 'admin') {
-          window.location.href = "GestorDocumental.html";
+          window.location.href = "/admin/GestorDocumental"; 
         } else {
-          window.location.href = "MisDocumentos.html";
+          window.location.href = "/admin/MisDocumentos";
         }
 
       } catch (err) {
@@ -53,16 +53,17 @@ document.addEventListener('DOMContentLoaded', () => {
 export async function verificarSesion(rolRequerido = null) {
   const usuarioLocal = JSON.parse(localStorage.getItem("usuario"));
   if (!usuarioLocal) {
-    window.location.href = "login.html";
+    window.location.href = "/admin/login"; // Ruta absoluta corregida
     return;
   }
   if (rolRequerido && usuarioLocal.role !== rolRequerido) {
-    window.location.href = usuarioLocal.role === 'admin' ? "GestorDocumental.html" : "MisDocumentos.html";
+    // Redirección inteligente basada en el rol
+    window.location.href = usuarioLocal.role === 'admin' ? "/admin/GestorDocumental" : "/admin/MisDocumentos";
   }
 }
 
 export async function cerrarSesion() {
   localStorage.removeItem("usuario");
   await supabase.auth.signOut();
-  window.location.href = "login.html";
+  window.location.href = "/admin/login"; // Ruta absoluta corregida
 }
