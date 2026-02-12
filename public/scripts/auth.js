@@ -1,8 +1,5 @@
-// 1. Configuración de Supabase
-
 import { supabase } from './supabaseClient.js';
 
-// 2. Lógica del Formulario (Se ejecuta solo si existe el formulario en la página)
 document.addEventListener('DOMContentLoaded', () => {
     const loginForm = document.getElementById('login-form');
     if (loginForm) {
@@ -13,7 +10,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const spinner = loginButton.querySelector('.spinner');
             const btnText = loginButton.querySelector('.button-text');
 
-            // Estado de carga UI
             loginButton.disabled = true;
             spinner?.classList.remove('hidden');
             if(btnText) btnText.textContent = "Validando...";
@@ -22,10 +18,10 @@ document.addEventListener('DOMContentLoaded', () => {
             const password = document.getElementById('login-password').value.trim();
 
             try {
-                // Consulta a la tabla 'users'
+                // Consulta a la tabla 'usuarios'
                 const { data: user, error } = await supabase
                     .from('usuarios')
-                    .select('id, username, password')
+                    .select('id, username, password, role')
                     .eq('username', username)
                     .eq('password', password)
                     .single();
@@ -35,11 +31,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Guardar sesión
                 localStorage.setItem("usuario", JSON.stringify(user));
 
-                // Redirección inteligente
+                // REDIRECCIÓN DINÁMICA CON RUTAS ABSOLUTAS
+                // Esto busca el archivo dentro de public/admin/ sin importar dónde estés
                 if (user.role === 'admin') {
-                    window.location.href = "GestorDocumental.html";
+                    window.location.href = "/admin/GestorDocumental.html";
                 } else {
-                    window.location.href = "MisDocumentos.html";
+                    window.location.href = "/admin/MisDocumentos.html";
                 }
 
             } catch (err) {
@@ -52,25 +49,28 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-// 3. Funciones de Protección (Para usar en otras páginas)
+/**
+ * Función para proteger las páginas
+ */
 export async function verificarSesion(rolRequerido = null) {
     const usuarioLocal = JSON.parse(localStorage.getItem("usuario"));
 
     if (!usuarioLocal) {
-        window.location.href = "login.html";
+        // Si no hay sesión, siempre vuelve al login en la raíz de admin
+        window.location.href = "/admin/login.html";
         return;
     }
 
     if (rolRequerido && usuarioLocal.role !== rolRequerido) {
         alert("Acceso restringido.");
         window.location.href = usuarioLocal.role === 'admin' 
-            ? "GestorDocumental.html" 
-            : "MisDocumentos.html";
+            ? "/admin/GestorDocumental.html" 
+            : "/admin/MisDocumentos.html";
     }
 }
 
 export async function cerrarSesion() {
     localStorage.removeItem("usuario");
     await supabase.auth.signOut();
-    window.location.href = "login.html";
+    window.location.href = "/admin/login.html";
 }
