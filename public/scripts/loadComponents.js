@@ -107,17 +107,18 @@ document.addEventListener("DOMContentLoaded", function () {
     categories.forEach((category) => {
       const section = document.createElement("section");
       section.id = category.id;
-      section.className = "max-w-6xl mx-auto px-4 mb-10";
+      section.className = "mb-16 animate__animated animate__fadeIn"; // Animación de entrada
 
-      const heading = document.createElement("h2");
-      heading.textContent = category.title;
-      heading.className =
-        "text-2xl font-bold text-slate-900 mb-4 text-center md:text-left";
-      section.appendChild(heading);
+      // Título de la categoría con una línea decorativa
+      section.innerHTML = `
+    <div class="flex items-center mb-8 px-4">
+      <h2 class="text-2xl font-extrabold text-slate-800 uppercase tracking-wider">${category.title}</h2>
+      <div class="flex-grow h-px bg-slate-300 ml-4"></div>
+    </div>
+  `;
 
       const grid = document.createElement("div");
-      grid.className =
-        "grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4";
+      grid.className = "grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6 px-4";
 
       category.players.forEach((playerName) => {
         const player = playersData.find(
@@ -125,26 +126,33 @@ document.addEventListener("DOMContentLoaded", function () {
         );
         const imageUrl = player ? player.imageUrl : defaultImageUrl;
 
+        // Crear el elemento de la tarjeta con clases mejoradas
         const card = document.createElement("article");
-        card.className =
-          "bg-white rounded-xl shadow-md border border-slate-200 overflow-hidden " +
-          "hover:shadow-lg hover:-translate-y-1 transition transform duration-200";
+        card.setAttribute("data-aos", "fade-up"); // Integración con AOS
+        card.className = `
+      group relative bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-2xl 
+      transition-all duration-300 border border-slate-100 hover:-translate-y-2
+    `;
 
-        const img = document.createElement("img");
-        img.src = imageUrl;
-        img.alt = playerName;
-        img.className = "w-full h-32 object-cover";
+        card.innerHTML = `
+      <div class="aspect-[3/4] overflow-hidden bg-slate-200 relative">
+        <img 
+          src="${imageUrl}" 
+          alt="${playerName}" 
+          class="w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-500"
+          onerror="this.src='${defaultImageUrl}'"
+        >
+        <div class="absolute inset-0 bg-gradient-to-t from-slate-900/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+      </div>
+      
+      <div class="p-3 text-center relative bg-white">
+        <p class="text-[11px] font-bold text-blue-600 uppercase tracking-tighter mb-1">Diba FBC</p>
+        <h3 class="text-sm font-bold text-slate-800 leading-tight truncate px-1">
+          ${playerName}
+        </h3>
+      </div>
+    `;
 
-        const cardBody = document.createElement("div");
-        cardBody.className = "px-2 py-2 text-center bg-slate-100";
-
-        const nameEl = document.createElement("p");
-        nameEl.textContent = playerName;
-        nameEl.className = "text-xs font-semibold text-slate-900 leading-tight";
-
-        cardBody.appendChild(nameEl);
-        card.appendChild(img);
-        card.appendChild(cardBody);
         grid.appendChild(card);
       });
 
