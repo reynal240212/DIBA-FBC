@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Gestor Documental | DIBA FBC</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="images/ESCUDO.ico">
+    <link rel="icon" href="/images/ESCUDO.ico">
 
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
@@ -24,26 +24,7 @@
 
 <body class="bg-slate-50 font-sans text-slate-900">
 
-    <nav class="bg-dibaBlue text-white sticky top-0 z-50 shadow-xl">
-        <div class="max-w-7xl mx-auto px-4 h-20 flex items-center justify-between">
-            <a href="dashboard.html" class="flex items-center gap-3">
-                <img src="images/ESCUDO.png" alt="Logo" class="h-12 w-auto drop-shadow-md">
-                <span class="font-black uppercase italic tracking-tighter text-xl hidden md:block">Gestor DIBA</span>
-            </a>
-            
-            <div class="flex items-center gap-6">
-                <div class="hidden lg:flex gap-6 font-bold text-[10px] uppercase tracking-widest">
-                    <a href="dashboard.html" class="hover:text-dibaGold transition-colors">Inicio</a>
-                    <a href="listar.html" class="hover:text-dibaGold transition-colors">Documentos</a>
-                    <a href="usuarios.html" class="hover:text-dibaGold transition-colors">Usuarios</a>
-                </div>
-                
-                <button id="logout-btn" class="bg-red-600/10 hover:bg-red-600 text-red-500 hover:text-white px-4 py-2 rounded-xl text-xs font-black uppercase transition-all flex items-center gap-2">
-                    <i class="fas fa-sign-out-alt"></i> <span class="hidden sm:inline">Salir</span>
-                </button>
-            </div>
-        </div>
-    </nav>
+    <header id="admin-nav" class="sticky top-0 z-50"></header>
 
     <main class="max-w-5xl mx-auto px-4 py-12">
         
@@ -87,16 +68,13 @@
                 <div class="flex-grow h-px bg-slate-200"></div>
             </div>
             
-            <div id="fileListContainer" class="grid gap-4">
-                </div>
+            <div id="fileListContainer" class="grid gap-4"></div>
         </section>
     </main>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <footer id="admin-footer"></footer>
 
-    
-    <script src="scripts/gestor.js"></script>
-</body>
+    <script type="module" src="../scripts/admin-layout.js"></script>
+    <script src="../scripts/gestor.js"></script>
 </body>
 </html>
