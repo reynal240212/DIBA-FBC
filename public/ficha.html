@@ -23,9 +23,7 @@
   </script>
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
-
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
-
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" />
 </head>
 
@@ -43,12 +41,11 @@
   <div id="patrocinadores-container"></div>
 
   <main class="py-10">
-    <div class="max-w-6xl mx-auto px-4">
-      <h1 class="text-center mb-8 text-3xl md:text-4xl font-bold text-slate-900 tracking-tight">
+    <div class="max-w-7xl mx-auto px-4"> <h1 class="text-center mb-12 text-3xl md:text-5xl font-extrabold text-slate-900 tracking-tight uppercase">
         Plantilla de Jugadores
       </h1>
 
-      <div id="players-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
+      <div id="players-container" class="w-full space-y-16"></div>
     </div>
   </main>
 
@@ -59,7 +56,6 @@
   <script src="scripts/main.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
   <script>
-    // Inicialización de AOS tras carga de componentes
     window.addEventListener('load', () => {
       AOS.init({ once: true, duration: 800 });
     });
