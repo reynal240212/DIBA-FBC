@@ -5,175 +5,87 @@
   <title>Acceso - DIBA FBC</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <!-- Bootstrap CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Montserrat', 'sans-serif'] },
+          colors: { dibaGold: '#ffcc00', dibaBlue: '#002a40' }
+        },
+      },
+    }
+  </script>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
 
   <style>
-    body {
-      background: url('https://cdn.britannica.com/51/190751-050-147B93F7/soccer-ball-goal.jpg') no-repeat center center fixed;
+    .bg-soccer {
+      background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), 
+                  url('https://cdn.britannica.com/51/190751-050-147B93F7/soccer-ball-goal.jpg');
       background-size: cover;
-      font-family: 'Segoe UI', Arial, sans-serif;
-      padding: 1rem;
-      position: relative;
+      background-position: center;
     }
-    body::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.6);
-      z-index: -1;
-    }
-    .auth-container { position: relative; z-index: 1; }
-    .auth-card {
-      max-width: 450px;
-      width: 100%;
-      margin: 2rem auto;
-      border: none;
-      border-radius: 12px;
-      background-color: rgba(255, 255, 255, 0.98);
-      backdrop-filter: blur(5px);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-    .auth-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 10px 20px rgba(0,0,0,0.2);
-    }
-    .animate__animated { --animate-duration: 0.8s; }
-    .nav-tabs { border-bottom: 0; }
-    .nav-tabs .nav-link {
-      border: none;
-      border-bottom: 2px solid transparent;
-      color: #6c757d;
-      font-weight: 600;
-    }
-    .nav-tabs .nav-link.active {
-      color: #0d6efd;
-      border-color: #0d6efd;
-      background-color: transparent;
-    }
-    .btn-submit .spinner-border { width: 1.2rem; height: 1.2rem; }
   </style>
 </head>
-<body>
-  <div class="container auth-container d-flex align-items-center justify-content-center min-vh-100">
-    <div class="card auth-card shadow-lg p-4 animate__animated animate__fadeInUp">
-      
-      <h2 class="h3 text-center mb-3 fw-bold">Bienvenido a DIBA FBC</h2>
-      
-      <div id="alert-container"></div>
 
-      <!-- Solo login -->
-      <ul class="nav nav-tabs nav-fill mb-4" id="authTabs" role="tablist">
-        <li class="nav-item" role="presentation">
-          <button class="nav-link active" id="login-tab" data-bs-toggle="tab" data-bs-target="#login-pane" type="button" role="tab">Iniciar Sesión</button>
-        </li>
-      </ul>
+<body class="bg-soccer min-h-screen flex items-center justify-center p-4 font-sans">
 
-      <div class="tab-content" id="authTabsContent">
-        <div class="tab-pane fade show active" id="login-pane" role="tabpanel">
-          <form id="login-form" novalidate>
-            <div class="mb-3">
-              <label for="login-username" class="form-label">Usuario</label>
-              <input type="text" class="form-control" id="login-username" required placeholder="Tu usuario">
+  <div class="w-full max-w-md animate__animated animate__fadeInUp">
+    <div class="bg-white/95 backdrop-blur-md rounded-3xl shadow-2xl overflow-hidden border border-white/20">
+      
+      <div class="bg-slate-900 p-8 text-center">
+        <img src="images/ESCUDO.ico" alt="DIBA FBC" class="w-20 mx-auto mb-4 drop-shadow-lg">
+        <h2 class="text-2xl font-black text-white uppercase italic tracking-tighter">Bienvenido a DIBA FBC</h2>
+        <p class="text-dibaGold text-[10px] font-bold uppercase tracking-[0.3em] mt-1">Panel de Control</p>
+      </div>
+
+      <div class="p-8">
+        <div id="alert-container" class="mb-6"></div>
+
+        <form id="login-form" class="space-y-6">
+          <div>
+            <label for="login-username" class="block text-[10px] font-black text-slate-500 uppercase tracking-widest mb-2 ml-1">Usuario</label>
+            <div class="relative">
+              <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-slate-400">
+                <i class="fas fa-user text-sm"></i>
+              </span>
+              <input type="text" id="login-username" required placeholder="Ingresa tu usuario"
+                class="w-full pl-11 pr-4 py-4 rounded-2xl bg-slate-100 border-2 border-transparent focus:border-blue-600 focus:bg-white focus:outline-none transition-all font-bold text-slate-700 placeholder:font-normal placeholder:text-slate-400">
             </div>
-            <div class="mb-4">
-              <label for="login-password" class="form-label">Contraseña</label>
-              <input type="password" class="form-control" id="login-password" required placeholder="••••••••">
+          </div>
+
+          <div>
+            <label for="login-password" class="block text-[10px] font-black text-slate-500 uppercase tracking-widest mb-2 ml-1">Contraseña</label>
+            <div class="relative">
+              <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-slate-400">
+                <i class="fas fa-lock text-sm"></i>
+              </span>
+              <input type="password" id="login-password" required placeholder="••••••••"
+                class="w-full pl-11 pr-4 py-4 rounded-2xl bg-slate-100 border-2 border-transparent focus:border-blue-600 focus:bg-white focus:outline-none transition-all font-bold text-slate-700 placeholder:font-normal placeholder:text-slate-400">
             </div>
-            <button type="submit" id="login-button" class="btn btn-primary w-100 fw-bold btn-submit">
-              <span class="button-text">Iniciar Sesión</span>
-              <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
-            </button>
-          </form>
-        </div>
+          </div>
+
+          <button type="submit" id="login-button" 
+            class="group w-full bg-dibaGold hover:bg-yellow-400 text-slate-900 font-black py-4 rounded-2xl shadow-lg shadow-yellow-500/20 hover:shadow-yellow-500/40 transform hover:-translate-y-1 transition-all flex items-center justify-center gap-3 uppercase italic tracking-widest">
+            <span class="button-text">Iniciar Sesión</span>
+            <i class="fas fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+            <i class="fas fa-circle-notch fa-spin hidden spinner"></i>
+          </button>
+        </form>
       </div>
     </div>
+
+    <p class="text-center mt-8">
+      <a href="index.html" class="text-white/60 hover:text-white text-xs font-bold uppercase tracking-widest transition-colors">
+        <i class="fas fa-chevron-left mr-2"></i> Volver al Inicio
+      </a>
+    </p>
   </div>
 
-  <!-- Bootstrap JS -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  <!-- Supabase JS -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
   
- <script>
-  // --- 1. CONFIGURACIÓN ---
-  const SUPABASE_URL = 'https://wdnlqfiwuocmmcdowjyw.supabase.co';
-  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndkbmxxZml3dW9jbW1jZG93anl3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg1MjY1ODAsImV4cCI6MjA2NDEwMjU4MH0.4SCS_NRDIYLQJ1XouqW111BxkMOlwMWOjje9gFTgW_Q'; // tu anon key real
-  const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-  // --- 2. ELEMENTOS DOM ---
-  const loginForm = document.getElementById('login-form');
-  const loginButton = document.getElementById('login-button');
-  const alertContainer = document.getElementById('alert-container');
-
-  // --- 3. FUNCIONES ---
-  function showAlert(message, type = 'danger') {
-    const alertHTML = `
-      <div class="alert alert-${type} alert-dismissible fade show" role="alert">
-        ${message}
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-      </div>
-    `;
-    alertContainer.innerHTML = alertHTML;
-  }
-
-  function setLoading(button, isLoading, originalText = '') {
-    const buttonText = button.querySelector('.button-text');
-    const spinner = button.querySelector('.spinner-border');
-    
-    if (isLoading) {
-      button.disabled = true;
-      buttonText.textContent = 'Procesando...';
-      spinner.classList.remove('d-none');
-    } else {
-      button.disabled = false;
-      buttonText.textContent = originalText;
-      spinner.classList.add('d-none');
-    }
-  }
-
-  // --- 4. LOGIN ---
-  loginForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    alertContainer.innerHTML = '';
-    setLoading(loginButton, true, 'Iniciar Sesión');
-
-    const username = document.getElementById('login-username').value.trim();
-    const password = document.getElementById('login-password').value.trim();
-
-    try {
-      const { data, error } = await supabaseClient
-        .from('usuarios')
-        .select('*')
-        .eq('username', username)
-        .eq('password', password)
-        .single();
-
-      if (error || !data) {
-        throw new Error("Usuario o contraseña incorrectos");
-      }
-
-      // Guardamos sesión en localStorage (manual)
-      localStorage.setItem("usuario", JSON.stringify(data));
-
-      showAlert('¡Inicio de sesión exitoso! Redirigiendo...', 'success');
-      setTimeout(() => { window.location.href = 'GestorDocumental.html'; }, 1500);
-
-    } catch (err) {
-      console.error(err);
-      showAlert('Credenciales incorrectas. Verifica tu usuario y contraseña.', 'danger');
-      setLoading(loginButton, false, 'Iniciar Sesión');
-    }
-  });
-
-  // --- 5. VERIFICAR SESIÓN AL ENTRAR ---
-  document.addEventListener('DOMContentLoaded', () => {
-    const usuario = localStorage.getItem("usuario");
-    if (usuario) {
-      window.location.href = 'index.html';
-    }
-  });
-</script>
 </body>
 </html>

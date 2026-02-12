@@ -1,210 +1,102 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
-    <meta charset="UTF-8" />
+    <meta charset="UTF-8">
     <title>Gestor Documental | DIBA FBC</title>
-    <link rel="icon" href="images/ESCUDO.ico" sizes="32x32">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="images/ESCUDO.ico">
 
-    <!-- Meta tags, Fonts y CSS -->
-    <meta property="og:title" content="Gestor Documental | DIBA FBC" />
-    <meta property="og:description"
-        content="Gestiona documentos, reportes y usuarios del club DIBA FBC de forma eficiente." />
-    <meta property="og:image" content="https://diba-fbc.vercel.app/images/ESCUDO.png" />
-    <meta property="og:url" content="https://diba-fbc.vercel.app/gestor.html" />
-    <meta property="og:type" content="website" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Montserrat', 'sans-serif'] },
+                    colors: { dibaGold: '#ffcc00', dibaBlue: '#002a40', dibaDark: '#0a0a0a' }
+                },
+            },
+        }
+    </script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
-    <link rel="stylesheet" href="styles/styles.css" />
-    <link rel="manifest" href="manifest.json" />
-
-    <style>
-        :root {
-            --diba-color-primario: #0D47A1;
-            --diba-color-secundario: #FFC107;
-        }
-
-        .btn-diba-primary {
-            background-color: var(--diba-color-primario);
-            border-color: var(--diba-color-primario);
-            color: #fff;
-        }
-
-        .btn-diba-primary:hover {
-            background-color: #0b3a82;
-            border-color: #0b3a82;
-            color: #fff;
-        }
-
-        .btn-diba-secondary {
-            background-color: var(--diba-color-secundario);
-            border-color: var(--diba-color-secundario);
-            color: #000;
-        }
-
-        .btn-diba-secondary:hover {
-            background-color: #e0a800;
-            border-color: #e0a800;
-            color: #000;
-        }
-
-        .list-group-item.signed-success {
-            background-color: #e9f5ec;
-            border-left: 4px solid #28a745;
-        }
-
-        /* =============================================================== */
-        /* NUEVO: ESTILOS PARA LA ZONA DE "ARRASTRAR Y SOLTAR"             */
-        /* =============================================================== */
-        #dropZone {
-            border: 2px dashed #ccc;
-            border-radius: 10px;
-            padding: 40px 20px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s ease-in-out;
-            background-color: #f8f9fa;
-        }
-
-        #dropZone.drag-over {
-            border-color: var(--diba-color-primario);
-            background-color: #eaf1fb;
-            /* Un azul muy claro */
-        }
-
-        #dropZone .drop-zone-icon {
-            font-size: 3rem;
-            color: var(--diba-color-primario);
-            margin-bottom: 1rem;
-        }
-    </style>
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
 </head>
 
-<body>
-    <header>
-        <!-- Navbar (sin cambios) -->
-        <nav class="navbar navbar-expand-lg navbar-dark fixed-top custom-navbar">
-            <div class="container"><a class="navbar-brand d-flex align-items-center" href="dashboard.html"><img
-                        src="images/ESCUDO.png" alt="Logo DIBA FBC" height="50" /><span class="ms-2">Gestor DIBA
-                        FBC</span></a><button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                    data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false"
-                    aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
-                <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
-                    <ul class="navbar-nav">
-                        <li class="nav-item"><a class="nav-link" href="dashboard.html">INICIO</a></li>
-                        <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" id="docsDropdown"
-                                role="button" data-bs-toggle="dropdown" aria-expanded="false">DOCUMENTOS</a>
-                            <ul class="dropdown-menu" aria-labelledby="docsDropdown">
-                                <li><a class="dropdown-item" href="subir.html">Subir Documento</a></li>
-                                <li><a class="dropdown-item" href="listar.html">Ver Todos</a></li>
-                                <li><a class="dropdown-item" href="firmas.html">Pendientes de Firma</a></li>
-                                <li><a class="dropdown-item" href="plantillas.html">Plantillas</a></li>
-                            </ul>
-                        </li>
-                        <li class="nav-item"><a class="nav-link" href="reportes.html">REPORTES</a></li>
-                        <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" id="usersDropdown"
-                                role="button" data-bs-toggle="dropdown" aria-expanded="false">USUARIOS</a>
-                            <ul class="dropdown-menu" aria-labelledby="usersDropdown">
-                                <li><a class="dropdown-item" href="roles.html">Roles y Permisos</a></li>
-                                <li><a class="dropdown-item" href="usuarios.html">Lista de Usuarios</a></li>
-                            </ul>
-                        </li>
-                        <!-- <li class="nav-item gold-link"><a class="nav-link" href="ayuda.html">AYUDA</a></li> -->
-                    </ul>
-                </div>
-                <div class="d-flex align-items-center"><button class="btn btn-dark" type="button" aria-label="Buscar"
-                        title="Buscar"><i class="fas fa-search" aria-hidden="true"></i></button><button
-                        class="btn btn-dark ms-2" type="button" aria-label="Perfil de usuario"
-                        title="Perfil de usuario"><i class="fas fa-user-circle" aria-hidden="true"></i></button></div>
-            </div>
-        </nav>
-    </header>
+<body class="bg-slate-50 font-sans text-slate-900">
 
-    <main class="container mt-4 pt-5">
-        <section aria-labelledby="main-heading">
-            <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
-                <h1 class="mb-0 h2" id="main-heading">Gestor Documental</h1>
-                <div class="d-flex gap-3 align-items-center mt-2 mt-md-0" role="group"
-                    aria-label="Filtros de documentos">
-                    <div><label for="docTypeSelect" class="form-label mb-0 fw-bold small">Tipo:</label><select
-                            class="form-select form-select-sm w-auto" id="docTypeSelect">
-                            <option selected>Todos</option>
-                            <option value="administrativo">Administrativos</option>
-                            <option value="legal">Legales</option>
-                            <option value="deportivo">Deportivos</option>
-                        </select></div>
-                    <div><label for="docDate" class="form-label mb-0 fw-bold small">Fecha:</label><input type="date"
-                            class="form-control form-control-sm w-auto" id="docDate"></div>
+    <nav class="bg-dibaBlue text-white sticky top-0 z-50 shadow-xl">
+        <div class="max-w-7xl mx-auto px-4 h-20 flex items-center justify-between">
+            <a href="dashboard.html" class="flex items-center gap-3">
+                <img src="images/ESCUDO.png" alt="Logo" class="h-12 w-auto drop-shadow-md">
+                <span class="font-black uppercase italic tracking-tighter text-xl hidden md:block">Gestor DIBA</span>
+            </a>
+            
+            <div class="flex items-center gap-6">
+                <div class="hidden lg:flex gap-6 font-bold text-[10px] uppercase tracking-widest">
+                    <a href="dashboard.html" class="hover:text-dibaGold transition-colors">Inicio</a>
+                    <a href="listar.html" class="hover:text-dibaGold transition-colors">Documentos</a>
+                    <a href="usuarios.html" class="hover:text-dibaGold transition-colors">Usuarios</a>
+                </div>
+                
+                <button id="logout-btn" class="bg-red-600/10 hover:bg-red-600 text-red-500 hover:text-white px-4 py-2 rounded-xl text-xs font-black uppercase transition-all flex items-center gap-2">
+                    <i class="fas fa-sign-out-alt"></i> <span class="hidden sm:inline">Salir</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-5xl mx-auto px-4 py-12">
+        
+        <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12 animate__animated animate__fadeIn">
+            <div>
+                <h1 class="text-4xl font-black uppercase italic text-slate-800 tracking-tighter">Gestor Documental</h1>
+                <p class="text-slate-500 font-medium">Panel de administración de archivos oficiales</p>
+            </div>
+            
+            <div class="flex gap-3">
+                <div class="bg-white p-2 rounded-2xl shadow-sm border border-slate-200 flex items-center gap-2">
+                    <label class="text-[10px] font-black uppercase text-slate-400 px-2">Tipo</label>
+                    <select id="docTypeSelect" class="bg-transparent font-bold text-sm outline-none border-none pr-4 cursor-pointer">
+                        <option value="todos">Todos</option>
+                        <option value="administrativo">Administrativos</option>
+                        <option value="legal">Legales</option>
+                        <option value="deportivo">Deportivos</option>
+                    </select>
                 </div>
             </div>
+        </div>
 
-            <div class="card shadow-sm mb-4">
-                <div class="card-body">
-                    <input type="file" id="newDocument" class="d-none" accept=".pdf,.doc,.docx,.jpg,.png">
-
-                    <div id="dropZone">
-                        <div class="drop-zone-icon"><i class="fas fa-file-upload"></i></div>
-                        <h3 class="h5">Subir Documentos</h3>
-                        <p class="text-muted">Arrastra y suelta un archivo aquí, o</p>
-                        <button type="button" id="selectFileBtn" class="btn btn-diba-primary">Seleccionar
-                            Documento</button>
-                    </div>
+        <section class="mb-12 animate__animated animate__fadeInUp">
+            <input type="file" id="newDocument" class="hidden" accept=".pdf,.doc,.docx,.jpg,.png">
+            
+            <div id="dropZone" class="group relative bg-white border-4 border-dashed border-slate-200 rounded-[2.5rem] p-16 flex flex-col items-center justify-center transition-all hover:border-dibaGold hover:bg-yellow-50/30 cursor-pointer">
+                <div class="w-20 h-20 bg-slate-100 rounded-3xl flex items-center justify-center mb-6 group-hover:bg-dibaGold group-hover:scale-110 transition-all">
+                    <i class="fas fa-cloud-upload-alt text-3xl text-slate-400 group-hover:text-dibaBlue"></i>
                 </div>
+                <h3 class="text-xl font-black uppercase italic text-slate-800 mb-2">Subir Documentos</h3>
+                <p class="text-slate-400 text-sm font-medium mb-6">Arrastra y suelta aquí o haz clic para buscar</p>
+                <button type="button" id="selectFileBtn" class="bg-dibaBlue text-white font-black uppercase italic py-3 px-8 rounded-xl shadow-lg hover:bg-slate-800 transition-all text-xs tracking-widest">
+                    Seleccionar Archivo
+                </button>
             </div>
+        </section>
 
-            <section id="uploadedFilesSection" class="d-none" aria-labelledby="uploaded-heading">
-                <h2 id="uploaded-heading" class="h4 mb-3">Documentos Cargados</h2>
-                <div class="list-group" id="fileListContainer"></div>
-            </section>
+        <section id="uploadedFilesSection" class="hidden animate__animated animate__fadeIn">
+            <div class="flex items-center gap-4 mb-6">
+                <h2 class="text-xl font-black uppercase italic text-slate-700">Documentos Cargados</h2>
+                <div class="flex-grow h-px bg-slate-200"></div>
+            </div>
+            
+            <div id="fileListContainer" class="grid gap-4">
+                </div>
         </section>
     </main>
 
-    <!-- ESTO SÍ FUNCIONARÍA -->
-      <!-- Inicialización del Cliente Supabase -->
-<script>
-  const SUPABASE_PROJECT_URL = 'https://wdnlqfiwuocmmcdowjyw.supabase.co';
-  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndkbmxxZml3dW9jbW1jZG93anl3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg1MjY1ODAsImV4cCI6MjA2NDEwMjU4MH0.4SCS_NRDIYLQJ1XouqW111BxkMOlwMWOjje9gFTgW_Q';
-
-  if (supabase && typeof supabase.createClient === 'function') {
-    window.supabase = supabase.createClient(SUPABASE_PROJECT_URL, SUPABASE_ANON_KEY);
-    console.log('✅ Supabase inicializado correctamente');
-  } else {
-    console.error('❌ Error: Supabase no se cargó correctamente.');
-  }
-
-  // 🚨 PROTECCIÓN DE RUTA
-  document.addEventListener("DOMContentLoaded", async () => {
-    const { data: { session } } = await window.supabase.auth.getSession();
-
-    // También revisa localStorage en caso de login manual
-    const usuario = localStorage.getItem("usuario");
-
-    if (!session && !usuario) {
-      // Si no hay sesión ni usuario guardado → redirige al login
-      window.location.href = "login.html";
-    }
-  });
-
-  // 🚪 Lógica de Cerrar Sesión
-  const logoutBtn = document.getElementById("logout-btn");
-  if (logoutBtn) {
-    logoutBtn.addEventListener("click", async () => {
-      localStorage.removeItem("usuario");
-      if (window.supabase) {
-        await window.supabase.auth.signOut();
-      }
-      window.location.href = "login.html";
-    });
-  }
-</script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script> <!-- 1. Primero, cargo la librería -->
-    <script src="scripts/gestor.js"></script> <!-- 2. Después, ejecuto mi código que la usa -->
-</body>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
+    
+    <script src="scripts/gestor.js"></script>
+</body>
+</body>
 </html>
