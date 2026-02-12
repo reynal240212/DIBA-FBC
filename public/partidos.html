@@ -1,253 +1,130 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
   <meta charset="UTF-8" />
   <title>Calendario Oficial | DIBA FBC</title>
+  <link rel="icon" href="images/ESCUDO.ico" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Sigue el calendario oficial de partidos y entrenamientos de DIBA FBC." />
 
-  <!-- Ícono del sitio -->
-  <link rel="icon" href="images/ESCUDO.ico" sizes="32x32" />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
 
-  <!-- MEJORA: Meta descripción más atractiva para SEO -->
-  <meta name="description"
-    content="Sigue el calendario oficial de partidos y entrenamientos de DIBA FBC. No te pierdas ningún momento de nuestro recorrido lleno de pasión y logros." />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Montserrat', 'sans-serif'] },
+          colors: { dibaGold: '#ffcc00', dibaBlue: '#002a40' }
+        },
+      },
+    }
+  </script>
 
-  <!-- Metadatos para redes sociales (Open Graph) -->
-  <meta property="og:title" content="Calendario Oficial | DIBA FBC" />
-  <meta property="og:description" content="Consulta el calendario de partidos y entrenamientos de DIBA FBC." />
-  <!-- SUGERENCIA: Utiliza una imagen de vista previa con dimensiones 1200x630px para un mejor resultado -->
-  <meta property="og:image" content="https://diba-fbc.vercel.app/images/diba-preview.jpg" />
-  <meta property="og:url" content="https://diba-fbc.vercel.app/calendario" />
-  <meta property="og:type" content="website" />
-
-  <!-- Metadatos para Twitter Card -->
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Calendario Oficial | DIBA FBC" />
-  <meta name="twitter:description" content="Consulta el calendario de partidos y entrenamientos de DIBA FBC." />
-  <meta name="twitter:image" content="https://diba-fbc.vercel.app/images/diba-preview.jpg" />
-
-  <!-- Dependencias CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
-  <!-- MEJORA: Consolidada una única versión de Font Awesome -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
-    integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
-    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-    integrity="sha256-sA+e2vfFZHtNRaSZB/vXdxNpI1OeblYF+xkAoCXYxoA=" crossorigin="" />
-
-  <!-- Estilos personalizados -->
-  <link rel="stylesheet" href="styles/styles.css" />
-  <link rel="stylesheet" href="styles/analisis.css" />
-  <link rel="stylesheet" href="styles/background-animation.css" />
-
-  <!-- MEJORA: CSS para mover el estilo en línea a una hoja de estilos -->
-  <style>
-    .hero-calendario {
-      background: linear-gradient(135deg, rgba(0, 42, 64, 0.85), rgba(0, 27, 114, 0.85)), url('images/fondo.jpg') center/cover no-repeat fixed;
-      background-blend-mode: multiply;
-      min-height: 75vh;
-    }
-
-    body {
-      font-family: 'Montserrat', sans-serif;
-      background-color: #f4f4f4;
-    }
-
-    .navbar {
-      background-color: #1c1c1c;
-    }
-
-    .navbar-brand {
-      color: #ffcc00 !important;
-      font-weight: 700;
-      font-size: 1.5rem;
-    }
-
-    .navbar-nav .nav-link {
-      color: #fff !important;
-      font-weight: 500;
-      margin-right: 15px;
-    }
-
-    .navbar-nav .nav-link:hover {
-      color: #ffcc00 !important;
-    }
-
-    /* Hero */
-    .hero {
-      background-color: #1c1c1c;
-      /* negro */
-      color: #ffcc00;
-      /* dorado */
-      padding: 100px 0 60px;
-      text-align: center;
-    }
-
-    /* Sección patrocinadores */
-    #patrocinadores {
-      padding: 80px 0;
-      background: linear-gradient(180deg, #ffffff 0%, #ffcc00 100%);
-      /* blanco a dorado */
-      color: #1c1c1c;
-      /* negro para el texto */
-    }
-
-    #patrocinadores h2 {
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      margin-bottom: 15px;
-    }
-
-    #patrocinadores p {
-      font-size: 1.1rem;
-      margin-bottom: 40px;
-      color: #1c1c1c;
-      /* negro */
-    }
-
-    .carousel-item img {
-      max-height: 150px;
-      margin: auto;
-      object-fit: contain;
-    }
-
-
-    /* Footer */
-    footer {
-      background-color: #1c1c1c;
-      color: #fff;
-      padding: 40px 0;
-      text-align: center;
-    }
-
-    footer a {
-      color: #ffcc00;
-      text-decoration: none;
-    }
-
-    footer a:hover {
-      text-decoration: underline;
-    }
-
-    #btnBackToTop {
-      position: fixed;
-      bottom: 30px;
-      right: 30px;
-      z-index: 1000;
-      display: none;
-    }
-  </style>
 </head>
 
-<body>
+<body class="bg-slate-50 text-slate-900 font-sans">
 
   <div id="navbar-container"></div>
   <div id="hero-container"></div>
   <div id="patrocinadores-container"></div>
 
+  <main class="py-12">
+    <div class="max-w-7xl mx-auto px-4">
+      
+      <section class="mb-16">
+        <div class="flex items-center mb-8">
+          <h2 class="text-2xl font-black text-slate-800 uppercase italic">Lugar de Entrenamiento</h2>
+          <div class="flex-grow h-1 bg-gradient-to-r from-blue-600 to-transparent ml-4"></div>
+        </div>
+        <div class="rounded-2xl overflow-hidden shadow-2xl border-4 border-white">
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3916.5!2d-74.8!3d10.9!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTDCsDU0JzAwLjAiTiA3NMKwNDgnMDAuMCJX!5e0!3m2!1ses!2sco!4v123456789"
+            class="w-full h-[450px] grayscale hover:grayscale-0 transition-all duration-700"
+            allowfullscreen="" loading="lazy">
+          </iframe>
+        </div>
+      </section>
 
-  <section class="container my-5">
-    <h2 class="text-center mb-4 text-primary">Lugar de Entrenamiento del Club</h2>
-    <!-- MEJORA: Se añade una sombra y bordes redondeados al contenedor del mapa para integrarlo mejor visualmente. -->
-    <div class="mapa-container shadow-lg rounded overflow-hidden">
-      <iframe
-        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3916.801711935751!2d-74.84118122607062!3d10.978334455439269!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8ef42cdd367c2453%3A0x401e8f23384cd2a6!2sParque%20La%20Pradera!5e0!3m2!1ses-419!2sco!4v1750282065919!5m2!1ses-419!2sco"
-        width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy"
-        referrerpolicy="no-referrer-when-downgrade"
-        title="Mapa de ubicación del Parque La Pradera, lugar de entrenamiento de DIBA FBC.">
-      </iframe>
-    </div>
-  </section>
-
-  <!-- SECCIÓN: FILTROS Y RESULTADOS -->
-  <section class="container my-5">
-    <!-- MEJORA: Se añade un g-lg-5 para mayor separación en pantallas grandes -->
-    <div class="row g-4 g-lg-5">
-      <!-- Columna de Partidos -->
-      <div class="col-lg-6">
-        <!-- MEJORA: Uso de <article> para contenido semántico y h-100 para igualar alturas -->
-        <article class="card shadow-sm h-100 border-0 p-4 bg-light">
-          <header class="d-flex justify-content-between align-items-center mb-3">
-            <!-- MEJORA: Jerarquía de encabezados correcta (h3 dentro de una sección con h2) -->
-            <h3 class="h5 mb-0 text-primary"><i class="fas fa-futbol me-2"></i>PARTIDOS</h3>
-            <!-- MEJORA: Botón de cierre menos agresivo (secondary en lugar de danger) -->
-            <button class="btn btn-sm btn-outline-secondary rounded-circle" id="btn-close-partidos" title="Cerrar">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+        
+        <article class="bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden flex flex-col h-full">
+          <header class="bg-blue-900 p-5 flex justify-between items-center text-white">
+            <h3 class="font-black italic uppercase tracking-wider flex items-center">
+              <i class="fas fa-futbol me-3 text-dibaGold text-xl"></i> Partidos
+            </h3>
+            <button id="btn-close-partidos" class="hover:bg-white/20 p-2 rounded-full transition-colors">
               <i class="fas fa-times"></i>
             </button>
           </header>
-          <div class="mb-3">
-            <label for="fecha" class="form-label fw-semibold">Selecciona una fecha</label>
-            <input type="date" id="fecha" class="form-control">
-          </div>
-          <div class="text-center my-3" id="loading-spinner" style="display: none;">
-            <div class="spinner-border text-primary" role="status">
-              <span class="visually-hidden">Cargando partidos...</span>
+          
+          <div class="p-8 flex-grow">
+            <div class="mb-6">
+              <label class="block text-sm font-bold text-slate-500 uppercase mb-2">Selecciona una fecha</label>
+              <input type="date" id="fecha" class="w-full p-3 rounded-lg border-2 border-slate-100 focus:border-blue-500 focus:outline-none transition-all">
             </div>
-          </div>
-          <div id="matches-container" aria-live="polite"></div>
-        </article>
-      </div>
 
-      <!-- Columna de Entrenamientos -->
-      <div class="col-lg-6">
-        <article class="card shadow-sm h-100 border-0 p-4 bg-light">
-          <header class="d-flex justify-content-between align-items-center mb-3">
-            <h3 class="h5 mb-0 text-success"><i class="fas fa-dumbbell me-2"></i>ENTRENAMIENTOS</h3>
-            <button class="btn btn-sm btn-outline-secondary rounded-circle" id="btn-close-entrenamientos"
-              title="Cerrar">
+            <div id="loading-spinner" class="hidden text-center py-10">
+              <i class="fas fa-circle-notch fa-spin text-3xl text-blue-600"></i>
+            </div>
+
+            <div id="matches-container" class="space-y-4">
+              </div>
+          </div>
+        </article>
+
+        <article class="bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden flex flex-col h-full">
+          <header class="bg-slate-800 p-5 flex justify-between items-center text-white">
+            <h3 class="font-black italic uppercase tracking-wider flex items-center">
+              <i class="fas fa-dumbbell me-3 text-dibaGold text-xl"></i> Entrenamientos
+            </h3>
+            <button id="btn-close-entrenamientos" class="hover:bg-white/20 p-2 rounded-full transition-colors">
               <i class="fas fa-times"></i>
             </button>
           </header>
-          <div class="mb-3">
-            <label for="fecha-entrenamiento" class="form-label fw-semibold">Selecciona una fecha</label>
-            <input type="date" id="fecha-entrenamiento" class="form-control">
-          </div>
-          <div class="text-center my-3" id="loading-spinner-entrenamiento" style="display: none;">
-            <div class="spinner-border text-success" role="status">
-              <span class="visually-hidden">Cargando entrenamientos...</span>
+
+          <div class="p-8 flex-grow">
+            <div class="mb-6">
+              <label class="block text-sm font-bold text-slate-500 uppercase mb-2">Selecciona una fecha</label>
+              <input type="date" id="fecha-entrenamiento" class="w-full p-3 rounded-lg border-2 border-slate-100 focus:border-green-500 focus:outline-none transition-all">
             </div>
+
+            <div id="loading-spinner-entrenamiento" class="hidden text-center py-10">
+              <i class="fas fa-circle-notch fa-spin text-3xl text-green-600"></i>
+            </div>
+
+            <div id="trainings-container" class="space-y-4">
+              </div>
           </div>
-          <div id="trainings-container" aria-live="polite"></div>
         </article>
+
+      </div>
+
+      <div class="mt-16 text-center">
+        <a href="partidos" class="inline-flex items-center justify-center bg-dibaGold text-slate-900 font-black uppercase italic py-4 px-10 rounded-full shadow-lg hover:shadow-2xl hover:-translate-y-1 transition-all">
+          <i class="fas fa-bolt me-3"></i> Ver Próximo Partido
+        </a>
       </div>
     </div>
-    <a href="partidos.html" class="btn btn-warning btn-lg fw-semibold py-3 px-5"
-      style="display: flex; align-items: center; justify-content: center; margin: 40px auto 0; max-width: 300px;">
-      Ver Próximo Partido
-    </a>
-  </section>
   </main>
 
-  <!-- MEJORA: Uso de la etiqueta <footer> -->
   <footer id="footer-container"></footer>
 
-  <!-- Scripts -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-    integrity="sha256-o9N1jzEOkG2z0KLFm7nS5MQe8PgrKaH60p3pqYy5S0c=" crossorigin=""></script>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-  <!-- Tu código general -->
   <script src="scripts/loadComponents.js"></script>
   <script src="scripts/main.js"></script>
-  <script src="scripts/script.js"></script>
-
-  <!-- Supabase desde CDN UMD (sin +esm) -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-  <!-- Lógica de calendario / partidos (ya SIN type="module") -->
   <script src="scripts/paridos.js"></script>
 
-  <!-- Script en línea para los botones de cerrar -->
   <script>
+    // Lógica de botones de cierre
     document.getElementById('btn-close-partidos').addEventListener('click', () => {
-      document.querySelector('#matches-container').innerHTML = '';
+      document.querySelector('#matches-container').innerHTML = '<p class="text-center text-slate-400 italic">Búsqueda limpiada</p>';
     });
     document.getElementById('btn-close-entrenamientos').addEventListener('click', () => {
-      document.querySelector('#trainings-container').innerHTML = '';
+      document.querySelector('#trainings-container').innerHTML = '<p class="text-center text-slate-400 italic">Búsqueda limpiada</p>';
     });
   </script>
 </body>
