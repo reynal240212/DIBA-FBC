@@ -93,7 +93,7 @@ document.addEventListener("DOMContentLoaded", function () {
       `;
 
       const grid = document.createElement("div");
-      grid.className = "grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 px-4";
+      grid.className = "grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6 px-4 w-full";
 
       category.players.forEach((playerName) => {
         const player = playersData.find(p => p.name.toLowerCase() === playerName.toLowerCase());
