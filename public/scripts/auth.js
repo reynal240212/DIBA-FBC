@@ -1,69 +1,43 @@
-import { supabase } from './supabaseClient.js';
+// auth.js
+import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
 
-document.addEventListener('DOMContentLoaded', () => {
-    const loginForm = document.getElementById('login-form');
-    if (loginForm) {
-        loginForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            
-            const loginButton = document.getElementById('login-button');
-            const spinner = loginButton.querySelector('.spinner');
-            const btnText = loginButton.querySelector('.button-text');
-
-            loginButton.disabled = true;
-            spinner?.classList.remove('hidden');
-            if(btnText) btnText.textContent = "Validando...";
-
-            const username = document.getElementById('login-username').value.trim();
-            const password = document.getElementById('login-password').value.trim();
-
-            try {
-                const { data: user, error } = await supabase
-                    .from('usuarios')
-                    .select('id, username, password, role')
-                    .eq('username', username)
-                    .eq('password', password)
-                    .single();
-
-                if (error || !user) throw new Error("Credenciales incorrectas");
-
-                // Guardar sesión en el navegador
-                localStorage.setItem("usuario", JSON.stringify(user));
-
-                // REDIRECCIÓN ÚNICA: Todos van al mismo archivo
-                window.location.href = "/admin/GestorDocumental.html";
-
-            } catch (err) {
-                alert("Error: " + err.message);
-                loginButton.disabled = false;
-                spinner?.classList.add('hidden');
-                if(btnText) btnText.textContent = "Iniciar Sesión";
-            }
-        });
-    }
-});
+const supabase = createClient(
+  "https://wdnlqfiwuocmmcdowjyw.supabase.co",
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndkbmxxZml3dW9jbW1jZG93anl3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg1MjY1ODAsImV4cCI6MjA2NDEwMjU4MH0.4SCS_NRDIYLQJ1XouqW111BxkMOlwMWOjje9gFTgW_Q"
+);
 
 /**
- * Función para proteger las páginas
+ * Verifica si el usuario está autenticado y si tiene el rol permitido.
+ * @param {string|null} rolRequerido - El rol necesario para ver la página (opcional).
  */
 export async function verificarSesion(rolRequerido = null) {
-    const usuarioLocal = JSON.parse(localStorage.getItem("usuario"));
+  // 1. Obtener los datos guardados en el login
+  const usuarioLocal = JSON.parse(localStorage.getItem("usuario"));
 
-    if (!usuarioLocal) {
-        window.location.href = "/admin/login.html";
-        return;
-    }
+  // 2. Si no hay datos en localStorage, mandarlo al login
+  if (!usuarioLocal) {
+    window.location.href = "/admin/login.html";
+    return;
+  }
 
-    // Si la página requiere un rol específico (ej. 'admin') y el usuario no lo tiene
-    if (rolRequerido && usuarioLocal.role !== rolRequerido) {
-        alert("No tienes permisos para acceder a esta sección.");
-        // Lo devolvemos a la página principal del gestor
-        window.location.href = "/admin/GestorDocumental.html";
-    }
+  // 3. (Opcional) Si quieres restringir partes de GestorDocumental solo a admin
+  if (rolRequerido && usuarioLocal.role !== rolRequerido) {
+    alert("⚠️ No tienes permisos para acceder a esta sección.");
+    // Redirigir a la base del gestor si intenta entrar a algo prohibido
+    window.location.href = "/admin/GestorDocumental.html";
+  }
 }
 
+/**
+ * Limpia la sesión y redirige al login.
+ */
 export async function cerrarSesion() {
-    localStorage.removeItem("usuario");
-    await supabase.auth.signOut();
-    window.location.href = "/admin/login.html";
+  // Limpiar localStorage
+  localStorage.removeItem("usuario");
+  
+  // Cerrar sesión en Supabase (si usas Auth oficial)
+  await supabase.auth.signOut();
+  
+  // Redirigir usando ruta absoluta para evitar errores de carpeta
+  window.location.href = "/admin/login.html";
 }
