@@ -7,37 +7,43 @@ const supabase = createClient(
 );
 
 /**
- * Verifica si el usuario está autenticado y si tiene el rol permitido.
- * @param {string|null} rolRequerido - El rol necesario para ver la página (opcional).
+ * Verifica la sesión y el rol.
  */
 export async function verificarSesion(rolRequerido = null) {
-  // 1. Obtener los datos guardados en el login
   const usuarioLocal = JSON.parse(localStorage.getItem("usuario"));
 
-  // 2. Si no hay datos en localStorage, mandarlo al login
+  // 1. Si no hay usuario, redirigir al login
   if (!usuarioLocal) {
-    window.location.href = "/admin/login.html";
-    return;
+    console.warn("Acceso denegado: No hay sesión activa.");
+    // Usamos rutas relativas al root para evitar bucles según la carpeta
+    window.location.replace("/admin/login.html"); 
+    return null;
   }
 
-  // 3. (Opcional) Si quieres restringir partes de GestorDocumental solo a admin
+  // 2. Si hay usuario pero el rol no coincide
   if (rolRequerido && usuarioLocal.role !== rolRequerido) {
     alert("⚠️ No tienes permisos para acceder a esta sección.");
-    // Redirigir a la base del gestor si intenta entrar a algo prohibido
-    window.location.href = "/admin/GestorDocumental.html";
+    window.location.replace("/admin/GestorDocumental.html");
+    return usuarioLocal;
   }
+
+  return usuarioLocal;
 }
 
 /**
- * Limpia la sesión y redirige al login.
+ * Cierra la sesión de forma segura
  */
 export async function cerrarSesion() {
-  // Limpiar localStorage
-  localStorage.removeItem("usuario");
-  
-  // Cerrar sesión en Supabase (si usas Auth oficial)
-  await supabase.auth.signOut();
-  
-  // Redirigir usando ruta absoluta para evitar errores de carpeta
-  window.location.href = "/admin/login.html";
+  try {
+    // Limpiar datos locales primero para feedback instantáneo
+    localStorage.removeItem("usuario");
+    
+    // Intentar cerrar sesión en Supabase
+    await supabase.auth.signOut();
+  } catch (err) {
+    console.error("Error al cerrar sesión:", err);
+  } finally {
+    // Siempre redirigir al login al final
+    window.location.replace("/admin/login.html");
+  }
 }
