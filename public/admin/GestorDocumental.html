@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <title>Gestor Documental | DIBA FBC</title>
@@ -19,7 +20,7 @@
         }
     </script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
 </head>
 
 <body class="bg-slate-50 font-sans text-slate-900">
@@ -27,17 +28,19 @@
     <header id="admin-nav" class="sticky top-0 z-50"></header>
 
     <main class="max-w-5xl mx-auto px-4 py-12">
-        
-        <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12 animate__animated animate__fadeIn">
+
+        <div
+            class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12 animate__animated animate__fadeIn">
             <div>
                 <h1 class="text-4xl font-black uppercase italic text-slate-800 tracking-tighter">Gestor Documental</h1>
                 <p class="text-slate-500 font-medium">Panel de administración de archivos oficiales</p>
             </div>
-            
+
             <div class="flex gap-3">
                 <div class="bg-white p-2 rounded-2xl shadow-sm border border-slate-200 flex items-center gap-2">
                     <label class="text-[10px] font-black uppercase text-slate-400 px-2">Tipo</label>
-                    <select id="docTypeSelect" class="bg-transparent font-bold text-sm outline-none border-none pr-4 cursor-pointer">
+                    <select id="docTypeSelect"
+                        class="bg-transparent font-bold text-sm outline-none border-none pr-4 cursor-pointer">
                         <option value="todos">Todos</option>
                         <option value="administrativo">Administrativos</option>
                         <option value="legal">Legales</option>
@@ -49,14 +52,17 @@
 
         <section class="mb-12 animate__animated animate__fadeInUp">
             <input type="file" id="newDocument" class="hidden" accept=".pdf,.doc,.docx,.jpg,.png">
-            
-            <div id="dropZone" class="group relative bg-white border-4 border-dashed border-slate-200 rounded-[2.5rem] p-16 flex flex-col items-center justify-center transition-all hover:border-dibaGold hover:bg-yellow-50/30 cursor-pointer">
-                <div class="w-20 h-20 bg-slate-100 rounded-3xl flex items-center justify-center mb-6 group-hover:bg-dibaGold group-hover:scale-110 transition-all">
+
+            <div id="dropZone"
+                class="group relative bg-white border-4 border-dashed border-slate-200 rounded-[2.5rem] p-16 flex flex-col items-center justify-center transition-all hover:border-dibaGold hover:bg-yellow-50/30 cursor-pointer">
+                <div
+                    class="w-20 h-20 bg-slate-100 rounded-3xl flex items-center justify-center mb-6 group-hover:bg-dibaGold group-hover:scale-110 transition-all">
                     <i class="fas fa-cloud-upload-alt text-3xl text-slate-400 group-hover:text-dibaBlue"></i>
                 </div>
                 <h3 class="text-xl font-black uppercase italic text-slate-800 mb-2">Subir Documentos</h3>
                 <p class="text-slate-400 text-sm font-medium mb-6">Arrastra y suelta aquí o haz clic para buscar</p>
-                <button type="button" id="selectFileBtn" class="bg-dibaBlue text-white font-black uppercase italic py-3 px-8 rounded-xl shadow-lg hover:bg-slate-800 transition-all text-xs tracking-widest">
+                <button type="button" id="selectFileBtn"
+                    class="bg-dibaBlue text-white font-black uppercase italic py-3 px-8 rounded-xl shadow-lg hover:bg-slate-800 transition-all text-xs tracking-widest">
                     Seleccionar Archivo
                 </button>
             </div>
@@ -67,14 +73,16 @@
                 <h2 class="text-xl font-black uppercase italic text-slate-700">Documentos Cargados</h2>
                 <div class="flex-grow h-px bg-slate-200"></div>
             </div>
-            
+
             <div id="fileListContainer" class="grid gap-4"></div>
         </section>
     </main>
 
     <footer id="admin-footer"></footer>
 
-    <script type="module" src="/scripts/admin-layout.js"></script>
     <script src="/scripts/gestor.js"></script>
+
+    <script type="module" src="/scripts/gestor.js"></script>
 </body>
+
 </html>
