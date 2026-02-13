@@ -18,7 +18,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const password = document.getElementById('login-password').value.trim();
 
             try {
-                // Consulta a la tabla 'usuarios'
                 const { data: user, error } = await supabase
                     .from('usuarios')
                     .select('id, username, password, role')
@@ -28,16 +27,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 if (error || !user) throw new Error("Credenciales incorrectas");
 
-                // Guardar sesión
+                // Guardar sesión en el navegador
                 localStorage.setItem("usuario", JSON.stringify(user));
 
-                // REDIRECCIÓN DINÁMICA CON RUTAS ABSOLUTAS
-                // Esto busca el archivo dentro de public/admin/ sin importar dónde estés
-                if (user.role === 'admin') {
-                    window.location.href = "/admin/GestorDocumental.html";
-                } else {
-                    window.location.href = "/admin/MisDocumentos.html";
-                }
+                // REDIRECCIÓN ÚNICA: Todos van al mismo archivo
+                window.location.href = "/admin/GestorDocumental.html";
 
             } catch (err) {
                 alert("Error: " + err.message);
@@ -56,16 +50,15 @@ export async function verificarSesion(rolRequerido = null) {
     const usuarioLocal = JSON.parse(localStorage.getItem("usuario"));
 
     if (!usuarioLocal) {
-        // Si no hay sesión, siempre vuelve al login en la raíz de admin
         window.location.href = "/admin/login.html";
         return;
     }
 
+    // Si la página requiere un rol específico (ej. 'admin') y el usuario no lo tiene
     if (rolRequerido && usuarioLocal.role !== rolRequerido) {
-        alert("Acceso restringido.");
-        window.location.href = usuarioLocal.role === 'admin' 
-            ? "/admin/GestorDocumental.html" 
-            : "/admin/MisDocumentos.html";
+        alert("No tienes permisos para acceder a esta sección.");
+        // Lo devolvemos a la página principal del gestor
+        window.location.href = "/admin/GestorDocumental.html";
     }
 }
 
