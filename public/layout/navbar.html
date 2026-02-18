@@ -1,217 +1,107 @@
-<nav class="fixed top-0 inset-x-0 z-50 bg-slate-900/95 backdrop-blur shadow">
+<nav class="fixed top-0 inset-x-0 z-[1000] bg-slate-900 border-b border-slate-800 shadow-2xl transition-all duration-300">
   <div class="max-w-6xl mx-auto px-4">
-    <div class="flex items-center justify-between h-16">
-      <!-- Logo -->
-      <a href="index.html" class="flex items-center">
-        <img src="images/ESCUDO.png" alt="Logo DIBA FBC" class="h-12 w-auto" />
+    <div class="flex items-center justify-between h-20">
+      
+      <a href="index.html" class="flex items-center transition-transform hover:scale-105 active:scale-95">
+        <img src="images/ESCUDO.png" alt="Logo DIBA FBC" class="h-14 w-auto object-contain" />
       </a>
 
-      <!-- Botón mobile -->
-      <button
-        id="nav-toggle"
-        class="inline-flex items-center justify-center rounded-md p-2 text-slate-200 hover:bg-slate-800
-               focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-900 focus:ring-blue-500 lg:hidden"
-        aria-controls="navbarNav"
-        aria-expanded="false"
-      >
-        <span class="sr-only">Abrir menú</span>
-        <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none"
-             viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M4 6h16M4 12h16M4 18h16"/>
-        </svg>
-      </button>
-
-      <!-- Menú desktop -->
-      <div id="navbarNav" class="hidden lg:flex lg:items-center lg:space-x-6">
-        <ul class="flex items-center space-x-4 text-sm font-semibold text-slate-100">
-          <li>
-            <a href="index.html" class="hover:text-amber-400 transition-colors">
-              INICIO
-            </a>
+      <div class="hidden lg:flex lg:items-center">
+        <ul class="flex items-center space-x-7 text-[13px] font-bold text-white tracking-wide">
+          
+          <li class="relative group">
+            <a href="index.html" class="hover:text-amber-400 transition-colors uppercase">Inicio</a>
+            <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-amber-400 transition-all group-hover:w-full"></span>
           </li>
 
-          <!-- CLUB dropdown -->
-          <li class="relative">
-            <button
-              type="button"
-              class="inline-flex items-center gap-1 hover:text-amber-400 transition-colors"
-              id="btn-club"
-            >
-              CLUB
-              <i class="fas fa-chevron-down text-[10px]"></i>
+          <li class="relative group py-7">
+            <button type="button" class="flex items-center gap-1.5 hover:text-amber-400 transition-colors uppercase outline-none">
+              Club
+              <i class="fas fa-chevron-down text-[9px] transition-transform group-hover:rotate-180"></i>
             </button>
-            <ul
-              id="dropdown-club"
-              class="absolute left-0 mt-2 w-40 rounded-md bg-slate-900 shadow-lg py-2 text-sm
-                     hidden"
-            >
-              <li>
-                <a href="Historia.html"
-                   class="block px-4 py-2 text-slate-100 hover:bg-slate-800 hover:text-amber-400">
-                  Historia
-                </a>
-              </li>
-              <li>
-                <a href="escudo.html"
-                   class="block px-4 py-2 text-slate-100 hover:bg-slate-800 hover:text-amber-400">
-                  Escudo
-                </a>
-              </li>
+            <ul class="absolute left-0 top-[90%] w-48 bg-slate-900 border border-slate-700 rounded-xl shadow-[0_20px_50px_rgba(0,0,0,0.6)] py-3 opacity-0 invisible translate-y-3 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 transition-all duration-300 z-[1100]">
+              <li><a href="Historia.html" class="block px-5 py-2.5 hover:bg-amber-500 hover:text-slate-900 transition-colors">Historia</a></li>
+              <li><a href="escudo.html" class="block px-5 py-2.5 hover:bg-amber-500 hover:text-slate-900 transition-colors">Escudo</a></li>
             </ul>
           </li>
 
-          <li>
-            <a href="vision_mision.html" class="hover:text-amber-400 transition-colors">
-              VISION Y MISION
-            </a>
+          <li class="relative group">
+            <a href="vision_mision.html" class="hover:text-amber-400 transition-colors uppercase">Visión y Misión</a>
+            <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-amber-400 transition-all group-hover:w-full"></span>
           </li>
 
-          <!-- PARTIDOS dropdown -->
-          <li class="relative">
-            <button
-              type="button"
-              class="inline-flex items-center gap-1 hover:text-amber-400 transition-colors"
-              id="btn-partidos"
-            >
-              PARTIDOS
-              <i class="fas fa-chevron-down text-[10px]"></i>
+          <li class="relative group py-7">
+            <button type="button" class="flex items-center gap-1.5 hover:text-amber-400 transition-colors uppercase outline-none">
+              Partidos
+              <i class="fas fa-chevron-down text-[9px] transition-transform group-hover:rotate-180"></i>
             </button>
-            <ul
-              id="dropdown-partidos"
-              class="absolute left-0 mt-2 w-56 rounded-md bg-slate-900 shadow-lg py-2 text-sm
-                     hidden"
-            >
-              <li>
-                <a href="ficha.html"
-                   class="block px-4 py-2 text-slate-100 hover:bg-slate-800 hover:text-amber-400">
-                  Plantilla
-                </a>
-              </li>
-              <li>
-                <a href="partidos.html"
-                   class="block px-4 py-2 text-slate-100 hover:bg-slate-800 hover:text-amber-400">
-                  Partidos / Entrenamiento
-                </a>
-              </li>
-              <li>
-                <a href="analisis.html"
-                   class="block px-4 py-2 text-slate-100 hover:bg-slate-800 hover:text-amber-400">
-                  Estadísticas
-                </a>
-              </li>
-              <li>
-                <a href="KidsSoccerPradera.html"
-                   class="block px-4 py-2 text-slate-100 hover:bg-slate-800 hover:text-amber-400">
-                  Torneo Kids SOCCER
-                </a>
-              </li>
-              <li>
-                <a href="torneo_suroccidente.html"
-                   class="block px-4 py-2 text-slate-100 hover:bg-slate-800 hover:text-amber-400">
-                  Torneo SurOccidente
-                </a>
-              </li>
+            <ul class="absolute left-0 top-[90%] w-64 bg-slate-900 border border-slate-700 rounded-xl shadow-[0_20px_50px_rgba(0,0,0,0.6)] py-3 opacity-0 invisible translate-y-3 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 transition-all duration-300 z-[1100]">
+              <li><a href="ficha.html" class="block px-5 py-2.5 hover:bg-amber-500 hover:text-slate-900 transition-colors">Plantilla</a></li>
+              <li><a href="partidos.html" class="block px-5 py-2.5 hover:bg-amber-500 hover:text-slate-900 transition-colors">Partidos / Entrenamiento</a></li>
+              <li><a href="analisis.html" class="block px-5 py-2.5 hover:bg-amber-500 hover:text-slate-900 transition-colors">Estadísticas</a></li>
+              <li class="my-2 border-t border-slate-700"></li>
+              <li><a href="KidsSoccerPradera.html" class="block px-5 py-2.5 hover:bg-amber-500 hover:text-slate-900 transition-colors text-xs">Torneo Kids SOCCER</a></li>
+              <li><a href="torneo_suroccidente.html" class="block px-5 py-2.5 hover:bg-amber-500 hover:text-slate-900 transition-colors text-xs">Torneo SurOccidente</a></li>
             </ul>
           </li>
 
-          <li>
-            <a href="contacto.html"
-               class="text-amber-400 hover:text-amber-300 transition-colors">
-              CONTACTO
-            </a>
+          <li class="flex items-center gap-4 border-l border-slate-700 pl-6 ml-2">
+            <a href="contacto.html" class="bg-amber-500 text-slate-900 px-5 py-2 rounded-full hover:bg-white hover:scale-105 transition-all font-black text-[11px]">CONTACTO</a>
+            <a href="ayuda.html" class="text-amber-400 hover:text-white transition-colors text-[11px]">AYUDA</a>
           </li>
+
           <li>
-            <a href="ayuda.html"
-               class="text-amber-400 hover:text-amber-300 transition-colors">
-              AYUDA
-            </a>
+            <button class="text-white hover:text-amber-400 p-2"><i class="fas fa-search"></i></button>
           </li>
         </ul>
       </div>
 
-      <!-- Icono búsqueda -->
-      <div class="hidden lg:flex items-center text-slate-100 cursor-pointer hover:text-amber-400">
-        <i class="fas fa-search"></i>
-      </div>
+      <button id="nav-toggle" class="lg:hidden p-2 text-white">
+        <svg class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+        </svg>
+      </button>
     </div>
 
-    <!-- Menú mobile -->
-    <div id="mobile-menu" class="lg:hidden hidden pt-2 pb-4">
-      <ul class="space-y-2 text-sm font-semibold text-slate-100">
-        <li>
-          <a href="index.html" class="block px-2 py-1 hover:text-amber-400">
-            INICIO
-          </a>
-        </li>
+    <div id="mobile-menu" class="hidden lg:hidden pb-8 space-y-3">
+      <a href="index.html" class="block px-4 py-3 rounded-xl bg-slate-800 text-amber-400 font-bold">INICIO</a>
+      
+      <details class="group bg-slate-800/40 rounded-xl">
+        <summary class="flex justify-between items-center px-4 py-3 cursor-pointer text-white font-bold uppercase list-none">
+          CLUB <i class="fas fa-chevron-down text-[10px] group-open:rotate-180"></i>
+        </summary>
+        <div class="px-6 py-2 pb-4 space-y-3 border-l-2 border-amber-500 ml-4 mt-1">
+          <a href="Historia.html" class="block text-slate-300">Historia</a>
+          <a href="escudo.html" class="block text-slate-300">Escudo</a>
+        </div>
+      </details>
 
-        <!-- CLUB mobile -->
-        <li>
-          <details class="px-2">
-            <summary class="cursor-pointer py-1 hover:text-amber-400">
-              CLUB
-            </summary>
-            <div class="mt-1 pl-3 space-y-1 text-xs font-normal">
-              <a href="Historia.html" class="block py-1 hover:text-amber-400">
-                Historia
-              </a>
-              <a href="escudo.html" class="block py-1 hover:text-amber-400">
-                Escudo
-              </a>
-            </div>
-          </details>
-        </li>
+      <a href="vision_mision.html" class="block px-4 py-3 text-white font-bold uppercase hover:text-amber-400">Visión y Misión</a>
 
-        <li>
-          <a href="vision_mision.html" class="block px-2 py-1 hover:text-amber-400">
-            VISION Y MISION
-          </a>
-        </li>
+      <details class="group bg-slate-800/40 rounded-xl">
+        <summary class="flex justify-between items-center px-4 py-3 cursor-pointer text-white font-bold uppercase list-none">
+          PARTIDOS <i class="fas fa-chevron-down text-[10px] group-open:rotate-180"></i>
+        </summary>
+        <div class="px-6 py-2 pb-4 space-y-3 border-l-2 border-amber-500 ml-4 mt-1">
+          <a href="ficha.html" class="block text-slate-300 italic">Plantilla</a>
+          <a href="partidos.html" class="block text-slate-300">Partidos / Entrenamiento</a>
+          <a href="analisis.html" class="block text-slate-300">Estadísticas</a>
+          <a href="KidsSoccerPradera.html" class="block text-slate-300 text-xs">Torneo Kids SOCCER</a>
+          <a href="torneo_suroccidente.html" class="block text-slate-300 text-xs">Torneo SurOccidente</a>
+        </div>
+      </details>
 
-        <!-- PARTIDOS mobile -->
-        <li>
-          <details class="px-2">
-            <summary class="cursor-pointer py-1 hover:text-amber-400">
-              PARTIDOS
-            </summary>
-            <div class="mt-1 pl-3 space-y-1 text-xs font-normal">
-              <a href="ficha.html" class="block py-1 hover:text-amber-400">
-                Plantilla
-              </a>
-              <a href="partidos.html" class="block py-1 hover:text-amber-400">
-                Partidos / Entrenamiento
-              </a>
-              <a href="analisis.html" class="block py-1 hover:text-amber-400">
-                Estadísticas
-              </a>
-              <a href="KidsSoccerPradera.html" class="block py-1 hover:text-amber-400">
-                Torneo Kids SOCCER
-              </a>
-              <a href="torneo_suroccidente.html" class="block py-1 hover:text-amber-400">
-                Torneo SurOccidente
-              </a>
-            </div>
-          </details>
-        </li>
-
-        <li>
-          <a href="contacto.html" class="block px-2 py-1 text-amber-400 hover:text-amber-300">
-            CONTACTO
-          </a>
-        </li>
-        <li>
-          <a href="ayuda.html" class="block px-2 py-1 text-amber-400 hover:text-amber-300">
-            AYUDA
-          </a>
-        </li>
-
-        <li class="px-2 pt-2">
-          <span class="inline-flex items-center gap-2 text-slate-100">
-            <i class="fas fa-search"></i>
-            Buscar
-          </span>
-        </li>
-      </ul>
+      <div class="pt-4 space-y-3 px-4">
+        <a href="contacto.html" class="block w-full text-center bg-amber-500 text-slate-900 py-3 rounded-xl font-black">CONTACTO</a>
+        <a href="ayuda.html" class="block w-full text-center border border-amber-500 text-amber-400 py-3 rounded-xl font-bold">AYUDA</a>
+      </div>
     </div>
   </div>
 </nav>
+
+<script>
+  // Script para abrir/cerrar menú móvil
+  const btn = document.getElementById('nav-toggle');
+  const menu = document.getElementById('mobile-menu');
+  btn.addEventListener('click', () => menu.classList.toggle('hidden'));
+</script>
