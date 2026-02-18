@@ -28,7 +28,7 @@ const formatearFecha = fechaISO =>
 // Crear tarjetas
 function crearCard({ tipo, titulo, cuerpo, escudo = null, color = 'primary' }) {
   const card = document.createElement('div');
-  card.className = `card border-0 shadow-lg mb-4 bg-${color} text-white animate__animated animate__fadeInUp`;
+  card.className = `card border-0 shadow-lg mb-4 bg-${color} text-black animate__animated animate__fadeInUp`;
 
   card.innerHTML = `
     <div class="card-header d-flex justify-content-between align-items-center bg-opacity-75">
