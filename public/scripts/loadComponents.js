@@ -2,7 +2,7 @@
    DIBA FBC - GESTIÓN DE JUGADORES Y COMPONENTES
 ================================================= */
 document.addEventListener("DOMContentLoaded", function () {
-  
+
   // --- 1. ESTILOS PARA EL MODAL Y MEJORA DE IMAGEN (ANTI-GRANULADO) ---
   const style = document.createElement('style');
   style.innerHTML = `
@@ -115,7 +115,7 @@ document.addEventListener("DOMContentLoaded", function () {
   if (playersContainer) {
     const playersData = [
       // 2014 / 2015
-    { name: "Mario perez", imageUrl: "images/DIBA FBC/MarioP.jpg" },
+      { name: "Mario perez", imageUrl: "images/DIBA FBC/MarioP.jpg" },
       { name: "Eliuth Meza", imageUrl: "images/DIBA FBC/Eliuth.jpg" },
       { name: "Abraham Pérez", imageUrl: "images/DIBA FBC/Abraham.jpg" },
       { name: "Rey David Arrieta", imageUrl: "images/DIBA FBC/ReyDavid.jpg" },
@@ -203,7 +203,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         const card = document.createElement("article");
         card.className = "group bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden hover:shadow-xl transition-all duration-300 cursor-pointer relative";
-        
+
         card.innerHTML = `
           <div class="aspect-[3/4] overflow-hidden bg-slate-100">
             <img src="${imageUrl}" class="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-110" onerror="this.src='${defaultImg}'">
@@ -234,7 +234,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
     try {
       const { createClient } = await import("https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm");
-      const supabase = createClient("https://wdnlqfiwuocmmcdowjyw.supabase.co", "TU_SUPABASE_KEY");
+      const { SUPABASE_URL, SUPABASE_ANON_KEY } = window.DIBA_CONFIG;
+      const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
       const { data, error } = await supabase.from("goleadores").select("*").order("goles", { ascending: false });
       if (error) throw error;

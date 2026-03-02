@@ -1,22 +1,17 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8">
   <title>Crear Perfil - DIBA FBC</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <!-- Bootstrap CSS -->
-  <link
-    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-    rel="stylesheet"
-  />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
   <!-- Bootstrap Icons (para el icono de marcador de posición) -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
   <!-- Animate.css -->
-  <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
-  />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
 
   <style>
     /* Fondo deportivo */
@@ -27,19 +22,23 @@
       padding: 1rem;
       position: relative;
     }
+
     /* Overlay oscuro para legibilidad */
     body::before {
       content: "";
       position: absolute;
       inset: 0;
-      background: rgba(0, 0, 0, 0.6); /* Un poco más oscuro para mejor contraste */
+      background: rgba(0, 0, 0, 0.6);
+      /* Un poco más oscuro para mejor contraste */
       z-index: -1;
     }
+
     /* Contenedor principal */
     .profile-container {
       position: relative;
       z-index: 1;
     }
+
     /* Tarjeta para el formulario */
     .profile-card {
       max-width: 500px;
@@ -48,22 +47,27 @@
       border: none;
       border-radius: 12px;
       overflow: hidden;
-      background-color: rgba(255, 255, 255, 0.98); /* Fondo ligeramente traslúcido */
+      background-color: rgba(255, 255, 255, 0.98);
+      /* Fondo ligeramente traslúcido */
       backdrop-filter: blur(5px);
       transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
+
     .profile-card:hover {
       transform: translateY(-5px);
-      box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
     }
+
     .animate__animated {
       --animate-duration: 0.8s;
     }
+
     /* Estilos para la previsualización del avatar */
     .avatar-preview-wrapper {
       text-align: center;
       margin-bottom: 1rem;
     }
+
     .avatar-preview {
       width: 100px;
       height: 100px;
@@ -74,9 +78,11 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 2.5rem; /* Tamaño del icono */
+      font-size: 2.5rem;
+      /* Tamaño del icono */
       color: #adb5bd;
     }
+
     /* Estilo para el botón de envío */
     .btn-submit .spinner-border {
       width: 1.2rem;
@@ -84,10 +90,11 @@
     }
   </style>
 </head>
+
 <body>
   <div class="container profile-container d-flex align-items-center justify-content-center min-vh-100">
     <div class="card profile-card shadow-lg p-4 animate__animated animate__fadeInUp">
-      
+
       <!-- Contenedor para la previsualización del avatar -->
       <div class="avatar-preview-wrapper">
         <img id="avatar-preview-img" class="avatar-preview shadow-sm" src="" alt="Previsualización del Avatar">
@@ -102,46 +109,23 @@
       <form id="profile-form" novalidate>
         <div class="mb-3">
           <label for="full_name" class="form-label">Nombre Completo</label>
-          <input
-            type="text"
-            class="form-control"
-            id="full_name"
-            name="full_name"
-            placeholder="Ej: Lionel Messi"
-            required
-          />
+          <input type="text" class="form-control" id="full_name" name="full_name" placeholder="Ej: Lionel Messi"
+            required />
         </div>
         <div class="mb-3">
           <label for="username" class="form-label">Nombre de Usuario</label>
-          <input
-            type="text"
-            class="form-control"
-            id="username"
-            name="username"
-            placeholder="Ej: lio_messi"
-            required
-          />
+          <input type="text" class="form-control" id="username" name="username" placeholder="Ej: lio_messi" required />
         </div>
         <div class="mb-3">
           <label for="bio" class="form-label">Biografía</label>
-          <textarea
-            class="form-control"
-            id="bio"
-            name="bio"
-            rows="3"
-            placeholder="Cuéntanos algo sobre ti..."
-          ></textarea>
+          <textarea class="form-control" id="bio" name="bio" rows="3"
+            placeholder="Cuéntanos algo sobre ti..."></textarea>
         </div>
         <!-- Campo de texto para pegar la URL de la imagen -->
         <div class="mb-4">
           <label for="avatar_url" class="form-label">URL de tu foto (opcional)</label>
-          <input
-            type="url"
-            class="form-control"
-            id="avatar_url"
-            name="avatar_url"
-            placeholder="https://ejemplo.com/tu-foto.jpg"
-          />
+          <input type="url" class="form-control" id="avatar_url" name="avatar_url"
+            placeholder="https://ejemplo.com/tu-foto.jpg" />
         </div>
         <button type="submit" id="submit-button" class="btn btn-success w-100 fw-bold btn-submit">
           <span class="button-text">Guardar Perfil</span>
@@ -155,11 +139,12 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <!-- Supabase JS (versión 2.x) -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-  
+  <script src="../scripts/config.js"></script>
+
   <script>
     // --- 1. CONFIGURACIÓN Y CONSTANTES ---
-    const SUPABASE_URL = 'https://nwxdshisfyenkylgqxgz.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im53eGRzaGlzZnllbmt5bGdxeGd6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzkwNTQzMDgsImV4cCI6MjA1NDYzMDMwOH0.QoIiNo5pFA1_MVfE2ugLgyz4HeET-WhA0C_sNOkWv9g';
+    // Credenciales desde config.js centralizado
+    const { SUPABASE_URL, SUPABASE_ANON_KEY } = window.DIBA_CONFIG;
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     // Seleccionamos elementos del DOM para reutilizarlos
@@ -309,7 +294,7 @@
         if (error) throw error;
 
         showAlert('¡Perfil guardado con éxito! Redirigiendo...', 'success');
-        
+
         // Redirigir a la página principal después de un breve momento
         setTimeout(() => {
           window.location.href = 'index.html';
@@ -322,10 +307,11 @@
         // No desactivamos el loading aquí si hay una redirección exitosa,
         // pero sí lo hacemos si falla.
         if (!document.querySelector('.alert-success')) {
-            setLoading(false);
+          setLoading(false);
         }
       }
     });
   </script>
 </body>
+
 </html>

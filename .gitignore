@@ -1,0 +1,27 @@
+# === CREDENCIALES Y SECRETS ===
+# ¡NUNCA subir este archivo! Contiene las claves de Supabase.
+public/scripts/config.js
+
+# Variables de entorno del servidor
+.env
+.env.local
+.env.production
+
+# === NODE / NPM ===
+node_modules/
+npm-debug.log*
+
+# === SISTEMA OPERATIVO ===
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# === EDITORES ===
+.vscode/settings.json
+*.swp
+*.swo
+
+# === BUILD / DIST ===
+dist/
+build/
+.cache/

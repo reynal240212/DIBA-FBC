@@ -4,10 +4,9 @@
 // Usamos el global `supabase` que expone createClient
 const { createClient } = window.supabase;
 
-// Configuración de Supabase
-const supabaseUrl = 'https://wdnlqfiwuocmmcdowjyw.supabase.co';
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndkbmxxZml3dW9jbW1jZG93anl3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg1MjY1ODAsImV4cCI6MjA2NDEwMjU4MH0.4SCS_NRDIYLQJ1XouqW111BxkMOlwMWOjje9gFTgW_Q'; // anon key pública
-const supabaseClient = createClient(supabaseUrl, supabaseKey);
+// Credenciales desde config.js centralizado
+const { SUPABASE_URL, SUPABASE_ANON_KEY } = window.DIBA_CONFIG;
+const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 // Selectores
 const inputFecha = document.getElementById('fecha');
@@ -226,8 +225,8 @@ async function mostrarClasificacion() {
     </thead>
     <tbody>
       ${datos
-        .map(
-          e => `
+      .map(
+        e => `
         <tr class="${e.equipo.toLowerCase().includes('diba') ? 'table-danger fw-bold' : ''}">
           <td>${e.posicion}</td>
           <td>${e.equipo}</td>
@@ -241,8 +240,8 @@ async function mostrarClasificacion() {
           <td>${e.diferencia}</td>
         </tr>
       `
-        )
-        .join('')}
+      )
+      .join('')}
     </tbody>
   `;
 

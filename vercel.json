@@ -1,0 +1,49 @@
+{
+    "buildCommand": "npm run build",
+    "outputDirectory": "public",
+    "cleanUrls": true,
+    "redirects": [
+        {
+            "source": "/:path*.html",
+            "destination": "/:path*",
+            "permanent": true
+        }
+    ],
+    "headers": [
+        {
+            "source": "/scripts/config.js",
+            "headers": [
+                {
+                    "key": "Cache-Control",
+                    "value": "no-store, no-cache, must-revalidate"
+                }
+            ]
+        },
+        {
+            "source": "/static/(.*)",
+            "headers": [
+                {
+                    "key": "Cache-Control",
+                    "value": "public, max-age=31536000, immutable"
+                }
+            ]
+        },
+        {
+            "source": "/(.*)",
+            "headers": [
+                {
+                    "key": "Cache-Control",
+                    "value": "no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0"
+                },
+                {
+                    "key": "Pragma",
+                    "value": "no-cache"
+                },
+                {
+                    "key": "Expires",
+                    "value": "0"
+                }
+            ]
+        }
+    ]
+}

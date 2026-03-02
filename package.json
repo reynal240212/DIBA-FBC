@@ -1,0 +1,12 @@
+{
+  "name": "diba-fbc",
+  "version": "1.0.0",
+  "description": "Sitio web oficial del club de fútbol DIBA FBC - Barranquilla, Colombia",
+  "scripts": {
+    "build": "node generate-config.js",
+    "build:local": "node generate-config.js"
+  },
+  "engines": {
+    "node": ">=16"
+  }
+}
