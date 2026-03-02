@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Página no encontrada | DIBA FBC</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <link rel="icon" href="images/ESCUDO.ico" sizes="32x32" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,700;0,900;1,900&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        * {
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        /* Fondo de campo de fútbol estilizado */
+        body {
+            background-color: #0f172a;
+            background-image:
+                linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Número 404 gigante */
+        .four-o-four {
+            font-size: clamp(7rem, 20vw, 14rem);
+            font-weight: 900;
+            font-style: italic;
+            line-height: 1;
+            letter-spacing: -0.04em;
+            background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 40%, #d97706 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            position: relative;
+            user-select: none;
+        }
+
+        /* Sombra de la pelota */
+        @keyframes bounce {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-18px);
+            }
+        }
+
+        @keyframes shadowPulse {
+
+            0%,
+            100% {
+                transform: scaleX(1);
+                opacity: 0.4;
+            }
+
+            50% {
+                transform: scaleX(0.65);
+                opacity: 0.15;
+            }
+        }
+
+        .ball {
+            animation: bounce 1.6s ease-in-out infinite;
+        }
+
+        .ball-shadow {
+            width: 56px;
+            height: 12px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 50%;
+            margin: 0 auto;
+            animation: shadowPulse 1.6s ease-in-out infinite;
+        }
+
+        /* Links de navegación rápida */
+        .quick-link {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.6rem 1.25rem;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #cbd5e1;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            transition: all 0.2s ease;
+            text-decoration: none;
+        }
+
+        .quick-link:hover {
+            background: rgba(245, 158, 11, 0.15);
+            border-color: rgba(245, 158, 11, 0.4);
+            color: #fbbf24;
+            transform: translateY(-2px);
+        }
+
+        /* Countdown auto-redireccion */
+        #countdown {
+            transition: opacity 0.3s;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(24px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .anim {
+            animation: fadeInUp 0.6s ease forwards;
+            opacity: 0;
+        }
+
+        .anim-1 {
+            animation-delay: 0.05s;
+        }
+
+        .anim-2 {
+            animation-delay: 0.15s;
+        }
+
+        .anim-3 {
+            animation-delay: 0.28s;
+        }
+
+        .anim-4 {
+            animation-delay: 0.42s;
+        }
+
+        .anim-5 {
+            animation-delay: 0.56s;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navbar mínimo con logo -->
+    <nav class="fixed top-0 inset-x-0 z-50 py-4 px-6 flex items-center justify-between">
+        <a href="index.html" class="flex items-center gap-3 opacity-80 hover:opacity-100 transition-opacity">
+            <img src="images/ESCUDO.png" alt="DIBA FBC" class="h-10 w-auto" />
+            <span class="text-white font-black text-sm tracking-wider hidden sm:block">DIBA FBC</span>
+        </a>
+        <a href="index.html"
+            class="text-slate-400 hover:text-amber-400 transition-colors text-xs font-bold uppercase tracking-widest flex items-center gap-1.5">
+            <i class="fas fa-arrow-left"></i> Volver al inicio
+        </a>
+    </nav>
+
+    <!-- Contenido principal -->
+    <main class="flex flex-col items-center justify-center text-center px-4 py-20 w-full max-w-2xl mx-auto">
+
+        <!-- Pelota animada -->
+        <div class="mb-4 anim anim-1">
+            <div class="ball text-6xl">⚽</div>
+            <div class="ball-shadow mt-2"></div>
+        </div>
+
+        <!-- 404 -->
+        <div class="four-o-four anim anim-2 mb-2">404</div>
+
+        <!-- Texto -->
+        <h1 class="text-white text-2xl md:text-3xl font-black mb-3 anim anim-3">
+            ¡Fuera de cancha!
+        </h1>
+        <p class="text-slate-400 text-sm md:text-base leading-relaxed mb-8 max-w-md anim anim-3">
+            La página que buscas no existe o fue movida. Parece que el balón salió por la línea de fondo.
+        </p>
+
+        <!-- Botón principal -->
+        <div class="mb-8 anim anim-4">
+            <a href="index.html"
+                class="inline-flex items-center gap-3 px-8 py-4 bg-amber-500 hover:bg-amber-400 text-slate-900 font-black rounded-2xl shadow-lg shadow-amber-500/30 transition-all hover:-translate-y-0.5 hover:shadow-amber-500/50">
+                <i class="fas fa-home"></i>
+                Volver al Inicio
+            </a>
+        </div>
+
+        <!-- Links rápidos -->
+        <div class="flex flex-wrap justify-center gap-2 mb-10 anim anim-5">
+            <a href="galeria.html" class="quick-link"><i class="fas fa-images"></i> Galería</a>
+            <a href="partidos.html" class="quick-link"><i class="fas fa-futbol"></i> Partidos</a>
+            <a href="ficha.html" class="quick-link"><i class="fas fa-users"></i> Plantilla</a>
+            <a href="analisis.html" class="quick-link"><i class="fas fa-chart-bar"></i> Estadísticas</a>
+            <a href="contacto.html" class="quick-link"><i class="fas fa-envelope"></i> Contacto</a>
+        </div>
+
+        <!-- Auto-redirect countdown -->
+        <p class="text-slate-600 text-xs anim anim-5">
+            Redirigiendo al inicio en <span id="countdown" class="text-amber-500 font-bold">10</span> segundos…
+            <button onclick="clearInterval(timer)"
+                class="ml-2 underline hover:text-slate-400 transition-colors">Cancelar</button>
+        </p>
+    </main>
+
+    <!-- Footer mínimo -->
+    <footer class="absolute bottom-4 inset-x-0 text-center text-slate-700 text-xs">
+        &copy; 2025 DIBA FBC · <a href="aviso.legal.html" class="hover:text-slate-500 transition-colors">Aviso Legal</a>
+    </footer>
+
+    <script>
+        // Auto-redirect con countdown
+        let seconds = 10;
+        const el = document.getElementById('countdown');
+        const timer = setInterval(() => {
+            seconds--;
+            if (el) el.textContent = seconds;
+            if (seconds <= 0) {
+                clearInterval(timer);
+                window.location.href = 'index.html';
+            }
+        }, 1000);
+    </script>
+</body>
+
+</html>
