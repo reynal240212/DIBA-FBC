@@ -3,145 +3,336 @@
 
 <head>
   <meta charset="UTF-8" />
-  <title>Contacto - DIBA FBC</title>
-  <link rel="icon" href="images/ESCUDO.ico" type="image/x-icon" />
+  <title>Contacto | DIBA FBC</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Contáctanos para cualquier información adicional sobre DIBA FBC, horarios de entrenamiento y más." />
+  <meta name="description"
+    content="Contáctanos para cualquier información adicional sobre DIBA FBC: inscripciones, horarios de entrenamiento y más." />
+  <meta property="og:title" content="Contacto | DIBA FBC" />
+  <meta property="og:description" content="Escríbenos y te responderemos a la brevedad posible." />
+  <meta property="og:image" content="https://diba-fbc.vercel.app/images/ESCUDO.png" />
+  <link rel="icon" href="images/ESCUDO.ico" sizes="32x32" />
 
-  <script src="https://cdn.tailwindcss.com"></script>
-  
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;900&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
-
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
-
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
 
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap');
-    
-    body {
+    * {
       font-family: 'Montserrat', sans-serif;
     }
 
-    /* Colores de marca DIBA */
-    .bg-diba-black { background-color: #1c1c1c; }
-    .text-diba-gold { color: #ffcc00; }
-    .bg-diba-gold { background-color: #ffcc00; }
-    .border-diba-gold { border-color: #ffcc00; }
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .fade-up {
+      animation: fadeUp 0.6s ease forwards;
+    }
+
+    .delay-1 {
+      animation-delay: 0.1s;
+      opacity: 0;
+    }
+
+    .delay-2 {
+      animation-delay: 0.2s;
+      opacity: 0;
+    }
+
+    .input-field {
+      width: 100%;
+      padding: 0.85rem 1rem;
+      border-radius: 0.75rem;
+      border: 2px solid #e2e8f0;
+      font-size: 0.875rem;
+      font-weight: 500;
+      background: #f8fafc;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      outline: none;
+    }
+
+    .input-field:focus {
+      border-color: #f59e0b;
+      box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.15);
+      background: #fff;
+    }
+
+    /* Toast */
+    #toast {
+      position: fixed;
+      bottom: 1.5rem;
+      right: 1.5rem;
+      z-index: 9999;
+      display: none;
+      transform: translateY(10px);
+      opacity: 0;
+      transition: all 0.3s ease;
+    }
+
+    #toast.show {
+      display: flex;
+      transform: translateY(0);
+      opacity: 1;
+    }
   </style>
 </head>
 
 <body class="bg-slate-50 text-slate-900">
-
   <div id="navbar-container"></div>
-  <div id="hero-container"></div>
-  
-  <div id="patrocinadores-container"></div>
 
-  <section class="max-w-6xl mx-auto px-4 py-16">
-    <div class="grid md:grid-cols-2 gap-12 items-start">
-      
-      <div data-aos="fade-right">
-        <h2 class="text-3xl font-black uppercase italic border-l-8 border-diba-gold pl-4 mb-6">
-          Información de Contacto
-        </h2>
-        <p class="text-slate-600 text-lg mb-8 leading-relaxed">
-          Si tienes preguntas, inquietudes o sugerencias, no dudes en comunicarte con nosotros. 
-          Nuestro equipo estará encantado de brindarte la información que necesites para unirte a nuestra escuela.
-        </p>
-        
-        <div class="space-y-6">
-          <div class="flex items-center group">
-            <div class="w-12 h-12 bg-diba-black flex items-center justify-center rounded-xl text-diba-gold group-hover:bg-diba-gold group-hover:text-diba-black transition-all duration-300 shadow-lg">
-              <i class="fas fa-map-marker-alt text-xl"></i>
-            </div>
-            <div class="ml-4">
-              <h4 class="font-bold uppercase text-xs text-slate-400 tracking-widest">Dirección</h4>
-              <p class="font-bold text-slate-800">Calle 117b #26 - 114, Barranquilla</p>
-            </div>
-          </div>
+  <!-- ══════════════ HERO ══════════════ -->
+  <section class="bg-slate-900 pt-36 pb-20 relative overflow-hidden">
+    <div class="absolute inset-0 flex items-center justify-center opacity-[0.05] pointer-events-none">
+      <img src="images/ESCUDO.png" alt="" class="w-[420px]" />
+    </div>
+    <div class="max-w-3xl mx-auto px-4 text-center relative z-10">
+      <span
+        class="inline-block px-4 py-1.5 bg-amber-500/20 border border-amber-500/40 text-amber-400 text-xs font-bold tracking-widest uppercase rounded-full mb-5 fade-up delay-1">
+        <i class="fas fa-envelope mr-2"></i>Escríbenos
+      </span>
+      <h1 class="text-5xl md:text-6xl font-black text-white mb-4 fade-up delay-2">
+        Contáct<span class="text-amber-400">anos</span>
+      </h1>
+      <p class="text-slate-300 text-lg fade-up delay-2">
+        Nuestro equipo está listo para responder todas tus preguntas.
+      </p>
+    </div>
+  </section>
 
-          <div class="flex items-center group">
-            <div class="w-12 h-12 bg-diba-black flex items-center justify-center rounded-xl text-diba-gold group-hover:bg-diba-gold group-hover:text-diba-black transition-all duration-300 shadow-lg">
-              <i class="fas fa-envelope text-xl"></i>
-            </div>
-            <div class="ml-4">
-              <h4 class="font-bold uppercase text-xs text-slate-400 tracking-widest">Email</h4>
-              <p class="font-bold text-slate-800 underline">fbcdiba@gmail.com</p>
-            </div>
-          </div>
+  <!-- ══════════════ CONTENIDO ══════════════ -->
+  <section class="py-20 bg-white">
+    <div class="max-w-6xl mx-auto px-4">
+      <div class="grid lg:grid-cols-2 gap-14 items-start">
 
-          <div class="flex items-center group">
-            <div class="w-12 h-12 bg-green-600 flex items-center justify-center rounded-xl text-white group-hover:scale-110 transition-all duration-300 shadow-lg">
-              <i class="fab fa-whatsapp text-2xl"></i>
+        <!-- Info de contacto -->
+        <div>
+          <p class="text-xs font-bold tracking-[0.2em] uppercase text-blue-600 mb-2">Información directa</p>
+          <h2 class="text-3xl font-black text-slate-900 mb-4">Estamos aquí <br />para ayudarte</h2>
+          <p class="text-slate-500 text-sm leading-relaxed mb-10">
+            Si tienes preguntas, inquietudes o sugerencias, no dudes en comunicarte con nosotros.
+            Estaremos encantados de brindarte la información que necesitas.
+          </p>
+
+          <div class="space-y-5">
+            <!-- Dirección -->
+            <div
+              class="flex items-center gap-4 bg-slate-50 rounded-2xl p-5 border border-slate-100 hover:border-amber-300 hover:shadow-sm transition-all">
+              <div class="flex-shrink-0 w-12 h-12 bg-amber-100 rounded-xl flex items-center justify-center">
+                <i class="fas fa-map-marker-alt text-amber-500 text-lg"></i>
+              </div>
+              <div>
+                <p class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-0.5">Dirección</p>
+                <p class="font-bold text-slate-800 text-sm">Calle 117b #26 - 114, Barranquilla</p>
+                <a href="https://maps.google.com/?q=Parque+La+Pradera+Barranquilla" target="_blank"
+                  class="text-xs text-amber-600 hover:underline mt-0.5 inline-block">Ver en Google Maps →</a>
+              </div>
             </div>
-            <div class="ml-4">
-              <h4 class="font-bold uppercase text-xs text-slate-400 tracking-widest">WhatsApp Directo</h4>
-              <a href="https://wa.me/573046566784" class="font-black text-green-700 hover:text-green-500">¡Escríbenos ahora!</a>
+
+            <!-- Email -->
+            <div
+              class="flex items-center gap-4 bg-slate-50 rounded-2xl p-5 border border-slate-100 hover:border-amber-300 hover:shadow-sm transition-all">
+              <div class="flex-shrink-0 w-12 h-12 bg-amber-100 rounded-xl flex items-center justify-center">
+                <i class="fas fa-envelope text-amber-500 text-lg"></i>
+              </div>
+              <div>
+                <p class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-0.5">Correo electrónico</p>
+                <a href="mailto:fbcdiba@gmail.com"
+                  class="font-bold text-slate-800 text-sm hover:text-amber-600 transition-colors">
+                  fbcdiba@gmail.com
+                </a>
+              </div>
+            </div>
+
+            <!-- WhatsApp -->
+            <div
+              class="flex items-center gap-4 bg-slate-50 rounded-2xl p-5 border border-slate-100 hover:border-green-300 hover:shadow-sm transition-all">
+              <div class="flex-shrink-0 w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center">
+                <i class="fab fa-whatsapp text-green-600 text-xl"></i>
+              </div>
+              <div>
+                <p class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-0.5">WhatsApp Directo</p>
+                <a href="https://wa.me/573046566784?text=Hola%20DIBA%20FBC%2C%20me%20interesa%20m%C3%A1s%20informaci%C3%B3n."
+                  target="_blank"
+                  class="font-bold text-green-700 text-sm hover:text-green-500 transition-colors flex items-center gap-2">
+                  +57 304 656 6784
+                  <span class="bg-green-100 text-green-700 text-[10px] font-black px-2 py-0.5 rounded-full">EN
+                    LÍNEA</span>
+                </a>
+              </div>
+            </div>
+
+            <!-- Horario -->
+            <div
+              class="flex items-center gap-4 bg-slate-50 rounded-2xl p-5 border border-slate-100 hover:border-amber-300 hover:shadow-sm transition-all">
+              <div class="flex-shrink-0 w-12 h-12 bg-amber-100 rounded-xl flex items-center justify-center">
+                <i class="fas fa-clock text-amber-500 text-lg"></i>
+              </div>
+              <div>
+                <p class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-0.5">Horario de atención</p>
+                <p class="font-bold text-slate-800 text-sm">Lun – Vie: 8:00 am – 6:00 pm</p>
+                <p class="text-xs text-slate-500">Sábados: 8:00 am – 12:00 pm</p>
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <div class="bg-white p-8 rounded-3xl shadow-2xl border border-slate-100" data-aos="fade-left">
-        <h2 class="text-2xl font-black italic uppercase mb-6 text-slate-800">Envíanos un Mensaje</h2>
-        
-        <form id="contactForm" class="space-y-5">
-          <div>
-            <label for="nombre" class="block text-xs font-black uppercase text-slate-500 mb-2 tracking-widest">Tu Nombre</label>
-            <input type="text" id="nombre" placeholder="Ej: Carlos Pérez" required 
-              class="w-full p-4 rounded-xl border-2 border-slate-100 focus:border-diba-gold focus:outline-none transition-all placeholder:text-slate-300 font-medium" />
-          </div>
-          
-          <div>
-            <label for="correo" class="block text-xs font-black uppercase text-slate-500 mb-2 tracking-widest">Correo Electrónico</label>
-            <input type="email" id="correo" placeholder="tucorreo@ejemplo.com" required 
-              class="w-full p-4 rounded-xl border-2 border-slate-100 focus:border-diba-gold focus:outline-none transition-all placeholder:text-slate-300 font-medium" />
-          </div>
-          
-          <div>
-            <label for="mensaje" class="block text-xs font-black uppercase text-slate-500 mb-2 tracking-widest">Mensaje</label>
-            <textarea id="mensaje" rows="4" placeholder="¿En qué podemos ayudarte?" required 
-              class="w-full p-4 rounded-xl border-2 border-slate-100 focus:border-diba-gold focus:outline-none transition-all placeholder:text-slate-300 font-medium"></textarea>
-          </div>
-          
-          <button type="submit"
-            class="w-full bg-diba-black text-diba-gold font-black py-4 rounded-xl uppercase tracking-[0.2em] shadow-xl hover:bg-slate-800 transition-all transform hover:-translate-y-1 flex items-center justify-center">
-            ENVIAR MENSAJE <i class="fas fa-paper-plane ms-3"></i>
-          </button>
-        </form>
+        <!-- Formulario -->
+        <div class="bg-white rounded-3xl shadow-xl border border-slate-100 p-8">
+          <h2 class="text-2xl font-black text-slate-900 mb-1">Envíanos un Mensaje</h2>
+          <p class="text-slate-400 text-sm mb-7">Te responderemos en menos de 24 horas.</p>
+
+          <form id="contactForm" class="space-y-5" novalidate>
+            <div class="grid sm:grid-cols-2 gap-4">
+              <div>
+                <label for="nombre" class="block text-xs font-black uppercase text-slate-500 mb-1.5 tracking-widest">Tu
+                  Nombre *</label>
+                <input type="text" id="nombre" placeholder="Ej: Carlos Pérez" required class="input-field"
+                  autocomplete="name" />
+              </div>
+              <div>
+                <label for="telefono"
+                  class="block text-xs font-black uppercase text-slate-500 mb-1.5 tracking-widest">Teléfono</label>
+                <input type="tel" id="telefono" placeholder="+57 300 000 0000" class="input-field" autocomplete="tel" />
+              </div>
+            </div>
+
+            <div>
+              <label for="correo"
+                class="block text-xs font-black uppercase text-slate-500 mb-1.5 tracking-widest">Correo Electrónico
+                *</label>
+              <input type="email" id="correo" placeholder="tucorreo@ejemplo.com" required class="input-field"
+                autocomplete="email" />
+            </div>
+
+            <div>
+              <label for="asunto"
+                class="block text-xs font-black uppercase text-slate-500 mb-1.5 tracking-widest">Asunto *</label>
+              <select id="asunto" required class="input-field">
+                <option value="" disabled selected>Selecciona un tema…</option>
+                <option value="inscripcion">Inscripción al club</option>
+                <option value="horarios">Horarios de entrenamiento</option>
+                <option value="pagos">Información de pagos</option>
+                <option value="torneos">Torneos y competencias</option>
+                <option value="otro">Otro</option>
+              </select>
+            </div>
+
+            <div>
+              <label for="mensaje"
+                class="block text-xs font-black uppercase text-slate-500 mb-1.5 tracking-widest">Mensaje *</label>
+              <textarea id="mensaje" rows="4" placeholder="¿En qué podemos ayudarte?" required
+                class="input-field resize-none"></textarea>
+              <p id="char-count" class="text-right text-xs text-slate-400 mt-1">0 / 500</p>
+            </div>
+
+            <button type="submit" id="submitBtn"
+              class="w-full bg-slate-900 text-amber-400 font-black py-4 rounded-xl uppercase tracking-[0.15em] shadow-lg hover:bg-amber-500 hover:text-slate-900 transition-all duration-300 flex items-center justify-center gap-3 group">
+              <span id="btnText">Enviar Mensaje</span>
+              <i id="btnIcon" class="fas fa-paper-plane group-hover:translate-x-1 transition-transform"></i>
+            </button>
+          </form>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════ MAPA ══════════════ -->
+  <section class="bg-slate-100 py-16">
+    <div class="max-w-6xl mx-auto px-4">
+      <div class="text-center mb-8">
+        <p class="text-xs font-bold tracking-[0.2em] uppercase text-blue-600 mb-2">¿Cómo llegar?</p>
+        <h2 class="text-2xl font-black text-slate-900">Parque La Pradera — Lugar de entrenamiento</h2>
+      </div>
+      <div class="rounded-2xl overflow-hidden shadow-xl border border-slate-200">
+        <iframe
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3916.801711935751!2d-74.84118122607062!3d10.978334455439269!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8ef42cdd367c2453%3A0x401e8f23384cd2a6!2sParque%20La%20Pradera!5e0!3m2!1ses-419!2sco!4v1750282065919!5m2!1ses-419!2sco"
+          width="100%" height="380" style="border:0;" allowfullscreen="" loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade" title="Ubicación Parque La Pradera"></iframe>
       </div>
     </div>
   </section>
 
   <div id="footer-container"></div>
 
-  <script src="scripts/loadComponents.js"></script>
-  <script src="scripts/main.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
-  
+  <!-- Toast de éxito -->
+  <div id="toast" class="items-center gap-3 bg-green-600 text-white px-5 py-4 rounded-2xl shadow-2xl">
+    <i class="fas fa-check-circle text-xl"></i>
+    <div>
+      <p class="font-bold text-sm">¡Mensaje enviado!</p>
+      <p class="text-green-200 text-xs">Te responderemos pronto.</p>
+    </div>
+  </div>
+
+  <script src="scripts/config.js"></script>
+  <script src="scripts/loadComponents.js" defer></script>
+  <script src="scripts/main.js" defer></script>
+
   <script>
-    // Inicializar AOS
-    AOS.init({ once: true, duration: 800 });
+    // Contador de caracteres
+    const msgArea = document.getElementById('mensaje');
+    const charCount = document.getElementById('char-count');
+    msgArea.addEventListener('input', () => {
+      const len = Math.min(msgArea.value.length, 500);
+      charCount.textContent = `${len} / 500`;
+      if (msgArea.value.length > 500) msgArea.value = msgArea.value.slice(0, 500);
+    });
 
-    // Manejo del formulario
-    document.getElementById("contactForm").addEventListener("submit", function (e) {
+    // Formulario → abre mailto con feedback visual
+    document.getElementById('contactForm').addEventListener('submit', function (e) {
       e.preventDefault();
+      const nombre = document.getElementById('nombre').value.trim();
+      const telefono = document.getElementById('telefono').value.trim();
+      const correo = document.getElementById('correo').value.trim();
+      const asunto = document.getElementById('asunto').value;
+      const mensaje = document.getElementById('mensaje').value.trim();
 
-      const nombre = document.getElementById("nombre").value;
-      const correo = document.getElementById("correo").value;
-      const mensaje = document.getElementById("mensaje").value;
+      if (!nombre || !correo || !asunto || !mensaje) return;
 
-      const destinatario = "fbcdiba@gmail.com";
-      const asunto = encodeURIComponent("Mensaje Web DIBA FBC - de " + nombre);
-      const cuerpo = encodeURIComponent(
-        `Nombre: ${nombre}\n` +
-        `Correo: ${correo}\n\n` +
-        `Mensaje:\n${mensaje}`
+      const btnText = document.getElementById('btnText');
+      const btnIcon = document.getElementById('btnIcon');
+      const btn = document.getElementById('submitBtn');
+      btn.disabled = true;
+      btnText.textContent = 'Enviando…';
+      btnIcon.className = 'fas fa-spinner fa-spin';
+
+      const dest = 'fbcdiba@gmail.com';
+      const sub = encodeURIComponent(`[DIBA FBC Web] ${asunto} - ${nombre}`);
+      const body = encodeURIComponent(
+        `Nombre: ${nombre}\nTeléfono: ${telefono || 'No indicado'}\nCorreo: ${correo}\n\nMensaje:\n${mensaje}`
       );
 
-      window.location.href = `mailto:${destinatario}?subject=${asunto}&body=${cuerpo}`;
+      setTimeout(() => {
+        window.location.href = `mailto:${dest}?subject=${sub}&body=${body}`;
+
+        // Mostrar toast
+        const toast = document.getElementById('toast');
+        toast.style.display = 'flex';
+        toast.classList.add('show');
+        setTimeout(() => {
+          toast.classList.remove('show');
+          setTimeout(() => toast.style.display = 'none', 300);
+        }, 4000);
+
+        // Reset
+        document.getElementById('contactForm').reset();
+        charCount.textContent = '0 / 500';
+        btn.disabled = false;
+        btnText.textContent = 'Enviar Mensaje';
+        btnIcon.className = 'fas fa-paper-plane group-hover:translate-x-1 transition-transform';
+      }, 600);
     });
   </script>
 </body>
+
 </html>

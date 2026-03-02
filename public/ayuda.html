@@ -3,192 +3,433 @@
 
 <head>
   <meta charset="UTF-8" />
+  <title>Centro de Ayuda | DIBA FBC</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Centro de Ayuda - DIBA FBC</title>
-  <link rel="shortcut icon" href="images/ESCUDO.ico" type="image/x-icon">
-
-  <meta name="description" content="Centro de Ayuda y Preguntas Frecuentes del club DIBA FBC" />
-  <!-- Open Graph y Twitter -->
-  <meta property="og:title" content="Centro de Ayuda - DIBA FBC" />
+  <meta name="description"
+    content="Centro de Ayuda y Preguntas Frecuentes del Club Deportivo DIBA FBC. Inscripciones, horarios, pagos y más." />
+  <meta property="og:title" content="Centro de Ayuda | DIBA FBC" />
   <meta property="og:description" content="Encuentra respuestas a las preguntas más comunes sobre el club DIBA FBC." />
   <meta property="og:image" content="https://diba-fbc.vercel.app/images/ESCUDO.png" />
   <meta property="og:url" content="https://diba-fbc.vercel.app/ayuda.html" />
-  <meta property="og:type" content="website" />
-  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="icon" href="images/ESCUDO.ico" sizes="32x32" />
 
-  <!-- Tailwind CSS -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
+  <style>
+    * {
+      font-family: 'Montserrat', sans-serif;
+    }
 
-  <!-- Animate.css -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
 
-  <!-- AOS -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" />
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
 
-  <!-- Estilos globales -->
-  <link rel="stylesheet" href="styles/styles.css" />
+    .fade-up {
+      animation: fadeUp 0.55s ease forwards;
+    }
+
+    .delay-1 {
+      animation-delay: 0.1s;
+      opacity: 0;
+    }
+
+    .delay-2 {
+      animation-delay: 0.2s;
+      opacity: 0;
+    }
+
+    /* Accordion */
+    .faq-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.35s ease;
+    }
+
+    .faq-content.open {
+      max-height: 800px;
+    }
+
+    .faq-icon {
+      transition: transform 0.3s ease;
+    }
+
+    .faq-icon.rotated {
+      transform: rotate(180deg);
+    }
+
+    .faq-btn:hover .faq-icon {
+      color: #f59e0b;
+    }
+
+    /* Search highlight */
+    mark {
+      background: #fef3c7;
+      color: #92400e;
+      border-radius: 2px;
+      padding: 0 2px;
+    }
+  </style>
 </head>
 
 <body class="bg-slate-50 text-slate-900">
   <div id="navbar-container"></div>
-  <div id="hero-container"></div>
-  <div id="patrocinadores-container"></div>
 
-  <main class="max-w-4xl mx-auto px-4 my-10">
-    <h1
-      class="text-3xl md:text-4xl font-bold text-center mb-4 flex items-center justify-center gap-3 animate__animated animate__fadeInDown"
-      data-aos="fade-down">
-      <i class="fas fa-life-ring text-blue-600"></i>
-      Centro de Ayuda / FAQs
-    </h1>
+  <!-- ══════════════ HERO ══════════════ -->
+  <section class="bg-slate-900 pt-36 pb-20 relative overflow-hidden">
+    <div class="absolute inset-0 flex items-center justify-center opacity-[0.05] pointer-events-none">
+      <img src="images/ESCUDO.png" alt="" class="w-[420px]" />
+    </div>
+    <div class="max-w-3xl mx-auto px-4 text-center relative z-10">
+      <span
+        class="inline-block px-4 py-1.5 bg-amber-500/20 border border-amber-500/40 text-amber-400 text-xs font-bold tracking-widest uppercase rounded-full mb-5 fade-up delay-1">
+        <i class="fas fa-life-ring mr-2"></i>Soporte
+      </span>
+      <h1 class="text-5xl md:text-6xl font-black text-white mb-4 fade-up delay-2">
+        Centro de <span class="text-amber-400">Ayuda</span>
+      </h1>
+      <p class="text-slate-300 text-lg mb-8 fade-up delay-2">
+        Encuentra respuestas rápidas a las preguntas más frecuentes del club.
+      </p>
+      <!-- Buscador FAQ -->
+      <div class="relative max-w-xl mx-auto fade-up delay-2">
+        <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+        <input id="faq-search" type="text" placeholder="Busca una pregunta…"
+          class="w-full pl-11 pr-5 py-3.5 rounded-2xl bg-white/10 border border-white/20 text-white placeholder-slate-400 text-sm font-medium outline-none focus:bg-white/20 focus:border-amber-400 transition" />
+      </div>
+    </div>
+  </section>
 
-    <p class="text-center text-slate-600 mb-8 max-w-2xl mx-auto animate__animated animate__fadeInUp" data-aos="fade-up">
-      Encuentra aquí respuestas a las preguntas más comunes sobre el club DIBA FBC.
-    </p>
+  <!-- ══════════════ STATS ══════════════ -->
+  <div class="bg-amber-500 py-8">
+    <div class="max-w-4xl mx-auto px-4 flex flex-wrap justify-center gap-8 text-slate-900 text-center">
+      <div>
+        <p class="text-3xl font-black">8</p>
+        <p class="text-xs font-bold uppercase tracking-widest">Preguntas</p>
+      </div>
+      <div class="hidden sm:block w-px bg-slate-900/20"></div>
+      <div>
+        <p class="text-3xl font-black">5</p>
+        <p class="text-xs font-bold uppercase tracking-widest">Categorías</p>
+      </div>
+      <div class="hidden sm:block w-px bg-slate-900/20"></div>
+      <div>
+        <p class="text-3xl font-black">&lt;24h</p>
+        <p class="text-xs font-bold uppercase tracking-widest">Respuesta</p>
+      </div>
+    </div>
+  </div>
 
-    <!-- FAQ Accordion -->
-    <section class="space-y-3 animate__animated animate__fadeInUp" id="faqAccordion" data-aos="fade-up">
-      <!-- Pregunta 1 -->
-      <article class="bg-white rounded-xl shadow-sm border border-slate-200">
-        <button type="button"
-          class="w-full flex justify-between items-center px-4 py-3 text-left text-sm md:text-base font-semibold text-slate-800"
-          onclick="toggleFaq('faq1')">
-          <span>¿Cómo puedo inscribirme al club?</span>
-          <span id="icon-faq1" class="text-slate-500 transition-transform">
-            <i class="fas fa-chevron-down"></i>
-          </span>
-        </button>
-        <div id="faq1" class="max-h-0 overflow-hidden transition-all duration-300 ease-in-out">
-          <div class="px-4 pb-4 pt-1 text-sm md:text-base text-slate-700">
-            Puedes inscribirte acercándote al
-            <strong>Parque La Pradera</strong> durante los entrenamientos
-            o comunicándote con nosotros mediante el formulario de
-            <a href="contacto.html" class="text-blue-600 hover:underline">Contacto</a>.
+  <!-- ══════════════ FAQ ══════════════ -->
+  <main class="py-20 bg-white">
+    <div class="max-w-3xl mx-auto px-4">
+
+      <p id="no-results" class="hidden text-center text-slate-400 py-12 text-sm">
+        No se encontraron preguntas para "<span id="search-term"></span>".<br />
+        ¿Tienes otra duda? <a href="contacto.html" class="text-amber-600 font-bold hover:underline">Escríbenos</a>.
+      </p>
+
+      <!-- Categoría: Inscripción -->
+      <div class="mb-8" data-category="inscripcion">
+        <div class="flex items-center gap-3 mb-4">
+          <div class="w-8 h-8 bg-amber-100 rounded-lg flex items-center justify-center flex-shrink-0">
+            <i class="fas fa-user-plus text-amber-500 text-sm"></i>
           </div>
+          <h2 class="text-xs font-black uppercase tracking-[0.15em] text-amber-600">Inscripción</h2>
         </div>
-      </article>
+        <div class="space-y-2" id="faqGroup">
 
-      <!-- Pregunta 2 -->
-      <article class="bg-white rounded-xl shadow-sm border border-slate-200">
-        <button type="button"
-          class="w-full flex justify-between items-center px-4 py-3 text-left text-sm md:text-base font-semibold text-slate-800"
-          onclick="toggleFaq('faq2')">
-          <span>¿Cuáles son los horarios de entrenamiento?</span>
-          <span id="icon-faq2" class="text-slate-500 transition-transform">
-            <i class="fas fa-chevron-down"></i>
-          </span>
-        </button>
-        <div id="faq2" class="max-h-0 overflow-hidden transition-all duration-300 ease-in-out">
-          <div class="px-4 pb-4 pt-1 text-sm md:text-base text-slate-700 space-y-4">
-            <p>
-              Los entrenamientos se realizan en diferentes días y horarios según la categoría.
-              Consulta la sección
-              <a href="partidos.html" class="text-blue-600 hover:underline">
-                Partidos / Entrenamientos
-              </a>
-              para más detalles.
-            </p>
-
-            <!-- Mapa -->
-            <section class="w-full">
-              <h2 class="text-center mb-3 text-blue-700 font-semibold">
-                Lugar de Entrenamiento del Club
-              </h2>
-              <div class="overflow-hidden rounded-xl border border-slate-200 shadow-sm">
-                <iframe
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3916.801711935751!2d-74.84118122607062!3d10.978334455439269!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8ef42cdd367c2453%3A0x401e8f23384cd2a6!2sParque%20La%20Pradera!5e0!3m2!1ses-419!2sco!4v1750282065919!5m2!1ses-419!2sco"
-                  width="100%" height="350" style="border:0;" allowfullscreen="" loading="lazy"
-                  referrerpolicy="no-referrer-when-downgrade"></iframe>
+          <article
+            class="faq-item bg-white rounded-2xl border border-slate-200 overflow-hidden hover:border-amber-300 transition-colors">
+            <button class="faq-btn w-full flex justify-between items-center px-6 py-4 text-left"
+              onclick="toggleFaq(this)">
+              <span class="font-bold text-slate-800 text-sm pr-4 faq-question">¿Cómo puedo inscribirme al club?</span>
+              <i class="fas fa-chevron-down text-slate-400 flex-shrink-0 faq-icon text-sm"></i>
+            </button>
+            <div class="faq-content">
+              <div class="px-6 pb-5 text-sm text-slate-600 leading-relaxed border-t border-slate-100 pt-4">
+                Puedes inscribirte acercándote al <strong class="text-slate-800">Parque La Pradera</strong> durante los
+                horarios de entrenamiento,
+                o comunicándote con nosotros a través del formulario de
+                <a href="contacto.html" class="text-amber-600 font-bold hover:underline">Contacto</a> o por
+                <a href="https://wa.me/573046566784" target="_blank"
+                  class="text-green-600 font-bold hover:underline">WhatsApp</a>.
               </div>
-            </section>
-          </div>
-        </div>
-      </article>
+            </div>
+          </article>
 
-      <!-- Pregunta 3 -->
-      <article class="bg-white rounded-xl shadow-sm border border-slate-200">
-        <button type="button"
-          class="w-full flex justify-between items-center px-4 py-3 text-left text-sm md:text-base font-semibold text-slate-800"
-          onclick="toggleFaq('faq3')">
-          <span>¿Qué necesito para unirme?</span>
-          <span id="icon-faq3" class="text-slate-500 transition-transform">
-            <i class="fas fa-chevron-down"></i>
-          </span>
-        </button>
-        <div id="faq3" class="max-h-0 overflow-hidden transition-all duration-300 ease-in-out">
-          <div class="px-4 pb-4 pt-1 text-sm md:text-base text-slate-700">
-            Debes llevar copia del registro de nacimiento, uniforme oficial DIBA FBC
-            y cumplir con el pago de inscripción.
-          </div>
-        </div>
-      </article>
+          <article
+            class="faq-item bg-white rounded-2xl border border-slate-200 overflow-hidden hover:border-amber-300 transition-colors">
+            <button class="faq-btn w-full flex justify-between items-center px-6 py-4 text-left"
+              onclick="toggleFaq(this)">
+              <span class="font-bold text-slate-800 text-sm pr-4 faq-question">¿Qué documentos necesito para
+                unirme?</span>
+              <i class="fas fa-chevron-down text-slate-400 flex-shrink-0 faq-icon text-sm"></i>
+            </button>
+            <div class="faq-content">
+              <div class="px-6 pb-5 text-sm text-slate-600 leading-relaxed border-t border-slate-100 pt-4">
+                <ul class="space-y-2">
+                  <li class="flex items-start gap-2"><i class="fas fa-check text-amber-500 mt-0.5 text-xs"></i> Copia
+                    del <strong class="text-slate-800">registro de nacimiento</strong></li>
+                  <li class="flex items-start gap-2"><i class="fas fa-check text-amber-500 mt-0.5 text-xs"></i> <strong
+                      class="text-slate-800">Uniforme oficial DIBA FBC</strong> (o consultar disponibilidad)</li>
+                  <li class="flex items-start gap-2"><i class="fas fa-check text-amber-500 mt-0.5 text-xs"></i> Pago de
+                    la <strong class="text-slate-800">inscripción inicial</strong></li>
+                </ul>
+              </div>
+            </div>
+          </article>
 
-      <!-- Pregunta 4 -->
-      <article class="bg-white rounded-xl shadow-sm border border-slate-200">
-        <button type="button"
-          class="w-full flex justify-between items-center px-4 py-3 text-left text-sm md:text-base font-semibold text-slate-800"
-          onclick="toggleFaq('faq4')">
-          <span>¿Cómo puedo pagar?</span>
-          <span id="icon-faq4" class="text-slate-500 transition-transform">
-            <i class="fas fa-chevron-down"></i>
-          </span>
-        </button>
-        <div id="faq4" class="max-h-0 overflow-hidden transition-all duration-300 ease-in-out">
-          <div class="px-4 pb-4 pt-1 text-sm md:text-base text-slate-700">
-            Puedes pagar en efectivo directamente con los responsables del club en el lugar de entrenamiento.
-          </div>
         </div>
-      </article>
-    </section>
+      </div>
+
+      <!-- Categoría: Entrenamientos -->
+      <div class="mb-8" data-category="entrenamientos">
+        <div class="flex items-center gap-3 mb-4">
+          <div class="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
+            <i class="fas fa-running text-blue-500 text-sm"></i>
+          </div>
+          <h2 class="text-xs font-black uppercase tracking-[0.15em] text-blue-600">Entrenamientos</h2>
+        </div>
+        <div class="space-y-2">
+
+          <article
+            class="faq-item bg-white rounded-2xl border border-slate-200 overflow-hidden hover:border-amber-300 transition-colors">
+            <button class="faq-btn w-full flex justify-between items-center px-6 py-4 text-left"
+              onclick="toggleFaq(this)">
+              <span class="font-bold text-slate-800 text-sm pr-4 faq-question">¿Cuáles son los horarios de
+                entrenamiento?</span>
+              <i class="fas fa-chevron-down text-slate-400 flex-shrink-0 faq-icon text-sm"></i>
+            </button>
+            <div class="faq-content">
+              <div class="px-6 pb-5 text-sm text-slate-600 leading-relaxed border-t border-slate-100 pt-4">
+                <p class="mb-3">Los entrenamientos se realizan en diferentes días y horarios según la categoría.
+                  Consulta la sección
+                  <a href="partidos.html" class="text-amber-600 font-bold hover:underline">Partidos / Entrenamientos</a>
+                  para el calendario actualizado.
+                </p>
+                <div class="rounded-xl overflow-hidden border border-slate-200">
+                  <iframe
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3916.801711935751!2d-74.84118122607062!3d10.978334455439269!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8ef42cdd367c2453%3A0x401e8f23384cd2a6!2sParque%20La%20Pradera!5e0!3m2!1ses-419!2sco!4v1750282065919!5m2!1ses-419!2sco"
+                    width="100%" height="260" style="border:0;" allowfullscreen="" loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade" title="Parque La Pradera"></iframe>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <article
+            class="faq-item bg-white rounded-2xl border border-slate-200 overflow-hidden hover:border-amber-300 transition-colors">
+            <button class="faq-btn w-full flex justify-between items-center px-6 py-4 text-left"
+              onclick="toggleFaq(this)">
+              <span class="font-bold text-slate-800 text-sm pr-4 faq-question">¿Dónde se realizan los
+                entrenamientos?</span>
+              <i class="fas fa-chevron-down text-slate-400 flex-shrink-0 faq-icon text-sm"></i>
+            </button>
+            <div class="faq-content">
+              <div class="px-6 pb-5 text-sm text-slate-600 leading-relaxed border-t border-slate-100 pt-4">
+                Los entrenamientos se llevan a cabo en el <strong class="text-slate-800">Parque La Pradera</strong>,
+                ubicado en la
+                Calle 117b #26 - 114, Barranquilla. Es un espacio amplio y adecuado para el desarrollo del fútbol base.
+              </div>
+            </div>
+          </article>
+
+        </div>
+      </div>
+
+      <!-- Categoría: Pagos -->
+      <div class="mb-8" data-category="pagos">
+        <div class="flex items-center gap-3 mb-4">
+          <div class="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0">
+            <i class="fas fa-credit-card text-green-500 text-sm"></i>
+          </div>
+          <h2 class="text-xs font-black uppercase tracking-[0.15em] text-green-600">Pagos</h2>
+        </div>
+        <div class="space-y-2">
+
+          <article
+            class="faq-item bg-white rounded-2xl border border-slate-200 overflow-hidden hover:border-amber-300 transition-colors">
+            <button class="faq-btn w-full flex justify-between items-center px-6 py-4 text-left"
+              onclick="toggleFaq(this)">
+              <span class="font-bold text-slate-800 text-sm pr-4 faq-question">¿Cómo puedo realizar el pago de
+                inscripción?</span>
+              <i class="fas fa-chevron-down text-slate-400 flex-shrink-0 faq-icon text-sm"></i>
+            </button>
+            <div class="faq-content">
+              <div class="px-6 pb-5 text-sm text-slate-600 leading-relaxed border-t border-slate-100 pt-4">
+                El pago puede realizarse en <strong class="text-slate-800">efectivo</strong> directamente con los
+                responsables del club
+                en el lugar de entrenamiento. Para más información sobre montos y fechas, comunícate por
+                <a href="https://wa.me/573046566784" target="_blank"
+                  class="text-green-600 font-bold hover:underline">WhatsApp</a>.
+              </div>
+            </div>
+          </article>
+
+        </div>
+      </div>
+
+      <!-- Categoría: Sitio Web -->
+      <div class="mb-8" data-category="sitio">
+        <div class="flex items-center gap-3 mb-4">
+          <div class="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center flex-shrink-0">
+            <i class="fas fa-globe text-purple-500 text-sm"></i>
+          </div>
+          <h2 class="text-xs font-black uppercase tracking-[0.15em] text-purple-600">Sitio Web</h2>
+        </div>
+        <div class="space-y-2">
+
+          <article
+            class="faq-item bg-white rounded-2xl border border-slate-200 overflow-hidden hover:border-amber-300 transition-colors">
+            <button class="faq-btn w-full flex justify-between items-center px-6 py-4 text-left"
+              onclick="toggleFaq(this)">
+              <span class="font-bold text-slate-800 text-sm pr-4 faq-question">¿Cómo uso el buscador del sitio?</span>
+              <i class="fas fa-chevron-down text-slate-400 flex-shrink-0 faq-icon text-sm"></i>
+            </button>
+            <div class="faq-content">
+              <div class="px-6 pb-5 text-sm text-slate-600 leading-relaxed border-t border-slate-100 pt-4">
+                Haz clic en el ícono 🔍 de la barra de navegación o usa el atajo de teclado
+                <kbd class="bg-slate-100 border border-slate-300 px-1.5 py-0.5 rounded text-xs font-mono">Ctrl + K</kbd>
+                para abrir el buscador. Escribe cualquier término y navega con las flechas del teclado, presiona
+                <kbd class="bg-slate-100 border border-slate-300 px-1.5 py-0.5 rounded text-xs font-mono">Enter</kbd>
+                para ir a la página
+                y <kbd class="bg-slate-100 border border-slate-300 px-1.5 py-0.5 rounded text-xs font-mono">Esc</kbd>
+                para cerrar.
+              </div>
+            </div>
+          </article>
+
+          <article
+            class="faq-item bg-white rounded-2xl border border-slate-200 overflow-hidden hover:border-amber-300 transition-colors">
+            <button class="faq-btn w-full flex justify-between items-center px-6 py-4 text-left"
+              onclick="toggleFaq(this)">
+              <span class="font-bold text-slate-800 text-sm pr-4 faq-question">¿Cómo puedo ver la galería de fotos y
+                videos?</span>
+              <i class="fas fa-chevron-down text-slate-400 flex-shrink-0 faq-icon text-sm"></i>
+            </button>
+            <div class="faq-content">
+              <div class="px-6 pb-5 text-sm text-slate-600 leading-relaxed border-t border-slate-100 pt-4">
+                Ve a la sección <a href="galeria.html" class="text-amber-600 font-bold hover:underline">Galería</a>
+                desde el menú superior.
+                Allí encontrarás más de 55 fotos organizadas por categorías (Partidos, Campeonatos, Celebraciones…)
+                y 2 videos del club. Puedes filtrar y hacer clic en cualquier imagen para verla ampliada.
+              </div>
+            </div>
+          </article>
+
+          <article
+            class="faq-item bg-white rounded-2xl border border-slate-200 overflow-hidden hover:border-amber-300 transition-colors">
+            <button class="faq-btn w-full flex justify-between items-center px-6 py-4 text-left"
+              onclick="toggleFaq(this)">
+              <span class="font-bold text-slate-800 text-sm pr-4 faq-question">¿Encontré un error en el sitio. ¿Qué
+                hago?</span>
+              <i class="fas fa-chevron-down text-slate-400 flex-shrink-0 faq-icon text-sm"></i>
+            </button>
+            <div class="faq-content">
+              <div class="px-6 pb-5 text-sm text-slate-600 leading-relaxed border-t border-slate-100 pt-4">
+                Por favor repórtalo en la sección de <a href="contacto.html"
+                  class="text-amber-600 font-bold hover:underline">Contacto</a>
+                indicando la página donde ocurrió el error y qué estabas intentando hacer. ¡Agradecemos tu ayuda!
+              </div>
+            </div>
+          </article>
+
+        </div>
+      </div>
+
+    </div>
   </main>
 
-  <!-- Footer -->
+  <!-- ══════════════ CTA ══════════════ -->
+  <section class="py-16 bg-slate-900 relative overflow-hidden">
+    <div class="absolute inset-0 opacity-[0.04] flex items-center justify-center pointer-events-none">
+      <img src="images/ESCUDO.png" alt="" class="w-[400px]" />
+    </div>
+    <div class="max-w-2xl mx-auto px-4 text-center relative z-10">
+      <p class="text-amber-400 font-black text-xs tracking-[0.2em] uppercase mb-3">¿No encontraste lo que buscabas?</p>
+      <h2 class="text-3xl font-black text-white mb-4">Contáctanos directamente</h2>
+      <p class="text-slate-400 text-sm mb-8">Nuestro equipo responde en menos de 24 horas.</p>
+      <div class="flex flex-wrap justify-center gap-4">
+        <a href="contacto.html"
+          class="inline-flex items-center gap-2 px-7 py-3.5 rounded-full bg-amber-500 text-slate-900 font-black text-sm hover:bg-amber-400 transition-colors shadow-lg shadow-amber-500/30">
+          <i class="fas fa-envelope"></i> Formulario de Contacto
+        </a>
+        <a href="https://wa.me/573046566784?text=Hola%20DIBA%20FBC%2C%20tengo%20una%20pregunta." target="_blank"
+          class="inline-flex items-center gap-2 px-7 py-3.5 rounded-full bg-green-600 text-white font-black text-sm hover:bg-green-500 transition-colors shadow-lg">
+          <i class="fab fa-whatsapp"></i> WhatsApp
+        </a>
+      </div>
+    </div>
+  </section>
+
   <div id="footer-container"></div>
 
-  <!-- Scripts propios -->
-  <script src="scripts/navbar.js"></script>
-  <script src="scripts/loadComponents.js"></script>
-  <script src="scripts/main.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+  <script src="scripts/config.js"></script>
+  <script src="scripts/loadComponents.js" defer></script>
+  <script src="scripts/main.js" defer></script>
+
   <script>
-    AOS.init({ once: true, duration: 800 });
-  </script>
+    // ── Accordion ──────────────────────────────────
+    function toggleFaq(btn) {
+      const article = btn.closest('.faq-item');
+      const content = article.querySelector('.faq-content');
+      const icon = btn.querySelector('.faq-icon');
+      const isOpen = content.classList.contains('open');
 
-  <!-- Lógica simple del accordion -->
-  <script>
-    function toggleFaq(id) {
-      const content = document.getElementById(id);
-      const icon = document.getElementById('icon-' + id);
+      // Cerrar todos
+      document.querySelectorAll('.faq-content.open').forEach(c => c.classList.remove('open'));
+      document.querySelectorAll('.faq-icon.rotated').forEach(i => i.classList.remove('rotated'));
 
-      const isOpen = content.style.maxHeight && content.style.maxHeight !== '0px';
-
-      if (isOpen) {
-        content.style.maxHeight = '0';
-        icon.classList.remove('rotate-180');
-      } else {
-        // Cerrar los demás
-        document.querySelectorAll('#faqAccordion > article > div[id^="faq"]').forEach((el) => {
-          el.style.maxHeight = '0';
-        });
-        document.querySelectorAll('[id^="icon-faq"]').forEach((ic) => {
-          ic.classList.remove('rotate-180');
-        });
-
-        // Abrir el seleccionado
-        content.style.maxHeight = content.scrollHeight + 'px';
-        icon.classList.add('rotate-180');
+      // Abrir/cerrar el actual
+      if (!isOpen) {
+        content.classList.add('open');
+        icon.classList.add('rotated');
       }
     }
 
-    // Abrir por defecto la primera
+    // Abrir la primera por defecto
     window.addEventListener('load', () => {
-      toggleFaq('faq1');
+      const first = document.querySelector('.faq-btn');
+      if (first) toggleFaq(first);
+    });
+
+    // ── Buscador FAQ ────────────────────────────────
+    document.getElementById('faq-search').addEventListener('input', function () {
+      const q = this.value.trim().toLowerCase();
+      const items = document.querySelectorAll('.faq-item');
+      const noResults = document.getElementById('no-results');
+      document.getElementById('search-term').textContent = this.value.trim();
+      let found = 0;
+
+      items.forEach(item => {
+        const question = item.querySelector('.faq-question').textContent.toLowerCase();
+        const answer = item.querySelector('.faq-content').textContent.toLowerCase();
+        const match = !q || question.includes(q) || answer.includes(q);
+        item.style.display = match ? '' : 'none';
+        if (match) found++;
+      });
+
+      // Mostrar/ocultar categorías vacías
+      document.querySelectorAll('[data-category]').forEach(cat => {
+        const visible = [...cat.querySelectorAll('.faq-item')].some(i => i.style.display !== 'none');
+        cat.style.display = visible ? '' : 'none';
+      });
+
+      noResults.classList.toggle('hidden', found > 0 || !q);
     });
   </script>
-
 </body>
 
 </html>
