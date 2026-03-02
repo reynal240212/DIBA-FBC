@@ -2,213 +2,342 @@
 <html lang="es">
 
 <head>
-  <meta charset="UTF-8">
-  <title>Plan de Desarrollo - DIBA FBC</title>
-  <link rel="icon" href="images/ESCUDO.ico" type="image/x-icon">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <title>Visión y Misión | DIBA FBC</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description"
+    content="Conoce la Misión, Visión y Ejes Estratégicos del Club Deportivo DIBA FBC, comprometido con la formación integral de jóvenes en Barranquilla." />
+  <meta property="og:title" content="Visión y Misión | DIBA FBC" />
+  <meta property="og:description" content="Formando campeones dentro y fuera de la cancha en Barranquilla." />
+  <meta property="og:image" content="https://diba-fbc.vercel.app/images/ESCUDO.png" />
+  <meta property="og:url" content="https://diba-fbc.vercel.app/vision_mision" />
+  <link rel="icon" href="images/ESCUDO.ico" sizes="32x32" />
+  <link rel="manifest" href="manifest.json" />
 
-  <!-- Fuentes y CSS Externos -->
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
-  <link rel="stylesheet" href="styles/styles.css">
+  <!-- Fonts & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
 
   <style>
-    :root {
-      --primary-gold: #ffcc00;
-      --dark-bg: #1c1c1c;
-      --soft-gray: #f8f9fa;
-      --transition: all 0.3s ease;
-    }
-
-    body {
+    * {
       font-family: 'Montserrat', sans-serif;
-      background-color: #ffffff;
-      color: #333;
     }
 
-    /* Estilización de Títulos */
-    .section-title {
-      font-weight: 800;
-      text-transform: uppercase;
-      position: relative;
-      padding-bottom: 15px;
-      margin-bottom: 40px;
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(24px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
-    .section-title::after {
-      content: '';
-      position: absolute;
-      width: 80px;
-      height: 4px;
-      background-color: var(--primary-gold);
-      bottom: 0;
-      left: 50%;
-      transform: translateX(-50%);
+    .fade-up {
+      animation: fadeUp 0.6s ease forwards;
     }
 
-    /* Tarjetas de Misión y Visión */
-    .info-card {
-      background: #fff;
-      border: none;
-      border-radius: 15px;
-      padding: 30px;
-      height: 100%;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-      transition: var(--transition);
-      border-bottom: 4px solid transparent;
+    .delay-1 {
+      animation-delay: 0.1s;
+      opacity: 0;
     }
 
-    .info-card:hover {
-      transform: translateY(-10px);
-      border-bottom: 4px solid var(--primary-gold);
-      box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+    .delay-2 {
+      animation-delay: 0.2s;
+      opacity: 0;
     }
 
-    .info-card .icon-box {
-      width: 60px;
-      height: 60px;
-      background: var(--primary-gold);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 20px;
-      font-size: 1.5rem;
-      color: var(--dark-bg);
+    .delay-3 {
+      animation-delay: 0.3s;
+      opacity: 0;
     }
 
-    /* Lista de Objetivos Mejorada */
-    .objective-item {
-      background: var(--soft-gray);
-      border-left: 5px solid var(--primary-gold);
-      margin-bottom: 10px;
-      padding: 15px 20px;
-      border-radius: 0 10px 10px 0;
-      transition: var(--transition);
+    .card-hover {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
 
-    .objective-item:hover {
-      background: #e9ecef;
-      padding-left: 30px;
+    .card-hover:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
     }
 
-    /* Frase Final */
-    .quote-section {
-      background: var(--dark-bg);
-      color: white;
-      padding: 60px 20px;
-      border-radius: 20px;
-      margin-top: 50px;
+    .eje-item {
+      transition: all 0.25s ease;
     }
 
-    .quote-text {
-      font-size: 1.5rem;
-      font-style: italic;
-      font-weight: 300;
+    .eje-item:hover {
+      padding-left: 1.75rem;
+      background: #fef3c7;
     }
 
-    .quote-text span {
-      color: var(--primary-gold);
-      font-weight: 700;
+    .valor-card:hover .valor-icon {
+      background: #f59e0b;
+      color: #fff;
     }
   </style>
 </head>
 
-<body>
+<body class="bg-slate-50 text-slate-900">
 
+  <!-- Navbar -->
   <div id="navbar-container"></div>
-  <div id="hero-container"></div>
-  <div id="patrocinadores-container"></div>
 
-  <!-- CONTENIDO PRINCIPAL -->
-  <main class="container py-5 animate__animated animate__fadeIn">
-    
-    <header class="text-center mb-5">
-      <h2 class="section-title">Club Deportivo D.I.B.A. FBC</h2>
-      <p class="lead mx-auto" style="max-width: 800px;">
-        Somos un organismo adscrito al <strong>Sistema Nacional del Deporte</strong>, comprometidos con transformar vidas en Barranquilla a través del fútbol base y la formación integral.
+  <!-- ════════════════════════════
+       HERO — fondo oscuro solo aquí
+       (igual que index.html / noticias)
+  ════════════════════════════ -->
+  <section class="bg-slate-900 pt-36 pb-20 relative overflow-hidden">
+    <div class="absolute inset-0 flex items-center justify-center pointer-events-none opacity-[0.05]">
+      <img src="images/ESCUDO.png" alt="" class="w-[480px]" />
+    </div>
+    <div class="max-w-4xl mx-auto px-4 text-center relative z-10">
+      <span
+        class="inline-block px-4 py-1.5 bg-amber-500/20 border border-amber-500/40 text-amber-400 text-xs font-bold tracking-widest uppercase rounded-full mb-5 fade-up delay-1">
+        <i class="fas fa-compass mr-2"></i>Nuestra identidad
+      </span>
+      <h1 class="text-5xl md:text-6xl font-black tracking-tight text-white mb-5 leading-tight fade-up delay-2">
+        Visión <span class="text-amber-400">&amp;</span> Misión
+      </h1>
+      <p class="text-slate-300 text-lg max-w-2xl mx-auto leading-relaxed fade-up delay-3">
+        Somos un organismo adscrito al <strong class="text-white">Sistema Nacional del Deporte</strong>, comprometidos
+        con transformar vidas en Barranquilla a través del fútbol base y la formación integral.
       </p>
-    </header>
+    </div>
+  </section>
 
-    <div class="row g-4 mb-5">
-      <!-- Misión -->
-      <div class="col-md-6 col-lg-4">
-        <div class="info-card">
-          <div class="icon-box"><i class="fas fa-bullseye"></i></div>
-          <h4>Misión</h4>
-          <p class="text-muted">
-            Velar por la formación integral de jóvenes deportistas, promoviendo valores de disciplina, trabajo en equipo y respeto, contribuyendo al desarrollo personal y social de nuestros integrantes.
-          </p>
-        </div>
+  <!-- ════════════════════════════
+       MISIÓN · VISIÓN · OBJETIVO
+       (fondo blanco)
+  ════════════════════════════ -->
+  <section class="py-20 bg-white">
+    <div class="max-w-6xl mx-auto px-4">
+
+      <div class="text-center mb-12">
+        <p class="text-xs font-semibold tracking-[0.2em] text-blue-600 uppercase mb-2">Club Deportivo D.I.B.A. FBC</p>
+        <h2 class="text-3xl md:text-4xl font-bold text-slate-900 tracking-tight">¿Quiénes somos?</h2>
       </div>
 
-      <!-- Visión -->
-      <div class="col-md-6 col-lg-4">
-        <div class="info-card">
-          <div class="icon-box"><i class="fas fa-eye"></i></div>
-          <h4>Visión</h4>
-          <p class="text-muted">
-            Ser un club referente a nivel regional y nacional por nuestra excelencia deportiva y administrativa, formando ciudadanos con altos estándares de responsabilidad y espíritu competitivo.
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+        <!-- Misión -->
+        <article class="card-hover bg-white rounded-2xl p-8 border border-slate-100 shadow-sm">
+          <div class="w-14 h-14 rounded-xl bg-amber-100 flex items-center justify-center mb-6">
+            <i class="fas fa-bullseye text-amber-500 text-2xl"></i>
+          </div>
+          <h3 class="text-lg font-black uppercase tracking-wide mb-3 text-slate-900">Misión</h3>
+          <div class="w-10 h-1 bg-amber-400 rounded mb-4"></div>
+          <p class="text-slate-600 text-sm leading-relaxed">
+            Velar por la formación integral de jóvenes deportistas, promoviendo valores de
+            <strong class="text-slate-800">disciplina</strong>,
+            <strong class="text-slate-800">trabajo en equipo</strong> y
+            <strong class="text-slate-800">respeto</strong>, contribuyendo al desarrollo personal y social de nuestros
+            integrantes.
           </p>
+        </article>
+
+        <!-- Visión — destacada -->
+        <article class="card-hover bg-slate-900 rounded-2xl p-8 shadow-xl shadow-slate-900/20">
+          <div class="w-14 h-14 rounded-xl bg-amber-500/20 flex items-center justify-center mb-6">
+            <i class="fas fa-eye text-amber-400 text-2xl"></i>
+          </div>
+          <h3 class="text-lg font-black uppercase tracking-wide mb-3 text-white">Visión</h3>
+          <div class="w-10 h-1 bg-amber-400 rounded mb-4"></div>
+          <p class="text-slate-300 text-sm leading-relaxed">
+            Ser un club referente a nivel regional y nacional por nuestra excelencia deportiva y administrativa,
+            formando ciudadanos con altos estándares de
+            <strong class="text-amber-400">responsabilidad</strong> y
+            <strong class="text-amber-400">espíritu competitivo</strong>.
+          </p>
+        </article>
+
+        <!-- Objetivo -->
+        <article class="card-hover bg-white rounded-2xl p-8 border border-slate-100 shadow-sm">
+          <div class="w-14 h-14 rounded-xl bg-amber-100 flex items-center justify-center mb-6">
+            <i class="fas fa-trophy text-amber-500 text-2xl"></i>
+          </div>
+          <h3 class="text-lg font-black uppercase tracking-wide mb-3 text-slate-900">Objetivo</h3>
+          <div class="w-10 h-1 bg-amber-400 rounded mb-4"></div>
+          <p class="text-slate-600 text-sm leading-relaxed">
+            Consolidar procesos de preparación orientados a logros competitivos y formación humana, fortaleciendo la
+            calidad del
+            <strong class="text-slate-800">fútbol de base</strong> en cada categoría.
+          </p>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════
+       EJES ESTRATÉGICOS
+       (fondo slate-100 como index)
+  ════════════════════════════ -->
+  <section class="py-20 bg-slate-100">
+    <div class="max-w-6xl mx-auto px-4">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+
+        <!-- Lista -->
+        <div>
+          <p class="text-xs font-semibold tracking-[0.2em] text-blue-600 uppercase mb-2">Plan de acción</p>
+          <h2 class="text-3xl md:text-4xl font-bold text-slate-900 mb-10">
+            <i class="fas fa-list-check text-amber-500 mr-3"></i>Ejes Estratégicos
+          </h2>
+
+          <div class="space-y-3">
+            <div class="eje-item flex items-center gap-4 bg-white rounded-xl border border-slate-200 px-5 py-4">
+              <span class="flex-shrink-0 w-10 h-10 rounded-lg bg-amber-100 flex items-center justify-center">
+                <i class="fas fa-running text-amber-500"></i>
+              </span>
+              <p class="text-slate-700 text-sm">Instrucción técnica y preparación física avanzada por categorías.</p>
+            </div>
+            <div class="eje-item flex items-center gap-4 bg-white rounded-xl border border-slate-200 px-5 py-4">
+              <span class="flex-shrink-0 w-10 h-10 rounded-lg bg-amber-100 flex items-center justify-center">
+                <i class="fas fa-users text-amber-500"></i>
+              </span>
+              <p class="text-slate-700 text-sm">Fomento del sentido de pertenencia y trabajo colaborativo.</p>
+            </div>
+            <div class="eje-item flex items-center gap-4 bg-white rounded-xl border border-slate-200 px-5 py-4">
+              <span class="flex-shrink-0 w-10 h-10 rounded-lg bg-amber-100 flex items-center justify-center">
+                <i class="fas fa-hands-helping text-amber-500"></i>
+              </span>
+              <p class="text-slate-700 text-sm">Vinculación activa de padres y familias en el proceso motivacional.</p>
+            </div>
+            <div class="eje-item flex items-center gap-4 bg-white rounded-xl border border-slate-200 px-5 py-4">
+              <span class="flex-shrink-0 w-10 h-10 rounded-lg bg-amber-100 flex items-center justify-center">
+                <i class="fas fa-clipboard-check text-amber-500"></i>
+              </span>
+              <p class="text-slate-700 text-sm">Alineación metodológica con ligas locales y nacionales.</p>
+            </div>
+            <div class="eje-item flex items-center gap-4 bg-white rounded-xl border border-slate-200 px-5 py-4">
+              <span class="flex-shrink-0 w-10 h-10 rounded-lg bg-amber-100 flex items-center justify-center">
+                <i class="fas fa-graduation-cap text-amber-500"></i>
+              </span>
+              <p class="text-slate-700 text-sm">Equilibrio entre rendimiento deportivo y excelencia académica.</p>
+            </div>
+          </div>
         </div>
+
+        <!-- Escudo -->
+        <div class="flex justify-center lg:justify-end">
+          <div class="relative">
+            <div class="absolute inset-0 bg-amber-400/20 rounded-full blur-3xl scale-110"></div>
+            <img src="images/ESCUDO.png" alt="Escudo oficial DIBA FBC"
+              class="relative w-72 h-72 object-contain drop-shadow-xl" />
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════
+       VALORES DEL CLUB
+       (fondo blanco)
+  ════════════════════════════ -->
+  <section class="py-20 bg-white">
+    <div class="max-w-6xl mx-auto px-4">
+      <div class="text-center mb-12">
+        <p class="text-xs font-semibold tracking-[0.2em] text-blue-600 uppercase mb-2">ADN DIBA FBC</p>
+        <h2 class="text-3xl md:text-4xl font-bold text-slate-900">Nuestros Valores</h2>
+        <p class="text-slate-500 mt-3 max-w-lg mx-auto text-sm">Los pilares que guían cada entrenamiento, partido y
+          decisión del club.</p>
       </div>
 
-      <!-- Objetivo General -->
-      <div class="col-md-12 col-lg-4">
-        <div class="info-card">
-          <div class="icon-box"><i class="fas fa-trophy"></i></div>
-          <h4>Objetivo</h4>
-          <p class="text-muted">
-            Consolidar procesos de preparación orientados a logros competitivos y formación humana, fortaleciendo la calidad del fútbol de base en cada categoría.
-          </p>
+      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+        <div
+          class="valor-card text-center bg-slate-50 rounded-2xl p-6 border border-slate-200 hover:border-amber-400 hover:shadow-md transition-all duration-300 cursor-default">
+          <div
+            class="valor-icon w-12 h-12 rounded-xl bg-amber-100 text-amber-500 flex items-center justify-center mx-auto mb-3 transition-all duration-300">
+            <i class="fas fa-fist-raised text-xl"></i>
+          </div>
+          <p class="text-xs font-bold uppercase tracking-wide text-slate-700">Disciplina</p>
+        </div>
+        <div
+          class="valor-card text-center bg-slate-50 rounded-2xl p-6 border border-slate-200 hover:border-amber-400 hover:shadow-md transition-all duration-300 cursor-default">
+          <div
+            class="valor-icon w-12 h-12 rounded-xl bg-amber-100 text-amber-500 flex items-center justify-center mx-auto mb-3 transition-all duration-300">
+            <i class="fas fa-handshake text-xl"></i>
+          </div>
+          <p class="text-xs font-bold uppercase tracking-wide text-slate-700">Respeto</p>
+        </div>
+        <div
+          class="valor-card text-center bg-slate-50 rounded-2xl p-6 border border-slate-200 hover:border-amber-400 hover:shadow-md transition-all duration-300 cursor-default">
+          <div
+            class="valor-icon w-12 h-12 rounded-xl bg-amber-100 text-amber-500 flex items-center justify-center mx-auto mb-3 transition-all duration-300">
+            <i class="fas fa-users text-xl"></i>
+          </div>
+          <p class="text-xs font-bold uppercase tracking-wide text-slate-700">Trabajo en equipo</p>
+        </div>
+        <div
+          class="valor-card text-center bg-slate-50 rounded-2xl p-6 border border-slate-200 hover:border-amber-400 hover:shadow-md transition-all duration-300 cursor-default">
+          <div
+            class="valor-icon w-12 h-12 rounded-xl bg-amber-100 text-amber-500 flex items-center justify-center mx-auto mb-3 transition-all duration-300">
+            <i class="fas fa-heart text-xl"></i>
+          </div>
+          <p class="text-xs font-bold uppercase tracking-wide text-slate-700">Compromiso</p>
+        </div>
+        <div
+          class="valor-card text-center bg-slate-50 rounded-2xl p-6 border border-slate-200 hover:border-amber-400 hover:shadow-md transition-all duration-300 cursor-default">
+          <div
+            class="valor-icon w-12 h-12 rounded-xl bg-amber-100 text-amber-500 flex items-center justify-center mx-auto mb-3 transition-all duration-300">
+            <i class="fas fa-star text-xl"></i>
+          </div>
+          <p class="text-xs font-bold uppercase tracking-wide text-slate-700">Excelencia</p>
+        </div>
+        <div
+          class="valor-card text-center bg-slate-50 rounded-2xl p-6 border border-slate-200 hover:border-amber-400 hover:shadow-md transition-all duration-300 cursor-default">
+          <div
+            class="valor-icon w-12 h-12 rounded-xl bg-amber-100 text-amber-500 flex items-center justify-center mx-auto mb-3 transition-all duration-300">
+            <i class="fas fa-seedling text-xl"></i>
+          </div>
+          <p class="text-xs font-bold uppercase tracking-wide text-slate-700">Formación</p>
         </div>
       </div>
     </div>
+  </section>
 
-    <!-- Objetivos Específicos -->
-    <section class="row align-items-center mt-5">
-      <div class="col-lg-6">
-        <h3 class="fw-bold mb-4"><i class="fas fa-list-check me-2 text-warning"></i>Ejes Estratégicos</h3>
-        <div class="objective-item d-flex align-items-center">
-          <i class="fas fa-running me-3 text-warning"></i>
-          <span>Instrucción técnica y preparación física avanzada por categorías.</span>
-        </div>
-        <div class="objective-item d-flex align-items-center">
-          <i class="fas fa-users me-3 text-warning"></i>
-          <span>Fomento del sentido de pertenencia y trabajo colaborativo.</span>
-        </div>
-        <div class="objective-item d-flex align-items-center">
-          <i class="fas fa-hands-helping me-3 text-warning"></i>
-          <span>Vinculación activa de padres en el proceso motivacional.</span>
-        </div>
-        <div class="objective-item d-flex align-items-center">
-          <i class="fas fa-clipboard-check me-3 text-warning"></i>
-          <span>Alineación metodológica con ligas locales y nacionales.</span>
-        </div>
-      </div>
-      <div class="col-lg-6 text-center d-none d-lg-block">
-        <!-- Imagen decorativa o Escudo -->
-        <img src="images/placeholder-soccer.png" alt="Entrenamiento" class="img-fluid rounded-circle shadow" style="max-height: 350px;">
-      </div>
-    </section>
-
-    <!-- Frase Inspiracional -->
-    <div class="quote-section text-center animate__animated animate__pulse animate__infinite">
-      <p class="quote-text">
-        "El fútbol no es sólo un deporte, es una <span>escuela de vida</span> que enseña valores y forja el carácter."
-      </p>
+  <!-- ════════════════════════════
+       FRASE FINAL
+       (dark — igual que hero de index)
+  ════════════════════════════ -->
+  <section class="py-20 bg-slate-900 relative overflow-hidden">
+    <div class="absolute inset-0 flex items-center justify-center pointer-events-none opacity-[0.04]">
+      <img src="images/ESCUDO.png" alt="" class="w-[500px]" />
     </div>
+    <div class="max-w-3xl mx-auto px-4 text-center relative z-10">
+      <i class="fas fa-quote-left text-amber-400/40 text-4xl mb-6"></i>
+      <blockquote class="text-2xl md:text-3xl font-light leading-relaxed text-slate-200">
+        "El fútbol no es sólo un deporte, es una
+        <em class="text-amber-400 font-bold not-italic">escuela de vida</em>
+        que enseña valores y forja el carácter."
+      </blockquote>
+      <div class="mt-10 flex flex-wrap justify-center gap-4">
+        <a href="galeria.html"
+          class="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-amber-500 text-slate-900 font-bold text-sm hover:bg-amber-400 transition-colors shadow-lg shadow-amber-500/30">
+          <i class="fas fa-images"></i> Ver Galería
+        </a>
+        <a href="Historia.html"
+          class="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white/10 text-white font-bold text-sm hover:bg-white/20 border border-white/20 transition-colors">
+          <i class="fas fa-book-open"></i> Nuestra Historia
+        </a>
+      </div>
+    </div>
+  </section>
 
-  </main>
-
+  <!-- Footer -->
   <div id="footer-container"></div>
 
   <!-- Scripts -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="scripts/loadComponents.js"></script>
-  <script src="scripts/main.js"></script>
+  <script src="scripts/config.js"></script>
+  <script src="scripts/loadComponents.js" defer></script>
+  <script src="scripts/main.js" defer></script>
 </body>
 
 </html>
