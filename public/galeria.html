@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Galería Multimedia | DIBA FBC</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description"
+        content="Galería oficial de fotos y videos del club DIBA FBC. Partidos, celebraciones, campeonatos y cultura ciudadana en Barranquilla." />
+    <meta property="og:title" content="Galería Multimedia | DIBA FBC" />
+    <meta property="og:image" content="https://diba-fbc.vercel.app/images/ESCUDO.png" />
+    <meta property="og:url" content="https://diba-fbc.vercel.app/galeria" />
+    <link rel="icon" href="images/ESCUDO.ico" sizes="32x32" />
+    <link rel="manifest" href="manifest.json" />
+
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;900&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        * {
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        /* ── Gallery Grid ── */
+        .gallery-grid {
+            columns: 4 280px;
+            column-gap: 12px;
+        }
+
+        .gallery-item {
+            break-inside: avoid;
+            margin-bottom: 12px;
+            position: relative;
+            overflow: hidden;
+            border-radius: 12px;
+            cursor: pointer;
+        }
+
+        .gallery-item img {
+            width: 100%;
+            display: block;
+            transition: transform 0.45s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.06);
+        }
+
+        .gallery-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.78) 0%, transparent 55%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 16px;
+        }
+
+        .gallery-item:hover .gallery-overlay {
+            opacity: 1;
+        }
+
+        /* ── Filter Buttons ── */
+        .filter-btn {
+            transition: all 0.2s ease;
+        }
+
+        .filter-btn.active {
+            background-color: #f59e0b;
+            color: #0f172a;
+            box-shadow: 0 4px 14px rgba(245, 158, 11, 0.45);
+        }
+
+        /* ── Hidden item ── */
+        .gallery-item.hidden-item {
+            display: none;
+        }
+
+        /* ── Lightbox ── */
+        #lightbox {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            background: rgba(0, 0, 0, 0.95);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        #lightbox.open {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        #lightbox img {
+            max-width: min(90vw, 1100px);
+            max-height: 88vh;
+            object-fit: contain;
+            border-radius: 12px;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.8);
+            transform: scale(0.92);
+            transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        #lightbox.open img {
+            transform: scale(1);
+        }
+
+        #lb-close {
+            position: absolute;
+            top: 20px;
+            right: 24px;
+            width: 48px;
+            height: 48px;
+            background: rgba(255, 255, 255, 0.12);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            color: white;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.2s;
+        }
+
+        #lb-close:hover {
+            background: #f59e0b;
+            transform: rotate(90deg) scale(1.1);
+        }
+
+        #lb-prev,
+        #lb-next {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            width: 52px;
+            height: 52px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.2s;
+        }
+
+        #lb-prev {
+            left: 16px;
+        }
+
+        #lb-next {
+            right: 16px;
+        }
+
+        #lb-prev:hover,
+        #lb-next:hover {
+            background: #f59e0b;
+            color: #0f172a;
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        #lb-caption {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            text-align: center;
+        }
+
+        #lb-counter {
+            position: absolute;
+            top: 24px;
+            left: 24px;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        /* ── Video cards ── */
+        .video-card video {
+            transition: transform 0.3s ease;
+        }
+
+        .video-card:hover video {
+            transform: scale(1.02);
+        }
+
+        /* ── Hero ── */
+        .hero-gradient {
+            background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 50%, #0f172a 100%);
+        }
+
+        /* ── Scroll reveal ── */
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(24px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-up {
+            animation: fadeUp 0.6s ease forwards;
+        }
+    </style>
+</head>
+
+<body class="bg-slate-900 text-white">
+
+    <!-- Navbar -->
+    <div id="navbar-container"></div>
+
+    <!-- ══════════════════════════════════════
+       HERO
+  ══════════════════════════════════════ -->
+    <section class="hero-gradient pt-36 pb-20 relative overflow-hidden">
+        <!-- Decorative blobs -->
+        <div class="absolute -top-24 -left-24 w-96 h-96 bg-amber-500/10 rounded-full blur-3xl pointer-events-none">
+        </div>
+        <div class="absolute -bottom-24 -right-24 w-96 h-96 bg-blue-600/10 rounded-full blur-3xl pointer-events-none">
+        </div>
+
+        <div class="max-w-4xl mx-auto px-4 text-center relative z-10">
+            <span
+                class="inline-block px-4 py-1.5 bg-amber-500/20 border border-amber-500/40 text-amber-400 text-xs font-bold tracking-widest uppercase rounded-full mb-5">
+                <i class="fas fa-images mr-2"></i>Multimedia
+            </span>
+            <h1 class="text-5xl md:text-6xl font-black tracking-tight mb-5 leading-tight">
+                Galería <span class="text-amber-400">DIBA FBC</span>
+            </h1>
+            <p class="text-slate-300 text-lg md:text-xl max-w-xl mx-auto leading-relaxed">
+                Los mejores momentos del club: partidos épicos, campeonatos, cultura ciudadana y mucho más.
+            </p>
+
+            <!-- Stats strip -->
+            <div class="mt-10 flex justify-center gap-10 text-center">
+                <div>
+                    <div class="text-3xl font-black text-amber-400" id="stat-fotos">55+</div>
+                    <div class="text-xs text-slate-400 uppercase tracking-wider mt-1">Fotos</div>
+                </div>
+                <div class="border-l border-slate-700"></div>
+                <div>
+                    <div class="text-3xl font-black text-amber-400">2</div>
+                    <div class="text-xs text-slate-400 uppercase tracking-wider mt-1">Videos</div>
+                </div>
+                <div class="border-l border-slate-700"></div>
+                <div>
+                    <div class="text-3xl font-black text-amber-400">5</div>
+                    <div class="text-xs text-slate-400 uppercase tracking-wider mt-1">Categorías</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ══════════════════════════════════════
+       FILTROS
+  ══════════════════════════════════════ -->
+    <section class="sticky top-[78px] z-50 bg-slate-900/95 backdrop-blur border-b border-slate-800 py-4 shadow-xl">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="flex flex-wrap justify-center gap-2" id="filter-bar">
+                <button
+                    class="filter-btn active px-5 py-2 rounded-full bg-slate-800 text-white text-sm font-bold border border-slate-700 hover:border-amber-500"
+                    data-cat="all">
+                    <i class="fas fa-th mr-1.5"></i>Todos
+                </button>
+                <button
+                    class="filter-btn px-5 py-2 rounded-full bg-slate-800 text-white text-sm font-bold border border-slate-700 hover:border-amber-500"
+                    data-cat="partidos">
+                    <i class="fas fa-futbol mr-1.5"></i>Partidos
+                </button>
+                <button
+                    class="filter-btn px-5 py-2 rounded-full bg-slate-800 text-white text-sm font-bold border border-slate-700 hover:border-amber-500"
+                    data-cat="campeonatos">
+                    <i class="fas fa-trophy mr-1.5"></i>Campeonatos
+                </button>
+                <button
+                    class="filter-btn px-5 py-2 rounded-full bg-slate-800 text-white text-sm font-bold border border-slate-700 hover:border-amber-500"
+                    data-cat="cultura">
+                    <i class="fas fa-hands-helping mr-1.5"></i>Cultura Ciudadana
+                </button>
+                <button
+                    class="filter-btn px-5 py-2 rounded-full bg-slate-800 text-white text-sm font-bold border border-slate-700 hover:border-amber-500"
+                    data-cat="celebraciones">
+                    <i class="fas fa-star mr-1.5"></i>Celebraciones
+                </button>
+                <button
+                    class="filter-btn px-5 py-2 rounded-full bg-slate-800 text-white text-sm font-bold border border-slate-700 hover:border-amber-500"
+                    data-cat="videos">
+                    <i class="fas fa-play-circle mr-1.5"></i>Videos
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ══════════════════════════════════════
+       GALLERY GRID
+  ══════════════════════════════════════ -->
+    <section class="py-12" id="gallery-section">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="gallery-grid" id="gallery-grid">
+
+                <!-- ─── PARTIDOS ─── -->
+                <div class="gallery-item" data-cat="partidos" data-caption="Partido oficial DIBA FBC"
+                    data-src="images/partido1.jpg">
+                    <img src="images/partido1.jpg" alt="Partido oficial DIBA FBC" loading="lazy" />
+                    <div class="gallery-overlay">
+                        <span
+                            class="inline-block text-[10px] bg-amber-500 text-slate-900 font-bold px-2 py-0.5 rounded-full w-fit mb-1">Partidos</span>
+                        <p class="text-white text-sm font-semibold leading-tight">Partido oficial DIBA FBC</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-cat="partidos" data-caption="Partido en El Poli"
+                    data-src="images/partido3.jpg">
+                    <img src="images/partido3.jpg" alt="Partido en El Poli" loading="lazy" />
+                    <div class="gallery-overlay">
+                        <span
+                            class="inline-block text-[10px] bg-amber-500 text-slate-900 font-bold px-2 py-0.5 rounded-full w-fit mb-1">Partidos</span>
+                        <p class="text-white text-sm font-semibold leading-tight">Partido en El Poli</p>
+                    </div>
+                </div>
+
+                <!-- ─── CAMPEONATOS ─── -->
+                <div class="gallery-item" data-cat="campeonatos" data-caption="Campeón 2002 — Primera conquista"
+                    data-src="images/campeon2002.jpg">
+                    <img src="images/campeon2002.jpg" alt="Campeón 2002" loading="lazy" />
+                    <div class="gallery-overlay">
+                        <span
+                            class="inline-block text-[10px] bg-amber-500 text-slate-900 font-bold px-2 py-0.5 rounded-full w-fit mb-1"><i
+                                class="fas fa-trophy mr-1"></i>Campeonato</span>
+                        <p class="text-white text-sm font-semibold leading-tight">Campeones 2002 — Primera conquista</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-cat="campeonatos" data-caption="Subcampeón 2003"
+                    data-src="images/subCAP_2003.jpg">
+                    <img src="images/subCAP_2003.jpg" alt="Subcampeón 2003" loading="lazy" />
+                    <div class="gallery-overlay">
+                        <span
+                            class="inline-block text-[10px] bg-amber-500 text-slate-900 font-bold px-2 py-0.5 rounded-full w-fit mb-1"><i
+                                class="fas fa-trophy mr-1"></i>Campeonato</span>
+                        <p class="text-white text-sm font-semibold leading-tight">Subcampeón 2003</p>
+                    </div>
+                </div>
+
+                <!-- ─── CULTURA CIUDADANA ─── -->
+                <div class="gallery-item" data-cat="cultura" data-caption="Cultura ciudadana — Jornada 1"
+                    data-src="images/cultura ciudadana 1.jpg">
+                    <img src="images/cultura ciudadana 1.jpg" alt="Cultura ciudadana" loading="lazy" />
+                    <div class="gallery-overlay">
+                        <span
+                            class="inline-block text-[10px] bg-blue-500 text-white font-bold px-2 py-0.5 rounded-full w-fit mb-1">Cultura
+                            Ciudadana</span>
+                        <p class="text-white text-sm font-semibold leading-tight">Jornada de Cultura Ciudadana</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-cat="cultura" data-caption="Charla formativa con jugadores"
+                    data-src="images/charla.jpg">
+                    <img src="images/charla.jpg" alt="Charla formativa" loading="lazy" />
+                    <div class="gallery-overlay">
+                        <span
+                            class="inline-block text-[10px] bg-blue-500 text-white font-bold px-2 py-0.5 rounded-full w-fit mb-1">Cultura
+                            Ciudadana</span>
+                        <p class="text-white text-sm font-semibold leading-tight">Charla formativa con jugadores</p>
+                    </div>
+                </div>
+
+                <!-- ─── PARTIDOS (más) ─── -->
+                <div class="gallery-item" data-cat="partidos" data-caption="Calentamiento previo al partido"
+                    data-src="images/calentamiento.jpg">
+                    <img src="images/calentamiento.jpg" alt="Calentamiento DIBA FBC" loading="lazy" />
+                    <div class="gallery-overlay">
+                        <span
+                            class="inline-block text-[10px] bg-amber-500 text-slate-900 font-bold px-2 py-0.5 rounded-full w-fit mb-1">Partidos</span>
+                        <p class="text-white text-sm font-semibold leading-tight">Calentamiento previo al partido</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-cat="partidos" data-caption="Partido en el estadio"
+                    data-src="images/partido4.jpg">
+                    <img src="images/partido4.jpg" alt="Partido estadio" loading="lazy" />
+                    <div class="gallery-overlay">
+                        <span
+                            class="inline-block text-[10px] bg-amber-500 text-slate-900 font-bold px-2 py-0.5 rounded-full w-fit mb-1">Partidos</span>
+                        <p class="text-white text-sm font-semibold leading-tight">Partido en el estadio</p>
+                    </div>
+                </div>
+
+                <!-- ─── CAMPEONATOS (más) ─── -->
+                <div class="gallery-item" data-cat="campeonatos" data-caption="Campeones torneo Pater Soccer"
+                    data-src="images/campeontorneo patersoccer.jpg">
+                    <img src="images/campeontorneo patersoccer.jpg" alt="Campeón Pater Soccer" loading="lazy" />
+                    <div class="gallery-overlay">
+                        <span
+                            class="inline-block text-[10px] bg-amber-500 text-slate-900 font-bold px-2 py-0.5 rounded-full w-fit mb-1"><i
+                                class="fas fa-trophy mr-1"></i>Campeonato</span>
+                        <p class="text-white text-sm font-semibold leading-tight">Campeones Torneo Pater Soccer</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-cat="campeonatos" data-caption="Campeón 2010"
+                    data-src="images/campeon2010.webp">
+                    <img src="images/campeon2010.webp" alt="Campeón 2010" loading="lazy" />
+                    <div class="gallery-overlay">
+                        <span
+                            class="inline-block text-[10px] bg-amber-500 text-slate-900 font-bold px-2 py-0.5 rounded-full w-fit mb-1"><i
+                                class="fas fa-trophy mr-1"></i>Campeonato</span>
+                        <p class="text-white text-sm font-semibold leading-tight">Campeones 2010</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-cat="campeonatos" data-caption="Subcampeón 2004"
+                    data-src="images/subcampeon2004.jpg">
+                    <img src="images/subcampeon2004.jpg" alt="Subcampeón 2004" loading="lazy" />
+                    <div class="gallery-overlay">
+                        <span
+                            class="inline-block text-[10px] bg-amber-500 text-slate-900 font-bold px-2 py-0.5 rounded-full w-fit mb-1"><i
+                                class="fas fa-trophy mr-1"></i>Campeonato</span>
+                        <p class="text-white text-sm font-semibold leading-tight">Subcampeón 2004</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-cat="campeonatos" data-caption="Categoría 2002 y 2003"
+                    data-src="images/2002.jpg">
+                    <img src="images/2002.jpg" alt="Categoría 2002" loading="lazy" />
+                    <div class="gallery-overlay">
+                        <span
+                            class="inline-block text-[10px] bg-amber-500 text-slate-900 font-bold px-2 py-0.5 rounded-full w-fit mb-1"><i
+                                class="fas fa-trophy mr-1"></i>Campeonato</span>
+                        <p class="text-white text-sm font-semibold leading-tight">Categoría 2002</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-cat="campeonatos" data-caption="Final categoría 2010"
+                    data-src="images/final categoria 2010.jpg">
+                    <img src="images/final categoria 2010.jpg" alt="Final categoría 2010" loading="lazy" />
+                    <div class="gallery-overlay">
+                        <span
+                            class="inline-block text-[10px] bg-amber-500 text-slate-900 font-bold px-2 py-0.5 rounded-full w-fit mb-1"><i
+                                class="fas fa-trophy mr-1"></i>Campeonato</span>
+                        <p class="text-white text-sm font-semibold leading-tight">Final Categoría 2010</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-cat="campeonatos" data-caption="Categoría 2014 / 2015"
+                    data-src="images/2014_2015.jpg">
+                    <img src="images/2014_2015.jpg" alt="Categoría 2014/2015" loading="lazy" />
+                    <div class="gallery-overlay">
+                        <span
+                            class="inline-block text-[10px] bg-amber-500 text-slate-900 font-bold px-2 py-0.5 rounded-full w-fit mb-1"><i
+                                class="fas fa-trophy mr-1"></i>Campeonato</span>
+                        <p class="text-white text-sm font-semibold leading-tight">Categoría 2014 / 2015</p>
+                    </div>
+                </div>
+
+                <!-- ─── CULTURA (más) ─── -->
+                <div class="gallery-item" data-cat="cultura" data-caption="Oración del equipo"
+                    data-src="images/oracion.jpg">
+                    <img src="images/oracion.jpg" alt="Oración del equipo" loading="lazy" />
+                    <div class="gallery-overlay">
+                        <span
+                            class="inline-block text-[10px] bg-blue-500 text-white font-bold px-2 py-0.5 rounded-full w-fit mb-1">Cultura
+                            Ciudadana</span>
+                        <p class="text-white text-sm font-semibold leading-tight">Momento de oración del equipo</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-cat="cultura" data-caption="Oración del equipo — 2"
+                    data-src="images/oracion2.jpg">
+                    <img src="images/oracion2.jpg" alt="Oración del equipo 2" loading="lazy" />
+                    <div class="gallery-overlay">
+                        <span
+                            class="inline-block text-[10px] bg-blue-500 text-white font-bold px-2 py-0.5 rounded-full w-fit mb-1">Cultura
+                            Ciudadana</span>
+                        <p class="text-white text-sm font-semibold leading-tight">Oración en equipo</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-cat="cultura" data-caption="Charlas formativas — Sesión 1"
+                    data-src="images/charlas 1.jpg">
+                    <img src="images/charlas 1.jpg" alt="Charlas formativas" loading="lazy" />
+                    <div class="gallery-overlay">
+                        <span
+                            class="inline-block text-[10px] bg-blue-500 text-white font-bold px-2 py-0.5 rounded-full w-fit mb-1">Cultura
+                            Ciudadana</span>
+                        <p class="text-white text-sm font-semibold leading-tight">Charlas formativas — Sesión 1</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-cat="cultura" data-caption="Cultura ciudadana — Jornada 2"
+                    data-src="images/cultura ciudadana 2.jpg">
+                    <img src="images/cultura ciudadana 2.jpg" alt="Cultura ciudadana 2" loading="lazy" />
+                    <div class="gallery-overlay">
+                        <span
+                            class="inline-block text-[10px] bg-blue-500 text-white font-bold px-2 py-0.5 rounded-full w-fit mb-1">Cultura
+                            Ciudadana</span>
+                        <p class="text-white text-sm font-semibold leading-tight">Cultura Ciudadana — Jornada 2</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-cat="cultura" data-caption="Cultura ciudadana — Jornada 3"
+                    data-src="images/cultura ciudadana 3.jpg">
+                    <img src="images/cultura ciudadana 3.jpg" alt="Cultura ciudadana 3" loading="lazy" />
+                    <div class="gallery-overlay">
+                        <span
+                            class="inline-block text-[10px] bg-blue-500 text-white font-bold px-2 py-0.5 rounded-full w-fit mb-1">Cultura
+                            Ciudadana</span>
+                        <p class="text-white text-sm font-semibold leading-tight">Cultura Ciudadana — Jornada 3</p>
+                    </div>
+                </div>
+
+                <!-- ─── CELEBRACIONES ─── -->
+                <div class="gallery-item" data-cat="celebraciones" data-caption="Regalos de Navidad — 2024"
+                    data-src="images/regalosnavidad 2024.jpg">
+                    <img src="images/regalosnavidad 2024.jpg" alt="Navidad DIBA FBC 2024" loading="lazy" />
+                    <div class="gallery-overlay">
+                        <span
+                            class="inline-block text-[10px] bg-emerald-500 text-white font-bold px-2 py-0.5 rounded-full w-fit mb-1"><i
+                                class="fas fa-star mr-1"></i>Celebraciones</span>
+                        <p class="text-white text-sm font-semibold leading-tight">Regalos de Navidad 2024</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-cat="celebraciones" data-caption="Navidad con los jugadores 2024"
+                    data-src="images/regalosnavidad 2024-1.jpg">
+                    <img src="images/regalosnavidad 2024-1.jpg" alt="Navidad 2024" loading="lazy" />
+                    <div class="gallery-overlay">
+                        <span
+                            class="inline-block text-[10px] bg-emerald-500 text-white font-bold px-2 py-0.5 rounded-full w-fit mb-1"><i
+                                class="fas fa-star mr-1"></i>Celebraciones</span>
+                        <p class="text-white text-sm font-semibold leading-tight">Navidad con los jugadores</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-cat="celebraciones" data-caption="Entrega de regalos navideños"
+                    data-src="images/navidad regalos.jpg">
+                    <img src="images/navidad regalos.jpg" alt="Navidad regalos" loading="lazy" />
+                    <div class="gallery-overlay">
+                        <span
+                            class="inline-block text-[10px] bg-emerald-500 text-white font-bold px-2 py-0.5 rounded-full w-fit mb-1"><i
+                                class="fas fa-star mr-1"></i>Celebraciones</span>
+                        <p class="text-white text-sm font-semibold leading-tight">Entrega de regalos navideños</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-cat="celebraciones" data-caption="Navidad regalos — 2"
+                    data-src="images/navidad regalos 2.jpg">
+                    <img src="images/navidad regalos 2.jpg" alt="Navidad regalos 2" loading="lazy" />
+                    <div class="gallery-overlay">
+                        <span
+                            class="inline-block text-[10px] bg-emerald-500 text-white font-bold px-2 py-0.5 rounded-full w-fit mb-1"><i
+                                class="fas fa-star mr-1"></i>Celebraciones</span>
+                        <p class="text-white text-sm font-semibold leading-tight">Celebración navideña</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-cat="celebraciones" data-caption="Entrega de indumentaria oficial"
+                    data-src="images/entrega de indumentaria 1.jpg">
+                    <img src="images/entrega de indumentaria 1.jpg" alt="Entrega indumentaria" loading="lazy" />
+                    <div class="gallery-overlay">
+                        <span
+                            class="inline-block text-[10px] bg-emerald-500 text-white font-bold px-2 py-0.5 rounded-full w-fit mb-1"><i
+                                class="fas fa-star mr-1"></i>Celebraciones</span>
+                        <p class="text-white text-sm font-semibold leading-tight">Entrega de indumentaria oficial</p>
+                    </div>
+                </div>
+
+                <!-- ─── MÁS PARTIDOS ─── -->
+                <div class="gallery-item" data-cat="partidos" data-caption="Partido oficial — 5"
+                    data-src="images/partido5.jpg">
+                    <img src="images/partido5.jpg" alt="Partido 5" loading="lazy" />
+                    <div class="gallery-overlay">
+                        <span
+                            class="inline-block text-[10px] bg-amber-500 text-slate-900 font-bold px-2 py-0.5 rounded-full w-fit mb-1">Partidos</span>
+                        <p class="text-white text-sm font-semibold leading-tight">Partido oficial DIBA FBC</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-cat="partidos" data-caption="Partido en el poli"
+                    data-src="images/partidoenelpoli.jpg">
+                    <img src="images/partidoenelpoli.jpg" alt="Partido en el poli" loading="lazy" />
+                    <div class="gallery-overlay">
+                        <span
+                            class="inline-block text-[10px] bg-amber-500 text-slate-900 font-bold px-2 py-0.5 rounded-full w-fit mb-1">Partidos</span>
+                        <p class="text-white text-sm font-semibold leading-tight">Partido en el Polideportivo</p>
+                    </div>
+                </div>
+
+                <!-- ─── MÁS CAMPEONATOS ─── -->
+                <div class="gallery-item" data-cat="campeonatos" data-caption="Categoría 2003 y 2002 juntos"
+                    data-src="images/categoria 2003 y 2002.jpg">
+                    <img src="images/categoria 2003 y 2002.jpg" alt="Cat 2003 y 2002" loading="lazy" />
+                    <div class="gallery-overlay">
+                        <span
+                            class="inline-block text-[10px] bg-amber-500 text-slate-900 font-bold px-2 py-0.5 rounded-full w-fit mb-1"><i
+                                class="fas fa-trophy mr-1"></i>Campeonato</span>
+                        <p class="text-white text-sm font-semibold leading-tight">Categorías 2003 y 2002</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-cat="campeonatos" data-caption="Categoría 2004"
+                    data-src="images/categoria 2004.jpg">
+                    <img src="images/categoria 2004.jpg" alt="Categoría 2004" loading="lazy" />
+                    <div class="gallery-overlay">
+                        <span
+                            class="inline-block text-[10px] bg-amber-500 text-slate-900 font-bold px-2 py-0.5 rounded-full w-fit mb-1"><i
+                                class="fas fa-trophy mr-1"></i>Campeonato</span>
+                        <p class="text-white text-sm font-semibold leading-tight">Categoría 2004</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-cat="campeonatos" data-caption="Temporada 2005"
+                    data-src="images/2005.jpg">
+                    <img src="images/2005.jpg" alt="2005" loading="lazy" />
+                    <div class="gallery-overlay">
+                        <span
+                            class="inline-block text-[10px] bg-amber-500 text-slate-900 font-bold px-2 py-0.5 rounded-full w-fit mb-1"><i
+                                class="fas fa-trophy mr-1"></i>Campeonato</span>
+                        <p class="text-white text-sm font-semibold leading-tight">Temporada 2005</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-cat="campeonatos" data-caption="Temporada 2014"
+                    data-src="images/2014.jpeg">
+                    <img src="images/2014.jpeg" alt="2014" loading="lazy" />
+                    <div class="gallery-overlay">
+                        <span
+                            class="inline-block text-[10px] bg-amber-500 text-slate-900 font-bold px-2 py-0.5 rounded-full w-fit mb-1"><i
+                                class="fas fa-trophy mr-1"></i>Campeonato</span>
+                        <p class="text-white text-sm font-semibold leading-tight">Temporada 2014</p>
+                    </div>
+                </div>
+
+            </div><!-- /gallery-grid -->
+
+            <!-- Empty state (hidden by default) -->
+            <div id="empty-state" class="hidden text-center py-20">
+                <i class="fas fa-images text-5xl text-slate-600 mb-4"></i>
+                <p class="text-slate-400 text-lg">No hay elementos en esta categoría aún.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ══════════════════════════════════════
+       VIDEOS
+  ══════════════════════════════════════ -->
+    <section class="py-16 bg-slate-800" id="videos" data-cat-section="videos">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="text-center mb-12">
+                <span
+                    class="inline-block px-4 py-1.5 bg-amber-500/20 border border-amber-500/40 text-amber-400 text-xs font-bold tracking-widest uppercase rounded-full mb-4">
+                    <i class="fas fa-film mr-2"></i>Videos
+                </span>
+                <h2 class="text-3xl md:text-4xl font-black tracking-tight">Momentos en Movimiento</h2>
+                <p class="text-slate-400 mt-3 max-w-lg mx-auto">Revive los mejores momentos del club en video.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+
+                <div class="video-card bg-slate-900 rounded-2xl overflow-hidden shadow-2xl ring-1 ring-slate-700 group">
+                    <div class="relative overflow-hidden">
+                        <video controls preload="metadata" poster="images/ESCUDO.png"
+                            class="w-full h-64 object-cover bg-slate-950">
+                            <source src="video/diba_ocam.mp4" type="video/mp4" />
+                            Tu navegador no soporta video HTML5.
+                        </video>
+                    </div>
+                    <div class="p-5">
+                        <div class="flex items-center gap-2 mb-2">
+                            <span
+                                class="text-[10px] bg-amber-500 text-slate-900 font-bold px-2 py-0.5 rounded-full">Video</span>
+                        </div>
+                        <h3 class="text-lg font-bold text-white">DIBA FBC — Video Oficial</h3>
+                        <p class="text-slate-400 text-sm mt-1">Momentos destacados del club en acción.</p>
+                    </div>
+                </div>
+
+                <div class="video-card bg-slate-900 rounded-2xl overflow-hidden shadow-2xl ring-1 ring-slate-700 group">
+                    <div class="relative overflow-hidden">
+                        <video controls preload="metadata" poster="images/ESCUDO.png"
+                            class="w-full h-64 object-cover bg-slate-950">
+                            <source src="video/entrenamientopost.mp4" type="video/mp4" />
+                            Tu navegador no soporta video HTML5.
+                        </video>
+                    </div>
+                    <div class="p-5">
+                        <div class="flex items-center gap-2 mb-2">
+                            <span
+                                class="text-[10px] bg-blue-500 text-white font-bold px-2 py-0.5 rounded-full">Entrenamiento</span>
+                        </div>
+                        <h3 class="text-lg font-bold text-white">Entrenamiento Post-Partido</h3>
+                        <p class="text-slate-400 text-sm mt-1">Sesión de entrenamiento y preparación del equipo.</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ══════════════════════════════════════
+       LIGHTBOX
+  ══════════════════════════════════════ -->
+    <div id="lightbox" role="dialog" aria-modal="true" aria-label="Visor de imagen">
+        <button id="lb-close" aria-label="Cerrar"><i class="fas fa-times"></i></button>
+        <button id="lb-prev" aria-label="Anterior"><i class="fas fa-chevron-left"></i></button>
+        <button id="lb-next" aria-label="Siguiente"><i class="fas fa-chevron-right"></i></button>
+        <span id="lb-counter"></span>
+        <img id="lb-img" src="" alt="Imagen ampliada" />
+        <span id="lb-caption"></span>
+    </div>
+
+    <!-- Footer -->
+    <div id="footer-container"></div>
+
+    <!-- Scripts de layout -->
+    <script src="scripts/config.js"></script>
+    <script src="scripts/loadComponents.js" defer></script>
+    <script src="scripts/main.js" defer></script>
+
+    <!-- ── GALLERY LOGIC ── -->
+    <script>
+        // ── Items visibles
+        const items = Array.from(document.querySelectorAll('.gallery-item'));
+        const emptyState = document.getElementById('empty-state');
+        const videoSection = document.getElementById('videos');
+
+        // Construir índice de lightbox a partir de las imágenes visibles
+        let lightboxItems = [];
+        let currentIndex = 0;
+
+        function buildLightboxIndex(visibleItems) {
+            lightboxItems = visibleItems.map(el => ({
+                src: el.dataset.src,
+                caption: el.dataset.caption
+            }));
+        }
+
+        // ── FILTROS ──────────────────────────────────────────────
+        const filterBtns = document.querySelectorAll('.filter-btn');
+
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const cat = btn.dataset.cat;
+
+                // Update active button
+                filterBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+
+                // Show / hide items
+                let visibleItems = [];
+
+                if (cat === 'all') {
+                    items.forEach(item => {
+                        item.classList.remove('hidden-item');
+                        visibleItems.push(item);
+                    });
+                    videoSection.style.display = '';
+                } else if (cat === 'videos') {
+                    items.forEach(item => item.classList.add('hidden-item'));
+                    videoSection.style.display = '';
+                    // Scroll to videos
+                    videoSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                } else {
+                    items.forEach(item => {
+                        if (item.dataset.cat === cat) {
+                            item.classList.remove('hidden-item');
+                            visibleItems.push(item);
+                        } else {
+                            item.classList.add('hidden-item');
+                        }
+                    });
+                    videoSection.style.display = 'none';
+                }
+
+                // Empty state
+                const anyVisible = visibleItems.length > 0 || cat === 'videos';
+                emptyState.classList.toggle('hidden', anyVisible);
+
+                buildLightboxIndex(visibleItems);
+            });
+        });
+
+        // Build initial index
+        buildLightboxIndex(items);
+
+        // ── LIGHTBOX ─────────────────────────────────────────────
+        const lightbox = document.getElementById('lightbox');
+        const lbImg = document.getElementById('lb-img');
+        const lbCap = document.getElementById('lb-caption');
+        const lbCounter = document.getElementById('lb-counter');
+
+        function openLightbox(index) {
+            currentIndex = index;
+            const item = lightboxItems[currentIndex];
+            lbImg.src = item.src;
+            lbCap.textContent = item.caption;
+            lbCounter.textContent = `${currentIndex + 1} / ${lightboxItems.length}`;
+            lightbox.classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeLightbox() {
+            lightbox.classList.remove('open');
+            document.body.style.overflow = '';
+        }
+
+        function showPrev() {
+            currentIndex = (currentIndex - 1 + lightboxItems.length) % lightboxItems.length;
+            openLightbox(currentIndex);
+        }
+
+        function showNext() {
+            currentIndex = (currentIndex + 1) % lightboxItems.length;
+            openLightbox(currentIndex);
+        }
+
+        // Attach click to each gallery item
+        items.forEach((item, index) => {
+            item.addEventListener('click', () => {
+                // Rebuild index from currently visible items
+                const visible = items.filter(i => !i.classList.contains('hidden-item'));
+                buildLightboxIndex(visible);
+                const newIndex = visible.indexOf(item);
+                if (newIndex >= 0) openLightbox(newIndex);
+            });
+        });
+
+        document.getElementById('lb-close').addEventListener('click', closeLightbox);
+        document.getElementById('lb-prev').addEventListener('click', showPrev);
+        document.getElementById('lb-next').addEventListener('click', showNext);
+
+        // Close on backdrop click
+        lightbox.addEventListener('click', e => {
+            if (e.target === lightbox) closeLightbox();
+        });
+
+        // Keyboard navigation
+        document.addEventListener('keydown', e => {
+            if (!lightbox.classList.contains('open')) return;
+            if (e.key === 'Escape') closeLightbox();
+            if (e.key === 'ArrowLeft') showPrev();
+            if (e.key === 'ArrowRight') showNext();
+        });
+
+        // Touch swipe support
+        let touchStartX = 0;
+        lightbox.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; });
+        lightbox.addEventListener('touchend', e => {
+            const dx = e.changedTouches[0].clientX - touchStartX;
+            if (dx > 60) showPrev();
+            if (dx < -60) showNext();
+        });
+    </script>
+</body>
+
+</html>
