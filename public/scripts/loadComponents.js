@@ -104,6 +104,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
   loadComponent("navbar-container", "layout/navbar.html", () => {
     if (typeof initNavbar === "function") initNavbar();
+    // Cargar buscador global después de que el navbar esté en el DOM
+    if (!document.getElementById('search-overlay')) {
+      const s = document.createElement('script');
+      s.src = 'scripts/search.js';
+      document.body.appendChild(s);
+    }
   });
   loadComponent("hero-container", "layout/hero.html");
   loadComponent("patrocinadores-container", "layout/patrocinadores.html");

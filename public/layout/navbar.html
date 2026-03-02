@@ -75,7 +75,10 @@
           </li>
 
           <li>
-            <button class="text-white hover:text-amber-400 p-2"><i class="fas fa-search"></i></button>
+            <button id="search-open" aria-label="Abrir buscador"
+              class="text-white hover:text-amber-400 p-2 transition-colors">
+              <i class="fas fa-search"></i>
+            </button>
           </li>
         </ul>
       </div>
@@ -132,8 +135,9 @@
   </div>
 </nav>
 
+
 <script>
-  // Script para abrir/cerrar menú móvil
+  // Menú móvil
   const btn = document.getElementById('nav-toggle');
   const menu = document.getElementById('mobile-menu');
   btn.addEventListener('click', () => menu.classList.toggle('hidden'));
