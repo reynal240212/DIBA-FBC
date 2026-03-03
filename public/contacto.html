@@ -17,6 +17,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;900&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
   <script src="https://cdn.tailwindcss.com"></script>
+  <!-- EmailJS SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 
   <style>
     * {
@@ -274,12 +276,38 @@
     </div>
   </div>
 
+  <!-- Toast de error -->
+  <div id="toast-error" class="items-center gap-3 bg-red-600 text-white px-5 py-4 rounded-2xl shadow-2xl"
+    style="position:fixed;bottom:1.5rem;right:1.5rem;z-index:9999;display:none;transform:translateY(10px);opacity:0;transition:all 0.3s ease;">
+    <i class="fas fa-exclamation-circle text-xl"></i>
+    <div>
+      <p class="font-bold text-sm">Error al enviar</p>
+      <p id="toast-error-msg" class="text-red-200 text-xs">Intenta de nuevo o escríbenos por WhatsApp.</p>
+    </div>
+  </div>
+
   <script src="scripts/config.js"></script>
   <script src="scripts/loadComponents.js" defer></script>
   <script src="scripts/main.js" defer></script>
 
   <script>
-    // Contador de caracteres
+    // ── Inicializar EmailJS ──────────────────────────────────────────
+    (function () {
+      emailjs.init('BGR4PNDAsVx9X2n5v');
+    })();
+
+    // ── Helpers de Toast ────────────────────────────────────────────
+    function showToast(id) {
+      const el = document.getElementById(id);
+      el.style.display = 'flex';
+      setTimeout(() => { el.style.transform = 'translateY(0)'; el.style.opacity = '1'; }, 10);
+      setTimeout(() => {
+        el.style.transform = 'translateY(10px)'; el.style.opacity = '0';
+        setTimeout(() => { el.style.display = 'none'; el.style.transform = ''; el.style.opacity = ''; }, 300);
+      }, 4500);
+    }
+
+    // ── Contador de caracteres ───────────────────────────────────────
     const msgArea = document.getElementById('mensaje');
     const charCount = document.getElementById('char-count');
     msgArea.addEventListener('input', () => {
@@ -288,9 +316,10 @@
       if (msgArea.value.length > 500) msgArea.value = msgArea.value.slice(0, 500);
     });
 
-    // Formulario → abre mailto con feedback visual
-    document.getElementById('contactForm').addEventListener('submit', function (e) {
+    // ── Envío real con EmailJS ───────────────────────────────────────
+    document.getElementById('contactForm').addEventListener('submit', async function (e) {
       e.preventDefault();
+
       const nombre = document.getElementById('nombre').value.trim();
       const telefono = document.getElementById('telefono').value.trim();
       const correo = document.getElementById('correo').value.trim();
@@ -299,38 +328,44 @@
 
       if (!nombre || !correo || !asunto || !mensaje) return;
 
+      const btn = document.getElementById('submitBtn');
       const btnText = document.getElementById('btnText');
       const btnIcon = document.getElementById('btnIcon');
-      const btn = document.getElementById('submitBtn');
+
       btn.disabled = true;
       btnText.textContent = 'Enviando…';
       btnIcon.className = 'fas fa-spinner fa-spin';
 
-      const dest = 'fbcdiba@gmail.com';
-      const sub = encodeURIComponent(`[DIBA FBC Web] ${asunto} - ${nombre}`);
-      const body = encodeURIComponent(
-        `Nombre: ${nombre}\nTeléfono: ${telefono || 'No indicado'}\nCorreo: ${correo}\n\nMensaje:\n${mensaje}`
-      );
+      try {
+        await emailjs.send(
+          'service_avpou66',
+          'template_aip0x8m',
+          {
+            name: nombre,
+            email: correo,
+            phone: telefono || 'No indicado',
+            title: asunto,
+            message: mensaje,
+            time: new Date().toLocaleString('es-CO', { dateStyle: 'medium', timeStyle: 'short' })
+          }
+        );
 
-      setTimeout(() => {
-        window.location.href = `mailto:${dest}?subject=${sub}&body=${body}`;
-
-        // Mostrar toast
-        const toast = document.getElementById('toast');
-        toast.style.display = 'flex';
-        toast.classList.add('show');
-        setTimeout(() => {
-          toast.classList.remove('show');
-          setTimeout(() => toast.style.display = 'none', 300);
-        }, 4000);
-
-        // Reset
+        // ✅ Éxito real
+        showToast('toast');
         document.getElementById('contactForm').reset();
         charCount.textContent = '0 / 500';
+
+      } catch (err) {
+        // ❌ Error
+        console.error('EmailJS error:', err);
+        const errMsg = document.getElementById('toast-error-msg');
+        if (errMsg) errMsg.textContent = err?.text || 'Error al enviar. Intenta de nuevo.';
+        showToast('toast-error');
+      } finally {
         btn.disabled = false;
         btnText.textContent = 'Enviar Mensaje';
         btnIcon.className = 'fas fa-paper-plane group-hover:translate-x-1 transition-transform';
-      }, 600);
+      }
     });
   </script>
 </body>
