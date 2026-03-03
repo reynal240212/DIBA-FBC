@@ -3,15 +3,19 @@
     "outputDirectory": "public",
     "cleanUrls": true,
     "trailingSlash": false,
-    "error": {
-        "statusCode": 404,
-        "destination": "/404.html"
-    },
-    "redirects": [
+    "routes": [
         {
-            "source": "/:path*.html",
-            "destination": "/:path*",
-            "permanent": true
+            "src": "/:path*\\.html",
+            "dest": "/:path*",
+            "status": 301
+        },
+        {
+            "handle": "filesystem"
+        },
+        {
+            "src": "/(.*)",
+            "dest": "/404.html",
+            "status": 404
         }
     ],
     "headers": [
