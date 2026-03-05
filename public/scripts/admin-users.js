@@ -1,17 +1,7 @@
-
 import { supabase, requireAdmin } from './supabaseClient.js';
 
-const API_BASE = '/api/admin/users';
-
-function qs(sel, root=document){ return root.querySelector(sel); }
-function qsa(sel, root=document){ return [...root.querySelectorAll(sel)]; }
-
-async function fetchJSON(url, opts) {
-  const r = await fetch(url, { headers: { 'Content-Type': 'application/json' }, ...opts });
-  const data = await r.json().catch(()=> ({}));
-  if (!r.ok) throw new Error(data.error || 'Error de red');
-  return data;
-}
+function qs(sel, root = document) { return root.querySelector(sel); }
+function qsa(sel, root = document) { return [...root.querySelectorAll(sel)]; }
 
 function renderRows(rows) {
   const tbody = qs('#usersTable tbody');
@@ -19,15 +9,12 @@ function renderRows(rows) {
   rows.forEach(u => {
     const tr = document.createElement('tr');
     tr.innerHTML = `
-      <td class="text-truncate" style="max-width:120px">${u.id}</td>
+      <td class="text-truncate" style="max-width:120px" title="${u.id}">${u.id.substring(0, 8)}...</td>
       <td>${u.username ?? ''}</td>
       <td>${u.full_name ?? ''}</td>
-      <td>${u.email ?? ''}</td>
-      <td><span class="badge bg-warning text-dark">${u.role_name}</span></td>
+      <td><span class="badge bg-warning text-dark">${u.role}</span></td>
+      <td>${new Date(u.created_at).toLocaleDateString()}</td>
       <td class="text-end">
-        <button class="btn btn-sm btn-primary me-1" data-action="edit" data-id="${u.id}">
-          <i class="fas fa-edit"></i>
-        </button>
         <button class="btn btn-sm btn-danger" data-action="del" data-id="${u.id}">
           <i class="fas fa-trash"></i>
         </button>
@@ -37,7 +24,16 @@ function renderRows(rows) {
 }
 
 async function loadUsers() {
-  const data = await fetchJSON(`${API_BASE}/list`);
+  const { data, error } = await supabase
+    .from('users')
+    .select('*')
+    .order('created_at', { ascending: false });
+
+  if (error) {
+    console.error('Error fetching users:', error);
+    alert('Error al cargar la lista de usuarios.');
+    return;
+  }
   renderRows(data);
 }
 
@@ -49,36 +45,17 @@ function hookListEvents() {
     const id = btn.dataset.id;
 
     if (btn.dataset.action === 'del') {
-      if (!confirm('¿Eliminar este usuario?')) return;
-      await fetchJSON(`${API_BASE}/delete?id=${encodeURIComponent(id)}`, { method: 'DELETE' });
-      await loadUsers();
-    }
+      if (!confirm('¿Seguro que deseas eliminar este usuario de forma permanente?')) return;
 
-    if (btn.dataset.action === 'edit') {
-      // Abre modal con datos
-      const row = btn.closest('tr').children;
-      const modal = new bootstrap.Modal(document.getElementById('editUserModal'));
-      qs('#editUserForm [name="id"]').value = id;
-      qs('#editUserForm [name="username"]').value = row[1].textContent.trim();
-      qs('#editUserForm [name="full_name"]').value = row[2].textContent.trim();
-      qs('#editUserForm [name="email"]').value = row[3].textContent.trim();
-      qs('#editUserForm [name="role_name"]').value = row[4].innerText.trim();
-      qs('#editUserForm [name="password"]').value = '';
-      modal.show();
-    }
-  });
+      const { error } = await supabase.rpc('admin_delete_user', { target_user_id: id });
 
-  qs('#editUserForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const fd = new FormData(e.currentTarget);
-    const payload = Object.fromEntries(fd.entries());
-    if (!payload.password) delete payload.password; // opcional
-    await fetchJSON(`${API_BASE}/update`, {
-      method: 'PUT',
-      body: JSON.stringify(payload)
-    });
-    bootstrap.Modal.getInstance(document.getElementById('editUserModal')).hide();
-    await loadUsers();
+      if (error) {
+        console.error('Error deleting user:', error);
+        alert('Error al eliminar el usuario: ' + error.message);
+      } else {
+        await loadUsers();
+      }
+    }
   });
 }
 
@@ -89,13 +66,30 @@ function hookCreateForm() {
     e.preventDefault();
     const fd = new FormData(form);
     const payload = Object.fromEntries(fd.entries());
-    await fetchJSON(`${API_BASE}/create`, {
-      method: 'POST',
-      body: JSON.stringify(payload)
-    });
-    alert('Usuario creado con éxito.');
-    form.reset();
-    window.location.href = '/admin/usuarios.html';
+
+    // Disable inputs while processing
+    const inputs = form.querySelectorAll('input, select, button');
+    inputs.forEach(i => i.disabled = true);
+
+    try {
+      const { data, error } = await supabase.rpc('admin_create_user', {
+        new_username: payload.username,
+        new_password: payload.password,
+        new_full_name: payload.full_name,
+        new_role: payload.role_name
+      });
+
+      if (error) throw error;
+
+      alert('Usuario creado con éxito.');
+      form.reset();
+      window.location.href = 'usuarios.html';
+    } catch (err) {
+      console.error('Error al crear usuario:', err);
+      alert('Error al crear usuario: ' + err.message);
+    } finally {
+      inputs.forEach(i => i.disabled = false);
+    }
   });
 }
 
