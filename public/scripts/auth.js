@@ -94,7 +94,7 @@ export async function cerrarSesion() {
  * Envia un correo de recuperación de contraseña
  */
 export async function enviarCorreoRecuperacion(usernameOrEmail) {
-  const email = usernameOrEmail.includes('@') ? usernameOrEmail : `${usernameOrEmail}@diba.local`;
+  const email = usernameOrEmail.includes('@') ? usernameOrEmail : `${usernameOrEmail}@diba.com`;
   const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
     redirectTo: `${window.location.origin}/admin/update-password.html`,
   });
