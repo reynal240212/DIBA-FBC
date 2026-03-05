@@ -167,9 +167,57 @@
     </p>
   </div>
 
-  <script type="module" src="/scripts/auth.js"></script>
+  <script type="module">
+    import { iniciarSesion } from "/scripts/auth.js";
 
-  <script>
+    const loginForm = document.getElementById('login-form');
+    const loginBtn = document.getElementById('login-button');
+    const alertContainer = document.getElementById('alert-container');
+    const spinner = loginBtn.querySelector('.spinner');
+    const btnText = loginBtn.querySelector('.button-text');
+
+    const showAlert = (message, type = 'error') => {
+      const bgColor = type === 'error' ? 'bg-red-50 border-red-200 text-red-700' : 'bg-green-50 border-green-200 text-green-700';
+      const icon = type === 'error' ? 'fa-exclamation-circle' : 'fa-check-circle';
+      alertContainer.innerHTML = `
+        <div class="flex items-center gap-3 p-4 rounded-2xl border ${bgColor} animate__animated animate__shakeX">
+          <i class="fas ${icon}"></i>
+          <p class="text-xs font-bold">${message}</p>
+        </div>
+      `;
+    };
+
+    loginForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('login-username').value.trim();
+      const password = document.getElementById('login-password').value;
+
+      // UI Loading
+      loginBtn.disabled = true;
+      spinner.classList.remove('hidden');
+      btnText.textContent = 'Verificando...';
+      alertContainer.innerHTML = '';
+
+      try {
+        await iniciarSesion(email, password);
+        btnText.textContent = '¡Bienvenido!';
+        showAlert('Acceso concedido. Redirigiendo...', 'success');
+
+        setTimeout(() => {
+          window.location.href = 'index.html';
+        }, 1500);
+
+      } catch (error) {
+        console.error("Login error:", error);
+        showAlert(error.message === 'Invalid login credentials' ? 'Correo o contraseña incorrectos.' : error.message);
+
+        // Reset UI
+        loginBtn.disabled = false;
+        spinner.classList.add('hidden');
+        btnText.textContent = 'Iniciar Sesión';
+      }
+    });
+
     // Partículas
     const wrap = document.getElementById('particles');
     for (let i = 0; i < 18; i++) {
@@ -190,17 +238,6 @@
       const shown = pwInput.type === 'text';
       pwInput.type = shown ? 'password' : 'text';
       pwIcon.className = shown ? 'fas fa-eye' : 'fas fa-eye-slash';
-    });
-
-    // Olvidé contraseña
-    document.getElementById('forgot-link').addEventListener('click', (e) => {
-      e.preventDefault();
-      const email = document.getElementById('login-username').value.trim();
-      if (!email) {
-        alert('Ingresa tu nombre de usuario o email primero.');
-        return;
-      }
-      alert(`Se enviará un enlace de recuperación a: ${email}\n(Funcionalidad conectada a Supabase Auth)`);
     });
   </script>
 </body>

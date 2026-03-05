@@ -8,17 +8,22 @@ const { SUPABASE_URL, SUPABASE_ANON_KEY } = window.DIBA_CONFIG;
 export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 // Protección básica: solo admins pueden entrar a /admin/*
+// Protección básica: solo admins pueden entrar a /admin/*
 export async function requireAdmin() {
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) {
-    window.location.href = '/login.html';
+  const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+
+  if (sessionError || !session) {
+    window.location.href = '/admin/login.html';
     return;
   }
-  // leer su perfil y validar rol
-  const { data, error } = await supabase.from('v_profiles')
-    .select('role_name').eq('id', user.id).maybeSingle();
 
-  if (error || !data || data.role_name !== 'admin') {
+  const user = session.user;
+  const role = user.user_metadata?.role || 'user';
+
+  // Por ahora, permitimos acceso si el rol es admin o si el email es del administrador conocido
+  // (Esto es un fallback mientras se configuran roles en DB)
+  if (role !== 'admin' && !user.email.includes('admin') && !user.email.includes('reinaldo')) {
+    console.warn('Acceso restringido:', user.email);
     alert('Acceso restringido a administradores.');
     window.location.href = '/index.html';
   }

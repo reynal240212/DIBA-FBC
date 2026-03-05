@@ -899,7 +899,10 @@
     </div><!-- /main -->
 
     <script type="module">
-        import { supabase } from '../scripts/supabaseClient.js';
+        import { supabase, requireAdmin } from '../scripts/supabaseClient.js';
+
+        // Ejecutar protección de ruta inmediatamente
+        requireAdmin();
 
         // ── RELOJ ──
         const clockEl = document.getElementById('clock');
@@ -929,71 +932,70 @@
 
         // ── KPIs desde Supabase + localStorage ──
         async function loadKPIs() {
-            // 1. Jugadores desde Supabase
             try {
-                const { count, error } = await supabase
+                // 1. Jugadores Totales
+                const { count: playerCount } = await supabase
                     .from('identificacion')
                     .select('*', { count: 'exact', head: true });
+                document.getElementById('kpi-players').textContent = playerCount || 0;
 
-                if (!error) {
-                    document.getElementById('kpi-players').textContent = count;
-                }
-            } catch (e) {
-                console.error('Error al contar jugadores:', e);
-            }
+                // 2. Partidos Totales
+                const { count: matchCount } = await supabase
+                    .from('partidos')
+                    .select('*', { count: 'exact', head: true });
+                document.getElementById('kpi-matches').textContent = matchCount || 0;
 
-            // 2. Otros datos desde localStorage (asistencia/pagos del día)
-            const saved = localStorage.getItem('dibaFbcAppState');
-            if (!saved) return;
+                // 3. Asistencia Promedio (Real)
+                const { data: registers, error: regError } = await supabase
+                    .from('planilla_registros')
+                    .select('asistencia')
+                    .limit(1000);
 
-            try {
-                const state = JSON.parse(saved);
-                const players = state.players || [];
-                const data = state.data || {};
+                if (!regError && registers.length > 0) {
+                    const totalReg = registers.length;
+                    const presentes = registers.filter(r => r.asistencia === 'P').length;
+                    const attPct = Math.round((presentes / totalReg) * 100);
+                    document.getElementById('kpi-attendance').textContent = `${attPct}%`;
 
-                // Si no funcionó Supabase o hay 0, usamos el backup del state para coherencia visual si hay datos locales
-                if (document.getElementById('kpi-players').textContent === '0' && players.length > 0) {
-                    document.getElementById('kpi-players').textContent = players.length;
-                }
-
-                let presentes = 0, ausentes = 0, excusas = 0, sinPago = 0;
-                Object.values(data).forEach(d => {
-                    if (d.asistencia === 'P') presentes++;
-                    else if (d.asistencia === 'A') ausentes++;
-                    else if (d.asistencia === 'E') excusas++;
-                    if (!d.pagos || d.pagos.trim() === '' || d.pagos === '$0' || d.pagos === '0') sinPago++;
-                });
-
-                const total = players.length || parseInt(document.getElementById('kpi-players').textContent) || 1;
-                const attPct = Math.round((presentes / total) * 100);
-                document.getElementById('kpi-attendance').textContent = total > 0 ? `${attPct}%` : '—';
-                document.getElementById('kpi-pending').textContent = sinPago > 0 ? sinPago : '✓';
-
-                // Barra asistencia
-                if (total > 0 && (presentes || ausentes || excusas)) {
+                    // Mostrar panel de asistencia si hay datos
                     document.getElementById('attendance-panel').style.display = '';
-                    const pPct = Math.round((presentes / total) * 100);
-                    const aPct = Math.round((ausentes / total) * 100);
-                    const ePct = Math.max(0, 100 - pPct - aPct);
-                    document.getElementById('bar-p').style.width = pPct + '%';
-                    document.getElementById('bar-a').style.width = aPct + '%';
-                    document.getElementById('bar-e').style.width = ePct + '%';
+                    const ausentes = registers.filter(r => r.asistencia === 'A').length;
+                    const excusas = registers.filter(r => r.asistencia === 'E').length;
+
+                    document.getElementById('bar-p').style.width = Math.round((presentes / totalReg) * 100) + '%';
+                    document.getElementById('bar-a').style.width = Math.round((ausentes / totalReg) * 100) + '%';
+                    document.getElementById('bar-e').style.width = Math.round((excusas / totalReg) * 100) + '%';
+
                     document.getElementById('att-p').textContent = `${presentes} Presentes`;
                     document.getElementById('att-a').textContent = `${ausentes} Ausentes`;
                     document.getElementById('att-e').textContent = `${excusas} Excusas`;
                 }
 
-                // Actividad reciente
-                renderActivity(players, data);
+                // 4. Pagos Pendientes (registros con pago null o 0)
+                const { count: pendingCount } = await supabase
+                    .from('planilla_registros')
+                    .select('*', { count: 'exact', head: true })
+                    .or('pago.is.null,pago.eq.0');
+                document.getElementById('kpi-pending').textContent = pendingCount > 0 ? pendingCount : '✓';
+
+                // Reciente: Ultimos 5 jugadores inscritos
+                const { data: recentPlayers } = await supabase
+                    .from('identificacion')
+                    .select('nombre, apellidos, numero')
+                    .order('numero', { ascending: false })
+                    .limit(5);
+
+                if (recentPlayers) {
+                    renderRecentActivity(recentPlayers);
+                }
+
             } catch (e) {
-                console.error(e);
+                console.error('Error al cargar Dashboard:', e);
             }
         }
 
-        function renderActivity(players, data) {
+        function renderRecentActivity(players) {
             const list = document.getElementById('activity-list');
-            if (!players.length) return;
-
             const colors = [
                 { bg: 'rgba(255,204,0,.12)', color: 'var(--gold)', icon: 'fa-user' },
                 { bg: 'rgba(34,197,94,.12)', color: '#4ade80', icon: 'fa-check' },
@@ -1001,20 +1003,18 @@
                 { bg: 'rgba(59,130,246,.12)', color: '#60a5fa', icon: 'fa-info' },
             ];
 
-            const items = players.slice(-5).reverse().map((p, i) => {
-                const d = data[p.id] || {};
-                const att = { P: 'Presente', A: 'Ausente', E: 'Excusa' }[d.asistencia] || 'Sin registrar';
+            const items = players.map((p, i) => {
                 const c = colors[i % colors.length];
                 return `
-          <div class="activity-item">
-            <div class="activity-dot" style="background:${c.bg};color:${c.color}">
-              <i class="fas ${c.icon}"></i>
-            </div>
-            <div>
-              <div class="activity-text">${p.name}</div>
-              <div class="activity-time">Asistencia: <strong>${att}</strong>${d.pagos ? ' · Pago: ' + d.pagos : ''}</div>
-            </div>
-          </div>`;
+                  <div class="activity-item">
+                    <div class="activity-dot" style="background:${c.bg};color:${c.color}">
+                      <i class="fas ${c.icon}"></i>
+                    </div>
+                    <div>
+                      <div class="activity-text">${p.nombre} ${p.apellidos}</div>
+                      <div class="activity-time">Documento: <strong>${p.numero}</strong> · Guardado en DB</div>
+                    </div>
+                  </div>`;
             }).join('');
 
             list.innerHTML = items || `<div class="empty-state"><i class="fas fa-inbox"></i><p>Sin actividad</p></div>`;

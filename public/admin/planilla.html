@@ -144,6 +144,12 @@
     .toast-container {
       z-index: 1100;
     }
+
+    .saving-indicator {
+      font-size: 0.7rem;
+      color: #64748b;
+      font-style: italic;
+    }
   </style>
 </head>
 
@@ -175,7 +181,9 @@
 
   <main class="container mt-4">
     <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap">
-      <h2 class="mb-0 fw-bold">Planilla de Asistencia</h2>
+      <div>
+        <h2 class="mb-0 fw-bold">Planilla de Asistencia <span id="sync-status" class="saving-indicator"></span></h2>
+      </div>
       <div class="d-flex gap-2 align-items-center mt-2 mt-md-0">
         <label for="planillaDate" class="form-label mb-0 fw-bold">Fecha:</label>
         <input type="date" class="form-control" id="planillaDate">
@@ -239,19 +247,18 @@
           <input type="text" id="playerSearch" class="search-input" placeholder="Buscar por nombre...">
           <button id="generatePDF" class="btn btn-primary"><i class="fas fa-file-pdf me-1"></i>PDF</button>
           <button id="generateExcel" class="btn btn-success"><i class="fas fa-file-excel me-1"></i>Excel</button>
-          <button id="clearData" class="btn btn-outline-danger"><i class="fas fa-trash-alt me-1"></i>Limpiar</button>
         </div>
       </div>
     </div>
 
     <!-- Tabla -->
     <div class="table-responsive shadow-sm rounded border">
-      <table class="table table-striped table-hover mb-0">
+      <table class="table table-striped table-hover mb-0" id="mainTable">
         <thead>
           <tr>
             <th style="width: 5%;">#</th>
             <th>Nombre del Jugador</th>
-            <th style="width: 15%;">Pagos</th>
+            <th style="width: 15%;">Pagos ($)</th>
             <th style="width: 15%;">Asistencia</th>
             <th style="width: 25%;">Observaciones</th>
             <th style="width: 10%;" class="text-center">Doc.</th>
@@ -259,7 +266,8 @@
         </thead>
         <tbody id="planillaBody">
           <tr>
-            <td colspan="6" class="text-center p-5 text-muted">Cargando datos desde Supabase...</td>
+            <td colspan="6" class="text-center p-5 text-muted">Cargando datos desde la nube... <i
+                class="fas fa-spinner fa-spin ms-2"></i></td>
           </tr>
         </tbody>
       </table>
@@ -267,18 +275,21 @@
   </main>
 
   <script type="module">
-    import { supabase } from '../scripts/supabaseClient.js';
+    import { supabase, requireAdmin } from '../scripts/supabaseClient.js';
+    requireAdmin();
 
     document.addEventListener('DOMContentLoaded', () => {
       const tableBody = document.getElementById('planillaBody');
       const dateInput = document.getElementById('planillaDate');
       const playerSearch = document.getElementById('playerSearch');
+      const syncStatus = document.getElementById('sync-status');
       const toastElement = document.getElementById('appToast');
       const bsToast = new bootstrap.Toast(toastElement);
 
       let appState = {
         players: [],
-        data: {}
+        currentPlanillaId: null,
+        registros: {} // { dni: { id_db, pago, asistencia, observacion } }
       };
 
       const showToast = (message, isError = false) => {
@@ -287,49 +298,84 @@
         bsToast.show();
       };
 
-      const saveLocally = () => {
-        localStorage.setItem('dibaFbcAppState_v2', JSON.stringify(appState.data));
-      };
-
       const loadData = async () => {
         try {
-          // Cargar jugadores de Supabase
-          const { data, error } = await supabase.from('identificacion').select('numero, nombre, apellidos').order('apellidos');
-          if (error) throw error;
-          appState.players = data.map(p => ({ id: p.numero, name: `${p.nombre} ${p.apellidos}`.trim() }));
-
-          // Cargar asistencia guardada localmente
-          const saved = localStorage.getItem('dibaFbcAppState_v2');
-          if (saved) appState.data = JSON.parse(saved);
+          tableBody.innerHTML = '<tr><td colspan="6" class="text-center p-5 text-muted">Sincronizando con base de datos... <i class="fas fa-spinner fa-spin ms-2"></i></td></tr>';
 
           if (!dateInput.value) dateInput.valueAsDate = new Date();
+          const fechaSeleccionada = dateInput.value;
+
+          // 1. Cargar jugadores
+          const { data: players, error: pErr } = await supabase.from('identificacion').select('numero, nombre, apellidos').order('apellidos');
+          if (pErr) throw pErr;
+          appState.players = players.map(p => ({ id: p.numero, name: `${p.nombre} ${p.apellidos}`.trim() }));
+
+          // 2. Obtener o crear Planilla del día
+          const { data: planillas, error: plErr } = await supabase
+            .from('planillas')
+            .select('id')
+            .eq('fecha', fechaSeleccionada)
+            .limit(1);
+
+          if (plErr) throw plErr;
+
+          let planillaId;
+          if (planillas.length === 0) {
+            const { data: newPl, error: createErr } = await supabase
+              .from('planillas')
+              .insert([{ fecha: fechaSeleccionada, categoria: 'General' }])
+              .select('id')
+              .single();
+            if (createErr) throw createErr;
+            planillaId = newPl.id;
+          } else {
+            planillaId = planillas[0].id;
+          }
+          appState.currentPlanillaId = planillaId;
+
+          // 3. Cargar registros existentes
+          const { data: regs, error: rErr } = await supabase
+            .from('planilla_registros')
+            .select('*')
+            .eq('planilla_id', planillaId);
+
+          if (rErr) throw rErr;
+
+          appState.registros = {};
+          regs.forEach(r => {
+            appState.registros[r.jugador_dni] = {
+              db_id: r.id,
+              pago: r.pago,
+              asistencia: r.asistencia,
+              obs: r.observacion
+            };
+          });
 
           render();
         } catch (e) {
           console.error(e);
-          showToast('Error al conectar con Supabase', true);
+          showToast('Error de conexión: ' + (e.message || 'Supabase no responde'), true);
         }
       };
 
       const render = () => {
         const q = playerSearch.value.toLowerCase();
         tableBody.innerHTML = '';
-
         const filtered = appState.players.filter(p => p.name.toLowerCase().includes(q));
 
         if (filtered.length === 0) {
-          tableBody.innerHTML = `<tr><td colspan="6" class="text-center p-4">No se encontraron jugadores.</td></tr>`;
+          tableBody.innerHTML = `<tr><td colspan="6" class="text-center p-4">Listado vacío o sin coincidencias.</td></tr>`;
           return;
         }
 
         filtered.forEach((p, i) => {
-          const d = appState.data[p.id] || { pagos: '', asistencia: 'P', obs: '' };
+          const d = appState.registros[p.id] || { pago: 0, asistencia: 'P', obs: '' };
           const tr = document.createElement('tr');
-          tr.dataset.id = p.id;
+          tr.dataset.dni = p.id;
           tr.innerHTML = `
             <td>${i + 1}</td>
             <td class="fw-bold text-primary">${p.name}</td>
-            <td><input type="text" class="form-control form-control-sm in-pago" value="${d.pagos || ''}" placeholder="$"></td>
+            <td><input type="number" class="form-control form-control-sm in-pago" value="${d.pago || ''}" placeholder="0"></td>
             <td>
               <select class="form-select form-select-sm in-asist">
                 <option value="P" ${d.asistencia === 'P' ? 'selected' : ''}>Presente</option>
@@ -349,7 +395,7 @@
         const total = appState.players.length;
         let p = 0, a = 0, e = 0;
         appState.players.forEach(pl => {
-          const d = appState.data[pl.id] || { asistencia: 'P' };
+          const d = appState.registros[pl.id] || { asistencia: 'P' };
           if (d.asistencia === 'P') p++;
           else if (d.asistencia === 'A') a++;
           else if (d.asistencia === 'E') e++;
@@ -367,57 +413,90 @@
         document.getElementById('prog-e').style.width = (total > 0 ? (e / total) * 100 : 0) + '%';
       };
 
-      // Events
+      // Guardado automático en Supabase
+      const saveRegistro = async (dni) => {
+        syncStatus.innerHTML = '<i class="fas fa-cloud-upload-alt ms-2"></i> Guardando...';
+        const d = appState.registros[dni];
+        const payload = {
+          planilla_id: appState.currentPlanillaId,
+          jugador_dni: dni,
+          pago: parseFloat(d.pago) || 0,
+          asistencia: d.asistencia,
+          observacion: d.obs
+        };
+
+        try {
+          if (d.db_id) {
+            // Update
+            await supabase.from('planilla_registros').update(payload).eq('id', d.db_id);
+          } else {
+            // Insert
+            const { data, error } = await supabase.from('planilla_registros').insert([payload]).select('id').single();
+            if (!error) d.db_id = data.id;
+          }
+          syncStatus.innerHTML = '<i class="fas fa-check-circle text-success ms-2"></i> Sincronizado';
+        } catch (e) {
+          console.error(e);
+          syncStatus.innerHTML = '<i class="fas fa-times-circle text-danger ms-2"></i> Error al guardar';
+        }
+      };
+
+      // Handlers
       tableBody.addEventListener('input', (e) => {
         const tr = e.target.closest('tr');
         if (!tr) return;
-        const id = tr.dataset.id;
-        if (!appState.data[id]) appState.data[id] = { pagos: '', asistencia: 'P', obs: '' };
+        const dni = tr.dataset.dni;
+        if (!appState.registros[dni]) appState.registros[dni] = { pago: 0, asistencia: 'P', obs: '' };
 
-        if (e.target.classList.contains('in-pago')) appState.data[id].pagos = e.target.value;
-        if (e.target.classList.contains('in-obs')) appState.data[id].obs = e.target.value;
-        saveLocally();
+        if (e.target.classList.contains('in-pago')) appState.registros[dni].pago = e.target.value;
+        if (e.target.classList.contains('in-obs')) appState.registros[dni].obs = e.target.value;
+
+        // Debounce simple
+        clearTimeout(window.saveTimer);
+        window.saveTimer = setTimeout(() => saveRegistro(dni), 1000);
       });
 
       tableBody.addEventListener('change', (e) => {
         const tr = e.target.closest('tr');
         if (tr && e.target.classList.contains('in-asist')) {
-          const id = tr.dataset.id;
-          if (!appState.data[id]) appState.data[id] = { pagos: '', asistencia: 'P', obs: '' };
-          appState.data[id].asistencia = e.target.value;
-          saveLocally();
+          const dni = tr.dataset.dni;
+          if (!appState.registros[dni]) appState.registros[dni] = { pago: 0, asistencia: 'P', obs: '' };
+          appState.registros[dni].asistencia = e.target.value;
+          saveRegistro(dni);
           updateStats();
         }
       });
 
-      playerSearch.addEventListener('input', render);
-      document.getElementById('clearData').onclick = () => {
-        if (confirm('¿Vaciar asistencia y pagos?')) { appState.data = {}; saveLocally(); render(); showToast('Planilla vaciada'); }
-      };
+      dateInput.onchange = loadData;
+      playerSearch.oninput = render;
 
       // Export
       document.getElementById('generateExcel').onclick = () => {
-        const rows = [['Nombre', 'Doc', 'Pago', 'Asistencia', 'Obs']];
+        const rows = [['Nombre', 'DNI', 'Pago', 'Asistencia', 'Observación']];
         appState.players.forEach(p => {
-          const d = appState.data[p.id] || { asistencia: 'P' };
-          rows.push([p.name, p.id, d.pagos, d.asistencia, d.obs]);
+          const d = appState.registros[p.id] || { asistencia: 'P' };
+          rows.push([p.name, p.id, d.pago, d.asistencia, d.obs]);
         });
         const ws = XLSX.utils.aoa_to_sheet(rows);
         const wb = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(wb, ws, 'Planilla');
-        XLSX.writeFile(wb, `Planilla_DIBA_${dateInput.value}.xlsx`);
+        XLSX.utils.book_append_sheet(wb, ws, 'DIBA_Planilla');
+        XLSX.writeFile(wb, `Planilla_${dateInput.value}.xlsx`);
       };
 
       document.getElementById('generatePDF').onclick = () => {
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF();
-        doc.text(`Planilla DIBA FBC - ${dateInput.value}`, 14, 20);
+        doc.setFontSize(18);
+        doc.text(`DIBA FBC - Planilla de Control`, 14, 20);
+        doc.setFontSize(10);
+        doc.text(`Fecha: ${dateInput.value} | Categoria: General`, 14, 28);
         const body = appState.players.map(p => {
-          const d = appState.data[p.id] || { asistencia: 'P' };
-          return [p.name, p.id, d.pagos, d.asistencia, d.obs];
+          const d = appState.registros[p.id] || { asistencia: 'P' };
+          const asistText = { P: 'Presente', A: 'Ausente', E: 'Excusa' }[d.asistencia];
+          return [p.name, p.id, `$${d.pago || 0}`, asistText, d.obs];
         });
-        doc.autoTable({ startY: 30, head: [['Nombre', 'Doc', 'Pago', 'Asist', 'Obs']], body });
-        doc.save(`Planilla_DIBA_${dateInput.value}.pdf`);
+        doc.autoTable({ startY: 35, head: [['Nombre del Jugador', 'DNI', 'Pago', 'Asist', 'Obs']], body });
+        doc.save(`DIBA_Planilla_${dateInput.value}.pdf`);
       };
 
       loadData();

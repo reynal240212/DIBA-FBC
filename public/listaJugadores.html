@@ -294,11 +294,10 @@
 
   <script src="scripts/config.js"></script>
   <script type="module">
-    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+    import { supabase, requireAdmin } from './scripts/supabaseClient.js';
 
-    const { SUPABASE_URL, SUPABASE_ANON_KEY } = window.DIBA_CONFIG;
-
-    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    // Proteger ruta
+    requireAdmin();
     let players = [];
 
     const bsModalEdit = new bootstrap.Modal('#modalEdit');
@@ -317,7 +316,7 @@
     }
 
     async function loadData() {
-      dataBody.innerHTML = '<tr><td colspan="6" class="text-center py-5 text-muted">Cargando jugadores...</td></tr>';
+      dataBody.innerHTML = `<tr><td colspan="6" class="text-center py-5 text-muted">Cargando jugadores...</td></tr>`;
 
       try {
         const { data, error } = await supabase
@@ -330,53 +329,50 @@
         renderTable();
       } catch (error) {
         console.error('Error:', error);
-        dataBody.innerHTML = `<tr><td colspan="6" class="text-center py-5 text-danger">Error: ${error.message}</td></tr>`;
+        dataBody.innerHTML = `<tr>
+    <td colspan="6" class="text-center py-5 text-danger">Error: ${error.message}</td>
+  </tr>`;
       }
     }
 
     function getCategoryByYear(year) {
-      if (!year || year.length < 4) return 'Otro';
-      const y = year.toString().substring(0, 4);
-      if (y === '2012' || y === '2013') return '2012/13';
-      if (['2014', '2015', '2016'].includes(y)) return '2014/15/16';
-      return 'Otro';
-    }
-
-    function renderTable() {
-      const filter = catFilter.value;
-      const search = nameSearch.value.trim().toLowerCase();
-
-      const filtered = players.filter((p) => {
-        const year = p.fecha_nacimiento ? new Date(p.fecha_nacimiento).getFullYear()?.toString() || '0' : '0';
-        const group = getCategoryByYear(year);
-        const text = `${p.nombre || ''} ${p.apellidos || ''} ${p.numero || ''}`.toLowerCase();
-        return (filter === 'todos' || group === filter) && (!search || text.includes(search));
-      });
+      if (!year || year.length < 4) return 'Otro'; const y = year.toString().substring(0, 4); if (y === '2012' || y === '2013')
+        return '2012/13'; if (['2014', '2015', '2016'].includes(y)) return '2014/15/16'; return 'Otro';
+    } function
+      renderTable() {
+      const filter = catFilter.value; const search = nameSearch.value.trim().toLowerCase(); const
+        filtered = players.filter((p) => {
+          const year = p.fecha_nacimiento ? new Date(p.fecha_nacimiento).getFullYear()?.toString() || '0' : '0';
+          const group = getCategoryByYear(year);
+          const text = `${p.nombre || ''} ${p.apellidos || ''} ${p.numero || ''}`.toLowerCase();
+          return (filter === 'todos' || group === filter) && (!search || text.includes(search));
+        });
 
       dataBody.innerHTML = filtered.length === 0
-        ? '<tr><td colspan="6" class="text-center py-5">No se encontraron resultados</td></tr>'
+        ? `<tr><td colspan="6" class="text-center py-5">No se encontraron resultados</td></tr>`
         : '';
 
       filtered.forEach((p, i) => {
         const year = p.fecha_nacimiento ? new Date(p.fecha_nacimiento).getFullYear() : '-';
         const tr = document.createElement('tr');
         tr.innerHTML = `
-          <td class="text-muted small">${i + 1}</td>
-          <td>
-            <div class="d-flex align-items-center">
-              <div class="avatar-circle">${(p.nombre || '?').charAt(0).toUpperCase()}</div>
-              <div class="fw-semibold text-dark">${p.nombre || ''} ${p.apellidos || ''}</div>
-            </div>
-          </td>
-          <td><span class="badge bg-light text-dark border fw-normal px-2 py-1">${p.numero || ''}</span></td>
-          <td class="no-print text-center text-muted small">${year}</td>
-          <td class="no-print text-center">
-            <button class="btn btn-sm btn-outline-primary border-0" type="button" onclick="window.showEdit(${JSON.stringify(p)})">
-              <i class="fas fa-pen-to-square"></i>
-            </button>
-          </td>
-          <td class="no-screen" style="border: 1px solid #000; height: 50px;"></td>
-        `;
+    <td class="text-muted small">${i + 1}</td>
+    <td>
+      <div class="d-flex align-items-center">
+        <div class="avatar-circle">${(p.nombre || '?').charAt(0).toUpperCase()}</div>
+        <div class="fw-semibold text-dark">${p.nombre || ''} ${p.apellidos || ''}</div>
+      </div>
+    </td>
+    <td><span class="badge bg-light text-dark border fw-normal px-2 py-1">${p.numero || ''}</span></td>
+    <td class="no-print text-center text-muted small">${year}</td>
+    <td class="no-print text-center">
+      <button class="btn btn-sm btn-outline-primary border-0" type="button"
+        onclick="window.showEdit(${JSON.stringify(p)})">
+        <i class="fas fa-pen-to-square"></i>
+      </button>
+    </td>
+    <td class="no-screen" style="border: 1px solid #000; height: 50px;"></td>
+    `;
         dataBody.appendChild(tr);
       });
     }

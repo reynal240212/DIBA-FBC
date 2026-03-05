@@ -1,25 +1,51 @@
 // auth.js
-// Las credenciales se leen del config.js centralizado (window.DIBA_CONFIG)
-import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
-
-const { SUPABASE_URL, SUPABASE_ANON_KEY } = window.DIBA_CONFIG;
-const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+import { supabase } from "./supabaseClient.js";
 
 /**
- * Verifica la sesión y el rol.
+ * Inicia sesión con Supabase Auth
+ */
+export async function iniciarSesion(email, password) {
+  const { data, error } = await supabase.auth.signInWithPassword({
+    email,
+    password,
+  });
+
+  if (error) throw error;
+
+  // Guardar datos básicos en localStorage para compatibilidad con código existente
+  localStorage.setItem("usuario", JSON.stringify({
+    id: data.user.id,
+    email: data.user.email,
+    role: data.user.user_metadata?.role || 'admin' // Por defecto admin si no hay meta
+  }));
+
+  return data;
+}
+
+/**
+ * Verifica la sesión real en Supabase
  */
 export async function verificarSesion(rolRequerido = null) {
-  const usuarioLocal = JSON.parse(localStorage.getItem("usuario"));
+  const { data: { session }, error } = await supabase.auth.getSession();
 
-  // 1. Si no hay usuario, redirigir al login
-  if (!usuarioLocal) {
+  if (error || !session) {
     console.warn("Acceso denegado: No hay sesión activa.");
-    // Usamos rutas relativas al root para evitar bucles según la carpeta
-    window.location.replace("/admin/login.html");
+    if (!window.location.pathname.includes('login.html')) {
+      window.location.replace("/admin/login.html");
+    }
     return null;
   }
 
-  // 2. Si hay usuario pero el rol no coincide
+  const user = session.user;
+  const usuarioLocal = {
+    id: user.id,
+    email: user.email,
+    role: user.user_metadata?.role || 'admin'
+  };
+
+  // Guardar en local para rapidez en UI
+  localStorage.setItem("usuario", JSON.stringify(usuarioLocal));
+
   if (rolRequerido && usuarioLocal.role !== rolRequerido) {
     alert("⚠️ No tienes permisos para acceder a esta sección.");
     window.location.replace("/admin/GestorDocumental.html");
@@ -30,19 +56,15 @@ export async function verificarSesion(rolRequerido = null) {
 }
 
 /**
- * Cierra la sesión de forma segura
+ * Cierra la sesión
  */
 export async function cerrarSesion() {
   try {
-    // Limpiar datos locales primero para feedback instantáneo
     localStorage.removeItem("usuario");
-
-    // Intentar cerrar sesión en Supabase
     await supabase.auth.signOut();
   } catch (err) {
     console.error("Error al cerrar sesión:", err);
   } finally {
-    // Siempre redirigir al login al final
     window.location.replace("/admin/login.html");
   }
 }
