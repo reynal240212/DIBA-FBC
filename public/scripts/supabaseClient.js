@@ -18,13 +18,14 @@ export async function requireAdmin() {
   }
 
   const user = session.user;
-  const role = user.user_metadata?.role || 'user';
+  // Consultamos el rol real desde la tabla de usuarios
+  const { data: userData, error: roleError } = await supabase
+    .from('users')
+    .select('role')
+    .eq('id', user.id)
+    .single();
 
-  // Validación de administradores permitidos (Email o Rol)
-  const isAuthorized = role === 'admin' ||
-    user.email.includes('admin') ||
-    user.email.includes('reinaldo') ||
-    user.email.includes('reynal');
+  const isAuthorized = userData?.role === 'admin';
 
   if (!isAuthorized) {
     console.warn('Acceso restringido para:', user.email);

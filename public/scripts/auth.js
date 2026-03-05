@@ -4,7 +4,10 @@ import { supabase } from "./supabaseClient.js";
 /**
  * Inicia sesión con Supabase Auth
  */
-export async function iniciarSesion(email, password) {
+export async function iniciarSesion(username, password) {
+  // Map username to virtual email for Supabase Auth
+  const email = username.includes('@') ? username : `${username}@diba.local`;
+
   const { data, error } = await supabase.auth.signInWithPassword({
     email,
     password,
@@ -12,11 +15,21 @@ export async function iniciarSesion(email, password) {
 
   if (error) throw error;
 
+  // Fetch real role from public.users table
+  const { data: userData } = await supabase
+    .from('users')
+    .select('role')
+    .eq('id', data.user.id)
+    .single();
+
+  const role = userData?.role || 'authenticated';
+
   // Guardar datos básicos en localStorage para compatibilidad con código existente
   localStorage.setItem("usuario", JSON.stringify({
     id: data.user.id,
+    username: username,
     email: data.user.email,
-    role: data.user.user_metadata?.role || 'admin' // Por defecto admin si no hay meta
+    role: role
   }));
 
   return data;
@@ -36,11 +49,19 @@ export async function verificarSesion(rolRequerido = null) {
     return null;
   }
 
-  const user = session.user;
+  // Fetch the real role
+  const { data: userData } = await supabase
+    .from('users')
+    .select('role')
+    .eq('id', user.id)
+    .single();
+
+  const role = userData?.role || 'authenticated';
+
   const usuarioLocal = {
     id: user.id,
     email: user.email,
-    role: user.user_metadata?.role || 'admin'
+    role: role
   };
 
   // Guardar en local para rapidez en UI
@@ -72,7 +93,8 @@ export async function cerrarSesion() {
 /**
  * Envia un correo de recuperación de contraseña
  */
-export async function enviarCorreoRecuperacion(email) {
+export async function enviarCorreoRecuperacion(usernameOrEmail) {
+  const email = usernameOrEmail.includes('@') ? usernameOrEmail : `${usernameOrEmail}@diba.local`;
   const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
     redirectTo: `${window.location.origin}/admin/update-password.html`,
   });
