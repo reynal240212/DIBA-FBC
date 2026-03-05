@@ -192,6 +192,7 @@
         let currentChannel = 'general';
         let currentUser = null;
         let userSettings = { notification_tone: 'pop', notifications_enabled: true };
+        let msgSubscription = null;
         const msgContainer = document.getElementById('messages-container');
         const input = document.getElementById('message-input');
 
@@ -272,16 +273,22 @@
         }
 
         async function fetchMessages() {
-            const { data, error } = await supabaseClient
-                .from('mensajes')
-                .select('*')
-                .eq('channel_id', currentChannel)
-                .order('created_at', { ascending: true })
-                .limit(50);
+            try {
+                const { data, error } = await supabaseClient
+                    .from('mensajes')
+                    .select('*')
+                    .eq('channel_id', currentChannel)
+                    .order('created_at', { ascending: true })
+                    .limit(50);
 
-            msgContainer.innerHTML = '';
-            data?.forEach(msg => appendMessage(msg));
-            scrollToBottom();
+                if (error) throw error;
+
+                msgContainer.innerHTML = '';
+                data?.forEach(msg => appendMessage(msg));
+                scrollToBottom();
+            } catch (err) {
+                console.error("Error al cargar mensajes:", err);
+            }
         }
 
         function appendMessage(msg) {
@@ -304,7 +311,11 @@
         }
 
         function setupRealtime() {
-            supabaseClient.channel('chat_v2')
+            if (msgSubscription) {
+                supabaseClient.removeChannel(msgSubscription);
+            }
+
+            msgSubscription = supabaseClient.channel(`chat_v2_${currentChannel}`)
                 .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'mensajes', filter: `channel_id=eq.${currentChannel}` }, payload => {
                     const isMe = payload.new.user_id === currentUser.id;
                     appendMessage(payload.new);
@@ -408,6 +419,7 @@
             document.getElementById('chan-' + id).classList.add('active-channel');
             document.getElementById('current-channel-name').innerText = '# ' + id.charAt(0).toUpperCase() + id.slice(1);
             fetchMessages();
+            setupRealtime(); // Re-suscribirse al nuevo canal
         }
 
         document.getElementById('chat-form').onsubmit = async (e) => {
