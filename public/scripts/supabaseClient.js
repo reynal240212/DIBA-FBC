@@ -23,7 +23,8 @@ export async function requireAdmin() {
   // Validación de administradores permitidos (Email o Rol)
   const isAuthorized = role === 'admin' ||
     user.email.includes('admin') ||
-    user.email.includes('reinaldo');
+    user.email.includes('reinaldo') ||
+    user.email.includes('reynal');
 
   if (!isAuthorized) {
     console.warn('Acceso restringido para:', user.email);
