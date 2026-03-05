@@ -686,7 +686,7 @@
     </style>
 </head>
 
-<body>
+<body style="display: none;" id="admin-body">
 
     <!-- ══ SIDEBAR ══ -->
     <aside class="sidebar" id="sidebar">
@@ -901,8 +901,13 @@
     <script type="module">
         import { supabase, requireAdmin } from '../scripts/supabaseClient.js';
 
-        // Ejecutar protección de ruta inmediatamente
-        requireAdmin();
+        // Ejecutar protección de ruta inmediatamente y mostrar body si es exitoso
+        requireAdmin().then(session => {
+            if (session) {
+                document.getElementById('admin-body').style.display = 'block';
+                loadKPIs(); // Cargar datos solo después de validar
+            }
+        });
 
         // ── RELOJ ──
         const clockEl = document.getElementById('clock');

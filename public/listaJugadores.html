@@ -135,7 +135,7 @@
   </style>
 </head>
 
-<body>
+<body style="display: none;" id="players-body">
 
   <div id="wrapper">
     <!-- SIDEBAR -->
@@ -297,7 +297,9 @@
     import { supabase, requireAdmin } from './scripts/supabaseClient.js';
 
     // Proteger ruta
-    requireAdmin();
+    requireAdmin().then(session => {
+      if (session) document.getElementById('players-body').style.display = 'block';
+    });
     let players = [];
 
     const bsModalEdit = new bootstrap.Modal('#modalEdit');
