@@ -1,7 +1,7 @@
 # 🌟 Sitio Web Oficial - DIBA FBC ⚽
 
 Bienvenido al repositorio del sitio web oficial de **DIBA FBC**, un club de fútbol amateur con sede en **Barranquilla, Colombia**.  
-Este proyecto busca **informar, conectar y gestionar** la vida deportiva y administrativa del club, ofreciendo una plataforma accesible para **jugadores, padres y seguidores**.
+Este proyecto es una plataforma integral para **informar, conectar y gestionar** la vida deportiva y administrativa del club.
 
 ---
 
@@ -12,72 +12,78 @@ Este proyecto busca **informar, conectar y gestionar** la vida deportiva y admin
 
 ## 📑 Índice
 1. [Funcionalidades principales](#-funcionalidades-principales)
-2. [Tecnologías utilizadas](#-tecnologías-utilizadas)
-3. [Backlog / Roadmap](#-por-hacer--backlog)
-4. [Contribuciones](#-contribuciones)
-5. [Autor](#-desarrollador-principal)
+2. [Arquitectura del Proyecto](#-arquitectura-del-proyecto)
+3. [Tecnologías utilizadas](#-tecnologías-utilizadas)
+4. [Documentación](#-documentación)
+5. [Backlog / Roadmap](#-por-hacer--backlog)
+6. [Autor](#-autor)
 
 ---
 
 ## 📌 Funcionalidades principales
 
-✅ Página de inicio con información general y enlaces a secciones del club.  
-✅ Gestión de jugadores: ficha técnica, documentos, asistencia, pagos y disciplina.  
-✅ Sección de partidos: programación y resultados.  
-✅ Diseño responsive adaptable a móviles.  
-🔜 Galería multimedia (en desarrollo).  
-🔜 Autenticación de usuarios (en progreso).  
+✅ **Autenticación Híbrida**: Inicio de sesión para administradores y para usuarios generales mediante **Google OAuth**.  
+✅ **Navbar Dinámico**: Menú que cambia según el estado de la sesión, mostrando la foto de perfil del usuario.  
+✅ **Gestión Deportiva**: Fichas técnicas, estadísticas de partidos, tablas de posiciones y análisis de rendimiento.  
+✅ **Noticias y Actualidad**: Sistema de anuncios con carrusel dinámico en la página de inicio.  
+✅ **Diseño Moderno**: Interfaz responsive y estética premium utilizando **Tailwind CSS**.  
+✅ **Buscador Global**: Acceso rápido a cualquier sección o contenido del sitio.
+
+---
+
+## 🏗️ Arquitectura del Proyecto
+
+El sitio utiliza una arquitectura basada en **Componentes Reutilizables** para facilitar el mantenimiento:
+
+- **`loadComponents.js`**: Motor de inyección que carga el `navbar`, `hero` y `footer` de forma asíncrona en todas las páginas.
+- **`auth.js`**: Módulo centralizado para el manejo de sesiones con Supabase y Google.
+- **`config.js`**: Generado automáticamente durante el despliegue para gestionar credenciales de forma segura.
 
 ---
 
 ## 🛠️ Tecnologías utilizadas
 
 **Frontend**
-- HTML5
-- CSS3 (Bootstrap)
-- JavaScript  
+- HTML5 & JavaScript (ES6 Modules)
+- **Tailwind CSS** (Styling principal)
+- Bootstrap 5 (Soporte técnico y componentes base)
 
-**Backend / Base de datos**
-- Supabase (PostgreSQL + API + Auth)  
+**Backend / Infraestructura**
+- **Supabase**: Base de datos PostgreSQL, Autenticación (JWT + OAuth) y Storage.
+- **Vercel**: Hosting y despliegue continuo (CI/CD).
 
-**Herramientas y entorno**
-- Visual Studio Code
+**Herramientas**
 - Git & GitHub
-- Vercel (Despliegue)  
+- Google Fonts & FontAwesome 6
 
-**Otros**
-- Canva (diseños gráficos)
-- Google Fonts & Animate.css  
+---
+
+## 📄 Documentación
+
+Se ha generado documentación detallada del proyecto disponible en la carpeta `documentacion pagna diba`:
+1. **Requisitos Funcionales/No Funcionales**: Descripción técnica del alcance.
+2. **Manual de Usuario**: Guía paso a paso para padres y seguidores.
+3. **Manual del Software**: Detalle de la arquitectura y mantenimiento para desarrolladores.
 
 ---
 
 ## 🧠 Por hacer / Backlog
 
-- [ ] Conexión completa con **Supabase** (auth + CRUD jugadores)  
-- [ ] Subida de documentos por jugador  
-- [ ] Panel administrativo con login  
-- [ ] Estadísticas del equipo (goles, asistencias, disciplina)  
-- [ ] Galería multimedia por temporada  
-- [ ] Notificaciones push (recordatorios de entrenos/partidos)  
-- [ ] Dashboard para el cuerpo técnico  
+- [x] Integración de Google Login en el Navbar.
+- [x] Sistema de carga de componentes dinámicos.
+- [ ] Subida de documentos (PDF) por jugador desde el perfil.
+- [ ] Panel de administración completo para edición de partidos.
+- [ ] Notificaciones de próximos encuentros vía Web Push.
+- [ ] Galería de fotos por categorías y temporadas.
 
 ---
 
-## 🙋‍♂️ Contribuciones
-
-Este proyecto está en constante crecimiento.  
-Si deseas aportar, ¡eres bienvenido!  
-- Abre un **issue** con sugerencias o mejoras.  
-- Envía un **pull request** con nuevas funcionalidades o correcciones.  
-
----
-
-## 👨‍💻 Desarrollador principal
+## 👨‍💻 Autor
 
 **Reinaldo De Jesús Pérez Navas**  
 Técnico del club & Desarrollador de software  
-📍 Barranquilla, Colombia  
+📍 Barranquilla, Colombia
 
 ---
 
-✨ *“Jugamos con pasión, crecemos con valores.”*  
+✨ *“Jugamos con pasión, crecemos con valores.”*
