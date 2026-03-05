@@ -3,12 +3,15 @@
 
 <head>
   <meta charset="UTF-8" />
-  <title>Calendario Oficial | DIBA FBC</title>
+  <title>Partidos y Entrenamientos | DIBA FBC</title>
   <link rel="icon" href="images/ESCUDO.ico" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Sigue el calendario oficial de partidos y entrenamientos de DIBA FBC." />
+  <meta name="description"
+    content="Consulta el calendario oficial de partidos, entrenamientos y la tabla de clasificación de DIBA FBC." />
 
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
 
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -16,132 +19,396 @@
       theme: {
         extend: {
           fontFamily: { sans: ['Montserrat', 'sans-serif'] },
-          colors: { dibaGold: '#ffcc00', dibaBlue: '#002a40' }
+          colors: {
+            dibaGold: '#ffcc00',
+            dibaBlue: '#002a40',
+            dibaDark: '#0a0f1a'
+          }
         },
       },
     }
   </script>
 
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+  <style>
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background: #060d18;
+    }
+
+    .hero-partidos {
+      background: linear-gradient(135deg, #0a1628 0%, #001f3f 50%, #0a1628 100%);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-partidos::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 30% 50%, rgba(255, 204, 0, 0.08) 0%, transparent 60%),
+        radial-gradient(ellipse at 70% 20%, rgba(0, 100, 200, 0.1) 0%, transparent 50%);
+    }
+
+    /* Tabs */
+    .tab-btn {
+      position: relative;
+      padding: 0.75rem 1.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      font-size: 0.8rem;
+      letter-spacing: 0.08em;
+      color: #94a3b8;
+      border-bottom: 3px solid transparent;
+      transition: all 0.25s;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .tab-btn:hover {
+      color: #fff;
+    }
+
+    .tab-btn.active {
+      color: #ffcc00;
+      border-bottom-color: #ffcc00;
+    }
+
+    .tab-panel {
+      display: none;
+    }
+
+    .tab-panel.active {
+      display: block;
+    }
+
+    /* Card de partido */
+    .match-card {
+      background: linear-gradient(135deg, #0f1d30 0%, #0d1929 100%);
+      border: 1px solid rgba(255, 204, 0, 0.12);
+      border-radius: 1rem;
+      overflow: hidden;
+      transition: transform 0.25s, box-shadow 0.25s, border-color 0.25s;
+    }
+
+    .match-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 50px rgba(255, 204, 0, 0.12);
+      border-color: rgba(255, 204, 0, 0.35);
+    }
+
+    .match-score {
+      background: linear-gradient(90deg, #ffcc00, #f59e0b);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* Tabla clasificación */
+    .tabla-clas th {
+      background: #0f1d30;
+      color: #94a3b8;
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.75rem 1rem;
+    }
+
+    .tabla-clas td {
+      padding: 0.65rem 1rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      font-size: 0.82rem;
+    }
+
+    .tabla-clas tr.diba-row td {
+      background: rgba(255, 204, 0, 0.08);
+      color: #ffcc00;
+      font-weight: 700;
+    }
+
+    .tabla-clas tr:hover td {
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    /* Input date */
+    input[type="date"]::-webkit-calendar-picker-indicator {
+      filter: invert(1) sepia(1) saturate(8) hue-rotate(10deg);
+      cursor: pointer;
+    }
+
+    /* Spinner */
+    .spinner-ring {
+      width: 40px;
+      height: 40px;
+      border: 3px solid rgba(255, 204, 0, 0.2);
+      border-top-color: #ffcc00;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    /* vs badge */
+    .vs-badge {
+      background: rgba(255, 204, 0, 0.15);
+      color: #ffcc00;
+      font-weight: 900;
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
+      padding: 0.25rem 0.6rem;
+      border-radius: 4px;
+      border: 1px solid rgba(255, 204, 0, 0.3);
+    }
+
+    .badge-resultado {
+      font-size: 0.65rem;
+      padding: 0.2rem 0.65rem;
+      border-radius: 999px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .badge-victoria {
+      background: rgba(34, 197, 94, 0.15);
+      color: #4ade80;
+      border: 1px solid rgba(34, 197, 94, 0.3);
+    }
+
+    .badge-derrota {
+      background: rgba(239, 68, 68, 0.15);
+      color: #f87171;
+      border: 1px solid rgba(239, 68, 68, 0.3);
+    }
+
+    .badge-empate {
+      background: rgba(148, 163, 184, 0.15);
+      color: #94a3b8;
+      border: 1px solid rgba(148, 163, 184, 0.3);
+    }
+
+    .badge-pendiente {
+      background: rgba(251, 191, 36, 0.15);
+      color: #fbbf24;
+      border: 1px solid rgba(251, 191, 36, 0.3);
+    }
+  </style>
 </head>
 
-<body class="bg-slate-50 text-slate-900 font-sans">
+<body class="text-white min-h-screen">
 
   <div id="navbar-container"></div>
-  <div id="hero-container"></div>
-  <div id="patrocinadores-container"></div>
 
-  <main class="py-12">
-    <div class="max-w-7xl mx-auto px-4">
+  <!-- HERO -->
+  <section class="hero-partidos pt-28 pb-14">
+    <div class="relative z-10 max-w-6xl mx-auto px-4 text-center">
+      <span
+        class="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-amber-400 bg-amber-400/10 border border-amber-400/20 px-4 py-1.5 rounded-full mb-5">
+        <i class="fas fa-futbol"></i> Temporada 2025 – 2026
+      </span>
+      <h1 class="text-4xl md:text-6xl font-black uppercase tracking-tight mb-4">
+        Partidos &amp; <span class="text-amber-400">Entrenamientos</span>
+      </h1>
+      <p class="text-slate-400 max-w-xl mx-auto text-sm leading-relaxed">
+        Consulta el calendario oficial, resultados recientes y la tabla de posiciones de DIBA FBC.
+      </p>
 
-      <section class="mb-16">
-        <div class="flex items-center mb-8">
-          <h2 class="text-2xl font-black text-slate-800 uppercase italic">Lugar de Entrenamiento</h2>
-          <div class="flex-grow h-1 bg-gradient-to-r from-blue-600 to-transparent ml-4"></div>
+      <!-- Stats rápidas -->
+      <div class="flex flex-wrap justify-center gap-6 mt-10">
+        <div class="text-center">
+          <div class="text-3xl font-black text-amber-400" id="stat-partidos">—</div>
+          <div class="text-xs text-slate-500 uppercase tracking-wider mt-1">Partidos</div>
+        </div>
+        <div class="w-px bg-slate-700 hidden sm:block"></div>
+        <div class="text-center">
+          <div class="text-3xl font-black text-green-400" id="stat-victorias">—</div>
+          <div class="text-xs text-slate-500 uppercase tracking-wider mt-1">Victorias</div>
+        </div>
+        <div class="w-px bg-slate-700 hidden sm:block"></div>
+        <div class="text-center">
+          <div class="text-3xl font-black text-red-400" id="stat-derrotas">—</div>
+          <div class="text-xs text-slate-500 uppercase tracking-wider mt-1">Derrotas</div>
+        </div>
+        <div class="w-px bg-slate-700 hidden sm:block"></div>
+        <div class="text-center">
+          <div class="text-3xl font-black text-sky-400" id="stat-empates">—</div>
+          <div class="text-xs text-slate-500 uppercase tracking-wider mt-1">Empates</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTENIDO PRINCIPAL -->
+  <main class="max-w-6xl mx-auto px-4 py-12 space-y-14">
+
+    <!-- TABS -->
+    <div class="bg-slate-900/60 border border-slate-800 rounded-2xl overflow-hidden">
+      <div class="flex overflow-x-auto border-b border-slate-800">
+        <button class="tab-btn active" data-tab="partidos-tab">
+          <i class="fas fa-futbol mr-2 text-amber-400"></i>Partidos
+        </button>
+        <button class="tab-btn" data-tab="entrenamientos-tab">
+          <i class="fas fa-dumbbell mr-2 text-green-400"></i>Entrenamientos
+        </button>
+        <button class="tab-btn" data-tab="clasificacion-tab">
+          <i class="fas fa-trophy mr-2 text-amber-400"></i>Clasificación
+        </button>
+        <button class="tab-btn" data-tab="mapa-tab">
+          <i class="fas fa-map-marker-alt mr-2 text-red-400"></i>Cancha
+        </button>
+      </div>
+
+      <!-- TAB: PARTIDOS -->
+      <div id="partidos-tab" class="tab-panel active p-6 md:p-8">
+        <div class="flex flex-col md:flex-row md:items-end gap-4 mb-8">
+          <div class="flex-1">
+            <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">
+              <i class="fas fa-calendar mr-1"></i>Filtrar por fecha
+            </label>
+            <input type="date" id="fecha"
+              class="w-full bg-slate-800 border border-slate-700 text-white rounded-xl px-4 py-3 focus:border-amber-400 focus:outline-none transition-all text-sm" />
+          </div>
+          <button id="btn-limpiar-partidos"
+            class="flex items-center gap-2 px-5 py-3 rounded-xl border border-slate-700 text-slate-400 hover:text-white hover:border-slate-500 transition-all text-sm font-semibold">
+            <i class="fas fa-times"></i> Limpiar
+          </button>
         </div>
 
-        <div class="rounded-2xl overflow-hidden shadow-2xl border-4 border-white aspect-video md:aspect-auto">
+        <!-- Estado inicial -->
+        <div id="partidos-estado-inicial" class="text-center py-16">
+          <div class="w-16 h-16 rounded-full bg-amber-400/10 flex items-center justify-center mx-auto mb-4">
+            <i class="fas fa-calendar-alt text-amber-400 text-2xl"></i>
+          </div>
+          <p class="text-slate-400 text-sm">Selecciona una fecha para ver los partidos</p>
+        </div>
+
+        <div id="partidos-spinner" class="flex justify-center py-14" style="display:none">
+          <div class="spinner-ring"></div>
+        </div>
+
+        <div id="partidos-results" class="grid grid-cols-1 gap-5"></div>
+      </div>
+
+      <!-- TAB: ENTRENAMIENTOS -->
+      <div id="entrenamientos-tab" class="tab-panel p-6 md:p-8">
+        <div class="flex flex-col md:flex-row md:items-end gap-4 mb-8">
+          <div class="flex-1">
+            <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">
+              <i class="fas fa-calendar mr-1"></i>Filtrar por fecha
+            </label>
+            <input type="date" id="fecha-entrenamiento"
+              class="w-full bg-slate-800 border border-slate-700 text-white rounded-xl px-4 py-3 focus:border-green-400 focus:outline-none transition-all text-sm" />
+          </div>
+          <button id="btn-limpiar-entrenamientos"
+            class="flex items-center gap-2 px-5 py-3 rounded-xl border border-slate-700 text-slate-400 hover:text-white hover:border-slate-500 transition-all text-sm font-semibold">
+            <i class="fas fa-times"></i> Limpiar
+          </button>
+        </div>
+
+        <div id="entrenamientos-estado-inicial" class="text-center py-16">
+          <div class="w-16 h-16 rounded-full bg-green-400/10 flex items-center justify-center mx-auto mb-4">
+            <i class="fas fa-dumbbell text-green-400 text-2xl"></i>
+          </div>
+          <p class="text-slate-400 text-sm">Selecciona una fecha para ver los entrenamientos</p>
+        </div>
+
+        <div id="entrenamientos-spinner" class="flex justify-center py-14" style="display:none">
+          <div class="spinner-ring" style="border-top-color: #4ade80;"></div>
+        </div>
+
+        <div id="entrenamientos-results" class="grid grid-cols-1 gap-5"></div>
+      </div>
+
+      <!-- TAB: CLASIFICACIÓN -->
+      <div id="clasificacion-tab" class="tab-panel p-6 md:p-8">
+        <div class="flex items-center justify-between mb-6">
+          <h2 class="text-lg font-black uppercase tracking-wide text-white flex items-center gap-2">
+            <i class="fas fa-trophy text-amber-400"></i> Tabla de Posiciones
+          </h2>
+          <span class="text-xs text-slate-500 bg-slate-800 px-3 py-1 rounded-full">Cat. 2014 – 2015</span>
+        </div>
+
+        <div id="clasificacion-spinner" class="flex justify-center py-14" style="display:none">
+          <div class="spinner-ring"></div>
+        </div>
+
+        <div id="clasificacion-container" class="overflow-x-auto rounded-xl border border-slate-800"></div>
+      </div>
+
+      <!-- TAB: MAPA -->
+      <div id="mapa-tab" class="tab-panel p-6 md:p-8">
+        <div class="mb-6">
+          <h2 class="text-lg font-black uppercase tracking-wide text-white flex items-center gap-2">
+            <i class="fas fa-map-marker-alt text-red-400"></i> Cancha La Jaula — La Enseñanza
+          </h2>
+          <p class="text-slate-400 text-sm mt-1">Barranquilla, Colombia — Lugar oficial de entrenamiento</p>
+        </div>
+
+        <div class="rounded-2xl overflow-hidden border border-slate-700 shadow-2xl">
           <iframe
             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3916.47352326759!2d-74.8190254!3d11.0099408!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8ef42daee3ed6491%3A0x1c26efbd3a5d6a0c!2sCancha%20La%20Jaula%20la%20Ense%C3%B1anza!5e0!3m2!1ses!2sco!4v1710000000000!5m2!1ses!2sco"
-            class="w-full h-[300px] md:h-[450px]" style="border:0;" allowfullscreen="" loading="lazy"
+            class="w-full h-[380px]" style="border:0;" allowfullscreen="" loading="lazy"
             referrerpolicy="no-referrer-when-downgrade">
           </iframe>
         </div>
 
-        <div class="mt-4 text-center">
+        <div class="mt-4 flex flex-wrap gap-3">
           <a href="https://maps.app.goo.gl/1uQ8MWKxUWBSWMfn7" target="_blank"
-            class="inline-flex items-center px-6 py-3 bg-blue-600 text-white font-bold rounded-full hover:bg-blue-700 transition-all shadow-lg">
-            <i class="fas fa-location-arrow me-2"></i> Abrir en Google Maps
+            class="inline-flex items-center gap-2 px-5 py-2.5 bg-amber-400 text-slate-900 font-bold rounded-full hover:bg-amber-300 transition-all text-sm shadow-lg shadow-amber-400/20">
+            <i class="fas fa-location-arrow"></i> Abrir en Google Maps
           </a>
+          <div class="flex items-center gap-2 text-sm text-slate-400 bg-slate-800 px-4 py-2.5 rounded-full">
+            <i class="fas fa-clock text-amber-400"></i>
+            <span>Entrenamientos: Sáb &amp; Dom</span>
+          </div>
         </div>
-      </section>
-
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
-
-        <article class="bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden flex flex-col h-full">
-          <header class="bg-blue-900 p-5 flex justify-between items-center text-white">
-            <h3 class="font-black italic uppercase tracking-wider flex items-center">
-              <i class="fas fa-futbol me-3 text-dibaGold text-xl"></i> Partidos
-            </h3>
-            <button id="btn-close-partidos" class="hover:bg-white/20 p-2 rounded-full transition-colors">
-              <i class="fas fa-times"></i>
-            </button>
-          </header>
-
-          <div class="p-8 flex-grow">
-            <div class="mb-6">
-              <label class="block text-sm font-bold text-slate-500 uppercase mb-2">Selecciona una fecha</label>
-              <input type="date" id="fecha"
-                class="w-full p-3 rounded-lg border-2 border-slate-100 focus:border-blue-500 focus:outline-none transition-all">
-            </div>
-
-            <div id="loading-spinner" class="hidden text-center py-10">
-              <i class="fas fa-circle-notch fa-spin text-3xl text-blue-600"></i>
-            </div>
-
-            <div id="matches-container" class="space-y-4">
-            </div>
-          </div>
-        </article>
-
-        <article class="bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden flex flex-col h-full">
-          <header class="bg-slate-800 p-5 flex justify-between items-center text-white">
-            <h3 class="font-black italic uppercase tracking-wider flex items-center">
-              <i class="fas fa-dumbbell me-3 text-dibaGold text-xl"></i> Entrenamientos
-            </h3>
-            <button id="btn-close-entrenamientos" class="hover:bg-white/20 p-2 rounded-full transition-colors">
-              <i class="fas fa-times"></i>
-            </button>
-          </header>
-
-          <div class="p-8 flex-grow">
-            <div class="mb-6">
-              <label class="block text-sm font-bold text-slate-500 uppercase mb-2">Selecciona una fecha</label>
-              <input type="date" id="fecha-entrenamiento"
-                class="w-full p-3 rounded-lg border-2 border-slate-100 focus:border-green-500 focus:outline-none transition-all">
-            </div>
-
-            <div id="loading-spinner-entrenamiento" class="hidden text-center py-10">
-              <i class="fas fa-circle-notch fa-spin text-3xl text-green-600"></i>
-            </div>
-
-            <div id="trainings-container" class="space-y-4">
-            </div>
-          </div>
-        </article>
-
       </div>
 
-      <div class="mt-16 text-center">
-        <a href="partidos"
-          class="inline-flex items-center justify-center bg-dibaGold text-slate-900 font-black uppercase italic py-4 px-10 rounded-full shadow-lg hover:shadow-2xl hover:-translate-y-1 transition-all">
-          <i class="fas fa-bolt me-3"></i> Ver Próximo Partido
-        </a>
-      </div>
-      <div id="matches-container" class="grid grid-cols-1 gap-6">
-
-      </div>
     </div>
+
+    <!-- PRÓXIMOS PARTIDOS DIBA -->
+    <section>
+      <div class="flex items-center gap-4 mb-8">
+        <div class="flex-shrink-0">
+          <span class="inline-flex items-center gap-2 text-sm font-black uppercase tracking-widest text-amber-400">
+            <i class="fas fa-star"></i> Partidos DIBA FBC
+          </span>
+        </div>
+        <div class="flex-grow h-px bg-gradient-to-r from-amber-400/40 to-transparent"></div>
+      </div>
+
+      <div id="diba-spinner" class="flex justify-center py-14" style="display:none">
+        <div class="spinner-ring"></div>
+      </div>
+
+      <div id="diba-slider" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5"></div>
+    </section>
+
   </main>
 
   <footer id="footer-container"></footer>
 
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="scripts/config.js"></script>
   <script src="scripts/loadComponents.js"></script>
   <script src="scripts/main.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="scripts/paridos.js"></script>
 
+  <!-- Tabs Logic -->
   <script>
-    // Lógica de botones de cierre
-    document.getElementById('btn-close-partidos').addEventListener('click', () => {
-      document.querySelector('#matches-container').innerHTML = '<p class="text-center text-slate-400 italic">Búsqueda limpiada</p>';
-    });
-    document.getElementById('btn-close-entrenamientos').addEventListener('click', () => {
-      document.querySelector('#trainings-container').innerHTML = '<p class="text-center text-slate-400 italic">Búsqueda limpiada</p>';
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById(btn.dataset.tab).classList.add('active');
+      });
     });
   </script>
+
 </body>
 
 </html>

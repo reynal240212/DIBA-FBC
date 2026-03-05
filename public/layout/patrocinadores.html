@@ -10,6 +10,20 @@
       </p>
     </div>
 
+    <!-- Patrocinador Destacado -->
+    <div class="pat-featured-sponsor">
+      <div class="pat-featured-badge">⭐ PATROCINADOR PRINCIPAL</div>
+      <a href="#" class="pat-featured-card" title="Vasquez & Orozco">
+        <div class="pat-featured-logo-wrap">
+          <img src="../images/vasquez_orozco.png" alt="Vasquez & Orozco" class="pat-featured-logo" />
+        </div>
+        <div class="pat-featured-info">
+          <span class="pat-featured-name">VASQUEŹ & OROZCO</span>
+          <span class="pat-featured-desc">Patrocinador Oficial DIBA FBC</span>
+        </div>
+      </a>
+    </div>
+
     <!-- Carrusel -->
     <div class="pat-track-wrapper">
       <div class="pat-fade-left"></div>
@@ -44,7 +58,7 @@
 
           <a class="pat-card" href="#" title="Vasquez & Orozco">
             <div class="pat-logo-wrap">
-              <img src="../images/vasquez_orozco.png" alt="Vasquez & Orozco" class="pat-logo pat-logo--dark" />
+              <img src="../images/vasquez_orozco.png" alt="Vasquez & Orozco" class="pat-logo" />
             </div>
             <span class="pat-name">Vasquez &amp; Orozco</span>
           </a>
@@ -85,7 +99,7 @@
 
           <a class="pat-card" href="#" title="Vasquez & Orozco">
             <div class="pat-logo-wrap">
-              <img src="../images/vasquez_orozco.png" alt="Vasquez & Orozco" class="pat-logo pat-logo--dark" />
+              <img src="../images/vasquez_orozco.png" alt="Vasquez & Orozco" class="pat-logo" />
             </div>
             <span class="pat-name">Vasquez &amp; Orozco</span>
           </a>
@@ -360,8 +374,121 @@
   }
 
   /* ======================
+     PATROCINADOR DESTACADO
+  ====================== */
+  .pat-featured-sponsor {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    margin-bottom: 3.5rem;
+  }
+
+  .pat-featured-badge {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #92400e;
+    background: linear-gradient(135deg, #fef3c7, #fde68a);
+    border: 2px solid #f59e0b;
+    padding: 0.45rem 1.4rem;
+    border-radius: 999px;
+  }
+
+  .pat-featured-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    width: 100%;
+    max-width: 700px;
+    padding: 3rem 2.5rem;
+    background: #fff;
+    border: 3px solid #e2e8f0;
+    border-radius: 28px;
+    text-decoration: none;
+    transition: all 0.35s ease;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .pat-featured-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 5px;
+    background: linear-gradient(90deg, #d97706, #fbbf24, #d97706);
+  }
+
+  .pat-featured-card:hover {
+    border-color: #f59e0b;
+    box-shadow: 0 20px 60px rgba(245, 158, 11, 0.3), 0 0 0 4px rgba(245, 158, 11, 0.15);
+    transform: translateY(-6px);
+  }
+
+  .pat-featured-logo-wrap {
+    width: 100%;
+    max-width: 480px;
+    height: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .pat-featured-logo {
+    width: 100%;
+    height: auto;
+    max-height: 320px;
+    object-fit: contain;
+    transition: transform 0.3s ease;
+  }
+
+  .pat-featured-card:hover .pat-featured-logo {
+    transform: scale(1.04);
+  }
+
+  .pat-featured-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .pat-featured-name {
+    font-size: clamp(1.4rem, 4vw, 2rem);
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #0f172a;
+  }
+
+  .pat-featured-desc {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #d97706;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+  }
+
+  /* ======================
      RESPONSIVE
   ====================== */
+  @media (max-width: 768px) {
+    .pat-featured-card {
+      padding: 2rem 1.5rem;
+      max-width: 100%;
+    }
+
+    .pat-featured-logo {
+      max-height: 240px;
+    }
+  }
+
   @media (max-width: 640px) {
     .pat-card {
       min-width: 180px;
@@ -371,6 +498,25 @@
     .pat-logo-wrap {
       width: 150px;
       height: 80px;
+    }
+
+    .pat-featured-card {
+      padding: 1.5rem 1rem;
+      border-radius: 18px;
+    }
+
+    .pat-featured-logo {
+      max-height: 180px;
+    }
+
+    .pat-featured-name {
+      font-size: 1.15rem;
+    }
+  }
+
+  @media (max-width: 400px) {
+    .pat-featured-logo {
+      max-height: 140px;
     }
   }
 </style>

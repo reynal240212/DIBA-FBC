@@ -1,300 +1,427 @@
-// public/scripts/paridos.js
+// public/scripts/paridos.js — Versión mejorada
 
-// Supabase desde CDN UMD (ver HTML)
-// Usamos el global `supabase` que expone createClient
 const { createClient } = window.supabase;
-
-// Credenciales desde config.js centralizado
 const { SUPABASE_URL, SUPABASE_ANON_KEY } = window.DIBA_CONFIG;
-const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const sb = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-// Selectores
-const inputFecha = document.getElementById('fecha');
-const matchesContainer = document.getElementById('matches-container');
-const loadingSpinner = document.getElementById('loading-spinner');
-const inputFechaEntrenamiento = document.getElementById('fecha-entrenamiento');
-const trainingsContainer = document.getElementById('trainings-container');
-const loadingSpinnerEntrenamiento = document.getElementById('loading-spinner-entrenamiento');
+// ──────────────────────────────────────────────────────────────────────────────
+//  UTILIDADES
+// ──────────────────────────────────────────────────────────────────────────────
 
-// Helper para formatear fecha
-const formatearFecha = fechaISO =>
-  new Date(fechaISO).toLocaleDateString('es-CO', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric'
+/** Formatea una fecha ISO a "14 de marzo de 2025" */
+function formatearFecha(fechaISO) {
+  if (!fechaISO) return 'Sin fecha';
+  return new Date(fechaISO).toLocaleDateString('es-CO', {
+    year: 'numeric', month: 'long', day: 'numeric'
   });
+}
 
-// Crear tarjetas
-function crearCard({ tipo, titulo, cuerpo, escudo = null, color = 'primary' }) {
-  const card = document.createElement('div');
-  card.className = `card border-0 shadow-lg mb-4 bg-${color} text-black animate__animated animate__fadeInUp`;
+/** Convierte una fecha ISO a YYYY-MM-DD en hora local */
+function toLocalDate(fechaISO) {
+  const d = new Date(fechaISO);
+  return (
+    d.getFullYear() + '-' +
+    String(d.getMonth() + 1).padStart(2, '0') + '-' +
+    String(d.getDate()).padStart(2, '0')
+  );
+}
 
-  card.innerHTML = `
-    <div class="card-header d-flex justify-content-between align-items-center bg-opacity-75">
-      <div class="d-flex align-items-center gap-2">
-        ${escudo ? `<img src="${escudo}" alt="Escudo" class="rounded shadow" style="width: 40px; height: 40px; object-fit: contain;">` : ''}
-        <h5 class="mb-0 fw-bold">${titulo}</h5>
+/** Determina badge de resultado para un partido */
+function badgeResultado(resultado) {
+  if (!resultado || resultado === 'Pendiente' || resultado === '-') {
+    return '<span class="badge-resultado badge-pendiente">Pendiente</span>';
+  }
+  const lower = resultado.toLowerCase();
+  if (lower.includes('victoria') || lower.includes('ganó') || lower.includes('ganamos') || lower.startsWith('w')) {
+    return `<span class="badge-resultado badge-victoria"><i class="fas fa-check mr-1"></i>Victoria</span>`;
+  }
+  if (lower.includes('derrota') || lower.includes('perdió') || lower.includes('perdimos') || lower.startsWith('l')) {
+    return `<span class="badge-resultado badge-derrota"><i class="fas fa-times mr-1"></i>Derrota</span>`;
+  }
+  if (lower.includes('empat')) {
+    return `<span class="badge-resultado badge-empate">Empate</span>`;
+  }
+  return `<span class="badge-resultado badge-pendiente">${resultado}</span>`;
+}
+
+function mostrarSpinner(id, v) {
+  const el = document.getElementById(id);
+  if (el) el.style.display = v ? 'flex' : 'none';
+}
+
+function mostrarInicialPanel(id, v) {
+  const el = document.getElementById(id);
+  if (el) el.style.display = v ? 'block' : 'none';
+}
+
+// ──────────────────────────────────────────────────────────────────────────────
+//  TARJETA DE PARTIDO
+// ──────────────────────────────────────────────────────────────────────────────
+function crearTarjetaPartido(p) {
+  const div = document.createElement('div');
+  div.className = 'match-card animate__animated animate__fadeInUp';
+
+  const partes = (p.resultado || '').split(/[-:]/).map(x => x.trim());
+  const golesLocal = partes[0] || '—';
+  const golesVisitante = partes[1] || '—';
+  const tieneResult = partes.length >= 2 && partes[0] !== '' && partes[1] !== '';
+
+  div.innerHTML = `
+    <!-- Cabecera equipos -->
+    <div class="p-5 flex items-center gap-3">
+      ${p.escudo
+      ? `<img src="${p.escudo}" alt="Escudo" class="w-10 h-10 object-contain rounded-full ring-2 ring-amber-400/30 flex-shrink-0">`
+      : `<div class="w-10 h-10 rounded-full bg-amber-400/10 flex items-center justify-center flex-shrink-0">
+             <i class="fas fa-shield-alt text-amber-400 text-sm"></i>
+           </div>`}
+      <div class="flex-1 min-w-0">
+        <div class="flex items-center gap-2 flex-wrap">
+          <span class="font-black text-white text-sm truncate">${p.equipolocal || 'Local'}</span>
+          <span class="vs-badge">VS</span>
+          <span class="font-black text-white text-sm truncate">${p.equipovisitante || 'Visitante'}</span>
+        </div>
+        <div class="flex items-center gap-3 mt-1.5">
+          ${tieneResult
+      ? `<span class="match-score font-black text-lg tracking-tight">${golesLocal} – ${golesVisitante}</span>`
+      : ''
+    }
+          ${badgeResultado(p.resultado)}
+        </div>
       </div>
-      <button class="btn btn-sm btn-outline-light rounded-circle btn-close-card" title="Cerrar">
-        <i class="fas fa-times"></i>
-      </button>
     </div>
-    <div class="card-body fs-6">
-      ${cuerpo}
+
+    <!-- Detalles -->
+    <div class="border-t border-slate-800 px-5 py-4 grid grid-cols-2 gap-3 text-xs text-slate-400">
+      <div class="flex items-center gap-2">
+        <i class="fas fa-calendar-alt text-amber-400 w-4 text-center"></i>
+        <span>${formatearFecha(p.fecha)}</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <i class="fas fa-clock text-amber-400 w-4 text-center"></i>
+        <span>${p.hora || 'Sin hora'}</span>
+      </div>
+      <div class="flex items-center gap-2 col-span-2">
+        <i class="fas fa-map-marker-alt text-red-400 w-4 text-center"></i>
+        <span>${p.Cancha || 'No especificada'}</span>
+      </div>
+      ${p.descripcion ? `
+      <div class="flex items-start gap-2 col-span-2">
+        <i class="fas fa-align-left text-sky-400 w-4 text-center mt-0.5"></i>
+        <span class="text-slate-300">${p.descripcion}</span>
+      </div>` : ''}
+      ${p.uniforme ? `
+      <div class="flex items-center gap-2">
+        <i class="fas fa-tshirt text-purple-400 w-4 text-center"></i>
+        <span>Uniforme: ${p.uniforme}</span>
+      </div>` : ''}
+      ${p.valor ? `
+      <div class="flex items-center gap-2">
+        <i class="fas fa-dollar-sign text-green-400 w-4 text-center"></i>
+        <span>$${p.valor}</span>
+      </div>` : ''}
+      ${p.observaciones ? `
+      <div class="flex items-start gap-2 col-span-2">
+        <i class="fas fa-comment-dots text-indigo-400 w-4 text-center mt-0.5"></i>
+        <span>${p.observaciones}</span>
+      </div>` : ''}
     </div>
   `;
-
-  card.querySelector('.btn-close-card').onclick = () => card.remove();
-  return card;
+  return div;
 }
 
-// ----- PARTIDOS -----
-async function obtenerPartidos() {
-  const { data, error } = await supabaseClient.from('partidos').select('*');
-  if (error) {
-    console.error('Error al obtener partidos:', error);
-    return [];
-  }
-  return data;
+// ──────────────────────────────────────────────────────────────────────────────
+//  TARJETA DE ENTRENAMIENTO
+// ──────────────────────────────────────────────────────────────────────────────
+function crearTarjetaEntrenamiento(e) {
+  const div = document.createElement('div');
+  div.className = 'match-card animate__animated animate__fadeInUp';
+  div.style.borderColor = 'rgba(74,222,128,0.15)';
+
+  div.innerHTML = `
+    <div class="p-5">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-full bg-green-500/10 flex items-center justify-center flex-shrink-0">
+          <i class="fas fa-dumbbell text-green-400"></i>
+        </div>
+        <div>
+          <p class="font-black text-white text-sm">${e.titulo || 'Entrenamiento'}</p>
+          <p class="text-xs text-green-400 mt-0.5">Sesión de entrenamiento</p>
+        </div>
+      </div>
+    </div>
+    <div class="border-t border-slate-800 px-5 py-4 grid grid-cols-2 gap-3 text-xs text-slate-400">
+      <div class="flex items-center gap-2">
+        <i class="fas fa-calendar-alt text-green-400 w-4 text-center"></i>
+        <span>${formatearFecha(e.fecha)}</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <i class="fas fa-clock text-green-400 w-4 text-center"></i>
+        <span>${e.hora || 'Sin hora'}</span>
+      </div>
+      <div class="flex items-center gap-2 col-span-2">
+        <i class="fas fa-map-marker-alt text-red-400 w-4 text-center"></i>
+        <span>${e.lugar || 'No especificado'}</span>
+      </div>
+      ${e.descripcion ? `
+      <div class="flex items-start gap-2 col-span-2">
+        <i class="fas fa-align-left text-sky-400 w-4 text-center mt-0.5"></i>
+        <span class="text-slate-300">${e.descripcion}</span>
+      </div>` : ''}
+      ${e.observaciones ? `
+      <div class="flex items-start gap-2 col-span-2">
+        <i class="fas fa-comment-dots text-indigo-400 w-4 text-center mt-0.5"></i>
+        <span>${e.observaciones}</span>
+      </div>` : ''}
+    </div>
+  `;
+  return div;
 }
+
+// ──────────────────────────────────────────────────────────────────────────────
+//  PARTIDOS — FILTRO POR FECHA
+// ──────────────────────────────────────────────────────────────────────────────
+const inputFecha = document.getElementById('fecha');
+const resultsPartidos = document.getElementById('partidos-results');
 
 async function filtrarPartidos() {
-  matchesContainer.innerHTML = '';
-  loadingSpinner.style.display = 'block';
+  const fecha = inputFecha?.value;
+  mostrarInicialPanel('partidos-estado-inicial', false);
+  resultsPartidos.innerHTML = '';
 
-  const fechaSeleccionada = inputFecha.value;
-  if (!fechaSeleccionada) {
-    loadingSpinner.style.display = 'none';
-    matchesContainer.innerHTML = '<p class="text-center text-muted">Selecciona una fecha para ver los partidos.</p>';
+  if (!fecha) {
+    mostrarInicialPanel('partidos-estado-inicial', true);
     return;
   }
 
-  const partidos = await obtenerPartidos();
-  loadingSpinner.style.display = 'none';
+  mostrarSpinner('partidos-spinner', true);
 
-  const filtrados = partidos.filter(p =>
-    new Date(p.fecha).toISOString().split('T')[0] === fechaSeleccionada
-  );
+  const { data, error } = await sb.from('partidos').select('*');
+  mostrarSpinner('partidos-spinner', false);
+
+  if (error) {
+    resultsPartidos.innerHTML = `<p class="text-center text-red-400 py-8"><i class="fas fa-exclamation-triangle mr-2"></i>Error al cargar partidos.</p>`;
+    return;
+  }
+
+  const filtrados = (data || []).filter(p => toLocalDate(p.fecha) === fecha);
 
   if (filtrados.length === 0) {
-    matchesContainer.innerHTML = '<p class="text-center text-muted">No hay partidos para la fecha seleccionada.</p>';
+    resultsPartidos.innerHTML = `
+      <div class="text-center py-14">
+        <div class="w-14 h-14 rounded-full bg-slate-800 flex items-center justify-center mx-auto mb-3">
+          <i class="fas fa-futbol text-slate-600 text-xl"></i>
+        </div>
+        <p class="text-slate-500 text-sm">No hay partidos registrados para esta fecha</p>
+      </div>`;
     return;
   }
 
-  filtrados.forEach(p => {
-    const cuerpo = `
-      <p><i class="fas fa-align-left me-2"></i><strong>Descripción:</strong> ${p.descripcion || 'N/A'}</p>
-      <p><i class="fas fa-calendar-alt me-2"></i><strong>Fecha/Hora:</strong> ${formatearFecha(p.fecha)} - ${p.hora || 'Sin hora'}</p>
-      <p><i class="fas fa-map-marker-alt me-2"></i><strong>Estadio:</strong> ${p.Cancha || 'No especificado'}</p>
-      ${p.valor ? `<p><i class="fas fa-dollar-sign me-2"></i><strong>Valor:</strong> $${p.valor}</p>` : ''}
-      <p><i class="fas fa-trophy me-2"></i><strong>Resultado:</strong> ${p.resultado || 'No disponible'}</p>
-      <p><i class="fas fa-futbol me-2"></i><strong>Goles:</strong> ${p.goles || 'No disponible'}</p>
-      ${p.uniforme ? `<p><i class="fas fa-tshirt me-2"></i><strong>Uniforme:</strong> ${p.uniforme}</p>` : ''}
-      ${p.observaciones ? `<p><i class="fas fa-users me-2"></i><strong>Observaciones:</strong> ${p.observaciones}</p>` : ''}
-      ${p.metodo_pago ? `<p><i class="fas fa-credit-card me-2"></i><strong>Método de Pago:</strong> ${p.metodo_pago}</p>` : ''}
-    `;
-
-    const card = crearCard({
-      tipo: 'partido',
-      titulo: `${p.equipolocal} vs ${p.equipovisitante}`,
-      cuerpo,
-      escudo: p.escudo,
-      color: 'primary'
-    });
-
-    matchesContainer.appendChild(card);
-  });
+  filtrados.forEach(p => resultsPartidos.appendChild(crearTarjetaPartido(p)));
 }
 
-if (inputFecha) {
-  inputFecha.addEventListener('change', filtrarPartidos);
-}
+if (inputFecha) inputFecha.addEventListener('change', filtrarPartidos);
 
-// ----- ENTRENAMIENTOS -----
-async function obtenerEntrenamientos() {
-  const { data, error } = await supabaseClient.from('entrenamientos').select('*');
-  if (error) {
-    console.error('Error al obtener entrenamientos:', error);
-    return [];
-  }
-  return data;
-}
+// ──────────────────────────────────────────────────────────────────────────────
+//  ENTRENAMIENTOS — FILTRO POR FECHA
+// ──────────────────────────────────────────────────────────────────────────────
+const inputFechaEnt = document.getElementById('fecha-entrenamiento');
+const resultsEnt = document.getElementById('entrenamientos-results');
 
 async function filtrarEntrenamientos() {
-  trainingsContainer.innerHTML = '';
-  loadingSpinnerEntrenamiento.style.display = 'block';
+  const fecha = inputFechaEnt?.value;
+  mostrarInicialPanel('entrenamientos-estado-inicial', false);
+  resultsEnt.innerHTML = '';
 
-  const fechaSeleccionada = inputFechaEntrenamiento.value;
-  if (!fechaSeleccionada) {
-    loadingSpinnerEntrenamiento.style.display = 'none';
-    trainingsContainer.innerHTML = '<p class="text-center text-muted">Selecciona una fecha para ver los entrenamientos.</p>';
+  if (!fecha) {
+    mostrarInicialPanel('entrenamientos-estado-inicial', true);
     return;
   }
 
-  const entrenamientos = await obtenerEntrenamientos();
-  loadingSpinnerEntrenamiento.style.display = 'none';
+  mostrarSpinner('entrenamientos-spinner', true);
 
-  const filtrados = entrenamientos.filter(e => {
-    const fechaLocal = new Date(e.fecha);
-    const fechaISO =
-      fechaLocal.getFullYear() + '-' +
-      String(fechaLocal.getMonth() + 1).padStart(2, '0') + '-' +
-      String(fechaLocal.getDate()).padStart(2, '0');
-    return fechaISO === fechaSeleccionada;
-  });
+  const { data, error } = await sb.from('entrenamientos').select('*');
+  mostrarSpinner('entrenamientos-spinner', false);
+
+  if (error) {
+    resultsEnt.innerHTML = `<p class="text-center text-red-400 py-8"><i class="fas fa-exclamation-triangle mr-2"></i>Error al cargar entrenamientos.</p>`;
+    return;
+  }
+
+  const filtrados = (data || []).filter(e => toLocalDate(e.fecha) === fecha);
 
   if (filtrados.length === 0) {
-    trainingsContainer.innerHTML = '<p class="text-center text-muted">No hay entrenamientos para la fecha seleccionada.</p>';
+    resultsEnt.innerHTML = `
+      <div class="text-center py-14">
+        <div class="w-14 h-14 rounded-full bg-slate-800 flex items-center justify-center mx-auto mb-3">
+          <i class="fas fa-dumbbell text-slate-600 text-xl"></i>
+        </div>
+        <p class="text-slate-500 text-sm">No hay entrenamientos registrados para esta fecha</p>
+      </div>`;
     return;
   }
 
-  const fragment = document.createDocumentFragment();
+  filtrados.forEach(e => resultsEnt.appendChild(crearTarjetaEntrenamiento(e)));
+}
 
-  filtrados.forEach(e => {
-    const cuerpo = `
-      <p><i class="fas fa-align-left me-2"></i><strong>Descripción:</strong> ${e.descripcion || 'N/A'}</p>
-      <p><i class="fas fa-calendar-alt me-2"></i><strong>Fecha/Hora:</strong> ${formatearFecha(e.fecha)} - ${e.hora || 'Sin hora'}</p>
-      <p><i class="fas fa-map-marker-alt me-2"></i><strong>Lugar:</strong> ${e.lugar || 'No especificado'}</p>
-      <p><i class="fas fa-comment-dots me-2"></i><strong>Observaciones:</strong> ${e.observaciones || 'Ninguna'}</p>
-    `;
-    const card = crearCard({
-      tipo: 'entrenamiento',
-      titulo: e.titulo || 'Entrenamiento',
-      cuerpo,
-      color: 'success'
-    });
-    fragment.appendChild(card);
+if (inputFechaEnt) inputFechaEnt.addEventListener('change', filtrarEntrenamientos);
+
+// Botones limpiar
+const btnLimpiarPartidos = document.getElementById('btn-limpiar-partidos');
+if (btnLimpiarPartidos) {
+  btnLimpiarPartidos.addEventListener('click', () => {
+    const f = document.getElementById('fecha');
+    if (f) f.value = '';
+    resultsPartidos.innerHTML = '';
+    mostrarInicialPanel('partidos-estado-inicial', true);
   });
-
-  trainingsContainer.appendChild(fragment);
 }
 
-if (inputFechaEntrenamiento) {
-  inputFechaEntrenamiento.addEventListener('change', filtrarEntrenamientos);
+const btnLimpiarEnt = document.getElementById('btn-limpiar-entrenamientos');
+if (btnLimpiarEnt) {
+  btnLimpiarEnt.addEventListener('click', () => {
+    const f = document.getElementById('fecha-entrenamiento');
+    if (f) f.value = '';
+    resultsEnt.innerHTML = '';
+    mostrarInicialPanel('entrenamientos-estado-inicial', true);
+  });
 }
+// ──────────────────────────────────────────────────────────────────────────────
+async function mostrarClasificacion() {
+  const container = document.getElementById('clasificacion-container');
+  const spinner = document.getElementById('clasificacion-spinner');
+  if (!container) return;
 
-// ----- CLASIFICACIÓN -----
-async function obtenerClasificacion() {
-  const { data, error } = await supabaseClient
+  if (spinner) spinner.style.display = 'flex';
+
+  const { data, error } = await sb
     .from('clasificacion_categoria_2014_15')
     .select('*')
     .order('posicion', { ascending: true });
 
-  if (error) {
-    console.error('Error al obtener clasificación:', error);
-    return [];
-  }
+  if (spinner) spinner.style.display = 'none';
 
-  return data;
-}
-
-async function mostrarClasificacion() {
-  const container = document.getElementById('clasificacion-container');
-  const spinner = document.getElementById('loading-clasificacion');
-
-  if (!container || !spinner) return;
-
-  spinner.style.display = 'block';
-  container.innerHTML = '';
-
-  const datos = await obtenerClasificacion();
-  spinner.style.display = 'none';
-
-  if (!datos.length) {
-    container.innerHTML = '<p class="text-center text-muted">No hay datos de clasificación disponibles.</p>';
+  if (error || !data?.length) {
+    container.innerHTML = `<p class="text-center text-slate-500 py-8">No hay datos de clasificación disponibles.</p>`;
     return;
   }
 
   const tabla = document.createElement('table');
-  tabla.className = 'table table-striped table-hover table-bordered text-center align-middle';
-
+  tabla.className = 'tabla-clas w-full text-left text-white';
   tabla.innerHTML = `
-    <thead class="table-dark">
+    <thead>
       <tr>
-        <th>Pos</th>
+        <th class="text-center">#</th>
         <th>Equipo</th>
-        <th>Pts</th>
-        <th>J</th>
-        <th>G</th>
-        <th>E</th>
-        <th>P</th>
-        <th>GF</th>
-        <th>GC</th>
-        <th>DIF</th>
+        <th class="text-center">Pts</th>
+        <th class="text-center">PJ</th>
+        <th class="text-center">PG</th>
+        <th class="text-center">PE</th>
+        <th class="text-center">PP</th>
+        <th class="text-center">GF</th>
+        <th class="text-center">GC</th>
+        <th class="text-center">DIF</th>
       </tr>
     </thead>
     <tbody>
-      ${datos
-      .map(
-        e => `
-        <tr class="${e.equipo.toLowerCase().includes('diba') ? 'table-danger fw-bold' : ''}">
-          <td>${e.posicion}</td>
-          <td>${e.equipo}</td>
-          <td>${e.puntos}</td>
-          <td>${e.jugados}</td>
-          <td>${e.ganados}</td>
-          <td>${e.empatados}</td>
-          <td>${e.perdidos}</td>
-          <td>${e.goles_favor}</td>
-          <td>${e.goles_contra}</td>
-          <td>${e.diferencia}</td>
-        </tr>
-      `
-      )
-      .join('')}
+      ${data.map(e => {
+    const isDiba = e.equipo?.toLowerCase().includes('diba');
+    return `
+        <tr class="${isDiba ? 'diba-row' : ''}">
+          <td class="text-center font-bold">${e.posicion}</td>
+          <td class="font-semibold flex items-center gap-2">
+            ${isDiba ? '<i class="fas fa-star text-amber-400 text-xs"></i>' : ''}
+            ${e.equipo}
+          </td>
+          <td class="text-center font-bold ${isDiba ? '' : 'text-white'}">${e.puntos}</td>
+          <td class="text-center">${e.jugados}</td>
+          <td class="text-center text-green-400">${e.ganados}</td>
+          <td class="text-center">${e.empatados}</td>
+          <td class="text-center text-red-400">${e.perdidos}</td>
+          <td class="text-center">${e.goles_favor}</td>
+          <td class="text-center">${e.goles_contra}</td>
+          <td class="text-center ${e.diferencia > 0 ? 'text-green-400' : e.diferencia < 0 ? 'text-red-400' : ''}">${e.diferencia > 0 ? '+' : ''}${e.diferencia}</td>
+        </tr>`;
+  }).join('')}
     </tbody>
   `;
-
   container.appendChild(tabla);
 }
 
-// ----- DIBA FBC -----
+// ──────────────────────────────────────────────────────────────────────────────
+//  PARTIDOS DIBA FBC (sección inferior)
+// ──────────────────────────────────────────────────────────────────────────────
 async function mostrarPartidosDIBA() {
-  const dibaContainer = document.getElementById('diba-slider');
-  if (!dibaContainer) return;
+  const container = document.getElementById('diba-slider');
+  const spinner = document.getElementById('diba-spinner');
+  if (!container) return;
 
-  const { data, error } = await supabaseClient
+  if (spinner) spinner.style.display = 'flex';
+
+  const { data, error } = await sb
     .from('partidos')
     .select('*')
     .or('equipolocal.ilike.%DIBA%,equipovisitante.ilike.%DIBA%')
     .order('fecha', { ascending: false });
 
+  if (spinner) spinner.style.display = 'none';
+
   if (error) {
-    console.error('Error al obtener partidos DIBA:', error);
-    dibaContainer.innerHTML = '<p class="text-muted">No se pudieron cargar los partidos de DIBA FBC.</p>';
+    container.innerHTML = `<p class="text-slate-500 text-sm text-center col-span-3">No se pudieron cargar los partidos de DIBA FBC.</p>`;
     return;
   }
 
-  if (!data.length) {
-    dibaContainer.innerHTML = '<p class="text-muted">No hay partidos recientes de DIBA FBC.</p>';
+  if (!data?.length) {
+    container.innerHTML = `<p class="text-slate-500 text-sm text-center col-span-3">No hay partidos de DIBA FBC registrados.</p>`;
     return;
   }
 
-  const fragment = document.createDocumentFragment();
-
-  data.forEach(p => {
-    const cuerpo = `
-      <p><i class="fas fa-calendar-alt me-2"></i><strong>Fecha/Hora:</strong> ${formatearFecha(p.fecha)} - ${p.hora || 'Sin hora'}</p>
-      <p><i class="fas fa-map-marker-alt me-2"></i><strong>Cancha:</strong> ${p.Cancha || 'No especificada'}</p>
-      <p><i class="fas fa-trophy me-2"></i><strong>Resultado:</strong> ${p.resultado || 'Pendiente'}</p>
-    `;
-
-    const card = crearCard({
-      tipo: 'diba',
-      titulo: `${p.equipolocal} vs ${p.equipovisitante}`,
-      cuerpo,
-      escudo: p.escudo,
-      color: 'danger'
-    });
-
-    fragment.appendChild(card);
-  });
-
-  dibaContainer.appendChild(fragment);
+  data.forEach(p => container.appendChild(crearTarjetaPartido(p)));
 }
 
-// Ejecutar automáticamente al cargar la página
+// ──────────────────────────────────────────────────────────────────────────────
+//  ESTADÍSTICAS RÁPIDAS (hero)
+// ──────────────────────────────────────────────────────────────────────────────
+async function cargarEstadisticasRapidas() {
+  const { data } = await sb
+    .from('partidos')
+    .select('resultado')
+    .or('equipolocal.ilike.%DIBA%,equipovisitante.ilike.%DIBA%');
+
+  if (!data) return;
+
+  const total = data.length;
+  let victorias = 0, derrotas = 0, empates = 0;
+
+  data.forEach(p => {
+    const r = (p.resultado || '').toLowerCase();
+    if (r.includes('victoria') || r.includes('ganó') || r.includes('ganamos')) victorias++;
+    else if (r.includes('derrota') || r.includes('perdió') || r.includes('perdimos')) derrotas++;
+    else if (r.includes('empat')) empates++;
+  });
+
+  const animate = (id, val) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    let cur = 0;
+    const step = Math.max(1, Math.floor(val / 20));
+    const interval = setInterval(() => {
+      cur = Math.min(cur + step, val);
+      el.textContent = cur;
+      if (cur >= val) clearInterval(interval);
+    }, 40);
+  };
+
+  animate('stat-partidos', total);
+  animate('stat-victorias', victorias);
+  animate('stat-derrotas', derrotas);
+  animate('stat-empates', empates);
+}
+
+// ──────────────────────────────────────────────────────────────────────────────
+//  INIT
+// ──────────────────────────────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
   mostrarClasificacion();
   mostrarPartidosDIBA();
+  cargarEstadisticasRapidas();
 });
