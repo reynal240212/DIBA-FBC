@@ -2,224 +2,281 @@
 <html lang="es">
 
 <head>
-  <meta charset="UTF-8" />
-  <title>Crear Perfil - DIBA FBC</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <!-- Prevenir cacheo -->
-  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-  <meta http-equiv="Pragma" content="no-cache" />
-  <meta http-equiv="Expires" content="0" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chat DIBA - Comunidad FBC</title>
 
-  <!-- Bootstrap CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
-  <!-- Animate.css (opcional) -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <!-- Tailwind CSS (via CDN for simplicity, but using the project's vibe) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet" />
 
-  <style>
-    /* Fondo deportivo */
-    body {
-      background: url('https://cdn.britannica.com/51/190751-050-147B93F7/soccer-ball-goal.jpg') no-repeat center center fixed;
-      background-size: cover;
-      font-family: Arial, sans-serif;
-      padding: 1rem;
-      position: relative;
-    }
+    <style>
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: #0f172a;
+            /* slate-900 */
+        }
 
-    /* Overlay oscuro para legibilidad */
-    body::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.55);
-      z-index: 0;
-    }
+        .glass {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
 
-    /* Contenedor principal */
-    .profile-container {
-      position: relative;
-      z-index: 1;
-    }
+        .chat-height {
+            height: calc(100vh - 180px);
+        }
 
-    /* Tarjeta para el formulario */
-    .profile-card {
-      max-width: 500px;
-      width: 100%;
-      margin: 0 auto;
-      border: none;
-      border-radius: 10px;
-      overflow: hidden;
-      background: #fff;
-    }
+        .message-bubble {
+            max-width: 80%;
+            transition: all 0.2s ease;
+        }
 
-    .profile-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.25);
-      transition: transform 0.3s, box-shadow 0.3s;
-    }
+        #messages-container::-webkit-scrollbar {
+            width: 6px;
+        }
 
-    .animate__animated {
-      animation-duration: 1s;
-    }
-  </style>
+        #messages-container::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        #messages-container::-webkit-scrollbar-thumb {
+            background: rgba(245, 158, 11, 0.3);
+            border-radius: 10px;
+        }
+
+        #messages-container::-webkit-scrollbar-thumb:hover {
+            background: rgba(245, 158, 11, 0.5);
+        }
+
+        .typing-indicator span {
+            display: inline-block;
+            width: 4px;
+            height: 4px;
+            background-color: #f59e0b;
+            border-radius: 50%;
+            margin-right: 2px;
+            animation: bounce 1.4s infinite ease-in-out both;
+        }
+
+        .typing-indicator span:nth-child(1) {
+            animation-delay: -0.32s;
+        }
+
+        .typing-indicator span:nth-child(2) {
+            animation-delay: -0.16s;
+        }
+
+        @keyframes bounce {
+
+            0%,
+            80%,
+            100% {
+                transform: scale(0);
+            }
+
+            40% {
+                transform: scale(1.0);
+            }
+        }
+    </style>
 </head>
 
-<body>
-  <div id="navbar-container"></div>
-  <div id="hero-container"></div>
-  <div id="patrocinadores-container"></div>
+<body class="text-slate-200">
+    <div id="navbar-container"></div>
 
+    <div class="pt-24 pb-8 px-4 overflow-hidden">
+        <div class="max-w-4xl mx-auto">
 
-  <div class="container profile-container d-flex align-items-center justify-content-center min-vh-100">
-    <div class="card profile-card shadow-sm p-4 animate__animated animate__fadeInUp">
-      <div class="d-flex justify-content-between align-items-center mb-3">
-        <h2 class="h4 text-center">Completa tu Perfil</h2>
-        <!-- Botón de cerrar sesión -->
-        <button id="logout-btn" class="btn btn-sm btn-danger">Cerrar Sesión</button>
-      </div>
+            <!-- Header do Chat -->
+            <div class="glass rounded-t-2xl p-4 flex items-center justify-between border-b border-white/5">
+                <div class="flex items-center gap-3">
+                    <div class="relative">
+                        <div
+                            class="w-12 h-12 bg-amber-500 rounded-full flex items-center justify-center text-slate-900 font-bold shadow-lg shadow-amber-500/20">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div
+                            class="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 border-2 border-slate-900 rounded-full">
+                        </div>
+                    </div>
+                    <div>
+                        <h1 class="font-bold text-lg text-white leading-tight">Chat General DIBA</h1>
+                        <p class="text-xs text-slate-400 flex items-center gap-1">
+                            <i class="fas fa-circle text-[6px] text-green-500"></i>
+                            Comunidad activa
+                        </p>
+                    </div>
+                </div>
+                <div class="flex gap-2">
+                    <button
+                        class="w-10 h-10 rounded-full hover:bg-white/5 flex items-center justify-center transition-colors">
+                        <i class="fas fa-ellipsis-v text-slate-400"></i>
+                    </button>
+                </div>
+            </div>
 
-      <!-- Formulario para completar/actualizar el perfil -->
-      <form id="profile-form">
-        <div class="mb-3">
-          <label for="full_name" class="form-label">Nombre Completo</label>
-          <input type="text" class="form-control" id="full_name" name="full_name" placeholder="Tu nombre completo"
-            required>
+            <!-- Messages List -->
+            <div id="messages-container" class="glass h-[60vh] md:h-[65vh] overflow-y-auto p-6 flex flex-col gap-4">
+                <!-- Los mensajes se cargarán aquí -->
+                <div class="flex flex-col items-center justify-center h-full opacity-40 italic text-sm">
+                    <i class="fas fa-spinner fa-spin text-2xl mb-2 text-amber-500"></i>
+                    Cargando conversación...
+                </div>
+            </div>
+
+            <!-- Input Area -->
+            <div class="glass rounded-b-2xl p-4 border-t border-white/5">
+                <form id="chat-form" class="flex items-center gap-3">
+                    <div class="relative flex-1">
+                        <input type="text" id="message-input" placeholder="Escribe un mensaje..."
+                            class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 pr-10 focus:outline-none focus:ring-2 focus:ring-amber-500/50 transition-all text-sm"
+                            autocomplete="off" />
+                        <button type="button"
+                            class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-amber-400">
+                            <i class="far fa-face-smile"></i>
+                        </button>
+                    </div>
+                    <button type="submit" id="send-btn"
+                        class="w-12 h-12 bg-amber-500 text-slate-900 rounded-xl flex items-center justify-center hover:bg-amber-400 hover:scale-105 active:scale-95 transition-all shadow-lg shadow-amber-500/20">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </form>
+                <p id="error-msg" class="text-[10px] text-rose-500 mt-2 hidden"></p>
+            </div>
+
         </div>
-        <div class="mb-3">
-          <label for="username" class="form-label">Nombre de Usuario</label>
-          <input type="text" class="form-control" id="username" name="username" placeholder="Nombre de usuario"
-            required>
-        </div>
-        <div class="mb-3">
-          <label for="bio" class="form-label">Biografía</label>
-          <textarea class="form-control" id="bio" name="bio" rows="3" placeholder="Cuéntanos algo sobre ti"></textarea>
-        </div>
-        <!-- Campo de texto para pegar la URL de la imagen -->
-        <div class="mb-3">
-          <label for="avatar_url" class="form-label">URL de tu foto (opcional)</label>
-          <input type="url" class="form-control" id="avatar_url" name="avatar_url"
-            placeholder="https://example.com/mi-foto.jpg">
-        </div>
-        <button type="submit" class="btn btn-success w-100">Guardar Perfil</button>
-      </form>
     </div>
-  </div>
 
-  <!-- Bootstrap JS Bundle -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <!-- Supabase JS (versión 2.x) -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-  <script src="scripts/config.js"></script>
-  <script>
-    // Credenciales desde config.js centralizado
-    const { SUPABASE_URL, SUPABASE_ANON_KEY } = window.DIBA_CONFIG;
-    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+    <script src="scripts/config.js"></script>
+    <script src="scripts/loadComponents.js"></script>
 
-    // Función para forzar que la página verifique la sesión al cargar (si el usuario no está autenticado, se redirige al login)
-    async function checkSession() {
-      const { data: { session } } = await supabaseClient.auth.getSession();
-      if (!session) {
-        window.location.href = 'login.html';
-      }
-    }
+    <script>
+        const { SUPABASE_URL, SUPABASE_ANON_KEY } = window.DIBA_CONFIG;
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    // Ejecutar la verificación al cargar la página
-    document.addEventListener('DOMContentLoaded', async () => {
-      await checkSession();
-      // Cargar el perfil existente si hay sesión
-      const { data: { session } } = await supabaseClient.auth.getSession();
-      if (session) {
-        await syncProfile(session.user.id);
-        await loadProfile(session.user.id);
-      }
-    });
+        const messagesContainer = document.getElementById('messages-container');
+        const chatForm = document.getElementById('chat-form');
+        const messageInput = document.getElementById('message-input');
+        const errorMsg = document.getElementById('error-msg');
 
-    // Función para sincronizar (crear) el perfil si no existe
-    async function syncProfile(userId) {
-      const { data: profileData, error } = await supabaseClient
-        .from('profiles')
-        .select('*')
-        .eq('id', userId)
-        .single();
+        let currentUser = null;
 
-      if (error || !profileData) {
-        const { data: { user } } = await supabaseClient.auth.getUser();
-        const email = user?.email || '';
-        const { error: insertError } = await supabaseClient
-          .from('profiles')
-          .insert([{ id: userId, username: email, full_name: '', bio: '', avatar_url: '' }]);
-        if (insertError) {
-          console.error('Error al crear perfil:', insertError);
-        } else {
-          console.log('Perfil creado exitosamente.');
+        // Inicializar
+        async function initChat() {
+            // Verificar sesión
+            const { data: { session } } = await supabaseClient.auth.getSession();
+            if (!session) {
+                messagesContainer.innerHTML = `
+                    <div class="flex flex-col items-center justify-center h-full text-center p-8">
+                        <div class="w-16 h-16 bg-white/5 rounded-full flex items-center justify-center mb-4">
+                            <i class="fas fa-lock text-slate-600 text-2xl"></i>
+                        </div>
+                        <h3 class="text-amber-400 font-bold mb-2">Acceso Restringido</h3>
+                        <p class="text-xs text-slate-400 max-w-xs">Inicia sesión con Google para participar en el chat de la comunidad.</p>
+                        <a href="index.html" class="mt-4 bg-white text-slate-900 px-6 py-2 rounded-full font-bold text-xs hover:bg-amber-400 transition-colors">Volver al Inicio</a>
+                    </div>
+                `;
+                chatForm.classList.add('opacity-50', 'pointer-events-none');
+                return;
+            }
+
+            currentUser = session.user;
+
+            // Cargar mensajes iniciales
+            await fetchMessages();
+
+            // Suscribirse a tiempo real
+            subscribeToMessages();
         }
-      } else {
-        console.log('Perfil sincronizado:', profileData);
-      }
-    }
 
-    // Función para cargar el perfil existente
-    async function loadProfile(userId) {
-      const { data: profileData, error } = await supabaseClient
-        .from('profiles')
-        .select('*')
-        .eq('id', userId)
-        .single();
-      if (error) {
-        console.log('No se encontró perfil. Probablemente se acaba de crear uno vacío.');
-        return;
-      }
-      document.getElementById('full_name').value = profileData.full_name || '';
-      document.getElementById('username').value = profileData.username || '';
-      document.getElementById('bio').value = profileData.bio || '';
-      document.getElementById('avatar_url').value = profileData.avatar_url || '';
-    }
+        async function fetchMessages() {
+            const { data, error } = await supabaseClient
+                .from('mensajes')
+                .select('*')
+                .order('created_at', { ascending: true })
+                .limit(50);
 
-    // Manejar el submit del formulario para insertar o actualizar el perfil
-    const profileForm = document.getElementById('profile-form');
-    profileForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const full_name = document.getElementById('full_name').value;
-      const username = document.getElementById('username').value;
-      const bio = document.getElementById('bio').value;
-      const avatar_url = document.getElementById('avatar_url').value;
+            if (error) {
+                console.error('Error fetching messages:', error);
+                return;
+            }
 
-      const { data: { session } } = await supabaseClient.auth.getSession();
-      if (!session) {
-        alert('No hay usuario autenticado. Por favor, inicia sesión.');
-        return;
-      }
-      const userId = session.user.id;
+            messagesContainer.innerHTML = '';
+            data.forEach(msg => appendMessage(msg));
+            scrollToBottom();
+        }
 
-      const { error } = await supabaseClient
-        .from('profiles')
-        .upsert({
-          id: userId,
-          full_name,
-          username,
-          bio,
-          avatar_url
-        });
-      if (error) {
-        alert('Error al guardar el perfil: ' + error.message);
-        console.error(error);
-      } else {
-        alert('Perfil guardado exitosamente.');
-        window.location.href = 'chat.html';
-      }
-    });
+        function appendMessage(msg) {
+            const isMe = currentUser && msg.user_id === currentUser.id;
 
-    // Manejar el clic en el botón de Cerrar Sesión
-    const logoutBtn = document.getElementById('logout-btn');
-    logoutBtn.addEventListener('click', async () => {
-      const { error } = await supabaseClient.auth.signOut();
-      if (error) {
-        alert('Error al cerrar sesión: ' + error.message);
-      } else {
-        alert('Has cerrado sesión correctamente');
-        window.location.href = 'login.html';
-      }
-    });
-  </script>
+            const div = document.createElement('div');
+            div.className = `flex ${isMe ? 'justify-end' : 'justify-start'} animate-in fade-in duration-300`;
+
+            // Determinar nombre y avatar
+            const name = msg.full_name || 'Usuario';
+            const avatar = msg.avatar_url || `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=random&color=fff`;
+
+            div.innerHTML = `
+                <div class="flex ${isMe ? 'flex-row-reverse' : 'flex-row'} items-end gap-2 max-w-[85%]">
+                    <img src="${avatar}" class="w-6 h-6 rounded-full border border-white/10" alt="Avatar">
+                    <div class="flex flex-col ${isMe ? 'items-end' : 'items-start'}">
+                        ${!isMe ? `<span class="text-[10px] text-slate-500 ml-2 mb-1">${name}</span>` : ''}
+                        <div class="message-bubble rounded-2xl px-4 py-2 text-sm ${isMe ? 'bg-amber-500 text-slate-900 font-medium' : 'bg-white/5 text-slate-200'}">
+                            ${msg.content}
+                        </div>
+                        <span class="text-[9px] text-slate-600 mt-1 mx-2">${new Date(msg.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+                    </div>
+                </div>
+            `;
+            messagesContainer.appendChild(div);
+        }
+
+        function subscribeToMessages() {
+            supabaseClient
+                .channel('public:mensajes')
+                .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'mensajes' }, payload => {
+                    appendMessage(payload.new);
+                    scrollToBottom();
+                })
+                .subscribe();
+        }
+
+        async function sendMessage(e) {
+            e.preventDefault();
+            const content = messageInput.value.trim();
+            if (!content) return;
+
+            messageInput.value = '';
+            errorMsg.classList.add('hidden');
+
+            const { error } = await supabaseClient
+                .from('mensajes')
+                .insert([{
+                    content,
+                    user_id: currentUser.id,
+                    full_name: currentUser.user_metadata.full_name || currentUser.email,
+                    avatar_url: currentUser.user_metadata.avatar_url
+                }]);
+
+            if (error) {
+                errorMsg.innerText = "Error al enviar: " + error.message;
+                errorMsg.classList.remove('hidden');
+                console.error('Error sending message:', error);
+            }
+        }
+
+        function scrollToBottom() {
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        chatForm.addEventListener('submit', sendMessage);
+
+        document.addEventListener('DOMContentLoaded', initChat);
+    </script>
 </body>
 
 </html>

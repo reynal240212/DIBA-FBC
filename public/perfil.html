@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mi Perfil - DIBA FBC</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet" />
+
+  <style>
+    body {
+      font-family: 'Outfit', sans-serif;
+      background-color: #0f172a;
+    }
+
+    .glass {
+      background: rgba(30, 41, 59, 0.7);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+  </style>
+</head>
+
+<body class="text-slate-200">
+  <div id="navbar-container"></div>
+
+  <div class="pt-32 pb-12 px-4 min-vh-100 flex items-center justify-center">
+    <div class="max-w-md w-full animate-in fade-in slide-in-from-bottom-4 duration-700">
+
+      <div class="glass rounded-3xl p-8 shadow-2xl relative overflow-hidden">
+        <!-- Estética de fondo -->
+        <div class="absolute -top-24 -right-24 w-48 h-48 bg-amber-500/10 rounded-full blur-3xl"></div>
+        <div class="absolute -bottom-24 -left-24 w-48 h-48 bg-blue-500/10 rounded-full blur-3xl"></div>
+
+        <div class="text-center mb-8 relative">
+          <div class="inline-block relative">
+            <img id="profile-preview" src="https://ui-avatars.com/api/?name=User&background=random"
+              class="w-24 h-24 rounded-full border-4 border-amber-500 p-1 object-cover mx-auto shadow-xl" alt="Avatar">
+            <div
+              class="absolute bottom-0 right-0 bg-amber-500 w-8 h-8 rounded-full flex items-center justify-center text-slate-900 shadow-lg border-4 border-slate-900">
+              <i class="fas fa-camera text-xs"></i>
+            </div>
+          </div>
+          <h1 class="text-2xl font-black text-white mt-4">Mi Perfil</h1>
+          <p class="text-slate-400 text-sm">Personaliza tu estancia en DIBA FBC</p>
+        </div>
+
+        <form id="profile-form" class="space-y-5 relative">
+          <div>
+            <label class="block text-[10px] font-bold text-amber-500 uppercase tracking-widest mb-1.5 ml-1">Nombre
+              Completo</label>
+            <input type="text" id="full_name" placeholder="Ej: Juan Pérez"
+              class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-amber-500/50 transition-all text-sm"
+              required>
+          </div>
+
+          <div>
+            <label class="block text-[10px] font-bold text-amber-500 uppercase tracking-widest mb-1.5 ml-1">Nombre de
+              Usuario</label>
+            <input type="text" id="username" placeholder="juan_diba"
+              class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-amber-500/50 transition-all text-sm"
+              required>
+          </div>
+
+          <div>
+            <label
+              class="block text-[10px] font-bold text-amber-500 uppercase tracking-widest mb-1.5 ml-1">Biografía</label>
+            <textarea id="bio" rows="3" placeholder="Apasionado por el fútbol..."
+              class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-amber-500/50 transition-all text-sm resize-none"></textarea>
+          </div>
+
+          <div>
+            <label class="block text-[10px] font-bold text-amber-500 uppercase tracking-widest mb-1.5 ml-1">URL de Foto
+              (Avatar)</label>
+            <input type="url" id="avatar_url" placeholder="https://..."
+              class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-amber-500/50 transition-all text-sm">
+          </div>
+
+          <div class="pt-4 flex gap-3">
+            <button type="submit"
+              class="flex-1 bg-amber-500 text-slate-900 py-3 rounded-xl font-black text-xs hover:bg-amber-400 transition-all shadow-lg shadow-amber-500/20 active:scale-95">
+              GUARDAR CAMBIOS
+            </button>
+            <button type="button" id="logout-btn"
+              class="px-4 bg-rose-500/10 text-rose-500 border border-rose-500/20 rounded-xl hover:bg-rose-500 hover:text-white transition-all active:scale-95">
+              <i class="fas fa-sign-out-alt"></i>
+            </button>
+          </div>
+        </form>
+
+        <p id="status-msg" class="text-center text-[10px] mt-4 font-bold uppercase tracking-widest hidden"></p>
+      </div>
+
+      <div class="text-center mt-6">
+        <a href="chat.html" class="text-amber-400 hover:text-white text-xs font-bold transition-colors">
+          <i class="fas fa-arrow-left mr-2"></i> Volver al Chat
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="scripts/config.js"></script>
+  <script src="scripts/loadComponents.js"></script>
+
+  <script>
+    const { SUPABASE_URL, SUPABASE_ANON_KEY } = window.DIBA_CONFIG;
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    const profileForm = document.getElementById('profile-form');
+    const statusMsg = document.getElementById('status-msg');
+    const preview = document.getElementById('profile-preview');
+
+    async function init() {
+      const { data: { session } } = await supabaseClient.auth.getSession();
+      if (!session) {
+        window.location.href = 'index.html';
+        return;
+      }
+
+      const userId = session.user.id;
+      await loadProfile(userId);
+
+      // Live preview of avatar
+      document.getElementById('avatar_url').addEventListener('input', (e) => {
+        if (e.target.value) preview.src = e.target.value;
+      });
+    }
+
+    async function loadProfile(userId) {
+      const { data, error } = await supabaseClient
+        .from('profiles')
+        .select('*')
+        .eq('id', userId)
+        .single();
+
+      if (error) {
+        console.log('Error o perfil nuevo. Cargando datos de Auth.');
+        const { data: { user } } = await supabaseClient.auth.getUser();
+        document.getElementById('full_name').value = user.user_metadata.full_name || '';
+        document.getElementById('username').value = user.email.split('@')[0];
+        if (user.user_metadata.avatar_url) {
+          document.getElementById('avatar_url').value = user.user_metadata.avatar_url;
+          preview.src = user.user_metadata.avatar_url;
+        }
+        return;
+      }
+
+      document.getElementById('full_name').value = data.full_name || '';
+      document.getElementById('username').value = data.username || '';
+      document.getElementById('bio').value = data.bio || '';
+      document.getElementById('avatar_url').value = data.avatar_url || '';
+      if (data.avatar_url) preview.src = data.avatar_url;
+    }
+
+    profileForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const { data: { session } } = await supabaseClient.auth.getSession();
+
+      const profile = {
+        id: session.user.id,
+        full_name: document.getElementById('full_name').value,
+        username: document.getElementById('username').value,
+        bio: document.getElementById('bio').value,
+        avatar_url: document.getElementById('avatar_url').value,
+        updated_at: new Date()
+      };
+
+      const { error } = await supabaseClient.from('profiles').upsert(profile);
+
+      statusMsg.classList.remove('hidden');
+      if (error) {
+        statusMsg.innerText = "Error: " + error.message;
+        statusMsg.className = "text-center text-[10px] mt-4 font-bold uppercase tracking-widest text-rose-500";
+      } else {
+        statusMsg.innerText = "¡Perfil actualizado!";
+        statusMsg.className = "text-center text-[10px] mt-4 font-bold uppercase tracking-widest text-emerald-500";
+        setTimeout(() => statusMsg.classList.add('hidden'), 3000);
+      }
+    });
+
+    document.getElementById('logout-btn').addEventListener('click', async () => {
+      if (confirm('¿Cerrar sesión?')) {
+        await supabaseClient.auth.signOut();
+        window.location.href = 'index.html';
+      }
+    });
+
+    document.addEventListener('DOMContentLoaded', init);
+  </script>
+</body>
+
+</html>
