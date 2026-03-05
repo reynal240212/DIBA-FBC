@@ -170,7 +170,7 @@
 
   <script src="/scripts/config.js"></script>
   <script type="module">
-    import { iniciarSesion } from "/scripts/auth.js";
+    import { iniciarSesion, enviarCorreoRecuperacion } from "/scripts/auth.js";
 
     const loginForm = document.getElementById('login-form');
     const loginBtn = document.getElementById('login-button');
@@ -214,6 +214,35 @@
         showAlert(error.message === 'Invalid login credentials' ? 'Correo o contraseña incorrectos.' : error.message);
 
         // Reset UI
+        loginBtn.disabled = false;
+        spinner.classList.add('hidden');
+        btnText.textContent = 'Iniciar Sesión';
+      }
+    });
+
+    // Enlace de "¿Olvidaste tu contraseña?"
+    const forgotLink = document.getElementById('forgot-link');
+    forgotLink.addEventListener('click', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('login-username').value.trim();
+
+      if (!email) {
+        showAlert('Por favor, ingresa tu Correo Electrónico arriba antes de recuperar la contraseña.', 'error');
+        return;
+      }
+
+      loginBtn.disabled = true;
+      spinner.classList.remove('hidden');
+      btnText.textContent = 'Enviando...';
+      alertContainer.innerHTML = '';
+
+      try {
+        await enviarCorreoRecuperacion(email);
+        showAlert('Hemos enviado un enlace de recuperación a tu correo.', 'success');
+      } catch (error) {
+        console.error("Recovery error:", error);
+        showAlert('Error al enviar correo: ' + error.message, 'error');
+      } finally {
         loginBtn.disabled = false;
         spinner.classList.add('hidden');
         btnText.textContent = 'Iniciar Sesión';

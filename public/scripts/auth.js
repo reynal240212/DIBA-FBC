@@ -68,3 +68,23 @@ export async function cerrarSesion() {
     window.location.replace("/admin/login.html");
   }
 }
+
+/**
+ * Envia un correo de recuperación de contraseña
+ */
+export async function enviarCorreoRecuperacion(email) {
+  const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
+    redirectTo: `${window.location.origin}/admin/update-password.html`,
+  });
+  if (error) throw error;
+  return data;
+}
+
+/**
+ * Actualiza la contraseña del usuario (requiere haber llegado desde el link del correo)
+ */
+export async function actualizarPassword(newPassword) {
+  const { data, error } = await supabase.auth.updateUser({ password: newPassword });
+  if (error) throw error;
+  return data;
+}
