@@ -80,6 +80,41 @@
               <i class="fas fa-search"></i>
             </button>
           </li>
+
+          <!-- Auth State Desktop -->
+          <li id="auth-container-desktop" class="flex items-center ml-2 border-l border-slate-700 pl-4">
+            <div id="auth-loading" class="animate-pulse flex space-x-2">
+              <div class="rounded-full bg-slate-700 h-8 w-8"></div>
+            </div>
+            <div id="auth-logged-out" class="hidden">
+              <button id="btn-login-google"
+                class="flex items-center gap-2 bg-white text-slate-900 px-4 py-1.5 rounded-full hover:bg-amber-400 transition-all font-bold text-[11px]">
+                <i class="fab fa-google"></i> ENTRAR
+              </button>
+            </div>
+            <div id="auth-logged-in" class="hidden relative group">
+              <button class="flex items-center gap-2 outline-none">
+                <img id="user-avatar" src="" alt=""
+                  class="h-8 w-8 rounded-full border-2 border-amber-500 object-cover hidden">
+                <div id="user-initials"
+                  class="h-8 w-8 rounded-full border-2 border-amber-500 bg-slate-800 flex items-center justify-center text-[10px] font-bold text-amber-500">
+                </div>
+                <i class="fas fa-chevron-down text-[9px] text-slate-400"></i>
+              </button>
+              <ul
+                class="absolute right-0 top-[110%] w-48 bg-slate-900 border border-slate-700 rounded-xl shadow-2xl py-2 opacity-0 invisible translate-y-2 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 transition-all duration-200 z-[1200]">
+                <li class="px-4 py-2 border-b border-slate-800">
+                  <p id="user-name" class="text-xs font-bold text-white truncate"></p>
+                  <p id="user-role" class="text-[9px] text-amber-500 font-bold uppercase"></p>
+                </li>
+                <li><a href="/admin/dashboard.html" id="link-admin"
+                    class="hidden block px-4 py-2 hover:bg-slate-800 text-xs text-white">Panel Admin</a></li>
+                <li><button id="btn-logout"
+                    class="w-full text-left px-4 py-2 hover:bg-rose-500/10 hover:text-rose-500 text-xs text-slate-300">Cerrar
+                    Sesión</button></li>
+              </ul>
+            </div>
+          </li>
         </ul>
       </div>
 
@@ -126,6 +161,34 @@
       </details>
 
       <div class="pt-4 space-y-3 px-4">
+        <!-- Auth State Mobile -->
+        <div id="auth-container-mobile" class="border-t border-slate-800 pt-4 mt-4">
+          <div id="auth-mobile-logged-out">
+            <button id="btn-login-google-mobile"
+              class="flex items-center justify-center gap-2 w-full bg-white text-slate-900 py-3 rounded-xl font-black">
+              <i class="fab fa-google"></i> ENTRAR CON GOOGLE
+            </button>
+          </div>
+          <div id="auth-mobile-logged-in" class="hidden space-y-3">
+            <div class="flex items-center gap-3 px-2">
+              <img id="user-avatar-mobile" src="" alt=""
+                class="h-10 w-10 rounded-full border-2 border-amber-500 object-cover hidden">
+              <div id="user-initials-mobile"
+                class="h-10 w-10 rounded-full border-2 border-amber-500 bg-slate-800 flex items-center justify-center font-bold text-amber-500">
+              </div>
+              <div>
+                <p id="user-name-mobile" class="text-sm font-bold text-white"></p>
+                <p id="user-role-mobile" class="text-[10px] text-amber-500 font-bold uppercase"></p>
+              </div>
+            </div>
+            <a href="/admin/dashboard.html" id="link-admin-mobile"
+              class="hidden block w-full text-center bg-slate-800 text-white py-3 rounded-xl font-bold">PANEL ADMIN</a>
+            <button id="btn-logout-mobile"
+              class="block w-full text-center bg-rose-500/10 text-rose-500 py-3 rounded-xl font-bold border border-rose-500/20">CERRAR
+              SESIÓN</button>
+          </div>
+        </div>
+
         <a href="contacto.html"
           class="block w-full text-center bg-amber-500 text-slate-900 py-3 rounded-xl font-black">CONTACTO</a>
         <a href="ayuda.html"

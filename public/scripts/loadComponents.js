@@ -102,8 +102,14 @@ document.addEventListener("DOMContentLoaded", function () {
       }).catch(err => console.error("Error:", filePath));
   }
 
-  loadComponent("navbar-container", "layout/navbar.html", () => {
-    if (typeof initNavbar === "function") initNavbar();
+  loadComponent("navbar-container", "layout/navbar.html", async () => {
+    try {
+      const { initNavbar } = await import('./navbar.js');
+      initNavbar();
+    } catch (err) {
+      console.error("Error initializing navbar module:", err);
+    }
+
     // Cargar buscador global después de que el navbar esté en el DOM
     if (!document.getElementById('search-overlay')) {
       const s = document.createElement('script');

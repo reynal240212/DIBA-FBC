@@ -24,7 +24,6 @@ export async function iniciarSesion(username, password) {
 
   const role = userData?.role || 'authenticated';
 
-  // Guardar datos básicos en localStorage para compatibilidad con código existente
   localStorage.setItem("usuario", JSON.stringify({
     id: data.user.id,
     username: username,
@@ -36,40 +35,60 @@ export async function iniciarSesion(username, password) {
 }
 
 /**
+ * Inicia sesión con Google (OAuth)
+ */
+export async function iniciarSesionGoogle() {
+  const { data, error } = await supabase.auth.signInWithOAuth({
+    provider: 'google',
+    options: {
+      redirectTo: window.location.origin + '/index.html'
+    }
+  });
+
+  if (error) throw error;
+  return data;
+}
+
+/**
  * Verifica la sesión real en Supabase
  */
 export async function verificarSesion(rolRequerido = null) {
   const { data: { session }, error } = await supabase.auth.getSession();
 
   if (error || !session) {
-    console.warn("Acceso denegado: No hay sesión activa.");
-    if (!window.location.pathname.includes('login.html')) {
-      window.location.replace("/admin/login.html");
+    if (rolRequerido) {
+      console.warn("Acceso denegado: Se requiere rol " + rolRequerido);
+      if (!window.location.pathname.includes('login.html')) {
+        window.location.replace("/admin/login.html");
+      }
     }
     return null;
   }
 
-  // Fetch the real role
+  const { user } = session;
+
+  // Fetch the real role or profile data
   const { data: userData } = await supabase
     .from('users')
-    .select('role')
+    .select('role, full_name, username')
     .eq('id', user.id)
     .single();
-
-  const role = userData?.role || 'authenticated';
 
   const usuarioLocal = {
     id: user.id,
     email: user.email,
-    role: role
+    username: userData?.username || user.email.split('@')[0],
+    full_name: userData?.full_name || user.user_metadata?.full_name || '',
+    avatar_url: user.user_metadata?.avatar_url || '',
+    role: userData?.role || 'authenticated'
   };
 
   // Guardar en local para rapidez en UI
   localStorage.setItem("usuario", JSON.stringify(usuarioLocal));
 
-  if (rolRequerido && usuarioLocal.role !== rolRequerido) {
+  if (rolRequerido && usuarioLocal.role !== rolRequerido && usuarioLocal.role !== 'admin') {
     alert("⚠️ No tienes permisos para acceder a esta sección.");
-    window.location.replace("/admin/GestorDocumental.html");
+    window.location.replace("/index.html");
     return usuarioLocal;
   }
 
