@@ -21,123 +21,175 @@
             font-family: 'Montserrat', sans-serif;
         }
 
-        /* Colores personalizados DIBA */
         .bg-diba-black {
-            background-color: #1c1c1c;
+            background-color: #0f172a;
         }
 
-        .text-diba-gold {
-            color: #ffcc00;
+        .symbol-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
-        /* Ajuste para que el timeline no se pegue en móviles */
-        @media (max-width: 768px) {
-            .timeline-adjust {
-                margin-left: 1.5rem;
-                border-left-width: 4px;
-            }
+        .symbol-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.05);
+            border-color: #f59e0b;
+        }
+
+        .symbol-card:hover .symbol-icon {
+            color: #fff;
+            filter: drop-shadow(0 0 8px rgba(245, 158, 11, 0.6));
+        }
+
+        .crest-glow {
+            filter: drop-shadow(0 0 30px rgba(245, 158, 11, 0.15));
         }
     </style>
 </head>
 
-<body class="bg-slate-50">
+<body class="bg-slate-50 text-slate-900">
     <div id="navbar-container"></div>
-    <div id="hero-container"></div>
 
-    <main class="max-w-6xl mx-auto px-4 py-12">
-        <div class="text-center mb-16" data-aos="fade-down">
-            <h1 class="text-4xl md:text-6xl font-black uppercase italic text-slate-900 tracking-tighter">
-                Historia del <span class="text-amber-500">Escudo</span>
+    <main class="max-w-6xl mx-auto px-4 py-32">
+        <div class="text-center mb-24" data-aos="fade-down">
+            <span class="text-blue-600 font-black uppercase tracking-[0.3em] text-xs">Identidad Visual</span>
+            <h1 class="text-5xl md:text-7xl font-black uppercase italic tracking-tighter mt-4">
+                El <span class="text-amber-500">Escudo</span>
             </h1>
-            <div class="w-24 h-2 bg-amber-500 mx-auto mt-4 rounded-full"></div>
+            <p class="text-slate-500 mt-6 max-w-xl mx-auto font-medium">Conoce el significado de los símbolos que
+                llevamos con orgullo en el pecho.</p>
         </div>
 
-        <section class="grid md:grid-cols-2 gap-12 items-center mb-24" data-aos="fade-up">
-            <div class="relative">
-                <div class="absolute -inset-4 bg-amber-500/20 rounded-full blur-3xl"></div>
+        <section class="grid md:grid-cols-2 gap-16 items-center mb-32" data-aos="fade-up">
+            <div class="relative group">
+                <div
+                    class="absolute -inset-10 bg-amber-500/5 rounded-full blur-3xl group-hover:bg-amber-500/10 transition-colors">
+                </div>
                 <img src="images/ESCUDO.png" alt="Escudo actual DIBA FBC"
-                    class="relative z-10 w-full max-w-sm mx-auto animate__animated animate__pulse animate__infinite animate__slow">
+                    class="relative z-10 w-full max-w-sm mx-auto crest-glow transform transition-transform group-hover:scale-105 duration-700">
             </div>
-            <div class="space-y-6">
-                <p class="text-xl text-slate-700 leading-relaxed font-medium">
-                    El escudo de <span class="font-black text-slate-900">DIBA FBC</span> es mucho más que un símbolo
-                    deportivo: es el corazón de nuestra institución.
+            <div class="space-y-8">
+                <div
+                    class="inline-flex items-center gap-2 px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-[10px] font-black uppercase tracking-widest">
+                    <i class="fas fa-history"></i> Legado
+                </div>
+                <h2 class="text-3xl font-black leading-tight">Mucho más que un emblema deportivo.</h2>
+                <p class="text-lg text-slate-600 leading-relaxed">
+                    El escudo de <span class="font-bold text-slate-900">DIBA FBC</span> representa la unión entre la
+                    tradición barranquillera y la ambición de un club que busca la excellence en cada nivel.
                 </p>
-                <p class="text-slate-600 leading-relaxed italic border-l-4 border-amber-500 pl-4">
+                <div
+                    class="bg-white p-6 rounded-3xl shadow-xl shadow-slate-200/50 border border-slate-100 italic text-slate-500 relative">
+                    <i class="fas fa-quote-left absolute -top-3 -left-3 text-amber-500 text-2xl"></i>
                     "Creado por Reinaldo Pérez González, este emblema ha guiado al club desde su fundación, adaptándose
-                    a los nuevos tiempos sin perder su identidad original."
-                </p>
-            </div>
-        </section>
-
-        <section class="bg-diba-black text-white rounded-[3rem] p-8 md:p-16 mb-24 shadow-2xl relative overflow-hidden">
-            <div class="absolute top-0 right-0 w-64 h-64 bg-amber-500/10 rounded-full -mr-32 -mt-32"></div>
-            <h3 class="text-3xl font-black uppercase italic text-amber-500 mb-10 text-center">Simbología</h3>
-
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-                <div class="text-center p-4">
-                    <div class="text-amber-500 text-4xl mb-4"><i class="fas fa-palette"></i></div>
-                    <h4 class="font-bold mb-2 uppercase tracking-widest">Colores</h4>
-                    <p class="text-sm text-slate-400">Amarillo (Energía) y Negro (Fortaleza y Disciplina).</p>
-                </div>
-                <div class="text-center p-4">
-                    <div class="text-amber-500 text-4xl mb-4"><i class="fas fa-futbol"></i></div>
-                    <h4 class="font-bold mb-2 uppercase tracking-widest">Balón</h4>
-                    <p class="text-sm text-slate-400">La pasión inquebrantable como motor de cada sueño.</p>
-                </div>
-                <div class="text-center p-4">
-                    <div class="text-amber-500 text-4xl mb-4"><i class="fas fa-star"></i></div>
-                    <h4 class="font-bold mb-2 uppercase tracking-widest">Estrellas</h4>
-                    <p class="text-sm text-slate-400">Las metas alcanzadas y los sueños por conquistar.</p>
-                </div>
-                <div class="text-center p-4">
-                    <div class="text-amber-500 text-4xl mb-4"><i class="fas fa-shield-alt"></i></div>
-                    <h4 class="font-bold mb-2 uppercase tracking-widest">Lema</h4>
-                    <p class="text-sm text-slate-400 text-amber-500 font-bold italic">"Fuerza y Lealtad"</p>
+                    a los nuevos tiempos sin perder su esencia original."
                 </div>
             </div>
         </section>
 
+        <!-- SECCIÓN SIMBOLOGÍA INTERACTIVA -->
+        <section class="bg-diba-black text-white rounded-[3rem] p-8 md:p-20 mb-32 shadow-2xl relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-96 h-96 bg-blue-500/5 rounded-full -mr-48 -mt-48 blur-3xl"></div>
+            <div class="absolute bottom-0 left-0 w-64 h-64 bg-amber-500/5 rounded-full -ml-32 -mb-32 blur-3xl"></div>
+
+            <div class="relative z-10">
+                <div class="text-center mb-16">
+                    <h3 class="text-3xl font-black uppercase italic text-amber-500 tracking-tighter">Simbología
+                        Interactiva</h3>
+                    <p class="text-slate-400 text-sm mt-2">Pasa el cursor sobre los elementos para descubrir su historia
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div class="symbol-card p-8 rounded-3xl bg-white/5 cursor-default group">
+                        <div class="symbol-icon text-amber-500 text-4xl mb-6 transition-colors duration-300">
+                            <i class="fas fa-palette"></i>
+                        </div>
+                        <h4 class="font-black mb-3 uppercase tracking-widest text-sm">Colores</h4>
+                        <p class="text-sm text-slate-400 leading-relaxed">El <span
+                                class="text-amber-400 font-bold">Amarillo</span> evoca la energía y el sol del Caribe,
+                            mientras que el <span class="text-slate-200 font-bold">Negro</span> simboliza la fortaleza y
+                            disciplina.</p>
+                    </div>
+
+                    <div class="symbol-card p-8 rounded-3xl bg-white/5 cursor-default group">
+                        <div class="symbol-icon text-amber-500 text-4xl mb-6 transition-colors duration-300">
+                            <i class="fas fa-futbol"></i>
+                        </div>
+                        <h4 class="font-black mb-3 uppercase tracking-widest text-sm">El Balón</h4>
+                        <p class="text-sm text-slate-400 leading-relaxed">Ubicado en el centro, representa el <span
+                                class="text-white font-bold">eje fundamental</span> de nuestro proyecto: el fútbol como
+                            herramienta de cambio.</p>
+                    </div>
+
+                    <div class="symbol-card p-8 rounded-3xl bg-white/5 cursor-default group">
+                        <div class="symbol-icon text-amber-500 text-4xl mb-6 transition-colors duration-300">
+                            <i class="fas fa-star text-sm"></i><i class="fas fa-star"></i><i
+                                class="fas fa-star text-sm"></i>
+                        </div>
+                        <h4 class="font-black mb-3 uppercase tracking-widest text-sm">Estrellas</h4>
+                        <p class="text-sm text-slate-400 leading-relaxed">Cada estrella refleja un <span
+                                class="text-white font-bold">pilar formativo</span>: Disciplina, Talento y Resiliencia
+                            en el campo de juego.</p>
+                    </div>
+
+                    <div class="symbol-card p-8 rounded-3xl bg-white/5 cursor-default group">
+                        <div class="symbol-icon text-amber-500 text-4xl mb-6 transition-colors duration-300">
+                            <i class="fas fa-shield-halved"></i>
+                        </div>
+                        <h4 class="font-black mb-3 uppercase tracking-widest text-sm">Lema</h4>
+                        <p
+                            class="text-sm text-slate-400 leading-relaxed font-bold italic border-l-2 border-amber-500/30 pl-4">
+                            "Fuerza y Lealtad"</p>
+                        <p class="text-[10px] text-slate-500 mt-2 uppercase tracking-widest">Nuestra promesa
+                            inquebrantable</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- EVOLUCIÓN -->
         <section class="py-12">
-            <h3 class="text-3xl font-black uppercase italic text-center mb-16">Evolución en el Tiempo</h3>
-            <div class="relative border-slate-200 md:flex md:border-t-4 md:justify-between md:pt-8 timeline-adjust">
+            <div class="text-center mb-20">
+                <h3 class="text-3xl font-black uppercase italic tracking-tighter">Evolución en el Tiempo</h3>
+                <div class="w-16 h-1 bg-slate-200 mx-auto mt-4"></div>
+            </div>
 
-                <div class="relative mb-12 md:mb-0 md:w-1/2 px-4" data-aos="fade-right">
+            <div class="grid md:grid-cols-2 gap-12">
+                <div class="group" data-aos="fade-right">
                     <div
-                        class="absolute -left-[36px] md:left-1/2 md:-top-[46px] md:-ml-4 w-8 h-8 bg-amber-500 rounded-full border-4 border-white shadow-lg z-20">
-                    </div>
-                    <div
-                        class="bg-white p-6 rounded-2xl shadow-xl hover:scale-105 transition-transform border border-slate-100 text-center">
-                        <span class="text-amber-500 font-black text-2xl">2012</span>
-                        <h5 class="font-bold uppercase mt-2">Fundación</h5>
-                        <img src="images/escudoOrigin.jpg" class="h-40 mx-auto my-4 object-contain rounded">
-                        <p class="text-sm text-slate-500">Primer diseño con enfoque en la energía pura del amarillo y la
-                            pasión del fútbol base.</p>
+                        class="bg-white p-10 rounded-[3rem] shadow-xl hover:shadow-2xl transition-all duration-500 border border-slate-100 text-center relative overflow-hidden">
+                        <div
+                            class="absolute top-0 right-0 py-2 px-6 bg-slate-100 text-slate-400 font-black italic text-sm">
+                            ORIGEN</div>
+                        <span class="text-amber-500 font-black text-5xl opacity-20 block mb-2">2012</span>
+                        <h5 class="font-black uppercase tracking-widest mb-6">Identidad Inicial</h5>
+                        <img src="images/escudoOrigin.jpg"
+                            class="h-48 mx-auto mb-8 object-contain transform group-hover:rotate-3 transition-transform duration-500">
+                        <p class="text-slate-500 text-sm leading-relaxed">Primer diseño con enfoque en la energía pura
+                            del amarillo y la pasión del fútbol base en los barrios.</p>
                     </div>
                 </div>
 
-                <div class="relative md:w-1/2 px-4" data-aos="fade-left">
+                <div class="group" data-aos="fade-left">
                     <div
-                        class="absolute -left-[36px] md:left-1/2 md:-top-[46px] md:-ml-4 w-8 h-8 bg-black rounded-full border-4 border-white shadow-lg z-20">
-                    </div>
-                    <div
-                        class="bg-white p-6 rounded-2xl shadow-xl border-2 border-amber-500 hover:scale-105 transition-transform text-center">
-                        <span class="text-slate-900 font-black text-2xl">2023</span>
-                        <h5 class="font-bold uppercase mt-2">Renovación</h5>
-                        <img src="images/ESCUDO.png" class="h-40 mx-auto my-4 object-contain">
-                        <p class="text-sm text-slate-500">Modernización visual integrando el lema institucional y un
-                            diseño más premium.</p>
+                        class="bg-white p-10 rounded-[3rem] shadow-xl hover:shadow-2xl transition-all duration-500 border-2 border-amber-500 shadow-amber-500/10 text-center relative overflow-hidden">
+                        <div class="absolute top-0 right-0 py-2 px-6 bg-amber-500 text-white font-black italic text-sm">
+                            ACTUAL</div>
+                        <span class="text-slate-900 font-black text-5xl opacity-10 block mb-2">2023</span>
+                        <h5 class="font-black uppercase tracking-widest mb-6">Renovación Premium</h5>
+                        <img src="images/ESCUDO.png"
+                            class="h-48 mx-auto mb-8 object-contain transform group-hover:-rotate-3 transition-transform duration-500 drop-shadow-2xl">
+                        <p class="text-slate-600 text-sm leading-relaxed">Modernización visual integrando el lema
+                            institucional y una tipografía más robusta para retos mayores.</p>
                     </div>
                 </div>
             </div>
         </section>
     </main>
 
-    <div id="patrocinadores-container"></div>
     <div id="footer-container"></div>
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
     <script src="scripts/config.js"></script>
     <script src="scripts/loadComponents.js"></script>

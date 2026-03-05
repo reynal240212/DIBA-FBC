@@ -117,9 +117,13 @@ document.addEventListener("DOMContentLoaded", function () {
       document.body.appendChild(s);
     }
   });
+  loadComponent("match-banner-container", "layout/match_banner.html");
   loadComponent("hero-container", "layout/hero.html");
+  loadComponent("stats-container", "layout/stats_counter.html");
   loadComponent("patrocinadores-container", "layout/patrocinadores.html");
+  loadComponent("testimonials-container", "layout/testimonials.html");
   loadComponent("footer-container", "layout/footer.html");
+  loadComponent("fab-container", "layout/fab.html");
 
   // --- 4. BASE DE DATOS COMPLETA DE JUGADORES ---
   const playersContainer = document.getElementById("players-container");

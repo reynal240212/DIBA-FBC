@@ -1,0 +1,80 @@
+<section class="py-16 bg-slate-900 border-y border-white/5 relative overflow-hidden">
+    <div class="absolute inset-0 bg-blue-600/5 blur-[100px] -translate-x-1/2 rounded-full pointer-events-none"></div>
+
+    <div class="max-w-6xl mx-auto px-4 relative z-10">
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12">
+
+            <!-- Stat 1 -->
+            <div class="text-center group" data-aos="fade-up">
+                <div class="text-4xl md:text-6xl font-black text-white mb-2 flex items-center justify-center">
+                    <span class="stats-number" data-target="13">0</span>
+                    <span class="text-blue-500 ml-1">+</span>
+                </div>
+                <p class="text-blue-400 text-xs font-black uppercase tracking-[0.2em]">Años de Historia</p>
+            </div>
+
+            <!-- Stat 2 -->
+            <div class="text-center group" data-aos="fade-up" data-aos-delay="100">
+                <div class="text-4xl md:text-6xl font-black text-white mb-2 flex items-center justify-center">
+                    <span class="stats-number" data-target="25">0</span>
+                    <span class="text-blue-500 ml-1">🏆</span>
+                </div>
+                <p class="text-blue-400 text-xs font-black uppercase tracking-[0.2em]">Trofeos Ganados</p>
+            </div>
+
+            <!-- Stat 3 -->
+            <div class="text-center group" data-aos="fade-up" data-aos-delay="200">
+                <div class="text-4xl md:text-6xl font-black text-white mb-2 flex items-center justify-center">
+                    <span class="stats-number" data-target="150">0</span>
+                    <span class="text-blue-500 ml-1">+</span>
+                </div>
+                <p class="text-blue-400 text-xs font-black uppercase tracking-[0.2em]">Jugadores Activos</p>
+            </div>
+
+            <!-- Stat 4 -->
+            <div class="text-center group" data-aos="fade-up" data-aos-delay="300">
+                <div class="text-4xl md:text-6xl font-black text-white mb-2 flex items-center justify-center">
+                    <span class="stats-number" data-target="100">0</span>
+                    <span class="text-blue-500 ml-1">%</span>
+                </div>
+                <p class="text-blue-400 text-xs font-black uppercase tracking-[0.2em]">Compromiso Total</p>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<script>
+    // Script para animar números (esto se ejecutará cuando el componente se cargue)
+    function animateStats() {
+        const stats = document.querySelectorAll('.stats-number');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const target = entry.target;
+                    const endValue = parseInt(target.getAttribute('data-target'));
+                    let startValue = 0;
+                    const duration = 2000;
+                    const increment = endValue / (duration / 16);
+
+                    const counter = setInterval(() => {
+                        startValue += increment;
+                        if (startValue >= endValue) {
+                            target.innerText = endValue;
+                            clearInterval(counter);
+                        } else {
+                            target.innerText = Math.floor(startValue);
+                        }
+                    }, 16);
+
+                    observer.unobserve(target);
+                }
+            });
+        }, { threshold: 0.5 });
+
+        stats.forEach(s => observer.observe(s));
+    }
+
+    // Iniciar después de un breve delay para asegurar que el DOM está listo
+    setTimeout(animateStats, 500);
+</script>

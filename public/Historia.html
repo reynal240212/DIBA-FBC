@@ -44,92 +44,124 @@
   <div id="hero-container"></div>
   <div id="patrocinadores-container"></div>
 
-  <!-- TIMELINE / MOMENTOS DESTACADOS -->
-  <section class="py-12 animate__animated animate__fadeInUp" role="region" aria-labelledby="timeline-heading">
-    <div class="max-w-6xl mx-auto px-4">
-      <h2 id="timeline-heading" class="text-3xl md:text-4xl font-bold text-center mb-8 text-blue-700">
-        Momentos Destacados
-      </h2>
+  <!-- TIMELINE / MOMENTOS DESTACADOS INMERSIVO -->
+  <section class="py-16 bg-slate-50 relative overflow-hidden" role="region" aria-labelledby="timeline-heading">
+    <!-- Decoración de fondo -->
+    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-px h-full bg-slate-200 z-0 hidden md:block"></div>
 
-      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        <!-- Cada tarjeta -->
-        <a href="images/subCAP_2003.jpg" data-lightbox="timeline" data-title="Subcampeonato 2013"
-          class="block bg-white rounded-xl shadow-sm overflow-hidden">
-          <img src="images/subCAP_2003.jpg" alt="Subcampeonato 2013" loading="lazy" class="w-full h-48 object-cover" />
-        </a>
+    <div class="max-w-6xl mx-auto px-4 relative z-10">
+      <div class="text-center mb-16">
+        <h2 id="timeline-heading" class="text-4xl md:text-5xl font-black text-slate-900 tracking-tight">
+          Nuestra <span class="text-blue-700">Trayectoria</span>
+        </h2>
+        <p class="mt-4 text-slate-600 max-w-2xl mx-auto uppercase tracking-widest text-xs font-bold">
+          DÉCADAS DE PASIÓN, ESFUERZO Y GLORIA DEPORTIVA
+        </p>
+      </div>
 
-        <a href="images/2002.jpg" data-lightbox="timeline" data-title="Campeón 2002"
-          class="block bg-white rounded-xl shadow-sm overflow-hidden">
-          <img src="images/2002.jpg" alt="Campeón 2002" class="w-full h-48 object-cover" />
-        </a>
+      <div class="space-y-12 md:space-y-0 relative">
+        <!-- 1999 -->
+        <div class="flex flex-col md:flex-row items-center justify-between mb-16" data-aos="fade-up">
+          <div class="md:w-[45%] text-center md:text-right mb-6 md:mb-0">
+            <span class="text-3xl font-black text-blue-700 block mb-2">1999</span>
+            <h3 class="text-xl font-bold text-slate-800 mb-3">Campeón Territorial</h3>
+            <p class="text-sm text-slate-600 leading-relaxed">Iniciamos nuestra senda ganadora con el primer título
+              importante, marcando el comienzo de una era de triunfos para el club.</p>
+          </div>
+          <div
+            class="w-10 h-10 bg-blue-700 rounded-full border-4 border-white shadow-xl z-20 hidden md:flex items-center justify-center">
+            <i class="fas fa-trophy text-white text-xs"></i>
+          </div>
+          <div class="md:w-[45%]">
+            <a href="https://scontent-bog2-1.xx.fbcdn.net/v/t39.30808-6/462653696_3807840056124001_6948574123012724707_n.jpg?_nc_cat=100&ccb=1-7&_nc_sid=833d8c&_nc_eui2=AeFkV314E1tu_Dz36WqKOe7UKvUB8damhz4q9QHx1qaHPlqEobnLbcpqwBF1SsNsPsCZx476CRZ1L_xtIRRoED0K&_nc_ohc=AjoCmAW_2gQQ7kNvgHV6QRf&_nc_oc=Adk2C_2kMtia1SUZjl2WL86c5Uds7Xy-oR6UhmBaUSpZGJg1ByooKhvWZ31eEpXDtJQ&_nc_zt=23&_nc_ht=scontent-bog2-1.xx&_nc_gid=gSmZBFcdA3TDB9byx_w7Ig&oh=00_AYF-gJTqxqSV8oEj1TnTPyd2W7CyJZKDFeUULbW9nn8dsA&oe=67E4003E"
+              data-lightbox="timeline" data-title="Campeón 1999"
+              class="block rounded-2xl overflow-hidden shadow-2xl hover:scale-[1.02] transition-transform">
+              <img
+                src="https://scontent-bog2-1.xx.fbcdn.net/v/t39.30808-6/462653696_3807840056124001_6948574123012724707_n.jpg?_nc_cat=100&ccb=1-7&_nc_sid=833d8c&_nc_eui2=AeFkV314E1tu_Dz36WqKOe7UKvUB8damhz4q9QHx1qaHPlqEobnLbcpqwBF1SsNsPsCZx476CRZ1L_xtIRRoED0K&_nc_ohc=AjoCmAW_2gQQ7kNvgHV6QRf&_nc_oc=Adk2C_2kMtia1SUZjl2WL86c5Uds7Xy-oR6UhmBaUSpZGJg1ByooKhvWZ31eEpXDtJQ&_nc_zt=23&_nc_ht=scontent-bog2-1.xx&_nc_gid=gSmZBFcdA3TDB9byx_w7Ig&oh=00_AYF-gJTqxqSV8oEj1TnTPyd2W7CyJZKDFeUULbW9nn8dsA&oe=67E4003E"
+                class="w-full h-64 object-cover">
+            </a>
+          </div>
+        </div>
 
-        <a href="https://scontent-bog2-1.xx.fbcdn.net/v/t39.30808-6/462653696_3807840056124001_6948574123012724707_n.jpg?_nc_cat=100&ccb=1-7&_nc_sid=833d8c&_nc_eui2=AeFkV314E1tu_Dz36WqKOe7UKvUB8damhz4q9QHx1qaHPlqEobnLbcpqwBF1SsNsPsCZx476CRZ1L_xtIRRoED0K&_nc_ohc=AjoCmAW_2gQQ7kNvgHV6QRf&_nc_oc=Adk2C_2kMtia1SUZjl2WL86c5Uds7Xy-oR6UhmBaUSpZGJg1ByooKhvWZ31eEpXDtJQ&_nc_zt=23&_nc_ht=scontent-bog2-1.xx&_nc_gid=gSmZBFcdA3TDB9byx_w7Ig&oh=00_AYF-gJTqxqSV8oEj1TnTPyd2W7CyJZKDFeUULbW9nn8dsA&oe=67E4003E"
-          data-lightbox="timeline" data-title="Campeón 1999"
-          class="block bg-white rounded-xl shadow-sm overflow-hidden">
-          <img
-            src="https://scontent-bog2-1.xx.fbcdn.net/v/t39.30808-6/462653696_3807840056124001_6948574123012724707_n.jpg?_nc_cat=100&ccb=1-7&_nc_sid=833d8c&_nc_eui2=AeFkV314E1tu_Dz36WqKOe7UKvUB8damhz4q9QHx1qaHPlqEobnLbcpqwBF1SsNsPsCZx476CRZ1L_xtIRRoED0K&_nc_ohc=AjoCmAW_2gQQ7kNvgHV6QRf&_nc_oc=Adk2C_2kMtia1SUZjl2WL86c5Uds7Xy-oR6UhmBaUSpZGJg1ByooKhvWZ31eEpXDtJQ&_nc_zt=23&_nc_ht=scontent-bog2-1.xx&_nc_gid=gSmZBFcdA3TDB9byx_w7Ig&oh=00_AYF-gJTqxqSV8oEj1TnTPyd2W7CyJZKDFeUULbW9nn8dsA&oe=67E4003E"
-            alt="Campeón 1999" class="w-full h-48 object-cover" />
-        </a>
+        <!-- 2002 -->
+        <div class="flex flex-col md:flex-row-reverse items-center justify-between mb-16" data-aos="fade-up">
+          <div class="md:w-[45%] text-center md:text-left mb-6 md:mb-0">
+            <span class="text-3xl font-black text-amber-500 block mb-2">2002</span>
+            <h3 class="text-xl font-bold text-slate-800 mb-3">Gloria Departamental</h3>
+            <p class="text-sm text-slate-600 leading-relaxed">Consolidación del club en el departamento, obteniendo el
+              título máximo y demostrando la calidad de nuestra cantera.</p>
+          </div>
+          <div
+            class="w-10 h-10 bg-amber-500 rounded-full border-4 border-white shadow-xl z-20 hidden md:flex items-center justify-center">
+            <i class="fas fa-certificate text-white text-xs"></i>
+          </div>
+          <div class="md:w-[45%]">
+            <a href="images/2002.jpg" data-lightbox="timeline" data-title="Campeón 2002"
+              class="block rounded-2xl overflow-hidden shadow-2xl hover:scale-[1.02] transition-transform">
+              <img src="images/2002.jpg" class="w-full h-64 object-cover">
+            </a>
+          </div>
+        </div>
 
-        <a href="images/2005.jpg" data-lightbox="timeline" data-title="La Gran Remontada 2005"
-          class="block bg-white rounded-xl shadow-sm overflow-hidden">
-          <img src="images/2005.jpg" alt="La Gran Remontada 2005" class="w-full h-48 object-cover" />
-        </a>
+        <!-- 2003 (Sub-cap) -->
+        <div class="flex flex-col md:flex-row items-center justify-between mb-16" data-aos="fade-up">
+          <div class="md:w-[45%] text-center md:text-right mb-6 md:mb-0">
+            <span class="text-3xl font-black text-slate-400 block mb-2">2003</span>
+            <h3 class="text-xl font-bold text-slate-800 mb-3">Subcampeonato Élite</h3>
+            <p class="text-sm text-slate-600 leading-relaxed">Un año de lucha constante que nos llevó hasta la gran
+              final, demostrando que DIBA siempre está en los puestos de honor.</p>
+          </div>
+          <div
+            class="w-10 h-10 bg-slate-400 rounded-full border-4 border-white shadow-xl z-20 hidden md:flex items-center justify-center">
+            <i class="fas fa-medal text-white text-xs"></i>
+          </div>
+          <div class="md:w-[45%]">
+            <a href="images/subCAP_2003.jpg" data-lightbox="timeline" data-title="Subcampeonato 2003"
+              class="block rounded-2xl overflow-hidden shadow-2xl hover:scale-[1.02] transition-transform">
+              <img src="images/subCAP_2003.jpg" class="w-full h-64 object-cover">
+            </a>
+          </div>
+        </div>
 
-        <a href="images/campeon2002.jpg" data-lightbox="timeline" data-title="Campeón 2004"
-          class="block bg-white rounded-xl shadow-sm overflow-hidden">
-          <img src="images/campeon2002.jpg" alt="Campeón 2004" class="w-full h-48 object-cover" />
-        </a>
+        <!-- 2005 -->
+        <div class="flex flex-col md:flex-row-reverse items-center justify-between mb-16" data-aos="fade-up">
+          <div class="md:w-[45%] text-center md:text-left mb-6 md:mb-0">
+            <span class="text-3xl font-black text-rose-600 block mb-2">2005</span>
+            <h3 class="text-xl font-bold text-slate-800 mb-3">La Gran Remontada</h3>
+            <p class="text-sm text-slate-600 leading-relaxed">Rememoramos uno de los partidos más épicos de nuestra
+              historia, donde el corazón y la garra nos dieron una victoria inolvidable.</p>
+          </div>
+          <div
+            class="w-10 h-10 bg-rose-600 rounded-full border-4 border-white shadow-xl z-20 hidden md:flex items-center justify-center">
+            <i class="fas fa-fire text-white text-xs"></i>
+          </div>
+          <div class="md:w-[45%]">
+            <a href="images/2005.jpg" data-lightbox="timeline" data-title="La Gran Remontada 2005"
+              class="block rounded-2xl overflow-hidden shadow-2xl hover:scale-[1.02] transition-transform">
+              <img src="images/2005.jpg" class="w-full h-64 object-cover">
+            </a>
+          </div>
+        </div>
 
-        <a href="images/subcampeon2004.jpg" data-lightbox="timeline" data-title="Subcampeón 2004"
-          class="block bg-white rounded-xl shadow-sm overflow-hidden">
-          <img src="images/subcampeon2004.jpg" alt="Subcampeón 2004" class="w-full h-48 object-cover" />
-        </a>
-
-        <a href="images/categoria 2004.jpg" data-lightbox="timeline" data-title="Categoría 2004"
-          class="block bg-white rounded-xl shadow-sm overflow-hidden">
-          <img src="images/categoria 2004.jpg" alt="Categoría 2004" class="w-full h-48 object-cover" />
-        </a>
-
-        <a href="images/categoria 2003 y 2002.jpg" data-lightbox="timeline" data-title="Categoría 2003 y 2002"
-          class="block bg-white rounded-xl shadow-sm overflow-hidden">
-          <img src="images/categoria 2003 y 2002.jpg" alt="Categoría 2003 y 2002" class="w-full h-48 object-cover" />
-        </a>
-
-        <a href="images/navidad regalos 2.jpg" data-lightbox="timeline" data-title="Navidad Regalos"
-          class="block bg-white rounded-xl shadow-sm overflow-hidden">
-          <img src="images/navidad regalos 2.jpg" alt="Navidad Regalos" class="w-full h-48 object-cover" />
-        </a>
-
-        <a href="images/2003, 2000.jpg" data-lightbox="timeline" data-title="2003, 2000"
-          class="block bg-white rounded-xl shadow-sm overflow-hidden">
-          <img src="images/2003, 2000.jpg" alt="2003, 2000" class="w-full h-48 object-cover" />
-        </a>
-
-        <a href="images/categoria 2003 y 2002.jpg" data-lightbox="timeline" data-title="Categoría 2003 y 2002 (2)"
-          class="block bg-white rounded-xl shadow-sm overflow-hidden">
-          <img src="images/categoria 2003 y 2002.jpg" alt="Categoría 2003 y 2002" class="w-full h-48 object-cover" />
-        </a>
-
-        <a href="images/cultura ciudadana 1.jpg" data-lightbox="timeline" data-title="Cultura Ciudadana 1"
-          class="block bg-white rounded-xl shadow-sm overflow-hidden">
-          <img src="images/cultura ciudadana 1.jpg" alt="Cultura Ciudadana 1" class="w-full h-48 object-cover" />
-        </a>
-
-        <a href="images/cultura ciudadana 2.jpg" data-lightbox="timeline" data-title="Cultura Ciudadana 2"
-          class="block bg-white rounded-xl shadow-sm overflow-hidden">
-          <img src="images/cultura ciudadana 2.jpg" alt="Cultura Ciudadana 2" class="w-full h-48 object-cover" />
-        </a>
-
-        <a href="images/cultura ciudadana 3.jpg" data-lightbox="timeline" data-title="Cultura Ciudadana 3"
-          class="block bg-white rounded-xl shadow-sm overflow-hidden">
-          <img src="images/cultura ciudadana 3.jpg" alt="Cultura Ciudadana 3" class="w-full h-48 object-cover" />
-        </a>
-
-        <a href="images/2014.jpeg" data-lightbox="timeline" data-title="Año 2014"
-          class="block bg-white rounded-xl shadow-sm overflow-hidden">
-          <img src="images/2014.jpeg" alt="Año 2014" class="w-full h-48 object-cover" />
-        </a>
+        <!-- 2014 -->
+        <div class="flex flex-col md:flex-row items-center justify-between mb-16" data-aos="fade-up">
+          <div class="md:w-[45%] text-center md:text-right mb-6 md:mb-0">
+            <span class="text-3xl font-black text-indigo-600 block mb-2">2014</span>
+            <h3 class="text-xl font-bold text-slate-800 mb-3">Nueva Era</h3>
+            <p class="text-sm text-slate-600 leading-relaxed">Renovación de nuestras categorías y fortalecimiento del
+              equipo técnico para afrontar los retos del fútbol moderno.</p>
+          </div>
+          <div
+            class="w-10 h-10 bg-indigo-600 rounded-full border-4 border-white shadow-xl z-20 hidden md:flex items-center justify-center">
+            <i class="fas fa-sync text-white text-xs"></i>
+          </div>
+          <div class="md:w-[45%]">
+            <a href="images/2014.jpeg" data-lightbox="timeline" data-title="Categoría 2014"
+              class="block rounded-2xl overflow-hidden shadow-2xl hover:scale-[1.02] transition-transform">
+              <img src="images/2014.jpeg" class="w-full h-64 object-cover">
+            </a>
+          </div>
+        </div>
       </div>
     </div>
   </section>
