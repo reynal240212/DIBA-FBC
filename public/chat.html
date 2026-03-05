@@ -413,16 +413,19 @@
             let type = 'text';
 
             if (file) {
-                const isVideo = file.type.startsWith('video/');
-                const fileExt = file.name.split('.').pop();
+                const isVideo = file.type.startsWith('video/') ||
+                    ['mp4', 'webm', 'ogg', 'mov', 'avi'].includes(fileExt.toLowerCase());
                 const fileName = `${Math.random()}.${fileExt}`;
                 const filePath = `${currentUser.id}/${fileName}`;
+
+                console.log("Subiendo archivo:", fileName, "Tipo detectado video:", isVideo);
 
                 const { error: uploadError } = await supabaseClient.storage
                     .from('statuses')
                     .upload(filePath, file);
 
                 if (uploadError) {
+                    console.error("Error upload:", uploadError);
                     alert('Error al subir contenido: ' + uploadError.message);
                     btn.disabled = false;
                     btn.innerText = "PUBLICAR";
@@ -441,8 +444,8 @@
                 user_id: currentUser.id,
                 content: contentUrl,
                 type: type,
-                full_name: currentUser.user_metadata.full_name,
-                avatar_url: currentUser.user_metadata.avatar_url
+                full_name: currentUser.user_metadata?.full_name || currentUser.email || 'Usuario DIBA',
+                avatar_url: currentUser.user_metadata?.avatar_url || `https://ui-avatars.com/api/?name=${currentUser.email || 'D'}`
             }]);
 
             btn.disabled = false;
@@ -463,7 +466,8 @@
             const container = document.getElementById('status-preview-container');
 
             if (file) {
-                const isVideo = file.type.startsWith('video/');
+                const fileExt = file.name.split('.').pop().toLowerCase();
+                const isVideo = file.type.startsWith('video/') || ['mp4', 'webm', 'ogg', 'mov', 'avi'].includes(fileExt);
                 const reader = new FileReader();
 
                 reader.onload = function (e) {
@@ -490,11 +494,14 @@
         }
 
         async function fetchStatuses() {
-            const { data } = await supabaseClient
+            const { data, error } = await supabaseClient
                 .from('estados')
                 .select('*')
                 .gte('expires_at', new Date().toISOString())
                 .order('created_at', { ascending: false });
+
+            if (error) console.error("Error estados:", error);
+            console.log("Estados cargados:", data?.length);
 
             const list = document.getElementById('stories-list');
             list.innerHTML = '';
@@ -569,8 +576,8 @@
                 content,
                 user_id: currentUser.id,
                 channel_id: currentChannel,
-                full_name: currentUser.user_metadata.full_name,
-                avatar_url: currentUser.user_metadata.avatar_url
+                full_name: currentUser.user_metadata?.full_name || currentUser.email || 'Usuario DIBA',
+                avatar_url: currentUser.user_metadata?.avatar_url || `https://ui-avatars.com/api/?name=${currentUser.email || 'D'}`
             }]);
         };
 
