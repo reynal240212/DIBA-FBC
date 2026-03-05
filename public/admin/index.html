@@ -898,7 +898,9 @@
         </div><!-- /content -->
     </div><!-- /main -->
 
-    <script>
+    <script type="module">
+        import { supabase } from '../scripts/supabaseClient.js';
+
         // ── RELOJ ──
         const clockEl = document.getElementById('clock');
         function updateClock() {
@@ -918,12 +920,29 @@
         });
 
         // ── LOGOUT ──
-        document.getElementById('logout-btn').addEventListener('click', () => {
-            if (confirm('¿Cerrar sesión?')) window.location.href = 'login.html';
+        document.getElementById('logout-btn').addEventListener('click', async () => {
+            if (confirm('¿Cerrar sesión?')) {
+                await supabase.auth.signOut();
+                window.location.href = 'login.html';
+            }
         });
 
-        // ── KPIs desde localStorage (planilla) ──
-        function loadKPIs() {
+        // ── KPIs desde Supabase + localStorage ──
+        async function loadKPIs() {
+            // 1. Jugadores desde Supabase
+            try {
+                const { count, error } = await supabase
+                    .from('identificacion')
+                    .select('*', { count: 'exact', head: true });
+
+                if (!error) {
+                    document.getElementById('kpi-players').textContent = count;
+                }
+            } catch (e) {
+                console.error('Error al contar jugadores:', e);
+            }
+
+            // 2. Otros datos desde localStorage (asistencia/pagos del día)
             const saved = localStorage.getItem('dibaFbcAppState');
             if (!saved) return;
 
@@ -932,28 +951,30 @@
                 const players = state.players || [];
                 const data = state.data || {};
 
-                const total = players.length;
-                document.getElementById('kpi-players').textContent = total;
+                // Si no funcionó Supabase o hay 0, usamos el backup del state para coherencia visual si hay datos locales
+                if (document.getElementById('kpi-players').textContent === '0' && players.length > 0) {
+                    document.getElementById('kpi-players').textContent = players.length;
+                }
 
                 let presentes = 0, ausentes = 0, excusas = 0, sinPago = 0;
-                players.forEach(p => {
-                    const d = data[p.id] || {};
+                Object.values(data).forEach(d => {
                     if (d.asistencia === 'P') presentes++;
                     else if (d.asistencia === 'A') ausentes++;
                     else if (d.asistencia === 'E') excusas++;
                     if (!d.pagos || d.pagos.trim() === '' || d.pagos === '$0' || d.pagos === '0') sinPago++;
                 });
 
-                const attPct = total > 0 ? Math.round((presentes / total) * 100) : 0;
+                const total = players.length || parseInt(document.getElementById('kpi-players').textContent) || 1;
+                const attPct = Math.round((presentes / total) * 100);
                 document.getElementById('kpi-attendance').textContent = total > 0 ? `${attPct}%` : '—';
                 document.getElementById('kpi-pending').textContent = sinPago > 0 ? sinPago : '✓';
 
                 // Barra asistencia
-                if (total > 0) {
+                if (total > 0 && (presentes || ausentes || excusas)) {
                     document.getElementById('attendance-panel').style.display = '';
                     const pPct = Math.round((presentes / total) * 100);
                     const aPct = Math.round((ausentes / total) * 100);
-                    const ePct = 100 - pPct - aPct;
+                    const ePct = Math.max(0, 100 - pPct - aPct);
                     document.getElementById('bar-p').style.width = pPct + '%';
                     document.getElementById('bar-a').style.width = aPct + '%';
                     document.getElementById('bar-e').style.width = ePct + '%';
@@ -964,7 +985,9 @@
 
                 // Actividad reciente
                 renderActivity(players, data);
-            } catch (e) { console.error(e); }
+            } catch (e) {
+                console.error(e);
+            }
         }
 
         function renderActivity(players, data) {
@@ -997,6 +1020,7 @@
             list.innerHTML = items || `<div class="empty-state"><i class="fas fa-inbox"></i><p>Sin actividad</p></div>`;
         }
 
+        // Inicializar
         loadKPIs();
     </script>
 
