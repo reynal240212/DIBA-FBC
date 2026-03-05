@@ -6,7 +6,7 @@ import { supabase } from "./supabaseClient.js";
  */
 export async function iniciarSesion(username, password) {
   // Map username to virtual email for Supabase Auth
-  const email = username.includes('@') ? username : `${username}@diba.local`;
+  const email = username.includes('@') ? username : `${username}@diba.com`;
 
   const { data, error } = await supabase.auth.signInWithPassword({
     email,
