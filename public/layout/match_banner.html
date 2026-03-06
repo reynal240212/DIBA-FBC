@@ -1,60 +1,30 @@
-<section id="match-banner" class="bg-slate-900 border-y border-white/10 relative overflow-hidden group">
-    <!-- Fondo decorativo sutil -->
+<section id="match-banner"
+    class="relative overflow-hidden group border-y border-white/10 bg-[radial-gradient(circle_at_50%_-50%,#1e293b_0%,#0f172a_100%)]">
+
     <div class="absolute inset-0 opacity-[0.03] flex items-center justify-center pointer-events-none">
         <img src="images/ESCUDO.png" alt="" class="w-[300px]" />
     </div>
 
-    <div class="max-w-6xl mx-auto px-4 py-4 relative z-10">
+    <div class="max-w-6xl mx-auto px-4 py-6 relative z-10">
         <div class="flex flex-col md:flex-row items-center justify-between gap-6">
-            <!-- Etiqueta y Título -->
-            <div class="flex flex-col sm:flex-row items-center gap-3 sm:gap-4 text-center sm:text-left">
-                <div
-                    class="bg-amber-500 text-slate-900 text-[10px] sm:text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full shadow-lg shadow-amber-500/20">
-                    PRÓXIMO ENCUENTRO
-                </div>
-                <div class="h-8 w-px bg-white/10 hidden md:block"></div>
-                <div class="text-white">
-                    <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest mb-0.5">Torneo Local -
-                        Categoría 2013</p>
-                    <h4 class="text-xs sm:text-sm font-black uppercase italic tracking-tighter">DIBA FBC vs REAL
-                        ACADEMIA</h4>
-                </div>
+
+            <div class="flex flex-col sm:flex-row items-center gap-4 text-center sm:text-left">
+                <span
+                    class="bg-amber-500 text-slate-900 text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full shadow-lg shadow-amber-500/20">
+                    Próximo Encuentro
+                </span>
+
+                <h2
+                    class="text-white font-bold text-lg uppercase tracking-tight drop-shadow-[0_0_5px_rgba(245,158,11,0.4)]">
+                    Nombre del Torneo / Rival
+                </h2>
             </div>
 
-            <!-- Detalles del Partido -->
-            <div class="flex flex-wrap items-center justify-center gap-x-3 gap-y-2 md:gap-6">
-                <div class="flex items-center gap-1.5 md:gap-2 text-slate-300">
-                    <i class="far fa-calendar-alt text-amber-500 text-xs text-glow"></i>
-                    <span class="text-[11px] md:text-xs font-bold uppercase tracking-tight text-center">Domingo, 16 de
-                        Marzo</span>
-                </div>
-                <div class="flex items-center gap-1.5 md:gap-2 text-slate-300">
-                    <i class="far fa-clock text-amber-500 text-xs text-glow"></i>
-                    <span class="text-[11px] md:text-xs font-bold uppercase tracking-tight text-center">08:30 AM</span>
-                </div>
-                <div class="flex items-center gap-1.5 md:gap-2 text-slate-300">
-                    <i class="fas fa-map-marker-alt text-amber-500 text-xs text-glow"></i>
-                    <span class="text-[11px] md:text-xs font-bold uppercase tracking-tight text-center">Parque La
-                        Pradera</span>
-                </div>
-            </div>
-
-            <!-- Botón de Acción -->
             <a href="partidos.html"
-                class="inline-flex items-center gap-2 bg-white/5 hover:bg-white/10 border border-white/10 px-5 py-2 rounded-full text-[11px] font-black text-white uppercase tracking-widest transition-all group-hover:border-amber-500/50">
+                class="inline-flex items-center gap-2 bg-white/5 hover:bg-white/10 border border-white/10 px-5 py-2 rounded-full text-[11px] font-black text-white uppercase tracking-widest transition-all duration-300 group-hover:border-amber-500/50">
                 Ver Calendario
                 <i class="fas fa-external-link-alt text-[9px] text-amber-500"></i>
             </a>
         </div>
     </div>
-
-    <style>
-        .text-glow {
-            filter: drop-shadow(0 0 5px rgba(245, 158, 11, 0.4));
-        }
-
-        #match-banner {
-            background: radial-gradient(circle at 50% -50%, #1e293b 0%, #0f172a 100%);
-        }
-    </style>
 </section>
