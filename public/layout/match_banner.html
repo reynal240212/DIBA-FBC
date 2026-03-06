@@ -10,7 +10,7 @@
     <div class="max-w-6xl mx-auto px-4 py-6 relative z-10">
         <!-- Contenedor flex donde se inyectarán las tarjetas generadas y se desplazarán -->
         <div id="dynamic-match-banner-container"
-            class="flex gap-6 overflow-x-auto pb-2 snap-x snap-mandatory scrollbar-hide"
+            class="flex gap-6 overflow-x-auto pb-4 pt-2 snap-x snap-mandatory banner-scroll cursor-grab active:cursor-grabbing"
             style="scroll-behavior: smooth;">
             <!-- Las tarjetas se inyectarán aquí por LoadComponents.js -->
         </div>
@@ -22,15 +22,23 @@
     </div>
 
     <style>
-        .scrollbar-hide::-webkit-scrollbar {
-            display: none;
+        /* Custom scrollbar para el banner */
+        .banner-scroll::-webkit-scrollbar {
+            height: 6px;
         }
 
-        .scrollbar-hide {
-            -ms-overflow-style: none;
-            /* IE and Edge */
-            scrollbar-width: none;
-            /* Firefox */
+        .banner-scroll::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+
+        .banner-scroll::-webkit-scrollbar-thumb {
+            background: rgba(245, 158, 11, 0.5);
+            border-radius: 10px;
+        }
+
+        .banner-scroll::-webkit-scrollbar-thumb:hover {
+            background: rgba(245, 158, 11, 0.8);
         }
     </style>
 </section>

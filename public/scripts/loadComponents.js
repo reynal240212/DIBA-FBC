@@ -162,12 +162,12 @@ document.addEventListener("DOMContentLoaded", function () {
         // Se encoge al ancho mínimo del contenido, snap center para scroll horizontal
         card.className = "flex-none w-80 sm:w-96 snap-center bg-white/5 border border-white/10 rounded-2xl p-4 flex flex-col gap-3 hover:bg-white/10 transition-colors duration-300";
 
-        // Helper function para manejar el escudo, predeterminado a logo DIBA si no se encuentra
+        // Helper function para manejar el escudo, logo DIBA si aplica, o iniciales autogeneradas si es rival
         const escudoImg = (url, equipoNombre) => {
           if (equipoNombre && equipoNombre.toUpperCase().includes('DIBA')) {
             return "images/ESCUDO.png";
           }
-          return url ? url : "images/ESCUDO.png";
+          return url ? url : `https://ui-avatars.com/api/?name=${encodeURIComponent(equipoNombre || 'Rival')}&background=1e293b&color=cbd5e1&bold=true`;
         };
 
         card.innerHTML = `
@@ -185,7 +185,7 @@ document.addEventListener("DOMContentLoaded", function () {
                  </div>
                  
                  <div class="flex flex-col items-center w-1/3">
-                     <img src="${escudoImg(p.escudo_visitante)}" alt="${p.equipovisitante}" class="w-12 h-12 object-contain mb-2 img-drop-shadow" onerror="this.src='images/ESCUDO.png'">
+                     <img src="${escudoImg(p.escudo_visitante, p.equipovisitante)}" alt="${p.equipovisitante}" class="w-12 h-12 object-contain mb-2 img-drop-shadow" onerror="this.src='https://ui-avatars.com/api/?name=Rival&background=1e293b&color=cbd5e1&bold=true'">
                      <span class="text-white font-bold text-[10px] sm:text-xs uppercase text-center line-clamp-2 leading-tight">${p.equipovisitante || 'Rival'}</span>
                  </div>
              </div>
@@ -195,6 +195,36 @@ document.addEventListener("DOMContentLoaded", function () {
              </a>
          `;
         dynamicContainer.appendChild(card);
+      });
+
+      // --- LOGICA DE SCROLL POR ARRASTRE DE RATÓN (DESKTOP) ---
+      let isDown = false;
+      let startX;
+      let scrollLeft;
+
+      dynamicContainer.addEventListener('mousedown', (e) => {
+        isDown = true;
+        dynamicContainer.classList.remove('snap-x', 'snap-mandatory'); // temporalmente quitar el snap al arrastrar
+        startX = e.pageX - dynamicContainer.offsetLeft;
+        scrollLeft = dynamicContainer.scrollLeft;
+      });
+
+      dynamicContainer.addEventListener('mouseleave', () => {
+        isDown = false;
+        dynamicContainer.classList.add('snap-x', 'snap-mandatory');
+      });
+
+      dynamicContainer.addEventListener('mouseup', () => {
+        isDown = false;
+        dynamicContainer.classList.add('snap-x', 'snap-mandatory');
+      });
+
+      dynamicContainer.addEventListener('mousemove', (e) => {
+        if (!isDown) return;
+        e.preventDefault();
+        const x = e.pageX - dynamicContainer.offsetLeft;
+        const walk = (x - startX) * 2; // velocidad de scroll
+        dynamicContainer.scrollLeft = scrollLeft - walk;
       });
 
     } catch (err) {
