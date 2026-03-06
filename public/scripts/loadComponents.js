@@ -173,10 +173,10 @@ document.addEventListener("DOMContentLoaded", function () {
         card.innerHTML = `
              <div class="flex items-center justify-between gap-4 w-full">
                  <div class="flex flex-col items-center w-1/3">
-                     <img src="${escudoImg(p.escudo_local || p.escudo, p.equipolocal)}" alt="${p.equipolocal}" class="w-12 h-12 object-contain mb-2 img-drop-shadow" onerror="this.src='images/ESCUDO.png'">
+                     <img src="${escudoImg(p.escudo_local || p.escudo, p.equipolocal)}" alt="${p.equipolocal}" class="w-12 h-12 object-contain mb-2 img-drop-shadow" onerror="this.src='${escudoImg(null, p.equipolocal)}'">
                      <span class="text-white font-bold text-[10px] sm:text-xs uppercase text-center line-clamp-2 leading-tight">${p.equipolocal || 'DIBA FBC'}</span>
                  </div>
-                 
+
                  <div class="flex flex-col items-center justify-center w-1/3 px-1">
                      <span class="bg-amber-500 text-slate-900 text-[9px] font-black uppercase tracking-widest px-2 py-0.5 rounded shadow-lg shadow-amber-500/20 mb-1">
                         ${p.hora || 'VS'}
@@ -185,15 +185,16 @@ document.addEventListener("DOMContentLoaded", function () {
                  </div>
                  
                  <div class="flex flex-col items-center w-1/3">
-                     <img src="${escudoImg(p.escudo_visitante, p.equipovisitante)}" alt="${p.equipovisitante}" class="w-12 h-12 object-contain mb-2 img-drop-shadow" onerror="this.src='https://ui-avatars.com/api/?name=Rival&background=1e293b&color=cbd5e1&bold=true'">
+                     <img src="${escudoImg(p.escudo_visitante, p.equipovisitante)}" alt="${p.equipovisitante}" class="w-12 h-12 object-contain mb-2 img-drop-shadow" onerror="this.src='${escudoImg(null, p.equipovisitante)}'">
                      <span class="text-white font-bold text-[10px] sm:text-xs uppercase text-center line-clamp-2 leading-tight">${p.equipovisitante || 'Rival'}</span>
                  </div>
-             </div>
-             
-             <a href="partidos.html" class="w-full mt-2 inline-flex justify-center items-center gap-2 bg-slate-900/50 hover:bg-amber-500 hover:text-slate-900 border border-white/5 py-1.5 rounded-xl text-[10px] font-black text-white uppercase tracking-widest transition-all duration-300">
-                Ver Detalles <i class="fas fa-external-link-alt text-[9px]"></i>
-             </a>
-         `;
+             </div >
+
+
+          <a href="partidos.html" class="w-full mt-2 inline-flex justify-center items-center gap-2 bg-slate-900/50 hover:bg-amber-500 hover:text-slate-900 border border-white/5 py-1.5 rounded-xl text-[10px] font-black text-white uppercase tracking-widest transition-all duration-300">
+            Ver Detalles <i class="fas fa-external-link-alt text-[9px]"></i>
+          </a>
+        `;
         dynamicContainer.appendChild(card);
       });
 
@@ -229,7 +230,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     } catch (err) {
       console.error("Match banner fetch error:", err);
-      if (loadingStatus) loadingStatus.innerHTML = `<span class="text-red-400 text-xs">Error cargando banner.</span>`;
+      if (loadingStatus) loadingStatus.innerHTML = `< span class="text-red-400 text-xs" > Error cargando banner.</span > `;
     }
   }); loadComponent("hero-container", "layout/hero.html");
   loadComponent("stats-container", "layout/stats_counter.html");
@@ -317,11 +318,11 @@ document.addEventListener("DOMContentLoaded", function () {
       const section = document.createElement("section");
       section.className = "mb-12 w-full";
       section.innerHTML = `
-        <div class="flex items-center mb-6 px-4">
+          < div class="flex items-center mb-6 px-4" >
           <h2 class="text-xl font-extrabold text-slate-800 uppercase tracking-tight">${cat.title}</h2>
           <div class="flex-grow h-px bg-slate-200 ml-4"></div>
-        </div>
-      `;
+        </div >
+          `;
 
       const grid = document.createElement("div");
       grid.className = "grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 px-4 w-full";
@@ -334,7 +335,7 @@ document.addEventListener("DOMContentLoaded", function () {
         card.className = "group bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden hover:shadow-xl transition-all duration-300 cursor-pointer relative";
 
         card.innerHTML = `
-          <div class="aspect-[3/4] overflow-hidden bg-slate-100">
+          < div class="aspect-[3/4] overflow-hidden bg-slate-100" >
             <img src="${imageUrl}" class="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-110" onerror="this.src='${defaultImg}'">
           </div>
           <div class="p-3 text-center">
@@ -374,7 +375,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const item = document.createElement("div");
         item.className = "flex items-center justify-between p-4 border-b border-slate-50 hover:bg-slate-50 transition-colors";
         item.innerHTML = `
-          <div class="flex items-center gap-3">
+          < div class="flex items-center gap-3" >
             <img src="${g.escudo_url || 'images/ESCUDO.png'}" class="w-8 h-8 object-contain">
             <div>
               <div class="text-sm font-bold text-slate-900">${g.nombre_jugador}</div>
@@ -386,7 +387,7 @@ document.addEventListener("DOMContentLoaded", function () {
         container.appendChild(item);
       });
     } catch (err) {
-      container.innerHTML = `<p class="text-center text-red-500 text-xs p-4">Error de conexión.</p>`;
+      container.innerHTML = `< p class="text-center text-red-500 text-xs p-4" > Error de conexión.</p > `;
     }
   }
   cargarGoleadores();
