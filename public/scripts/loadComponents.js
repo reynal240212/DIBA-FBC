@@ -233,7 +233,74 @@ document.addEventListener("DOMContentLoaded", function () {
       if (loadingStatus) loadingStatus.innerHTML = `< span class="text-red-400 text-xs" > Error cargando banner.</span > `;
     }
   }); loadComponent("hero-container", "layout/hero.html");
-  loadComponent("stats-container", "layout/stats_counter.html");
+  loadComponent("stats-container", "layout/stats_counter.html", async () => {
+    try {
+      const { createClient } = await import("https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm");
+      const { SUPABASE_URL, SUPABASE_ANON_KEY } = window.DIBA_CONFIG;
+      const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+      async function fetchAndSetValues() {
+        const startYear = 2012;
+        const currentYear = new Date().getFullYear();
+        const yearsOfHistory = currentYear - startYear > 0 ? currentYear - startYear : 14;
+
+        const totalTrophies = 13 + 3 + 2;
+
+        let totalPlayers = 60;
+        try {
+          const { count, error } = await supabase
+            .from('identificacion')
+            .select('*', { count: 'exact', head: true });
+
+          if (!error && count !== null && count > 0) {
+            totalPlayers = count;
+          }
+        } catch (e) {
+          console.error("Error connecting to supabase for stats:", e);
+        }
+
+        const yearsEl = document.getElementById('stats-years');
+        const trophiesEl = document.getElementById('stats-trophies');
+        const playersEl = document.getElementById('stats-players');
+        const commitmentEl = document.getElementById('stats-commitment');
+
+        if (yearsEl) animateValue(yearsEl, 0, yearsOfHistory, 2000);
+        if (trophiesEl) animateValue(trophiesEl, 0, totalTrophies, 2000);
+        if (playersEl) animateValue(playersEl, 0, totalPlayers, 2000);
+        if (commitmentEl) animateValue(commitmentEl, 0, 100, 2000);
+      }
+
+      function animateValue(obj, start, end, duration) {
+        if (!obj) return;
+        let startTimestamp = null;
+        const step = (timestamp) => {
+          if (!startTimestamp) startTimestamp = timestamp;
+          const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+          obj.innerHTML = Math.floor(progress * (end - start) + start);
+          if (progress < 1) {
+            window.requestAnimationFrame(step);
+          }
+        };
+        window.requestAnimationFrame(step);
+      }
+
+      const statsSection = document.querySelector('.max-w-7xl');
+      if (statsSection) {
+        const observer = new IntersectionObserver((entries) => {
+          if (entries[0].isIntersecting) {
+            fetchAndSetValues();
+            observer.disconnect();
+          }
+        }, { threshold: 0.1 });
+        observer.observe(statsSection);
+      } else {
+        fetchAndSetValues(); // Fallback
+      }
+
+    } catch (err) {
+      console.error("Error initializing stats component:", err);
+    }
+  });
   loadComponent("patrocinadores-container", "layout/patrocinadores.html");
   loadComponent("testimonials-container", "layout/testimonials.html");
   loadComponent("footer-container", "layout/footer.html");
