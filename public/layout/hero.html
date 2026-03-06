@@ -1,60 +1,23 @@
-<section class="relative min-h-[85vh] flex items-center justify-center overflow-hidden bg-slate-900">
-  <!-- Fondo con Parallax (Simulado con fixed bg) -->
-  <div class="absolute inset-0 bg-[url('./images/estadio.jpg')] bg-cover bg-center bg-fixed opacity-40 scale-110"></div>
-
-  <!-- Gradientes de profundidad -->
-  <div class="absolute inset-0 bg-gradient-to-b from-slate-900/80 via-transparent to-slate-900"></div>
-  <div class="absolute inset-0 bg-gradient-to-r from-slate-900 via-transparent to-transparent"></div>
-
-  <!-- Contenido Central -->
-  <div class="relative z-20 max-w-5xl mx-auto px-4 text-center">
-    <div
-      class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-500/10 border border-blue-500/20 backdrop-blur-md mb-8 animate__animated animate__fadeInDown">
-      <span class="relative flex h-2 w-2">
-        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
-        <span class="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
-      </span>
-      <span class="text-blue-400 text-[10px] font-black uppercase tracking-[0.2em]">Temporada 2026 Activa</span>
+<!-- HERO DEPORTIVO -->
+<section class="relative bg-slate-900 bg-cover bg-center bg-no-repeat min-h-[75vh] flex items-center" style="background-image: url('images/estadio.jpg');">
+  <div class="absolute inset-0 bg-black/60 z-0"></div>
+  <div class="container mx-auto px-4 relative z-10 w-full py-20">
+    <div class="flex flex-wrap items-center">
+      <!-- Columna de Texto -->
+      <div class="w-full lg:w-1/2 md:w-2/3 text-white">
+        <h5 class="text-amber-500 uppercase font-bold tracking-[0.2em] text-sm mb-2 drop-shadow-md">Club de Fútbol Amateur</h5>
+        <h1 class="text-6xl md:text-8xl font-black uppercase tracking-tighter animate__animated animate__fadeInLeft mb-6 drop-shadow-lg text-white">DIBA FBC</h1>
+        <p class="text-lg md:text-2xl text-slate-200 mb-10 max-w-xl animate__animated animate__fadeInUp leading-relaxed">
+          Forjando campeones en Barranquilla. Disciplina, pasión y talento juvenil desde la cancha del barrio hasta la gloria.
+        </p>
+        <a href="contacto.html"
+          class="inline-flex items-center justify-center bg-amber-500 hover:bg-amber-600 text-slate-900 text-lg px-8 py-4 font-black rounded-xl shadow-xl shadow-amber-500/20 active:scale-95 transition-all animate__animated animate__pulse animate__infinite uppercase">
+          ¡Únete al Equipo!
+          <i class="fas fa-arrow-right ml-3"></i>
+        </a>
+      </div>
+      <!-- Columna vacía para dejar espacio a la imagen -->
+      <div class="w-full lg:w-1/2 md:w-1/3"></div>
     </div>
-
-    <h1 class="text-5xl md:text-8xl font-black text-white mb-6 tracking-tighter uppercase italic leading-[0.9]">
-      FORJANDO EL <span
-        class="text-amber-500 underline decoration-blue-500 decoration-8 underline-offset-8">FUTURO</span>
-    </h1>
-
-    <p
-      class="text-lg md:text-2xl text-slate-300 max-w-2xl mx-auto mb-10 font-medium leading-relaxed animate__animated animate__fadeInUp animate__delay-1s">
-      Más que un club, una familia unida por la pasión, la disciplina y el talento barranquillero.
-    </p>
-
-    <div
-      class="flex flex-col sm:flex-row items-center justify-center gap-4 animate__animated animate__fadeInUp animate__delay-2s">
-      <a href="partidos.html"
-        class="group relative px-8 py-4 bg-amber-500 text-slate-900 font-black rounded-xl overflow-hidden transition-all hover:scale-105 active:scale-95 shadow-2xl shadow-amber-500/20">
-        <span class="relative z-10 flex items-center gap-2">
-          VER PRÓXIMO PARTIDO <i
-            class="fas fa-chevron-right text-xs group-hover:translate-x-1 transition-transform"></i>
-        </span>
-      </a>
-      <a href="Historia.html"
-        class="px-8 py-4 bg-white/5 border border-white/10 backdrop-blur-md text-white font-black rounded-xl hover:bg-white/10 transition-all">
-        NUESTRA HISTORIA
-      </a>
-    </div>
-  </div>
-
-  <!-- Mouse Scroll Animation -->
-  <div class="absolute bottom-10 left-1/2 -translate-x-1/2 z-20 hidden md:block">
-    <div class="w-6 h-10 border-2 border-white/20 rounded-full flex justify-center p-1">
-      <div class="w-1 h-2 bg-amber-500 rounded-full animate-bounce"></div>
-    </div>
-  </div>
-
-  <!-- Decoración lateral -->
-  <div
-    class="absolute right-[-10%] top-[20%] w-[40%] h-[60%] bg-blue-600/10 blur-[120px] rounded-full pointer-events-none">
-  </div>
-  <div
-    class="absolute left-[-5%] bottom-0 w-[30%] h-[40%] bg-amber-500/5 blur-[100px] rounded-full pointer-events-none">
   </div>
 </section>
