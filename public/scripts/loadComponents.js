@@ -117,8 +117,91 @@ document.addEventListener("DOMContentLoaded", function () {
       document.body.appendChild(s);
     }
   });
-  loadComponent("match-banner-container", "layout/match_banner.html");
-  loadComponent("hero-container", "layout/hero.html");
+  loadComponent("match-banner-container", "layout/match_banner.html", async () => {
+    // --- LÓGICA DEL MATCH BANNER DINÁMICO ---
+    const dynamicContainer = document.getElementById("dynamic-match-banner-container");
+    const loadingStatus = document.getElementById("banner-loading");
+    if (!dynamicContainer) return;
+
+    try {
+      const { createClient } = await import("https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm");
+      const { SUPABASE_URL, SUPABASE_ANON_KEY } = window.DIBA_CONFIG;
+      const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+      // Fecha específica solicitada: 7 de marzo de 2026
+      const targetDate = "2026-03-07";
+
+      // Reutiliza la función toLocalDate si estuviera global, pero aquí la redefinimos para uso seguro
+      const toLocalDateBanner = (fechaISO) => {
+        const d = new Date(fechaISO);
+        return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+      };
+
+      const { data, error } = await supabase.from('partidos').select('*');
+
+      if (error) throw error;
+
+      const matches = (data || []).filter(p => toLocalDateBanner(p.fecha) === targetDate);
+
+      if (loadingStatus) loadingStatus.style.display = 'none';
+
+      if (matches.length === 0) {
+        dynamicContainer.innerHTML = `
+           <div class="w-full text-center text-slate-400 text-sm py-4 italic">
+              No hay partidos programados para hoy.
+           </div>
+         `;
+        return;
+      }
+
+      // Limpiar contenedor
+      dynamicContainer.innerHTML = '';
+
+      matches.forEach(p => {
+        const card = document.createElement("div");
+        // Se encoge al ancho mínimo del contenido, snap center para scroll horizontal
+        card.className = "flex-none w-80 sm:w-96 snap-center bg-white/5 border border-white/10 rounded-2xl p-4 flex flex-col gap-3 hover:bg-white/10 transition-colors duration-300";
+
+        // Helper function para manejar el escudo, predeterminado a logo DIBA si no se encuentra
+        const escudoImg = (url, equipoNombre) => {
+          if (equipoNombre && equipoNombre.toUpperCase().includes('DIBA')) {
+            return "images/ESCUDO.png";
+          }
+          return url ? url : "images/ESCUDO.png";
+        };
+
+        card.innerHTML = `
+             <div class="flex items-center justify-between gap-4 w-full">
+                 <div class="flex flex-col items-center w-1/3">
+                     <img src="${escudoImg(p.escudo_local || p.escudo, p.equipolocal)}" alt="${p.equipolocal}" class="w-12 h-12 object-contain mb-2 img-drop-shadow" onerror="this.src='images/ESCUDO.png'">
+                     <span class="text-white font-bold text-[10px] sm:text-xs uppercase text-center line-clamp-2 leading-tight">${p.equipolocal || 'DIBA FBC'}</span>
+                 </div>
+                 
+                 <div class="flex flex-col items-center justify-center w-1/3 px-1">
+                     <span class="bg-amber-500 text-slate-900 text-[9px] font-black uppercase tracking-widest px-2 py-0.5 rounded shadow-lg shadow-amber-500/20 mb-1">
+                        ${p.hora || 'VS'}
+                     </span>
+                     <span class="text-slate-400 text-[9px] sm:text-[10px] uppercase font-bold text-center w-full truncate">${p.Cancha || 'Cancha'}</span>
+                 </div>
+                 
+                 <div class="flex flex-col items-center w-1/3">
+                     <img src="${escudoImg(p.escudo_visitante)}" alt="${p.equipovisitante}" class="w-12 h-12 object-contain mb-2 img-drop-shadow" onerror="this.src='images/ESCUDO.png'">
+                     <span class="text-white font-bold text-[10px] sm:text-xs uppercase text-center line-clamp-2 leading-tight">${p.equipovisitante || 'Rival'}</span>
+                 </div>
+             </div>
+             
+             <a href="partidos.html" class="w-full mt-2 inline-flex justify-center items-center gap-2 bg-slate-900/50 hover:bg-amber-500 hover:text-slate-900 border border-white/5 py-1.5 rounded-xl text-[10px] font-black text-white uppercase tracking-widest transition-all duration-300">
+                Ver Detalles <i class="fas fa-external-link-alt text-[9px]"></i>
+             </a>
+         `;
+        dynamicContainer.appendChild(card);
+      });
+
+    } catch (err) {
+      console.error("Match banner fetch error:", err);
+      if (loadingStatus) loadingStatus.innerHTML = `<span class="text-red-400 text-xs">Error cargando banner.</span>`;
+    }
+  }); loadComponent("hero-container", "layout/hero.html");
   loadComponent("stats-container", "layout/stats_counter.html");
   loadComponent("patrocinadores-container", "layout/patrocinadores.html");
   loadComponent("testimonials-container", "layout/testimonials.html");
