@@ -7,25 +7,27 @@
             <!-- Stat 1 -->
             <div class="text-center group" data-aos="fade-up">
                 <div class="text-4xl md:text-6xl font-black text-white mb-2 flex items-center justify-center">
-                    <span class="stats-number" data-target="13">0</span>
+                    <span class="stats-number" id="stats-years" data-target="0">0</span>
                     <span class="text-blue-500 ml-1">+</span>
                 </div>
                 <p class="text-blue-400 text-xs font-black uppercase tracking-[0.2em]">Años de Historia</p>
+                <p class="text-[10px] text-slate-400 mt-1 uppercase">Desde 2012</p>
             </div>
 
             <!-- Stat 2 -->
             <div class="text-center group" data-aos="fade-up" data-aos-delay="100">
-                <div class="text-4xl md:text-6xl font-black text-white mb-2 flex items-center justify-center">
-                    <span class="stats-number" data-target="25">0</span>
+                <div class="text-4xl md:text-6xl font-black text-white mb-2 flex items-center justify-center" title="13 Campeones, 3 Tercer puesto, 2 Subcampeones">
+                    <span class="stats-number" id="stats-trophies" data-target="0">0</span>
                     <span class="text-blue-500 ml-1">🏆</span>
                 </div>
                 <p class="text-blue-400 text-xs font-black uppercase tracking-[0.2em]">Trofeos Ganados</p>
+                <p class="text-[10px] text-slate-400 mt-1 uppercase">13🏆 - 2🥈 - 3🥉</p>
             </div>
 
             <!-- Stat 3 -->
             <div class="text-center group" data-aos="fade-up" data-aos-delay="200">
                 <div class="text-4xl md:text-6xl font-black text-white mb-2 flex items-center justify-center">
-                    <span class="stats-number" data-target="150">0</span>
+                    <span class="stats-number" id="stats-players" data-target="0">0</span>
                     <span class="text-blue-500 ml-1">+</span>
                 </div>
                 <p class="text-blue-400 text-xs font-black uppercase tracking-[0.2em]">Jugadores Activos</p>
@@ -34,7 +36,7 @@
             <!-- Stat 4 -->
             <div class="text-center group" data-aos="fade-up" data-aos-delay="300">
                 <div class="text-4xl md:text-6xl font-black text-white mb-2 flex items-center justify-center">
-                    <span class="stats-number" data-target="100">0</span>
+                    <span class="stats-number" id="stats-commitment" data-target="100" data-suffix="%">0</span>
                     <span class="text-blue-500 ml-1">%</span>
                 </div>
                 <p class="text-blue-400 text-xs font-black uppercase tracking-[0.2em]">Compromiso Total</p>
@@ -44,15 +46,53 @@
     </div>
 </section>
 
-<script>
-    // Script para animar números (esto se ejecutará cuando el componente se cargue)
+<script type="module">
+    import { supabase } from './scripts/supabaseClient.js';
+
+    async function fetchAndSetValues() {
+        // Años de historia: 2026 - 2012 = 14
+        const startYear = 2012;
+        const currentYear = new Date().getFullYear();
+        let currentRealYear = currentYear;
+        // The user says "desde 2012 hasta 2026", just in case they are looking for exactly 14 right now:
+        const yearsOfHistory = currentRealYear - startYear > 0 ? currentRealYear - startYear : 14; 
+        document.getElementById('stats-years').setAttribute('data-target', yearsOfHistory);
+
+        // Trofeos ganados: 13 campeones + 3 tercer puesto + 2 subcampeones = 18
+        const totalTrophies = 13 + 3 + 2;
+        document.getElementById('stats-trophies').setAttribute('data-target', totalTrophies);
+
+        // Jugadores activos (de sb: identificaciones)
+        let totalPlayers = 60; // fallback if error
+        try {
+            const { count, error } = await supabase
+                .from('identificaciones')
+                .select('*', { count: 'exact', head: true });
+            
+            if (!error && count !== null) {
+                totalPlayers = count;
+            } else {
+                console.error("Error fetching player count:", error);
+            }
+        } catch (e) {
+            console.error("Error connecting to supabase for stats:", e);
+        }
+        document.getElementById('stats-players').setAttribute('data-target', totalPlayers);
+
+        // Compromiso Total ya está en 100 de forma estática en el HTML
+        animateStats();
+    }
+
+    // Script para animar números
     function animateStats() {
         const stats = document.querySelectorAll('.stats-number');
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     const target = entry.target;
-                    const endValue = parseInt(target.getAttribute('data-target'));
+                    const endValue = parseInt(target.getAttribute('data-target')) || 0;
+                    if (endValue === 0) return; // Wait if not set
+                    
                     let startValue = 0;
                     const duration = 2000;
                     const increment = endValue / (duration / 16);
@@ -75,6 +115,6 @@
         stats.forEach(s => observer.observe(s));
     }
 
-    // Iniciar después de un breve delay para asegurar que el DOM está listo
-    setTimeout(animateStats, 500);
+    // Iniciar
+    setTimeout(fetchAndSetValues, 100);
 </script>
