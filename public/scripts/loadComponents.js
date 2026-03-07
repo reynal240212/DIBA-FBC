@@ -128,8 +128,9 @@ document.addEventListener("DOMContentLoaded", function () {
       const { SUPABASE_URL, SUPABASE_ANON_KEY } = window.DIBA_CONFIG;
       const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-      // Fecha específica solicitada: 7 de marzo de 2026
-      const targetDate = "2026-03-07";
+      // Obtener la fecha actual del sistema dinámicamente
+      const today = new Date();
+      const targetDate = today.getFullYear() + '-' + String(today.getMonth() + 1).padStart(2, '0') + '-' + String(today.getDate()).padStart(2, '0');
 
       // Reutiliza la función toLocalDate si estuviera global, pero aquí la redefinimos para uso seguro
       const toLocalDateBanner = (fechaISO) => {
@@ -143,12 +144,27 @@ document.addEventListener("DOMContentLoaded", function () {
 
       const matches = (data || []).filter(p => toLocalDateBanner(p.fecha) === targetDate);
 
+      // Si no hay partidos hoy, busca los PRÓXIMOS partidos a futuro
+      let displayMatches = matches;
+      let isFuture = false;
+
+      if (displayMatches.length === 0) {
+        const futureMatches = (data || []).filter(p => new Date(p.fecha) >= new Date(targetDate));
+        // Agrupar por la fecha más cercana
+        if (futureMatches.length > 0) {
+          const sorted = futureMatches.sort((a, b) => new Date(a.fecha) - new Date(b.fecha));
+          const nextDate = toLocalDateBanner(sorted[0].fecha);
+          displayMatches = sorted.filter(p => toLocalDateBanner(p.fecha) === nextDate);
+          isFuture = true;
+        }
+      }
+
       if (loadingStatus) loadingStatus.style.display = 'none';
 
-      if (matches.length === 0) {
+      if (displayMatches.length === 0) {
         dynamicContainer.innerHTML = `
            <div class="w-full text-center text-slate-400 text-sm py-4 italic">
-              No hay partidos programados para hoy.
+              No hay partidos programados próximamente.
            </div>
          `;
         return;
@@ -157,7 +173,15 @@ document.addEventListener("DOMContentLoaded", function () {
       // Limpiar contenedor
       dynamicContainer.innerHTML = '';
 
-      matches.forEach(p => {
+      // Título sutil si son partidos futuros
+      if (isFuture) {
+        const title = document.createElement("div");
+        title.className = "w-full flex-none text-center text-amber-500 font-bold text-xs uppercase tracking-widest mb-2 snap-center";
+        title.innerHTML = `PRÓXIMOS PARTIDOS: ${toLocalDateBanner(displayMatches[0].fecha)}`;
+        dynamicContainer.appendChild(title);
+      }
+
+      displayMatches.forEach(p => {
         const card = document.createElement("div");
         // Se encoge al ancho mínimo del contenido, snap center para scroll horizontal
         card.className = "flex-none w-80 sm:w-96 snap-center bg-white/5 border border-white/10 rounded-2xl p-4 flex flex-col gap-3 hover:bg-white/10 transition-colors duration-300";
