@@ -1,418 +1,478 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" data-bs-theme="light">
 
 <head>
-  <meta charset="UTF-8">
-  <title>Planilla — DIBA FBC Admin</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="icon" href="/images/ESCUDO.ico" type="image/x-icon">
-  <link
-    href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,600;0,700;0,900;1,700;1,900&display=swap"
-    rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
-</head>
-<script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.8.2/dist/jspdf.plugin.autotable.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
-<script src="https://cdn.tailwindcss.com"></script>
-<script>
-  tailwind.config = {
-    theme: {
-      extend: {
-        colors: {
-          'diba-dark': '#0a0e14',
-          'diba-dark-node': '#111823',
-          'diba-dark-card': '#1a2332',
-          'diba-gold': '#ffcc00',
-          'diba-gold-hover': '#e6b800',
-          'diba-blue': '#002a40',
-          'diba-slate': '#8b9ab0',
-        },
-        fontFamily: {
-          'montserrat': ['Montserrat', 'sans-serif'],
-        }
-      }
+  <meta charset="UTF-8" />
+  <title>Planilla - DIBA FBC</title>
+  <meta name="author" content="REINALDO DE JESUS PEREZ NAVAS" />
+  <meta name="keywords"
+    content="DIBA FBC, Deportivo Internacional De Barranquilla Atlántico, Fútbol, Barranquilla, Atlántico, Colombia" />
+  <meta name="robots" content="index, follow" />
+  <meta name="theme-color" content="#002a40" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="images/ESCUDO.ico" sizes="32x32">
+
+  <!-- Bootstrap 5.3.3 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
+  <link rel="stylesheet" href="styles/styles.css" />
+  <link rel="stylesheet" href="styles/background-animation.css" />
+
+  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.8.2/dist/jspdf.plugin.autotable.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+
+  <style>
+    :root {
+      --primary-color: #002a40;
+      --gold: #ffcc00;
+      --bs-body-bg: #f8f9fa;
     }
-  }
-</script>
-<style type="text/tailwindcss">
-  @layer base {
-            body { @apply bg-diba-dark text-slate-200 font-montserrat min-h-screen flex overflow-x-hidden; }
-            * { @apply box-border margin-0 padding-0; }
-        }
-        @layer components {
-            .nav-link { @apply flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-bold text-diba-slate transition-all hover:bg-white/5 hover:text-white relative; }
-            .nav-link.active { @apply bg-diba-gold/10 text-diba-gold; }
-            .nav-link.active::before { content: ''; @apply absolute left-0 top-1/4 bottom-1/4 w-[3px] bg-diba-gold rounded-r; }
-            
-            .stat-card { @apply bg-diba-dark-node border border-white/10 rounded-2xl p-4 flex items-center gap-3 transition-all hover:bg-white/5; }
-            .panel { @apply bg-diba-dark-node border border-white/10 rounded-2xl overflow-hidden; }
-            .btn-primary { @apply inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-diba-gold text-diba-blue text-[0.72rem] font-black uppercase transition-all hover:bg-diba-gold-hover hover:-translate-y-px; }
-            .btn-outline { @apply inline-flex items-center gap-2 px-4 py-2 rounded-xl border border-white/10 text-white text-[0.7rem] font-black uppercase transition-all hover:bg-white/5; }
-            
-            .form-control { @apply bg-diba-dark-card border border-white/10 text-white rounded-xl px-4 py-2 text-xs font-semibold outline-none focus:border-diba-gold transition-colors; }
-            .form-select { @apply bg-diba-dark-card border border-white/10 text-white rounded-xl px-4 py-2 text-xs font-semibold outline-none focus:border-diba-gold transition-colors; }
-        }
-    </style>
+
+    body {
+      background-color: var(--bs-body-bg);
+      padding-bottom: 5rem;
+    }
+
+    .navbar {
+      background-color: var(--primary-color) !important;
+    }
+
+    .table-responsive {
+      max-height: 65vh;
+      overflow-y: auto;
+    }
+
+    .table th {
+      background-color: var(--primary-color);
+      color: white;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .stats-bar {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: .8rem;
+      margin-bottom: 1.2rem;
+    }
+
+    .stat-chip {
+      display: flex;
+      align-items: center;
+      gap: .65rem;
+      padding: .75rem 1rem;
+      border-radius: 12px;
+      border: 1px solid transparent;
+      background: #fff;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, .06);
+    }
+
+    .stat-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: .85rem;
+      flex-shrink: 0;
+    }
+
+    .stat-chip.green .stat-icon {
+      background: #dcfce7;
+      color: #16a34a;
+    }
+
+    .stat-chip.red .stat-icon {
+      background: #fee2e2;
+      color: #dc2626;
+    }
+
+    .stat-chip.yellow .stat-icon {
+      background: #fef9c3;
+      color: #ca8a04;
+    }
+
+    .stat-chip.blue .stat-icon {
+      background: #dbeafe;
+      color: #2563eb;
+    }
+
+    .stat-chip.purple .stat-icon {
+      background: #f3e8ff;
+      color: #7c3aed;
+    }
+
+    .stat-value {
+      font-size: 1.4rem;
+      font-weight: 900;
+      color: #0f172a;
+    }
+
+    .stat-label {
+      font-size: .6rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      color: #64748b;
+    }
+
+    .att-progress-bar {
+      height: 8px;
+      background: #e2e8f0;
+      border-radius: 999px;
+      overflow: hidden;
+      display: flex;
+      margin-bottom: 1.2rem;
+    }
+
+    .att-seg {
+      height: 100%;
+      transition: width .4s ease;
+    }
+
+    .search-input {
+      padding: .55rem .9rem;
+      border-radius: 10px;
+      border: 1.5px solid #e2e8f0;
+      font-size: .82rem;
+      font-weight: 600;
+      outline: none;
+    }
+
+    .toast-container {
+      z-index: 1100;
+    }
+
+    .saving-indicator {
+      font-size: 0.7rem;
+      color: #64748b;
+      font-style: italic;
+    }
+  </style>
 </head>
 
-<body style="display: none;" id="admin-body">
-
-  <!-- ══ SIDEBAR ══ -->
-  <aside
-    class="fixed top-0 left-0 bottom-0 w-[270px] bg-diba-dark-node border-r border-white/10 flex flex-col z-[100] transition-transform duration-300 md:translate-x-0 -translate-x-full"
-    id="sidebar">
-    <div class="p-8 pb-6 border-b border-white/10 flex items-center gap-3">
-      <img src="/images/ESCUDO.png" alt="DIBA FBC" class="w-[38px] h-[38px] object-contain">
-      <div>
-        <div class="text-[1.05rem] font-black italic uppercase tracking-wider text-diba-gold">DIBA FBC</div>
-        <div class="text-[0.55rem] text-diba-slate uppercase tracking-[0.15em] font-bold mt-px">Panel de Control</div>
+<body style="display: none;" id="planilla-body">
+  <!-- Toast -->
+  <div class="toast-container position-fixed top-0 end-0 p-3">
+    <div id="appToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+      <div class="toast-header">
+        <i class="fas fa-check-circle text-success me-2"></i>
+        <strong class="me-auto">Notificación</strong>
+        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
       </div>
+      <div class="toast-body"></div>
     </div>
+  </div>
 
-    <nav class="flex-1 p-4 flex flex-col gap-1 overflow-y-auto">
-      <a href="dashboard.html" class="nav-link"><i class="fas fa-th-large w-[18px] text-center text-sm"></i>
-        Dashboard</a>
-
-      <div class="text-[0.55rem] font-extrabold tracking-[0.2em] uppercase text-diba-slate px-2 py-3 mt-2">Equipo</div>
-      <a href="planilla.html" class="nav-link active"><i class="fas fa-clipboard-list w-[18px] text-center text-sm"></i>
-        Planilla</a>
-      <a href="listaJugadores.html" class="nav-link"><i class="fas fa-users w-[18px] text-center text-sm"></i>
-        Jugadores</a>
-      <a href="partidos.html" class="nav-link"><i class="fas fa-futbol w-[18px] text-center text-sm"></i> Partidos</a>
-      <a href="../analisis.html" class="nav-link"><i class="fas fa-chart-line w-[18px] text-center text-sm"></i>
-        Análisis</a>
-
-      <div class="text-[0.55rem] font-extrabold tracking-[0.2em] uppercase text-diba-slate px-2 py-3 mt-2">
-        Administración</div>
-      <a href="GestorDocumental.html" class="nav-link"><i class="fas fa-folder-open w-[18px] text-center text-sm"></i>
-        Gestor Documental</a>
-      <a href="usuarios.html" class="nav-link"><i class="fas fa-user-cog w-[18px] text-center text-sm"></i> Usuarios</a>
-      <a href="crear-usuario.html" class="nav-link"><i class="fas fa-user-plus w-[18px] text-center text-sm"></i> Crear
-        Usuario</a>
-      <a href="rifa_diba.html" class="nav-link"><i class="fas fa-ticket-alt w-[18px] text-center text-sm"></i> Rifas</a>
-
-      <div class="text-[0.55rem] font-extrabold tracking-[0.2em] uppercase text-diba-slate px-2 py-3 mt-2">Sitio Web
-      </div>
-      <a href="../index.html" class="nav-link"><i class="fas fa-globe w-[18px] text-center text-sm"></i> Ver Sitio</a>
-    </nav>
-
-    <div class="p-4 border-t border-white/10">
-      <div class="flex items-center gap-3 p-3 rounded-xl bg-white/5 mb-2">
-        <div
-          class="w-9 h-9 rounded-full bg-diba-gold text-diba-blue flex items-center justify-center font-black text-xs"
-          id="sb-avatar">A</div>
-        <div>
-          <div class="text-[0.75rem] font-extrabold text-white" id="sb-name">Administrador</div>
-          <div class="text-[0.6rem] text-diba-slate uppercase tracking-wider" id="sb-role">Admin</div>
-        </div>
-      </div>
-      <button
-        class="w-full h-10 flex items-center justify-center gap-2 rounded-xl bg-red-500/10 text-red-500 text-[0.72rem] font-extrabold uppercase transition-all hover:bg-red-500 hover:text-white"
-        id="logout-btn">
-        <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
-      </button>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark shadow-sm">
+    <div class="container text-center">
+      <a class="navbar-brand mx-auto" href="index.html">
+        <img src="/images/ESCUDO.png" alt="DIBA FBC Logo" width="30" height="30"
+          class="d-inline-block align-text-top me-2">
+        DIBA FBC - Planilla de Administración
+      </a>
+      <a href="index.html" class="btn btn-sm btn-outline-warning position-absolute end-0 me-3"><i
+          class="fas fa-th-large me-1"></i>Panel</a>
     </div>
-  </aside>
+  </nav>
 
-  <!-- ══ MAIN ══ -->
-  <div class="flex-1 flex flex-col min-h-screen md:ml-[270px]">
-
-    <!-- Top Bar -->
-    <header
-      class="p-6 md:p-8 border-b border-white/10 bg-diba-dark-node flex items-center justify-between gap-4 sticky top-0 z-50">
-      <button
-        class="md:hidden bg-diba-dark-card border border-white/10 text-diba-gold w-[38px] h-[38px] rounded-xl flex items-center justify-center cursor-pointer"
-        id="menu-btn">
-        <i class="fas fa-bars" id="menu-icon"></i>
-      </button>
+  <main class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap">
       <div>
-        <div class="text-2xl font-black italic uppercase tracking-tight">Planilla <span
-            class="text-diba-gold">Asistencia</span></div>
-        <div class="text-[0.7rem] text-diba-slate font-semibold mt-0.5">Gestión de entrenamientos — <span
-            id="sync-status" class="italic font-bold">Sincronizado</span></div>
+        <h2 class="mb-0 fw-bold">Planilla de Asistencia <span id="sync-status" class="saving-indicator"></span></h2>
       </div>
-      <div class="flex items-center gap-3">
+      <div class="d-flex gap-2 align-items-center mt-2 mt-md-0">
+        <label for="planillaDate" class="form-label mb-0 fw-bold">Fecha:</label>
         <input type="date" class="form-control" id="planillaDate">
-        <div
-          class="hidden sm:block text-[0.72rem] font-bold text-diba-slate bg-diba-dark-card px-3.5 py-2 rounded-lg border border-white/10"
-          id="clock">--:--</div>
       </div>
-    </header>
+    </div>
 
-    <!-- Content -->
-    <main class="p-8 flex-1">
-
-      <!-- Stats Bar -->
-      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-        <div class="stat-card">
-          <div class="w-8 h-8 rounded-lg flex items-center justify-center text-xs bg-green-500/10 text-green-400"><i
-              class="fas fa-check"></i></div>
-          <div>
-            <div class="text-[0.6rem] text-diba-slate font-bold uppercase tracking-wider">Presentes</div>
-            <div class="text-lg font-black" id="stat-presentes">0</div>
-          </div>
-        </div>
-        <div class="stat-card">
-          <div class="w-8 h-8 rounded-lg flex items-center justify-center text-xs bg-red-500/10 text-red-500"><i
-              class="fas fa-times"></i></div>
-          <div>
-            <div class="text-[0.6rem] text-diba-slate font-bold uppercase tracking-wider">Ausentes</div>
-            <div class="text-lg font-black" id="stat-ausentes">0</div>
-          </div>
-        </div>
-        <div class="stat-card">
-          <div class="w-8 h-8 rounded-lg flex items-center justify-center text-xs bg-yellow-500/10 text-yellow-400"><i
-              class="fas fa-clock"></i></div>
-          <div>
-            <div class="text-[0.6rem] text-diba-slate font-bold uppercase tracking-wider">Excusas</div>
-            <div class="text-lg font-black" id="stat-excusas">0</div>
-          </div>
-        </div>
-        <div class="stat-card border-diba-gold/30">
-          <div class="w-8 h-8 rounded-lg flex items-center justify-center text-xs bg-diba-gold/10 text-diba-gold"><i
-              class="fas fa-percent"></i></div>
-          <div>
-            <div class="text-[0.6rem] text-diba-slate font-bold uppercase tracking-wider">Asistencia</div>
-            <div class="text-lg font-black" id="stat-pct">0%</div>
-          </div>
+    <!-- Stats -->
+    <div class="stats-bar">
+      <div class="stat-chip green">
+        <div class="stat-icon"><i class="fas fa-check-circle"></i></div>
+        <div>
+          <div class="stat-value" id="stat-presentes">0</div>
+          <div class="stat-label">Presentes</div>
         </div>
       </div>
-
-      <!-- Progress Bar -->
-      <div class="h-1.5 bg-diba-dark-card rounded-full overflow-hidden flex mb-8">
-        <div id="prog-p" class="h-full transition-[width] duration-500 bg-green-400" style="width:0%"></div>
-        <div id="prog-a" class="h-full transition-[width] duration-500 bg-red-400" style="width:0%"></div>
-        <div id="prog-e" class="h-full transition-[width] duration-500 bg-yellow-400" style="width:0%"></div>
-      </div>
-
-      <!-- Table Panel -->
-      <div class="panel">
-        <div class="px-6 py-5 border-b border-white/10">
-          <div class="flex flex-col md:flex-row gap-4 items-center justify-between w-full">
-            <div
-              class="flex items-center gap-3 bg-diba-dark-card border border-white/10 rounded-xl px-4 py-2 flex-1 w-full max-w-md">
-              <i class="fas fa-search text-diba-slate"></i>
-              <input type="text" id="playerSearch"
-                class="bg-transparent border-none text-white text-xs font-semibold outline-none w-full"
-                placeholder="Buscar jugador por nombre...">
-            </div>
-            <div class="flex gap-2">
-              <button id="generatePDF" class="btn-outline"><i class="fas fa-file-pdf"></i> PDF</button>
-              <button id="generateExcel" class="btn-outline"><i class="fas fa-file-excel"></i> Excel</button>
-              <a href="listaJugadores.html" class="btn-primary"><i class="fas fa-plus"></i> Jugadores</a>
-            </div>
-          </div>
-        </div>
-        <div class="p-0">
-          <div class="overflow-x-auto">
-            <table class="w-full border-collapse border-none">
-              <thead>
-                <tr class="border-b border-white/10">
-                  <th class="px-6 py-4 text-left text-[0.6rem] font-black uppercase tracking-[0.15em] text-diba-slate">#
-                  </th>
-                  <th class="px-6 py-4 text-left text-[0.6rem] font-black uppercase tracking-[0.15em] text-diba-slate">
-                    Nombre del Jugador</th>
-                  <th
-                    class="px-6 py-4 text-left text-[0.6rem] font-black uppercase tracking-[0.15em] text-diba-slate w-[150px]">
-                    Pagos ($)</th>
-                  <th
-                    class="px-6 py-4 text-left text-[0.6rem] font-black uppercase tracking-[0.15em] text-diba-slate w-[180px]">
-                    Asistencia</th>
-                  <th class="px-6 py-4 text-left text-[0.6rem] font-black uppercase tracking-[0.15em] text-diba-slate">
-                    Observaciones</th>
-                  <th
-                    class="px-6 py-4 text-center text-[0.6rem] font-black uppercase tracking-[0.15em] text-diba-slate w-[100px]">
-                    DNI</th>
-                </tr>
-              </thead>
-              <tbody id="planillaBody">
-                <!-- Data will be loaded here -->
-              </tbody>
-            </table>
-          </div>
+      <div class="stat-chip red">
+        <div class="stat-icon"><i class="fas fa-times-circle"></i></div>
+        <div>
+          <div class="stat-value" id="stat-ausentes">0</div>
+          <div class="stat-label">Ausentes</div>
         </div>
       </div>
+      <div class="stat-chip yellow">
+        <div class="stat-icon"><i class="fas fa-clock"></i></div>
+        <div>
+          <div class="stat-value" id="stat-excusas">0</div>
+          <div class="stat-label">Excusas</div>
+        </div>
+      </div>
+      <div class="stat-chip blue">
+        <div class="stat-icon"><i class="fas fa-users"></i></div>
+        <div>
+          <div class="stat-value" id="stat-total">0</div>
+          <div class="stat-label">Total DB</div>
+        </div>
+      </div>
+      <div class="stat-chip purple">
+        <div class="stat-icon"><i class="fas fa-percent"></i></div>
+        <div>
+          <div class="stat-value" id="stat-pct">0%</div>
+          <div class="stat-label">Asistencia</div>
+        </div>
+      </div>
+    </div>
 
-  </div><!-- /content -->
-  </div><!-- /main -->
+    <!-- Barra de progreso -->
+    <div class="att-progress-bar">
+      <div class="att-seg" id="prog-p" style="background:#22c55e;width:0%"></div>
+      <div class="att-seg" id="prog-a" style="background:#ef4444;width:0%"></div>
+      <div class="att-seg" id="prog-e" style="background:#eab308;width:0%"></div>
+    </div>
 
-  <script src="/scripts/config.js"></script>
+    <!-- Controles -->
+    <div class="card shadow-sm mb-4">
+      <div class="card-body d-flex justify-content-between align-items-center flex-wrap gap-3">
+        <div class="d-flex gap-2">
+          <a href="../listaJugadores.html" class="btn btn-warning fw-bold"><i
+              class="fas fa-users-cog me-2"></i>Gestionar Jugadores</a>
+        </div>
+        <div class="d-flex gap-2 align-items-center">
+          <input type="text" id="playerSearch" class="search-input" placeholder="Buscar por nombre...">
+          <button id="generatePDF" class="btn btn-primary"><i class="fas fa-file-pdf me-1"></i>PDF</button>
+          <button id="generateExcel" class="btn btn-success"><i class="fas fa-file-excel me-1"></i>Excel</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tabla -->
+    <div class="table-responsive shadow-sm rounded border">
+      <table class="table table-striped table-hover mb-0" id="mainTable">
+        <thead>
+          <tr>
+            <th style="width: 5%;">#</th>
+            <th>Nombre del Jugador</th>
+            <th style="width: 15%;">Pagos ($)</th>
+            <th style="width: 15%;">Asistencia</th>
+            <th style="width: 25%;">Observaciones</th>
+            <th style="width: 10%;" class="text-center">Doc.</th>
+          </tr>
+        </thead>
+        <tbody id="planillaBody">
+          <tr>
+            <td colspan="6" class="text-center p-5 text-muted">Cargando datos desde la nube... <i
+                class="fas fa-spinner fa-spin ms-2"></i></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+
   <script type="module">
     import { supabase, requireAdmin } from '../scripts/supabaseClient.js';
-    import { setupAdminUI } from '../scripts/admin-ui.js';
-
-    let appState = {
-      players: [],
-      currentPlanillaId: null,
-      registros: {} // { dni: { id_db, pago, asistencia, observacion } }
-    };
-
     requireAdmin().then(session => {
-      if (session) {
-        document.getElementById('admin-body').style.display = 'flex';
-        setupAdminUI();
-        init();
-      }
+      if (session) document.getElementById('planilla-body').style.display = 'block';
     });
 
-    async function init() {
-      const dateInput = document.getElementById('planillaDate');
-      if (!dateInput.value) dateInput.valueAsDate = new Date();
-
-      dateInput.onchange = loadData;
-      document.getElementById('playerSearch').oninput = render;
-
-      await loadData();
-      setupExport();
-    }
-
-    async function loadData() {
-      const syncStatus = document.getElementById('sync-status');
+    document.addEventListener('DOMContentLoaded', () => {
       const tableBody = document.getElementById('planillaBody');
-      const fecha = document.getElementById('planillaDate').value;
-
-      tableBody.innerHTML = '<tr><td colspan="6" class="text-center py-12 text-diba-slate font-bold uppercase text-[0.7rem]">Sincronizando... <i class="fas fa-spinner fa-spin ml-2"></i></td></tr>';
-      syncStatus.innerHTML = '<i class="fas fa-cloud"></i> Sincronizando...';
-
-      try {
-        // 1. Jugadores
-        const { data: players } = await supabase.from('identificacion').select('numero, nombre, apellidos').order('apellidos');
-        appState.players = players.map(p => ({ id: p.numero, name: `${p.nombre} ${p.apellidos}`.trim() }));
-
-        // 2. Planilla
-        const { data: planillas } = await supabase.from('planillas').select('id').eq('fecha', fecha).limit(1);
-        let pid;
-        if (!planillas || planillas.length === 0) {
-          const { data: newP } = await supabase.from('planillas').insert([{ fecha, categoria: 'General' }]).select('id').single();
-          pid = newP.id;
-        } else {
-          pid = planillas[0].id;
-        }
-        appState.currentPlanillaId = pid;
-
-        // 3. Registros
-        const { data: regs } = await supabase.from('planilla_registros').select('*').eq('planilla_id', pid);
-        appState.registros = {};
-        if (regs) {
-          regs.forEach(r => {
-            appState.registros[r.jugador_dni] = { db_id: r.id, pago: r.pago, asistencia: r.asistencia, obs: r.observacion };
-          });
-        }
-
-        render();
-        syncStatus.innerHTML = '<i class="fas fa-check-circle" style="color:#4ade80"></i> Al día';
-      } catch (e) {
-        console.error(e);
-        syncStatus.innerHTML = '<i class="fas fa-exclamation-triangle" style="color:#fb7185"></i> Error de conexión';
-      }
-    }
-
-    function render() {
-      const q = document.getElementById('playerSearch').value.toLowerCase();
-      const body = document.getElementById('planillaBody');
-      const filtered = appState.players.filter(p => p.name.toLowerCase().includes(q));
-
-      return `
-                    <tr class="border-b border-white/10 hover:bg-white/[0.025] transition-colors" data-dni="${p.id}">
-                        <td class="px-6 py-4 text-[0.78rem] font-semibold">${i + 1}</td>
-                        <td class="px-6 py-4 text-[0.78rem] font-bold text-diba-gold italic uppercase tracking-tight">${p.name}</td>
-                        <td class="px-6 py-4"><input type="number" class="form-control in-pago w-full" value="${d.pago || ''}" placeholder="0"></td>
-                        <td class="px-6 py-4">
-                            <select class="form-select in-asist w-full">
-                                <option value="P" ${d.asistencia === 'P' ? 'selected' : ''}>Presente</option>
-                                <option value="A" ${d.asistencia === 'A' ? 'selected' : ''}>Ausente</option>
-                                <option value="E" ${d.asistencia === 'E' ? 'selected' : ''}>Excusa</option>
-                            </select>
-                        </td>
-                        <td class="px-6 py-4"><input type="text" class="form-control in-obs w-full" value="${d.obs || ''}" placeholder="..."></td>
-                        <td class="px-6 py-4 text-center text-[0.65rem] font-bold text-diba-slate uppercase tracking-wider">${p.id}</td>
-                    </tr>
-                `;
-    }).join('');
-
-    if (filtered.length === 0) {
-      body.innerHTML = '<tr><td colspan="6" class="text-center py-12 text-diba-slate font-bold uppercase text-[0.7rem]">No hay resultados</td></tr>';
-    }
-
-    setupRowEvents();
-    updateStats();
-    }
-
-    function setupRowEvents() {
-      document.querySelectorAll('#planillaBody tr').forEach(tr => {
-        const dni = tr.dataset.dni;
-
-        tr.querySelector('.in-pago').oninput = (e) => debounceSave(dni, { pago: e.target.value });
-        tr.querySelector('.in-obs').oninput = (e) => debounceSave(dni, { obs: e.target.value });
-        tr.querySelector('.in-asist').onchange = (e) => {
-          updateRegistryLocal(dni, { asistencia: e.target.value });
-          saveRegistry(dni);
-          updateStats();
-        };
-      });
-    }
-
-    function updateRegistryLocal(dni, data) {
-      if (!appState.registros[dni]) appState.registros[dni] = { pago: 0, asistencia: 'P', obs: '' };
-      Object.assign(appState.registros[dni], data);
-    }
-
-    let saveTimers = {};
-    function debounceSave(dni, data) {
-      updateRegistryLocal(dni, data);
-      clearTimeout(saveTimers[dni]);
-      saveTimers[dni] = setTimeout(() => saveRegistry(dni), 1000);
-    }
-
-    async function saveRegistry(dni) {
+      const dateInput = document.getElementById('planillaDate');
+      const playerSearch = document.getElementById('playerSearch');
       const syncStatus = document.getElementById('sync-status');
-      syncStatus.innerHTML = '<i class="fas fa-cloud-upload-alt"></i> Guardando...';
+      const toastElement = document.getElementById('appToast');
+      const bsToast = new bootstrap.Toast(toastElement);
 
-      const d = appState.registros[dni];
-      const payload = {
-        planilla_id: appState.currentPlanillaId,
-        jugador_dni: dni,
-        pago: parseFloat(d.pago) || 0,
-        asistencia: d.asistencia,
-        observacion: d.obs
+      let appState = {
+        players: [],
+        currentPlanillaId: null,
+        registros: {} // { dni: { id_db, pago, asistencia, observacion } }
       };
 
-      try {
-        if (d.db_id) {
-          await supabase.from('planilla_registros').update(payload).eq('id', d.db_id);
-        } else {
-          const { data } = await supabase.from('planilla_registros').insert([payload]).select('id').single();
-          if (data) d.db_id = data.id;
-        }
-        syncStatus.innerHTML = '<i class="fas fa-check-circle" style="color:#4ade80"></i> Cambios guardados';
-      } catch (e) {
-        syncStatus.innerHTML = '<i class="fas fa-times-circle" style="color:#fb7185"></i> Error al guardar';
-      }
-    }
+      const showToast = (message, isError = false) => {
+        toastElement.querySelector('.toast-body').textContent = message;
+        toastElement.querySelector('i').className = isError ? 'fas fa-exclamation-circle text-danger me-2' : 'fas fa-check-circle text-success me-2';
+        bsToast.show();
+      };
 
-    function updateStats() {
-      const total = appState.players.length;
-      let p = 0, a = 0, e = 0;
-      appState.players.forEach(pl => {
-        const d = appState.registros[pl.id] || { asistencia: 'P' };
-        if (d.asistencia === 'P') p++;
-        else if (d.asistencia === 'A') a++;
-        else if (d.asistencia === 'E') e++;
+      const loadData = async () => {
+        try {
+          tableBody.innerHTML = '<tr><td colspan="6" class="text-center p-5 text-muted">Sincronizando con base de datos... <i class="fas fa-spinner fa-spin ms-2"></i></td></tr>';
+
+          if (!dateInput.value) dateInput.valueAsDate = new Date();
+          const fechaSeleccionada = dateInput.value;
+
+          // 1. Cargar jugadores
+          const { data: players, error: pErr } = await supabase.from('identificacion').select('numero, nombre, apellidos').order('apellidos');
+          if (pErr) throw pErr;
+          appState.players = players.map(p => ({ id: p.numero, name: `${p.nombre} ${p.apellidos}`.trim() }));
+
+          // 2. Obtener o crear Planilla del día
+          const { data: planillas, error: plErr } = await supabase
+            .from('planillas')
+            .select('id')
+            .eq('fecha', fechaSeleccionada)
+            .limit(1);
+
+          if (plErr) throw plErr;
+
+          let planillaId;
+          if (planillas.length === 0) {
+            const { data: newPl, error: createErr } = await supabase
+              .from('planillas')
+              .insert([{ fecha: fechaSeleccionada, categoria: 'General' }])
+              .select('id')
+              .single();
+            if (createErr) throw createErr;
+            planillaId = newPl.id;
+          } else {
+            planillaId = planillas[0].id;
+          }
+          appState.currentPlanillaId = planillaId;
+
+          // 3. Cargar registros existentes
+          const { data: regs, error: rErr } = await supabase
+            .from('planilla_registros')
+            .select('*')
+            .eq('planilla_id', planillaId);
+
+          if (rErr) throw rErr;
+
+          appState.registros = {};
+          regs.forEach(r => {
+            appState.registros[r.jugador_dni] = {
+              db_id: r.id,
+              pago: r.pago,
+              asistencia: r.asistencia,
+              obs: r.observacion
+            };
+          });
+
+          render();
+        } catch (e) {
+          console.error(e);
+          showToast('Error de conexión: ' + (e.message || 'Supabase no responde'), true);
+        }
+      };
+
+      const render = () => {
+        const q = playerSearch.value.toLowerCase();
+        tableBody.innerHTML = '';
+        const filtered = appState.players.filter(p => p.name.toLowerCase().includes(q));
+
+        if (filtered.length === 0) {
+          tableBody.innerHTML = `<tr><td colspan="6" class="text-center p-4">Listado vacío o sin coincidencias.</td></tr>`;
+          return;
+        }
+
+        filtered.forEach((p, i) => {
+          const d = appState.registros[p.id] || { pago: 0, asistencia: 'P', obs: '' };
+          const tr = document.createElement('tr');
+          tr.dataset.dni = p.id;
+          tr.innerHTML = `
+            <td>${i + 1}</td>
+            <td class="fw-bold text-primary">${p.name}</td>
+            <td><input type="number" class="form-control form-control-sm in-pago" value="${d.pago || ''}" placeholder="0"></td>
+            <td>
+              <select class="form-select form-select-sm in-asist">
+                <option value="P" ${d.asistencia === 'P' ? 'selected' : ''}>Presente</option>
+                <option value="A" ${d.asistencia === 'A' ? 'selected' : ''}>Ausente</option>
+                <option value="E" ${d.asistencia === 'E' ? 'selected' : ''}>Excusa</option>
+              </select>
+            </td>
+            <td><input type="text" class="form-control form-control-sm in-obs" value="${d.obs || ''}" placeholder="..."></td>
+            <td class="text-center small text-muted">${p.id}</td>
+          `;
+          tableBody.appendChild(tr);
+        });
+        updateStats();
+      };
+
+      const updateStats = () => {
+        const total = appState.players.length;
+        let p = 0, a = 0, e = 0;
+        appState.players.forEach(pl => {
+          const d = appState.registros[pl.id] || { asistencia: 'P' };
+          if (d.asistencia === 'P') p++;
+          else if (d.asistencia === 'A') a++;
+          else if (d.asistencia === 'E') e++;
+        });
+
+        document.getElementById('stat-presentes').textContent = p;
+        document.getElementById('stat-ausentes').textContent = a;
+        document.getElementById('stat-excusas').textContent = e;
+        document.getElementById('stat-total').textContent = total;
+
+        const pct = total > 0 ? Math.round((p / total) * 100) : 0;
+        document.getElementById('stat-pct').textContent = pct + '%';
+        document.getElementById('prog-p').style.width = (total > 0 ? (p / total) * 100 : 0) + '%';
+        document.getElementById('prog-a').style.width = (total > 0 ? (a / total) * 100 : 0) + '%';
+        document.getElementById('prog-e').style.width = (total > 0 ? (e / total) * 100 : 0) + '%';
+      };
+
+      // Guardado automático en Supabase
+      const saveRegistro = async (dni) => {
+        syncStatus.innerHTML = '<i class="fas fa-cloud-upload-alt ms-2"></i> Guardando...';
+        const d = appState.registros[dni];
+        const payload = {
+          planilla_id: appState.currentPlanillaId,
+          jugador_dni: dni,
+          pago: parseFloat(d.pago) || 0,
+          asistencia: d.asistencia,
+          observacion: d.obs
+        };
+
+        try {
+          if (d.db_id) {
+            // Update
+            await supabase.from('planilla_registros').update(payload).eq('id', d.db_id);
+          } else {
+            // Insert
+            const { data, error } = await supabase.from('planilla_registros').insert([payload]).select('id').single();
+            if (!error) d.db_id = data.id;
+          }
+          syncStatus.innerHTML = '<i class="fas fa-check-circle text-success ms-2"></i> Sincronizado';
+        } catch (e) {
+          console.error(e);
+          syncStatus.innerHTML = '<i class="fas fa-times-circle text-danger ms-2"></i> Error al guardar';
+        }
+      };
+
+      // Handlers
+      tableBody.addEventListener('input', (e) => {
+        const tr = e.target.closest('tr');
+        if (!tr) return;
+        const dni = tr.dataset.dni;
+        if (!appState.registros[dni]) appState.registros[dni] = { pago: 0, asistencia: 'P', obs: '' };
+
+        if (e.target.classList.contains('in-pago')) appState.registros[dni].pago = e.target.value;
+        if (e.target.classList.contains('in-obs')) appState.registros[dni].obs = e.target.value;
+
+        // Debounce simple
+        clearTimeout(window.saveTimer);
+        window.saveTimer = setTimeout(() => saveRegistro(dni), 1000);
       });
 
-      document.getElementById('stat-presentes').textContent = p;
-      document.getElementById('stat-ausentes').textContent = a;
-      document.getElementById('stat-excusas').textContent = e;
-      const pct = total > 0 ? Math.round((p / total) * 100) : 0;
-      document.getElementById('stat-pct').textContent = pct + '%';
+      tableBody.addEventListener('change', (e) => {
+        const tr = e.target.closest('tr');
+        if (tr && e.target.classList.contains('in-asist')) {
+          const dni = tr.dataset.dni;
+          if (!appState.registros[dni]) appState.registros[dni] = { pago: 0, asistencia: 'P', obs: '' };
+          appState.registros[dni].asistencia = e.target.value;
+          saveRegistro(dni);
+          updateStats();
+        }
+      });
 
-      document.getElementById('prog-p').style.width = (total > 0 ? (p / total) * 100 : 0) + '%';
-      document.getElementById('prog-a').style.width = (total > 0 ? (a / total) * 100 : 0) + '%';
-      document.getElementById('prog-e').style.width = (total > 0 ? (e / total) * 100 : 0) + '%';
-    }
+      dateInput.onchange = loadData;
+      playerSearch.oninput = render;
 
-    function setupExport() {
+      // Export
       document.getElementById('generateExcel').onclick = () => {
         const rows = [['Nombre', 'DNI', 'Pago', 'Asistencia', 'Observación']];
         appState.players.forEach(p => {
@@ -422,26 +482,30 @@
         const ws = XLSX.utils.aoa_to_sheet(rows);
         const wb = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(wb, ws, 'DIBA_Planilla');
-        XLSX.writeFile(wb, `Planilla_${document.getElementById('planillaDate').value}.xlsx`);
+        XLSX.writeFile(wb, `Planilla_${dateInput.value}.xlsx`);
       };
 
       document.getElementById('generatePDF').onclick = () => {
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF();
-        const fecha = document.getElementById('planillaDate').value;
         doc.setFontSize(18);
-        doc.text(`DIBA FBC — Planilla Control`, 14, 20);
+        doc.text(`DIBA FBC - Planilla de Control`, 14, 20);
         doc.setFontSize(10);
-        doc.text(`Fecha: ${fecha}`, 14, 28);
+        doc.text(`Fecha: ${dateInput.value} | Categoria: General`, 14, 28);
         const body = appState.players.map(p => {
           const d = appState.registros[p.id] || { asistencia: 'P' };
-          return [p.name, p.id, `$${d.pago || 0}`, d.asistencia, d.obs];
+          const asistText = { P: 'Presente', A: 'Ausente', E: 'Excusa' }[d.asistencia];
+          return [p.name, p.id, `$${d.pago || 0}`, asistText, d.obs];
         });
-        doc.autoTable({ startY: 35, head: [['Nombre', 'DNI', 'Pago', 'Asist', 'Obs']], body });
-        doc.save(`Planilla_DIBA_${fecha}.pdf`);
+        doc.autoTable({ startY: 35, head: [['Nombre del Jugador', 'DNI', 'Pago', 'Asist', 'Obs']], body });
+        doc.save(`DIBA_Planilla_${dateInput.value}.pdf`);
       };
-    }
+
+      loadData();
+    });
   </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>
