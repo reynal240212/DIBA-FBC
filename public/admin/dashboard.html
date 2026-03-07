@@ -10,219 +10,312 @@
         href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,600;0,700;0,900;1,700;1,900&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
-    <link rel="stylesheet" href="/styles/admin-common.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'diba-dark': '#0a0e14',
+                        'diba-dark-node': '#111823',
+                        'diba-dark-card': '#1a2332',
+                        'diba-gold': '#ffcc00',
+                        'diba-gold-hover': '#e6b800',
+                        'diba-blue': '#002a40',
+                        'diba-slate': '#8b9ab0',
+                    },
+                    fontFamily: {
+                        'montserrat': ['Montserrat', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer base {
+            body { @apply bg-diba-dark text-slate-200 font-montserrat min-h-screen flex overflow-x-hidden; }
+            * { @apply box-border margin-0 padding-0; }
+        }
+        @layer components {
+            .nav-link { @apply flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-bold text-diba-slate transition-all hover:bg-white/5 hover:text-white relative; }
+            .nav-link.active { @apply bg-diba-gold/10 text-diba-gold; }
+            .nav-link.active::before { content: ''; @apply absolute left-0 top-1/4 bottom-1/4 w-[3px] bg-diba-gold rounded-r; }
+            
+            .kpi-card { @apply bg-diba-dark-node border border-white/10 rounded-[20px] p-6 relative overflow-hidden transition-transform hover:-translate-y-1; }
+            .panel { @apply bg-diba-dark-node border border-white/10 rounded-[18px] overflow-hidden mb-8; }
+            .btn-primary { @apply inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-diba-gold text-diba-blue text-[0.72rem] font-black uppercase transition-all hover:bg-diba-gold-hover hover:-translate-y-px; }
+        }
+    </style>
 </head>
 
 <body style="display: none;" id="admin-body">
 
     <!-- ══ SIDEBAR ══ -->
-    <aside class="sidebar" id="sidebar">
-        <div class="sidebar-logo">
-            <img src="/images/ESCUDO.png" alt="DIBA FBC">
+    <aside
+        class="fixed top-0 left-0 bottom-0 w-[270px] bg-diba-dark-node border-r border-white/10 flex flex-col z-[100] transition-transform duration-300 md:translate-x-0 -translate-x-full"
+        id="sidebar">
+        <div class="p-8 pb-6 border-b border-white/10 flex items-center gap-3">
+            <img src="/images/ESCUDO.png" alt="DIBA FBC" class="w-[38px] h-[38px] object-contain">
             <div>
-                <div class="sidebar-logo-text">DIBA FBC</div>
-                <div class="sidebar-logo-sub">Panel de Control</div>
+                <div class="text-[1.05rem] font-black italic uppercase tracking-wider text-diba-gold">DIBA FBC</div>
+                <div class="text-[0.55rem] text-diba-slate uppercase tracking-[0.15em] font-bold mt-px">Panel de Control
+                </div>
             </div>
         </div>
 
-        <nav class="sidebar-nav">
-            <a href="dashboard.html" class="nav-link active"><i class="fas fa-th-large"></i> Dashboard</a>
+        <nav class="flex-1 p-4 flex flex-col gap-1 overflow-y-auto">
+            <a href="dashboard.html" class="nav-link active"><i
+                    class="fas fa-th-large w-[18px] text-center text-sm"></i> Dashboard</a>
 
-            <div class="nav-section-label">Equipo</div>
-            <a href="planilla.html" class="nav-link"><i class="fas fa-clipboard-list"></i> Planilla</a>
-            <a href="listaJugadores.html" class="nav-link"><i class="fas fa-users"></i> Jugadores</a>
-            <a href="partidos.html" class="nav-link"><i class="fas fa-futbol"></i> Partidos</a>
-            <a href="../analisis.html" class="nav-link"><i class="fas fa-chart-line"></i> Análisis</a>
+            <div class="text-[0.55rem] font-extrabold tracking-[0.2em] uppercase text-diba-slate px-2 py-3 mt-2">Equipo
+            </div>
+            <a href="planilla.html" class="nav-link"><i class="fas fa-clipboard-list w-[18px] text-center text-sm"></i>
+                Planilla</a>
+            <a href="listaJugadores.html" class="nav-link"><i class="fas fa-users w-[18px] text-center text-sm"></i>
+                Jugadores</a>
+            <a href="partidos.html" class="nav-link"><i class="fas fa-futbol w-[18px] text-center text-sm"></i>
+                Partidos</a>
+            <a href="../analisis.html" class="nav-link"><i class="fas fa-chart-line w-[18px] text-center text-sm"></i>
+                Análisis</a>
 
-            <div class="nav-section-label">Administración</div>
-            <a href="GestorDocumental.html" class="nav-link"><i class="fas fa-folder-open"></i> Gestor Documental</a>
-            <a href="usuarios.html" class="nav-link"><i class="fas fa-user-cog"></i> Usuarios</a>
-            <a href="crear-usuario.html" class="nav-link"><i class="fas fa-user-plus"></i> Crear Usuario</a>
-            <a href="rifa_diba.html" class="nav-link"><i class="fas fa-ticket-alt"></i> Rifas</a>
+            <div class="text-[0.55rem] font-extrabold tracking-[0.2em] uppercase text-diba-slate px-2 py-3 mt-2">
+                Administración</div>
+            <a href="GestorDocumental.html" class="nav-link"><i
+                    class="fas fa-folder-open w-[18px] text-center text-sm"></i> Gestor Documental</a>
+            <a href="usuarios.html" class="nav-link"><i class="fas fa-user-cog w-[18px] text-center text-sm"></i>
+                Usuarios</a>
+            <a href="crear-usuario.html" class="nav-link"><i class="fas fa-user-plus w-[18px] text-center text-sm"></i>
+                Crear Usuario</a>
+            <a href="rifa_diba.html" class="nav-link"><i class="fas fa-ticket-alt w-[18px] text-center text-sm"></i>
+                Rifas</a>
 
-            <div class="nav-section-label">Sitio Web</div>
-            <a href="../index.html" class="nav-link"><i class="fas fa-globe"></i> Ver Sitio</a>
+            <div class="text-[0.55rem] font-extrabold tracking-[0.2em] uppercase text-diba-slate px-2 py-3 mt-2">Sitio
+                Web</div>
+            <a href="../index.html" class="nav-link"><i class="fas fa-globe w-[18px] text-center text-sm"></i> Ver
+                Sitio</a>
         </nav>
 
-        <div class="sidebar-footer">
-            <div class="user-chip">
-                <div class="user-avatar" id="sb-avatar">A</div>
+        <div class="p-4 border-t border-white/10">
+            <div class="flex items-center gap-3 p-3 rounded-xl bg-white/5 mb-2">
+                <div class="w-9 h-9 rounded-full bg-diba-gold text-diba-blue flex items-center justify-center font-black text-xs"
+                    id="sb-avatar">A</div>
                 <div>
-                    <div class="user-name" id="sb-name">Administrador</div>
-                    <div class="user-role" id="sb-role">Admin</div>
+                    <div class="text-[0.75rem] font-extrabold text-white" id="sb-name">Administrador</div>
+                    <div class="text-[0.6rem] text-diba-slate uppercase tracking-wider" id="sb-role">Admin</div>
                 </div>
             </div>
-            <button class="btn-logout" id="logout-btn">
+            <button
+                class="w-full h-10 flex items-center justify-center gap-2 rounded-xl bg-red-500/10 text-red-500 text-[0.72rem] font-extrabold uppercase transition-all hover:bg-red-500 hover:text-white"
+                id="logout-btn">
                 <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
             </button>
         </div>
     </aside>
 
     <!-- ══ MAIN ══ -->
-    <div class="main">
+    <!-- Top Bar -->
+    <header
+        class="p-6 md:p-8 border-b border-white/10 bg-diba-dark-node flex items-center justify-between gap-4 sticky top-0 z-50">
+        <button
+            class="md:hidden bg-diba-dark-card border border-white/10 text-diba-gold w-[38px] h-[38px] rounded-xl flex items-center justify-center cursor-pointer"
+            id="menu-btn">
+            <i class="fas fa-bars" id="menu-icon"></i>
+        </button>
+        <div>
+            <div class="text-2xl font-black italic uppercase tracking-tight">Dashboard <span
+                    class="text-diba-gold">Admin</span></div>
+            <div class="text-[0.7rem] text-diba-slate font-semibold mt-0.5">Vista general del sistema — DIBA FBC</div>
+        </div>
+        <div class="flex items-center gap-3">
+            <div class="text-[0.72rem] font-bold text-diba-slate bg-diba-dark-card px-3.5 py-2 rounded-lg border border-white/10"
+                id="clock">--:--</div>
+        </div>
+    </header>
 
-        <!-- Top Bar -->
-        <header class="topbar">
-            <button class="mobile-menu-btn" id="menu-btn">
-                <i class="fas fa-bars" id="menu-icon"></i>
-            </button>
-            <div>
-                <div class="page-title">Dashboard <span>Admin</span></div>
-                <div class="page-subtitle">Vista general del sistema — DIBA FBC</div>
-            </div>
-            <div class="topbar-right">
-                <div class="topbar-time" id="clock">--:--</div>
-            </div>
-        </header>
+    <!-- Content -->
+    <main class="p-8 flex-1">
 
-        <!-- Content -->
-        <div class="content">
-
-            <!-- KPI Cards -->
-            <div class="kpi-grid">
-                <div class="kpi-card gold">
-                    <div class="kpi-icon"><i class="fas fa-users"></i></div>
-                    <div class="kpi-value" id="kpi-players">0</div>
-                    <div class="kpi-label">Jugadores</div>
-                    <div class="kpi-delta up"><i class="fas fa-arrow-trend-up"></i> <span>En planilla activa</span>
-                    </div>
-                </div>
-
-                <div class="kpi-card blue">
-                    <div class="kpi-icon"><i class="fas fa-futbol"></i></div>
-                    <div class="kpi-value" id="kpi-matches">—</div>
-                    <div class="kpi-label">Partidos</div>
-                    <div class="kpi-delta info"><i class="fas fa-calendar"></i> <span>Temporada actual</span></div>
-                </div>
-
-                <div class="kpi-card green">
-                    <div class="kpi-icon"><i class="fas fa-percent"></i></div>
-                    <div class="kpi-value" id="kpi-attendance">—</div>
-                    <div class="kpi-label">% Asistencia</div>
-                    <div class="kpi-delta up"><i class="fas fa-arrow-trend-up"></i> <span>Última sesión</span></div>
-                </div>
-
-                <div class="kpi-card red">
-                    <div class="kpi-icon"><i class="fas fa-money-bill-wave"></i></div>
-                    <div class="kpi-value" id="kpi-pending">—</div>
-                    <div class="kpi-label">Pagos Pendientes</div>
-                    <div class="kpi-delta info"><i class="fas fa-info-circle"></i> <span>Sin pago registrado</span>
-                    </div>
+        <!-- KPI Cards -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <div class="kpi-card group">
+                <div
+                    class="w-11 h-11 rounded-xl bg-diba-gold/10 text-diba-gold flex items-center justify-center text-xl mb-4">
+                    <i class="fas fa-users"></i></div>
+                <div class="text-3xl font-black italic mb-1" id="kpi-players">0</div>
+                <div class="text-[0.75rem] font-bold text-diba-slate uppercase tracking-wider">Jugadores</div>
+                <div class="text-[0.62rem] font-extrabold mt-4 flex items-center gap-1.5 uppercase text-green-400">
+                    <i class="fas fa-arrow-trend-up"></i> <span>En planilla activa</span>
                 </div>
             </div>
 
-            <!-- Row 2 -->
-            <div class="row-2">
-
-                <!-- Accesos rápidos -->
-                <div class="panel">
-                    <div class="panel-header">
-                        <span class="panel-title"><i class="fas fa-bolt"></i>Accesos Rápidos</span>
-                        <span class="panel-badge">Admin</span>
-                    </div>
-                    <div class="panel-body">
-                        <div class="quick-grid">
-                            <a href="planilla.html" class="quick-btn">
-                                <div class="quick-btn-icon" style="background:rgba(255,204,0,.12);color:var(--gold)"><i
-                                        class="fas fa-clipboard-list"></i></div>
-                                <div>
-                                    <div class="quick-btn-label">Planilla</div>
-                                    <div class="quick-btn-sub">Control asistencia</div>
-                                </div>
-                            </a>
-                            <a href="GestorDocumental.html" class="quick-btn">
-                                <div class="quick-btn-icon" style="background:rgba(59,130,246,.12);color:#60a5fa"><i
-                                        class="fas fa-folder-open"></i></div>
-                                <div>
-                                    <div class="quick-btn-label">Gestor</div>
-                                    <div class="quick-btn-sub">Documentos</div>
-                                </div>
-                            </a>
-                            <a href="usuarios.html" class="quick-btn">
-                                <div class="quick-btn-icon" style="background:rgba(168,85,247,.12);color:#c084fc"><i
-                                        class="fas fa-user-cog"></i></div>
-                                <div>
-                                    <div class="quick-btn-label">Usuarios</div>
-                                    <div class="quick-btn-sub">Gestión accesos</div>
-                                </div>
-                            </a>
-                            <a href="crear-usuario.html" class="quick-btn">
-                                <div class="quick-btn-icon" style="background:rgba(34,197,94,.12);color:#4ade80"><i
-                                        class="fas fa-user-plus"></i></div>
-                                <div>
-                                    <div class="quick-btn-label">Nuevo Usuario</div>
-                                    <div class="quick-btn-sub">Crear acceso</div>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
+            <div class="kpi-card group">
+                <div
+                    class="w-11 h-11 rounded-xl bg-blue-500/10 text-blue-400 flex items-center justify-center text-xl mb-4">
+                    <i class="fas fa-futbol"></i></div>
+                <div class="text-3xl font-black italic mb-1" id="kpi-matches">—</div>
+                <div class="text-[0.75rem] font-bold text-diba-slate uppercase tracking-wider">Partidos</div>
+                <div class="text-[0.62rem] font-extrabold mt-4 flex items-center gap-1.5 uppercase text-diba-slate">
+                    <i class="fas fa-calendar"></i> <span>Temporada actual</span>
                 </div>
+            </div>
 
-                <!-- Actividad reciente -->
-                <div class="panel">
-                    <div class="panel-header">
-                        <span class="panel-title"><i class="fas fa-history"></i>Actividad Reciente</span>
-                    </div>
-                    <div class="panel-body">
-                        <div class="activity-list" id="activity-list">
-                            <div class="empty-state">
-                                <i class="fas fa-inbox"></i>
-                                <p>Sin actividad registrada</p>
+            <div class="kpi-card group">
+                <div
+                    class="w-11 h-11 rounded-xl bg-green-500/10 text-green-400 flex items-center justify-center text-xl mb-4">
+                    <i class="fas fa-percent"></i></div>
+                <div class="text-3xl font-black italic mb-1" id="kpi-attendance">—</div>
+                <div class="text-[0.75rem] font-bold text-diba-slate uppercase tracking-wider">% Asistencia</div>
+                <div class="text-[0.62rem] font-extrabold mt-4 flex items-center gap-1.5 uppercase text-green-400">
+                    <i class="fas fa-arrow-trend-up"></i> <span>Última sesión</span>
+                </div>
+            </div>
+
+            <div class="kpi-card group">
+                <div
+                    class="w-11 h-11 rounded-xl bg-red-500/10 text-red-500 flex items-center justify-center text-xl mb-4">
+                    <i class="fas fa-money-bill-wave"></i></div>
+                <div class="text-3xl font-black italic mb-1" id="kpi-pending">—</div>
+                <div class="text-[0.75rem] font-bold text-diba-slate uppercase tracking-wider">Pagos Pendientes</div>
+                <div class="text-[0.62rem] font-extrabold mt-4 flex items-center gap-1.5 uppercase text-diba-slate">
+                    <i class="fas fa-info-circle"></i> <span>Sin pago registrado</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Row 2 -->
+        <div class="grid grid-cols-1 lg:grid-cols-[1fr,350px] gap-6 mb-10">
+
+            <!-- Accesos rápidos -->
+            <div class="panel">
+                <div class="px-6 py-5 border-b border-white/10 flex items-center justify-between">
+                    <span class="text-[0.8rem] font-extrabold uppercase tracking-widest text-white">
+                        <i class="fas fa-bolt text-diba-gold mr-2"></i>Accesos Rápidos
+                    </span>
+                    <span
+                        class="text-[0.6rem] font-extrabold px-3 py-1 rounded-full bg-diba-gold/10 text-diba-gold uppercase tracking-widest">Admin</span>
+                </div>
+                <div class="p-6">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <a href="planilla.html"
+                            class="flex items-center gap-4 p-5 bg-diba-dark-card border border-white/10 rounded-2xl no-underline transition-all hover:border-diba-gold hover:bg-white/[0.02] hover:scale-[1.02]">
+                            <div
+                                class="w-10 h-10 rounded-xl flex items-center justify-center text-base bg-diba-gold/10 text-diba-gold">
+                                <i class="fas fa-clipboard-list"></i>
                             </div>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-
-            <!-- Row 3: Próximos Partidos -->
-            <div class="panel" id="matches-panel" style="margin-bottom: 2rem;">
-                <div class="panel-header">
-                    <span class="panel-title"><i class="fas fa-calendar-alt"></i>Próximos Partidos</span>
-                    <a href="partidos.html"
-                        style="font-size:.7rem;font-weight:800;color:var(--gold);text-decoration:none;text-transform:uppercase;letter-spacing:.1em">Gestionar
-                        →</a>
-                </div>
-                <div class="panel-body">
-                    <div id="matches-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                        <!-- Matches will be rendered here -->
-                        <div class="empty-state">
-                            <i class="fas fa-search"></i>
-                            <p>Buscando encuentros...</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Asistencia última sesión -->
-            <div class="panel" id="attendance-panel" style="display:none">
-                <div class="panel-header">
-                    <span class="panel-title"><i class="fas fa-chart-pie"></i>Asistencia Última Sesión</span>
-                    <a href="planilla.html"
-                        style="font-size:.7rem;font-weight:800;color:var(--gold);text-decoration:none;text-transform:uppercase;letter-spacing:.1em">Ver
-                        Planilla →</a>
-                </div>
-                <div class="panel-body">
-                    <div class="attendance-labels">
-                        <div class="att-chip">
-                            <div class="att-dot" style="background:#4ade80"></div> <span id="att-p">0 Presentes</span>
-                        </div>
-                        <div class="att-chip">
-                            <div class="att-dot" style="background:#fb7185"></div> <span id="att-a">0 Ausentes</span>
-                        </div>
-                        <div class="att-chip">
-                            <div class="att-dot" style="background:#facc15"></div> <span id="att-e">0 Excusas</span>
-                        </div>
-                    </div>
-                    <div class="bar-track">
-                        <div class="bar-seg" id="bar-p" style="background:#4ade80;width:0%"></div>
-                        <div class="bar-seg" id="bar-a" style="background:#fb7185;width:0%;margin-left:2px"></div>
-                        <div class="bar-seg" id="bar-e" style="background:#facc15;width:0%;margin-left:2px"></div>
+                            <div>
+                                <div class="text-[0.78rem] font-extrabold text-white">Planilla</div>
+                                <div class="text-[0.6rem] text-diba-slate font-semibold">Control asistencia</div>
+                            </div>
+                        </a>
+                        <a href="GestorDocumental.html"
+                            class="flex items-center gap-4 p-5 bg-diba-dark-card border border-white/10 rounded-2xl no-underline transition-all hover:border-diba-gold hover:bg-white/[0.02] hover:scale-[1.02]">
+                            <div
+                                class="w-10 h-10 rounded-xl flex items-center justify-center text-base bg-blue-500/10 text-blue-400">
+                                <i class="fas fa-folder-open"></i>
+                            </div>
+                            <div>
+                                <div class="text-[0.78rem] font-extrabold text-white">Gestor</div>
+                                <div class="text-[0.6rem] text-diba-slate font-semibold">Documentos</div>
+                            </div>
+                        </a>
+                        <a href="usuarios.html"
+                            class="flex items-center gap-4 p-5 bg-diba-dark-card border border-white/10 rounded-2xl no-underline transition-all hover:border-diba-gold hover:bg-white/[0.02] hover:scale-[1.02]">
+                            <div
+                                class="w-10 h-10 rounded-xl flex items-center justify-center text-base bg-purple-500/10 text-purple-400">
+                                <i class="fas fa-user-cog"></i>
+                            </div>
+                            <div>
+                                <div class="text-[0.78rem] font-extrabold text-white">Usuarios</div>
+                                <div class="text-[0.6rem] text-diba-slate font-semibold">Gestión accesos</div>
+                            </div>
+                        </a>
+                        <a href="crear-usuario.html"
+                            class="flex items-center gap-4 p-5 bg-diba-dark-card border border-white/10 rounded-2xl no-underline transition-all hover:border-diba-gold hover:bg-white/[0.02] hover:scale-[1.02]">
+                            <div
+                                class="w-10 h-10 rounded-xl flex items-center justify-center text-base bg-green-500/10 text-green-400">
+                                <i class="fas fa-user-plus"></i>
+                            </div>
+                            <div>
+                                <div class="text-[0.78rem] font-extrabold text-white">Nuevo Usuario</div>
+                                <div class="text-[0.6rem] text-diba-slate font-semibold">Crear acceso</div>
+                            </div>
+                        </a>
                     </div>
                 </div>
             </div>
 
-        </div><!-- /content -->
+            <!-- Actividad reciente -->
+            <div class="panel">
+                <div class="px-6 py-5 border-b border-white/10 flex items-center">
+                    <span class="text-[0.8rem] font-extrabold uppercase tracking-widest text-white">
+                        <i class="fas fa-history text-diba-gold mr-2"></i>Actividad Reciente
+                    </span>
+                </div>
+                <div class="p-6">
+                    <div class="flex flex-col gap-5" id="activity-list">
+                        <div class="text-center py-12 text-diba-slate">
+                            <i class="fas fa-inbox text-3xl mb-4 opacity-30"></i>
+                            <p class="text-[0.72rem] font-bold uppercase">Sin actividad registrada</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Row 3: Próximos Partidos -->
+        <div class="panel mb-8" id="matches-panel">
+            <div class="px-6 py-5 border-b border-white/10 flex items-center justify-between">
+                <span class="text-[0.8rem] font-extrabold uppercase tracking-widest text-white">
+                    <i class="fas fa-calendar-alt text-diba-gold mr-2"></i>Próximos Partidos
+                </span>
+                <a href="partidos.html"
+                    class="text-[0.7rem] font-extrabold text-diba-gold no-underline uppercase tracking-widest hover:underline">Gestionar
+                    →</a>
+            </div>
+            <div class="p-6">
+                <div id="matches-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <div class="text-center py-12 text-diba-slate">
+                        <i class="fas fa-search text-3xl mb-4 opacity-30"></i>
+                        <p class="text-[0.72rem] font-bold uppercase">Buscando encuentros...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Asistencia última sesión -->
+        <div class="panel" id="attendance-panel" style="display:none">
+            <div class="px-6 py-5 border-b border-white/10 flex items-center justify-between">
+                <span class="text-[0.8rem] font-extrabold uppercase tracking-widest text-white">
+                    <i class="fas fa-chart-pie text-diba-gold mr-2"></i>Asistencia Última Sesión
+                </span>
+                <a href="planilla.html"
+                    class="text-[0.7rem] font-extrabold text-diba-gold no-underline uppercase tracking-widest hover:underline">Ver
+                    Planilla →</a>
+            </div>
+            <div class="p-6">
+                <div class="flex gap-4 mb-6">
+                    <div class="flex items-center gap-2 text-[0.65rem] font-extrabold text-diba-slate uppercase">
+                        <div class="w-2 h-2 rounded-full bg-green-400"></div> <span id="att-p">0 Presentes</span>
+                    </div>
+                    <div class="flex items-center gap-2 text-[0.65rem] font-extrabold text-diba-slate uppercase">
+                        <div class="w-2 h-2 rounded-full bg-red-400"></div> <span id="att-a">0 Ausentes</span>
+                    </div>
+                    <div class="flex items-center gap-2 text-[0.65rem] font-extrabold text-diba-slate uppercase">
+                        <div class="w-2 h-2 rounded-full bg-yellow-400"></div> <span id="att-e">0 Excusas</span>
+                    </div>
+                </div>
+                <div class="h-[10px] bg-diba-dark-card rounded-[20px] overflow-hidden flex">
+                    <div id="bar-p" class="h-full transition-[width] duration-500 bg-green-400" style="width:0%"></div>
+                    <div id="bar-a" class="h-full transition-[width] duration-500 bg-red-400 ml-0.5" style="width:0%">
+                    </div>
+                    <div id="bar-e" class="h-full transition-[width] duration-500 bg-yellow-400 ml-0.5"
+                        style="width:0%"></div>
+                </div>
+            </div>
+        </div>
+
+    </main><!-- /content -->
     </div><!-- /main -->
 
     <script src="/scripts/config.js"></script>

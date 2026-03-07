@@ -10,211 +10,220 @@
     href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,600;0,700;0,900;1,700;1,900&display=swap"
     rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
-  <link rel="stylesheet" href="/styles/admin-common.css">
-
-  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.8.2/dist/jspdf.plugin.autotable.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-
-  <style>
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-      gap: 1rem;
-      margin-bottom: 2rem;
+</head>
+<script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.8.2/dist/jspdf.plugin.autotable.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          'diba-dark': '#0a0e14',
+          'diba-dark-node': '#111823',
+          'diba-dark-card': '#1a2332',
+          'diba-gold': '#ffcc00',
+          'diba-gold-hover': '#e6b800',
+          'diba-blue': '#002a40',
+          'diba-slate': '#8b9ab0',
+        },
+        fontFamily: {
+          'montserrat': ['Montserrat', 'sans-serif'],
+        }
+      }
     }
-
-    .stat-small-card {
-      background: var(--dark2);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 1rem;
-      display: flex;
-      align-items: center;
-      gap: .8rem;
-    }
-
-    .stat-small-icon {
-      width: 32px;
-      height: 32px;
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: .8rem;
-    }
-
-    .saving-indicator {
-      font-size: .65rem;
-      color: var(--slate);
-      font-style: italic;
-      font-weight: 600;
-    }
-
-    .att-bar-full {
-      height: 6px;
-      background: var(--dark3);
-      border-radius: 999px;
-      overflow: hidden;
-      display: flex;
-      margin-bottom: 2rem;
-    }
-
-    .att-bar-seg {
-      height: 100%;
-      transition: width .4s ease;
-    }
-
-    /* Overrides for table inputs */
-    .in-pago,
-    .in-obs {
-      width: 100%;
-      min-width: 80px;
-    }
-
-    .in-asist {
-      min-width: 120px;
-    }
-  </style>
+  }
+</script>
+<style type="text/tailwindcss">
+  @layer base {
+            body { @apply bg-diba-dark text-slate-200 font-montserrat min-h-screen flex overflow-x-hidden; }
+            * { @apply box-border margin-0 padding-0; }
+        }
+        @layer components {
+            .nav-link { @apply flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-bold text-diba-slate transition-all hover:bg-white/5 hover:text-white relative; }
+            .nav-link.active { @apply bg-diba-gold/10 text-diba-gold; }
+            .nav-link.active::before { content: ''; @apply absolute left-0 top-1/4 bottom-1/4 w-[3px] bg-diba-gold rounded-r; }
+            
+            .stat-card { @apply bg-diba-dark-node border border-white/10 rounded-2xl p-4 flex items-center gap-3 transition-all hover:bg-white/5; }
+            .panel { @apply bg-diba-dark-node border border-white/10 rounded-2xl overflow-hidden; }
+            .btn-primary { @apply inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-diba-gold text-diba-blue text-[0.72rem] font-black uppercase transition-all hover:bg-diba-gold-hover hover:-translate-y-px; }
+            .btn-outline { @apply inline-flex items-center gap-2 px-4 py-2 rounded-xl border border-white/10 text-white text-[0.7rem] font-black uppercase transition-all hover:bg-white/5; }
+            
+            .form-control { @apply bg-diba-dark-card border border-white/10 text-white rounded-xl px-4 py-2 text-xs font-semibold outline-none focus:border-diba-gold transition-colors; }
+            .form-select { @apply bg-diba-dark-card border border-white/10 text-white rounded-xl px-4 py-2 text-xs font-semibold outline-none focus:border-diba-gold transition-colors; }
+        }
+    </style>
 </head>
 
 <body style="display: none;" id="admin-body">
 
   <!-- ══ SIDEBAR ══ -->
-  <aside class="sidebar" id="sidebar">
-    <div class="sidebar-logo">
-      <img src="/images/ESCUDO.png" alt="DIBA FBC">
+  <aside
+    class="fixed top-0 left-0 bottom-0 w-[270px] bg-diba-dark-node border-r border-white/10 flex flex-col z-[100] transition-transform duration-300 md:translate-x-0 -translate-x-full"
+    id="sidebar">
+    <div class="p-8 pb-6 border-b border-white/10 flex items-center gap-3">
+      <img src="/images/ESCUDO.png" alt="DIBA FBC" class="w-[38px] h-[38px] object-contain">
       <div>
-        <div class="sidebar-logo-text">DIBA FBC</div>
-        <div class="sidebar-logo-sub">Panel de Control</div>
+        <div class="text-[1.05rem] font-black italic uppercase tracking-wider text-diba-gold">DIBA FBC</div>
+        <div class="text-[0.55rem] text-diba-slate uppercase tracking-[0.15em] font-bold mt-px">Panel de Control</div>
       </div>
     </div>
 
-    <nav class="sidebar-nav">
-      <a href="dashboard.html" class="nav-link"><i class="fas fa-th-large"></i> Dashboard</a>
+    <nav class="flex-1 p-4 flex flex-col gap-1 overflow-y-auto">
+      <a href="dashboard.html" class="nav-link"><i class="fas fa-th-large w-[18px] text-center text-sm"></i>
+        Dashboard</a>
 
-      <div class="nav-section-label">Equipo</div>
-      <a href="planilla.html" class="nav-link active"><i class="fas fa-clipboard-list"></i> Planilla</a>
-      <a href="listaJugadores.html" class="nav-link"><i class="fas fa-users"></i> Jugadores</a>
-      <a href="partidos.html" class="nav-link"><i class="fas fa-futbol"></i> Partidos</a>
-      <a href="../analisis.html" class="nav-link"><i class="fas fa-chart-line"></i> Análisis</a>
+      <div class="text-[0.55rem] font-extrabold tracking-[0.2em] uppercase text-diba-slate px-2 py-3 mt-2">Equipo</div>
+      <a href="planilla.html" class="nav-link active"><i class="fas fa-clipboard-list w-[18px] text-center text-sm"></i>
+        Planilla</a>
+      <a href="listaJugadores.html" class="nav-link"><i class="fas fa-users w-[18px] text-center text-sm"></i>
+        Jugadores</a>
+      <a href="partidos.html" class="nav-link"><i class="fas fa-futbol w-[18px] text-center text-sm"></i> Partidos</a>
+      <a href="../analisis.html" class="nav-link"><i class="fas fa-chart-line w-[18px] text-center text-sm"></i>
+        Análisis</a>
 
-      <div class="nav-section-label">Administración</div>
-      <a href="GestorDocumental.html" class="nav-link"><i class="fas fa-folder-open"></i> Gestor Documental</a>
-      <a href="usuarios.html" class="nav-link"><i class="fas fa-user-cog"></i> Usuarios</a>
-      <a href="crear-usuario.html" class="nav-link"><i class="fas fa-user-plus"></i> Crear Usuario</a>
-      <a href="rifa_diba.html" class="nav-link"><i class="fas fa-ticket-alt"></i> Rifas</a>
+      <div class="text-[0.55rem] font-extrabold tracking-[0.2em] uppercase text-diba-slate px-2 py-3 mt-2">
+        Administración</div>
+      <a href="GestorDocumental.html" class="nav-link"><i class="fas fa-folder-open w-[18px] text-center text-sm"></i>
+        Gestor Documental</a>
+      <a href="usuarios.html" class="nav-link"><i class="fas fa-user-cog w-[18px] text-center text-sm"></i> Usuarios</a>
+      <a href="crear-usuario.html" class="nav-link"><i class="fas fa-user-plus w-[18px] text-center text-sm"></i> Crear
+        Usuario</a>
+      <a href="rifa_diba.html" class="nav-link"><i class="fas fa-ticket-alt w-[18px] text-center text-sm"></i> Rifas</a>
 
-      <div class="nav-section-label">Sitio Web</div>
-      <a href="../index.html" class="nav-link"><i class="fas fa-globe"></i> Ver Sitio</a>
+      <div class="text-[0.55rem] font-extrabold tracking-[0.2em] uppercase text-diba-slate px-2 py-3 mt-2">Sitio Web
+      </div>
+      <a href="../index.html" class="nav-link"><i class="fas fa-globe w-[18px] text-center text-sm"></i> Ver Sitio</a>
     </nav>
 
-    <div class="sidebar-footer">
-      <div class="user-chip">
-        <div class="user-avatar" id="sb-avatar">A</div>
+    <div class="p-4 border-t border-white/10">
+      <div class="flex items-center gap-3 p-3 rounded-xl bg-white/5 mb-2">
+        <div
+          class="w-9 h-9 rounded-full bg-diba-gold text-diba-blue flex items-center justify-center font-black text-xs"
+          id="sb-avatar">A</div>
         <div>
-          <div class="user-name" id="sb-name">Administrador</div>
-          <div class="user-role" id="sb-role">Admin</div>
+          <div class="text-[0.75rem] font-extrabold text-white" id="sb-name">Administrador</div>
+          <div class="text-[0.6rem] text-diba-slate uppercase tracking-wider" id="sb-role">Admin</div>
         </div>
       </div>
-      <button class="btn-logout" id="logout-btn">
+      <button
+        class="w-full h-10 flex items-center justify-center gap-2 rounded-xl bg-red-500/10 text-red-500 text-[0.72rem] font-extrabold uppercase transition-all hover:bg-red-500 hover:text-white"
+        id="logout-btn">
         <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
       </button>
     </div>
   </aside>
 
   <!-- ══ MAIN ══ -->
-  <div class="main">
+  <div class="flex-1 flex flex-col min-h-screen md:ml-[270px]">
 
     <!-- Top Bar -->
-    <header class="topbar">
-      <button class="mobile-menu-btn" id="menu-btn">
+    <header
+      class="p-6 md:p-8 border-b border-white/10 bg-diba-dark-node flex items-center justify-between gap-4 sticky top-0 z-50">
+      <button
+        class="md:hidden bg-diba-dark-card border border-white/10 text-diba-gold w-[38px] h-[38px] rounded-xl flex items-center justify-center cursor-pointer"
+        id="menu-btn">
         <i class="fas fa-bars" id="menu-icon"></i>
       </button>
       <div>
-        <div class="page-title">Planilla <span>Asistencia</span></div>
-        <div class="page-subtitle">Gestión de entrenamientos y cobros — <span id="sync-status"
-            class="saving-indicator">Sincronizado</span></div>
+        <div class="text-2xl font-black italic uppercase tracking-tight">Planilla <span
+            class="text-diba-gold">Asistencia</span></div>
+        <div class="text-[0.7rem] text-diba-slate font-semibold mt-0.5">Gestión de entrenamientos — <span
+            id="sync-status" class="italic font-bold">Sincronizado</span></div>
       </div>
-      <div class="topbar-right">
-        <input type="date" class="form-control" id="planillaDate" style="width: auto;">
-        <div class="topbar-time" id="clock">--:--</div>
+      <div class="flex items-center gap-3">
+        <input type="date" class="form-control" id="planillaDate">
+        <div
+          class="hidden sm:block text-[0.72rem] font-bold text-diba-slate bg-diba-dark-card px-3.5 py-2 rounded-lg border border-white/10"
+          id="clock">--:--</div>
       </div>
     </header>
 
     <!-- Content -->
-    <div class="content">
+    <main class="p-8 flex-1">
 
       <!-- Stats Bar -->
-      <div class="stats-grid animate-fade-up">
-        <div class="stat-small-card">
-          <div class="stat-small-icon" style="background:rgba(34,197,94,.12);color:#4ade80"><i class="fas fa-check"></i>
-          </div>
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+        <div class="stat-card">
+          <div class="w-8 h-8 rounded-lg flex items-center justify-center text-xs bg-green-500/10 text-green-400"><i
+              class="fas fa-check"></i></div>
           <div>
-            <div class="page-subtitle" style="margin:0">Presentes</div>
-            <div style="font-size:1.1rem;font-weight:900" id="stat-presentes">0</div>
+            <div class="text-[0.6rem] text-diba-slate font-bold uppercase tracking-wider">Presentes</div>
+            <div class="text-lg font-black" id="stat-presentes">0</div>
           </div>
         </div>
-        <div class="stat-small-card">
-          <div class="stat-small-icon" style="background:rgba(244,63,94,.12);color:#fb7185"><i class="fas fa-times"></i>
-          </div>
+        <div class="stat-card">
+          <div class="w-8 h-8 rounded-lg flex items-center justify-center text-xs bg-red-500/10 text-red-500"><i
+              class="fas fa-times"></i></div>
           <div>
-            <div class="page-subtitle" style="margin:0">Ausentes</div>
-            <div style="font-size:1.1rem;font-weight:900" id="stat-ausentes">0</div>
+            <div class="text-[0.6rem] text-diba-slate font-bold uppercase tracking-wider">Ausentes</div>
+            <div class="text-lg font-black" id="stat-ausentes">0</div>
           </div>
         </div>
-        <div class="stat-small-card">
-          <div class="stat-small-icon" style="background:rgba(234,179,8,.12);color:#facc15"><i class="fas fa-clock"></i>
-          </div>
+        <div class="stat-card">
+          <div class="w-8 h-8 rounded-lg flex items-center justify-center text-xs bg-yellow-500/10 text-yellow-400"><i
+              class="fas fa-clock"></i></div>
           <div>
-            <div class="page-subtitle" style="margin:0">Excusas</div>
-            <div style="font-size:1.1rem;font-weight:900" id="stat-excusas">0</div>
+            <div class="text-[0.6rem] text-diba-slate font-bold uppercase tracking-wider">Excusas</div>
+            <div class="text-lg font-black" id="stat-excusas">0</div>
           </div>
         </div>
-        <div class="stat-small-card" style="border-color:var(--gold)">
-          <div class="stat-small-icon" style="background:rgba(255,204,0,.12);color:var(--gold)"><i
+        <div class="stat-card border-diba-gold/30">
+          <div class="w-8 h-8 rounded-lg flex items-center justify-center text-xs bg-diba-gold/10 text-diba-gold"><i
               class="fas fa-percent"></i></div>
           <div>
-            <div class="page-subtitle" style="margin:0">Asistencia</div>
-            <div style="font-size:1.1rem;font-weight:900" id="stat-pct">0%</div>
+            <div class="text-[0.6rem] text-diba-slate font-bold uppercase tracking-wider">Asistencia</div>
+            <div class="text-lg font-black" id="stat-pct">0%</div>
           </div>
         </div>
       </div>
 
       <!-- Progress Bar -->
-      <div class="att-bar-full">
-        <div class="att-bar-seg" id="prog-p" style="background:#4ade80;width:0%"></div>
-        <div class="att-bar-seg" id="prog-a" style="background:#fb7185;width:0%"></div>
-        <div class="att-bar-seg" id="prog-e" style="background:#facc15;width:0%"></div>
+      <div class="h-1.5 bg-diba-dark-card rounded-full overflow-hidden flex mb-8">
+        <div id="prog-p" class="h-full transition-[width] duration-500 bg-green-400" style="width:0%"></div>
+        <div id="prog-a" class="h-full transition-[width] duration-500 bg-red-400" style="width:0%"></div>
+        <div id="prog-e" class="h-full transition-[width] duration-500 bg-yellow-400" style="width:0%"></div>
       </div>
 
-      <!-- Controls Panel -->
-      <div class="panel animate-fade-up" style="animation-delay:.1s">
-        <div class="panel-header">
-          <div class="topbar-right" style="gap:1rem;width:100%;justify-content:space-between">
-            <div style="display:flex;gap:.8rem;align-items:center;flex:1">
-              <i class="fas fa-search" style="color:var(--slate)"></i>
-              <input type="text" id="playerSearch" class="form-control" placeholder="Buscar jugador por nombre..."
-                style="flex:1;max-width:400px">
+      <!-- Table Panel -->
+      <div class="panel">
+        <div class="px-6 py-5 border-b border-white/10">
+          <div class="flex flex-col md:flex-row gap-4 items-center justify-between w-full">
+            <div
+              class="flex items-center gap-3 bg-diba-dark-card border border-white/10 rounded-xl px-4 py-2 flex-1 w-full max-w-md">
+              <i class="fas fa-search text-diba-slate"></i>
+              <input type="text" id="playerSearch"
+                class="bg-transparent border-none text-white text-xs font-semibold outline-none w-full"
+                placeholder="Buscar jugador por nombre...">
             </div>
-            <div style="display:flex;gap:.8rem">
-              <button id="generatePDF" class="btn btn-outline"><i class="fas fa-file-pdf"></i> PDF</button>
-              <button id="generateExcel" class="btn btn-outline"><i class="fas fa-file-excel"></i> Excel</button>
-              <a href="listaJugadores.html" class="btn btn-primary"><i class="fas fa-plus"></i> Jugadores</a>
+            <div class="flex gap-2">
+              <button id="generatePDF" class="btn-outline"><i class="fas fa-file-pdf"></i> PDF</button>
+              <button id="generateExcel" class="btn-outline"><i class="fas fa-file-excel"></i> Excel</button>
+              <a href="listaJugadores.html" class="btn-primary"><i class="fas fa-plus"></i> Jugadores</a>
             </div>
           </div>
         </div>
-        <div class="panel-body">
-          <div class="table-responsive">
-            <table id="mainTable">
+        <div class="p-0">
+          <div class="overflow-x-auto">
+            <table class="w-full border-collapse border-none">
               <thead>
-                <tr>
-                  <th style="width:50px">#</th>
-                  <th>Nombre del Jugador</th>
-                  <th style="width:150px">Pagos ($)</th>
-                  <th style="width:180px">Asistencia</th>
-                  <th>Observaciones</th>
-                  <th style="width:100px;text-align:center">DNI</th>
+                <tr class="border-b border-white/10">
+                  <th class="px-6 py-4 text-left text-[0.6rem] font-black uppercase tracking-[0.15em] text-diba-slate">#
+                  </th>
+                  <th class="px-6 py-4 text-left text-[0.6rem] font-black uppercase tracking-[0.15em] text-diba-slate">
+                    Nombre del Jugador</th>
+                  <th
+                    class="px-6 py-4 text-left text-[0.6rem] font-black uppercase tracking-[0.15em] text-diba-slate w-[150px]">
+                    Pagos ($)</th>
+                  <th
+                    class="px-6 py-4 text-left text-[0.6rem] font-black uppercase tracking-[0.15em] text-diba-slate w-[180px]">
+                    Asistencia</th>
+                  <th class="px-6 py-4 text-left text-[0.6rem] font-black uppercase tracking-[0.15em] text-diba-slate">
+                    Observaciones</th>
+                  <th
+                    class="px-6 py-4 text-center text-[0.6rem] font-black uppercase tracking-[0.15em] text-diba-slate w-[100px]">
+                    DNI</th>
                 </tr>
               </thead>
               <tbody id="planillaBody">
@@ -225,7 +234,7 @@
         </div>
       </div>
 
-    </div><!-- /content -->
+  </div><!-- /content -->
   </div><!-- /main -->
 
   <script src="/scripts/config.js"></script>
@@ -263,7 +272,7 @@
       const tableBody = document.getElementById('planillaBody');
       const fecha = document.getElementById('planillaDate').value;
 
-      tableBody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:3rem;color:var(--slate)">Sincronizando... <i class="fas fa-spinner fa-spin"></i></td></tr>';
+      tableBody.innerHTML = '<tr><td colspan="6" class="text-center py-12 text-diba-slate font-bold uppercase text-[0.7rem]">Sincronizando... <i class="fas fa-spinner fa-spin ml-2"></i></td></tr>';
       syncStatus.innerHTML = '<i class="fas fa-cloud"></i> Sincronizando...';
 
       try {
@@ -304,32 +313,30 @@
       const body = document.getElementById('planillaBody');
       const filtered = appState.players.filter(p => p.name.toLowerCase().includes(q));
 
-      body.innerHTML = filtered.map((p, i) => {
-        const d = appState.registros[p.id] || { pago: 0, asistencia: 'P', obs: '' };
-        return `
-                    <tr data-dni="${p.id}">
-                        <td>${i + 1}</td>
-                        <td style="color:var(--gold);font-weight:700">${p.name}</td>
-                        <td><input type="number" class="form-control in-pago" value="${d.pago || ''}" placeholder="0"></td>
-                        <td>
-                            <select class="form-select in-asist">
+      return `
+                    <tr class="border-b border-white/10 hover:bg-white/[0.025] transition-colors" data-dni="${p.id}">
+                        <td class="px-6 py-4 text-[0.78rem] font-semibold">${i + 1}</td>
+                        <td class="px-6 py-4 text-[0.78rem] font-bold text-diba-gold italic uppercase tracking-tight">${p.name}</td>
+                        <td class="px-6 py-4"><input type="number" class="form-control in-pago w-full" value="${d.pago || ''}" placeholder="0"></td>
+                        <td class="px-6 py-4">
+                            <select class="form-select in-asist w-full">
                                 <option value="P" ${d.asistencia === 'P' ? 'selected' : ''}>Presente</option>
                                 <option value="A" ${d.asistencia === 'A' ? 'selected' : ''}>Ausente</option>
                                 <option value="E" ${d.asistencia === 'E' ? 'selected' : ''}>Excusa</option>
                             </select>
                         </td>
-                        <td><input type="text" class="form-control in-obs" value="${d.obs || ''}" placeholder="..."></td>
-                        <td style="text-align:center;color:var(--slate);font-size:.7rem">${p.id}</td>
+                        <td class="px-6 py-4"><input type="text" class="form-control in-obs w-full" value="${d.obs || ''}" placeholder="..."></td>
+                        <td class="px-6 py-4 text-center text-[0.65rem] font-bold text-diba-slate uppercase tracking-wider">${p.id}</td>
                     </tr>
                 `;
-      }).join('');
+    }).join('');
 
-      if (filtered.length === 0) {
-        body.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:2rem;color:var(--slate)">No hay resultados</td></tr>';
-      }
+    if (filtered.length === 0) {
+      body.innerHTML = '<tr><td colspan="6" class="text-center py-12 text-diba-slate font-bold uppercase text-[0.7rem]">No hay resultados</td></tr>';
+    }
 
-      setupRowEvents();
-      updateStats();
+    setupRowEvents();
+    updateStats();
     }
 
     function setupRowEvents() {
