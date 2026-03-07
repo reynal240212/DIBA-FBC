@@ -874,6 +874,26 @@
 
             </div>
 
+            <!-- Row 3: Próximos Partidos -->
+            <div class="panel" id="matches-panel" style="margin-bottom: 2rem;">
+                <div class="panel-header">
+                    <span class="panel-title"><i class="fas fa-calendar-alt"
+                            style="color:var(--gold);margin-right:.5rem"></i>Próximos Partidos</span>
+                    <a href="partidos.html"
+                        style="font-size:.7rem;font-weight:800;color:var(--gold);text-decoration:none;text-transform:uppercase;letter-spacing:.1em">Gestionar
+                        →</a>
+                </div>
+                <div class="panel-body">
+                    <div id="matches-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <!-- Matches will be rendered here -->
+                        <div class="empty-state">
+                            <i class="fas fa-search"></i>
+                            <p>Buscando encuentros...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- Asistencia última sesión -->
             <div class="panel" id="attendance-panel" style="display:none">
                 <div class="panel-header">
