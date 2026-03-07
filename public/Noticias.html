@@ -3,18 +3,17 @@
 
 <head>
   <meta charset="UTF-8" />
-  <title>DIBA FBC | Noticias y Actualidad del Club</title>
+  <title>DIBA FBC | Noticias y Actualidad</title>
   <link rel="icon" href="images/ESCUDO.ico" sizes="32x32">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- Descripción SEO -->
+  <!-- SEO y Meta Tags -->
   <meta name="description"
     content="Entérate de las últimas noticias de DIBA FBC: partidos, resultados, goleadores y logros de nuestras categorías juveniles." />
   <meta name="keywords"
     content="DIBA FBC, noticias fútbol, Barranquilla, torneo KIDSSOCCER, goleadores, categorías juveniles, fútbol amateur" />
-  <meta name="author" content="DIBA FBC" />
 
-  <!-- Open Graph (Facebook, WhatsApp) -->
+  <!-- Open Graph -->
   <meta property="og:title" content="DIBA FBC | Noticias y Actualidad" />
   <meta property="og:description"
     content="Partidos, resultados y novedades de nuestras categorías juveniles. ¡Sigue la pasión de DIBA FBC!" />
@@ -22,325 +21,288 @@
   <meta property="og:url" content="https://diba-fbc.vercel.app/noticias.html" />
   <meta property="og:type" content="article" />
 
-  <!-- Twitter Cards -->
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="DIBA FBC | Noticias del Club" />
-  <meta name="twitter:description"
-    content="Últimas noticias de DIBA FBC: partidos, logros y nuestros jugadores destacados." />
-  <meta name="twitter:image" content="https://diba-fbc.vercel.app/images/jugadores/dylan_sanchez.jpg" />
-
-  <!-- Fonts y CSS -->
+  <!-- Fonts y Librerías -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" />
-  <link rel="stylesheet" href="styles/styles.css" />
-  <link rel="stylesheet" href="styles/background-animation.css" />
-  <link rel="manifest" href="manifest.json" />
-</head>
 
-<style>
-  .card-image-section {
-    border: none;
-    overflow: hidden;
-  }
-
-  .card-body-content {
-    padding: 2rem;
-  }
-
-  /* Estilos para las tarjetas de imagen */
-  .image-card {
-    position: relative;
-    border-radius: 0.75rem;
-    /* Bordes redondeados */
-    overflow: hidden;
-    height: 350px;
-    /* Altura fija para las tarjetas de imagen */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    /* Sombra sutil */
-    transition: transform 0.3s ease-in-out;
-    /* Transición para el hover */
-  }
-
-  .image-card:hover {
-    transform: translateY(-5px);
-    /* Efecto de elevación al pasar el ratón */
-  }
-
-  .image-card img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    /* Cubrir el área sin distorsionar */
-    filter: brightness(0.8);
-    /* Oscurecer un poco la imagen para que el texto resalte */
-  }
-
-  .image-card-overlay {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    padding: 1.5rem;
-    color: white;
-    /* Degradado de abajo hacia arriba */
-    background: linear-gradient(to top, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0) 100%);
-  }
-
-  .image-card-title {
-    font-size: 1.5rem;
-    font-weight: bold;
-    margin-bottom: 0.5rem;
-  }
-
-  .image-card-subtitle {
-    font-size: 0.9rem;
-    opacity: 0.8;
-  }
-
-  /* Animación de entrada suave (fade-in) para el texto y las imágenes */
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  .animate-fade-in {
-    animation: fadeIn 1s ease-out forwards;
-  }
-
-  .text-center-desktop {
-    text-align: center;
-  }
-
-  @media (min-width: 992px) {
-
-    /* breakpoint de desktop */
-    .text-center-desktop {
-      text-align: left;
-    }
-  }
-</style>
-
-<body>
-  <!-- Service Worker -->
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
   <script>
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/service-worker.js')
-        .then(reg => console.log("SW registrado:", reg))
-        .catch(err => console.error("Error registrando SW:", err));
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Montserrat', 'system-ui', 'sans-serif'],
+          }
+        }
+      }
     }
   </script>
+</head>
+
+<body class="bg-slate-50 text-slate-900 overflow-x-hidden selection:bg-amber-500 selection:text-slate-900">
+
+  <!-- Navbar Carga Dinámica -->
   <div id="navbar-container"></div>
-  <div id="hero-container"></div>
-  <div id="patrocinadores-container"></div>
 
-
-  </div>
-  </div>
-  </section>
-  <!-- <section>
-    <div class="container my-5">
-      <h1 class="text-center fw-bold mb-4">
-        PARTIDO DE ELIMINACIÓN DIRECTA – TORNEO KIDSSOCCER LA PRADERA Categoria 2014/15
-      </h1>
-
-      <p class="text-center text-muted mb-4 fs-6">
-        📅 Fecha: Sábado, 27 de septiembre de 2025
-      </p>
-
-      <div class="text-center my-4">
-        <img src="images/2014_2015.jpg" alt="Categoría 2014-2015" class="img-fluid rounded-3 shadow-lg">
-      </div>
-
-      <p class="text-left mb-4 fs-5">
-        Nuestros talentosos jugadores de la <strong>categoría 2014/15</strong> afrontan hoy un
-        trascendental encuentro de <strong>eliminación directa</strong> en el prestigioso torneo
-        <em>KIDSSOCCER La Pradera</em>. Esta cita deportiva representa una oportunidad única para
-        que nuestros jóvenes futbolistas demuestren todo su esfuerzo, disciplina y pasión por el
-        juego, reflejando el trabajo en equipo que ha sido la base de su crecimiento durante la
-        temporada.
-      </p>
-
-      <p class="text-left mb-4 fs-5">
-        Extendemos una cordial invitación a toda la comunidad, familiares y amigos para que
-        acompañen a nuestros jugadores en este emocionante desafío. Su apoyo desde las gradas
-        será el motor que impulse a nuestros chicos a dejarlo todo en la cancha.
-        <strong>¡Vamos DIBA FBC, juntos hacia la victoria!</strong>
-      </p>
-
-      <div class="text-center my-4">
-        <img src="images/jugadores/yesid.jpg" alt="Goleador Yesid" class="img-fluid rounded-3 shadow-lg">
-      </div>
-
-      <p class="text-left mb-4 fs-5">
-        En esta jornada decisiva, todas las miradas estarán puestas en nuestro goleador
-        <strong>Yesid</strong>, quien se ha consolidado como una de las piezas clave del equipo
-        gracias a su garra, habilidad y compromiso dentro del campo. Con una trayectoria
-        sobresaliente a lo largo de la temporada, su liderazgo y capacidad de definición serán
-        determinantes en las aspiraciones del club.
-        <strong>Confiamos en que Yesid y todo el plantel dejarán en alto el nombre de DIBA FBC.</strong>
-      </p>
+  <!-- Header Hero de Noticias -->
+  <section class="relative pt-32 pb-20 lg:pt-40 lg:pb-28 bg-slate-900 overflow-hidden">
+    <!-- Fondos decorativos -->
+    <div class="absolute inset-0 bg-[url('images/estadio.jpg')] bg-cover bg-center opacity-20 mix-blend-overlay"></div>
+    <div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/80 to-transparent"></div>
+    <div
+      class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-blue-600/20 via-transparent to-transparent">
     </div>
-  </section>
-  <section>
-    <div class="container my-5">
-      <h1 class="text-center fw-bold mb-4 text-uppercase">
-        SEMIFINAL – TORNEO SUROCCIDENTE BARRANQUILLA Categoria 2012/13
-      </h1>
-
-      <p class="text-center fs-4 mb-3 d-flex align-items-center justify-content-center gap-3">
-        <strong>
-          <img src="images/ESCUDO.png" alt="Escudo DIBA FBC" class="img-fluid" style="max-height: 80px;">
-        </strong>
-        <span class="fw-bold fs-3">🆚</span>
-        <strong>
-          <img
-            src="https://scontent.ftkd1-1.fna.fbcdn.net/v/t39.30808-6/458187833_1047143467104788_4520351497237448140_n.jpg?_nc_cat=102&ccb=1-7&_nc_sid=6ee11a&_nc_eui2=AeG4dH833sI2AMsBjCufN0GN2-JrDI0V21Lb4msMjRXbUlSYVhYWcfCcoDJry6veTGVx4zTPezbqQVYGo-3D8QAx&_nc_ohc=KrBRDgeeAHAQ7kNvwHETokV&_nc_oc=Adl7N8LnuGKO47VwFS2taEYHb2yhGbIlxrZZYRtwknnLjZD338kfhuk49c278nWYqDI&_nc_zt=23&_nc_ht=scontent.ftkd1-1.fna&_nc_gid=F2DVDT8_T6F-wEfy7R1riA&oh=00_AfYnPe4Bu94XgWclqFsC6b2ka0Y4qPk6ns0FEgnl08DsvQ&oe=68DDDF32"
-            alt="Escudo OCAM" class="img-fluid" style="max-height: 80px;">
-        </strong>
-      </p>
-
-
-      <p class="text-center text-muted fs-6 mb-4">
-        📅 Sábado, 27 de septiembre de 2025 <br>
-        📍 Cancha Polideportivo de la 27
-      </p>
-
-
-
-      <h3 class="fw-bold text-left mb-3">Convocados:</h3>
-      <ul class="list-group list-group-flush mb-4 fs-5">
-        <li class="list-group-item">Juan Tobías</li>
-        <li class="list-group-item">Dilan Sánchez</li>
-        <li class="list-group-item">Dany Tapias</li>
-        <li class="list-group-item">Daniel Rodríguez</li>
-        <li class="list-group-item">Nelson Pauline</li>
-        <li class="list-group-item">Santiago Mendoza</li>
-        <li class="list-group-item">Oscar López</li>
-        <li class="list-group-item">Miguel Aldana</li>
-        <li class="list-group-item">Yojainer Villalobos</li>
-        <li class="list-group-item">Jesús Ricardo</li>
-        <li class="list-group-item">Ángel Hernández</li>
-        <li class="list-group-item">Larson Orozco</li>
-        <li class="list-group-item">Joseph Aldana</li>
-        <li class="list-group-item">Mateo Boscán</li>
-        <li class="list-group-item">Jesús A. Camargo</li>
-        <li class="list-group-item">Steven Cabarcas</li>
-        <li class="list-group-item">Isaac Ventura</li>
-        <li class="list-group-item">Eliuth Meza</li>
-        <li class="list-group-item">Zaid Ricardo</li>
-      </ul>
-      <div class="container my-5">
-        <div class="text-center my-4">
-          <img src="images/jugadores/dyaln sanchez.jpg" alt="Goleador Dylan Sánchez"
-            class="img-fluid rounded-3 shadow-lg">
-        </div>
-
-        <h3 class="fw-bold text-left mb-3">Dylan Sánchez – Goleador Categoría 2012</h3>
-        <p class="text-left fs-5">
-          Con apenas 13 años, <strong>Dylan Sánchez</strong> se ha consolidado como uno de los jugadores
-          más decisivos de la categoría 2012. Su instinto goleador, velocidad y precisión frente al arco
-          lo han convertido en una pieza fundamental para <strong>DIBA FBC</strong>, siendo responsable de
-          gran parte de los triunfos alcanzados durante la temporada.
-        </p>
-        <p class="text-left fs-5">
-          Dylan no solo brilla por sus goles, sino también por su entrega y compromiso en cada partido.
-          Su capacidad para liderar en el campo inspira a sus compañeros y refleja el trabajo constante
-          que realiza dentro y fuera de los entrenamientos.
-          <br><br>
-          ⚽ <em>Confiamos en que Dylan seguirá dejando huella con su talento y será clave en las metas
-            que nuestro equipo se ha propuesto alcanzar.</em>
-        </p>
-      </div>
-
-
-      <p class="text-left fs-5">
-        Esta semifinal es un momento clave en el camino de <strong>DIBA FBC</strong>.
-        Con un equipo lleno de talento, compromiso y pasión, nuestros jugadores saldrán a darlo
-        todo en la cancha. Invitamos a toda la comunidad, familiares y seguidores a
-        <strong>acompañar y alentar</strong> a los convocados en este reto decisivo.
-        <br><br>
-        ⚽ <em>¡Vamos DIBA FBC, la victoria está en nuestras manos!</em>
-      </p>
+    <div
+      class="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,_var(--tw-gradient-stops))] from-amber-500/10 via-transparent to-transparent">
     </div>
-  </section> -->
 
-  <section class="bg-light py-5">
-    <div class="container my-5 text-center">
-      <h1 class="fw-bolder mb-3 text-uppercase text-success">
-        ¡RUMBO A LA GLORIA! 🏆
+    <div class="container mx-auto px-4 relative z-10 text-center">
+      <span
+        class="inline-block py-1 px-3 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-500 text-xs font-bold tracking-widest uppercase mb-4"
+        data-aos="fade-down">
+        Actualidad DIBA
+      </span>
+      <h1 class="text-4xl md:text-6xl font-black text-white uppercase italic tracking-tight mb-6 drop-shadow-lg"
+        data-aos="fade-up" data-aos-delay="100">
+        Noticias del <span class="text-amber-500">Club</span>
       </h1>
-      <h2 class="fw-bold mb-5 display-6">
-        DIBA FBC es FINALISTA en la Categoría 2012/2013
-      </h2>
-
-      <p class="fs-4 mb-4">
-        ¡No podríamos estar más orgullosos! Después de un partido intenso, lleno de emociones
-        y demostrando un talento increíble, el equipo **DIBA FBC** ha sellado su pase a
-        <strong class="text-danger">LA GRAN FINAL</strong> del Torneo Suroccidente.
-      </p>
-
-      <div class="row justify-content-center align-items-center my-5 bg-white p-4 rounded-3 shadow-sm">
-        <div class="col-12">
-          <h3 class="fw-bold text-center mb-4 text-secondary">MARCADOR SEMIFINAL:</h3>
-        </div>
-
-        <div class="col-5 text-center">
-          <p class="fs-1 fw-bolder text-primary mb-0">3</p>
-          <p class="fw-bold fs-5 mb-0">DIBA FBC</p>
-          <img src="images/ESCUDO.png" alt="Escudo DIBA FBC" class="img-fluid mt-2" style="max-height: 80px;">
-        </div>
-
-        <div class="col-2 text-center">
-          <span class="fw-bold fs-1 text-muted">VS</span>
-        </div>
-
-        <div class="col-5 text-center">
-          <p class="fs-1 fw-bolder text-danger mb-0">2</p>
-          <p class="fw-bold fs-5 mb-0">OCAM FC</p>
-          <img src="" alt="Escudo OCAM" class="img-fluid mt-2" style="max-height: 80px;">
-        </div>
-      </div>
-
-      <p class="fs-5 mt-5">
-        Ver a nuestros chicos jugar con tanta pasión y espíritu de equipo es la mayor recompensa.
-        <br>
-        **¡Felicidades** a cada jugador, al cuerpo técnico y a las familias por el apoyo incondicional!
-        ¡Ahora, a prepararse para el último desafío!
-      </p>
-
-      <h3 class="mt-4 fw-bold text-danger">
-        ¡Un aplauso a nuestros futuros campeones!
-      </h3>
-
-      <p class="mt-4 text-muted small">
-        @seguidores @destacar | #DIBAFBC #GranFinal #VamosPorLaCopa #Orgullo
+      <p class="text-slate-300 text-lg max-w-2xl mx-auto leading-relaxed" data-aos="fade-up" data-aos-delay="200">
+        Mantente al día con los últimos resultados, eventos, convocatorias y el día a día de nuestras categorías
+        formadas con Fuerza y Lealtad.
       </p>
     </div>
   </section>
 
+  <!-- Banner Destacado: Finalistas -->
+  <section class="py-12 bg-white relative -mt-8 z-20 container mx-auto px-4">
+    <div
+      class="bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900 rounded-3xl shadow-2xl overflow-hidden border border-white/10"
+      data-aos="zoom-in">
+      <div class="flex flex-col lg:flex-row items-center">
+        <!-- Contenido destacado -->
+        <div class="p-8 lg:p-12 w-full lg:w-3/5 text-center lg:text-left relative z-10">
+          <span
+            class="inline-flex items-center gap-2 bg-rose-500 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-widest mb-4 shadow-lg shadow-rose-500/30 animate-pulse">
+            <i class="fas fa-fire"></i> Destacado
+          </span>
+          <h2 class="text-3xl lg:text-5xl font-black text-white uppercase italic tracking-tighter mb-4 leading-tight">
+            ¡DIBA FBC ES <span class="text-amber-500">FINALISTA!</span> 🏆
+          </h2>
+          <p class="text-slate-300 mb-8 text-sm lg:text-base leading-relaxed">
+            Categoría 2012/2013 rubmo a la gloria. En un partido intenso y lleno de emociones cerradas, el equipo selló
+            su pase a LA GRAN FINAL del Torneo Suroccidente venciendo 3-2 a OCAM FC. ¡Un aplauso a nuestros futuros
+            campeones!
+          </p>
 
+          <div
+            class="flex flex-wrap items-center justify-center lg:justify-start gap-6 bg-white/5 rounded-2xl p-4 border border-white/10 backdrop-blur-sm">
+            <div class="flex flex-col items-center gap-2">
+              <img src="images/ESCUDO.png" alt="DIBA FBC" class="w-12 h-12 object-contain drop-shadow-lg">
+              <span class="text-amber-500 font-bold text-sm">DIBA FBC</span>
+            </div>
+            <div class="flex flex-col items-center">
+              <span class="text-3xl font-black text-white">3</span>
+              <span class="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-1">Goles</span>
+            </div>
+            <span class="text-slate-500 font-bold text-xl px-2">VS</span>
+            <div class="flex flex-col items-center">
+              <span class="text-3xl font-black text-slate-400">2</span>
+              <span class="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-1">Goles</span>
+            </div>
+            <div class="flex flex-col items-center gap-2">
+              <div class="w-12 h-12 rounded-full bg-slate-800 flex items-center justify-center border border-slate-700">
+                <i class="fas fa-shield-alt text-slate-500"></i>
+              </div>
+              <span class="text-slate-400 font-bold text-sm">OCAM FC</span>
+            </div>
+          </div>
+        </div>
 
-  <!-- Contenedor para el Footer (se carga desde layout/footer.html) -->
+        <!-- Imagen del goleador -->
+        <div class="w-full lg:w-2/5 h-64 lg:h-full relative min-h-[300px]">
+          <div
+            class="absolute inset-0 bg-gradient-to-t lg:bg-gradient-to-r from-slate-900/80 via-transparent to-transparent z-10">
+          </div>
+          <img src="images/jugadores/dyaln sanchez.jpg" alt="Dylan Sánchez"
+            class="absolute inset-0 w-full h-full object-cover object-top filter brightness-90">
+          <div class="absolute bottom-6 right-6 z-20 text-right">
+            <p class="text-white font-black italic text-xl drop-shadow-md">Dylan Sánchez</p>
+            <p class="text-amber-500 font-bold text-xs uppercase tracking-widest drop-shadow-md">Goleador Estrella</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Grilla de Noticias -->
+  <section class="py-16 bg-slate-50">
+    <div class="container mx-auto px-4 max-w-6xl">
+      <div class="flex items-center justify-between mb-10">
+        <div>
+          <h3 class="text-2xl font-black text-slate-900 uppercase italic">Últimas Noticias</h3>
+          <div class="w-12 h-1 bg-amber-500 mt-2 rounded-full"></div>
+        </div>
+        <div class="flex gap-2">
+          <button
+            class="w-10 h-10 rounded-full bg-white border border-slate-200 text-slate-400 hover:text-slate-900 hover:border-slate-400 hover:shadow-md transition-all flex items-center justify-center">
+            <i class="fas fa-chevron-left"></i>
+          </button>
+          <button
+            class="w-10 h-10 rounded-full bg-white border border-slate-200 text-slate-400 hover:text-slate-900 hover:border-slate-400 hover:shadow-md transition-all flex items-center justify-center">
+            <i class="fas fa-chevron-right"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+        <!-- Noticia 1 -->
+        <article id="jugador10"
+          class="group bg-white rounded-2xl overflow-hidden shadow-lg shadow-slate-200/50 border border-slate-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col"
+          data-aos="fade-up">
+          <div class="relative h-56 overflow-hidden bg-slate-200">
+            <img src="images/Jugador10Indumentaria.jpg" alt="Indumentaria Oficial"
+              class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+            <div class="absolute top-4 left-4">
+              <span
+                class="bg-blue-600 text-white text-[10px] font-bold uppercase tracking-widest px-3 py-1.5 rounded-full shadow-md">
+                Indumentaria
+              </span>
+            </div>
+          </div>
+          <div class="p-6 flex-1 flex flex-col">
+            <div class="flex items-center gap-2 mb-3">
+              <i class="far fa-calendar-alt text-amber-500 text-sm"></i>
+              <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Hace 2 días</span>
+            </div>
+            <h4
+              class="text-xl font-bold text-slate-900 mb-3 leading-tight group-hover:text-amber-600 transition-colors">
+              Orgullo en la Cancha: El Número 10
+            </h4>
+            <p class="text-slate-600 text-sm mb-6 flex-1 line-clamp-3">
+              Nuestro talento luciendo la indumentaria oficial del club de cara a la próxima temporada. La camiseta que
+              defenderemos con pasión en cada torneo.
+            </p>
+            <a href="#"
+              class="inline-flex items-center gap-2 text-sm font-bold text-blue-600 hover:text-blue-800 transition-colors uppercase tracking-wide">
+              Leer Más <i class="fas fa-arrow-right text-[10px]"></i>
+            </a>
+          </div>
+        </article>
+
+        <!-- Noticia 2 -->
+        <article id="jugador10-tras"
+          class="group bg-white rounded-2xl overflow-hidden shadow-lg shadow-slate-200/50 border border-slate-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col"
+          data-aos="fade-up" data-aos-delay="100">
+          <div class="relative h-56 overflow-hidden bg-slate-200">
+            <img src="images/Jugador10Atrasindumentaria.jpg" alt="Detalle Trasero Uniforme"
+              class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+            <div class="absolute top-4 left-4">
+              <span
+                class="bg-blue-600 text-white text-[10px] font-bold uppercase tracking-widest px-3 py-1.5 rounded-full shadow-md">
+                Indumentaria
+              </span>
+            </div>
+          </div>
+          <div class="p-6 flex-1 flex flex-col">
+            <div class="flex items-center gap-2 mb-3">
+              <i class="far fa-calendar-alt text-amber-500 text-sm"></i>
+              <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Hace 2 días</span>
+            </div>
+            <h4
+              class="text-xl font-bold text-slate-900 mb-3 leading-tight group-hover:text-amber-600 transition-colors">
+              El Peso del Número: Responsabilidad
+            </h4>
+            <p class="text-slate-600 text-sm mb-6 flex-1 line-clamp-3">
+              Detalle de la espalda del uniforme oficial. Llevar el número no solo es talento, es el peso de la
+              responsabilidad y el trabajo en equipo en el campo de juego.
+            </p>
+            <a href="#"
+              class="inline-flex items-center gap-2 text-sm font-bold text-blue-600 hover:text-blue-800 transition-colors uppercase tracking-wide">
+              Leer Más <i class="fas fa-arrow-right text-[10px]"></i>
+            </a>
+          </div>
+        </article>
+
+        <!-- Noticia 3 -->
+        <article id="bandera"
+          class="group bg-white rounded-2xl overflow-hidden shadow-lg shadow-slate-200/50 border border-slate-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col"
+          data-aos="fade-up" data-aos-delay="200">
+          <div class="relative h-56 overflow-hidden bg-slate-200">
+            <img src="images/Bandera.jpg" alt="Bandera DIBA"
+              class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+            <div class="absolute top-4 left-4">
+              <span
+                class="bg-amber-500 text-slate-900 text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-full shadow-md">
+                Institucional
+              </span>
+            </div>
+          </div>
+          <div class="p-6 flex-1 flex flex-col">
+            <div class="flex items-center gap-2 mb-3">
+              <i class="far fa-calendar-alt text-amber-500 text-sm"></i>
+              <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Hace 1 semana</span>
+            </div>
+            <h4
+              class="text-xl font-bold text-slate-900 mb-3 leading-tight group-hover:text-amber-600 transition-colors">
+              Presentamos nuestra Bandera Oficial
+            </h4>
+            <p class="text-slate-600 text-sm mb-6 flex-1 line-clamp-3">
+              Un símbolo de identidad, unión y orgullo para toda la familia DIBA FBC. Conoce el significado detrás de
+              nuestros colores institucionales.
+            </p>
+            <a href="#"
+              class="inline-flex items-center gap-2 text-sm font-bold text-blue-600 hover:text-blue-800 transition-colors uppercase tracking-wide">
+              Leer Más <i class="fas fa-arrow-right text-[10px]"></i>
+            </a>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Newsletter / Suscripción (Estilo Footer Superior) -->
+  <section class="py-16 bg-slate-900 border-t border-slate-800 relative overflow-hidden">
+    <div
+      class="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-blue-900/20 via-slate-900 to-slate-900">
+    </div>
+    <div class="container mx-auto px-4 relative z-10 max-w-4xl text-center">
+      <i class="far fa-envelope-open text-4xl text-amber-500 mb-6 drop-shadow-lg"></i>
+      <h3 class="text-3xl font-black text-white uppercase italic tracking-tight mb-4">No te pierdas ninguna <span
+          class="text-amber-500">Novedad</span></h3>
+      <p class="text-slate-400 text-sm md:text-base max-w-2xl mx-auto mb-8">
+        Suscríbete a nuestro boletín y recibe las alertas de partidos, convocatorias y noticias del club directamente en
+        tu bandeja.
+      </p>
+      <form class="flex flex-col sm:flex-row items-center gap-3 justify-center max-w-xl mx-auto">
+        <input type="email" placeholder="Tu correo electrónico..."
+          class="w-full bg-slate-800/50 border border-slate-700 text-white rounded-xl px-6 py-4 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition-all placeholder:text-slate-500"
+          required>
+        <button type="submit"
+          class="w-full sm:w-auto bg-amber-500 hover:bg-amber-600 text-slate-900 font-black uppercase tracking-widest px-8 py-4 rounded-xl shadow-lg shadow-amber-500/20 transition-all active:scale-95 whitespace-nowrap">
+          Suscribirme
+        </button>
+      </form>
+    </div>
+  </section>
+
+  <!-- Footer Dinámico -->
   <div id="footer-container"></div>
+  <div id="fab-container"></div>
 
-  <!-- Scripts -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Scripts Globales -->
   <script src="scripts/config.js"></script>
   <script src="scripts/loadComponents.js"></script>
-  <script src="scripts/main.js"></script>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+  <script>
+    AOS.init({ once: true, duration: 800 });
+  </script>
 </body>
 
 </html>
