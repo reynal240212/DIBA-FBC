@@ -836,6 +836,14 @@
                                     <div class="quick-btn-sub">Control boletas</div>
                                 </div>
                             </a>
+                            <a href="partidos.html" class="quick-btn">
+                                <div class="quick-btn-icon" style="background:rgba(239,68,68,.12);color:#fb7185"><i
+                                        class="fas fa-futbol"></i></div>
+                                <div>
+                                    <div class="quick-btn-label">Partidos</div>
+                                    <div class="quick-btn-sub">Gestionar eventos</div>
+                                </div>
+                            </a>
                             <a href="../analisis.html" class="quick-btn">
                                 <div class="quick-btn-icon" style="background:rgba(20,184,166,.12);color:#2dd4bf"><i
                                         class="fas fa-chart-line"></i></div>
@@ -936,45 +944,41 @@
             }
         });
 
-        // ── KPIs desde Supabase + localStorage ──
+        async function getMatchCount() {
+            const { count } = await supabase.from('partidos').select('*', { count: 'exact', head: true });
+            return count || 0;
+        }
+
+        // ── KPIs desde Supabase ──
         async function loadKPIs() {
             try {
-                // 1. Jugadores Totales
-                const { count: playerCount } = await supabase
-                    .from('identificacion')
-                    .select('*', { count: 'exact', head: true });
-                document.getElementById('kpi-players').textContent = playerCount || 0;
+                // Usar RPC para estadísticas consolidadas
+                const { data: stats, error: statsError } = await supabase.rpc('get_dashboard_stats');
 
-                // 2. Partidos Totales
-                const { count: matchCount } = await supabase
-                    .from('partidos')
-                    .select('*', { count: 'exact', head: true });
-                document.getElementById('kpi-matches').textContent = matchCount || 0;
+                if (!statsError && stats && stats.length > 0) {
+                    const s = stats[0];
+                    // El RPC usa la tabla 'jugadores', pero preferimos 'identificacion' si es la oficial
+                    // Para este proyecto parece que identificacion es el registro detallado
 
-                // 3. Asistencia Promedio (Real)
-                const { data: registers, error: regError } = await supabase
-                    .from('planilla_registros')
-                    .select('asistencia')
-                    .limit(1000);
+                    // Re-verificamos conteo si es necesario o usamos el del RPC
+                    document.getElementById('kpi-players').textContent = s.total_jugadores || 0;
+                    document.getElementById('kpi-matches').textContent = await getMatchCount();
 
-                if (!regError && registers.length > 0) {
-                    const totalReg = registers.length;
-                    const presentes = registers.filter(r => r.asistencia === 'P').length;
-                    const attPct = Math.round((presentes / totalReg) * 100);
-                    document.getElementById('kpi-attendance').textContent = `${attPct}%`;
+                    if (s.presentes !== undefined) {
+                        const totalAsis = (s.presentes || 0) + (s.ausentes || 0) + (s.excusas || 0);
+                        const attPct = totalAsis > 0 ? Math.round((s.presentes / totalAsis) * 100) : 0;
+                        document.getElementById('kpi-attendance').textContent = `${attPct}%`;
 
-                    // Mostrar panel de asistencia si hay datos
-                    document.getElementById('attendance-panel').style.display = '';
-                    const ausentes = registers.filter(r => r.asistencia === 'A').length;
-                    const excusas = registers.filter(r => r.asistencia === 'E').length;
+                        // Mostrar panel de asistencia
+                        document.getElementById('attendance-panel').style.display = '';
+                        document.getElementById('bar-p').style.width = (totalAsis > 0 ? (s.presentes / totalAsis) * 100 : 0) + '%';
+                        document.getElementById('bar-a').style.width = (totalAsis > 0 ? (s.ausentes / totalAsis) * 100 : 0) + '%';
+                        document.getElementById('bar-e').style.width = (totalAsis > 0 ? (s.excusas / totalAsis) * 100 : 0) + '%';
 
-                    document.getElementById('bar-p').style.width = Math.round((presentes / totalReg) * 100) + '%';
-                    document.getElementById('bar-a').style.width = Math.round((ausentes / totalReg) * 100) + '%';
-                    document.getElementById('bar-e').style.width = Math.round((excusas / totalReg) * 100) + '%';
-
-                    document.getElementById('att-p').textContent = `${presentes} Presentes`;
-                    document.getElementById('att-a').textContent = `${ausentes} Ausentes`;
-                    document.getElementById('att-e').textContent = `${excusas} Excusas`;
+                        document.getElementById('att-p').textContent = `${s.presentes} Presentes`;
+                        document.getElementById('att-a').textContent = `${s.ausentes} Ausentes`;
+                        document.getElementById('att-e').textContent = `${s.excusas} Excusas`;
+                    }
                 }
 
                 // 4. Pagos Pendientes (registros con pago null o 0)

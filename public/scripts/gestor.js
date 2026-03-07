@@ -1,13 +1,11 @@
-import { supabase } from './supabaseClient.js';
-import { verificarSesion, cerrarSesion } from './auth.js';
+import { supabase, requireAdmin } from './supabaseClient.js';
+import { cerrarSesion } from './auth.js';
 
 (async () => {
     // 1. SEGURIDAD Y DATOS DE SESIÓN
+    const session = await requireAdmin();
+    if (!session) return;
     const usuario = JSON.parse(localStorage.getItem("usuario"));
-    if (!usuario) {
-        window.location.href = "/admin/login";
-        return;
-    }
 
     // 2. ELEMENTOS DEL DOM
     const navName = document.getElementById("nav-user-name");
@@ -23,7 +21,7 @@ import { verificarSesion, cerrarSesion } from './auth.js';
     // ---------------------------------------------------------
     // 3. LÓGICA DEL GESTOR DE DOCUMENTOS
     // ---------------------------------------------------------
-    
+
     async function loadDocuments() {
         mainTitle.innerHTML = 'Gestor <span class="text-slate-300">Documental</span>';
         dynamicContent.innerHTML = `
@@ -82,7 +80,7 @@ import { verificarSesion, cerrarSesion } from './auth.js';
     // ---------------------------------------------------------
     // 4. LÓGICA DE JUGADORES (Tabla Identificación)
     // ---------------------------------------------------------
-    
+
     async function loadPlayers() {
         mainTitle.innerHTML = 'Plantilla <span class="text-slate-300">Oficial</span>';
         dynamicContent.innerHTML = '<div class="flex justify-center py-20"><i class="fas fa-circle-notch animate-spin text-3xl text-dibaGold"></i></div>';

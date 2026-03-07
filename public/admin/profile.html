@@ -138,14 +138,9 @@
   <!-- Bootstrap JS Bundle -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <!-- Supabase JS (versión 2.x) -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-  <script src="../scripts/config.js"></script>
-
-  <script>
-    // --- 1. CONFIGURACIÓN Y CONSTANTES ---
-    // Credenciales desde config.js centralizado
-    const { SUPABASE_URL, SUPABASE_ANON_KEY } = window.DIBA_CONFIG;
-    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  <script type="module">
+    import { supabase, requireAdmin } from '../scripts/supabaseClient.js';
+    const supabaseClient = supabase;
 
     // Seleccionamos elementos del DOM para reutilizarlos
     const profileForm = document.getElementById('profile-form');
@@ -247,13 +242,8 @@
     // Al cargar la página, verificar la sesión y cargar datos
     document.addEventListener('DOMContentLoaded', async () => {
       try {
-        const { data: { session }, error: sessionError } = await supabaseClient.auth.getSession();
-        if (sessionError) throw sessionError;
-
-        if (!session) {
-          window.location.href = 'login.html'; // Redirigir si no hay sesión
-          return;
-        }
+        const session = await requireAdmin();
+        if (!session) return;
 
         await loadProfile(session.user.id);
       } catch (error) {
