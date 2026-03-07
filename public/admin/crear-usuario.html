@@ -260,23 +260,64 @@
     </style>
 </head>
 
-<body style="display:none;" id="admin-body">
+<body style="display: none;" id="admin-body">
 
-    <!-- Sidebar injected by dashboard iframe pattern -->
-    <script src="../scripts/config.js"></script>
-    <script type="module">
-        import { requireAdmin } from '../scripts/supabaseClient.js';
-        requireAdmin().then(() => {
-            document.getElementById('admin-body').style.display = '';
-        });
-    </script>
+    <!-- ══ SIDEBAR ══ -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-logo">
+            <img src="/images/ESCUDO.png" alt="DIBA FBC">
+            <div>
+                <div class="sidebar-logo-text">DIBA FBC</div>
+                <div class="sidebar-logo-sub">Panel de Control</div>
+            </div>
+        </div>
+
+        <nav class="sidebar-nav">
+            <a href="dashboard.html" class="nav-link"><i class="fas fa-th-large"></i> Dashboard</a>
+
+            <div class="nav-section-label">Equipo</div>
+            <a href="planilla.html" class="nav-link"><i class="fas fa-clipboard-list"></i> Planilla</a>
+            <a href="../listaJugadores.html" class="nav-link"><i class="fas fa-users"></i> Jugadores</a>
+            <a href="../partidos.html" class="nav-link"><i class="fas fa-futbol"></i> Partidos</a>
+            <a href="../analisis.html" class="nav-link"><i class="fas fa-chart-line"></i> Análisis</a>
+
+            <div class="nav-section-label">Administración</div>
+            <a href="GestorDocumental.html" class="nav-link"><i class="fas fa-folder-open"></i> Gestor Documental</a>
+            <a href="usuarios.html" class="nav-link"><i class="fas fa-user-cog"></i> Usuarios</a>
+            <a href="crear-usuario.html" class="nav-link active"><i class="fas fa-user-plus"></i> Crear Usuario</a>
+            <a href="rifa_diba.html" class="nav-link"><i class="fas fa-ticket-alt"></i> Rifas</a>
+
+            <div class="nav-section-label">Sitio Web</div>
+            <a href="../index.html" class="nav-link"><i class="fas fa-globe"></i> Ver Sitio</a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="user-chip">
+                <div class="user-avatar" id="sb-avatar">A</div>
+                <div>
+                    <div class="user-name" id="sb-name">Administrador</div>
+                    <div class="user-role" id="sb-role">Admin</div>
+                </div>
+            </div>
+            <button class="btn-logout" id="logout-btn">
+                <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+            </button>
+        </div>
+    </aside>
 
     <div class="main">
 
+        <!-- Top Bar -->
         <header class="topbar">
+            <button class="mobile-menu-btn" id="menu-btn">
+                <i class="fas fa-bars" id="menu-icon"></i>
+            </button>
             <div>
                 <div class="page-title">Crear <span>Usuario</span></div>
-                <div class="page-subtitle">Registro de nuevo miembro del panel — DIBA FBC</div>
+                <div class="page-subtitle">Registro de nuevo miembro — DIBA FBC</div>
+            </div>
+            <div class="topbar-right">
+                <div class="topbar-time" id="clock">--:--</div>
             </div>
         </header>
 
@@ -331,8 +372,49 @@
         </div>
     </div>
 
+    <script src="/scripts/config.js"></script>
     <script type="module">
-        import { supabase } from '../scripts/supabaseClient.js';
+        import { supabase, requireAdmin } from '../scripts/supabaseClient.js';
+
+        // Protección de ruta
+        requireAdmin().then(session => {
+            if (session) {
+                document.getElementById('admin-body').style.display = 'flex';
+
+                // Mostrar info del usuario si está disponible
+                const user = session.user;
+                if (user) {
+                    document.getElementById('sb-name').textContent = user.email.split('@')[0];
+                    document.getElementById('sb-avatar').textContent = user.email[0].toUpperCase();
+                }
+            }
+        });
+
+        // ── RELOJ ──
+        const clockEl = document.getElementById('clock');
+        function updateClock() {
+            const now = new Date();
+            clockEl.textContent = now.toLocaleTimeString('es-CO', { hour: '2-digit', minute: '2-digit' });
+        }
+        updateClock();
+        setInterval(updateClock, 1000);
+
+        // ── MOBILE MENU ──
+        const menuBtn = document.getElementById('menu-btn');
+        const menuIcon = document.getElementById('menu-icon');
+        const sidebar = document.getElementById('sidebar');
+        menuBtn?.addEventListener('click', () => {
+            sidebar.classList.toggle('open');
+            menuIcon.className = sidebar.classList.contains('open') ? 'fas fa-times' : 'fas fa-bars';
+        });
+
+        // ── LOGOUT ──
+        document.getElementById('logout-btn')?.addEventListener('click', async () => {
+            if (confirm('¿Cerrar sesión?')) {
+                await supabase.auth.signOut();
+                window.location.href = 'login.html';
+            }
+        });
 
         const form = document.getElementById('createUserForm');
         const alertBox = document.getElementById('form-alert');
@@ -340,12 +422,13 @@
 
         function showAlert(msg, type = 'error') {
             alertBox.className = `alert ${type}`;
+            alertBox.style.display = 'flex';
             alertBox.innerHTML = `<i class="fas fa-${type === 'error' ? 'circle-exclamation' : 'circle-check'}"></i> ${msg}`;
         }
 
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
-            alertBox.className = 'alert'; // hide
+            alertBox.style.display = 'none';
             submitBtn.disabled = true;
             submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creando...';
 
@@ -378,7 +461,6 @@
             }
         });
     </script>
-
 </body>
 
 </html>

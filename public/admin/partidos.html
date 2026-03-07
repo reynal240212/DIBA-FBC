@@ -20,37 +20,278 @@
         }
     </script>
     <style>
+        /* ── Dashboard Base Styles ── */
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
         :root {
             --blue: #002a40;
+            --blue2: #003d5c;
             --gold: #ffcc00;
+            --gold2: #e6b800;
             --dark: #0a0e14;
             --dark2: #111823;
+            --dark3: #1a2332;
+            --slate: #8b9ab0;
+            --text: #e2e8f0;
             --border: rgba(255, 255, 255, 0.07);
             --sidebar-w: 270px;
         }
 
         body {
+            font-family: 'Montserrat', sans-serif;
             background: var(--dark);
-            color: #e2e8f0;
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            overflow-x: hidden;
         }
 
+        /* ── SIDEBAR ── */
         .sidebar {
-            width: var(--sidebar-w);
             position: fixed;
-            height: 100vh;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            width: var(--sidebar-w);
             background: var(--dark2);
             border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            z-index: 100;
+            transition: transform .3s ease;
         }
 
+        .sidebar-logo {
+            padding: 2rem 1.5rem 1.5rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: .8rem;
+        }
+
+        .sidebar-logo img {
+            width: 38px;
+            height: 38px;
+            object-fit: contain;
+        }
+
+        .sidebar-logo-text {
+            font-size: 1.05rem;
+            font-weight: 900;
+            font-style: italic;
+            text-transform: uppercase;
+            letter-spacing: .05em;
+            color: var(--gold);
+        }
+
+        .sidebar-logo-sub {
+            font-size: .55rem;
+            color: var(--slate);
+            text-transform: uppercase;
+            letter-spacing: .15em;
+            font-weight: 700;
+            margin-top: 1px;
+        }
+
+        .sidebar-nav {
+            flex: 1;
+            padding: 1.5rem 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: .35rem;
+            overflow-y: auto;
+        }
+
+        .nav-section-label {
+            font-size: .55rem;
+            font-weight: 800;
+            letter-spacing: .2em;
+            text-transform: uppercase;
+            color: var(--slate);
+            padding: .8rem .6rem .4rem;
+            margin-top: .5rem;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: .85rem;
+            padding: .75rem 1rem;
+            border-radius: 12px;
+            text-decoration: none;
+            font-size: .78rem;
+            font-weight: 700;
+            color: var(--slate);
+            transition: all .2s ease;
+            position: relative;
+        }
+
+        .nav-link i {
+            width: 18px;
+            text-align: center;
+            font-size: .85rem;
+        }
+
+        .nav-link:hover {
+            background: rgba(255, 255, 255, .05);
+            color: var(--text);
+        }
+
+        .nav-link.active {
+            background: rgba(255, 204, 0, .1);
+            color: var(--gold);
+        }
+
+        .sidebar-footer {
+            padding: 1.2rem 1rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .user-chip {
+            display: flex;
+            align-items: center;
+            gap: .75rem;
+            padding: .75rem 1rem;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, .04);
+            margin-bottom: .6rem;
+        }
+
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--gold);
+            color: var(--blue);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: .8rem;
+        }
+
+        .user-name {
+            font-size: .75rem;
+            font-weight: 800;
+            color: var(--text);
+        }
+
+        .user-role {
+            font-size: .6rem;
+            color: var(--slate);
+            text-transform: uppercase;
+            letter-spacing: .1em;
+        }
+
+        .btn-logout {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: .5rem;
+            padding: .7rem;
+            border-radius: 12px;
+            border: none;
+            background: rgba(239, 68, 68, .1);
+            color: #ef4444;
+            font-family: 'Montserrat', sans-serif;
+            font-size: .72rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all .2s;
+        }
+
+        .btn-logout:hover {
+            background: #ef4444;
+            color: #fff;
+        }
+
+        /* ── MAIN & TOPBAR ── */
         .main {
             margin-left: var(--sidebar-w);
+            flex: 1;
+            display: flex;
+            flex-direction: column;
             min-height: 100vh;
         }
 
-        @media (max-width: 1024px) {
+        .topbar {
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid var(--border);
+            background: var(--dark2);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        .page-title {
+            font-size: 1.4rem;
+            font-weight: 900;
+            font-style: italic;
+            text-transform: uppercase;
+            letter-spacing: .03em;
+        }
+
+        .page-title span {
+            color: var(--gold);
+        }
+
+        .page-subtitle {
+            font-size: .7rem;
+            color: var(--slate);
+            font-weight: 600;
+            margin-top: 2px;
+        }
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: .8rem;
+        }
+
+        .topbar-time {
+            font-size: .72rem;
+            font-weight: 700;
+            color: var(--slate);
+            background: var(--dark3);
+            padding: .45rem .9rem;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: var(--dark3);
+            border: 1px solid var(--border);
+            color: var(--gold);
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            font-size: 1rem;
+            cursor: pointer;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .content {
+            padding: 2rem;
+            flex: 1;
+        }
+
+        @media (max-width: 992px) {
             .sidebar {
                 transform: translateX(-100%);
-                transition: transform 0.3s;
             }
 
             .sidebar.open {
@@ -60,66 +301,90 @@
             .main {
                 margin-left: 0;
             }
+
+            .mobile-menu-btn {
+                display: flex;
+            }
         }
     </style>
 </head>
 
-<body class="font-sans antialiased" style="display:none;" id="admin-body">
+<body style="display: none;" id="admin-body">
 
-    <div class="sidebar overflow-y-auto" id="sidebar">
-        <div class="p-8">
-            <div class="flex items-center gap-3 mb-10">
-                <img src="/images/ESCUDO.ico" class="w-8 h-8" alt="Logo">
-                <span class="font-black italic text-lg uppercase text-dibaGold">Diba FBC</span>
+    <!-- ══ SIDEBAR ══ -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-logo">
+            <img src="/images/ESCUDO.png" alt="DIBA FBC">
+            <div>
+                <div class="sidebar-logo-text">DIBA FBC</div>
+                <div class="sidebar-logo-sub">Panel de Control</div>
             </div>
-            <nav class="space-y-2">
-                <a href="dashboard.html"
-                    class="flex items-center gap-4 p-4 rounded-2xl hover:bg-white/5 transition-all text-slate-400">
-                    <i class="fas fa-th-large w-5"></i> Dashboard
-                </a>
-                <a href="planilla.html"
-                    class="flex items-center gap-4 p-4 rounded-2xl hover:bg-white/5 transition-all text-slate-400">
-                    <i class="fas fa-clipboard-list w-5"></i> Planilla
-                </a>
-                <a href="partidos.html"
-                    class="flex items-center gap-4 p-4 rounded-2xl bg-dibaGold/10 text-dibaGold font-bold border-l-4 border-dibaGold">
-                    <i class="fas fa-futbol w-5"></i> Partidos
-                </a>
-                <a href="GestorDocumental.html"
-                    class="flex items-center gap-4 p-4 rounded-2xl hover:bg-white/5 transition-all text-slate-400">
-                    <i class="fas fa-folder-open w-5"></i> Gestor
-                </a>
-                <a href="usuarios.html"
-                    class="flex items-center gap-4 p-4 rounded-2xl hover:bg-white/5 transition-all text-slate-400">
-                    <i class="fas fa-user-cog w-5"></i> Usuarios
-                </a>
-            </nav>
         </div>
-    </div>
 
-    <main class="main flex flex-col">
-        <header
-            class="bg-dibaDark/50 backdrop-blur-md border-b border-white/5 sticky top-0 z-40 p-6 flex items-center justify-between">
-            <div class="flex items-center gap-4">
-                <button id="menu-btn" class="lg:hidden text-2xl text-dibaGold"><i class="fas fa-bars"></i></button>
-                <h1 class="text-2xl font-black uppercase italic tracking-tighter">Gestión de <span
-                        class="text-dibaGold">Partidos</span></h1>
+        <nav class="sidebar-nav">
+            <a href="dashboard.html" class="nav-link"><i class="fas fa-th-large"></i> Dashboard</a>
+
+            <div class="nav-section-label">Equipo</div>
+            <a href="planilla.html" class="nav-link"><i class="fas fa-clipboard-list"></i> Planilla</a>
+            <a href="../listaJugadores.html" class="nav-link"><i class="fas fa-users"></i> Jugadores</a>
+            <a href="partidos.html" class="nav-link active"><i class="fas fa-futbol"></i> Partidos</a>
+            <a href="../analisis.html" class="nav-link"><i class="fas fa-chart-line"></i> Análisis</a>
+
+            <div class="nav-section-label">Administración</div>
+            <a href="GestorDocumental.html" class="nav-link"><i class="fas fa-folder-open"></i> Gestor Documental</a>
+            <a href="usuarios.html" class="nav-link"><i class="fas fa-user-cog"></i> Usuarios</a>
+            <a href="crear-usuario.html" class="nav-link"><i class="fas fa-user-plus"></i> Crear Usuario</a>
+            <a href="rifa_diba.html" class="nav-link"><i class="fas fa-ticket-alt"></i> Rifas</a>
+
+            <div class="nav-section-label">Sitio Web</div>
+            <a href="../index.html" class="nav-link"><i class="fas fa-globe"></i> Ver Sitio</a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="user-chip">
+                <div class="user-avatar" id="sb-avatar">A</div>
+                <div>
+                    <div class="user-name" id="sb-name">Administrador</div>
+                    <div class="user-role" id="sb-role">Admin</div>
+                </div>
             </div>
-            <button id="add-match-btn"
-                class="bg-dibaGold text-dibaBlue px-6 py-3 rounded-2xl font-black uppercase italic text-xs flex items-center gap-2 hover:scale-105 transition-all shadow-lg active:scale-95">
-                <i class="fas fa-plus"></i> Nuevo Partido
+            <button class="btn-logout" id="logout-btn">
+                <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
             </button>
+        </div>
+    </aside>
+
+    <div class="main">
+        <!-- Top Bar -->
+        <header class="topbar">
+            <button class="mobile-menu-btn" id="menu-btn">
+                <i class="fas fa-bars" id="menu-icon"></i>
+            </button>
+            <div>
+                <div class="page-title">Gestión de <span>Partidos</span></div>
+                <div class="page-subtitle">Programación y resultados de encuentros — DIBA FBC</div>
+            </div>
+            <div class="topbar-right">
+                <div class="topbar-time" id="clock">--:--</div>
+                <button id="add-match-btn"
+                    class="bg-dibaGold text-dibaBlue px-6 py-2 rounded-xl font-black uppercase italic text-[10px] flex items-center gap-2 hover:scale-105 transition-all shadow-lg active:scale-95">
+                    <i class="fas fa-plus"></i> Nuevo Partido
+                </button>
+            </div>
         </header>
 
-        <div class="p-6 md:p-10 max-w-7xl mx-auto w-full">
-            <div id="matches-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <!-- Skeleton loader -->
-                <div class="animate-pulse bg-white/5 rounded-3xl h-64 border border-white/10"></div>
-                <div class="animate-pulse bg-white/5 rounded-3xl h-64 border border-white/10"></div>
-                <div class="animate-pulse bg-white/5 rounded-3xl h-64 border border-white/10"></div>
+        <div class="content">
+
+            <div class="p-6 md:p-10 max-w-7xl mx-auto w-full">
+                <div id="matches-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Skeleton loader -->
+                    <div class="animate-pulse bg-white/5 rounded-3xl h-64 border border-white/10"></div>
+                    <div class="animate-pulse bg-white/5 rounded-3xl h-64 border border-white/10"></div>
+                    <div class="animate-pulse bg-white/5 rounded-3xl h-64 border border-white/10"></div>
+                </div>
             </div>
         </div>
-    </main>
+    </div>
 
     <!-- Modal para crear/editar -->
     <div id="match-modal" class="fixed inset-0 z-[100] hidden flex items-center justify-center p-4">
@@ -205,11 +470,63 @@
 
         let allMatches = [];
 
-        // 1. Protección de ruta
-        requireAdmin().then(session => {
-            if (session) {
-                document.getElementById('admin-body').style.display = 'block';
+        // ── AUTENTICACIÓN Y CARGA ──
+        async function init() {
+            try {
+                const session = await requireAdmin();
+                if (!session) return;
+
+                document.getElementById('admin-body').style.display = 'flex';
+
+                const user = session.user;
+                if (user) {
+                    const { data: profile } = await supabase
+                        .from('users')
+                        .select('username, role, full_name')
+                        .eq('id', user.id)
+                        .single();
+
+                    if (profile) {
+                        document.getElementById('sb-name').textContent = profile.username;
+                        document.getElementById('sb-role').textContent = profile.role;
+                        document.getElementById('sb-avatar').textContent = profile.username[0].toUpperCase();
+                    } else {
+                        const emailName = user.email.split('@')[0];
+                        document.getElementById('sb-name').textContent = emailName;
+                        document.getElementById('sb-avatar').textContent = emailName[0].toUpperCase();
+                    }
+                }
                 loadMatches();
+            } catch (error) {
+                console.error("Init error:", error);
+            }
+        }
+
+        init();
+
+        // Clock
+        const clockEl = document.getElementById('clock');
+        function updateClock() {
+            const now = new Date();
+            if (clockEl) clockEl.textContent = now.toLocaleTimeString('es-CO', { hour: '2-digit', minute: '2-digit' });
+        }
+        updateClock();
+        setInterval(updateClock, 1000);
+
+        // Mobile Menu
+        const menuBtn = document.getElementById('menu-btn');
+        const menuIcon = document.getElementById('menu-icon');
+        const sidebar = document.getElementById('sidebar');
+        menuBtn?.addEventListener('click', () => {
+            sidebar.classList.toggle('open');
+            if (menuIcon) menuIcon.className = sidebar.classList.contains('open') ? 'fas fa-times' : 'fas fa-bars';
+        });
+
+        // Logout
+        document.getElementById('logout-btn')?.addEventListener('click', async () => {
+            if (confirm('¿Cerrar sesión?')) {
+                await supabase.auth.signOut();
+                window.location.href = 'login.html';
             }
         });
 
@@ -325,9 +642,9 @@
             }
         });
 
-        // 4. Menu mobile
-        const sidebar = document.getElementById('sidebar');
-        document.getElementById('menu-btn').addEventListener('click', () => sidebar.classList.toggle('open'));
+        // Make functions global for HTML strings
+        window.editMatch = editMatch;
+        window.deleteMatch = deleteMatch;
 
     </script>
 </body>

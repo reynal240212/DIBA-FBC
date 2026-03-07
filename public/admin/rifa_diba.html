@@ -3,46 +3,329 @@
 
 <head>
   <meta charset="UTF-8" />
-  <title>Generador de Boletas</title>
+  <title>Generador de Boletas — DIBA FBC</title>
+  <link rel="icon" href="/images/ESCUDO.ico" type="image/x-icon">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
   <style>
-    body {
+    /* ── Dashboard Base Styles ── */
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: Arial, sans-serif;
-      background: #f9f9f9;
-      color: #001f63;
-      font-size: 16px;
     }
 
-    .btn-container {
+    :root {
+      --blue: #002a40;
+      --blue2: #003d5c;
+      --gold: #ffcc00;
+      --gold2: #e6b800;
+      --dark: #0a0e14;
+      --dark2: #111823;
+      --dark3: #1a2332;
+      --slate: #8b9ab0;
+      --text: #e2e8f0;
+      --border: rgba(255, 255, 255, 0.07);
+      --sidebar-w: 270px;
+    }
+
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background: var(--dark);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      overflow-x: hidden;
+    }
+
+    /* ── SIDEBAR ── */
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      width: var(--sidebar-w);
+      background: var(--dark2);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      z-index: 100;
+      transition: transform .3s ease;
+    }
+
+    .sidebar-logo {
+      padding: 2rem 1.5rem 1.5rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: .8rem;
+    }
+
+    .sidebar-logo img {
+      width: 38px;
+      height: 38px;
+      object-fit: contain;
+    }
+
+    .sidebar-logo-text {
+      font-size: 1.05rem;
+      font-weight: 900;
+      font-style: italic;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      color: var(--gold);
+    }
+
+    .sidebar-logo-sub {
+      font-size: .55rem;
+      color: var(--slate);
+      text-transform: uppercase;
+      letter-spacing: .15em;
+      font-weight: 700;
+      margin-top: 1px;
+    }
+
+    .sidebar-nav {
+      flex: 1;
+      padding: 1.5rem 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: .35rem;
+      overflow-y: auto;
+    }
+
+    .nav-section-label {
+      font-size: .55rem;
+      font-weight: 800;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: var(--slate);
+      padding: .8rem .6rem .4rem;
+      margin-top: .5rem;
+    }
+
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: .85rem;
+      padding: .75rem 1rem;
+      border-radius: 12px;
+      text-decoration: none;
+      font-size: .78rem;
+      font-weight: 700;
+      color: var(--slate);
+      transition: all .2s ease;
+      position: relative;
+    }
+
+    .nav-link i {
+      width: 18px;
       text-align: center;
-      margin: 1rem 0;
+      font-size: .85rem;
     }
 
-    button {
-      background: #001f63;
-      color: #FFD700;
-      padding: 0.7rem 1.2rem;
+    .nav-link:hover {
+      background: rgba(255, 255, 255, .05);
+      color: var(--text);
+    }
+
+    .nav-link.active {
+      background: rgba(255, 204, 0, .1);
+      color: var(--gold);
+    }
+
+    .sidebar-footer {
+      padding: 1.2rem 1rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .user-chip {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+      padding: .75rem 1rem;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, .04);
+      margin-bottom: .6rem;
+    }
+
+    .user-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--gold);
+      color: var(--blue);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      font-size: .8rem;
+    }
+
+    .user-name {
+      font-size: .75rem;
+      font-weight: 800;
+      color: var(--text);
+    }
+
+    .user-role {
+      font-size: .6rem;
+      color: var(--slate);
+      text-transform: uppercase;
+      letter-spacing: .1em;
+    }
+
+    .btn-logout {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: .5rem;
+      padding: .7rem;
+      border-radius: 12px;
       border: none;
-      font-weight: bold;
+      background: rgba(239, 68, 68, .1);
+      color: #ef4444;
+      font-family: 'Montserrat', sans-serif;
+      font-size: .72rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all .2s;
+    }
+
+    .btn-logout:hover {
+      background: #ef4444;
+      color: #fff;
+    }
+
+    /* ── MAIN & TOPBAR ── */
+    .main {
+      margin-left: var(--sidebar-w);
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    .topbar {
+      padding: 1.5rem 2rem;
+      border-bottom: 1px solid var(--border);
+      background: var(--dark2);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+
+    .page-title {
+      font-size: 1.4rem;
+      font-weight: 900;
+      font-style: italic;
+      text-transform: uppercase;
+      letter-spacing: .03em;
+    }
+
+    .page-title span {
+      color: var(--gold);
+    }
+
+    .page-subtitle {
+      font-size: .7rem;
+      color: var(--slate);
+      font-weight: 600;
+      margin-top: 2px;
+    }
+
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: .8rem;
+    }
+
+    .topbar-time {
+      font-size: .72rem;
+      font-weight: 700;
+      color: var(--slate);
+      background: var(--dark3);
+      padding: .45rem .9rem;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+    }
+
+    .mobile-menu-btn {
+      display: none;
+      background: var(--dark3);
+      border: 1px solid var(--border);
+      color: var(--gold);
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
       font-size: 1rem;
       cursor: pointer;
-      border-radius: 4px;
-      margin: 8px;
-      transition: background 0.3s;
+      align-items: center;
+      justify-content: center;
     }
 
-    button:hover {
-      background: #001751;
+    .content {
+      padding: 2rem;
+      flex: 1;
+    }
+
+    /* ── Raffle Content Specific ── */
+    .btn-container {
+      margin-bottom: 2rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+      background: var(--dark2);
+      padding: 1.5rem;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+    }
+
+    .btn-container label {
+      font-size: .75rem;
+      font-weight: 800;
+      color: var(--slate);
+      text-transform: uppercase;
     }
 
     input[type="number"] {
-      width: 70px;
-      padding: 6px;
-      font-size: 1rem;
-      text-align: center;
-      border: 1px solid #001f63;
-      border-radius: 4px;
+      background: var(--dark);
+      border: 1px solid var(--border);
+      color: #fff;
+      padding: .6rem;
+      border-radius: 10px;
+      width: 80px;
+      font-weight: 700;
+      outline: none;
+    }
+
+    button.btn-action {
+      background: var(--gold);
+      color: var(--blue);
+      padding: .7rem 1.5rem;
+      border: none;
+      font-weight: 900;
+      font-style: italic;
+      text-transform: uppercase;
+      font-size: .75rem;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all .2s;
+      box-shadow: 0 4px 15px rgba(255, 204, 0, 0.2);
+    }
+
+    button.btn-action:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(255, 204, 0, 0.3);
     }
 
     .page {
@@ -54,97 +337,192 @@
       align-items: center;
       page-break-after: always;
       background: white;
-      box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+      border-radius: 10px;
     }
 
     .boleta {
       width: 95%;
       min-height: 240px;
       background: #FFD700;
-      border: 2px solid #001f63;
+      border: 2px solid #002a40;
       border-radius: 10px;
-      padding: 1rem;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+      padding: 1.5rem;
       position: relative;
-      margin: 10px 0;
+      margin: 15px 0;
+      color: #002a40;
     }
 
     .titulo-boleta {
       text-align: center;
-      font-weight: bold;
+      font-weight: 900;
       font-size: 1.8rem;
       margin-bottom: 0.5rem;
+      font-style: italic;
     }
 
     .logo {
-      width: 60px;
+      width: 70px;
       position: absolute;
-      top: 10px;
-      right: 10px;
+      top: 15px;
+      right: 15px;
     }
 
     .info {
       text-align: center;
-      font-size: 1.1rem;
-      margin-bottom: 0.7rem;
+      font-size: 1.05rem;
+      margin-bottom: 1rem;
       line-height: 1.3;
+      font-weight: 700;
     }
 
     .numeros {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      margin-top: 0.7rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 1rem;
     }
 
     .fila-numero-nombre {
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      gap: 10px;
+      gap: 8px;
     }
 
     .numero {
       background: #fff;
-      color: #001f63;
-      width: 60px;
-      height: 60px;
-      border: 2px solid #001f63;
-      border-radius: 6px;
+      color: #002a40;
+      width: 45px;
+      height: 45px;
+      border: 2px solid #002a40;
+      border-radius: 8px;
       display: flex;
       justify-content: center;
       align-items: center;
-      font-weight: bold;
-      font-size: 1.5rem;
+      font-weight: 900;
+      font-size: 1.4rem;
+      flex-shrink: 0;
     }
 
     .nombre-numero {
       flex: 1;
-      font-size: 1rem;
-      padding: 8px;
-      border: 1px solid #001f63;
-      border-radius: 6px;
+      font-size: .8rem;
+      padding: 6px 10px;
+      border: 1.5px solid #002a40;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.5);
+      font-weight: 700;
     }
 
-    .footer {
+    .footer-boleta {
       position: absolute;
       bottom: 10px;
-      left: 1rem;
-      font-weight: bold;
-      font-size: 1rem;
+      left: 1.5rem;
+      font-weight: 900;
+      font-size: .9rem;
+      opacity: 0.7;
+    }
+
+    @media (max-width: 992px) {
+      .sidebar {
+        transform: translateX(-100%);
+      }
+
+      .sidebar.open {
+        transform: translateX(0);
+      }
+
+      .main {
+        margin-left: 0;
+      }
+
+      .mobile-menu-btn {
+        display: flex;
+      }
+
+      .page {
+        width: 100%;
+        margin: 0;
+        padding: 5mm;
+      }
     }
   </style>
 </head>
 
-<body>
-  <div class="btn-container">
-    <label for="cantidad">Cantidad de boletas:</label>
-    <input type="number" id="cantidad" min="1" value="40" />
-    <button onclick="generarBoletas()">Generar Boletas</button>
-    <button onclick="descargarZip()">Descargar ZIP</button>
-  </div>
+<body style="display: none;" id="admin-body">
 
-  <div id="contenedor"></div>
+  <!-- ══ SIDEBAR ══ -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <img src="/images/ESCUDO.png" alt="DIBA FBC">
+      <div>
+        <div class="sidebar-logo-text">DIBA FBC</div>
+        <div class="sidebar-logo-sub">Panel de Control</div>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a href="dashboard.html" class="nav-link"><i class="fas fa-th-large"></i> Dashboard</a>
+
+      <div class="nav-section-label">Equipo</div>
+      <a href="planilla.html" class="nav-link"><i class="fas fa-clipboard-list"></i> Planilla</a>
+      <a href="../listaJugadores.html" class="nav-link"><i class="fas fa-users"></i> Jugadores</a>
+      <a href="../partidos.html" class="nav-link"><i class="fas fa-futbol"></i> Partidos</a>
+      <a href="../analisis.html" class="nav-link"><i class="fas fa-chart-line"></i> Análisis</a>
+
+      <div class="nav-section-label">Administración</div>
+      <a href="GestorDocumental.html" class="nav-link"><i class="fas fa-folder-open"></i> Gestor Documental</a>
+      <a href="usuarios.html" class="nav-link"><i class="fas fa-user-cog"></i> Usuarios</a>
+      <a href="crear-usuario.html" class="nav-link"><i class="fas fa-user-plus"></i> Crear Usuario</a>
+      <a href="rifa_diba.html" class="nav-link active"><i class="fas fa-ticket-alt"></i> Rifas</a>
+
+      <div class="nav-section-label">Sitio Web</div>
+      <a href="../index.html" class="nav-link"><i class="fas fa-globe"></i> Ver Sitio</a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="user-chip">
+        <div class="user-avatar" id="sb-avatar">A</div>
+        <div>
+          <div class="user-name" id="sb-name">Administrador</div>
+          <div class="user-role" id="sb-role">Admin</div>
+        </div>
+      </div>
+      <button class="btn-logout" id="logout-btn">
+        <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+      </button>
+    </div>
+  </aside>
+
+  <div class="main">
+    <!-- Top Bar -->
+    <header class="topbar">
+      <button class="mobile-menu-btn" id="menu-btn">
+        <i class="fas fa-bars" id="menu-icon"></i>
+      </button>
+      <div>
+        <div class="page-title">Generador de <span>Rifas</span></div>
+        <div class="page-subtitle">Creación de boletas para sorteos — DIBA FBC</div>
+      </div>
+      <div class="topbar-right">
+        <div class="topbar-time" id="clock">--:--</div>
+      </div>
+    </header>
+
+    <div class="content">
+      <div class="btn-container">
+        <div>
+          <label for="cantidad">Cantidad:</label>
+          <input type="number" id="cantidad" min="1" value="40" />
+        </div>
+        <button onclick="generarBoletas()" class="btn-action">Generar Boletas</button>
+        <button onclick="descargarZip()" class="btn-action"
+          style="background: var(--dark3); color: var(--gold); border: 1px solid var(--border);">Descargar ZIP</button>
+      </div>
+
+      <div id="contenedor"></div>
+    </div>
+  </div>
 
   <!-- Librerías necesarias -->
   <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
@@ -193,7 +571,7 @@
         const boleta = document.createElement('div');
         boleta.className = 'boleta';
         boleta.innerHTML = `
-          <img src="images/ESCUDO.png" class="logo" alt="Logo" />
+          <img src="/images/ESCUDO.png" class="logo" alt="Logo" />
           <div>
             <div class="titulo-boleta">RESPONSABLE DIBA FBC</div>
             <div class="info">
@@ -203,7 +581,7 @@
               Valor: $3000 cada número
             </div>
             <div class="numeros">${numerosHTML}</div>
-            <div class="footer">Boleta #${i}</div>
+            <div class="footer-boleta">Boleta #${i}</div>
           </div>
         `;
         paginaActual.appendChild(boleta);
@@ -250,11 +628,48 @@
       }
     }
   </script>
+  <script src="/scripts/config.js"></script>
   <script type="module">
-    import { requireAdmin } from "./scripts/supabaseClient.js";
-    requireAdmin();
-  </script>
+    import { supabase, requireAdmin } from "./scripts/supabaseClient.js";
 
+    // Protection & Unified UI
+    requireAdmin().then(session => {
+      if (session) {
+        document.getElementById('admin-body').style.display = 'flex';
+        const user = session.user;
+        if (user) {
+          document.getElementById('sb-name').textContent = user.email.split('@')[0];
+          document.getElementById('sb-avatar').textContent = user.email[0].toUpperCase();
+        }
+      }
+    });
+
+    // Clock
+    const clockEl = document.getElementById('clock');
+    function updateClock() {
+      const now = new Date();
+      if (clockEl) clockEl.textContent = now.toLocaleTimeString('es-CO', { hour: '2-digit', minute: '2-digit' });
+    }
+    updateClock();
+    setInterval(updateClock, 1000);
+
+    // Mobile Menu
+    const menuBtn = document.getElementById('menu-btn');
+    const menuIcon = document.getElementById('menu-icon');
+    const sidebar = document.getElementById('sidebar');
+    menuBtn?.addEventListener('click', () => {
+      sidebar.classList.toggle('open');
+      if (menuIcon) menuIcon.className = sidebar.classList.contains('open') ? 'fas fa-times' : 'fas fa-bars';
+    });
+
+    // Logout
+    document.getElementById('logout-btn')?.addEventListener('click', async () => {
+      if (confirm('¿Cerrar sesión?')) {
+        await supabase.auth.signOut();
+        window.location.href = 'login.html';
+      }
+    });
+  </script>
 </body>
 
 </html>

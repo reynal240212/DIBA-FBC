@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <title>Panel Administrativo | DIBA FBC</title>
@@ -20,118 +21,457 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
     <style>
-        .no-scrollbar::-webkit-scrollbar { display: none; }
-        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        /* ── Dashboard Base Styles ── */
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --blue: #002a40;
+            --blue2: #003d5c;
+            --gold: #ffcc00;
+            --gold2: #e6b800;
+            --dark: #0a0e14;
+            --dark2: #111823;
+            --dark3: #1a2332;
+            --slate: #8b9ab0;
+            --text: #e2e8f0;
+            --border: rgba(255, 255, 255, 0.07);
+            --sidebar-w: 270px;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: var(--dark);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            overflow-x: hidden;
+        }
+
+        /* ── SIDEBAR ── */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            width: var(--sidebar-w);
+            background: var(--dark2);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            z-index: 100;
+            transition: transform .3s ease;
+        }
+
+        .sidebar-logo {
+            padding: 2rem 1.5rem 1.5rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: .8rem;
+        }
+
+        .sidebar-logo img {
+            width: 38px;
+            height: 38px;
+            object-fit: contain;
+        }
+
+        .sidebar-logo-text {
+            font-size: 1.05rem;
+            font-weight: 900;
+            font-style: italic;
+            text-transform: uppercase;
+            letter-spacing: .05em;
+            color: var(--gold);
+        }
+
+        .sidebar-logo-sub {
+            font-size: .55rem;
+            color: var(--slate);
+            text-transform: uppercase;
+            letter-spacing: .15em;
+            font-weight: 700;
+            margin-top: 1px;
+        }
+
+        .sidebar-nav {
+            flex: 1;
+            padding: 1.5rem 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: .35rem;
+            overflow-y: auto;
+        }
+
+        .nav-section-label {
+            font-size: .55rem;
+            font-weight: 800;
+            letter-spacing: .2em;
+            text-transform: uppercase;
+            color: var(--slate);
+            padding: .8rem .6rem .4rem;
+            margin-top: .5rem;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: .85rem;
+            padding: .75rem 1rem;
+            border-radius: 12px;
+            text-decoration: none;
+            font-size: .78rem;
+            font-weight: 700;
+            color: var(--slate);
+            transition: all .2s ease;
+            position: relative;
+        }
+
+        .nav-link i {
+            width: 18px;
+            text-align: center;
+            font-size: .85rem;
+        }
+
+        .nav-link:hover {
+            background: rgba(255, 255, 255, .05);
+            color: var(--text);
+        }
+
+        .nav-link.active {
+            background: rgba(255, 204, 0, .1);
+            color: var(--gold);
+        }
+
+        .sidebar-footer {
+            padding: 1.2rem 1rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .user-chip {
+            display: flex;
+            align-items: center;
+            gap: .75rem;
+            padding: .75rem 1rem;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, .04);
+            margin-bottom: .6rem;
+        }
+
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--gold);
+            color: var(--blue);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: .8rem;
+        }
+
+        .user-name {
+            font-size: .75rem;
+            font-weight: 800;
+            color: var(--text);
+        }
+
+        .user-role {
+            font-size: .6rem;
+            color: var(--slate);
+            text-transform: uppercase;
+            letter-spacing: .1em;
+        }
+
+        .btn-logout {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: .5rem;
+            padding: .7rem;
+            border-radius: 12px;
+            border: none;
+            background: rgba(239, 68, 68, .1);
+            color: #ef4444;
+            font-family: 'Montserrat', sans-serif;
+            font-size: .72rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all .2s;
+        }
+
+        .btn-logout:hover {
+            background: #ef4444;
+            color: #fff;
+        }
+
+        /* ── MAIN & TOPBAR ── */
+        .main {
+            margin-left: var(--sidebar-w);
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .topbar {
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid var(--border);
+            background: var(--dark2);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        .page-title {
+            font-size: 1.4rem;
+            font-weight: 900;
+            font-style: italic;
+            text-transform: uppercase;
+            letter-spacing: .03em;
+        }
+
+        .page-title span {
+            color: var(--gold);
+        }
+
+        .page-subtitle {
+            font-size: .7rem;
+            color: var(--slate);
+            font-weight: 600;
+            margin-top: 2px;
+        }
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: .8rem;
+        }
+
+        .topbar-time {
+            font-size: .72rem;
+            font-weight: 700;
+            color: var(--slate);
+            background: var(--dark3);
+            padding: .45rem .9rem;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: var(--dark3);
+            border: 1px solid var(--border);
+            color: var(--gold);
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            font-size: 1rem;
+            cursor: pointer;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .content {
+            padding: 2rem;
+            flex: 1;
+        }
+
+        @media (max-width: 992px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+
+            .main {
+                margin-left: 0;
+            }
+
+            .mobile-menu-btn {
+                display: flex;
+            }
+        }
+
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
     </style>
 </head>
 
-<body class="bg-slate-100 font-sans text-slate-900 antialiased overflow-x-hidden">
+<body style="display: none;" id="admin-body">
 
-    <div class="lg:hidden fixed bottom-6 right-6 z-[100]">
-        <button id="mobile-menu-btn" class="w-14 h-14 bg-dibaBlue text-dibaGold rounded-full shadow-2xl flex items-center justify-center text-2xl active:scale-90 transition-all">
-            <i class="fas fa-bars"></i>
-        </button>
-    </div>
+    <!-- ══ SIDEBAR ══ -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-logo">
+            <img src="/images/ESCUDO.png" alt="DIBA FBC">
+            <div>
+                <div class="sidebar-logo-text">DIBA FBC</div>
+                <div class="sidebar-logo-sub">Panel de Control</div>
+            </div>
+        </div>
 
-    <div class="flex min-h-screen">
-        
-        <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-72 bg-dibaBlue text-white transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out shadow-2xl">
-            <div class="p-8 flex flex-col h-full">
-                <div class="flex items-center gap-3 mb-12">
-                    <img src="/images/ESCUDO.ico" class="w-10 h-10 object-contain" alt="Logo">
-                    <span class="font-black italic tracking-tighter text-xl uppercase text-dibaGold">Diba FBC</span>
-                </div>
+        <nav class="sidebar-nav">
+            <a href="dashboard.html" class="nav-link"><i class="fas fa-th-large"></i> Dashboard</a>
 
-                <nav class="flex-grow space-y-2">
-                    <a href="#" id="view-gestor-btn" class="flex items-center gap-4 p-4 rounded-2xl bg-white/10 text-dibaGold font-bold border-l-4 border-dibaGold transition-all">
-                        <i class="fas fa-folder-open w-6 text-center"></i> Gestor
-                    </a>
-                    <a href="#" id="view-players-btn" class="flex items-center gap-4 p-4 rounded-2xl hover:bg-white/5 transition-all text-slate-300 hover:text-white">
-                        <i class="fas fa-users w-6 text-center"></i> Jugadores
-                    </a>
-                    <a href="#" class="flex items-center gap-4 p-4 rounded-2xl hover:bg-white/5 transition-all text-slate-300 hover:text-white">
-                        <i class="fas fa-chart-line w-6 text-center"></i> Estadísticas
-                    </a>
-                </nav>
+            <div class="nav-section-label">Equipo</div>
+            <a href="planilla.html" class="nav-link"><i class="fas fa-clipboard-list"></i> Planilla</a>
+            <a href="../listaJugadores.html" class="nav-link"><i class="fas fa-users"></i> Jugadores</a>
+            <a href="../partidos.html" class="nav-link"><i class="fas fa-futbol"></i> Partidos</a>
+            <a href="../analisis.html" class="nav-link"><i class="fas fa-chart-line"></i> Análisis</a>
 
-                <div class="pt-8 border-t border-white/10">
-                    <div class="flex items-center gap-3 mb-6 p-2">
-                        <div class="w-10 h-10 rounded-full bg-dibaGold flex items-center justify-center text-dibaBlue font-black" id="user-avatar">U</div>
-                        <div class="overflow-hidden">
-                            <p class="text-xs font-black uppercase truncate" id="nav-user-name">Usuario</p>
-                            <p class="text-[10px] text-slate-400 uppercase tracking-widest" id="nav-user-role">Cargando...</p>
-                        </div>
-                    </div>
-                    <button id="logout-btn" class="w-full flex items-center justify-center gap-2 p-4 rounded-2xl bg-red-500/10 text-red-400 hover:bg-red-500 hover:text-white transition-all font-bold text-xs uppercase italic">
-                        <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
-                    </button>
+            <div class="nav-section-label">Administración</div>
+            <a href="GestorDocumental.html" class="nav-link active"><i class="fas fa-folder-open"></i> Gestor
+                Documental</a>
+            <a href="usuarios.html" class="nav-link"><i class="fas fa-user-cog"></i> Usuarios</a>
+            <a href="crear-usuario.html" class="nav-link"><i class="fas fa-user-plus"></i> Crear Usuario</a>
+            <a href="rifa_diba.html" class="nav-link"><i class="fas fa-ticket-alt"></i> Rifas</a>
+
+            <div class="nav-section-label">Sitio Web</div>
+            <a href="../index.html" class="nav-link"><i class="fas fa-globe"></i> Ver Sitio</a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="user-chip">
+                <div class="user-avatar" id="sb-avatar">A</div>
+                <div>
+                    <div class="user-name" id="sb-name">Administrador</div>
+                    <div class="user-role" id="sb-role">Admin</div>
                 </div>
             </div>
-        </aside>
+            <button class="btn-logout" id="logout-btn">
+                <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+            </button>
+        </div>
+    </aside>
 
-        <main class="flex-grow lg:ml-72 transition-all duration-300">
-            
-            <header class="bg-white p-6 md:p-10 border-b border-slate-200">
-                <div class="max-w-5xl mx-auto">
-                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
-                        <div class="animate__animated animate__fadeInLeft">
-                            <h2 class="text-sm font-black text-dibaGold uppercase tracking-[0.3em] mb-2 font-semibold">Panel de Control</h2>
-                            <h1 id="main-title" class="text-3xl md:text-5xl font-black uppercase italic text-dibaBlue tracking-tighter">
-                                Gestor <span class="text-slate-300">Documental</span>
-                            </h1>
-                        </div>
-                        
-                        <div class="relative group">
-                            <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-dibaGold transition-colors"></i>
-                            <input type="text" id="searchInput" placeholder="Buscar..." 
-                                class="w-full md:w-80 pl-12 pr-4 py-4 bg-slate-50 rounded-2xl border-none focus:ring-2 focus:ring-dibaGold outline-none font-medium shadow-inner transition-all">
-                        </div>
-                    </div>
+    <div class="main">
+        <!-- Top Bar -->
+        <header class="topbar">
+            <button class="mobile-menu-btn" id="menu-btn">
+                <i class="fas fa-bars" id="menu-icon"></i>
+            </button>
+            <div>
+                <div class="page-title">Gestor <span>Documental</span></div>
+                <div class="page-subtitle">Administración de archivos y registros — DIBA FBC</div>
+            </div>
+            <div class="topbar-right">
+                <div class="topbar-time" id="clock">--:--</div>
+                <div class="relative group">
+                    <i
+                        class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-dibaGold transition-colors"></i>
+                    <input type="text" id="searchInput" placeholder="Buscar..."
+                        class="pl-12 pr-4 py-2 bg-slate-100/10 text-white rounded-xl border border-white/10 focus:ring-2 focus:ring-dibaGold outline-none font-medium transition-all text-sm">
                 </div>
-            </header>
+            </div>
+        </header>
 
-            <article class="p-6 md:p-10 max-w-5xl mx-auto">
-                
-                <div id="filter-container" class="flex items-center gap-3 mb-8 overflow-x-auto pb-2 no-scrollbar">
-                    <button class="px-6 py-2 rounded-full bg-dibaBlue text-white text-[10px] font-black uppercase italic whitespace-nowrap">Todos</button>
-                    <button class="px-6 py-2 rounded-full bg-white text-slate-400 text-[10px] font-black uppercase italic border border-slate-200 hover:border-dibaGold transition-all whitespace-nowrap">Legales</button>
-                    <button class="px-6 py-2 rounded-full bg-white text-slate-400 text-[10px] font-black uppercase italic border border-slate-200 hover:border-dibaGold transition-all whitespace-nowrap">Pagos</button>
+        <div class="content">
+            <!-- Título fallback para gestor.js selector si es necesario -->
+            <h1 id="main-title" class="hidden">Gestor Documental</h1>
+
+            <div id="filter-container" class="flex items-center gap-3 mb-8 overflow-x-auto pb-2 no-scrollbar">
+                <button
+                    class="px-6 py-2 rounded-full bg-dibaGold text-blue-900 text-[10px] font-black uppercase italic whitespace-nowrap">Todos</button>
+                <button
+                    class="px-6 py-2 rounded-full bg-white/5 text-slate-400 text-[10px] font-black uppercase italic border border-white/10 hover:border-dibaGold transition-all whitespace-nowrap">Legales</button>
+                <button
+                    class="px-6 py-2 rounded-full bg-white/5 text-slate-400 text-[10px] font-black uppercase italic border border-white/10 hover:border-dibaGold transition-all whitespace-nowrap">Pagos</button>
+            </div>
+
+            <div id="dynamic-content" class="animate__animated animate__fadeIn">
+                <div class="flex flex-col items-center justify-center py-20 text-slate-500">
+                    <i class="fas fa-circle-notch animate-spin text-4xl mb-4"></i>
+                    <p class="text-xs font-bold uppercase tracking-widest">Sincronizando datos...</p>
                 </div>
-
-                <div id="dynamic-content" class="animate__animated animate__fadeIn">
-                    
-                    <div class="flex flex-col items-center justify-center py-20 text-slate-300">
-                        <i class="fas fa-circle-notch animate-spin text-4xl mb-4"></i>
-                        <p class="text-xs font-bold uppercase tracking-widest">Sincronizando datos...</p>
-                    </div>
-
-                </div>
-            </article>
-        </main>
+            </div>
+        </div>
     </div>
 
-    <script>
-        // Menú Móvil
-        const btn = document.getElementById('mobile-menu-btn');
+    <script src="/scripts/config.js"></script>
+    <script type="module">
+        import { supabase, requireAdmin } from '../scripts/supabaseClient.js';
+
+        // ── AUTENTICACIÓN Y CARGA ──
+        async function init() {
+            try {
+                const session = await requireAdmin();
+                if (!session) return;
+
+                document.getElementById('admin-body').style.display = 'flex';
+
+                const user = session.user;
+                if (user) {
+                    const { data: profile } = await supabase
+                        .from('users')
+                        .select('username, role, full_name')
+                        .eq('id', user.id)
+                        .single();
+
+                    if (profile) {
+                        document.getElementById('sb-name').textContent = profile.username;
+                        document.getElementById('sb-role').textContent = profile.role;
+                        document.getElementById('sb-avatar').textContent = profile.username[0].toUpperCase();
+                    } else {
+                        document.getElementById('sb-name').textContent = user.email.split('@')[0];
+                        document.getElementById('sb-avatar').textContent = user.email[0].toUpperCase();
+                    }
+                }
+            } catch (error) {
+                console.error("Init error:", error);
+            }
+        }
+
+        init();
+
+        // ── RELOJ ──
+        const clockEl = document.getElementById('clock');
+        function updateClock() {
+            const now = new Date();
+            if (clockEl) clockEl.textContent = now.toLocaleTimeString('es-CO', { hour: '2-digit', minute: '2-digit' });
+        }
+        updateClock();
+        setInterval(updateClock, 1000);
+
+        // ── MOBILE MENU ──
+        const menuBtn = document.getElementById('menu-btn');
+        const menuIcon = document.getElementById('menu-icon');
         const sidebar = document.getElementById('sidebar');
-        btn.addEventListener('click', () => {
-            sidebar.classList.toggle('-translate-x-full');
-            btn.querySelector('i').classList.toggle('fa-bars');
-            btn.querySelector('i').classList.toggle('fa-times');
+        menuBtn?.addEventListener('click', () => {
+            sidebar.classList.toggle('open');
+            if (menuIcon) menuIcon.className = sidebar.classList.contains('open') ? 'fas fa-times' : 'fas fa-bars';
         });
 
-        // Estilo activo del menú (cambio visual al hacer clic)
-        const navLinks = document.querySelectorAll('nav a');
-        navLinks.forEach(link => {
-            link.addEventListener('click', () => {
-                navLinks.forEach(l => l.classList.remove('bg-white/10', 'text-dibaGold', 'border-l-4', 'border-dibaGold'));
-                link.classList.add('bg-white/10', 'text-dibaGold', 'border-l-4', 'border-dibaGold');
-                // En móvil, cerrar el sidebar al clickear
-                if (window.innerWidth < 1024) sidebar.classList.add('-translate-x-full');
-            });
+        // ── LOGOUT ──
+        document.getElementById('logout-btn')?.addEventListener('click', async () => {
+            if (confirm('¿Cerrar sesión?')) {
+                await supabase.auth.signOut();
+                window.location.href = 'login.html';
+            }
         });
     </script>
 
     <script type="module" src="/scripts/gestor.js"></script>
 </body>
+
 </html>
