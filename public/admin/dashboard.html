@@ -1018,9 +1018,45 @@
                 activities.sort((a, b) => b.time - a.time);
                 renderRecentActivity(activities.slice(0, 5));
 
+                // 4. Próximos Partidos
+                const { data: upcomingMatches } = await supabase
+                    .from('partidos')
+                    .select('*')
+                    .gte('fecha', new Date().toISOString().split('T')[0])
+                    .order('fecha', { ascending: true })
+                    .limit(3);
+
+                renderMatches(upcomingMatches);
+
             } catch (e) {
                 console.error('Error al cargar Dashboard:', e);
             }
+        }
+
+        function renderMatches(matches) {
+            const container = document.getElementById('matches-list');
+            if (!matches || matches.length === 0) {
+                container.innerHTML = `<div class="empty-state"><i class="fas fa-futbol"></i><p>No hay partidos programados</p></div>`;
+                return;
+            }
+
+            container.innerHTML = matches.map(m => `
+                <div style="background:var(--dark3); border:1px solid var(--border); border-radius:14px; padding:1.2rem; display:flex; flex-direction:column; gap:0.5rem">
+                    <div style="display:flex; justify-content:space-between; align-items:center">
+                        <span style="font-size:0.6rem; font-weight:800; color:var(--gold); text-transform:uppercase">${m.categoria}</span>
+                        <span style="font-size:0.6rem; color:var(--slate)">${new Date(m.fecha).toLocaleDateString()}</span>
+                    </div>
+                    <div style="font-size:0.85rem; font-weight:900; font-style:italic; text-transform:uppercase; display:flex; align-items:center; gap:0.5rem">
+                        <span>${m.equipolocal}</span>
+                        <span style="color:var(--gold)">VS</span>
+                        <span>${m.equipovisitante}</span>
+                    </div>
+                    <div style="font-size:0.65rem; color:var(--slate); display:flex; flex-direction:column; gap:0.2rem">
+                        <span><i class="fas fa-clock" style="margin-right:0.3rem"></i> ${m.hora}</span>
+                        <span><i class="fas fa-map-marker-alt" style="margin-right:0.3rem"></i> ${m.Cancha}</span>
+                    </div>
+                </div>
+            `).join('');
         }
 
         function renderRecentActivity(activities) {
