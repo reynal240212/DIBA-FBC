@@ -972,15 +972,23 @@
         // ── KPIs desde Supabase ──
         // ── KPIs desde Supabase ──
         async function loadKPIs() {
+            // 1. Cargar Jugadores (Prioritario)
             try {
-                // 1. Usar RPC para estadísticas consolidadas
-                const { data: stats, error: statsError } = await supabase.rpc('get_dashboard_stats');
+                const { count } = await supabase.from('identificacion').select('*', { count: 'exact', head: true });
+                document.getElementById('kpi-players').textContent = count || 0;
+            } catch (e) { console.error('Error Jugadores:', e); }
 
+            // 2. Cargar Partidos
+            try {
+                const count = await getMatchCount();
+                document.getElementById('kpi-matches').textContent = count || 0;
+            } catch (e) { console.error('Error Partidos:', e); }
+
+            // 3. Cargar Estadísticas (RPC)
+            try {
+                const { data: stats, error: statsError } = await supabase.rpc('get_dashboard_stats');
                 if (!statsError && stats && stats.length > 0) {
                     const s = stats[0];
-                    document.getElementById('kpi-players').textContent = s.total_jugadores || 0;
-                    document.getElementById('kpi-matches').textContent = await getMatchCount();
-
                     if (s.presentes !== undefined) {
                         const totalAsis = (s.presentes || 0) + (s.ausentes || 0) + (s.excusas || 0);
                         const attPct = totalAsis > 0 ? Math.round((s.presentes / totalAsis) * 100) : 0;
@@ -996,15 +1004,24 @@
                         document.getElementById('att-e').textContent = `${s.excusas} Excusas`;
                     }
                 }
+            } catch (e) { console.error('Error RPC Stats:', e); }
 
-                // 2. Pagos Pendientes
+            // 4. Pagos Pendientes
+            try {
                 const { count: pendingCount } = await supabase
                     .from('planilla_registros')
                     .select('*', { count: 'exact', head: true })
                     .or('pago.is.null,pago.eq.0');
                 document.getElementById('kpi-pending').textContent = pendingCount > 0 ? pendingCount : '✓';
+            } catch (e) { console.error('Error Pagos:', e); }
 
-                // 3. Actividad Combinada (Jugadores + Mensajes)
+            // 5. Actividad y Partidos Próximos
+            loadRecentActivity();
+            loadUpcomingMatches();
+        }
+
+        async function loadRecentActivity() {
+            try {
                 const { data: recentPlayers } = await supabase
                     .from('identificacion')
                     .select('nombre, apellidos, created_at')
@@ -1037,8 +1054,11 @@
 
                 activities.sort((a, b) => b.time - a.time);
                 renderRecentActivity(activities.slice(0, 5));
+            } catch (e) { console.error('Error Actividad:', e); }
+        }
 
-                // 4. Próximos Partidos
+        async function loadUpcomingMatches() {
+            try {
                 const { data: upcomingMatches } = await supabase
                     .from('partidos')
                     .select('*')
@@ -1047,10 +1067,7 @@
                     .limit(3);
 
                 renderMatches(upcomingMatches);
-
-            } catch (e) {
-                console.error('Error al cargar Dashboard:', e);
-            }
+            } catch (e) { console.error('Error Upcoming Matches:', e); }
         }
 
         function renderMatches(matches) {
