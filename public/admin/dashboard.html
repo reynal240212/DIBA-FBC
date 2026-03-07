@@ -950,17 +950,14 @@
         }
 
         // ── KPIs desde Supabase ──
+        // ── KPIs desde Supabase ──
         async function loadKPIs() {
             try {
-                // Usar RPC para estadísticas consolidadas
+                // 1. Usar RPC para estadísticas consolidadas
                 const { data: stats, error: statsError } = await supabase.rpc('get_dashboard_stats');
 
                 if (!statsError && stats && stats.length > 0) {
                     const s = stats[0];
-                    // El RPC usa la tabla 'jugadores', pero preferimos 'identificacion' si es la oficial
-                    // Para este proyecto parece que identificacion es el registro detallado
-
-                    // Re-verificamos conteo si es necesario o usamos el del RPC
                     document.getElementById('kpi-players').textContent = s.total_jugadores || 0;
                     document.getElementById('kpi-matches').textContent = await getMatchCount();
 
@@ -969,7 +966,6 @@
                         const attPct = totalAsis > 0 ? Math.round((s.presentes / totalAsis) * 100) : 0;
                         document.getElementById('kpi-attendance').textContent = `${attPct}%`;
 
-                        // Mostrar panel de asistencia
                         document.getElementById('attendance-panel').style.display = '';
                         document.getElementById('bar-p').style.width = (totalAsis > 0 ? (s.presentes / totalAsis) * 100 : 0) + '%';
                         document.getElementById('bar-a').style.width = (totalAsis > 0 ? (s.ausentes / totalAsis) * 100 : 0) + '%';
@@ -981,48 +977,70 @@
                     }
                 }
 
-                // 4. Pagos Pendientes (registros con pago null o 0)
+                // 2. Pagos Pendientes
                 const { count: pendingCount } = await supabase
                     .from('planilla_registros')
                     .select('*', { count: 'exact', head: true })
                     .or('pago.is.null,pago.eq.0');
                 document.getElementById('kpi-pending').textContent = pendingCount > 0 ? pendingCount : '✓';
 
-                // Reciente: Ultimos 5 jugadores inscritos
+                // 3. Actividad Combinada (Jugadores + Mensajes)
                 const { data: recentPlayers } = await supabase
                     .from('identificacion')
-                    .select('nombre, apellidos, numero')
-                    .order('numero', { ascending: false })
-                    .limit(5);
+                    .select('nombre, apellidos, created_at')
+                    .order('created_at', { ascending: false })
+                    .limit(3);
 
+                const { data: recentMessages } = await supabase
+                    .from('mensajes')
+                    .select('full_name, content, created_at')
+                    .order('created_at', { ascending: false })
+                    .limit(3);
+
+                const activities = [];
                 if (recentPlayers) {
-                    renderRecentActivity(recentPlayers);
+                    recentPlayers.forEach(p => activities.push({
+                        type: 'player',
+                        title: `${p.nombre} ${p.apellidos}`,
+                        subtitle: 'Nuevo jugador registrado',
+                        time: new Date(p.created_at)
+                    }));
                 }
+                if (recentMessages) {
+                    recentMessages.forEach(m => activities.push({
+                        type: 'message',
+                        title: m.full_name || 'Usuario Anónimo',
+                        subtitle: `Mensaje: "${m.content.substring(0, 30)}..."`,
+                        time: new Date(m.created_at)
+                    }));
+                }
+
+                activities.sort((a, b) => b.time - a.time);
+                renderRecentActivity(activities.slice(0, 5));
 
             } catch (e) {
                 console.error('Error al cargar Dashboard:', e);
             }
         }
 
-        function renderRecentActivity(players) {
+        function renderRecentActivity(activities) {
             const list = document.getElementById('activity-list');
-            const colors = [
-                { bg: 'rgba(255,204,0,.12)', color: 'var(--gold)', icon: 'fa-user' },
-                { bg: 'rgba(34,197,94,.12)', color: '#4ade80', icon: 'fa-check' },
-                { bg: 'rgba(239,68,68,.12)', color: '#fb7185', icon: 'fa-times' },
-                { bg: 'rgba(59,130,246,.12)', color: '#60a5fa', icon: 'fa-info' },
-            ];
+            const icons = {
+                player: { bg: 'rgba(255,204,0,.12)', color: 'var(--gold)', icon: 'fa-user-plus' },
+                message: { bg: 'rgba(59,130,246,.12)', color: '#60a5fa', icon: 'fa-envelope' }
+            };
 
-            const items = players.map((p, i) => {
-                const c = colors[i % colors.length];
+            const items = activities.map(act => {
+                const conf = icons[act.type];
+                const timeStr = act.time.toLocaleDateString() + ' ' + act.time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
                 return `
                   <div class="activity-item">
-                    <div class="activity-dot" style="background:${c.bg};color:${c.color}">
-                      <i class="fas ${c.icon}"></i>
+                    <div class="activity-dot" style="background:${conf.bg};color:${conf.color}">
+                      <i class="fas ${conf.icon}"></i>
                     </div>
                     <div>
-                      <div class="activity-text">${p.nombre} ${p.apellidos}</div>
-                      <div class="activity-time">Documento: <strong>${p.numero}</strong> · Guardado en DB</div>
+                      <div class="activity-text">${act.title}</div>
+                      <div class="activity-time">${act.subtitle} · ${timeStr}</div>
                     </div>
                   </div>`;
             }).join('');
