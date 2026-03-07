@@ -3,195 +3,15 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DIBA FBC — Gestión de Usuarios</title>
+    <title>Usuarios — DIBA FBC Admin</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="icon" href="/images/ESCUDO.ico" type="image/x-icon">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,600;0,700;0,900;1,700;1,900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+    <link rel="stylesheet" href="/styles/admin-common.css">
     <style>
-        *,
-        *::before,
-        *::after {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        :root {
-            --blue: #002a40;
-            --gold: #ffcc00;
-            --dark: #0a0e14;
-            --dark2: #111823;
-            --dark3: #1a2332;
-            --slate: #8b9ab0;
-            --text: #e2e8f0;
-            --border: rgba(255, 255, 255, 0.07);
-            --sidebar-w: 270px;
-            --red: #f43f5e;
-        }
-
-        body {
-            font-family: 'Montserrat', sans-serif;
-            background: var(--dark);
-            color: var(--text);
-            min-height: 100vh;
-            display: flex;
-        }
-
-        .main {
-            margin-left: var(--sidebar-w);
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
-
-        .topbar {
-            padding: 1.5rem 2rem;
-            border-bottom: 1px solid var(--border);
-            background: var(--dark2);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 1rem;
-            position: sticky;
-            top: 0;
-            z-index: 50;
-        }
-
-        .page-title {
-            font-size: 1.4rem;
-            font-weight: 900;
-            font-style: italic;
-            text-transform: uppercase;
-        }
-
-        .page-title span {
-            color: var(--gold);
-        }
-
-        .page-subtitle {
-            font-size: .7rem;
-            color: var(--slate);
-            font-weight: 600;
-            margin-top: 2px;
-        }
-
-        .btn-add {
-            display: inline-flex;
-            align-items: center;
-            gap: .5rem;
-            padding: .6rem 1.2rem;
-            border-radius: 10px;
-            background: var(--gold);
-            color: var(--blue);
-            font-family: 'Montserrat', sans-serif;
-            font-size: .72rem;
-            font-weight: 800;
-            text-transform: uppercase;
-            text-decoration: none;
-            border: none;
-            cursor: pointer;
-            transition: background .2s;
-        }
-
-        .btn-add:hover {
-            background: #e6b800;
-        }
-
-        .content {
-            padding: 2rem;
-            flex: 1;
-        }
-
-        /* Panel */
-        .panel {
-            background: var(--dark2);
-            border: 1px solid var(--border);
-            border-radius: 18px;
-            overflow: hidden;
-            animation: fadeUp .4s ease both;
-        }
-
-        .panel-header {
-            padding: 1.2rem 1.5rem;
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .panel-title {
-            font-size: .8rem;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: .1em;
-        }
-
-        .panel-title i {
-            color: var(--gold);
-            margin-right: .5rem;
-        }
-
-        .panel-badge {
-            font-size: .6rem;
-            font-weight: 800;
-            padding: .25rem .7rem;
-            border-radius: 999px;
-            background: rgba(255, 204, 0, .12);
-            color: var(--gold);
-            text-transform: uppercase;
-            letter-spacing: .1em;
-        }
-
-        /* Table */
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        thead th {
-            padding: 1rem 1.5rem;
-            font-size: .6rem;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: .15em;
-            color: var(--slate);
-            border-bottom: 1px solid var(--border);
-            text-align: left;
-        }
-
-        tbody tr {
-            border-bottom: 1px solid var(--border);
-            transition: background .15s;
-        }
-
-        tbody tr:last-child {
-            border-bottom: none;
-        }
-
-        tbody tr:hover {
-            background: rgba(255, 255, 255, .025);
-        }
-
-        tbody td {
-            padding: 1rem 1.5rem;
-            font-size: .78rem;
-            font-weight: 600;
-        }
-
-        .badge {
-            display: inline-flex;
-            align-items: center;
-            gap: .3rem;
-            padding: .25rem .7rem;
-            border-radius: 999px;
-            font-size: .6rem;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: .08em;
-        }
-
         .badge-admin {
             background: rgba(255, 204, 0, .15);
             color: var(--gold);
@@ -214,252 +34,211 @@
             background: var(--dark3);
             padding: .2rem .5rem;
             border-radius: 6px;
-            cursor: help;
-        }
-
-        .btn-del {
-            display: inline-flex;
-            align-items: center;
-            gap: .4rem;
-            padding: .45rem .85rem;
-            border-radius: 8px;
-            background: rgba(244, 63, 94, .1);
-            color: var(--red);
-            border: 1px solid rgba(244, 63, 94, .18);
-            font-family: 'Montserrat', sans-serif;
-            font-size: .68rem;
-            font-weight: 800;
-            cursor: pointer;
-            transition: all .2s;
-        }
-
-        .btn-del:hover {
-            background: var(--red);
-            color: #fff;
-        }
-
-        /* Loading / empty */
-        .state-center {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: .6rem;
-            padding: 3rem;
-            color: var(--slate);
-            font-size: .75rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: .1em;
-        }
-
-        .state-center i {
-            font-size: 2rem;
-            opacity: .35;
-        }
-
-        .spinner {
-            animation: spin .7s linear infinite;
-        }
-
-        @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
-        }
-
-        /* Alert banner */
-        .alert-bar {
-            margin: 1.5rem 0 0;
-            padding: .8rem 1.2rem;
-            border-radius: 10px;
-            font-size: .75rem;
-            font-weight: 700;
-            display: none;
-            align-items: center;
-            gap: .5rem;
-        }
-
-        .alert-bar.error {
-            background: rgba(244, 63, 94, .1);
-            color: #fb7185;
-            border: 1px solid rgba(244, 63, 94, .2);
-            display: flex;
-        }
-
-        @keyframes fadeUp {
-            from {
-                opacity: 0;
-                transform: translateY(16px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @media (max-width: 768px) {
-            .main {
-                margin-left: 0;
-            }
-
-            .content {
-                padding: 1rem;
-            }
-
-            .topbar {
-                flex-wrap: wrap;
-            }
-
-            thead th:first-child,
-            tbody td:first-child {
-                display: none;
-            }
         }
     </style>
 </head>
 
-<body style="display:none;" id="admin-body">
+<body style="display: none;" id="admin-body">
 
-    <script src="../scripts/config.js"></script>
-    <script type="module">
-        import { requireAdmin } from '../scripts/supabaseClient.js';
-        requireAdmin().then(() => {
-            document.getElementById('admin-body').style.display = '';
-        });
-    </script>
+    <!-- ══ SIDEBAR ══ -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-logo">
+            <img src="/images/ESCUDO.png" alt="DIBA FBC">
+            <div>
+                <div class="sidebar-logo-text">DIBA FBC</div>
+                <div class="sidebar-logo-sub">Panel de Control</div>
+            </div>
+        </div>
 
+        <nav class="sidebar-nav">
+            <a href="dashboard.html" class="nav-link"><i class="fas fa-th-large"></i> Dashboard</a>
+
+            <div class="nav-section-label">Equipo</div>
+            <a href="planilla.html" class="nav-link"><i class="fas fa-clipboard-list"></i> Planilla</a>
+            <a href="listaJugadores.html" class="nav-link"><i class="fas fa-users"></i> Jugadores</a>
+            <a href="partidos.html" class="nav-link"><i class="fas fa-futbol"></i> Partidos</a>
+            <a href="../analisis.html" class="nav-link"><i class="fas fa-chart-line"></i> Análisis</a>
+
+            <div class="nav-section-label">Administración</div>
+            <a href="GestorDocumental.html" class="nav-link"><i class="fas fa-folder-open"></i> Gestor Documental</a>
+            <a href="usuarios.html" class="nav-link active"><i class="fas fa-user-cog"></i> Usuarios</a>
+            <a href="crear-usuario.html" class="nav-link"><i class="fas fa-user-plus"></i> Crear Usuario</a>
+            <a href="rifa_diba.html" class="nav-link"><i class="fas fa-ticket-alt"></i> Rifas</a>
+
+            <div class="nav-section-label">Sitio Web</div>
+            <a href="../index.html" class="nav-link"><i class="fas fa-globe"></i> Ver Sitio</a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="user-chip">
+                <div class="user-avatar" id="sb-avatar">A</div>
+                <div>
+                    <div class="user-name" id="sb-name">Administrador</div>
+                    <div class="user-role" id="sb-role">Admin</div>
+                </div>
+            </div>
+            <button class="btn-logout" id="logout-btn">
+                <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+            </button>
+        </div>
+    </aside>
+
+    <!-- ══ MAIN ══ -->
     <div class="main">
 
+        <!-- Top Bar -->
         <header class="topbar">
+            <button class="mobile-menu-btn" id="menu-btn">
+                <i class="fas fa-bars" id="menu-icon"></i>
+            </button>
             <div>
                 <div class="page-title">Gestión de <span>Usuarios</span></div>
                 <div class="page-subtitle">Administra los miembros del panel — DIBA FBC</div>
             </div>
-            <a href="crear-usuario.html" class="btn-add"><i class="fas fa-user-plus"></i> Nuevo Usuario</a>
+            <div class="topbar-right">
+                <a href="crear-usuario.html" class="btn btn-primary"><i class="fas fa-user-plus"></i> Nuevo Usuario</a>
+                <div class="topbar-time" id="clock">--:--</div>
+            </div>
         </header>
 
+        <!-- Content -->
         <div class="content">
 
-            <div id="alert-bar" class="alert-bar error"></div>
+            <div id="alert-bar" class="panel"
+                style="display:none; margin-bottom:1.5rem; border-color:var(--red); background:rgba(244,63,94,.05); padding:1rem; color:#fb7185; font-weight:700; font-size:.8rem">
+            </div>
 
-            <div class="panel">
+            <div class="panel animate-fade-up">
                 <div class="panel-header">
                     <span class="panel-title"><i class="fas fa-users"></i>Usuarios del Sistema</span>
-                    <span class="panel-badge" id="count-badge">cargando…</span>
+                    <span class="panel-badge" id="count-badge">Consultando…</span>
                 </div>
 
-                <div id="table-wrapper">
-                    <div class="state-center" id="loading-state">
-                        <i class="fas fa-circle-notch spinner"></i>
-                        <span>Cargando usuarios…</span>
+                <div class="panel-body">
+                    <div id="loading-state" style="text-align:center; padding:3rem; color:var(--slate)">
+                        <i class="fas fa-circle-notch fa-spin" style="font-size:1.5rem; margin-bottom:1rem"></i>
+                        <p style="font-size:.7rem; font-weight:700; text-transform:uppercase">Cargando usuarios…</p>
                     </div>
-                    <table id="usersTable" style="display:none;">
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Usuario</th>
-                                <th>Nombre Completo</th>
-                                <th>Rol</th>
-                                <th>Registro</th>
-                                <th style="text-align:right">Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody id="users-tbody"></tbody>
-                    </table>
-                    <div class="state-center" id="empty-state" style="display:none;">
-                        <i class="fas fa-user-slash"></i>
-                        <span>No hay usuarios registrados</span>
+
+                    <div class="table-responsive" id="table-wrapper" style="display:none">
+                        <table id="usersTable">
+                            <thead>
+                                <tr>
+                                    <th style="width:100px">ID</th>
+                                    <th>Usuario</th>
+                                    <th>Nombre Completo</th>
+                                    <th>Rol</th>
+                                    <th>Registro</th>
+                                    <th style="text-align:right">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="users-tbody"></tbody>
+                        </table>
+                    </div>
+
+                    <div id="empty-state" style="display:none; text-align:center; padding:3rem; color:var(--slate)">
+                        <i class="fas fa-user-slash" style="font-size:2rem; opacity:.3; margin-bottom:1rem"></i>
+                        <p style="font-size:.7rem; font-weight:700; text-transform:uppercase">No hay usuarios
+                            registrados</p>
                     </div>
                 </div>
-
             </div>
-        </div>
-    </div>
 
+        </div><!-- /content -->
+    </div><!-- /main -->
+
+    <script src="/scripts/config.js"></script>
     <script type="module">
-        import { supabase } from '../scripts/supabaseClient.js';
+        import { supabase, requireAdmin } from '../scripts/supabaseClient.js';
+        import { setupAdminUI } from '../scripts/admin-ui.js';
 
         const tbody = document.getElementById('users-tbody');
-        const table = document.getElementById('usersTable');
-        const loadingEl = document.getElementById('loading-state');
-        const emptyEl = document.getElementById('empty-state');
         const countBadge = document.getElementById('count-badge');
         const alertBar = document.getElementById('alert-bar');
 
-        function badgeClass(role) {
-            if (role === 'admin') return 'badge badge-admin';
-            if (role === 'tecnico') return 'badge badge-tecnico';
-            return 'badge badge-user';
-        }
-
-        function renderRows(users) {
-            loadingEl.style.display = 'none';
-            if (!users.length) { emptyEl.style.display = 'flex'; return; }
-
-            table.style.display = '';
-            emptyEl.style.display = 'none';
-            countBadge.textContent = `${users.length} usuario${users.length !== 1 ? 's' : ''}`;
-
-            tbody.innerHTML = '';
-            users.forEach(u => {
-                const tr = document.createElement('tr');
-                const date = new Date(u.created_at).toLocaleDateString('es-ES', { day: '2-digit', month: 'short', year: 'numeric' });
-                tr.innerHTML = `
-                    <td><span class="uid-chip" title="${u.id}">${u.id.substring(0, 8)}…</span></td>
-                    <td><strong>${u.username}</strong></td>
-                    <td>${u.full_name || '<span style="opacity:.4">—</span>'}</td>
-                    <td><span class="${badgeClass(u.role)}">${u.role}</span></td>
-                    <td>${date}</td>
-                    <td style="text-align:right">
-                        <button class="btn-del" data-id="${u.id}" data-name="${u.username}">
-                            <i class="fas fa-trash-alt"></i> Eliminar
-                        </button>
-                    </td>`;
-                tbody.appendChild(tr);
-            });
-        }
-
-        async function loadUsers() {
-            const { data, error } = await supabase
-                .from('users')
-                .select('*')
-                .order('created_at', { ascending: false });
-
-            if (error) {
-                alertBar.innerHTML = `<i class="fas fa-circle-exclamation"></i> Error al cargar usuarios: ${error.message}`;
-                alertBar.style.display = 'flex';
-                loadingEl.style.display = 'none';
-                return;
-            }
-            renderRows(data);
-        }
-
-        table.addEventListener('click', async (e) => {
-            const btn = e.target.closest('.btn-del');
-            if (!btn) return;
-            const { id, name } = btn.dataset;
-            if (!confirm(`¿Eliminar al usuario "${name}" de forma permanente?`)) return;
-
-            btn.disabled = true;
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Eliminando…';
-
-            const { error } = await supabase.rpc('admin_delete_user', { target_user_id: id });
-
-            if (error) {
-                alertBar.innerHTML = `<i class="fas fa-circle-exclamation"></i> Error: ${error.message}`;
-                alertBar.style.display = 'flex';
-                btn.disabled = false;
-                btn.innerHTML = '<i class="fas fa-trash-alt"></i> Eliminar';
-            } else {
-                await loadUsers();
+        requireAdmin().then(session => {
+            if (session) {
+                document.getElementById('admin-body').style.display = 'flex';
+                setupAdminUI();
+                loadUsers();
             }
         });
 
-        loadUsers();
-    </script>
+        async function loadUsers() {
+            const loading = document.getElementById('loading-state');
+            const wrapper = document.getElementById('table-wrapper');
+            const empty = document.getElementById('empty-state');
 
+            loading.style.display = 'block';
+            wrapper.style.display = 'none';
+            empty.style.display = 'none';
+
+            try {
+                const { data: users, error } = await supabase.from('users').select('*').order('created_at', { ascending: false });
+
+                if (error) throw error;
+
+                loading.style.display = 'none';
+                if (!users || users.length === 0) {
+                    empty.style.display = 'block';
+                    countBadge.textContent = '0 Usuarios';
+                    return;
+                }
+
+                wrapper.style.display = 'block';
+                countBadge.textContent = `${users.length} Usuario${users.length !== 1 ? 's' : ''}`;
+
+                tbody.innerHTML = users.map(u => `
+                    <tr>
+                        <td><span class="uid-chip">${u.id.substring(0, 8)}…</span></td>
+                        <td><strong style="color:var(--text)">${u.username}</strong></td>
+                        <td style="color:var(--slate)">${u.full_name || '—'}</td>
+                        <td><span class="badge ${getBadgeClass(u.role)}">${u.role}</span></td>
+                        <td style="color:var(--slate); font-size:.7rem">${new Date(u.created_at).toLocaleDateString()}</td>
+                        <td style="text-align:right">
+                            <button class="btn-del btn-sm" data-id="${u.id}" data-name="${u.username}" style="background:rgba(244,63,94,.1);color:#fb7185;border:1px solid rgba(244,63,94,.15);padding:.4rem .8rem;border-radius:8px;font-size:.65rem;font-weight:800;cursor:pointer">
+                                <i class="fas fa-trash-alt"></i> ELIMINAR
+                            </button>
+                        </td>
+                    </tr>
+                `).join('');
+
+                setupDeleteEvents();
+            } catch (e) {
+                console.error(e);
+                alertBar.style.display = 'block';
+                alertBar.textContent = 'Error al cargar usuarios: ' + e.message;
+                loading.style.display = 'none';
+            }
+        }
+
+        function getBadgeClass(role) {
+            if (role === 'admin') return 'badge-admin';
+            if (role === 'tecnico') return 'badge-tecnico';
+            return 'badge-user';
+        }
+
+        function setupDeleteEvents() {
+            document.querySelectorAll('.btn-del').forEach(btn => {
+                btn.onclick = async () => {
+                    const { id, name } = btn.dataset;
+                    if (!confirm(`¿Eliminar permanently al usuario "${name}"?`)) return;
+
+                    btn.disabled = true;
+                    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+
+                    const { error } = await supabase.rpc('admin_delete_user', { target_user_id: id });
+                    if (error) {
+                        alert(error.message);
+                        btn.disabled = false;
+                        btn.innerHTML = '<i class="fas fa-trash-alt"></i> ELIMINAR';
+                    } else {
+                        loadUsers();
+                    }
+                };
+            });
+        }
+    </script>
 </body>
 
 </html>

@@ -2,156 +2,231 @@
 <html lang="es">
 
 <head>
-  <meta charset="UTF-8" />
-  <title>Generador de Boletas</title>
+  <meta charset="UTF-8">
+  <title>Sorteos — DIBA FBC Admin</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="/images/ESCUDO.ico" type="image/x-icon">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,600;0,700;0,900;1,700;1,900&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="/styles/admin-common.css">
   <style>
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: Arial, sans-serif;
-      background: #f9f9f9;
-      color: #001f63;
-      font-size: 16px;
-    }
-
-    .btn-container {
-      text-align: center;
-      margin: 1rem 0;
-    }
-
-    button {
-      background: #001f63;
-      color: #FFD700;
-      padding: 0.7rem 1.2rem;
-      border: none;
-      font-weight: bold;
-      font-size: 1rem;
-      cursor: pointer;
-      border-radius: 4px;
-      margin: 8px;
-      transition: background 0.3s;
-    }
-
-    button:hover {
-      background: #001751;
-    }
-
-    input[type="number"] {
-      width: 70px;
-      padding: 6px;
-      font-size: 1rem;
-      text-align: center;
-      border: 1px solid #001f63;
-      border-radius: 4px;
-    }
-
-    .page {
-      width: 210mm;
-      margin: 10mm auto;
-      padding: 10mm;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      page-break-after: always;
-      background: white;
-      box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-    }
-
     .boleta {
-      width: 95%;
-      min-height: 240px;
-      background: #FFD700;
-      border: 2px solid #001f63;
-      border-radius: 10px;
-      padding: 1rem;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+      width: 100%;
+      max-width: 600px;
+      background: var(--gold);
+      border: 2px solid var(--blue);
+      border-radius: 14px;
+      padding: 1.5rem;
+      color: var(--blue);
       position: relative;
-      margin: 10px 0;
+      margin: 1rem auto;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
     }
 
-    .titulo-boleta {
+    .boleta-title {
+      font-weight: 900;
       text-align: center;
-      font-weight: bold;
-      font-size: 1.8rem;
-      margin-bottom: 0.5rem;
+      font-size: 1.2rem;
+      text-transform: uppercase;
+      font-style: italic;
     }
 
-    .logo {
-      width: 60px;
+    .boleta-logo {
       position: absolute;
-      top: 10px;
-      right: 10px;
+      top: 1rem;
+      right: 1rem;
+      width: 40px;
     }
 
-    .info {
+    .boleta-info {
       text-align: center;
-      font-size: 1.1rem;
-      margin-bottom: 0.7rem;
-      line-height: 1.3;
+      font-size: .8rem;
+      font-weight: 700;
+      margin: .5rem 0;
+      line-height: 1.4;
+      color: rgba(0, 42, 64, .8);
     }
 
-    .numeros {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      margin-top: 0.7rem;
-    }
-
-    .fila-numero-nombre {
+    .boleta-num-row {
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      gap: 10px;
+      gap: .8rem;
+      margin-top: .5rem;
     }
 
-    .numero {
+    .boleta-num {
       background: #fff;
-      color: #001f63;
-      width: 60px;
-      height: 60px;
-      border: 2px solid #001f63;
-      border-radius: 6px;
+      width: 40px;
+      height: 40px;
       display: flex;
-      justify-content: center;
       align-items: center;
-      font-weight: bold;
-      font-size: 1.5rem;
+      justify-content: center;
+      font-weight: 900;
+      border-radius: 8px;
+      border: 2px solid var(--blue);
+      font-size: 1.1rem;
     }
 
-    .nombre-numero {
+    .boleta-input {
       flex: 1;
-      font-size: 1rem;
-      padding: 8px;
-      border: 1px solid #001f63;
-      border-radius: 6px;
+      background: rgba(255, 255, 255, .5);
+      border: 1px solid var(--blue);
+      border-radius: 8px;
+      padding: .4rem;
+      font-family: 'Montserrat', sans-serif;
+      font-size: .75rem;
+      font-weight: 700;
     }
 
-    .footer {
-      position: absolute;
-      bottom: 10px;
-      left: 1rem;
-      font-weight: bold;
-      font-size: 1rem;
+    .boleta-footer {
+      font-size: .7rem;
+      font-weight: 800;
+      margin-top: 1rem;
+    }
+
+    .print-area {
+      background: #fff;
+      padding: 2rem;
+      border-radius: 20px;
+      margin-top: 2rem;
+      display: none;
+    }
+
+    @media print {
+
+      .sidebar,
+      .topbar,
+      .btn-container {
+        display: none !important;
+      }
+
+      .main {
+        margin: 0 !important;
+      }
+
+      .content {
+        padding: 0 !important;
+      }
+
+      .print-area {
+        display: block !important;
+        box-shadow: none !important;
+      }
     }
   </style>
 </head>
 
-<body>
-  <div class="btn-container">
-    <label for="cantidad">Cantidad de boletas:</label>
-    <input type="number" id="cantidad" min="1" value="40" />
-    <button onclick="generarBoletas()">Generar Boletas</button>
-    <button onclick="descargarZip()">Descargar ZIP</button>
+<body style="display:none;" id="admin-body">
+
+  <!-- ══ SIDEBAR ══ -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <img src="/images/ESCUDO.png" alt="DIBA FBC">
+      <div>
+        <div class="sidebar-logo-text">DIBA FBC</div>
+        <div class="sidebar-logo-sub">Panel de Control</div>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a href="dashboard.html" class="nav-link"><i class="fas fa-th-large"></i> Dashboard</a>
+
+      <div class="nav-section-label">Equipo</div>
+      <a href="planilla.html" class="nav-link"><i class="fas fa-clipboard-list"></i> Planilla</a>
+      <a href="listaJugadores.html" class="nav-link"><i class="fas fa-users"></i> Jugadores</a>
+      <a href="partidos.html" class="nav-link"><i class="fas fa-futbol"></i> Partidos</a>
+      <a href="../analisis.html" class="nav-link"><i class="fas fa-chart-line"></i> Análisis</a>
+
+      <div class="nav-section-label">Administración</div>
+      <a href="GestorDocumental.html" class="nav-link"><i class="fas fa-folder-open"></i> Gestor Documental</a>
+      <a href="usuarios.html" class="nav-link"><i class="fas fa-user-cog"></i> Usuarios</a>
+      <a href="crear-usuario.html" class="nav-link"><i class="fas fa-user-plus"></i> Crear Usuario</a>
+      <a href="rifa_diba.html" class="nav-link active"><i class="fas fa-ticket-alt"></i> Rifas</a>
+
+      <div class="nav-section-label">Sitio Web</div>
+      <a href="../index.html" class="nav-link"><i class="fas fa-globe"></i> Ver Sitio</a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="user-chip">
+        <div class="user-avatar" id="sb-avatar">A</div>
+        <div>
+          <div class="user-name" id="sb-name">Administrador</div>
+          <div class="user-role" id="sb-role">Admin</div>
+        </div>
+      </div>
+      <button class="btn-logout" id="logout-btn">
+        <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+      </button>
+    </div>
+  </aside>
+
+  <!-- ══ MAIN ══ -->
+  <div class="main">
+
+    <header class="topbar">
+      <button class="mobile-menu-btn" id="menu-btn">
+        <i class="fas fa-bars" id="menu-icon"></i>
+      </button>
+      <div>
+        <div class="page-title">Generador de <span>Rifas</span></div>
+        <div class="page-subtitle">Crea y exporta boletas de sorteos — DIBA FBC</div>
+      </div>
+      <div class="topbar-right">
+        <div class="topbar-time" id="clock">--:--</div>
+      </div>
+    </header>
+
+    <div class="content">
+      <div class="panel animate-fade-up">
+        <div class="panel-header">
+          <span class="panel-title"><i class="fas fa-cog"></i>Configuración del Sorteo</span>
+          <span class="panel-badge">Tools</span>
+        </div>
+        <div class="panel-body">
+          <div style="display:flex; gap:1.5rem; align-items:flex-end; flex-wrap:wrap">
+            <div style="flex:1; min-width:200px">
+              <label class="page-subtitle" style="text-transform:uppercase; margin-bottom:.5rem; display:block">Cantidad
+                de boletas</label>
+              <input type="number" id="cantidad" class="form-control" value="40" min="1">
+            </div>
+            <button onclick="generarBoletas()" class="btn btn-primary"><i class="fas fa-magic"></i> GENERAR</button>
+            <button onclick="descargarZip()" class="btn btn-outline"><i class="fas fa-file-archive"></i> DESCARGAR
+              ZIP</button>
+            <button onclick="window.print()" class="btn btn-outline"><i class="fas fa-print"></i> IMPRIMIR</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="contenedor" class="animate-fade-up" style="margin-top:2rem">
+        <!-- Boletas will be here -->
+        <div style="text-align:center; padding:5rem; color:var(--slate)">
+          <i class="fas fa-ticket-alt" style="font-size:3rem; opacity:.1; margin-bottom:1rem"></i>
+          <p style="font-size:.7rem; font-weight:800; text-transform:uppercase">Ingresa la cantidad y genera las boletas
+          </p>
+        </div>
+      </div>
+    </div>
   </div>
 
-  <div id="contenedor"></div>
-
-  <!-- Librerías necesarias -->
   <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.7.1/jszip.min.js"></script>
+  <script src="../scripts/config.js"></script>
+  <script type="module">
+    import { requireAdmin } from "../scripts/supabaseClient.js";
+    import { setupAdminUI } from "../scripts/admin-ui.js";
+
+    requireAdmin().then(session => {
+      if (session) {
+        document.getElementById('admin-body').style.display = 'flex';
+        setupAdminUI();
+      }
+    });
+  </script>
 
   <script>
-    const contenedor = document.getElementById('contenedor');
     const numerosUsadosGlobal = new Set();
     const MAX_NUMEROS_UNICOS = 100;
     const NUMEROS_POR_BOLETA = 6;
@@ -161,8 +236,7 @@
       while (numerosBoleta.size < NUMEROS_POR_BOLETA) {
         const numero = Math.floor(Math.random() * 100);
         const numeroFormateado = numero.toString().padStart(2, '0');
-        const sePermitenRepetidos = numerosUsadosGlobal.size >= MAX_NUMEROS_UNICOS;
-        if (sePermitenRepetidos || !numerosUsadosGlobal.has(numeroFormateado)) {
+        if (numerosUsadosGlobal.size >= MAX_NUMEROS_UNICOS || !numerosUsadosGlobal.has(numeroFormateado)) {
           numerosBoleta.add(numeroFormateado);
           numerosUsadosGlobal.add(numeroFormateado);
         }
@@ -171,90 +245,66 @@
     }
 
     function generarBoletas() {
+      const contenedor = document.getElementById('contenedor');
       contenedor.innerHTML = "";
       numerosUsadosGlobal.clear();
 
       const total = parseInt(document.getElementById('cantidad').value) || 40;
-      let paginaActual;
       for (let i = 1; i <= total; i++) {
-        if ((i - 1) % 4 === 0) {
-          paginaActual = document.createElement('div');
-          paginaActual.className = 'page';
-          contenedor.appendChild(paginaActual);
-        }
         const numeros = generarNumerosParaBoleta();
-        const numerosHTML = numeros.map(n => `
-          <div class="fila-numero-nombre">
-            <div class="numero">${n}</div>
-            <input type="text" class="nombre-numero" placeholder="Nombre del comprador" />
-          </div>
-        `).join('');
-
         const boleta = document.createElement('div');
-        boleta.className = 'boleta';
+        boleta.className = 'boleta animate-fade-up';
+        boleta.style.animationDelay = (i * 0.05) + 's';
+
         boleta.innerHTML = `
-          <img src="images/ESCUDO.png" class="logo" alt="Logo" />
-          <div>
-            <div class="titulo-boleta">RESPONSABLE DIBA FBC</div>
-            <div class="info">
-              Juega el sábado 19 de abril de 2025<br>
-              Lotería El Sinuano - Noche - Últimas 2 cifras - 10:00 PM<br>
-              Sorteo de 2 Perfumes para Caballeros<br>
-              Valor: $3000 cada número
-            </div>
-            <div class="numeros">${numerosHTML}</div>
-            <div class="footer">Boleta #${i}</div>
-          </div>
-        `;
-        paginaActual.appendChild(boleta);
+                    <img src="/images/ESCUDO.png" class="boleta-logo" alt="Logo">
+                    <div class="boleta-title">RESPONSABLE DIBA FBC</div>
+                    <div class="boleta-info">
+                        Juega el sábado 19 de abril de 2025<br>
+                        Lotería El Sinuano - Noche - Últimas 2 cifras - 10:00 PM<br>
+                        Sorteo de 2 Perfumes para Caballeros<br>
+                        Valor: $3000 cada número
+                    </div>
+                    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1rem">
+                        ${numeros.map(n => `
+                            <div class="boleta-num-row">
+                                <div class="boleta-num">${n}</div>
+                                <input type="text" class="boleta-input" placeholder="Nombre...">
+                            </div>
+                        `).join('')}
+                    </div>
+                    <div class="boleta-footer">BOLETA #${i}</div>
+                `;
+        contenedor.appendChild(boleta);
       }
-      console.log("Boletas generadas correctamente.");
     }
 
     async function descargarZip() {
       const zip = new JSZip();
       const boletas = document.querySelectorAll('.boleta');
+      if (boletas.length === 0) return alert("Genera las boletas primero");
 
-      if (boletas.length === 0) {
-        alert("Primero genera las boletas.");
-        return;
+      const btn = event.target;
+      const original = btn.innerHTML;
+      btn.disabled = true;
+      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> PROCESANDO...';
+
+      for (let i = 0; i < boletas.length; i++) {
+        const canvas = await html2canvas(boletas[i], { scale: 2 });
+        const imgData = canvas.toDataURL("image/jpeg", 0.9);
+        zip.file(`boleta_${i + 1}.jpg`, imgData.split(',')[1], { base64: true });
       }
 
-      console.log(`Procesando ${boletas.length} boleta(s)...`);
-      // Mensaje informativo
-      alert("Generando imágenes y creando el ZIP, puede tardar unos segundos...");
+      const content = await zip.generateAsync({ type: "blob" });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(content);
+      link.download = "boletas_diba.zip";
+      link.click();
 
-      const promises = Array.from(boletas).map(async (boleta, index) => {
-        try {
-          const canvas = await html2canvas(boleta, { scale: 2 });
-          const imgData = canvas.toDataURL("image/jpeg", 1.0);
-          zip.file(`boleta_${index + 1}.jpg`, imgData.split(',')[1], { base64: true });
-          console.log(`Boleta ${index + 1} procesada.`);
-        } catch (error) {
-          console.error(`Error procesando la boleta ${index + 1}: `, error);
-        }
-      });
-
-      await Promise.all(promises);
-
-      try {
-        const contenidoZip = await zip.generateAsync({ type: "blob" });
-        const link = document.createElement("a");
-        link.href = URL.createObjectURL(contenidoZip);
-        link.download = "boletas.zip";
-        link.click();
-        console.log("ZIP descargado con éxito.");
-      } catch (error) {
-        console.error("Error al generar el ZIP: ", error);
-        alert("Ocurrió un error al generar el ZIP. Revisa la consola para más detalles.");
-      }
+      btn.disabled = false;
+      btn.innerHTML = original;
     }
   </script>
-  <script type="module">
-    import { requireAdmin } from "./scripts/supabaseClient.js";
-    requireAdmin();
-  </script>
-
 </body>
 
 </html>

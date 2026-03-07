@@ -3,197 +3,293 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DIBA FBC — Gestión de Partidos</title>
+    <title>Partidos — DIBA FBC Admin</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="icon" href="/images/ESCUDO.ico" type="image/x-icon">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: { sans: ['Montserrat', 'sans-serif'] },
-                    colors: { dibaGold: '#ffcc00', dibaBlue: '#002a40', dibaDark: '#0a0e14' }
-                },
-            },
-        }
-    </script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,600;0,700;0,900;1,700;1,900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+    <link rel="stylesheet" href="/styles/admin-common.css">
     <style>
-        :root {
-            --blue: #002a40;
-            --gold: #ffcc00;
-            --dark: #0a0e14;
-            --dark2: #111823;
-            --border: rgba(255, 255, 255, 0.07);
-            --sidebar-w: 270px;
+        .match-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 1.5rem;
         }
 
-        body {
-            background: var(--dark);
-            color: #e2e8f0;
-        }
-
-        .sidebar {
-            width: var(--sidebar-w);
-            position: fixed;
-            height: 100vh;
+        .match-card {
             background: var(--dark2);
-            border-right: 1px solid var(--border);
+            border: 1px solid var(--border);
+            border-radius: 28px;
+            padding: 1.8rem;
+            transition: all .3s;
+            position: relative;
+            overflow: hidden;
         }
 
-        .main {
-            margin-left: var(--sidebar-w);
-            min-height: 100vh;
+        .match-card:hover {
+            transform: translateY(-5px);
+            background: var(--dark3);
+            border-color: var(--gold-semi);
         }
 
-        @media (max-width: 1024px) {
-            .sidebar {
-                transform: translateX(-100%);
-                transition: transform 0.3s;
-            }
+        .match-badge {
+            background: rgba(255, 204, 0, .1);
+            color: var(--gold);
+            padding: .3rem .8rem;
+            border-radius: 99px;
+            font-size: .6rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            border: 1px solid var(--gold-semi);
+            display: inline-block;
+            margin-bottom: 1rem;
+        }
 
-            .sidebar.open {
-                transform: translateX(0);
-            }
+        .match-date {
+            font-size: .65rem;
+            color: var(--slate);
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: .05em;
+            margin-bottom: .5rem;
+        }
 
-            .main {
-                margin-left: 0;
-            }
+        .match-teams {
+            font-size: 1.1rem;
+            font-weight: 900;
+            font-style: italic;
+            text-transform: uppercase;
+            line-height: 1.2;
+            margin-bottom: .8rem;
+            color: var(--text);
+        }
+
+        .match-teams span {
+            color: var(--slate);
+            font-style: normal;
+            font-weight: 400;
+            margin: 0 .3rem;
+        }
+
+        .match-result {
+            font-size: 1.2rem;
+            font-weight: 900;
+            color: var(--gold);
+            margin-top: .5rem;
+            display: inline-block;
+            background: var(--dark);
+            padding: .3rem 1rem;
+            border-radius: 12px;
+        }
+
+        .match-meta {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: .5rem;
+            font-size: .65rem;
+            color: var(--slate);
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .match-actions {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            display: flex;
+            gap: .5rem;
+        }
+
+        .action-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: .8rem;
+            cursor: pointer;
+            transition: all .2s;
+            border: none;
+        }
+
+        .btn-edit {
+            background: var(--dark3);
+            color: var(--slate);
+        }
+
+        .btn-edit:hover {
+            background: var(--gold);
+            color: var(--blue);
+        }
+
+        .btn-delete {
+            background: rgba(244, 63, 94, .1);
+            color: #fb7185;
+        }
+
+        .btn-delete:hover {
+            background: #f43f5e;
+            color: #white;
+        }
+
+        /* Modal specific overrides */
+        .modal-body {
+            max-height: 70vh;
+            overflow-y: auto;
+            padding-right: .5rem;
         }
     </style>
 </head>
 
-<body class="font-sans antialiased" style="display:none;" id="admin-body">
+<body style="display:none;" id="admin-body">
 
-    <div class="sidebar overflow-y-auto" id="sidebar">
-        <div class="p-8">
-            <div class="flex items-center gap-3 mb-10">
-                <img src="/images/ESCUDO.ico" class="w-8 h-8" alt="Logo">
-                <span class="font-black italic text-lg uppercase text-dibaGold">Diba FBC</span>
+    <!-- ══ SIDEBAR ══ -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-logo">
+            <img src="/images/ESCUDO.png" alt="DIBA FBC">
+            <div>
+                <div class="sidebar-logo-text">DIBA FBC</div>
+                <div class="sidebar-logo-sub">Panel de Control</div>
             </div>
-            <nav class="space-y-2">
-                <a href="dashboard.html"
-                    class="flex items-center gap-4 p-4 rounded-2xl hover:bg-white/5 transition-all text-slate-400">
-                    <i class="fas fa-th-large w-5"></i> Dashboard
-                </a>
-                <a href="planilla.html"
-                    class="flex items-center gap-4 p-4 rounded-2xl hover:bg-white/5 transition-all text-slate-400">
-                    <i class="fas fa-clipboard-list w-5"></i> Planilla
-                </a>
-                <a href="partidos.html"
-                    class="flex items-center gap-4 p-4 rounded-2xl bg-dibaGold/10 text-dibaGold font-bold border-l-4 border-dibaGold">
-                    <i class="fas fa-futbol w-5"></i> Partidos
-                </a>
-                <a href="GestorDocumental.html"
-                    class="flex items-center gap-4 p-4 rounded-2xl hover:bg-white/5 transition-all text-slate-400">
-                    <i class="fas fa-folder-open w-5"></i> Gestor
-                </a>
-                <a href="usuarios.html"
-                    class="flex items-center gap-4 p-4 rounded-2xl hover:bg-white/5 transition-all text-slate-400">
-                    <i class="fas fa-user-cog w-5"></i> Usuarios
-                </a>
-            </nav>
         </div>
-    </div>
 
-    <main class="main flex flex-col">
-        <header
-            class="bg-dibaDark/50 backdrop-blur-md border-b border-white/5 sticky top-0 z-40 p-6 flex items-center justify-between">
-            <div class="flex items-center gap-4">
-                <button id="menu-btn" class="lg:hidden text-2xl text-dibaGold"><i class="fas fa-bars"></i></button>
-                <h1 class="text-2xl font-black uppercase italic tracking-tighter">Gestión de <span
-                        class="text-dibaGold">Partidos</span></h1>
+        <nav class="sidebar-nav">
+            <a href="dashboard.html" class="nav-link"><i class="fas fa-th-large"></i> Dashboard</a>
+
+            <div class="nav-section-label">Equipo</div>
+            <a href="planilla.html" class="nav-link"><i class="fas fa-clipboard-list"></i> Planilla</a>
+            <a href="listaJugadores.html" class="nav-link"><i class="fas fa-users"></i> Jugadores</a>
+            <a href="partidos.html" class="nav-link active"><i class="fas fa-futbol"></i> Partidos</a>
+            <a href="../analisis.html" class="nav-link"><i class="fas fa-chart-line"></i> Análisis</a>
+
+            <div class="nav-section-label">Administración</div>
+            <a href="GestorDocumental.html" class="nav-link"><i class="fas fa-folder-open"></i> Gestor Documental</a>
+            <a href="usuarios.html" class="nav-link"><i class="fas fa-user-cog"></i> Usuarios</a>
+            <a href="crear-usuario.html" class="nav-link"><i class="fas fa-user-plus"></i> Crear Usuario</a>
+            <a href="rifa_diba.html" class="nav-link"><i class="fas fa-ticket-alt"></i> Rifas</a>
+
+            <div class="nav-section-label">Sitio Web</div>
+            <a href="../index.html" class="nav-link"><i class="fas fa-globe"></i> Ver Sitio</a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="user-chip">
+                <div class="user-avatar" id="sb-avatar">A</div>
+                <div>
+                    <div class="user-name" id="sb-name">Administrador</div>
+                    <div class="user-role" id="sb-role">Admin</div>
+                </div>
             </div>
-            <button id="add-match-btn"
-                class="bg-dibaGold text-dibaBlue px-6 py-3 rounded-2xl font-black uppercase italic text-xs flex items-center gap-2 hover:scale-105 transition-all shadow-lg active:scale-95">
-                <i class="fas fa-plus"></i> Nuevo Partido
+            <button class="btn-logout" id="logout-btn">
+                <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
             </button>
+        </div>
+    </aside>
+
+    <!-- ══ MAIN ══ -->
+    <div class="main">
+
+        <!-- Top Bar -->
+        <header class="topbar">
+            <button class="mobile-menu-btn" id="menu-btn">
+                <i class="fas fa-bars" id="menu-icon"></i>
+            </button>
+            <div>
+                <div class="page-title">Gestión de <span>Partidos</span></div>
+                <div class="page-subtitle">Programación y resultados — DIBA FBC</div>
+            </div>
+            <div class="topbar-right">
+                <button id="add-match-btn" class="btn btn-primary" style="font-size:.7rem"><i class="fas fa-plus"></i>
+                    NUEVO PARTIDO</button>
+                <div class="topbar-time" id="clock">--:--</div>
+            </div>
         </header>
 
-        <div class="p-6 md:p-10 max-w-7xl mx-auto w-full">
-            <div id="matches-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <!-- Skeleton loader -->
-                <div class="animate-pulse bg-white/5 rounded-3xl h-64 border border-white/10"></div>
-                <div class="animate-pulse bg-white/5 rounded-3xl h-64 border border-white/10"></div>
-                <div class="animate-pulse bg-white/5 rounded-3xl h-64 border border-white/10"></div>
-            </div>
-        </div>
-    </main>
+        <!-- Content -->
+        <div class="content">
 
-    <!-- Modal para crear/editar -->
-    <div id="match-modal" class="fixed inset-0 z-[100] hidden flex items-center justify-center p-4">
-        <div class="absolute inset-0 bg-black/80 backdrop-blur-sm" id="modal-backdrop"></div>
-        <div
-            class="relative bg-dibaDark border border-white/10 w-full max-w-2xl rounded-[2.5rem] shadow-2xl overflow-hidden animate__animated animate__zoomIn">
-            <div class="p-8 border-b border-white/5 flex justify-between items-center">
-                <h3 class="text-xl font-black uppercase italic" id="modal-title">Registrar Partido</h3>
-                <button class="text-slate-400 hover:text-white" id="close-modal"><i class="fas fa-times"></i></button>
+            <div id="matches-grid" class="match-grid animate-fade-up">
+                <!-- Skeletons -->
+                <div class="match-card skeleton" style="height:250px"></div>
+                <div class="match-card skeleton" style="height:250px"></div>
+                <div class="match-card skeleton" style="height:250px"></div>
             </div>
-            <form id="match-form" class="p-8 space-y-6 max-h-[70vh] overflow-y-auto custom-scrollbar">
+
+        </div><!-- /content -->
+    </div><!-- /main -->
+
+    <!-- Modal Form -->
+    <div id="match-modal" class="modal" style="display:none">
+        <div class="modal-content animate-fade-up" style="max-width:700px">
+            <div class="modal-header">
+                <h3 id="modal-title">Registrar Partido</h3>
+                <button type="button" class="btn btn-outline" id="close-modal"
+                    style="padding:.5rem; border-radius:10px"><i class="fas fa-times"></i></button>
+            </div>
+            <form id="match-form">
                 <input type="hidden" name="id">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div class="space-y-2">
-                        <label class="text-[10px] font-black uppercase tracking-widest text-slate-500">Equipo
-                            Local</label>
-                        <input type="text" name="equipolocal" required
-                            class="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 focus:ring-2 focus:ring-dibaGold outline-none font-bold">
+                <div class="modal-body"
+                    style="display:grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; padding: 2rem;">
+
+                    <div>
+                        <label class="page-subtitle"
+                            style="text-transform:uppercase; margin-bottom:.5rem; display:block">Equipo Local</label>
+                        <input type="text" name="equipolocal" class="form-control" required placeholder="DIBA FBC">
                     </div>
-                    <div class="space-y-2">
-                        <label class="text-[10px] font-black uppercase tracking-widest text-slate-500">Equipo
+                    <div>
+                        <label class="page-subtitle"
+                            style="text-transform:uppercase; margin-bottom:.5rem; display:block">Equipo
                             Visitante</label>
-                        <input type="text" name="equipovisitante" required
-                            class="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 focus:ring-2 focus:ring-dibaGold outline-none font-bold">
+                        <input type="text" name="equipovisitante" class="form-control" required placeholder="Rival">
                     </div>
-                    <div class="space-y-2">
-                        <label class="text-[10px] font-black uppercase tracking-widest text-slate-500">Fecha</label>
-                        <input type="date" name="fecha" required
-                            class="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 focus:ring-2 focus:ring-dibaGold outline-none font-bold">
+                    <div>
+                        <label class="page-subtitle"
+                            style="text-transform:uppercase; margin-bottom:.5rem; display:block">Fecha</label>
+                        <input type="date" name="fecha" class="form-control" required>
                     </div>
-                    <div class="space-y-2">
-                        <label class="text-[10px] font-black uppercase tracking-widest text-slate-500">Hora</label>
-                        <input type="time" name="hora" required
-                            class="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 focus:ring-2 focus:ring-dibaGold outline-none font-bold">
+                    <div>
+                        <label class="page-subtitle"
+                            style="text-transform:uppercase; margin-bottom:.5rem; display:block">Hora</label>
+                        <input type="time" name="hora" class="form-control" required>
                     </div>
-                    <div class="space-y-2">
-                        <label class="text-[10px] font-black uppercase tracking-widest text-slate-500">Cancha /
-                            Lugar</label>
-                        <input type="text" name="Cancha"
-                            class="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 focus:ring-2 focus:ring-dibaGold outline-none font-bold"
-                            placeholder="Ej: Cancha Municipal">
+                    <div>
+                        <label class="page-subtitle"
+                            style="text-transform:uppercase; margin-bottom:.5rem; display:block">Cancha / Lugar</label>
+                        <input type="text" name="Cancha" class="form-control" placeholder="Ej: Cancha Municipal">
                     </div>
-                    <div class="space-y-2">
-                        <label class="text-[10px] font-black uppercase tracking-widest text-slate-500">Categoría</label>
-                        <input type="text" name="categoria"
-                            class="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 focus:ring-2 focus:ring-dibaGold outline-none font-bold"
-                            placeholder="Ej: Sub-12">
+                    <div>
+                        <label class="page-subtitle"
+                            style="text-transform:uppercase; margin-bottom:.5rem; display:block">Categoría</label>
+                        <input type="text" name="categoria" class="form-control" placeholder="Ej: Sub-12">
                     </div>
-                    <div class="space-y-2 md:col-span-2">
-                        <label class="text-[10px] font-black uppercase tracking-widest text-slate-500">Descripción /
-                            Detalles</label>
-                        <textarea name="descripcion"
-                            class="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 focus:ring-2 focus:ring-dibaGold outline-none font-bold h-24"
-                            placeholder="Detalles del partido..."></textarea>
+                    <div style="grid-column: span 2">
+                        <label class="page-subtitle"
+                            style="text-transform:uppercase; margin-bottom:.5rem; display:block">Descripción /
+                            Resultados Preliminares</label>
+                        <textarea name="descripcion" class="form-control" rows="3"
+                            placeholder="Detalles extra..."></textarea>
                     </div>
-                    <div class="space-y-2">
-                        <label class="text-[10px] font-black uppercase tracking-widest text-slate-500">Resultado</label>
-                        <input type="text" name="resultado"
-                            class="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 focus:ring-2 focus:ring-dibaGold outline-none font-bold"
-                            placeholder="Ej: 2 - 1">
+                    <div>
+                        <label class="page-subtitle"
+                            style="text-transform:uppercase; margin-bottom:.5rem; display:block">Resultado Final</label>
+                        <input type="text" name="resultado" class="form-control" placeholder="Ej: 2 - 1">
                     </div>
-                    <div class="space-y-2">
-                        <label class="text-[10px] font-black uppercase tracking-widest text-slate-500">Valor /
-                            Costo</label>
-                        <input type="number" name="valor"
-                            class="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 focus:ring-2 focus:ring-dibaGold outline-none font-bold">
+                    <div>
+                        <label class="page-subtitle"
+                            style="text-transform:uppercase; margin-bottom:.5rem; display:block">Costo / Valor</label>
+                        <input type="number" name="valor" class="form-control">
                     </div>
                 </div>
-                <div class="flex justify-end gap-4 p-8 bg-white/5 mt-8 -mx-8 -mb-8">
-                    <button type="button" id="cancel-modal"
-                        class="px-8 py-4 rounded-2xl text-slate-400 font-black uppercase italic text-xs hover:bg-white/5">Cancelar</button>
-                    <button type="submit"
-                        class="bg-dibaGold text-dibaBlue px-10 py-4 rounded-2xl font-black uppercase italic text-xs shadow-lg hover:scale-105 active:scale-95 transition-all">Guardar
-                        Cambios</button>
+                <div class="modal-footer"
+                    style="padding: 1.5rem 2rem; background: var(--dark3); display: flex; justify-content: flex-end; gap: 1rem;">
+                    <button type="button" class="btn btn-outline" id="cancel-modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary" style="font-size: .7rem;">Guardar Cambios</button>
                 </div>
             </form>
         </div>
@@ -202,25 +298,24 @@
     <script src="/scripts/config.js"></script>
     <script type="module">
         import { supabase, requireAdmin } from '../scripts/supabaseClient.js';
+        import { setupAdminUI } from '../scripts/admin-ui.js';
 
         let allMatches = [];
 
-        // 1. Protección de ruta
         requireAdmin().then(session => {
             if (session) {
-                document.getElementById('admin-body').style.display = 'block';
+                document.getElementById('admin-body').style.display = 'flex';
+                setupAdminUI();
                 loadMatches();
             }
         });
 
-        // 2. Cargar partidos
         async function loadMatches() {
             const grid = document.getElementById('matches-grid');
             const { data, error } = await supabase.from('partidos').select('*').order('fecha', { ascending: false });
 
             if (error) {
-                console.error(error);
-                grid.innerHTML = `<p class="col-span-full text-center text-red-400">Error al cargar datos: ${error.message}</p>`;
+                grid.innerHTML = `<p style="grid-column:1/-1; text-align:center; color:var(--red);">Error: ${error.message}</p>`;
                 return;
             }
 
@@ -231,45 +326,38 @@
         function renderMatches(matches) {
             const grid = document.getElementById('matches-grid');
             if (matches.length === 0) {
-                grid.innerHTML = `<div class="col-span-full text-center py-20 bg-white/5 rounded-[2.5rem] border border-dashed border-white/10">
-                    <i class="fas fa-calendar-times text-4xl text-slate-600 mb-4 block"></i>
-                    <p class="text-slate-500 uppercase font-black italic">No hay partidos registrados</p>
+                grid.innerHTML = `<div style="grid-column:1/-1; text-align:center; padding:5rem; border:2px dashed var(--border); border-radius:30px;">
+                    <i class="fas fa-calendar-times" style="font-size:3rem; opacity:.1; margin-bottom:1rem; display:block"></i>
+                    <p style="text-transform:uppercase; font-size:.7rem; font-weight:800; color:var(--slate)">No hay partidos registrados</p>
                 </div>`;
                 return;
             }
 
             grid.innerHTML = matches.map(m => {
-                const fecha = new Date(m.fecha).toLocaleDateString('es-CO', { day: '2-digit', month: 'short', year: 'numeric' });
+                const date = new Date(m.fecha).toLocaleDateString('es-CO', { day: '2-digit', month: 'short', year: 'numeric' });
                 return `
-                <div class="bg-white/5 border border-white/10 rounded-[2.5rem] p-8 hover:bg-white/[0.08] transition-all group overflow-hidden relative">
-                    <div class="flex justify-between items-start mb-6">
-                        <span class="bg-dibaGold/10 text-dibaGold px-4 py-1.5 rounded-full text-[9px] font-black uppercase italic tracking-widest border border-dibaGold/20">${m.categoria || 'GENERAL'}</span>
-                        <div class="flex gap-2">
-                            <button onclick="editMatch('${m.id}')" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-slate-400 hover:text-white hover:bg-white/10 transition-all"><i class="fas fa-edit"></i></button>
-                            <button onclick="deleteMatch('${m.id}')" class="w-10 h-10 rounded-full bg-red-500/10 flex items-center justify-center text-red-500 hover:bg-red-500 hover:text-white transition-all"><i class="fas fa-trash"></i></button>
-                        </div>
+                <div class="match-card">
+                    <div class="match-actions">
+                        <button onclick="window.editMatch('${m.id}')" class="action-btn btn-edit"><i class="fas fa-pencil-alt"></i></button>
+                        <button onclick="window.deleteMatch('${m.id}')" class="action-btn btn-delete"><i class="fas fa-trash-alt"></i></button>
                     </div>
-                    <div class="mb-6">
-                        <p class="text-[10px] text-slate-500 font-black uppercase tracking-widest mb-2">${fecha} · ${m.hora || '--:--'}</p>
-                        <h3 class="text-xl font-black uppercase italic leading-tight text-white group-hover:text-dibaGold transition-colors">${m.equipolocal} <span class="text-slate-500">vs</span> ${m.equipovisitante}</h3>
-                        ${m.resultado ? `<div class="mt-4 bg-black/40 px-4 py-2 rounded-xl inline-block font-black text-dibaGold italic text-lg">${m.resultado}</div>` : ''}
-                    </div>
-                    <div class="flex items-center gap-3 text-slate-400">
-                        <i class="fas fa-map-marker-alt text-xs text-dibaGold"></i>
-                        <span class="text-[10px] font-bold uppercase">${m.Cancha || 'Cancha por definir'}</span>
+                    <span class="match-badge">${m.categoria || 'DIBA FBC'}</span>
+                    <div class="match-date">${date} · ${m.hora || '--:--'}</div>
+                    <h3 class="match-teams">${m.equipolocal} <span>VS</span> ${m.equipovisitante}</h3>
+                    ${m.resultado ? `<div class="match-result">${m.resultado}</div>` : '<div style="font-size:.65rem; color:var(--slate); margin-top:.5rem; font-weight:700">PARTIDO PENDIENTE</div>'}
+                    <div class="match-meta">
+                        <i class="fas fa-map-marker-alt" style="color:var(--gold)"></i>
+                        <span>${m.Cancha || 'Lugar por definir'}</span>
                     </div>
                 </div>`;
             }).join('');
         }
 
-        // 3. Modal logic
-        const modal = document.getElementById('match-modal');
-        const form = document.getElementById('match-form');
-
+        // Exposed to window for onclick handlers
         window.editMatch = (id) => {
             const match = allMatches.find(m => m.id === id);
             if (!match) return;
-
+            const form = document.getElementById('match-form');
             document.getElementById('modal-title').textContent = 'Editar Partido';
             form.id.value = match.id;
             form.equipolocal.value = match.equipolocal;
@@ -281,12 +369,11 @@
             form.descripcion.value = match.descripcion || '';
             form.resultado.value = match.resultado || '';
             form.valor.value = match.valor || '';
-
-            modal.classList.remove('hidden');
+            document.getElementById('match-modal').style.display = 'flex';
         };
 
         window.deleteMatch = async (id) => {
-            if (!confirm('¿Seguro que deseas eliminar este partido?')) return;
+            if (!confirm('¿Seguro de eliminar este partido?')) return;
             const { error } = await supabase.from('partidos').delete().eq('id', id);
             if (error) alert('Error: ' + error.message);
             else loadMatches();
@@ -294,41 +381,41 @@
 
         document.getElementById('add-match-btn').addEventListener('click', () => {
             document.getElementById('modal-title').textContent = 'Registrar Partido';
-            form.reset();
-            form.id.value = '';
-            modal.classList.remove('hidden');
+            document.getElementById('match-form').reset();
+            document.getElementById('match-form').id.value = '';
+            document.getElementById('match-modal').style.display = 'flex';
         });
 
-        document.getElementById('close-modal').addEventListener('click', () => modal.classList.add('hidden'));
-        document.getElementById('cancel-modal').addEventListener('click', () => modal.classList.add('hidden'));
-        document.getElementById('modal-backdrop').addEventListener('click', () => modal.classList.add('hidden'));
+        const closeModal = () => document.getElementById('match-modal').style.display = 'none';
+        document.getElementById('close-modal').addEventListener('click', closeModal);
+        document.getElementById('cancel-modal').addEventListener('click', closeModal);
 
-        form.addEventListener('submit', async (e) => {
+        document.getElementById('match-form').addEventListener('submit', async (e) => {
             e.preventDefault();
-            const fd = new FormData(form);
+            const fd = new FormData(e.target);
             const id = fd.get('id');
             const data = Object.fromEntries(fd.entries());
             delete data.id;
 
-            let result;
-            if (id) {
-                result = await supabase.from('partidos').update(data).eq('id', id);
-            } else {
-                result = await supabase.from('partidos').insert([data]);
-            }
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> GUARDANDO...';
 
-            if (result.error) {
-                alert('Error al guardar: ' + result.error.message);
+            const { error } = id
+                ? await supabase.from('partidos').update(data).eq('id', id)
+                : await supabase.from('partidos').insert([data]);
+
+            if (error) {
+                alert('Error: ' + error.message);
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = 'Guardar Cambios';
             } else {
-                modal.classList.add('hidden');
+                closeModal();
                 loadMatches();
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = 'Guardar Cambios';
             }
         });
-
-        // 4. Menu mobile
-        const sidebar = document.getElementById('sidebar');
-        document.getElementById('menu-btn').addEventListener('click', () => sidebar.classList.toggle('open'));
-
     </script>
 </body>
 

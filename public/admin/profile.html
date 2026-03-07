@@ -3,302 +3,255 @@
 
 <head>
   <meta charset="UTF-8">
-  <title>Crear Perfil - DIBA FBC</title>
+  <title>Perfil de Usuario — DIBA FBC Admin</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-
-  <!-- Bootstrap CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
-  <!-- Bootstrap Icons (para el icono de marcador de posición) -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-  <!-- Animate.css -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
-
+  <link rel="icon" href="/images/ESCUDO.ico" type="image/x-icon">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,600;0,700;0,900;1,700;1,900&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+  <link rel="stylesheet" href="/styles/admin-common.css">
   <style>
-    /* Fondo deportivo */
-    body {
-      background: url('https://cdn.britannica.com/51/190751-050-147B93F7/soccer-ball-goal.jpg') no-repeat center center fixed;
-      background-size: cover;
-      font-family: 'Segoe UI', Arial, sans-serif;
-      padding: 1rem;
-      position: relative;
-    }
-
-    /* Overlay oscuro para legibilidad */
-    body::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.6);
-      /* Un poco más oscuro para mejor contraste */
-      z-index: -1;
-    }
-
-    /* Contenedor principal */
-    .profile-container {
-      position: relative;
-      z-index: 1;
-    }
-
-    /* Tarjeta para el formulario */
-    .profile-card {
-      max-width: 500px;
-      width: 100%;
-      margin: 2rem auto;
-      border: none;
-      border-radius: 12px;
-      overflow: hidden;
-      background-color: rgba(255, 255, 255, 0.98);
-      /* Fondo ligeramente traslúcido */
-      backdrop-filter: blur(5px);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-
-    .profile-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-    }
-
-    .animate__animated {
-      --animate-duration: 0.8s;
-    }
-
-    /* Estilos para la previsualización del avatar */
-    .avatar-preview-wrapper {
+    .profile-header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem;
+      background: var(--dark3);
+      border-bottom: 1px solid var(--border);
       text-align: center;
-      margin-bottom: 1rem;
     }
 
-    .avatar-preview {
-      width: 100px;
-      height: 100px;
+    .avatar-huge {
+      width: 120px;
+      height: 120px;
+      background: var(--gold);
       border-radius: 50%;
-      object-fit: cover;
-      border: 3px solid #dee2e6;
-      background-color: #f8f9fa;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 2.5rem;
-      /* Tamaño del icono */
-      color: #adb5bd;
+      font-size: 3rem;
+      font-weight: 900;
+      color: var(--blue);
+      margin-bottom: 1.5rem;
+      border: 4px solid var(--dark2);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      background-size: cover;
+      background-position: center;
     }
 
-    /* Estilo para el botón de envío */
-    .btn-submit .spinner-border {
-      width: 1.2rem;
-      height: 1.2rem;
+    .profile-form-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+      padding: 2rem;
     }
   </style>
 </head>
 
-<body>
-  <div class="container profile-container d-flex align-items-center justify-content-center min-vh-100">
-    <div class="card profile-card shadow-lg p-4 animate__animated animate__fadeInUp">
+<body style="display:none;" id="admin-body">
 
-      <!-- Contenedor para la previsualización del avatar -->
-      <div class="avatar-preview-wrapper">
-        <img id="avatar-preview-img" class="avatar-preview shadow-sm" src="" alt="Previsualización del Avatar">
+  <!-- ══ SIDEBAR ══ -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <img src="/images/ESCUDO.png" alt="DIBA FBC">
+      <div>
+        <div class="sidebar-logo-text">DIBA FBC</div>
+        <div class="sidebar-logo-sub">Panel de Control</div>
       </div>
-
-      <h2 class="h4 text-center mb-4 fw-bold">Completa tu Perfil</h2>
-
-      <!-- Contenedor para alertas dinámicas -->
-      <div id="alert-container"></div>
-
-      <!-- Formulario para completar/actualizar el perfil -->
-      <form id="profile-form" novalidate>
-        <div class="mb-3">
-          <label for="full_name" class="form-label">Nombre Completo</label>
-          <input type="text" class="form-control" id="full_name" name="full_name" placeholder="Ej: Lionel Messi"
-            required />
-        </div>
-        <div class="mb-3">
-          <label for="username" class="form-label">Nombre de Usuario</label>
-          <input type="text" class="form-control" id="username" name="username" placeholder="Ej: lio_messi" required />
-        </div>
-        <div class="mb-3">
-          <label for="bio" class="form-label">Biografía</label>
-          <textarea class="form-control" id="bio" name="bio" rows="3"
-            placeholder="Cuéntanos algo sobre ti..."></textarea>
-        </div>
-        <!-- Campo de texto para pegar la URL de la imagen -->
-        <div class="mb-4">
-          <label for="avatar_url" class="form-label">URL de tu foto (opcional)</label>
-          <input type="url" class="form-control" id="avatar_url" name="avatar_url"
-            placeholder="https://ejemplo.com/tu-foto.jpg" />
-        </div>
-        <button type="submit" id="submit-button" class="btn btn-success w-100 fw-bold btn-submit">
-          <span class="button-text">Guardar Perfil</span>
-          <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
-        </button>
-      </form>
     </div>
-  </div>
 
-  <!-- Bootstrap JS Bundle -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  <!-- Supabase JS (versión 2.x) -->
+    <nav class="sidebar-nav">
+      <a href="dashboard.html" class="nav-link"><i class="fas fa-th-large"></i> Dashboard</a>
+
+      <div class="nav-section-label">Equipo</div>
+      <a href="planilla.html" class="nav-link"><i class="fas fa-clipboard-list"></i> Planilla</a>
+      <a href="listaJugadores.html" class="nav-link"><i class="fas fa-users"></i> Jugadores</a>
+      <a href="partidos.html" class="nav-link"><i class="fas fa-futbol"></i> Partidos</a>
+      <a href="../analisis.html" class="nav-link"><i class="fas fa-chart-line"></i> Análisis</a>
+
+      <div class="nav-section-label">Administración</div>
+      <a href="GestorDocumental.html" class="nav-link"><i class="fas fa-folder-open"></i> Gestor Documental</a>
+      <a href="usuarios.html" class="nav-link"><i class="fas fa-user-cog"></i> Usuarios</a>
+      <a href="crear-usuario.html" class="nav-link"><i class="fas fa-user-plus"></i> Crear Usuario</a>
+      <a href="rifa_diba.html" class="nav-link"><i class="fas fa-ticket-alt"></i> Rifas</a>
+
+      <div class="nav-section-label">Sitio Web</div>
+      <a href="../index.html" class="nav-link"><i class="fas fa-globe"></i> Ver Sitio</a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="user-chip">
+        <div class="user-avatar" id="sb-avatar">A</div>
+        <div>
+          <div class="user-name" id="sb-name">Administrador</div>
+          <div class="user-role" id="sb-role">Admin</div>
+        </div>
+      </div>
+      <button class="btn-logout" id="logout-btn">
+        <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+      </button>
+    </div>
+  </aside>
+
+  <!-- ══ MAIN ══ -->
+  <div class="main">
+
+    <!-- Top Bar -->
+    <header class="topbar">
+      <button class="mobile-menu-btn" id="menu-btn">
+        <i class="fas fa-bars" id="menu-icon"></i>
+      </button>
+      <div>
+        <div class="page-title">Mi <span>Perfil</span></div>
+        <div class="page-subtitle">Información de usuario y ajustes — DIBA FBC</div>
+      </div>
+      <div class="topbar-right">
+        <div class="topbar-time" id="clock">--:--</div>
+      </div>
+    </header>
+
+    <!-- Content -->
+    <div class="content">
+      <div class="panel animate-fade-up" style="max-width:600px; margin:0 auto; overflow:hidden">
+        <div class="profile-header">
+          <div class="avatar-huge" id="avatar-preview">U</div>
+          <h2 class="page-title" style="font-size:1.1rem">Tu <span>Identidad</span></h2>
+          <p class="page-subtitle">Personaliza cómo te ven los demás</p>
+        </div>
+
+        <div class="panel-body">
+          <div id="form-alert" class="panel"
+            style="display:none; margin-bottom:1.5rem; padding:1rem; font-size:.8rem; font-weight:700"></div>
+
+          <form id="profile-form" class="profile-form-grid">
+            <div>
+              <label class="page-subtitle" style="text-transform:uppercase; margin-bottom:.5rem; display:block">Nombre
+                Completo</label>
+              <input type="text" id="full_name" class="form-control" placeholder="Ej: Lionel Messi" required>
+            </div>
+
+            <div>
+              <label class="page-subtitle" style="text-transform:uppercase; margin-bottom:.5rem; display:block">Nombre
+                de Usuario</label>
+              <input type="text" id="username" class="form-control" placeholder="Ej: lio_messi" required>
+            </div>
+
+            <div>
+              <label class="page-subtitle"
+                style="text-transform:uppercase; margin-bottom:.5rem; display:block">Biografía</label>
+              <textarea id="bio" class="form-control" rows="3" placeholder="Cuéntanos algo sobre ti..."></textarea>
+            </div>
+
+            <div>
+              <label class="page-subtitle" style="text-transform:uppercase; margin-bottom:.5rem; display:block">URL de
+                tu foto (Avatar)</label>
+              <input type="url" id="avatar_url" class="form-control" placeholder="https://ejemplo.com/foto.jpg">
+            </div>
+
+            <div style="display:flex; justify-content:center; margin-top:1rem">
+              <button type="submit" id="submit-btn" class="btn btn-primary" style="padding:1rem 3rem; font-size:.8rem">
+                <i class="fas fa-save"></i> GUARDAR PERFIL
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div><!-- /content -->
+  </div><!-- /main -->
+
+  <script src="/scripts/config.js"></script>
   <script type="module">
     import { supabase, requireAdmin } from '../scripts/supabaseClient.js';
-    const supabaseClient = supabase;
+    import { setupAdminUI } from '../scripts/admin-ui.js';
 
-    // Seleccionamos elementos del DOM para reutilizarlos
-    const profileForm = document.getElementById('profile-form');
-    const submitButton = document.getElementById('submit-button');
-    const buttonText = submitButton.querySelector('.button-text');
-    const buttonSpinner = submitButton.querySelector('.spinner-border');
-    const alertContainer = document.getElementById('alert-container');
-    const avatarUrlInput = document.getElementById('avatar_url');
-    const avatarPreviewImg = document.getElementById('avatar-preview-img');
-    const placeholderIcon = '<i class="bi bi-person-circle"></i>'; // Icono de Bootstrap para el placeholder
+    const form = document.getElementById('profile-form');
+    const alertBox = document.getElementById('form-alert');
+    const submitBtn = document.getElementById('submit-btn');
+    const avatarUrl = document.getElementById('avatar_url');
+    const avatarPreview = document.getElementById('avatar-preview');
 
-    // --- 2. FUNCIONES AUXILIARES ---
-
-    /**
-     * Muestra una alerta de Bootstrap.
-     * @param {string} message - El mensaje a mostrar.
-     * @param {string} type - El tipo de alerta ('success', 'danger', 'warning', 'info').
-     */
-    function showAlert(message, type = 'danger') {
-      const alertHTML = `
-        <div class="alert alert-${type} alert-dismissible fade show" role="alert">
-          ${message}
-          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-      `;
-      alertContainer.innerHTML = alertHTML;
-    }
-
-    /**
-     * Activa o desactiva el estado de carga del formulario.
-     * @param {boolean} isLoading - True para activar el estado de carga, false para desactivarlo.
-     */
-    function setLoading(isLoading) {
-      if (isLoading) {
-        submitButton.disabled = true;
-        profileForm.setAttribute('aria-busy', 'true');
-        buttonText.textContent = 'Guardando...';
-        buttonSpinner.classList.remove('d-none');
-      } else {
-        submitButton.disabled = false;
-        profileForm.setAttribute('aria-busy', 'false');
-        buttonText.textContent = 'Guardar Perfil';
-        buttonSpinner.classList.add('d-none');
+    requireAdmin().then(session => {
+      if (session) {
+        document.getElementById('admin-body').style.display = 'flex';
+        setupAdminUI();
+        loadProfile(session.user.id);
       }
-    }
+    });
 
-    /**
-     * Actualiza la previsualización del avatar.
-     * @param {string} url - La URL de la imagen.
-     */
-    function updateAvatarPreview(url) {
-      if (url && url.trim() !== '') {
-        avatarPreviewImg.src = url;
-        avatarPreviewImg.innerHTML = ''; // Limpiar el icono si la imagen carga
-        avatarPreviewImg.onerror = () => { // Si la URL es inválida
-          avatarPreviewImg.src = ''; // Limpiar el src fallido
-          avatarPreviewImg.innerHTML = placeholderIcon; // Mostrar icono de placeholder
-        };
-      } else {
-        avatarPreviewImg.src = '';
-        avatarPreviewImg.innerHTML = placeholderIcon; // Mostrar icono por defecto
-      }
-    }
-
-    /**
-     * Carga el perfil del usuario autenticado en el formulario.
-     * @param {string} userId - El ID del usuario de Supabase.
-     */
     async function loadProfile(userId) {
       try {
-        const { data: profileData, error } = await supabaseClient
-          .from('profiles')
-          .select('full_name, username, bio, avatar_url')
-          .eq('id', userId)
-          .single();
-
-        if (error && error.code !== 'PGRST116') { // PGRST116: No rows found
-          throw error;
+        const { data, error } = await supabase.from('profiles').select('*').eq('id', userId).single();
+        if (error && error.code !== 'PGRST116') throw error;
+        if (data) {
+          document.getElementById('full_name').value = data.full_name || '';
+          document.getElementById('username').value = data.username || '';
+          document.getElementById('bio').value = data.bio || '';
+          avatarUrl.value = data.avatar_url || '';
+          updatePreview(data.avatar_url);
         }
-
-        if (profileData) {
-          document.getElementById('full_name').value = profileData.full_name || '';
-          document.getElementById('username').value = profileData.username || '';
-          document.getElementById('bio').value = profileData.bio || '';
-          avatarUrlInput.value = profileData.avatar_url || '';
-          updateAvatarPreview(profileData.avatar_url);
-        } else {
-          // Si no hay perfil, mostrar el placeholder por defecto
-          updateAvatarPreview('');
-        }
-      } catch (error) {
-        console.error('Error al cargar el perfil:', error);
-        showAlert('No se pudo cargar tu perfil. Inténtalo de nuevo más tarde.', 'warning');
+      } catch (err) {
+        console.error(err);
+        showAlert("Error al cargar perfil: " + err.message);
       }
     }
 
-    // --- 3. LÓGICA PRINCIPAL Y EVENT LISTENERS ---
-
-    // Al cargar la página, verificar la sesión y cargar datos
-    document.addEventListener('DOMContentLoaded', async () => {
-      try {
-        const session = await requireAdmin();
-        if (!session) return;
-
-        await loadProfile(session.user.id);
-      } catch (error) {
-        console.error("Error en la inicialización:", error);
-        showAlert("Error de autenticación. Por favor, intenta iniciar sesión de nuevo.");
+    function updatePreview(url) {
+      if (url) {
+        avatarPreview.style.backgroundImage = `url(${url})`;
+        avatarPreview.textContent = '';
+      } else {
+        avatarPreview.style.backgroundImage = 'none';
+        avatarPreview.textContent = 'U';
       }
-    });
+    }
 
-    // Actualizar la previsualización del avatar cuando el usuario escribe en el campo URL
-    avatarUrlInput.addEventListener('input', () => {
-      updateAvatarPreview(avatarUrlInput.value);
-    });
+    avatarUrl.addEventListener('input', (e) => updatePreview(e.target.value));
 
-    // Manejar el envío del formulario
-    profileForm.addEventListener('submit', async (e) => {
+    function showAlert(msg, isSuccess = false) {
+      alertBox.style.display = 'block';
+      alertBox.style.borderColor = isSuccess ? '#4ade80' : '#fb7185';
+      alertBox.style.color = isSuccess ? '#4ade80' : '#fb7185';
+      alertBox.style.background = isSuccess ? 'rgba(34,197,94,.05)' : 'rgba(244,63,94,.05)';
+      alertBox.innerHTML = `<i class="fas fa-${isSuccess ? 'check-circle' : 'exclamation-triangle'}"></i> ${msg}`;
+    }
+
+    form.addEventListener('submit', async (e) => {
       e.preventDefault();
-      alertContainer.innerHTML = ''; // Limpiar alertas previas
-      setLoading(true);
+      alertBox.style.display = 'none';
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> GUARDANDO...';
 
       try {
-        const { data: { user } } = await supabaseClient.auth.getUser();
-        if (!user) throw new Error('Usuario no autenticado.');
-
-        const profileUpdate = {
+        const { data: { user } } = await supabase.auth.getUser();
+        const update = {
           id: user.id,
           full_name: document.getElementById('full_name').value,
           username: document.getElementById('username').value,
           bio: document.getElementById('bio').value,
-          avatar_url: avatarUrlInput.value,
-          updated_at: new Date().toISOString(),
+          avatar_url: avatarUrl.value,
+          updated_at: new Date().toISOString()
         };
 
-        // La función upsert inserta si no existe, o actualiza si ya existe
-        const { error } = await supabaseClient
-          .from('profiles')
-          .upsert(profileUpdate, { onConflict: 'id' }); // Especifica la columna de conflicto
-
+        const { error } = await supabase.from('profiles').upsert(update);
         if (error) throw error;
 
-        showAlert('¡Perfil guardado con éxito! Redirigiendo...', 'success');
+        showAlert("¡Perfil actualizado con éxito!", true);
 
-        // Redirigir a la página principal después de un breve momento
-        setTimeout(() => {
-          window.location.href = 'index.html';
-        }, 2000);
+        // Update local info for setupAdminUI components
+        const localUser = JSON.parse(localStorage.getItem('usuario') || '{}');
+        localUser.username = update.username;
+        localUser.full_name = update.full_name;
+        localStorage.setItem('usuario', JSON.stringify(localUser));
 
-      } catch (error) {
-        console.error('Error al guardar el perfil:', error);
-        showAlert(`Error al guardar: ${error.message || 'Ocurrió un problema.'}`);
+        // Re-run setup to refresh sidebar
+        setupAdminUI();
+
+      } catch (err) {
+        showAlert("Error: " + err.message);
       } finally {
-        // No desactivamos el loading aquí si hay una redirección exitosa,
-        // pero sí lo hacemos si falla.
-        if (!document.querySelector('.alert-success')) {
-          setLoading(false);
-        }
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '<i class="fas fa-save"></i> GUARDAR PERFIL';
       }
     });
   </script>
