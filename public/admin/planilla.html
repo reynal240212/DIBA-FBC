@@ -613,7 +613,7 @@
               <tr>
                 <th style="width: 5%;">#</th>
                 <th>Nombre del Jugador</th>
-                <th style="width: 15%;">Pagos ($)</th>
+                <th style="width: 20%;">Método de Pago</th>
                 <th style="width: 15%;">Asistencia</th>
                 <th style="width: 25%;">Observaciones</th>
                 <th style="width: 10%;" class="text-center">Doc.</th>
@@ -760,7 +760,7 @@
             regs.forEach(r => {
               appState.registros[r.jugador_dni] = {
                 db_id: r.id,
-                pago: r.pago,
+                pago: r.pago || '',
                 asistencia: r.asistencia,
                 obs: r.observacion
               };
@@ -790,7 +790,15 @@
             tr.innerHTML = `
             <td>${i + 1}</td>
             <td class="fw-bold text-primary">${p.name}</td>
-            <td><input type="number" class="form-control form-control-sm in-pago" value="${d.pago || ''}" placeholder="0"></td>
+            <td>
+              <select class="form-select form-select-sm in-pago">
+                <option value="" ${d.pago === '' ? 'selected' : ''}>Sin pago</option>
+                <option value="Nequi" ${d.pago === 'Nequi' ? 'selected' : ''}>Nequi</option>
+                <option value="Efectivo" ${d.pago === 'Efectivo' ? 'selected' : ''}>Efectivo</option>
+                <option value="Daviplata" ${d.pago === 'Daviplata' ? 'selected' : ''}>Daviplata</option>
+                <option value="Banco Bogotá" ${d.pago === 'Banco Bogotá' ? 'selected' : ''}>Banco Bogotá</option>
+              </select>
+            </td>
             <td>
               <select class="form-select form-select-sm in-asist">
                 <option value="P" ${d.asistencia === 'P' ? 'selected' : ''}>Presente</option>
@@ -835,7 +843,7 @@
           const payload = {
             planilla_id: appState.currentPlanillaId,
             jugador_dni: dni,
-            pago: parseFloat(d.pago) || 0,
+            pago: d.pago || null,
             asistencia: d.asistencia,
             observacion: d.obs
           };
@@ -857,30 +865,40 @@
         };
 
         // Handlers
+        tableBody.addEventListener('change', (e) => {
+          const tr = e.target.closest('tr');
+          if (!tr) return;
+          const dni = tr.dataset.dni;
+          if (!appState.registros[dni]) appState.registros[dni] = { pago: '', asistencia: 'P', obs: '' };
+
+          let changed = false;
+          if (e.target.classList.contains('in-pago')) {
+            appState.registros[dni].pago = e.target.value;
+            changed = true;
+          }
+          if (e.target.classList.contains('in-asist')) {
+            appState.registros[dni].asistencia = e.target.value;
+            changed = true;
+            updateStats();
+          }
+
+          if (changed) saveRegistro(dni);
+        });
+
         tableBody.addEventListener('input', (e) => {
           const tr = e.target.closest('tr');
           if (!tr) return;
           const dni = tr.dataset.dni;
-          if (!appState.registros[dni]) appState.registros[dni] = { pago: 0, asistencia: 'P', obs: '' };
+          if (!appState.registros[dni]) appState.registros[dni] = { pago: '', asistencia: 'P', obs: '' };
 
-          if (e.target.classList.contains('in-pago')) appState.registros[dni].pago = e.target.value;
-          if (e.target.classList.contains('in-obs')) appState.registros[dni].obs = e.target.value;
-
-          // Debounce simple
-          clearTimeout(window.saveTimer);
-          window.saveTimer = setTimeout(() => saveRegistro(dni), 1000);
-        });
-
-        tableBody.addEventListener('change', (e) => {
-          const tr = e.target.closest('tr');
-          if (tr && e.target.classList.contains('in-asist')) {
-            const dni = tr.dataset.dni;
-            if (!appState.registros[dni]) appState.registros[dni] = { pago: 0, asistencia: 'P', obs: '' };
-            appState.registros[dni].asistencia = e.target.value;
-            saveRegistro(dni);
-            updateStats();
+          if (e.target.classList.contains('in-obs')) {
+            appState.registros[dni].obs = e.target.value;
+            // Debounce simple
+            clearTimeout(window.saveTimer);
+            window.saveTimer = setTimeout(() => saveRegistro(dni), 1000);
           }
         });
+
 
         dateInput.onchange = loadData;
         playerSearch.oninput = render;
@@ -890,7 +908,7 @@
           const rows = [['Nombre', 'DNI', 'Pago', 'Asistencia', 'Observación']];
           appState.players.forEach(p => {
             const d = appState.registros[p.id] || { asistencia: 'P' };
-            rows.push([p.name, p.id, d.pago, d.asistencia, d.obs]);
+            rows.push([p.name, p.id, d.pago || 'Ninguno', d.asistencia, d.obs]);
           });
           const ws = XLSX.utils.aoa_to_sheet(rows);
           const wb = XLSX.utils.book_new();
@@ -908,9 +926,9 @@
           const body = appState.players.map(p => {
             const d = appState.registros[p.id] || { asistencia: 'P' };
             const asistText = { P: 'Presente', A: 'Ausente', E: 'Excusa' }[d.asistencia];
-            return [p.name, p.id, `$${d.pago || 0}`, asistText, d.obs];
+            return [p.name, p.id, d.pago || 'Ninguno', asistText, d.obs];
           });
-          doc.autoTable({ startY: 35, head: [['Nombre del Jugador', 'DNI', 'Pago', 'Asist', 'Obs']], body });
+          doc.autoTable({ startY: 35, head: [['Nombre del Jugador', 'DNI', 'Método de Pago', 'Asist', 'Obs']], body });
           doc.save(`DIBA_Planilla_${dateInput.value}.pdf`);
         };
 
