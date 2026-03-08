@@ -11,6 +11,7 @@
   <meta name="theme-color" content="#002a40" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="icon" href="images/ESCUDO.ico" sizes="32x32">
+  <link rel="stylesheet" href="styles/planilla.css" />
 
   <!-- Bootstrap 5.3.3 CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
@@ -313,7 +314,7 @@
       background-color: rgba(255, 255, 255, 0.02);
       color: var(--text);
     }
-    
+
     .table-hover>tbody>tr:hover>* {
       background-color: rgba(255, 255, 255, 0.05);
       color: var(--text);
@@ -329,7 +330,7 @@
     .stat-chip {
       background: var(--dark3);
       border: 1px solid var(--border);
-      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
       color: var(--text);
       display: flex;
       align-items: center;
@@ -338,10 +339,10 @@
       border-radius: 16px;
       transition: transform 0.2s, box-shadow 0.2s;
     }
-    
+
     .stat-chip:hover {
       transform: translateY(-3px);
-      box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
     }
 
     .stat-icon {
@@ -354,11 +355,30 @@
       border-radius: 12px;
     }
 
-    .stat-chip.green .stat-icon { color: #22c55e; background: rgba(34, 197, 94, 0.1); }
-    .stat-chip.red .stat-icon { color: #ef4444; background: rgba(239, 68, 68, 0.1); }
-    .stat-chip.yellow .stat-icon { color: #eab308; background: rgba(234, 179, 8, 0.1); }
-    .stat-chip.blue .stat-icon { color: #3b82f6; background: rgba(59, 130, 246, 0.1); }
-    .stat-chip.purple .stat-icon { color: #a855f7; background: rgba(168, 85, 247, 0.1); }
+    .stat-chip.green .stat-icon {
+      color: #22c55e;
+      background: rgba(34, 197, 94, 0.1);
+    }
+
+    .stat-chip.red .stat-icon {
+      color: #ef4444;
+      background: rgba(239, 68, 68, 0.1);
+    }
+
+    .stat-chip.yellow .stat-icon {
+      color: #eab308;
+      background: rgba(234, 179, 8, 0.1);
+    }
+
+    .stat-chip.blue .stat-icon {
+      color: #3b82f6;
+      background: rgba(59, 130, 246, 0.1);
+    }
+
+    .stat-chip.purple .stat-icon {
+      color: #a855f7;
+      background: rgba(168, 85, 247, 0.1);
+    }
 
     .stat-value {
       color: var(--text);
@@ -412,7 +432,7 @@
       letter-spacing: 0.05em;
       padding: 1rem;
     }
-    
+
     .table td {
       padding: 0.8rem 1rem;
       border-color: var(--border);
@@ -429,7 +449,7 @@
       overflow: hidden;
       background: var(--dark3);
       margin-bottom: 1.5rem;
-      box-shadow: inset 0 1px 3px rgba(0,0,0,0.2);
+      box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2);
     }
 
     .att-seg {
@@ -452,6 +472,21 @@
       .mobile-menu-btn {
         display: flex;
       }
+    }
+
+    /* Category Header Styles */
+    .category-header-row {
+      background: linear-gradient(90deg, var(--blue2) 0%, var(--dark3) 100%) !important;
+    }
+
+    .category-header-row td {
+      color: var(--gold) !important;
+      font-weight: 800 !important;
+      text-transform: uppercase !important;
+      letter-spacing: 0.15em !important;
+      font-size: 0.85rem !important;
+      padding: 1rem !important;
+      border-left: 4px solid var(--gold) !important;
     }
   </style>
 </head>
@@ -595,23 +630,29 @@
             </div>
             <div class="d-flex gap-3 align-items-center">
               <div class="input-group">
-                <span class="input-group-text border-0" style="background: var(--dark3); color: var(--gold); border-radius: 8px 0 0 8px;">
+                <span class="input-group-text border-0"
+                  style="background: var(--dark3); color: var(--gold); border-radius: 8px 0 0 8px;">
                   <i class="fas fa-search"></i>
                 </span>
-                <input type="text" id="playerSearch" class="form-control border-0 shadow-none" placeholder="Buscar jugador..." style="background: var(--dark3); color: white; border-radius: 0 8px 8px 0;">
+                <input type="text" id="playerSearch" class="form-control border-0 shadow-none"
+                  placeholder="Buscar jugador..."
+                  style="background: var(--dark3); color: white; border-radius: 0 8px 8px 0;">
               </div>
-              <button id="generatePDF" class="btn btn-danger rounded-pill px-4"><i class="fas fa-file-pdf me-2"></i>PDF</button>
-              <button id="generateExcel" class="btn btn-success rounded-pill px-4"><i class="fas fa-file-excel me-2"></i>Excel</button>
+              <button id="generatePDF" class="btn btn-danger rounded-pill px-4"><i
+                  class="fas fa-file-pdf me-2"></i>PDF</button>
+              <button id="generateExcel" class="btn btn-success rounded-pill px-4"><i
+                  class="fas fa-file-excel me-2"></i>Excel</button>
             </div>
           </div>
         </div>
 
         <!-- Tabla -->
-        <div class="table-responsive shadow-lg rounded-4 border-0 mb-5" style="background: var(--dark2); overflow: hidden;">
+        <div class="table-responsive shadow-lg rounded-4 border-0 mb-5"
+          style="background: var(--dark2); overflow: hidden;">
           <table class="table table-hover mb-0" id="mainTable">
             <thead>
               <tr>
-                <th style="width: 5%;">#</th>
+                <th style="width: 8%;"># No.</th>
                 <th>Nombre del Jugador</th>
                 <th style="width: 20%;">Método de Pago</th>
                 <th style="width: 15%;">Asistencia</th>
@@ -721,9 +762,13 @@
             const fechaSeleccionada = dateInput.value;
 
             // 1. Cargar jugadores
-            const { data: players, error: pErr } = await supabase.from('identificacion').select('numero, nombre, apellidos').order('apellidos');
+            const { data: players, error: pErr } = await supabase.from('identificacion').select('numero, nombre, apellidos, categoria').order('apellidos');
             if (pErr) throw pErr;
-            appState.players = players.map(p => ({ id: p.numero, name: `${p.nombre} ${p.apellidos}`.trim() }));
+            appState.players = players.map(p => ({ 
+              id: p.numero, 
+              name: `${p.nombre} ${p.apellidos}`.trim(),
+              categoria: p.categoria || 'General'
+            }));
 
             // 2. Obtener o crear Planilla del día
             const { data: planillas, error: plErr } = await supabase
@@ -778,21 +823,39 @@
           tableBody.innerHTML = '';
           const filtered = appState.players.filter(p => p.name.toLowerCase().includes(q));
 
-          if (filtered.length === 0) {
-            tableBody.innerHTML = `<tr><td colspan="6" class="text-center p-4">Listado vacío o sin coincidencias.</td></tr>`;
-            return;
-          }
+          // Ordenar por categoría según el deseo del usuario
+          const order = { '2014/2015': 1, '2012': 2, '2013': 3, '2016': 4, 'General': 5 };
+          filtered.sort((a, b) => {
+            if (order[a.categoria] !== order[b.categoria]) {
+              return (order[a.categoria] || 99) - (order[b.categoria] || 99);
+            }
+            return a.name.localeCompare(b.name);
+          });
 
-          filtered.forEach((p, i) => {
-            const d = appState.registros[p.id] || { pago: 0, asistencia: 'P', obs: '' };
+          let currentCategory = null;
+          let categoryEnum = 0;
+
+          filtered.forEach((p) => {
+            if (p.categoria !== currentCategory) {
+              currentCategory = p.categoria;
+              categoryEnum = 0; // Reiniciar contador por categoría
+
+              const headerTr = document.createElement('tr');
+              headerTr.className = 'category-header-row';
+              headerTr.innerHTML = `<td colspan="6"><i class="fas fa-layer-group me-2"></i>CATEGORÍA ${currentCategory}</td>`;
+              tableBody.appendChild(headerTr);
+            }
+
+            categoryEnum++;
+            const d = appState.registros[p.id] || { pago: '', asistencia: 'P', obs: '' };
             const tr = document.createElement('tr');
             tr.dataset.dni = p.id;
             tr.innerHTML = `
-            <td>${i + 1}</td>
+            <td class="fw-bold text-center" style="background: rgba(255,204,0,0.03);">${categoryEnum}</td>
             <td class="fw-bold text-primary">${p.name}</td>
             <td>
               <select class="form-select form-select-sm in-pago">
-                <option value="" ${d.pago === '' ? 'selected' : ''}>Sin pago</option>
+                <option value="" ${!d.pago ? 'selected' : ''}>Sin pago</option>
                 <option value="Nequi" ${d.pago === 'Nequi' ? 'selected' : ''}>Nequi</option>
                 <option value="Efectivo" ${d.pago === 'Efectivo' ? 'selected' : ''}>Efectivo</option>
                 <option value="Daviplata" ${d.pago === 'Daviplata' ? 'selected' : ''}>Daviplata</option>
@@ -904,11 +967,22 @@
         playerSearch.oninput = render;
 
         // Export
+        const getExportData = () => {
+          const order = { '2014/2015': 1, '2012': 2, '2013': 3, '2016': 4, 'General': 5 };
+          const sorted = [...appState.players].sort((a, b) => {
+            if (order[a.categoria] !== order[b.categoria]) {
+              return (order[a.categoria] || 99) - (order[b.categoria] || 99);
+            }
+            return a.name.localeCompare(b.name);
+          });
+          return sorted;
+        };
+
         document.getElementById('generateExcel').onclick = () => {
-          const rows = [['Nombre', 'DNI', 'Pago', 'Asistencia', 'Observación']];
-          appState.players.forEach(p => {
+          const rows = [['Categoría', 'Nombre', 'DNI', 'Pago', 'Asistencia', 'Observación']];
+          getExportData().forEach(p => {
             const d = appState.registros[p.id] || { asistencia: 'P' };
-            rows.push([p.name, p.id, d.pago || 'Ninguno', d.asistencia, d.obs]);
+            rows.push([p.categoria, p.name, p.id, d.pago || 'Ninguno', d.asistencia, d.obs]);
           });
           const ws = XLSX.utils.aoa_to_sheet(rows);
           const wb = XLSX.utils.book_new();
@@ -922,13 +996,18 @@
           doc.setFontSize(18);
           doc.text(`DIBA FBC - Planilla de Control`, 14, 20);
           doc.setFontSize(10);
-          doc.text(`Fecha: ${dateInput.value} | Categoria: General`, 14, 28);
-          const body = appState.players.map(p => {
+          doc.text(`Fecha: ${dateInput.value}`, 14, 28);
+          const body = getExportData().map(p => {
             const d = appState.registros[p.id] || { asistencia: 'P' };
             const asistText = { P: 'Presente', A: 'Ausente', E: 'Excusa' }[d.asistencia];
-            return [p.name, p.id, d.pago || 'Ninguno', asistText, d.obs];
+            return [p.categoria, p.name, p.id, d.pago || 'Ninguno', asistText, d.obs];
           });
-          doc.autoTable({ startY: 35, head: [['Nombre del Jugador', 'DNI', 'Método de Pago', 'Asist', 'Obs']], body });
+          doc.autoTable({ 
+            startY: 35, 
+            head: [['Cat', 'Nombre del Jugador', 'DNI', 'Método de Pago', 'Asist', 'Obs']], 
+            body,
+            headStyles: { fillColor: [0, 42, 64] }
+          });
           doc.save(`DIBA_Planilla_${dateInput.value}.pdf`);
         };
 
