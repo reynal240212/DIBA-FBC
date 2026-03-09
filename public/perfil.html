@@ -384,10 +384,19 @@
     }
 
     async function loadDocuments(userId) {
+      // Intentar cargar por user_id primero, pero también obtener el DNI vinculado
+      const { data: userData } = await supabaseClient
+        .from('users')
+        .select('identificacion_numero')
+        .eq('id', userId)
+        .single();
+
+      const dni = userData?.identificacion_numero;
+
       const { data: docs } = await supabaseClient
         .from('player_documents')
         .select('*')
-        .eq('user_id', userId);
+        .or(`user_id.eq.${userId}${dni ? `,identificacion_numero.eq.${dni}` : ''}`);
 
       if (docs) {
         docs.forEach(doc => {
@@ -412,8 +421,22 @@
 
       const { data: { session } } = await supabaseClient.auth.getSession();
       const userId = session.user.id;
+
+      const { data: userData } = await supabaseClient
+        .from('users')
+        .select('identificacion_numero')
+        .eq('id', userId)
+        .single();
+
+      const dni = userData?.identificacion_numero;
+      if (!dni) {
+        alert("Debes vincular tu registro de jugador antes de subir documentos.");
+        return;
+      }
+
       const docType = DOC_TYPES[key];
-      const fileName = `${userId}/${docType}_${Date.now()}_${file.name}`;
+      // Usamos el DNI como carpeta en el storage para que el admin lo encuentre fácil
+      const fileName = `${dni}/${docType}_${Date.now()}_${file.name}`;
 
       const statusEl = document.getElementById(`status-${key}`);
       statusEl.innerText = "Subiendo...";
@@ -439,11 +462,12 @@
         .from('player_documents')
         .upsert({
           user_id: userId,
+          identificacion_numero: dni,
           doc_type: docType,
           file_url: publicUrl,
           status: 'pendiente',
           updated_at: new Date()
-        }, { onConflict: ['user_id', 'doc_type'] });
+        }, { onConflict: ['identificacion_numero', 'doc_type'] });
 
       if (dbError) {
         alert("Error guardando referencia: " + dbError.message);

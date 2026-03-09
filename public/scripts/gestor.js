@@ -109,14 +109,135 @@ import { cerrarSesion } from './auth.js';
                                 </td>
                                 <td class="p-5 font-mono text-xs text-slate-500">${j.numero}</td>
                                 <td class="p-5"><span class="bg-red-50 text-red-600 px-2 py-0.5 rounded text-[9px] font-black">${j.grupo_sanguineo}</span></td>
-                                <td class="p-5"><button class="text-dibaBlue hover:text-dibaGold"><i class="fas fa-info-circle"></i></button></td>
+                                <td class="p-5 flex gap-2">
+                                    <button class="text-dibaBlue hover:text-dibaGold" title="Info"><i class="fas fa-info-circle"></i></button>
+                                    <button onclick="openAdminDocs('${j.numero}', '${j.nombre} ${j.apellidos}')" class="text-emerald-600 hover:text-emerald-700" title="Documentos"><i class="fas fa-file-medical"></i></button>
+                                </td>
                             </tr>
                         `).join('')}
                     </tbody>
                 </table>
             </div>
+
+            <!-- Modal de Gestión Documental Admin -->
+            <div id="adminDocsModal" class="hidden fixed inset-0 bg-slate-900/80 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
+                <div class="bg-slate-900 border border-white/10 w-full max-w-2xl rounded-[2.5rem] overflow-hidden shadow-2xl animate__animated animate__zoomIn animate__faster">
+                    <div class="p-8 border-b border-white/5 flex justify-between items-center bg-gradient-to-r from-slate-900 to-slate-800">
+                        <div>
+                            <h3 id="modalPlayerName" class="text-xl font-black text-white italic uppercase">Cargando...</h3>
+                            <p id="modalPlayerDni" class="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-1"></p>
+                        </div>
+                        <button onclick="closeAdminDocs()" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-slate-400 hover:bg-rose-500/20 hover:text-rose-500 transition-all">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <div class="p-8 space-y-4 max-h-[60vh] overflow-y-auto" id="modalDocsList">
+                        <!-- Items de documentos se insertan aquí -->
+                    </div>
+                    <div class="p-6 bg-slate-950/50 text-center">
+                        <p class="text-[9px] text-slate-500 font-bold uppercase tracking-widest">Panel de Gestión Administrativa - DIBA FBC</p>
+                    </div>
+                </div>
+            </div>
         `;
     }
+
+    // Funciones globales para el modal (disponibles para los botones de la tabla)
+    window.openAdminDocs = async (dni, name) => {
+        const modal = document.getElementById('adminDocsModal');
+        const nameEl = document.getElementById('modalPlayerName');
+        const dniEl = document.getElementById('modalPlayerDni');
+        const listEl = document.getElementById('modalDocsList');
+
+        nameEl.innerText = name;
+        dniEl.innerText = `DNI: ${dni}`;
+        modal.classList.remove('hidden');
+        listEl.innerHTML = '<div class="flex justify-center py-10"><i class="fas fa-circle-notch animate-spin text-2xl text-dibaGold"></i></div>';
+
+        const DOC_TYPES = [
+            { id: 'tarjeta_identidad', label: 'Tarjeta de Identidad' },
+            { id: 'cedula_padre', label: 'Cédula del Padre' },
+            { id: 'cedula_madre', label: 'Cédula de la Madre' },
+            { id: 'registro_civil', label: 'Registro Civil' },
+            { id: 'consentimiento_padres', label: 'Consentimiento Padres' }
+        ];
+
+        // Cargar documentos existentes
+        const { data: docs } = await supabase.from('player_documents').select('*').eq('identificacion_numero', dni);
+
+        listEl.innerHTML = '';
+        DOC_TYPES.forEach(type => {
+            const doc = docs?.find(d => d.doc_type === type.id);
+            const item = document.createElement('div');
+            item.className = "flex items-center justify-between p-4 bg-white/5 border border-white/10 rounded-2xl hover:bg-white/[0.07] transition-all";
+            item.innerHTML = `
+                <div class="flex items-center gap-4">
+                    <div class="w-10 h-10 bg-slate-800 rounded-xl flex items-center justify-center text-slate-500"><i class="fas fa-file-alt"></i></div>
+                    <div>
+                        <p class="text-[11px] font-black text-white italic uppercase">${type.label}</p>
+                        <p class="text-[9px] uppercase font-bold ${doc ? (doc.status === 'verificado' ? 'text-emerald-500' : 'text-amber-500') : 'text-slate-500'}">
+                            ${doc ? doc.status : 'No cargado'}
+                        </p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2">
+                    ${doc ? `<a href="${doc.file_url}" target="_blank" class="p-2 text-slate-400 hover:text-dibaGold"><i class="fas fa-eye"></i></a>` : ''}
+                    <button onclick="document.getElementById('upload-${type.id}').click()" class="p-2 text-slate-400 hover:text-emerald-500"><i class="fas fa-upload"></i></button>
+                    <input type="file" id="upload-${type.id}" class="hidden" onchange="adminUploadDoc('${dni}', '${type.id}', this)">
+                </div>
+            `;
+            listEl.appendChild(item);
+        });
+    };
+
+    window.closeAdminDocs = () => {
+        document.getElementById('adminDocsModal').classList.add('hidden');
+    };
+
+    window.adminUploadDoc = async (dni, docType, input) => {
+        const file = input.files[0];
+        if (!file) return;
+
+        const originalBtn = input.previousElementSibling;
+        const originalIcon = originalBtn.innerHTML;
+        originalBtn.innerHTML = '<i class="fas fa-circle-notch animate-spin text-emerald-500"></i>';
+        originalBtn.disabled = true;
+
+        try {
+            const fileName = `${dni}/${docType}_${Date.now()}_${file.name}`;
+            
+            // 1. Storage
+            const { error: uploadError } = await supabase.storage
+                .from('documents')
+                .upload(fileName, file, { upsert: true });
+
+            if (uploadError) throw uploadError;
+
+            const { data: { publicUrl } } = supabase.storage.from('documents').getPublicUrl(fileName);
+
+            // 2. DB (Upsert por DNI)
+            const { error: dbError } = await supabase.from('player_documents').upsert({
+                identificacion_numero: dni,
+                doc_type: docType,
+                file_url: publicUrl,
+                status: 'verificado', // Admin sube y queda verificado automáticamente
+                updated_at: new Date()
+            }, { onConflict: ['identificacion_numero', 'doc_type'] });
+
+            if (dbError) throw dbError;
+
+            // Recargar modal
+            const nameEl = document.getElementById('modalPlayerName').innerText;
+            window.openAdminDocs(dni, nameEl);
+
+        } catch (err) {
+            console.error(err);
+            alert("Error al subir: " + err.message);
+        } finally {
+            originalBtn.innerHTML = originalIcon;
+            originalBtn.disabled = false;
+        }
+    };
 
     // ---------------------------------------------------------
     // 5. MANEJO DE EVENTOS Y BUSCADOR
