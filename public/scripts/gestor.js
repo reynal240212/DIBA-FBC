@@ -86,40 +86,94 @@ import { cerrarSesion } from './auth.js';
         dynamicContent.innerHTML = '<div class="flex justify-center py-20"><i class="fas fa-circle-notch animate-spin text-3xl text-dibaGold"></i></div>';
 
         const { data: jugadores, error } = await supabase.from('identificacion').select('*').order('apellidos');
+        const { data: allDocs } = await supabase.from('player_documents').select('identificacion_numero, doc_type, status');
 
         if (error) return console.error(error);
 
+        const DOC_TYPES_MAP = [
+            { id: 'tarjeta_identidad', icon: 'fa-id-card' },
+            { id: 'cedula_padre', icon: 'fa-user-tie' },
+            { id: 'cedula_madre', icon: 'fa-user' },
+            { id: 'registro_civil', icon: 'fa-baby' },
+            { id: 'consentimiento_padres', icon: 'fa-file-signature' }
+        ];
+
+        // Calcular estadísticas para el dashboard
+        const totalJugadores = jugadores.length;
+        const alDia = jugadores.filter(j => {
+            const jDocs = allDocs?.filter(d => d.identificacion_numero === j.numero && d.status === 'verificado');
+            return jDocs?.length === 5;
+        }).length;
+
         dynamicContent.innerHTML = `
-            <div class="bg-white rounded-[2.5rem] shadow-sm border border-slate-200 overflow-hidden">
+            <!-- Dashboard de Documentación -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8 animate__animated animate__fadeInDown">
+                <div class="bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm flex items-center gap-4">
+                    <div class="w-12 h-12 bg-dibaBlue/5 text-dibaBlue rounded-2xl flex items-center justify-center text-xl"><i class="fas fa-users"></i></div>
+                    <div>
+                        <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Total Jugadores</p>
+                        <h4 class="text-2xl font-black text-slate-800 italic">${totalJugadores}</h4>
+                    </div>
+                </div>
+                <div class="bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm flex items-center gap-4">
+                    <div class="w-12 h-12 bg-emerald-50 text-emerald-500 rounded-2xl flex items-center justify-center text-xl"><i class="fas fa-check-double"></i></div>
+                    <div>
+                        <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Documentación al Día</p>
+                        <h4 class="text-2xl font-black text-slate-800 italic">${alDia}</h4>
+                    </div>
+                </div>
+                <div class="bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm flex items-center gap-4">
+                    <div class="w-12 h-12 bg-amber-50 text-amber-500 rounded-2xl flex items-center justify-center text-xl"><i class="fas fa-exclamation-triangle"></i></div>
+                    <div>
+                        <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Pendientes</p>
+                        <h4 class="text-2xl font-black text-slate-800 italic">${totalJugadores - alDia}</h4>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-[2.5rem] shadow-sm border border-slate-200 overflow-hidden animate__animated animate__fadeInUp">
                 <table class="w-full text-left border-collapse">
                     <thead class="bg-slate-50 border-b border-slate-100">
                         <tr>
                             <th class="p-5 text-[10px] font-black uppercase text-slate-400">Jugador</th>
-                            <th class="p-5 text-[10px] font-black uppercase text-slate-400">ID Numero</th>
-                            <th class="p-5 text-[10px] font-black uppercase text-slate-400">RH</th>
+                            <th class="p-5 text-[10px] font-black uppercase text-slate-400">DNI</th>
+                            <th class="p-5 text-[10px] font-black uppercase text-slate-400">Documentación (TI|P|M|RC|C)</th>
                             <th class="p-5 text-[10px] font-black uppercase text-slate-400">Acción</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-50">
-                        ${jugadores.map(j => `
+                        ${jugadores.map(j => {
+            const jDocs = allDocs?.filter(d => d.identificacion_numero === j.numero) || [];
+            return `
                             <tr class="hover:bg-slate-50/50 transition-all">
                                 <td class="p-5">
                                     <p class="font-bold text-slate-700 text-xs uppercase italic">${j.nombre} ${j.apellidos}</p>
                                     <p class="text-[9px] text-slate-400 uppercase font-medium">${j.nacionalidad}</p>
                                 </td>
                                 <td class="p-5 font-mono text-xs text-slate-500">${j.numero}</td>
-                                <td class="p-5"><span class="bg-red-50 text-red-600 px-2 py-0.5 rounded text-[9px] font-black">${j.grupo_sanguineo}</span></td>
+                                <td class="p-5">
+                                    <div class="flex gap-1.5">
+                                        ${DOC_TYPES_MAP.map(type => {
+                const doc = jDocs.find(d => d.doc_type === type.id);
+                let colorClass = 'bg-slate-100 text-slate-300';
+                if (doc) {
+                    colorClass = doc.status === 'verificado' ? 'bg-emerald-500 text-white' : 'bg-amber-500 text-white';
+                }
+                return `<div class="w-6 h-6 rounded-full flex items-center justify-center text-[10px] ${colorClass}" title="${type.id}"><i class="fas ${type.icon}"></i></div>`;
+            }).join('')}
+                                    </div>
+                                </td>
                                 <td class="p-5 flex gap-2">
                                     <button class="text-dibaBlue hover:text-dibaGold" title="Info"><i class="fas fa-info-circle"></i></button>
                                     <button onclick="openAdminDocs('${j.numero}', '${j.nombre} ${j.apellidos}')" class="text-emerald-600 hover:text-emerald-700" title="Documentos"><i class="fas fa-file-medical"></i></button>
                                 </td>
                             </tr>
-                        `).join('')}
+                        `}).join('')}
                     </tbody>
                 </table>
             </div>
 
-            <!-- Modal de Gestión Documental Admin -->
+            <!-- Modal de Gestión Documental Admin (Se mantiene igual pero con estilos Tailwind) -->
             <div id="adminDocsModal" class="hidden fixed inset-0 bg-slate-900/80 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
                 <div class="bg-slate-900 border border-white/10 w-full max-w-2xl rounded-[2.5rem] overflow-hidden shadow-2xl animate__animated animate__zoomIn animate__faster">
                     <div class="p-8 border-b border-white/5 flex justify-between items-center bg-gradient-to-r from-slate-900 to-slate-800">
@@ -205,7 +259,7 @@ import { cerrarSesion } from './auth.js';
 
         try {
             const fileName = `${dni}/${docType}_${Date.now()}_${file.name}`;
-            
+
             // 1. Storage
             const { error: uploadError } = await supabase.storage
                 .from('documents')

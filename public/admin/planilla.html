@@ -642,6 +642,9 @@
                   class="fas fa-file-pdf me-2"></i>PDF</button>
               <button id="generateExcel" class="btn btn-success rounded-pill px-4"><i
                   class="fas fa-file-excel me-2"></i>Excel</button>
+              <button id="saveAllBtn" class="btn btn-warning fw-bold text-dark rounded-pill px-4">
+                <i class="fas fa-cloud-upload-alt me-2"></i>Guardar Planilla
+              </button>
             </div>
           </div>
         </div>
@@ -1021,7 +1024,27 @@
           XLSX.writeFile(wb, `Planilla_${dateInput.value}.xlsx`);
         };
 
-        document.getElementById('generatePDF').onclick = () => {
+        const archivePDF = async (pdfBlob, fileName) => {
+          try {
+            const { error } = await supabase.storage.from('planillas').upload(fileName, pdfBlob, {
+              upsert: true,
+              contentType: 'application/pdf'
+            });
+            if (error) {
+              if (error.message.includes('not found')) {
+                console.warn("Bucket 'planillas' no existe. Saltando archivado.");
+                return;
+              }
+              throw error;
+            }
+            showToast('Planilla archivada en la nube correctamente');
+          } catch (err) {
+            console.error('Error al archivar PDF:', err);
+            // No bloqueamos al usuario si falla el archivado de fondo
+          }
+        };
+
+        document.getElementById('generatePDF').onclick = async () => {
           const { jsPDF } = window.jspdf;
           const doc = new jsPDF();
           doc.setFontSize(18);
@@ -1039,7 +1062,33 @@
             body,
             headStyles: { fillColor: [0, 42, 64] }
           });
-          doc.save(`DIBA_Planilla_${dateInput.value}.pdf`);
+
+          // Descargar localmente
+          const fileName = `DIBA_Planilla_${dateInput.value}.pdf`;
+          doc.save(fileName);
+
+          // Archivar en la nube
+          const blob = doc.output('blob');
+          archivePDF(blob, `Archivo_${dateInput.value}_${Date.now()}.pdf`);
+        };
+
+        document.getElementById('saveAllBtn').onclick = async () => {
+          const btn = document.getElementById('saveAllBtn');
+          const originalHtml = btn.innerHTML;
+          btn.innerHTML = '<i class="fas fa-circle-notch fa-spin me-2"></i>Guardando...';
+          btn.disabled = true;
+
+          try {
+            const dnis = Object.keys(appState.registros);
+            const promises = dnis.map(dni => saveRegistro(dni));
+            await Promise.all(promises);
+            showToast('¡Todos los cambios han sido guardados!');
+          } catch (err) {
+            showToast('Error al guardar algunos registros', true);
+          } finally {
+            btn.innerHTML = originalHtml;
+            btn.disabled = false;
+          }
         };
 
         loadData();

@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Mis Documentos | DIBA FBC</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="/images/ESCUDO.ico">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Montserrat', 'sans-serif'] },
+                    colors: { dibaGold: '#ffcc00', dibaBlue: '#002a40', dibaDark: '#0a101b' }
+                },
+            },
+        }
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <style>
+        .glass {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .progress-bar-glow {
+            box-shadow: 0 0 15px rgba(255, 204, 0, 0.3);
+        }
+    </style>
+</head>
+
+<body class="bg-dibaDark text-slate-200 min-h-screen">
+    <div id="navbar-container"></div>
+
+    <main class="max-w-4xl mx-auto px-4 py-12">
+        <header class="mb-12 animate__animated animate__fadeInDown">
+            <h1 class="text-4xl font-black text-white uppercase italic tracking-tighter">Gestión <span
+                    class="text-dibaGold">Documental</span></h1>
+            <p class="text-slate-400 font-bold uppercase tracking-widest text-[10px] mt-2">Mantén tus registros
+                actualizados para competir</p>
+        </header>
+
+        <!-- Resumen de Progreso -->
+        <div class="glass rounded-[2.5rem] p-8 mb-10 animate__animated animate__fadeInUp">
+            <div class="flex justify-between items-end mb-4">
+                <div>
+                    <p class="text-[10px] font-black uppercase text-slate-500 tracking-widest mb-1">Estado General</p>
+                    <h2 id="progress-text" class="text-2xl font-black text-white italic uppercase">0% Completado</h2>
+                </div>
+                <div class="text-right">
+                    <span id="pending-count"
+                        class="text-[10px] font-black bg-dibaGold/10 text-dibaGold px-3 py-1 rounded-full uppercase tracking-widest border border-dibaGold/20">5
+                        PENDIENTES</span>
+                </div>
+            </div>
+            <div class="w-full h-4 bg-white/5 rounded-full overflow-hidden p-1 border border-white/5">
+                <div id="progress-bar"
+                    class="h-full bg-gradient-to-r from-dibaGold to-amber-500 rounded-full transition-all duration-1000 w-0 progress-bar-glow">
+                </div>
+            </div>
+        </div>
+
+        <!-- Lista de Documentos -->
+        <div id="docs-list" class="grid gap-4 animate__animated animate__fadeInUp" style="animation-delay: 0.2s;">
+            <!-- Carga inicial animada -->
+            <div class="flex justify-center py-20"><i
+                    class="fas fa-circle-notch animate-spin text-3xl text-dibaGold"></i></div>
+        </div>
+
+        <div class="mt-12 p-6 rounded-3xl bg-amber-500/5 border border-amber-500/10 text-center">
+            <p class="text-[11px] text-slate-400 font-bold leading-relaxed">
+                <i class="fas fa-info-circle text-dibaGold mr-2"></i>
+                RECUERDA: Los documentos deben estar legibles en formato PDF o Imagen (JPG/PNG). <br>
+                Cualquier cambio será revisado por el cuerpo técnico del club.
+            </p>
+        </div>
+    </main>
+
+    <div id="footer-container"></div>
+
+    <script src="/scripts/config.js"></script>
+    <script type="module">
+        import { verificarSesion } from './scripts/auth.js';
+        import { supabase } from './scripts/supabaseClient.js';
+
+        const DOC_TYPES = [
+            { id: 'tarjeta_identidad', label: 'Tarjeta de Identidad', desc: 'Fotocopia ampliada del jugador' },
+            { id: 'cedula_padre', label: 'Cédula del Padre', desc: 'Fotocopia del documento del acudiente masculino' },
+            { id: 'cedula_madre', label: 'Cédula de la Madre', desc: 'Fotocopia del documento del acudiente femenino' },
+            { id: 'registro_civil', label: 'Registro Civil', desc: 'Copia legible del registro civil de nacimiento' },
+            { id: 'consentimiento_padres', label: 'Consentimiento Padres', desc: 'Formato diligenciado y firmado' }
+        ];
+
+        let currentUser = null;
+
+        async function loadDocs() {
+            const listEl = document.getElementById('docs-list');
+            const progBar = document.getElementById('progress-bar');
+            const progText = document.getElementById('progress-text');
+            const pendingEl = document.getElementById('pending-count');
+
+            if (!currentUser.identificacion_numero) {
+                listEl.innerHTML = `
+                    <div class="glass rounded-3xl p-12 text-center">
+                        <i class="fas fa-user-shield text-4xl text-slate-600 mb-6"></i>
+                        <h3 class="text-xl font-black text-white uppercase italic mb-4">Perfil no vinculado</h3>
+                        <p class="text-slate-400 text-sm mb-8 leading-relaxed max-w-sm mx-auto">Para cargar tus documentos, primero debes vincular tu cuenta con tu número de identificación oficial.</p>
+                        <a href="perfil.html" class="bg-dibaGold text-blue-900 px-8 py-3 rounded-full font-black uppercase text-xs hover:scale-105 transition-all inline-block shadow-lg shadow-dibaGold/20">Vincular Ahora</a>
+                    </div>
+                `;
+                return;
+            }
+
+            const { data: docs } = await supabase.from('player_documents').select('*').eq('identificacion_numero', currentUser.identificacion_numero);
+
+            let uploadedCount = 0;
+            listEl.innerHTML = '';
+
+            DOC_TYPES.forEach((type, index) => {
+                const doc = docs?.find(d => d.doc_type === type.id);
+                if (doc) uploadedCount++;
+
+                const delay = 0.1 * index;
+                const card = document.createElement('div');
+                card.className = "glass rounded-3xl p-6 flex flex-col md:flex-row items-center justify-between gap-6 hover:bg-white/[0.05] transition-all animate__animated animate__fadeInUp";
+                card.style.animationDelay = `${delay}s`;
+
+                card.innerHTML = `
+                    <div class="flex items-center gap-5 w-full md:w-auto">
+                        <div class="w-14 h-14 rounded-2xl ${doc ? 'bg-success/10 text-emerald-500' : 'bg-white/5 text-slate-500'} flex items-center justify-center text-xl shrink-0">
+                            <i class="fas ${doc ? 'fa-check-circle' : 'fa-file-upload'}"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-sm font-black text-white uppercase italic tracking-tight">${type.label}</h3>
+                            <p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest mt-0.5">${type.desc}</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center gap-4 w-full md:w-auto justify-end">
+                        ${doc ? `
+                            <div class="flex flex-col items-end mr-2">
+                                <span class="text-[9px] font-black uppercase tracking-widest ${doc.status === 'verificado' ? 'text-emerald-500' : 'text-amber-500'} bg-white/5 px-3 py-1 rounded-full border border-white/5">
+                                    ${doc.status}
+                                </span>
+                            </div>
+                            <a href="${doc.file_url}" target="_blank" class="w-10 h-10 glass rounded-full flex items-center justify-center text-slate-300 hover:text-dibaGold transition-all">
+                                <i class="fas fa-eye"></i>
+                            </a>
+                        ` : ''}
+                        
+                        <button onclick="document.getElementById('file-${type.id}').click()" 
+                                class="h-10 px-6 rounded-full font-black text-[10px] uppercase tracking-widest transition-all
+                                ${doc ? 'bg-white/5 text-slate-400 hover:bg-white/10' : 'bg-dibaGold text-blue-900 hover:scale-105 shadow-lg shadow-dibaGold/10'}">
+                            ${doc ? 'Actualizar' : 'Subir Documento'}
+                        </button>
+                        <input type="file" id="file-${type.id}" class="hidden" accept=".pdf,.jpg,.jpeg,.png" onchange="window.uploadDocument('${type.id}', this)">
+                    </div>
+                `;
+                listEl.appendChild(card);
+            });
+
+            // Update progress
+            const pct = Math.round((uploadedCount / DOC_TYPES.length) * 100);
+            progBar.style.width = `${pct}%`;
+            progText.innerText = `${pct}% Completado`;
+            pendingEl.innerText = `${DOC_TYPES.length - uploadedCount} PENDIENTES`;
+            pendingEl.className = (DOC_TYPES.length - uploadedCount) === 0
+                ? "text-[10px] font-black bg-emerald-500/10 text-emerald-500 px-3 py-1 rounded-full uppercase tracking-widest border border-emerald-500/20"
+                : "text-[10px] font-black bg-dibaGold/10 text-dibaGold px-3 py-1 rounded-full uppercase tracking-widest border border-dibaGold/20";
+        }
+
+        window.uploadDocument = async (typeId, input) => {
+            const file = input.files[0];
+            if (!file) return;
+
+            const btn = input.previousElementSibling;
+            const originalText = btn.innerText;
+            btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i>';
+            btn.disabled = true;
+
+            try {
+                const dni = currentUser.identificacion_numero;
+                const path = `${dni}/${typeId}_${Date.now()}_${file.name}`;
+
+                const { error: upError } = await supabase.storage.from('documents').upload(path, file);
+                if (upError) throw upError;
+
+                const { data: { publicUrl } } = supabase.storage.from('documents').getPublicUrl(path);
+
+                const { error: dbError } = await supabase.from('player_documents').upsert({
+                    identificacion_numero: dni,
+                    user_id: currentUser.id,
+                    doc_type: typeId,
+                    file_url: publicUrl,
+                    status: 'pendiente',
+                    updated_at: new Date()
+                }, { onConflict: ['identificacion_numero', 'doc_type'] });
+
+                if (dbError) throw dbError;
+
+                loadDocs(); // Reload UI
+            } catch (err) {
+                console.error(err);
+                alert("Error al subir el archivo. Por favor reintenta.");
+            } finally {
+                btn.innerText = originalText;
+                btn.disabled = false;
+            }
+        };
+
+        // Initialize Page
+        (async () => {
+            currentUser = await verificarSesion();
+            if (!currentUser) {
+                window.location.href = 'index.html';
+                return;
+            }
+
+            // Load Navbar/Footer
+            const { initNavbar } = await import('./scripts/navbar.js');
+            const { loadComponent } = await import('./scripts/loadComponents.js'); // Actually defined in the global scope but we use the one loaded by script tags inside layout if needed, though usually loadComponents is global.
+
+            // Since loadComponents is global and already in loadComponents.js
+            fetch('layout/navbar.html').then(r => r.text()).then(html => {
+                document.getElementById('navbar-container').innerHTML = html;
+                initNavbar();
+            });
+
+            fetch('layout/footer.html').then(r => r.text()).then(html => {
+                document.getElementById('footer-container').innerHTML = html;
+            });
+
+            loadDocs();
+        })();
+    </script>
+</body>
+
+</html>

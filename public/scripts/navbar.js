@@ -37,6 +37,7 @@ export async function initNavbar() {
         const nameLabel = document.getElementById('user-name');
         const roleLabel = document.getElementById('user-role');
         const linkAdmin = document.getElementById('link-admin');
+        const linkDocs = document.getElementById('link-docs');
 
         if (user.avatar_url) {
           avatar.src = user.avatar_url;
@@ -55,6 +56,10 @@ export async function initNavbar() {
           linkAdmin?.classList.remove('hidden');
         }
 
+        if (user.role === 'usuario' || user.role === 'admin') {
+          linkDocs?.classList.remove('hidden');
+        }
+
         // Mobile Profile
         authMobileLoggedOut?.classList.add('hidden');
         authMobileLoggedIn?.classList.remove('hidden');
@@ -64,6 +69,7 @@ export async function initNavbar() {
         const nameLabelMob = document.getElementById('user-name-mobile');
         const roleLabelMob = document.getElementById('user-role-mobile');
         const linkAdminMob = document.getElementById('link-admin-mobile');
+        const linkDocsMob = document.getElementById('link-docs-mobile');
 
         if (user.avatar_url) {
           avatarMob.src = user.avatar_url;
@@ -80,6 +86,10 @@ export async function initNavbar() {
 
         if (user.role === 'admin' || user.role === 'tecnico') {
           linkAdminMob?.classList.remove('hidden');
+        }
+
+        if (user.role === 'usuario' || user.role === 'admin') {
+          linkDocsMob?.classList.remove('hidden');
         }
 
       } else {
