@@ -22,6 +22,7 @@ Este proyecto es una plataforma integral para **informar, conectar y gestionar**
 
 ✅ **Panel Administrativo Premium**: Interfaz unificada con diseño oscuro, glassmorphism y Tailwind CSS para la gestión total del club.  
 ✅ **Autenticación y Perfiles**: Inicio de sesión para administradores y usuarios generales (vía **Google OAuth**) con perfiles dinámicos y roles gestionados desde Supabase.  
+✅ **Gestión Documental**: Subida individual de documentos obligatorios (TI, Cédulas, Registro Civil, Consentimiento) para jugadores con seguimiento de estado.
 ✅ **Historia Inmersiva**: Timeline vertical interactivo con animaciones AOS y Lightbox para visualizar momentos históricos del club.
 ✅ **Simbología Interactiva**: Página dedicada a la explicación dinámica de los símbolos del escudo institucional.
 ✅ **Himno Oficial**: Sección multimedia para escuchar el himno oficial y consultar su letra.
@@ -74,7 +75,7 @@ Se ha generado documentación detallada y walkthroughs de las últimas actualiza
 - [x] Línea de tiempo histórica inmersiva con animaciones.
 - [x] Página de himno oficial y simbología del escudo interactiva.
 - [x] Integración de feed de Instagram en sección de Noticias.
-- [ ] Subida de documentos (PDF) por jugador desde el perfil.
+- [x] Subida individual de documentos (PDF/Imagen) por jugador desde el perfil.
 - [ ] Notificaciones de próximos encuentros vía Web Push.
 
 ---
