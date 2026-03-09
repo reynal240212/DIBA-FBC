@@ -20,61 +20,62 @@ Este proyecto es una plataforma integral para **informar, conectar y gestionar**
 
 ---
 
-## 📌 Funcionalidades principales
-
-✅ **Autenticación Híbrida**: Inicio de sesión para administradores y para usuarios generales mediante **Google OAuth**.  
-✅ **Navbar Dinámico**: Menú que cambia según el estado de la sesión, mostrando la foto de perfil del usuario.  
-✅ **Gestión Deportiva**: Fichas técnicas, estadísticas de partidos, tablas de posiciones y análisis de rendimiento.  
-✅ **Noticias y Actualidad**: Sistema de anuncios con carrusel dinámico en la página de inicio.  
-✅ **Diseño Moderno**: Interfaz responsive y estética premium utilizando **Tailwind CSS**.  
-✅ **Buscador Global**: Acceso rápido a cualquier sección o contenido del sitio.
+✅ **Panel Administrativo Premium**: Interfaz unificada con diseño oscuro, glassmorphism y Tailwind CSS para la gestión total del club.  
+✅ **Autenticación y Perfiles**: Inicio de sesión para administradores y usuarios generales (vía **Google OAuth**) con perfiles dinámicos y roles gestionados desde Supabase.  
+✅ **Historia Inmersiva**: Timeline vertical interactivo con animaciones AOS y Lightbox para visualizar momentos históricos del club.
+✅ **Simbología Interactiva**: Página dedicada a la explicación dinámica de los símbolos del escudo institucional.
+✅ **Himno Oficial**: Sección multimedia para escuchar el himno oficial y consultar su letra.
+✅ **Integración Social**: Feed dinámico de Instagram integrado directamente en la sección de noticias y muro social.
+✅ **Gestión Deportiva**: Control de plantillas, asistencia, pagos, partidos y análisis de rendimiento en tiempo real con banners de próximos encuentros.
 
 ---
 
 ## 🏗️ Arquitectura del Proyecto
 
-El sitio utiliza una arquitectura basada en **Componentes Reutilizables** para facilitar el mantenimiento:
+El sitio utiliza una arquitectura moderna basada en **Componentes Reutilizables** y **Tailwind CSS**:
 
-- **`loadComponents.js`**: Motor de inyección que carga el `navbar`, `hero` y `footer` de forma asíncrona en todas las páginas.
-- **`auth.js`**: Módulo centralizado para el manejo de sesiones con Supabase y Google.
-- **`config.js`**: Generado automáticamente durante el despliegue para gestionar credenciales de forma segura.
+- **`dashboard.html` & Admin Suite**: Nueva suite administrativa unificada con componentes persistentes (sidebar, topbar).
+- **`loadComponents.js`**: Inyección asíncrona de componentes comunes en la parte pública (navbar, footer).
+- **`supabaseClient.js`**: Módulo centralizado para la lógica de base de datos, autenticación (Google OAuth) y RBAC.
+- **`Animate On Scroll (AOS)` & `Animate.css`**: Utilizados para la interactividad y fluidez visual en las páginas de historia y escudo.
 
 ---
 
 ## 🛠️ Tecnologías utilizadas
 
 **Frontend**
+- **Tailwind CSS** (Framework de diseño principal para sitio público y administrativo)
 - HTML5 & JavaScript (ES6 Modules)
-- **Tailwind CSS** (Styling principal)
-- Bootstrap 5 (Soporte técnico y componentes base)
+- **AOS (Animate On Scroll)** & **Animate.css** (Animaciones e interactividad)
+- **Lightbox2** (Galería de imágenes interactiva)
+- FontAwesome 6 & Bootstrap 5
 
 **Backend / Infraestructura**
-- **Supabase**: Base de datos PostgreSQL, Autenticación (JWT + OAuth) y Storage.
+- **Supabase**: Base de datos PostgreSQL, Autenticación (JWT + OAuth), RPC functions y Storage.
 - **Vercel**: Hosting y despliegue continuo (CI/CD).
-
-**Herramientas**
-- Git & GitHub
-- Google Fonts & FontAwesome 6
 
 ---
 
 ## 📄 Documentación
 
-Se ha generado documentación detallada del proyecto disponible en la carpeta `documentacion pagna diba`:
-1. **Requisitos Funcionales/No Funcionales**: Descripción técnica del alcance.
-2. **Manual de Usuario**: Guía paso a paso para padres y seguidores.
-3. **Manual del Software**: Detalle de la arquitectura y mantenimiento para desarrolladores.
+Se ha generado documentación detallada y walkthroughs de las últimas actualizaciones:
+1. **Unificación Admin UI**: Rediseño integral de la plataforma de gestión.
+2. **Sistema de Perfiles**: Gestión dinámica de usuarios y roles.
+3. **Manuales Originales**: Disponibles en la carpeta `documentacion pagna diba`.
 
 ---
 
 ## 🧠 Por hacer / Backlog
 
-- [x] Integración de Google Login en el Navbar.
+- [x] Integración de Google Login en el Navbar e interfaz de usuario.
 - [x] Sistema de carga de componentes dinámicos.
+- [x] Panel de administración completo y unificado para gestión del club.
+- [x] Gestión dinámica de perfiles administrativos.
+- [x] Línea de tiempo histórica inmersiva con animaciones.
+- [x] Página de himno oficial y simbología del escudo interactiva.
+- [x] Integración de feed de Instagram en sección de Noticias.
 - [ ] Subida de documentos (PDF) por jugador desde el perfil.
-- [ ] Panel de administración completo para edición de partidos.
 - [ ] Notificaciones de próximos encuentros vía Web Push.
-- [ ] Galería de fotos por categorías y temporadas.
 
 ---
 
@@ -87,3 +88,4 @@ Técnico del club & Desarrollador de software
 ---
 
 ✨ *“Jugamos con pasión, crecemos con valores.”*
+
