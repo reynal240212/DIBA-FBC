@@ -824,7 +824,7 @@
           const filtered = appState.players.filter(p => p.name.toLowerCase().includes(q));
 
           // Ordenar por categoría según el deseo del usuario
-          const order = { '2014/2015': 1, '2012': 2, '2013': 3, '2016': 4, 'General': 5 };
+          const order = { '2014/2015/2016': 1, '2012': 2, '2013': 3, 'General': 4 };
           filtered.sort((a, b) => {
             if (order[a.categoria] !== order[b.categoria]) {
               return (order[a.categoria] || 99) - (order[b.categoria] || 99);
@@ -968,7 +968,7 @@
 
         // Export
         const getExportData = () => {
-          const order = { '2014/2015': 1, '2012': 2, '2013': 3, '2016': 4, 'General': 5 };
+          const order = { '2014/2015/2016': 1, '2012': 2, '2013': 3, 'General': 4 };
           const sorted = [...appState.players].sort((a, b) => {
             if (order[a.categoria] !== order[b.categoria]) {
               return (order[a.categoria] || 99) - (order[b.categoria] || 99);
