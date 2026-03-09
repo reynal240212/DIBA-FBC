@@ -668,6 +668,33 @@
             </tbody>
           </table>
         </div>
+
+        <!-- Modal de Gestión Documental Admin (Planilla) -->
+        <div id="adminDocsModal"
+          class="d-none fixed-top w-100 h-100 d-flex align-items-center justify-content-center p-4"
+          style="background: rgba(10,14,20,0.9); z-index: 2000; backdrop-filter: blur(5px);">
+          <div class="card border-0 shadow-2xl w-100 mx-auto"
+            style="max-width: 650px; background: #0a101b; border: 1px solid rgba(255,255,255,0.1) !important; border-radius: 2rem;">
+            <div class="card-header border-0 p-4 d-flex justify-content-between align-items-center bg-transparent">
+              <div>
+                <h3 id="modalPlayerName" class="h5 fw-black text-white text-uppercase italic mb-0">Cargando...</h3>
+                <p id="modalPlayerDni" class="small text-muted fw-bold text-uppercase tracking-widest mb-0 mt-1"></p>
+              </div>
+              <button onclick="closeAdminDocs()"
+                class="btn btn-dark rounded-circle d-flex align-items-center justify-content-center p-0"
+                style="width: 40px; height: 40px; background: rgba(255,255,255,0.05);">
+                <i class="fas fa-times"></i>
+              </button>
+            </div>
+            <div class="card-body p-4 overflow-y-auto" id="modalDocsList" style="max-height: 450px;">
+              <!-- Items de documentos se insertan aquí -->
+            </div>
+            <div class="card-footer border-0 p-3 bg-transparent text-center">
+              <p class="small text-muted fw-bold text-uppercase tracking-widest mb-0" style="font-size: 0.6rem;">Panel
+                Administrativo — DIBA FBC</p>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
