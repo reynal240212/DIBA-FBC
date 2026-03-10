@@ -515,6 +515,83 @@
             padding: .5rem 0 .2rem;
         }
 
+        /* ── CATEGORY HEADERS ── */
+        .cat-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: .55rem .85rem;
+            background: rgba(255, 204, 0, .07);
+            border: 1px solid rgba(255, 204, 0, .15);
+            border-radius: 10px;
+            margin-top: .5rem;
+            cursor: pointer;
+            user-select: none;
+            transition: background .15s;
+        }
+
+        .cat-header:hover {
+            background: rgba(255, 204, 0, .12);
+        }
+
+        .cat-header-left {
+            display: flex;
+            align-items: center;
+            gap: .65rem;
+        }
+
+        .cat-header-title {
+            font-size: .65rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: .15em;
+            color: var(--gold);
+        }
+
+        .cat-header-count {
+            font-size: .6rem;
+            font-weight: 800;
+            color: var(--slate);
+            background: rgba(255, 255, 255, .06);
+            padding: .15rem .55rem;
+            border-radius: 999px;
+        }
+
+        .cat-header-count.has-selected {
+            color: var(--gold);
+            background: rgba(255, 204, 0, .15);
+        }
+
+        .cat-check {
+            accent-color: var(--gold);
+            width: 14px;
+            height: 14px;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        .cat-chevron {
+            font-size: .65rem;
+            color: var(--slate);
+            transition: transform .2s;
+            flex-shrink: 0;
+        }
+
+        .cat-chevron.open {
+            transform: rotate(0deg);
+        }
+
+        .cat-chevron.closed {
+            transform: rotate(-90deg);
+        }
+
+        .cat-body {
+            display: flex;
+            flex-direction: column;
+            gap: .35rem;
+            padding: .3rem 0 .2rem 0;
+        }
+
         /* ── HISTORIAL ── */
         .conv-card {
             padding: 1rem 1.25rem;
@@ -873,22 +950,98 @@
                 return;
             }
             list.innerHTML = '';
+
+            // Agrupar por categoría
+            const grouped = {};
             jugadores.forEach(j => {
-                const item = document.createElement('label');
-                item.className = 'player-item' + (selectedDNIs.has(j.numero) ? ' selected' : '');
-                item.innerHTML = `
-          <input type="checkbox" value="${j.numero}" ${selectedDNIs.has(j.numero) ? 'checked' : ''}>
-          <div>
-            <div class="player-name-text">${j.nombre} ${j.apellidos}</div>
-            <div class="player-cat">Cat. ${j.categoria || 'General'}</div>
-          </div>`;
-                item.querySelector('input').addEventListener('change', (e) => {
-                    if (e.target.checked) { selectedDNIs.add(j.numero); item.classList.add('selected'); }
-                    else { selectedDNIs.delete(j.numero); item.classList.remove('selected'); }
-                    document.getElementById('selected-badge').textContent = `${selectedDNIs.size} seleccionados`;
-                });
-                list.appendChild(item);
+                const cat = j.categoria || 'General';
+                if (!grouped[cat]) grouped[cat] = [];
+                grouped[cat].push(j);
             });
+
+            Object.entries(grouped)
+                .sort(([a], [b]) => a.localeCompare(b))
+                .forEach(([catName, players]) => {
+
+                    const selInCat = () => players.filter(p => selectedDNIs.has(p.numero)).length;
+
+                    // ── HEADER de categoría ──
+                    const header = document.createElement('div');
+                    header.className = 'cat-header';
+
+                    const catCheckId = `cat-chk-${catName.replace(/\s+/g, '-')}`;
+                    header.innerHTML = `
+                        <div class="cat-header-left">
+                            <input type="checkbox" class="cat-check" id="${catCheckId}" title="Seleccionar todos">
+                            <span class="cat-header-title"><i class="fas fa-layer-group" style="margin-right:.4rem;font-size:.6rem;"></i>${catName}</span>
+                            <span class="cat-header-count" id="cnt-${catCheckId}">${selInCat()} / ${players.length}</span>
+                        </div>
+                        <i class="fas fa-chevron-down cat-chevron open" id="chev-${catCheckId}"></i>`;
+
+                    // ── BODY de jugadores ──
+                    const body = document.createElement('div');
+                    body.className = 'cat-body';
+                    body.id = `body-${catCheckId}`;
+
+                    function refreshCatCount() {
+                        const cnt = selInCat();
+                        const el = document.getElementById(`cnt-${catCheckId}`);
+                        if (el) {
+                            el.textContent = `${cnt} / ${players.length}`;
+                            el.className = 'cat-header-count' + (cnt > 0 ? ' has-selected' : '');
+                        }
+                        // Sincronizar estado del checkbox de categoría
+                        const catChk = document.getElementById(catCheckId);
+                        if (catChk) {
+                            catChk.checked = cnt === players.length;
+                            catChk.indeterminate = cnt > 0 && cnt < players.length;
+                        }
+                        document.getElementById('selected-badge').textContent = `${selectedDNIs.size} seleccionados`;
+                    }
+
+                    players.forEach(j => {
+                        const item = document.createElement('label');
+                        item.className = 'player-item' + (selectedDNIs.has(j.numero) ? ' selected' : '');
+                        item.innerHTML = `
+                            <input type="checkbox" value="${j.numero}" ${selectedDNIs.has(j.numero) ? 'checked' : ''}>
+                            <div>
+                                <div class="player-name-text">${j.nombre} ${j.apellidos}</div>
+                                <div class="player-cat">DNI ${j.numero}</div>
+                            </div>`;
+                        item.querySelector('input').addEventListener('change', e => {
+                            if (e.target.checked) { selectedDNIs.add(j.numero); item.classList.add('selected'); }
+                            else { selectedDNIs.delete(j.numero); item.classList.remove('selected'); }
+                            refreshCatCount();
+                        });
+                        body.appendChild(item);
+                    });
+
+                    // Toggle collapse al hacer clic en el header
+                    header.addEventListener('click', e => {
+                        if (e.target.type === 'checkbox') return; // no colapsar al clic en checkbox
+                        const bodyEl = document.getElementById(`body-${catCheckId}`);
+                        const chevron = document.getElementById(`chev-${catCheckId}`);
+                        const isHidden = bodyEl.style.display === 'none';
+                        bodyEl.style.display = isHidden ? '' : 'none';
+                        chevron.className = 'fas fa-chevron-down cat-chevron ' + (isHidden ? 'open' : 'closed');
+                    });
+
+                    // Checkbox de categoría → seleccionar/deseleccionar todos
+                    header.querySelector('.cat-check').addEventListener('change', e => {
+                        e.stopPropagation();
+                        const check = e.target.checked;
+                        body.querySelectorAll('input[type=checkbox]').forEach((chk, i) => {
+                            chk.checked = check;
+                            if (check) { selectedDNIs.add(players[i].numero); chk.closest('label').classList.add('selected'); }
+                            else { selectedDNIs.delete(players[i].numero); chk.closest('label').classList.remove('selected'); }
+                        });
+                        refreshCatCount();
+                    });
+
+                    refreshCatCount();
+                    list.appendChild(header);
+                    list.appendChild(body);
+                });
         }
 
         // Buscador
