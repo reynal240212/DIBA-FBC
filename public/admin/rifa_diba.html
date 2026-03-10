@@ -511,11 +511,39 @@
     </header>
 
     <div class="content">
-      <div class="btn-container">
-        <div>
-          <label for="cantidad">Cantidad:</label>
-          <input type="number" id="cantidad" min="1" value="40" />
+      <div class="btn-container" style="flex-wrap:wrap;gap:1rem;">
+        <div style="display:flex;align-items:center;gap:.6rem;">
+          <label for="cantidad">Boletas:</label>
+          <input type="number" id="cantidad" min="1" max="500" value="40" />
         </div>
+        <div style="display:flex;flex-direction:column;gap:.3rem;">
+          <label>Fecha del sorteo</label>
+          <input type="text" id="cfg-fecha" value="Sabado 19 de abril de 2025"
+            style="background:var(--dark);border:1px solid var(--border);color:#fff;padding:.5rem .7rem;border-radius:10px;font-size:.73rem;font-family:'Montserrat',sans-serif;outline:none;width:220px;">
+        </div>
+        <div style="display:flex;flex-direction:column;gap:.3rem;">
+          <label>Premio</label>
+          <input type="text" id="cfg-premio" value="2 Perfumes para Caballeros"
+            style="background:var(--dark);border:1px solid var(--border);color:#fff;padding:.5rem .7rem;border-radius:10px;font-size:.73rem;font-family:'Montserrat',sans-serif;outline:none;width:210px;">
+        </div>
+        <div style="display:flex;flex-direction:column;gap:.3rem;">
+          <label>Loteria</label>
+          <input type="text" id="cfg-loteria" value="Sinuano Noche - Ultimas 2 cifras"
+            style="background:var(--dark);border:1px solid var(--border);color:#fff;padding:.5rem .7rem;border-radius:10px;font-size:.73rem;font-family:'Montserrat',sans-serif;outline:none;width:210px;">
+        </div>
+        <div style="display:flex;flex-direction:column;gap:.3rem;">
+          <label>Valor por numero</label>
+          <input type="text" id="cfg-valor" value="$3.000"
+            style="background:var(--dark);border:1px solid var(--border);color:#fff;padding:.5rem .7rem;border-radius:10px;font-size:.73rem;font-family:'Montserrat',sans-serif;outline:none;width:100px;">
+        </div>
+        <div style="display:flex;gap:.6rem;align-items:flex-end;margin-left:auto;flex-wrap:wrap;">
+          <button onclick="generarBoletas()" class="btn-action"><i class="fas fa-ticket-alt" style="margin-right:.4rem;"></i>Generar</button>
+          <button onclick="window.print()" class="btn-action"
+            style="background:var(--dark3);color:var(--gold);border:1px solid var(--border);"><i class="fas fa-print" style="margin-right:.4rem;"></i>Imprimir</button>
+          <button onclick="descargarZip()" class="btn-action"
+            style="background:var(--dark3);color:var(--gold);border:1px solid var(--border);"><i class="fas fa-file-archive" style="margin-right:.4rem;"></i>ZIP</button>
+        </div>
+      </div>
         <button onclick="generarBoletas()" class="btn-action">Generar Boletas</button>
         <button onclick="descargarZip()" class="btn-action"
           style="background: var(--dark3); color: var(--gold); border: 1px solid var(--border);">Descargar ZIP</button>
@@ -553,7 +581,11 @@
       contenedor.innerHTML = "";
       numerosUsadosGlobal.clear();
 
-      const total = parseInt(document.getElementById('cantidad').value) || 40;
+      const total    = parseInt(document.getElementById('cantidad').value) || 40;
+      const fecha    = document.getElementById('cfg-fecha')?.value   || 'Por definir';
+      const premio   = document.getElementById('cfg-premio')?.value  || 'Por definir';
+      const loteria  = document.getElementById('cfg-loteria')?.value || 'Por definir';
+      const valor    = document.getElementById('cfg-valor')?.value   || '.000';
       let paginaActual;
       for (let i = 1; i <= total; i++) {
         if ((i - 1) % 4 === 0) {
@@ -576,13 +608,13 @@
           <div>
             <div class="titulo-boleta">RESPONSABLE DIBA FBC</div>
             <div class="info">
-              Juega el sábado 19 de abril de 2025<br>
-              Lotería El Sinuano - Noche - Últimas 2 cifras - 10:00 PM<br>
-              Sorteo de 2 Perfumes para Caballeros<br>
-              Valor: $3000 cada número
+              Juega el ${fecha}<br>
+              ${loteria}<br>
+              Premio: ${premio}<br>
+              Valor: ${valor} por numero
             </div>
             <div class="numeros">${numerosHTML}</div>
-            <div class="footer-boleta">Boleta #${i}</div>
+            <div class="footer-boleta">Boleta #${String(i).padStart(3,"0")}</div>
           </div>
         `;
         paginaActual.appendChild(boleta);
@@ -631,7 +663,7 @@
   </script>
   <script src="/scripts/config.js"></script>
   <script type="module">
-    import { supabase, requireAdmin } from "./scripts/supabaseClient.js";
+    import { supabase, requireAdmin } from "../scripts/supabaseClient.js";
 
     // Protection & Unified UI
     requireAdmin().then(session => {
@@ -674,4 +706,7 @@
 </body>
 
 </html>
+
+
+
 
