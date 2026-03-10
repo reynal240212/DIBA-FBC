@@ -3,12 +3,14 @@
 
 <head>
   <meta charset="UTF-8" />
-  <title>Generador de Boletas — DIBA FBC</title>
+  <title>Generador de Rifas — DIBA FBC</title>
   <link rel="icon" href="/images/ESCUDO.ico" type="image/x-icon">
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;900&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,600;0,700;0,900;1,700;1,900&display=swap"
+    rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
   <style>
-    /* ── Dashboard Base Styles ── */
     *,
     *::before,
     *::after {
@@ -18,16 +20,14 @@
     }
 
     :root {
-      --blue: #002a40;
-      --blue2: #003d5c;
       --gold: #ffcc00;
-      --gold2: #e6b800;
       --dark: #0a0e14;
       --dark2: #111823;
       --dark3: #1a2332;
       --slate: #8b9ab0;
       --text: #e2e8f0;
-      --border: rgba(255, 255, 255, 0.07);
+      --border: rgba(255, 255, 255, .07);
+      --blue: #002a40;
       --sidebar-w: 270px;
     }
 
@@ -52,7 +52,7 @@
       display: flex;
       flex-direction: column;
       z-index: 100;
-      transition: transform .3s ease;
+      transition: transform .3s;
     }
 
     .sidebar-logo {
@@ -116,7 +116,7 @@
       font-size: .78rem;
       font-weight: 700;
       color: var(--slate);
-      transition: all .2s ease;
+      transition: all .2s;
       position: relative;
     }
 
@@ -134,6 +134,17 @@
     .nav-link.active {
       background: rgba(255, 204, 0, .1);
       color: var(--gold);
+    }
+
+    .nav-link.active::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 20%;
+      bottom: 20%;
+      width: 3px;
+      background: var(--gold);
+      border-radius: 0 3px 3px 0;
     }
 
     .sidebar-footer {
@@ -201,7 +212,21 @@
       color: #fff;
     }
 
-    /* ── MAIN & TOPBAR ── */
+    .mobile-menu-btn {
+      display: none;
+      background: var(--dark3);
+      border: 1px solid var(--border);
+      color: var(--gold);
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      font-size: 1rem;
+      cursor: pointer;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* ── MAIN ── */
     .main {
       margin-left: var(--sidebar-w);
       flex: 1;
@@ -242,12 +267,6 @@
       margin-top: 2px;
     }
 
-    .topbar-right {
-      display: flex;
-      align-items: center;
-      gap: .8rem;
-    }
-
     .topbar-time {
       font-size: .72rem;
       font-weight: 700;
@@ -258,172 +277,329 @@
       border: 1px solid var(--border);
     }
 
-    .mobile-menu-btn {
-      display: none;
-      background: var(--dark3);
-      border: 1px solid var(--border);
-      color: var(--gold);
-      width: 38px;
-      height: 38px;
-      border-radius: 10px;
-      font-size: 1rem;
-      cursor: pointer;
-      align-items: center;
-      justify-content: center;
-    }
-
     .content {
       padding: 2rem;
       flex: 1;
     }
 
-    /* ── Raffle Content Specific ── */
-    .btn-container {
-      margin-bottom: 2rem;
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      flex-wrap: wrap;
+    /* ── TOOLBAR ── */
+    .toolbar {
       background: var(--dark2);
-      padding: 1.5rem;
-      border-radius: 20px;
       border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 1.5rem 1.75rem;
+      margin-bottom: 1.5rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.2rem;
+      align-items: flex-end;
     }
 
-    .btn-container label {
-      font-size: .75rem;
-      font-weight: 800;
-      color: var(--slate);
-      text-transform: uppercase;
-    }
-
-    input[type="number"] {
-      background: var(--dark);
-      border: 1px solid var(--border);
-      color: #fff;
-      padding: .6rem;
-      border-radius: 10px;
-      width: 80px;
-      font-weight: 700;
-      outline: none;
-    }
-
-    button.btn-action {
-      background: var(--gold);
-      color: var(--blue);
-      padding: .7rem 1.5rem;
-      border: none;
-      font-weight: 900;
-      font-style: italic;
-      text-transform: uppercase;
-      font-size: .75rem;
-      border-radius: 12px;
-      cursor: pointer;
-      transition: all .2s;
-      box-shadow: 0 4px 15px rgba(255, 204, 0, 0.2);
-    }
-
-    button.btn-action:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(255, 204, 0, 0.3);
-    }
-
-    .page {
-      width: 210mm;
-      margin: 10mm auto;
-      padding: 10mm;
+    .field-group {
       display: flex;
       flex-direction: column;
-      align-items: center;
-      page-break-after: always;
-      background: white;
-      box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+      gap: .35rem;
+    }
+
+    .field-group label {
+      font-size: .6rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .12em;
+      color: var(--slate);
+    }
+
+    .field-group input,
+    .field-group select {
+      background: var(--dark3);
+      border: 1px solid var(--border);
+      color: var(--text);
       border-radius: 10px;
+      padding: .6rem .85rem;
+      font-family: 'Montserrat', sans-serif;
+      font-size: .75rem;
+      font-weight: 700;
+      outline: none;
+      transition: border-color .2s;
+    }
+
+    .field-group input:focus,
+    .field-group select:focus {
+      border-color: var(--gold);
+    }
+
+    .field-group input[type=number] {
+      width: 90px;
+    }
+
+    .field-group input[type=text] {
+      width: 200px;
+    }
+
+    .field-group select {
+      width: 200px;
+    }
+
+    .btn-action {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      padding: .7rem 1.4rem;
+      border: none;
+      border-radius: 12px;
+      font-family: 'Montserrat', sans-serif;
+      font-size: .72rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: .07em;
+      cursor: pointer;
+      transition: all .2s;
+      white-space: nowrap;
+    }
+
+    .btn-primary {
+      background: var(--gold);
+      color: var(--blue);
+      box-shadow: 0 4px 15px rgba(255, 204, 0, .2);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(255, 204, 0, .35);
+    }
+
+    .btn-secondary {
+      background: var(--dark3);
+      color: var(--gold);
+      border: 1px solid var(--border);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 204, 0, .08);
+      border-color: rgba(255, 204, 0, .3);
+    }
+
+    .btn-action:disabled {
+      opacity: .4;
+      cursor: not-allowed;
+      transform: none !important;
+    }
+
+    .actions-row {
+      display: flex;
+      gap: .6rem;
+      align-items: flex-end;
+      margin-left: auto;
+      flex-wrap: wrap;
+    }
+
+    /* ── BOLETAS PREVIEW ── */
+    #contenedor {
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    /* ── PRINT PAGE: 5 boletas por A4 ── */
+    .page-rifa {
+      width: 210mm;
+      min-height: 297mm;
+      margin: 0 auto;
+      padding: 8mm 10mm;
+      background: white;
+      display: grid;
+      grid-template-rows: repeat(5, 1fr);
+      gap: 5mm;
+      page-break-after: always;
     }
 
     .boleta {
-      width: 95%;
-      min-height: 240px;
       background: #FFD700;
       border: 2px solid #002a40;
-      border-radius: 10px;
-      padding: 1.5rem;
+      border-radius: 8px;
+      padding: 6px 12px;
       position: relative;
-      margin: 15px 0;
       color: #002a40;
-    }
-
-    .titulo-boleta {
-      text-align: center;
-      font-weight: 900;
-      font-size: 1.8rem;
-      margin-bottom: 0.5rem;
-      font-style: italic;
-    }
-
-    .logo {
-      width: 70px;
-      position: absolute;
-      top: 15px;
-      right: 15px;
-    }
-
-    .info {
-      text-align: center;
-      font-size: 1.05rem;
-      margin-bottom: 1rem;
-      line-height: 1.3;
-      font-weight: 700;
-    }
-
-    .numeros {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      margin-top: 1rem;
+      grid-template-columns: 1fr auto;
+      gap: 8px;
+      align-items: center;
+      min-height: 50mm;
     }
 
-    .fila-numero-nombre {
+    .boleta-left {
+      flex: 1;
+    }
+
+    .boleta-header {
       display: flex;
       align-items: center;
       gap: 8px;
+      margin-bottom: 4px;
     }
 
-    .numero {
-      background: #fff;
-      color: #002a40;
-      width: 45px;
-      height: 45px;
-      border: 2px solid #002a40;
-      border-radius: 8px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-weight: 900;
-      font-size: 1.4rem;
+    .boleta-logo {
+      width: 40px;
+      height: 40px;
+      object-fit: contain;
       flex-shrink: 0;
     }
 
-    .nombre-numero {
-      flex: 1;
-      font-size: .8rem;
-      padding: 6px 10px;
-      border: 1.5px solid #002a40;
-      border-radius: 8px;
-      background: rgba(255, 255, 255, 0.5);
-      font-weight: 700;
-    }
-
-    .footer-boleta {
-      position: absolute;
-      bottom: 10px;
-      left: 1.5rem;
+    .boleta-titulo {
+      font-size: .85rem;
       font-weight: 900;
-      font-size: .9rem;
-      opacity: 0.7;
+      font-style: italic;
+      text-transform: uppercase;
+      line-height: 1.1;
     }
 
-    @media (max-width: 992px) {
+    .boleta-info {
+      font-size: .55rem;
+      font-weight: 700;
+      line-height: 1.4;
+      color: #002a40;
+      margin-bottom: 6px;
+    }
+
+    .boleta-jugador-label {
+      font-size: .5rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      color: rgba(0, 42, 64, .6);
+    }
+
+    .boleta-jugador {
+      font-size: .75rem;
+      font-weight: 900;
+      color: #002a40;
+      background: rgba(255, 255, 255, .5);
+      border: 1.5px solid #002a40;
+      border-radius: 6px;
+      padding: 3px 8px;
+      display: inline-block;
+      min-width: 140px;
+    }
+
+    .boleta-numeros {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(34px, 1fr));
+      gap: 4px;
+      background: rgba(255, 255, 255, .35);
+      border-radius: 8px;
+      padding: 6px;
+      border: 1.5px solid rgba(0, 42, 64, .3);
+    }
+
+    .num-cell {
+      background: white;
+      color: #002a40;
+      width: 34px;
+      height: 34px;
+      border: 2px solid #002a40;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      font-size: .85rem;
+    }
+
+    .boleta-footer {
+      font-size: .5rem;
+      font-weight: 900;
+      opacity: .6;
+      margin-top: 4px;
+    }
+
+    /* ── @media print ── */
+    @media print {
+      @page {
+        size: A4 portrait;
+        margin: 8mm 10mm;
+      }
+
+      * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+
+      body {
+        background: white !important;
+        display: block !important;
+      }
+
+      .sidebar,
+      .topbar,
+      .toolbar,
+      .main>.content>#status-bar {
+        display: none !important;
+      }
+
+      .main {
+        margin-left: 0 !important;
+      }
+
+      .content {
+        padding: 0 !important;
+      }
+
+      #contenedor {
+        border-radius: 0;
+        background: white;
+        box-shadow: none;
+      }
+
+      .page-rifa {
+        width: 100%;
+        min-height: auto;
+        margin: 0;
+        padding: 0;
+        grid-template-rows: repeat(5, 1fr);
+        height: 277mm;
+        page-break-after: always;
+        gap: 4mm;
+      }
+
+      .boleta {
+        break-inside: avoid;
+      }
+    }
+
+    /* ── STATUS BAR ── */
+    #status-bar {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem 1.5rem;
+      background: var(--dark2);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      margin-bottom: 1.5rem;
+      font-size: .75rem;
+    }
+
+    #status-bar .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--gold);
+      animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        opacity: 1
+      }
+
+      50% {
+        opacity: .3
+      }
+    }
+
+    @media(max-width:992px) {
       .sidebar {
         transform: translateX(-100%);
       }
@@ -440,18 +616,16 @@
         display: flex;
       }
 
-      .page {
+      .page-rifa {
         width: 100%;
-        margin: 0;
-        padding: 5mm;
       }
     }
   </style>
 </head>
 
-<body style="display: none;" id="admin-body">
+<body style="display:none;" id="admin-body">
 
-  <!-- ══ SIDEBAR ══ -->
+  <!-- SIDEBAR -->
   <aside class="sidebar" id="sidebar">
     <div class="sidebar-logo">
       <img src="/images/ESCUDO.png" alt="DIBA FBC">
@@ -460,27 +634,22 @@
         <div class="sidebar-logo-sub">Panel de Control</div>
       </div>
     </div>
-
     <nav class="sidebar-nav">
       <a href="dashboard.html" class="nav-link"><i class="fas fa-th-large"></i> Dashboard</a>
-
       <div class="nav-section-label">Equipo</div>
       <a href="planilla.html" class="nav-link"><i class="fas fa-clipboard-list"></i> Planilla</a>
       <a href="../ficha.html" class="nav-link"><i class="fas fa-users"></i> Jugadores</a>
       <a href="../partidos.html" class="nav-link"><i class="fas fa-futbol"></i> Partidos</a>
       <a href="../analisis.html" class="nav-link"><i class="fas fa-chart-line"></i> Análisis</a>
-            <a href="convocatorias.html" class="nav-link"><i class="fas fa-bullhorn"></i> Convocatorias</a>
-
+      <a href="convocatorias.html" class="nav-link"><i class="fas fa-bullhorn"></i> Convocatorias</a>
       <div class="nav-section-label">Administración</div>
       <a href="GestorDocumental.html" class="nav-link"><i class="fas fa-folder-open"></i> Gestor Documental</a>
       <a href="usuarios.html" class="nav-link"><i class="fas fa-user-cog"></i> Usuarios</a>
       <a href="crear-usuario.html" class="nav-link"><i class="fas fa-user-plus"></i> Crear Usuario</a>
       <a href="rifa_diba.html" class="nav-link active"><i class="fas fa-ticket-alt"></i> Rifas</a>
-
       <div class="nav-section-label">Sitio Web</div>
       <a href="../index.html" class="nav-link"><i class="fas fa-globe"></i> Ver Sitio</a>
     </nav>
-
     <div class="sidebar-footer">
       <div class="user-chip">
         <div class="user-avatar" id="sb-avatar">A</div>
@@ -489,224 +658,234 @@
           <div class="user-role" id="sb-role">Admin</div>
         </div>
       </div>
-      <button class="btn-logout" id="logout-btn">
-        <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
-      </button>
+      <button class="btn-logout" id="logout-btn"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</button>
     </div>
   </aside>
 
+  <!-- MAIN -->
   <div class="main">
-    <!-- Top Bar -->
     <header class="topbar">
-      <button class="mobile-menu-btn" id="menu-btn">
-        <i class="fas fa-bars" id="menu-icon"></i>
-      </button>
+      <button class="mobile-menu-btn" id="menu-btn"><i class="fas fa-bars" id="menu-icon"></i></button>
       <div>
         <div class="page-title">Generador de <span>Rifas</span></div>
-        <div class="page-subtitle">Creación de boletas para sorteos — DIBA FBC</div>
+        <div class="page-subtitle">Boletas por jugador con exportación PDF</div>
       </div>
-      <div class="topbar-right">
+      <div style="display:flex;align-items:center;gap:.8rem;">
         <div class="topbar-time" id="clock">--:--</div>
       </div>
     </header>
 
     <div class="content">
-      <div class="btn-container" style="flex-wrap:wrap;gap:1rem;">
-        <div style="display:flex;align-items:center;gap:.6rem;">
-          <label for="cantidad">Boletas:</label>
-          <input type="number" id="cantidad" min="1" max="500" value="40" />
+      <!-- TOOLBAR -->
+      <div class="toolbar">
+
+        <div class="field-group">
+          <label>Boletas por jugador</label>
+          <input type="number" id="cfg-boletas" min="1" max="20" value="1">
         </div>
-        <div style="display:flex;flex-direction:column;gap:.3rem;">
+
+        <div class="field-group">
+          <label>Números por boleta</label>
+          <select id="cfg-numeros">
+            <option value="4">4 números</option>
+            <option value="5">5 números</option>
+            <option value="6" selected>6 números</option>
+            <option value="8">8 números</option>
+            <option value="10">10 números</option>
+          </select>
+        </div>
+
+        <div class="field-group">
           <label>Fecha del sorteo</label>
-          <input type="text" id="cfg-fecha" value="Sabado 19 de abril de 2025"
-            style="background:var(--dark);border:1px solid var(--border);color:#fff;padding:.5rem .7rem;border-radius:10px;font-size:.73rem;font-family:'Montserrat',sans-serif;outline:none;width:220px;">
+          <input type="text" id="cfg-fecha" value="Sábado 19 de abril de 2025">
         </div>
-        <div style="display:flex;flex-direction:column;gap:.3rem;">
+
+        <div class="field-group">
+          <label>Lotería / Modalidad</label>
+          <input type="text" id="cfg-loteria" value="Sinuano Noche — Últimas 2 cifras">
+        </div>
+
+        <div class="field-group">
           <label>Premio</label>
-          <input type="text" id="cfg-premio" value="2 Perfumes para Caballeros"
-            style="background:var(--dark);border:1px solid var(--border);color:#fff;padding:.5rem .7rem;border-radius:10px;font-size:.73rem;font-family:'Montserrat',sans-serif;outline:none;width:210px;">
+          <input type="text" id="cfg-premio" value="2 Perfumes para Caballeros">
         </div>
-        <div style="display:flex;flex-direction:column;gap:.3rem;">
-          <label>Loteria</label>
-          <input type="text" id="cfg-loteria" value="Sinuano Noche - Ultimas 2 cifras"
-            style="background:var(--dark);border:1px solid var(--border);color:#fff;padding:.5rem .7rem;border-radius:10px;font-size:.73rem;font-family:'Montserrat',sans-serif;outline:none;width:210px;">
+
+        <div class="field-group">
+          <label>Valor por número</label>
+          <input type="text" id="cfg-valor" style="width:110px;" value="$3.000">
         </div>
-        <div style="display:flex;flex-direction:column;gap:.3rem;">
-          <label>Valor por numero</label>
-          <input type="text" id="cfg-valor" value="$3.000"
-            style="background:var(--dark);border:1px solid var(--border);color:#fff;padding:.5rem .7rem;border-radius:10px;font-size:.73rem;font-family:'Montserrat',sans-serif;outline:none;width:100px;">
+
+        <div class="actions-row">
+          <button class="btn-action btn-primary" id="btn-generar" disabled>
+            <i class="fas fa-circle-notch fa-spin" id="gen-icon"></i>
+            Cargando jugadores...
+          </button>
+          <button class="btn-action btn-secondary" onclick="window.print()">
+            <i class="fas fa-print"></i> Imprimir / PDF
+          </button>
         </div>
-        <div style="display:flex;gap:.6rem;align-items:flex-end;margin-left:auto;flex-wrap:wrap;">
-          <button onclick="generarBoletas()" class="btn-action"><i class="fas fa-ticket-alt" style="margin-right:.4rem;"></i>Generar</button>
-          <button onclick="window.print()" class="btn-action"
-            style="background:var(--dark3);color:var(--gold);border:1px solid var(--border);"><i class="fas fa-print" style="margin-right:.4rem;"></i>Imprimir</button>
-          <button onclick="descargarZip()" class="btn-action"
-            style="background:var(--dark3);color:var(--gold);border:1px solid var(--border);"><i class="fas fa-file-archive" style="margin-right:.4rem;"></i>ZIP</button>
-        </div>
-      </div>
-        <button onclick="generarBoletas()" class="btn-action">Generar Boletas</button>
-        <button onclick="descargarZip()" class="btn-action"
-          style="background: var(--dark3); color: var(--gold); border: 1px solid var(--border);">Descargar ZIP</button>
       </div>
 
+      <!-- STATUS -->
+      <div id="status-bar" style="display:none;">
+        <div class="dot"></div>
+        <span id="status-text">Generando...</span>
+      </div>
+
+      <!-- BOLETAS OUTPUT -->
       <div id="contenedor"></div>
     </div>
   </div>
 
-  <!-- Librerías necesarias -->
-  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.7.1/jszip.min.js"></script>
+  <!-- SCRIPTS -->
+  <script src="/scripts/config.js"></script>
+  <script type="module">
+    import { supabase, requireAdmin } from '../scripts/supabaseClient.js';
 
-  <script>
-    const contenedor = document.getElementById('contenedor');
-    const numerosUsadosGlobal = new Set();
-    const MAX_NUMEROS_UNICOS = 100;
-    const NUMEROS_POR_BOLETA = 6;
-
-    function generarNumerosParaBoleta() {
-      const numerosBoleta = new Set();
-      while (numerosBoleta.size < NUMEROS_POR_BOLETA) {
-        const numero = Math.floor(Math.random() * 100);
-        const numeroFormateado = numero.toString().padStart(2, '0');
-        const sePermitenRepetidos = numerosUsadosGlobal.size >= MAX_NUMEROS_UNICOS;
-        if (sePermitenRepetidos || !numerosUsadosGlobal.has(numeroFormateado)) {
-          numerosBoleta.add(numeroFormateado);
-          numerosUsadosGlobal.add(numeroFormateado);
-        }
+    // ── AUTH ───────────────────────────────────────────────────
+    const session = await requireAdmin();
+    if (!session) { /* requireAdmin ya redirige */ }
+    else {
+      document.getElementById('admin-body').style.display = 'flex';
+      const { data: profile } = await supabase.from('users').select('username,role').eq('id', session.user.id).single();
+      if (profile) {
+        document.getElementById('sb-name').textContent = profile.username || session.user.email;
+        document.getElementById('sb-role').textContent = profile.role;
+        document.getElementById('sb-avatar').textContent = (profile.username || 'A')[0].toUpperCase();
       }
-      return [...numerosBoleta].sort((a, b) => parseInt(a) - parseInt(b));
     }
 
-    function generarBoletas() {
-      contenedor.innerHTML = "";
-      numerosUsadosGlobal.clear();
+    // ── CLOCK ─────────────────────────────────────────────────
+    const clockEl = document.getElementById('clock');
+    (function tick() { clockEl.textContent = new Date().toLocaleTimeString('es-CO', { hour: '2-digit', minute: '2-digit' }); setTimeout(tick, 1000); })();
 
-      const total    = parseInt(document.getElementById('cantidad').value) || 40;
-      const fecha    = document.getElementById('cfg-fecha')?.value   || 'Por definir';
-      const premio   = document.getElementById('cfg-premio')?.value  || 'Por definir';
-      const loteria  = document.getElementById('cfg-loteria')?.value || 'Por definir';
-      const valor    = document.getElementById('cfg-valor')?.value   || '.000';
-      let paginaActual;
-      for (let i = 1; i <= total; i++) {
-        if ((i - 1) % 4 === 0) {
-          paginaActual = document.createElement('div');
-          paginaActual.className = 'page';
-          contenedor.appendChild(paginaActual);
-        }
-        const numeros = generarNumerosParaBoleta();
-        const numerosHTML = numeros.map(n => `
-          <div class="fila-numero-nombre">
-            <div class="numero">${n}</div>
-            <input type="text" class="nombre-numero" placeholder="Nombre del comprador" />
-          </div>
-        `).join('');
+    // ── MOBILE MENU ───────────────────────────────────────────
+    document.getElementById('menu-btn').addEventListener('click', () => {
+      const s = document.getElementById('sidebar');
+      s.classList.toggle('open');
+      document.getElementById('menu-icon').className = s.classList.contains('open') ? 'fas fa-times' : 'fas fa-bars';
+    });
 
-        const boleta = document.createElement('div');
-        boleta.className = 'boleta';
-        boleta.innerHTML = `
-          <img src="/images/ESCUDO.png" class="logo" alt="Logo" />
-          <div>
-            <div class="titulo-boleta">RESPONSABLE DIBA FBC</div>
-            <div class="info">
-              Juega el ${fecha}<br>
-              ${loteria}<br>
-              Premio: ${premio}<br>
-              Valor: ${valor} por numero
-            </div>
-            <div class="numeros">${numerosHTML}</div>
-            <div class="footer-boleta">Boleta #${String(i).padStart(3,"0")}</div>
-          </div>
-        `;
-        paginaActual.appendChild(boleta);
+    // ── LOGOUT ────────────────────────────────────────────────
+    document.getElementById('logout-btn').addEventListener('click', async () => {
+      if (confirm('¿Cerrar sesión?')) { await supabase.auth.signOut(); location.href = 'login.html'; }
+    });
+
+    // ── LOAD PLAYERS ──────────────────────────────────────────
+    let jugadores = [];
+    async function loadJugadores() {
+      const btn = document.getElementById('btn-generar');
+      const icon = document.getElementById('gen-icon');
+      try {
+        const { data, error } = await supabase
+          .from('identificacion')
+          .select('numero, nombre, apellidos, categoria')
+          .order('apellidos');
+        if (error) throw error;
+        jugadores = data || [];
+        btn.disabled = false;
+        btn.innerHTML = `<i class="fas fa-ticket-alt"></i> Generar Boletas (${jugadores.length} jugadores)`;
+        btn.classList.add('btn-primary');
+      } catch (e) {
+        btn.innerHTML = `<i class="fas fa-exclamation-triangle"></i> Error cargando jugadores`;
+        console.error(e);
       }
-      console.log("Boletas generadas correctamente.");
+    }
+    loadJugadores();
+
+    // ── NUMERO GENERATOR ──────────────────────────────────────
+    const usados = new Set();
+
+    function generarNumeros(count) {
+      const set = new Set();
+      let tries = 0;
+      while (set.size < count && tries < 500) {
+        const n = String(Math.floor(Math.random() * 100)).padStart(2, '0');
+        if (usados.size >= 100 || !usados.has(n)) {
+          set.add(n);
+          usados.add(n);
+        }
+        tries++;
+      }
+      return [...set].sort((a, b) => parseInt(a) - parseInt(b));
     }
 
-    async function descargarZip() {
-      const zip = new JSZip();
-      const boletas = document.querySelectorAll('.boleta');
+    // ── GENERATE ──────────────────────────────────────────────
+    window.generarBoletas = function () {
+      usados.clear();
+      const contenedor = document.getElementById('contenedor');
+      contenedor.innerHTML = '';
 
-      if (boletas.length === 0) {
-        alert("Primero genera las boletas.");
-        return;
-      }
+      const boletasPorJugador = parseInt(document.getElementById('cfg-boletas').value) || 1;
+      const numPorBoleta = parseInt(document.getElementById('cfg-numeros').value) || 6;
+      const fecha = document.getElementById('cfg-fecha').value.trim();
+      const loteria = document.getElementById('cfg-loteria').value.trim();
+      const premio = document.getElementById('cfg-premio').value.trim();
+      const valor = document.getElementById('cfg-valor').value.trim();
 
-      console.log(`Procesando ${boletas.length} boleta(s)...`);
-      // Mensaje informativo
-      alert("Generando imágenes y creando el ZIP, puede tardar unos segundos...");
+      if (!jugadores.length) { alert('No hay jugadores cargados.'); return; }
 
-      const promises = Array.from(boletas).map(async (boleta, index) => {
-        try {
-          const canvas = await html2canvas(boleta, { scale: 2 });
-          const imgData = canvas.toDataURL("image/jpeg", 1.0);
-          zip.file(`boleta_${index + 1}.jpg`, imgData.split(',')[1], { base64: true });
-          console.log(`Boleta ${index + 1} procesada.`);
-        } catch (error) {
-          console.error(`Error procesando la boleta ${index + 1}: `, error);
+      const statusBar = document.getElementById('status-bar');
+      const statusText = document.getElementById('status-text');
+      statusBar.style.display = 'flex';
+
+      // Crear todas las boletas (jugador × boletasPorJugador)
+      let todasLasBoletas = [];
+      jugadores.forEach(j => {
+        for (let b = 0; b < boletasPorJugador; b++) {
+          todasLasBoletas.push({
+            jugador: `${j.nombre} ${j.apellidos}`.trim(),
+            categoria: j.categoria || 'General',
+            numeros: generarNumeros(numPorBoleta),
+          });
         }
       });
 
-      await Promise.all(promises);
+      statusText.textContent = `${todasLasBoletas.length} boletas generadas → ${Math.ceil(todasLasBoletas.length / 5)} páginas`;
 
-      try {
-        const contenidoZip = await zip.generateAsync({ type: "blob" });
-        const link = document.createElement("a");
-        link.href = URL.createObjectURL(contenidoZip);
-        link.download = "boletas.zip";
-        link.click();
-        console.log("ZIP descargado con éxito.");
-      } catch (error) {
-        console.error("Error al generar el ZIP: ", error);
-        alert("Ocurrió un error al generar el ZIP. Revisa la consola para más detalles.");
+      // Paginar: 5 boletas por página
+      const BOLETAS_POR_PAG = 5;
+      let globalIdx = 0;
+
+      for (let p = 0; p < Math.ceil(todasLasBoletas.length / BOLETAS_POR_PAG); p++) {
+        const page = document.createElement('div');
+        page.className = 'page-rifa';
+
+        const slice = todasLasBoletas.slice(p * BOLETAS_POR_PAG, (p + 1) * BOLETAS_POR_PAG);
+        slice.forEach(boleta => {
+          globalIdx++;
+          const numerosHTML = boleta.numeros.map(n =>
+            `<div class="num-cell">${n}</div>`
+          ).join('');
+
+          const el = document.createElement('div');
+          el.className = 'boleta';
+          el.innerHTML = `
+            <div class="boleta-left">
+              <div class="boleta-header">
+                <img src="/images/ESCUDO.png" class="boleta-logo" alt="Logo">
+                <div class="boleta-titulo">RIFA DIBA FBC</div>
+              </div>
+              <div class="boleta-info">
+                📅 ${fecha}<br>
+                🎰 ${loteria}<br>
+                🏆 Premio: ${premio}<br>
+                💰 Valor: ${valor} por número
+              </div>
+              <div class="boleta-jugador-label">Jugador asignado</div>
+              <div class="boleta-jugador">👤 ${boleta.jugador} &nbsp;·&nbsp; ${boleta.categoria}</div>
+              <div class="boleta-footer">Boleta #${String(globalIdx).padStart(3, '0')}</div>
+            </div>
+            <div class="boleta-numeros">${numerosHTML}</div>`;
+          page.appendChild(el);
+        });
+
+        contenedor.appendChild(page);
       }
-    }
-  </script>
-  <script src="/scripts/config.js"></script>
-  <script type="module">
-    import { supabase, requireAdmin } from "../scripts/supabaseClient.js";
+    };
 
-    // Protection & Unified UI
-    requireAdmin().then(session => {
-      if (session) {
-        document.getElementById('admin-body').style.display = 'flex';
-        const user = session.user;
-        if (user) {
-          document.getElementById('sb-name').textContent = user.email.split('@')[0];
-          document.getElementById('sb-avatar').textContent = user.email[0].toUpperCase();
-        }
-      }
-    });
-
-    // Clock
-    const clockEl = document.getElementById('clock');
-    function updateClock() {
-      const now = new Date();
-      if (clockEl) clockEl.textContent = now.toLocaleTimeString('es-CO', { hour: '2-digit', minute: '2-digit' });
-    }
-    updateClock();
-    setInterval(updateClock, 1000);
-
-    // Mobile Menu
-    const menuBtn = document.getElementById('menu-btn');
-    const menuIcon = document.getElementById('menu-icon');
-    const sidebar = document.getElementById('sidebar');
-    menuBtn?.addEventListener('click', () => {
-      sidebar.classList.toggle('open');
-      if (menuIcon) menuIcon.className = sidebar.classList.contains('open') ? 'fas fa-times' : 'fas fa-bars';
-    });
-
-    // Logout
-    document.getElementById('logout-btn')?.addEventListener('click', async () => {
-      if (confirm('¿Cerrar sesión?')) {
-        await supabase.auth.signOut();
-        window.location.href = 'login.html';
-      }
-    });
+    document.getElementById('btn-generar').addEventListener('click', window.generarBoletas);
   </script>
 </body>
 
 </html>
-
-
-
-
