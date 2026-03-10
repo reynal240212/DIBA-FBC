@@ -395,128 +395,198 @@
 
     /* ── BOLETAS PREVIEW ── */
     #contenedor {
-      background: white;
-      border-radius: 12px;
-      overflow: hidden;
+      background: #f1f5f9;
+      padding: 2rem 0;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
     }
 
     /* ── PRINT PAGE: 5 boletas por A4 ── */
     .page-rifa {
       width: 210mm;
-      min-height: 297mm;
+      height: 297mm;
       margin: 0 auto;
-      padding: 8mm 10mm;
+      padding: 10mm;
       background: white;
-      display: grid;
-      grid-template-rows: repeat(5, 1fr);
-      gap: 5mm;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
       page-break-after: always;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .boleta-container {
+      height: 55.4mm;
+      /* (297 - 20) / 5 = 55.4mm exactly */
+      width: 100%;
+      display: flex;
+      align-items: center;
+      position: relative;
+      border-bottom: 1px dashed #cbd5e1;
+    }
+
+    .boleta-container:last-child {
+      border-bottom: none;
+    }
+
+    /* Cut line indicator */
+    .boleta-container::after {
+      content: '\f0c4';
+      font-family: 'Font Awesome 6 Free';
+      font-weight: 900;
+      position: absolute;
+      bottom: -7px;
+      left: 10px;
+      font-size: 10px;
+      color: #94a3b8;
+      background: white;
+      padding: 0 5px;
+      z-index: 10;
     }
 
     .boleta {
-      background: #FFD700;
+      width: 100%;
+      height: 48mm;
+      background: linear-gradient(135deg, #FFD700 0%, #ffec8b 50%, #e6b800 100%);
       border: 2px solid #002a40;
-      border-radius: 8px;
-      padding: 6px 12px;
-      position: relative;
+      border-radius: 12px;
+      padding: 10px 15px;
       color: #002a40;
-      display: grid;
-      grid-template-columns: 1fr auto;
-      gap: 8px;
+      display: flex;
+      gap: 15px;
       align-items: center;
-      min-height: 50mm;
+      box-shadow: inset 0 0 40px rgba(255, 255, 255, 0.3);
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Stub (Talonario) line */
+    .boleta::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 65px;
+      bottom: 0;
+      width: 1px;
+      border-right: 2px dotted rgba(0, 42, 64, 0.2);
     }
 
     .boleta-left {
+      width: 50px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+
+    .boleta-logo {
+      width: 45px;
+      height: 45px;
+      object-fit: contain;
+      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+    }
+
+    .boleta-main {
       flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: 100%;
     }
 
     .boleta-header {
       display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 4px;
-    }
-
-    .boleta-logo {
-      width: 40px;
-      height: 40px;
-      object-fit: contain;
-      flex-shrink: 0;
+      justify-content: space-between;
+      align-items: flex-start;
     }
 
     .boleta-titulo {
-      font-size: .85rem;
+      font-size: 1.1rem;
       font-weight: 900;
       font-style: italic;
       text-transform: uppercase;
-      line-height: 1.1;
+      letter-spacing: 0.02em;
+      color: #002a40;
+    }
+
+    .boleta-number-id {
+      font-size: 0.8rem;
+      font-weight: 900;
+      background: #002a40;
+      color: var(--gold);
+      padding: 2px 8px;
+      border-radius: 4px;
+    }
+
+    .boleta-content {
+      display: grid;
+      grid-template-columns: 1fr 180px;
+      gap: 15px;
+      align-items: flex-end;
     }
 
     .boleta-info {
-      font-size: .55rem;
+      font-size: 0.65rem;
       font-weight: 700;
       line-height: 1.4;
-      color: #002a40;
-      margin-bottom: 6px;
+    }
+
+    .boleta-info strong {
+      color: #000;
+    }
+
+    .boleta-jugador-box {
+      margin-top: 5px;
+      padding: 4px 8px;
+      background: rgba(255, 255, 255, 0.6);
+      border: 1px solid #002a40;
+      border-radius: 6px;
     }
 
     .boleta-jugador-label {
-      font-size: .5rem;
-      font-weight: 900;
+      font-size: 0.45rem;
+      font-weight: 800;
       text-transform: uppercase;
-      letter-spacing: .1em;
-      color: rgba(0, 42, 64, .6);
+      color: rgba(0, 42, 64, 0.6);
+      margin-bottom: 2px;
     }
 
     .boleta-jugador {
-      font-size: .75rem;
+      font-size: 0.75rem;
       font-weight: 900;
-      color: #002a40;
-      background: rgba(255, 255, 255, .5);
-      border: 1.5px solid #002a40;
-      border-radius: 6px;
-      padding: 3px 8px;
-      display: inline-block;
-      min-width: 140px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .boleta-numeros {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(34px, 1fr));
-      gap: 4px;
-      background: rgba(255, 255, 255, .35);
-      border-radius: 8px;
-      padding: 6px;
-      border: 1.5px solid rgba(0, 42, 64, .3);
+      grid-template-columns: repeat(3, 1fr);
+      gap: 5px;
     }
 
     .num-cell {
       background: white;
       color: #002a40;
-      width: 34px;
-      height: 34px;
+      height: 32px;
       border: 2px solid #002a40;
       border-radius: 6px;
       display: flex;
       align-items: center;
       justify-content: center;
       font-weight: 900;
-      font-size: .85rem;
-    }
-
-    .boleta-footer {
-      font-size: .5rem;
-      font-weight: 900;
-      opacity: .6;
-      margin-top: 4px;
+      font-size: 0.9rem;
+      box-shadow: 0 2px 0 #002a40;
     }
 
     /* ── @media print ── */
     @media print {
       @page {
         size: A4 portrait;
-        margin: 8mm 10mm;
+        margin: 0;
       }
 
       * {
@@ -532,7 +602,8 @@
       .sidebar,
       .topbar,
       .toolbar,
-      .main>.content>#status-bar {
+      .main>.content>#status-bar,
+      .actions-row {
         display: none !important;
       }
 
@@ -548,21 +619,20 @@
         border-radius: 0;
         background: white;
         box-shadow: none;
+        padding: 0 !important;
       }
 
       .page-rifa {
-        width: 100%;
-        min-height: auto;
+        width: 210mm;
+        height: 297mm;
         margin: 0;
-        padding: 0;
-        grid-template-rows: repeat(5, 1fr);
-        height: 277mm;
+        padding: 10mm;
+        box-shadow: none;
         page-break-after: always;
-        gap: 4mm;
       }
 
-      .boleta {
-        break-inside: avoid;
+      .boleta-container {
+        height: 55.4mm;
       }
     }
 
@@ -859,24 +929,32 @@
           ).join('');
 
           const el = document.createElement('div');
-          el.className = 'boleta';
+          el.className = 'boleta-container';
           el.innerHTML = `
-            <div class="boleta-left">
-              <div class="boleta-header">
+            <div class="boleta">
+              <div class="boleta-left">
                 <img src="/images/ESCUDO.png" class="boleta-logo" alt="Logo">
-                <div class="boleta-titulo">RIFA DIBA FBC</div>
               </div>
-              <div class="boleta-info">
-                📅 ${fecha}<br>
-                🎰 ${loteria}<br>
-                🏆 Premio: ${premio}<br>
-                💰 Valor: ${valor} por número
+              <div class="boleta-main">
+                <div class="boleta-header">
+                  <div class="boleta-titulo">RIFA DIBA FBC</div>
+                  <div class="boleta-number-id">#${String(globalIdx).padStart(3, '0')}</div>
+                </div>
+                <div class="boleta-content">
+                  <div class="boleta-info">
+                    📅 Juega: <strong>${fecha}</strong><br>
+                    🎰 Lotería: <strong>${loteria}</strong><br>
+                    🏆 Premio: <strong>${premio}</strong><br>
+                    💰 Valor: <strong>${valor}</strong> por número
+                  </div>
+                  <div class="boleta-numeros">${numerosHTML}</div>
+                </div>
+                <div class="boleta-jugador-box">
+                  <div class="boleta-jugador-label">Jugador Responsable</div>
+                  <div class="boleta-jugador">👤 ${boleta.jugador}</div>
+                </div>
               </div>
-              <div class="boleta-jugador-label">Jugador asignado</div>
-              <div class="boleta-jugador">👤 ${boleta.jugador}</div>
-              <div class="boleta-footer">Boleta #${String(globalIdx).padStart(3, '0')}</div>
-            </div>
-            <div class="boleta-numeros">${numerosHTML}</div>`;
+            </div>`;
           page.appendChild(el);
         });
 
