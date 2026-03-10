@@ -110,12 +110,29 @@ document.addEventListener("DOMContentLoaded", function () {
         renderSkeleton();
         try {
             const response = await fetch(API_URL);
+            if (response.status === 404) {
+                feedContainer.innerHTML = `
+                    <div class="col-span-full text-center py-20 bg-slate-50 rounded-3xl border-2 border-dashed border-slate-200">
+                        <i class="fas fa-cog text-4xl text-amber-500 mb-4 animate-spin-slow"></i>
+                        <h4 class="text-slate-900 font-black uppercase italic mb-2">Configuración Necesaria</h4>
+                        <p class="text-slate-500 text-sm max-w-sm mx-auto mb-6">
+                            El Feed de Instagram está listo, pero requiere un <b>ID de Behold.so</b> válido vinculado a la cuenta del club.
+                        </p>
+                        <div class="flex flex-col gap-3 items-center">
+                            <a href="https://behold.so/" target="_blank" class="bg-slate-900 text-white text-[10px] font-black uppercase tracking-widest px-6 py-3 rounded-xl hover:bg-amber-500 hover:text-slate-900 transition-all">
+                                Obtener ID en Behold.so
+                            </a>
+                            <span class="text-[10px] text-slate-400">Instrucciones enviadas al chat de Antigravity</span>
+                        </div>
+                    </div>
+                `;
+                return;
+            }
             if (!response.ok) throw new Error('Network response was not ok');
             const data = await response.json();
             renderFeed(data);
         } catch (error) {
             console.error('Error fetching Instagram feed:', error);
-            // Fallback: mostrar un par de posts estáticos o mensaje de error
             renderFeed([]);
         }
     };
