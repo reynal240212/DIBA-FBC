@@ -335,6 +335,7 @@
     
     let currentUser = null;
     let playerDNI = null;
+    let displayName = "Jugador";
 
     const DOC_TYPES = [
       { id: 'ti', name: 'Tarjeta de Identidad', type: 'tarjeta_identidad', icon: 'fa-id-card', color: 'amber' },
@@ -389,7 +390,6 @@
 
       if (!userData) return;
 
-      welcomeName.innerText = `Hola, ${userData.username || 'Jugador'}`;
       document.getElementById('header-user-role').innerText = userData.role;
 
       if (userData.identificacion_numero) {
@@ -397,7 +397,8 @@
         linkSection.classList.add('hidden');
         await loadFichaDeportiva(playerDNI);
       } else if (userData.role !== 'admin') {
-        welcomeName.innerText = `Bienvenido, ${currentUser.user_metadata.full_name || 'Nuevo Miembro'}`;
+        displayName = currentUser.user_metadata.full_name || 'Nuevo Miembro';
+        welcomeName.innerText = `Bienvenido, ${displayName}`;
         linkSection.classList.remove('hidden');
       }
     }
@@ -413,7 +414,8 @@
         document.getElementById('stat-category').innerText = ficha.categoria || 'Sin Categoría';
         document.getElementById('stat-birth').innerText = ficha.fecha_nacimiento || '--/--/----';
         document.getElementById('stat-dni').innerText = dni;
-        welcomeName.innerText = `Hola, ${ficha.nombre}`;
+        displayName = ficha.nombre; // El nombre oficial del registro
+        welcomeName.innerText = `Hola, ${displayName}`;
       }
     }
 
@@ -429,6 +431,13 @@
         document.getElementById('username').value = profile.username || '';
         document.getElementById('bio').value = profile.bio || '';
         document.getElementById('avatar_url').value = profile.avatar_url || '';
+        
+        // El nombre del perfil GUARDADO tiene máxima prioridad si existe
+        if (profile.full_name) {
+          displayName = profile.full_name;
+          welcomeName.innerText = `Hola, ${displayName}`;
+        }
+
         if (profile.avatar_url) {
           headerAvatar.src = profile.avatar_url;
           document.getElementById('profile-preview').src = profile.avatar_url;
