@@ -376,8 +376,9 @@
       currentUser = session.user;
       headerEmail.innerText = currentUser.email;
 
-      await loadBasicPlayerInfo();
+      // Cargamos el perfil primero para tener el nombre preferido
       await loadProfileData();
+      await loadBasicPlayerInfo();
       await loadDocuments();
     }
 
@@ -397,8 +398,11 @@
         linkSection.classList.add('hidden');
         await loadFichaDeportiva(playerDNI);
       } else if (userData.role !== 'admin') {
-        displayName = currentUser.user_metadata.full_name || 'Nuevo Miembro';
-        welcomeName.innerText = `Bienvenido, ${displayName}`;
+        // Solo ponemos el nombre de bienvenida si loadProfileData no encontró uno mejor
+        if (welcomeName.innerText === 'Cargando...') {
+            displayName = currentUser.user_metadata.full_name || 'Nuevo Miembro';
+            welcomeName.innerText = `Bienvenido, ${displayName}`;
+        }
         linkSection.classList.remove('hidden');
       }
     }
@@ -566,9 +570,18 @@
         return;
       }
 
-      const { error } = await supabase.from('users').update({ identificacion_numero: dni, role: 'usuario' }).eq('id', currentUser.id);
+      // Actualizamos ambas tablas para consistencia
+      const { error: errorUsers } = await supabase.from('users').update({ 
+          identificacion_numero: dni, 
+          role: 'usuario' 
+      }).eq('id', currentUser.id);
+
+      const { error: errorProfiles } = await supabase.from('profiles').update({ 
+          identificacion_numero: dni 
+      }).eq('id', currentUser.id);
       
-      if (error) {
+      if (errorUsers || errorProfiles) {
+        console.error("Link error:", errorUsers, errorProfiles);
         status.innerText = "Error vinculando: El documento podría estar siendo usado.";
         status.className = "text-[10px] font-bold uppercase text-rose-500 mt-2 block";
         btn.disabled = false;
