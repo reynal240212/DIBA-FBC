@@ -9,8 +9,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // --- CONFIGURACIÓN ---
     // SUSTITUYE ESTE ID con el que obtengas en Behold.so
-    // Este es un ID de demostración (placeholder)
-    const BEHOLD_ID = 'GvWunA6t1H91U4X41v2D';
+    // Usando ID de demostración funcional para evitar 404 y mostrar ejemplo real
+    const BEHOLD_ID = 'zFgp2Jbbk23Ovf1ZUOhq';
     const API_URL = `https://feeds.behold.so/${BEHOLD_ID}`;
 
     const renderSkeleton = () => {
