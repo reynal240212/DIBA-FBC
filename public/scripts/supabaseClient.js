@@ -37,3 +37,8 @@ export async function requireAdmin() {
   return session;
 }
 
+// Estandarización de DNI: Elimina puntos, espacios y caracteres no numéricos
+export const sanitizeDNI = (dni) => {
+    if (!dni) return '';
+    return dni.toString().replace(/[^0-9]/g, '');
+};

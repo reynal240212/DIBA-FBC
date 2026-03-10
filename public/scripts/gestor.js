@@ -1,4 +1,4 @@
-import { supabase, requireAdmin } from './supabaseClient.js';
+import { supabase, requireAdmin, sanitizeDNI } from './supabaseClient.js';
 import { cerrarSesion } from './auth.js';
 
 (async () => {
@@ -198,13 +198,14 @@ import { cerrarSesion } from './auth.js';
 
     // Funciones globales para el modal (disponibles para los botones de la tabla)
     window.openAdminDocs = async (dni, name) => {
+        const sanitizedDni = sanitizeDNI(dni);
         const modal = document.getElementById('adminDocsModal');
         const nameEl = document.getElementById('modalPlayerName');
         const dniEl = document.getElementById('modalPlayerDni');
         const listEl = document.getElementById('modalDocsList');
 
         nameEl.innerText = name;
-        dniEl.innerText = `DNI: ${dni}`;
+        dniEl.innerText = `DNI: ${sanitizedDni}`;
         modal.classList.remove('hidden');
         listEl.innerHTML = '<div class="flex justify-center py-10"><i class="fas fa-circle-notch animate-spin text-2xl text-dibaGold"></i></div>';
 
@@ -217,7 +218,7 @@ import { cerrarSesion } from './auth.js';
         ];
 
         // Cargar documentos existentes
-        const { data: docs } = await supabase.from('player_documents').select('*').eq('identificacion_numero', dni);
+        const { data: docs } = await supabase.from('player_documents').select('*').eq('identificacion_numero', sanitizedDni);
 
         listEl.innerHTML = '';
         DOC_TYPES.forEach(type => {
@@ -237,7 +238,7 @@ import { cerrarSesion } from './auth.js';
                 <div class="flex items-center gap-2">
                     ${doc ? `<a href="${doc.file_url}" target="_blank" class="p-2 text-slate-400 hover:text-dibaGold"><i class="fas fa-eye"></i></a>` : ''}
                     <button onclick="document.getElementById('upload-${type.id}').click()" class="p-2 text-slate-400 hover:text-emerald-500"><i class="fas fa-upload"></i></button>
-                    <input type="file" id="upload-${type.id}" class="hidden" onchange="adminUploadDoc('${dni}', '${type.id}', this)">
+                    <input type="file" id="upload-${type.id}" class="hidden" onchange="adminUploadDoc('${sanitizedDni}', '${type.id}', this)">
                 </div>
             `;
             listEl.appendChild(item);
@@ -249,6 +250,7 @@ import { cerrarSesion } from './auth.js';
     };
 
     window.adminUploadDoc = async (dni, docType, input) => {
+        const sanitizedDni = sanitizeDNI(dni);
         const file = input.files[0];
         if (!file) return;
 
@@ -258,7 +260,7 @@ import { cerrarSesion } from './auth.js';
         originalBtn.disabled = true;
 
         try {
-            const fileName = `${dni}/${docType}_${Date.now()}_${file.name}`;
+            const fileName = `${sanitizedDni}/${docType}_${Date.now()}_${file.name}`;
 
             // 1. Storage
             const { error: uploadError } = await supabase.storage
@@ -271,7 +273,7 @@ import { cerrarSesion } from './auth.js';
 
             // 2. DB (Upsert por DNI)
             const { error: dbError } = await supabase.from('player_documents').upsert({
-                identificacion_numero: dni,
+                identificacion_numero: sanitizedDni,
                 doc_type: docType,
                 file_url: publicUrl,
                 status: 'verificado', // Admin sube y queda verificado automáticamente
@@ -282,7 +284,7 @@ import { cerrarSesion } from './auth.js';
 
             // Recargar modal
             const nameEl = document.getElementById('modalPlayerName').innerText;
-            window.openAdminDocs(dni, nameEl);
+            window.openAdminDocs(sanitizedDni, nameEl);
 
         } catch (err) {
             console.error(err);
