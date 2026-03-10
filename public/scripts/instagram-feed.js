@@ -8,9 +8,8 @@ document.addEventListener("DOMContentLoaded", function () {
     if (!feedContainer) return;
 
     // --- CONFIGURACIÓN ---
-    // SUSTITUYE ESTE ID con el que obtengas en Behold.so
-    // Usando ID de demostración funcional para evitar 404 y mostrar ejemplo real
-    const BEHOLD_ID = 'zFgp2Jbbk23Ovf1ZUOhq';
+    // ID REAL DE DIBA FBC - Vinculado a Behold.so
+    const BEHOLD_ID = '5mpGVzRLEdsEQpFCbEnH';
     const API_URL = `https://feeds.behold.so/${BEHOLD_ID}`;
 
     const renderSkeleton = () => {
