@@ -330,10 +330,87 @@ document.addEventListener("DOMContentLoaded", function () {
   loadComponent("footer-container", "layout/footer.html");
   loadComponent("fab-container", "layout/fab.html");
 
-  // --- 4. BASE DE DATOS COMPLETA DE JUGADORES ---
+  // --- 4. JUGADORES DINÁMICOS DESDE SUPABASE ---
   const playersContainer = document.getElementById("players-container");
 
   if (playersContainer) {
+    async function loadPlayersFromSupabase() {
+      playersContainer.innerHTML = '<div class="flex justify-center py-20 w-full"><i class="fas fa-circle-notch animate-spin text-3xl text-amber-500"></i></div>';
+      try {
+        const { createClient } = await import("https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm");
+        const { SUPABASE_URL, SUPABASE_ANON_KEY } = window.DIBA_CONFIG;
+        const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        const { data: jugadores, error } = await supabase
+          .from('identificacion')
+          .select('nombre, apellidos, categoria, foto_url')
+          .order('apellidos');
+
+        if (error) throw error;
+        if (!jugadores || jugadores.length === 0) {
+          playersContainer.innerHTML = '<p class="text-center text-slate-400 py-16 col-span-full uppercase text-xs font-bold">No hay jugadores registrados aún.</p>';
+          return;
+        }
+
+        // Agrupar por categoría
+        const grouped = {};
+        jugadores.forEach(j => {
+          const cat = j.categoria || 'General';
+          if (!grouped[cat]) grouped[cat] = [];
+          grouped[cat].push(j);
+        });
+
+        playersContainer.innerHTML = '';
+        const defaultImg = "https://placehold.co/300x400/e2e8f0/64748b?text=Jugador";
+
+        Object.entries(grouped).sort(([a], [b]) => a.localeCompare(b)).forEach(([catTitle, players]) => {
+          const section = document.createElement("section");
+          section.className = "mb-12 w-full";
+          section.innerHTML = `
+            <div class="flex items-center mb-6 px-4">
+              <h2 class="text-xl font-extrabold text-slate-800 uppercase tracking-tight">Categoría ${catTitle}</h2>
+              <div class="flex-grow h-px bg-slate-200 ml-4"></div>
+            </div>`;
+
+          const grid = document.createElement("div");
+          grid.className = "grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 px-4 w-full";
+
+          players.forEach(j => {
+            const playerName = `${j.nombre} ${j.apellidos}`.trim();
+            const imageUrl = j.foto_url || defaultImg;
+
+            const card = document.createElement("article");
+            card.className = "group bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden hover:shadow-xl transition-all duration-300 cursor-pointer relative";
+            card.innerHTML = `
+              <div class="aspect-[3/4] overflow-hidden bg-slate-100">
+                <img src="${imageUrl}" class="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-110" onerror="this.src='${defaultImg}'">
+              </div>
+              <div class="p-3 text-center">
+                <p class="text-[9px] font-black text-amber-500 uppercase mb-1">DIBA FBC</p>
+                <h3 class="text-[11px] font-bold text-slate-800 uppercase leading-tight min-h-[2.2rem] flex items-center justify-center">${playerName}</h3>
+              </div>`;
+
+            card.addEventListener('click', () => {
+              modalImg.src = imageUrl;
+              modalName.textContent = playerName;
+              modal.classList.add('active');
+            });
+            grid.appendChild(card);
+          });
+
+          section.appendChild(grid);
+          playersContainer.appendChild(section);
+        });
+
+      } catch (err) {
+        console.error('[Players] Error cargando desde Supabase:', err);
+        playersContainer.innerHTML = '<p class="text-center text-red-400 py-16 col-span-full text-xs font-bold uppercase">Error al cargar jugadores. Intenta de nuevo.</p>';
+      }
+    }
+
+    loadPlayersFromSupabase();
+
+    // ── [Fallback: datos estáticos por si el observer llama a algo antiguo] ──
     const playersData = [
       // 2014 / 2015
       { name: "Mario perez", imageUrl: "images/DIBA FBC/MarioP.jpg" },

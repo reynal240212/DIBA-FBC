@@ -1,0 +1,1015 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Convocatorias — DIBA FBC Admin</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="/images/ESCUDO.ico" type="image/x-icon">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,600;0,700;0,900;1,700;1,900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --blue: #002a40;
+            --blue2: #003d5c;
+            --gold: #ffcc00;
+            --gold2: #e6b800;
+            --dark: #0a0e14;
+            --dark2: #111823;
+            --dark3: #1a2332;
+            --slate: #8b9ab0;
+            --text: #e2e8f0;
+            --border: rgba(255, 255, 255, .07);
+            --sidebar-w: 270px;
+            --green: #22c55e;
+            --red: #ef4444;
+            --amber: #f59e0b;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: var(--dark);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            overflow-x: hidden;
+        }
+
+        /* ── SIDEBAR (igual que dashboard) ── */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            width: var(--sidebar-w);
+            background: var(--dark2);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            z-index: 100;
+            transition: transform .3s ease;
+        }
+
+        .sidebar-logo {
+            padding: 2rem 1.5rem 1.5rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: .8rem;
+        }
+
+        .sidebar-logo img {
+            width: 38px;
+            height: 38px;
+            object-fit: contain;
+        }
+
+        .sidebar-logo-text {
+            font-size: 1.05rem;
+            font-weight: 900;
+            font-style: italic;
+            text-transform: uppercase;
+            letter-spacing: .05em;
+            color: var(--gold);
+        }
+
+        .sidebar-logo-sub {
+            font-size: .55rem;
+            color: var(--slate);
+            text-transform: uppercase;
+            letter-spacing: .15em;
+            font-weight: 700;
+            margin-top: 1px;
+        }
+
+        .sidebar-nav {
+            flex: 1;
+            padding: 1.5rem 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: .35rem;
+            overflow-y: auto;
+        }
+
+        .nav-section-label {
+            font-size: .55rem;
+            font-weight: 800;
+            letter-spacing: .2em;
+            text-transform: uppercase;
+            color: var(--slate);
+            padding: .8rem .6rem .4rem;
+            margin-top: .5rem;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: .85rem;
+            padding: .75rem 1rem;
+            border-radius: 12px;
+            text-decoration: none;
+            font-size: .78rem;
+            font-weight: 700;
+            color: var(--slate);
+            transition: all .2s ease;
+            position: relative;
+        }
+
+        .nav-link i {
+            width: 18px;
+            text-align: center;
+            font-size: .85rem;
+        }
+
+        .nav-link:hover {
+            background: rgba(255, 255, 255, .05);
+            color: var(--text);
+        }
+
+        .nav-link.active {
+            background: rgba(255, 204, 0, .1);
+            color: var(--gold);
+        }
+
+        .nav-link.active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 20%;
+            bottom: 20%;
+            width: 3px;
+            background: var(--gold);
+            border-radius: 0 3px 3px 0;
+        }
+
+        .sidebar-footer {
+            padding: 1.2rem 1rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .user-chip {
+            display: flex;
+            align-items: center;
+            gap: .75rem;
+            padding: .75rem 1rem;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, .04);
+            margin-bottom: .6rem;
+        }
+
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--gold);
+            color: var(--blue);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: .8rem;
+        }
+
+        .user-name {
+            font-size: .75rem;
+            font-weight: 800;
+            color: var(--text);
+        }
+
+        .user-role {
+            font-size: .6rem;
+            color: var(--slate);
+            text-transform: uppercase;
+            letter-spacing: .1em;
+        }
+
+        .btn-logout {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: .5rem;
+            padding: .7rem;
+            border-radius: 12px;
+            border: none;
+            background: rgba(239, 68, 68, .1);
+            color: #ef4444;
+            font-family: 'Montserrat', sans-serif;
+            font-size: .72rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all .2s;
+        }
+
+        .btn-logout:hover {
+            background: #ef4444;
+            color: #fff;
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: var(--dark3);
+            border: 1px solid var(--border);
+            color: var(--gold);
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            font-size: 1rem;
+            cursor: pointer;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* ── MAIN ── */
+        .main {
+            margin-left: var(--sidebar-w);
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .topbar {
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid var(--border);
+            background: var(--dark2);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        .page-title {
+            font-size: 1.4rem;
+            font-weight: 900;
+            font-style: italic;
+            text-transform: uppercase;
+            letter-spacing: .03em;
+        }
+
+        .page-title span {
+            color: var(--gold);
+        }
+
+        .page-subtitle {
+            font-size: .7rem;
+            color: var(--slate);
+            font-weight: 600;
+            margin-top: 2px;
+        }
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: .8rem;
+        }
+
+        .topbar-time {
+            font-size: .72rem;
+            font-weight: 700;
+            color: var(--slate);
+            background: var(--dark3);
+            padding: .45rem .9rem;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+
+        .content {
+            padding: 2rem;
+            flex: 1;
+        }
+
+        /* ── LAYOUT DOS COLUMNAS ── */
+        .conv-grid {
+            display: grid;
+            grid-template-columns: 1fr 380px;
+            gap: 1.5rem;
+            align-items: start;
+        }
+
+        @media(max-width:1100px) {
+            .conv-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* ── PANEL ── */
+        .panel {
+            background: var(--dark2);
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            overflow: hidden;
+            animation: fadeUp .4s ease both;
+        }
+
+        .panel-header {
+            padding: 1.2rem 1.5rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .panel-title {
+            font-size: .8rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: .1em;
+        }
+
+        .panel-badge {
+            font-size: .6rem;
+            font-weight: 800;
+            padding: .25rem .7rem;
+            border-radius: 999px;
+            background: rgba(255, 204, 0, .12);
+            color: var(--gold);
+            text-transform: uppercase;
+        }
+
+        .panel-body {
+            padding: 1.5rem;
+        }
+
+        /* ── FORMULARIO ── */
+        .field {
+            margin-bottom: 1.1rem;
+        }
+
+        .field label {
+            display: block;
+            font-size: .65rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: .12em;
+            color: var(--slate);
+            margin-bottom: .45rem;
+        }
+
+        .field input,
+        .field textarea,
+        .field select {
+            width: 100%;
+            background: var(--dark3);
+            border: 1px solid var(--border);
+            color: var(--text);
+            border-radius: 10px;
+            padding: .7rem 1rem;
+            font-family: 'Montserrat', sans-serif;
+            font-size: .78rem;
+            outline: none;
+            transition: border-color .2s;
+        }
+
+        .field input:focus,
+        .field textarea:focus,
+        .field select:focus {
+            border-color: var(--gold);
+        }
+
+        .field textarea {
+            min-height: 90px;
+            resize: vertical;
+        }
+
+        .field select option {
+            background: var(--dark3);
+        }
+
+        /* ── BTN PRINCIPAL ── */
+        .btn-convocar {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: .7rem;
+            padding: 1rem;
+            border-radius: 14px;
+            border: none;
+            background: linear-gradient(135deg, var(--gold), #e6a800);
+            color: var(--dark);
+            font-family: 'Montserrat', sans-serif;
+            font-size: .8rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: .1em;
+            cursor: pointer;
+            transition: transform .2s, box-shadow .2s;
+        }
+
+        .btn-convocar:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(255, 204, 0, .3);
+        }
+
+        .btn-convocar:active {
+            transform: translateY(0);
+        }
+
+        .btn-convocar:disabled {
+            opacity: .5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* ── LISTA DE JUGADORES (checkboxes) ── */
+        .search-players {
+            width: 100%;
+            background: var(--dark3);
+            border: 1px solid var(--border);
+            color: var(--text);
+            border-radius: 10px;
+            padding: .65rem 1rem;
+            font-family: 'Montserrat', sans-serif;
+            font-size: .75rem;
+            outline: none;
+            margin-bottom: 1rem;
+            transition: border-color .2s;
+        }
+
+        .search-players:focus {
+            border-color: var(--gold);
+        }
+
+        .players-list {
+            max-height: 420px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: .4rem;
+        }
+
+        .players-list::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .players-list::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, .1);
+            border-radius: 4px;
+        }
+
+        .player-item {
+            display: flex;
+            align-items: center;
+            gap: .85rem;
+            padding: .7rem 1rem;
+            border-radius: 12px;
+            background: var(--dark3);
+            border: 1px solid transparent;
+            transition: all .2s;
+            cursor: pointer;
+        }
+
+        .player-item:hover {
+            border-color: rgba(255, 204, 0, .2);
+            background: rgba(255, 255, 255, .03);
+        }
+
+        .player-item.selected {
+            border-color: rgba(255, 204, 0, .5);
+            background: rgba(255, 204, 0, .06);
+        }
+
+        .player-item input[type=checkbox] {
+            accent-color: var(--gold);
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        .player-cat {
+            font-size: .55rem;
+            color: var(--slate);
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: .08em;
+        }
+
+        .player-name-text {
+            font-size: .76rem;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .selected-count {
+            font-size: .65rem;
+            color: var(--gold);
+            font-weight: 800;
+            text-align: right;
+            padding: .5rem 0 .2rem;
+        }
+
+        /* ── HISTORIAL ── */
+        .conv-card {
+            padding: 1rem 1.25rem;
+            border-bottom: 1px solid var(--border);
+            transition: background .2s;
+        }
+
+        .conv-card:last-child {
+            border-bottom: none;
+        }
+
+        .conv-card:hover {
+            background: rgba(255, 255, 255, .02);
+        }
+
+        .conv-title {
+            font-size: .82rem;
+            font-weight: 800;
+            color: var(--text);
+        }
+
+        .conv-meta {
+            font-size: .62rem;
+            color: var(--slate);
+            margin-top: .25rem;
+            display: flex;
+            gap: .8rem;
+            flex-wrap: wrap;
+        }
+
+        .conv-meta i {
+            color: var(--gold);
+        }
+
+        .conv-badge {
+            display: inline-block;
+            font-size: .55rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            padding: .2rem .55rem;
+            border-radius: 999px;
+            background: rgba(255, 204, 0, .12);
+            color: var(--gold);
+            margin-left: auto;
+        }
+
+        /* ── TOAST ── */
+        .toast-bar {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: .6rem;
+            pointer-events: none;
+        }
+
+        .toast {
+            pointer-events: auto;
+            display: flex;
+            align-items: center;
+            gap: .75rem;
+            padding: .9rem 1.3rem;
+            border-radius: 14px;
+            font-size: .75rem;
+            font-weight: 700;
+            min-width: 260px;
+            max-width: 380px;
+            animation: slideIn .3s ease;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, .5);
+        }
+
+        .toast.success {
+            background: #14532d;
+            border: 1px solid #22c55e30;
+            color: #86efac;
+        }
+
+        .toast.error {
+            background: #450a0a;
+            border: 1px solid #ef444430;
+            color: #fca5a5;
+        }
+
+        .toast.info {
+            background: var(--dark3);
+            border: 1px solid var(--border);
+            color: var(--text);
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media(max-width:768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+
+            .main {
+                margin-left: 0;
+            }
+
+            .mobile-menu-btn {
+                display: flex;
+            }
+
+            .content {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+
+<body style="display:none;" id="admin-body">
+
+    <!-- ══ SIDEBAR ══ -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-logo">
+            <img src="/images/ESCUDO.png" alt="DIBA FBC">
+            <div>
+                <div class="sidebar-logo-text">DIBA FBC</div>
+                <div class="sidebar-logo-sub">Panel de Control</div>
+            </div>
+        </div>
+
+        <nav class="sidebar-nav">
+            <a href="dashboard.html" class="nav-link"><i class="fas fa-th-large"></i> Dashboard</a>
+
+            <div class="nav-section-label">Equipo</div>
+            <a href="planilla.html" class="nav-link"><i class="fas fa-clipboard-list"></i> Planilla</a>
+            <a href="../ficha.html" class="nav-link"><i class="fas fa-users"></i> Jugadores</a>
+            <a href="../partidos.html" class="nav-link"><i class="fas fa-futbol"></i> Partidos</a>
+            <a href="../analisis.html" class="nav-link"><i class="fas fa-chart-line"></i> Análisis</a>
+            <a href="convocatorias.html" class="nav-link active"><i class="fas fa-bullhorn"></i> Convocatorias</a>
+
+            <div class="nav-section-label">Administración</div>
+            <a href="GestorDocumental.html" class="nav-link"><i class="fas fa-folder-open"></i> Gestor Documental</a>
+            <a href="usuarios.html" class="nav-link"><i class="fas fa-user-cog"></i> Usuarios</a>
+            <a href="crear-usuario.html" class="nav-link"><i class="fas fa-user-plus"></i> Crear Usuario</a>
+            <a href="rifa_diba.html" class="nav-link"><i class="fas fa-ticket-alt"></i> Rifas</a>
+
+            <div class="nav-section-label">Sitio Web</div>
+            <a href="../index.html" class="nav-link"><i class="fas fa-globe"></i> Ver Sitio</a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="user-chip">
+                <div class="user-avatar" id="sb-avatar">A</div>
+                <div>
+                    <div class="user-name" id="sb-name">Administrador</div>
+                    <div class="user-role" id="sb-role">Admin</div>
+                </div>
+            </div>
+            <button class="btn-logout" id="logout-btn"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</button>
+        </div>
+    </aside>
+
+    <!-- ══ MAIN ══ -->
+    <div class="main">
+        <header class="topbar">
+            <button class="mobile-menu-btn" id="menu-btn"><i class="fas fa-bars" id="menu-icon"></i></button>
+            <div>
+                <div class="page-title">Convocatorias <span>DIBA FBC</span></div>
+                <div class="page-subtitle">Selecciona jugadores y notifícalos al instante</div>
+            </div>
+            <div class="topbar-right">
+                <div class="topbar-time" id="clock">--:--</div>
+            </div>
+        </header>
+
+        <div class="content">
+            <div class="conv-grid">
+
+                <!-- ── IZQUIERDA: Selección de jugadores ── -->
+                <div style="display:flex; flex-direction:column; gap:1.5rem;">
+
+                    <!-- Jugadores -->
+                    <div class="panel">
+                        <div class="panel-header">
+                            <span class="panel-title"><i class="fas fa-users"
+                                    style="color:var(--gold);margin-right:.5rem;"></i>Seleccionar Jugadores</span>
+                            <span class="panel-badge" id="selected-badge">0 seleccionados</span>
+                        </div>
+                        <div class="panel-body">
+                            <input type="text" class="search-players" id="searchPlayers"
+                                placeholder="🔍  Buscar jugador...">
+                            <div class="players-list" id="playersList">
+                                <div style="text-align:center;padding:2rem;color:var(--slate);">
+                                    <i class="fas fa-circle-notch fa-spin" style="font-size:1.5rem;"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Historial -->
+                    <div class="panel">
+                        <div class="panel-header">
+                            <span class="panel-title"><i class="fas fa-history"
+                                    style="color:var(--gold);margin-right:.5rem;"></i>Convocatorias Anteriores</span>
+                        </div>
+                        <div id="historialList" style="min-height:80px;">
+                            <div style="text-align:center;padding:2rem;color:var(--slate);font-size:.75rem;">
+                                <i class="fas fa-circle-notch fa-spin"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ── DERECHA: Formulario ── -->
+                <div class="panel" style="position:sticky;top:90px;">
+                    <div class="panel-header">
+                        <span class="panel-title"><i class="fas fa-bullhorn"
+                                style="color:var(--gold);margin-right:.5rem;"></i>Nueva Convocatoria</span>
+                    </div>
+                    <div class="panel-body">
+                        <form id="formConvocatoria" autocomplete="off">
+
+                            <div class="field">
+                                <label>Título *</label>
+                                <input type="text" id="convTitulo" placeholder="Ej: Partido vs Atlético Real" required>
+                            </div>
+
+                            <div class="field">
+                                <label>Fecha y Hora *</label>
+                                <input type="datetime-local" id="convFecha" required>
+                            </div>
+
+                            <div class="field">
+                                <label>Lugar / Cancha</label>
+                                <input type="text" id="convLugar" placeholder="Ej: Cancha La Pradera">
+                            </div>
+
+                            <div class="field">
+                                <label>Descripción / Instrucciones</label>
+                                <textarea id="convDescripcion"
+                                    placeholder="Indicaciones para los jugadores, puntos de encuentro, uniformes, etc."></textarea>
+                            </div>
+
+                            <div
+                                style="padding:.9rem 1rem;background:var(--dark3);border-radius:12px;margin-bottom:1.2rem;font-size:.72rem;color:var(--slate);">
+                                <i class="fas fa-bell" style="color:var(--gold);margin-right:.5rem;"></i>
+                                Se enviará una <strong style="color:var(--text);">notificación push</strong> a todos los
+                                jugadores convocados que tengan activadas las alertas.
+                            </div>
+
+                            <button type="submit" class="btn-convocar" id="btnConvocar">
+                                <i class="fas fa-paper-plane"></i>
+                                Convocar y Notificar
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+        </div><!-- /content -->
+    </div><!-- /main -->
+
+    <!-- ── TOAST CONTAINER ── -->
+    <div class="toast-bar" id="toastBar"></div>
+
+    <!-- ── SCRIPTS ── -->
+    <script src="/scripts/config.js"></script>
+    <script type="module">
+        import { supabase, requireAdmin } from '../scripts/supabaseClient.js';
+
+        // ── AUTH & LAYOUT ──────────────────────────────────────────
+        async function init() {
+            const session = await requireAdmin();
+            if (!session) return;
+
+            document.getElementById('admin-body').style.display = 'flex';
+            const { data: profile } = await supabase.from('users').select('username,role').eq('id', session.user.id).single();
+            if (profile) {
+                document.getElementById('sb-name').textContent = profile.username || session.user.email;
+                document.getElementById('sb-role').textContent = profile.role;
+                document.getElementById('sb-avatar').textContent = (profile.username || 'A')[0].toUpperCase();
+            }
+
+            loadJugadores();
+            loadHistorial();
+        }
+
+        // Reloj
+        const clockEl = document.getElementById('clock');
+        (function tick() { clockEl.textContent = new Date().toLocaleTimeString('es-CO', { hour: '2-digit', minute: '2-digit' }); setTimeout(tick, 1000); })();
+
+        // Menú móvil
+        document.getElementById('menu-btn').addEventListener('click', () => {
+            const s = document.getElementById('sidebar');
+            s.classList.toggle('open');
+            document.getElementById('menu-icon').className = s.classList.contains('open') ? 'fas fa-times' : 'fas fa-bars';
+        });
+
+        // Logout
+        document.getElementById('logout-btn').addEventListener('click', async () => {
+            if (confirm('¿Cerrar sesión?')) { await supabase.auth.signOut(); location.href = 'login.html'; }
+        });
+
+        // ── TOAST ──────────────────────────────────────────────────
+        function showToast(msg, type = 'info') {
+            const bar = document.getElementById('toastBar');
+            const t = document.createElement('div');
+            t.className = `toast ${type}`;
+            const icons = { success: 'fa-check-circle', error: 'fa-exclamation-circle', info: 'fa-info-circle' };
+            t.innerHTML = `<i class="fas ${icons[type] || 'fa-info-circle'}"></i><span>${msg}</span>`;
+            bar.appendChild(t);
+            setTimeout(() => t.remove(), 4500);
+        }
+
+        // ── JUGADORES ──────────────────────────────────────────────
+        let allJugadores = [];
+        let selectedDNIs = new Set();
+
+        async function loadJugadores() {
+            const list = document.getElementById('playersList');
+            try {
+                const { data, error } = await supabase.from('identificacion').select('numero, nombre, apellidos, categoria').order('apellidos');
+                if (error) throw error;
+                allJugadores = data || [];
+                renderJugadores(allJugadores);
+            } catch (e) {
+                list.innerHTML = `<p style="text-align:center;color:#f87171;font-size:.72rem;padding:1rem;">Error cargando jugadores: ${e.message}</p>`;
+            }
+        }
+
+        function renderJugadores(jugadores) {
+            const list = document.getElementById('playersList');
+            if (!jugadores.length) {
+                list.innerHTML = '<p style="text-align:center;color:var(--slate);font-size:.72rem;padding:1.5rem;">No se encontraron jugadores.</p>';
+                return;
+            }
+            list.innerHTML = '';
+            jugadores.forEach(j => {
+                const item = document.createElement('label');
+                item.className = 'player-item' + (selectedDNIs.has(j.numero) ? ' selected' : '');
+                item.innerHTML = `
+          <input type="checkbox" value="${j.numero}" ${selectedDNIs.has(j.numero) ? 'checked' : ''}>
+          <div>
+            <div class="player-name-text">${j.nombre} ${j.apellidos}</div>
+            <div class="player-cat">Cat. ${j.categoria || 'General'}</div>
+          </div>`;
+                item.querySelector('input').addEventListener('change', (e) => {
+                    if (e.target.checked) { selectedDNIs.add(j.numero); item.classList.add('selected'); }
+                    else { selectedDNIs.delete(j.numero); item.classList.remove('selected'); }
+                    document.getElementById('selected-badge').textContent = `${selectedDNIs.size} seleccionados`;
+                });
+                list.appendChild(item);
+            });
+        }
+
+        // Buscador
+        document.getElementById('searchPlayers').addEventListener('input', e => {
+            const q = e.target.value.toLowerCase();
+            renderJugadores(allJugadores.filter(j =>
+                `${j.nombre} ${j.apellidos}`.toLowerCase().includes(q) ||
+                (j.categoria || '').toLowerCase().includes(q)
+            ));
+        });
+
+        // ── HISTORIAL ──────────────────────────────────────────────
+        async function loadHistorial() {
+            const cont = document.getElementById('historialList');
+            try {
+                const { data, error } = await supabase
+                    .from('convocatorias')
+                    .select(`*, convocatoria_jugadores(count)`)
+                    .order('fecha', { ascending: false })
+                    .limit(15);
+
+                if (error) throw error;
+                if (!data || !data.length) {
+                    cont.innerHTML = '<p style="text-align:center;color:var(--slate);padding:1.5rem;font-size:.72rem;">Todavía no hay convocatorias.</p>';
+                    return;
+                }
+                cont.innerHTML = data.map(c => {
+                    const fecha = new Date(c.fecha).toLocaleString('es-CO', { weekday: 'short', day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' });
+                    const cnt = c.convocatoria_jugadores?.[0]?.count ?? '?';
+                    return `
+            <div class="conv-card">
+              <div style="display:flex;align-items:center;justify-content:space-between;">
+                <div class="conv-title">${c.titulo}</div>
+                <span class="conv-badge">${cnt} jugadores</span>
+              </div>
+              <div class="conv-meta">
+                <span><i class="fas fa-calendar-alt"></i> ${fecha}</span>
+                ${c.lugar ? `<span><i class="fas fa-map-marker-alt"></i> ${c.lugar}</span>` : ''}
+              </div>
+            </div>`;
+                }).join('');
+            } catch (e) {
+                cont.innerHTML = `<p style="color:#f87171;font-size:.72rem;padding:1rem;text-align:center;">Error: ${e.message}</p>`;
+            }
+        }
+
+        // ── GUARDAR CONVOCATORIA ───────────────────────────────────
+        document.getElementById('formConvocatoria').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('btnConvocar');
+
+            if (selectedDNIs.size === 0) {
+                showToast('Selecciona al menos un jugador.', 'error');
+                return;
+            }
+
+            const titulo = document.getElementById('convTitulo').value.trim();
+            const fecha = document.getElementById('convFecha').value;
+            const lugar = document.getElementById('convLugar').value.trim();
+            const descripcion = document.getElementById('convDescripcion').value.trim();
+
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Guardando...';
+
+            try {
+                const { data: { user } } = await supabase.auth.getUser();
+
+                // 1. Crear convocatoria
+                const { data: conv, error: convErr } = await supabase
+                    .from('convocatorias')
+                    .insert({ titulo, fecha, lugar: lugar || null, descripcion: descripcion || null, created_by: user.id })
+                    .select()
+                    .single();
+
+                if (convErr) throw convErr;
+
+                // 2. Insertar jugadores convocados
+                const jugadoresConvocados = allJugadores
+                    .filter(j => selectedDNIs.has(j.numero))
+                    .map(j => ({
+                        convocatoria_id: conv.id,
+                        identificacion_numero: j.numero,
+                        nombre_jugador: `${j.nombre} ${j.apellidos}`,
+                        categoria: j.categoria || 'General',
+                        estado: 'convocado',
+                    }));
+
+                const { error: jErr } = await supabase.from('convocatoria_jugadores').insert(jugadoresConvocados);
+                if (jErr) throw jErr;
+
+                // 3. Intentar enviar push via Edge Function (si está desplegada)
+                try {
+                    await supabase.functions.invoke('send-push-notification', {
+                        body: {
+                            title: `📣 Convocatoria: ${titulo}`,
+                            body: `${lugar ? lugar + ' — ' : ''}${new Date(fecha).toLocaleString('es-CO', { weekday: 'short', day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' })}`,
+                            url: '/partidos.html',
+                        }
+                    });
+                } catch (_) { /* La edge function puede no estar aún, no es bloqueante */ }
+
+                showToast(`✅ Convocatoria creada con ${selectedDNIs.size} jugadores`, 'success');
+
+                // Reset
+                e.target.reset();
+                selectedDNIs.clear();
+                document.getElementById('selected-badge').textContent = '0 seleccionados';
+                renderJugadores(allJugadores);
+                loadHistorial();
+
+            } catch (err) {
+                console.error(err);
+                showToast(`Error: ${err.message}`, 'error');
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-paper-plane"></i> Convocar y Notificar';
+            }
+        });
+
+        init();
+    </script>
+</body>
+
+</html>

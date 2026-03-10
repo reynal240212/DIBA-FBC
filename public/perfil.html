@@ -71,7 +71,8 @@
 <body class="min-h-screen flex">
 
   <!-- Mobile Toggle -->
-  <button id="sidebar-toggle" class="lg:hidden fixed bottom-6 right-6 z-[100] w-14 h-14 bg-amber-500 text-slate-900 rounded-full shadow-2xl flex items-center justify-center text-xl active:scale-90 transition-all">
+  <button id="sidebar-toggle"
+    class="lg:hidden fixed bottom-6 right-6 z-[100] w-14 h-14 bg-amber-500 text-slate-900 rounded-full shadow-2xl flex items-center justify-center text-xl active:scale-90 transition-all">
     <i class="fas fa-bars"></i>
   </button>
 
@@ -79,31 +80,42 @@
   <aside id="sidebar" class="sidebar fixed inset-y-0 left-0 w-72 glass z-50 flex flex-col lg:translate-x-0">
     <div class="p-8 text-center border-b border-white/5">
       <img src="images/ESCUDO.png" alt="DIBA FBC" class="w-16 h-16 mx-auto mb-4 animate__animated animate__fadeIn">
-      <h2 class="text-white font-black tracking-tighter text-xl italic uppercase">DIBA <span class="text-amber-500">FBC</span></h2>
+      <h2 class="text-white font-black tracking-tighter text-xl italic uppercase">DIBA <span
+          class="text-amber-500">FBC</span></h2>
       <p class="text-[10px] text-slate-500 font-bold uppercase tracking-[0.3em] mt-1">Player Dashboard</p>
     </div>
 
     <nav class="flex-1 px-4 py-8 space-y-2 overflow-y-auto custom-scrollbar">
-      <a href="index.html" class="sidebar-link group flex items-center gap-4 px-4 py-4 rounded-2xl hover:bg-white/5 transition-all">
+      <a href="index.html"
+        class="sidebar-link group flex items-center gap-4 px-4 py-4 rounded-2xl hover:bg-white/5 transition-all">
         <i class="fas fa-home text-slate-400 group-hover:text-amber-500"></i>
         <span class="text-sm font-bold uppercase tracking-wider">Inicio</span>
       </a>
-      <button onclick="switchTab('overview')" class="sidebar-link active group w-full flex items-center gap-4 px-4 py-4 rounded-2xl hover:bg-white/5 transition-all">
+      <button onclick="switchTab('overview')"
+        class="sidebar-link active group w-full flex items-center gap-4 px-4 py-4 rounded-2xl hover:bg-white/5 transition-all">
         <i class="fas fa-th-large"></i>
         <span class="text-sm font-bold uppercase tracking-wider">Dashboard</span>
       </button>
-      <button onclick="switchTab('profile')" class="sidebar-link group w-full flex items-center gap-4 px-4 py-4 rounded-2xl hover:bg-white/5 transition-all">
+      <button onclick="switchTab('profile')"
+        class="sidebar-link group w-full flex items-center gap-4 px-4 py-4 rounded-2xl hover:bg-white/5 transition-all">
         <i class="fas fa-user"></i>
         <span class="text-sm font-bold uppercase tracking-wider">Mi Perfil</span>
       </button>
-      <button onclick="switchTab('documents')" class="sidebar-link group w-full flex items-center gap-4 px-4 py-4 rounded-2xl hover:bg-white/5 transition-all">
+      <button onclick="switchTab('documents')"
+        class="sidebar-link group w-full flex items-center gap-4 px-4 py-4 rounded-2xl hover:bg-white/5 transition-all">
         <i class="fas fa-file-contract"></i>
         <span class="text-sm font-bold uppercase tracking-wider">Documentos</span>
+      </button>
+      <button onclick="switchTab('notifications')"
+        class="sidebar-link group w-full flex items-center gap-4 px-4 py-4 rounded-2xl hover:bg-white/5 transition-all">
+        <i class="fas fa-bell"></i>
+        <span class="text-sm font-bold uppercase tracking-wider">Notificaciones</span>
       </button>
     </nav>
 
     <div class="p-6 border-t border-white/5">
-      <button id="logout-btn" class="w-full flex items-center justify-center gap-3 px-4 py-4 bg-rose-500/10 text-rose-500 rounded-2xl hover:bg-rose-500 hover:text-white transition-all font-black text-xs uppercase tracking-widest">
+      <button id="logout-btn"
+        class="w-full flex items-center justify-center gap-3 px-4 py-4 bg-rose-500/10 text-rose-500 rounded-2xl hover:bg-rose-500 hover:text-white transition-all font-black text-xs uppercase tracking-widest">
         <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
       </button>
     </div>
@@ -111,29 +123,32 @@
 
   <!-- Main Content -->
   <main class="flex-1 lg:ml-72 min-h-screen p-4 lg:p-8 flex flex-col gap-8 relative">
-    
+
     <!-- Background Accents -->
     <div class="fixed top-0 right-0 w-[500px] h-[500px] bg-amber-500/5 rounded-full blur-[120px] -z-10"></div>
     <div class="fixed bottom-0 left-0 w-[300px] h-[300px] bg-blue-500/5 rounded-full blur-[100px] -z-10"></div>
 
     <!-- Header Section -->
-    <header class="flex flex-col md:flex-row md:items-center justify-between gap-6 animate__animated animate__fadeInDown">
+    <header
+      class="flex flex-col md:flex-row md:items-center justify-between gap-6 animate__animated animate__fadeInDown">
       <div>
         <h1 id="welcome-name" class="text-3xl md:text-4xl font-black text-white italic">Cargando...</h1>
-        <p class="text-slate-400 text-sm mt-1 uppercase tracking-widest font-bold">¡Bienvenido de nuevo a la familia DIBA!</p>
+        <p class="text-slate-400 text-sm mt-1 uppercase tracking-widest font-bold">¡Bienvenido de nuevo a la familia
+          DIBA!</p>
       </div>
       <div class="flex items-center gap-4 glass px-6 py-4 rounded-3xl border border-white/10">
         <div class="text-right">
           <p id="header-user-role" class="text-[10px] text-amber-500 font-black uppercase tracking-widest">Jugador</p>
           <p id="header-user-email" class="text-xs text-white font-bold opacity-60">...</p>
         </div>
-        <img id="header-avatar" src="https://ui-avatars.com/api/?name=User" class="w-12 h-12 rounded-full border-2 border-amber-500 p-1 object-cover">
+        <img id="header-avatar" src="https://ui-avatars.com/api/?name=User"
+          class="w-12 h-12 rounded-full border-2 border-amber-500 p-1 object-cover">
       </div>
     </header>
 
     <!-- Content Tabs -->
     <div id="tab-content" class="space-y-8">
-      
+
       <!-- Tab: Overview -->
       <section id="tab-overview" class="space-y-8 animate__animated animate__fadeIn">
         <!-- Stats Grid -->
@@ -143,7 +158,8 @@
               <div class="w-12 h-12 bg-amber-500/10 rounded-2xl flex items-center justify-center text-amber-500">
                 <i class="fas fa-certificate text-xl"></i>
               </div>
-              <span class="text-[10px] bg-emerald-500/20 text-emerald-500 px-3 py-1 rounded-full font-bold">Activo</span>
+              <span
+                class="text-[10px] bg-emerald-500/20 text-emerald-500 px-3 py-1 rounded-full font-bold">Activo</span>
             </div>
             <p class="text-slate-400 text-[10px] font-bold uppercase tracking-widest">Estado Registro</p>
             <h3 id="stat-category" class="text-2xl font-black text-white mt-1">En Verificación</h3>
@@ -154,7 +170,8 @@
               <div class="w-12 h-12 bg-blue-500/10 rounded-2xl flex items-center justify-center text-blue-400">
                 <i class="fas fa-file-alt text-xl"></i>
               </div>
-              <span id="doc-percent-badge" class="text-[10px] bg-amber-500/20 text-amber-500 px-3 py-1 rounded-full font-bold">0%</span>
+              <span id="doc-percent-badge"
+                class="text-[10px] bg-amber-500/20 text-amber-500 px-3 py-1 rounded-full font-bold">0%</span>
             </div>
             <p class="text-slate-400 text-[10px] font-bold uppercase tracking-widest">Documentación</p>
             <h3 id="stat-docs" class="text-2xl font-black text-white mt-1">Cargando...</h3>
@@ -186,14 +203,18 @@
           <!-- Linking Section (Shows only if not linked) -->
           <div id="link-section" class="lg:col-span-3 glass p-8 rounded-[2.5rem] border-blue-500/20 hidden">
             <div class="max-w-xl mx-auto text-center space-y-6">
-              <div class="w-20 h-20 bg-blue-600/10 rounded-full flex items-center justify-center text-blue-500 mx-auto text-3xl">
+              <div
+                class="w-20 h-20 bg-blue-600/10 rounded-full flex items-center justify-center text-blue-500 mx-auto text-3xl">
                 <i class="fas fa-user-plus"></i>
               </div>
               <h2 class="text-2xl font-black text-white">Vinculación de Registro</h2>
-              <p class="text-slate-400 text-sm">Ingresa tu número de documento para vincular tu cuenta con tu registro oficial de jugador y ver tus documentos.</p>
+              <p class="text-slate-400 text-sm">Ingresa tu número de documento para vincular tu cuenta con tu registro
+                oficial de jugador y ver tus documentos.</p>
               <div class="flex flex-col sm:flex-row gap-3">
-                <input type="text" id="dni-input" placeholder="Número de Documento" class="flex-1 bg-white/5 border border-white/10 rounded-2xl px-6 py-4 focus:ring-2 focus:ring-blue-500/50 outline-none text-white font-bold">
-                <button id="link-btn" class="bg-blue-600 hover:bg-blue-500 text-white px-8 py-4 rounded-2xl font-black text-sm uppercase tracking-widest transition-all active:scale-95 shadow-xl shadow-blue-600/20">
+                <input type="text" id="dni-input" placeholder="Número de Documento"
+                  class="flex-1 bg-white/5 border border-white/10 rounded-2xl px-6 py-4 focus:ring-2 focus:ring-blue-500/50 outline-none text-white font-bold">
+                <button id="link-btn"
+                  class="bg-blue-600 hover:bg-blue-500 text-white px-8 py-4 rounded-2xl font-black text-sm uppercase tracking-widest transition-all active:scale-95 shadow-xl shadow-blue-600/20">
                   Vincular
                 </button>
               </div>
@@ -206,16 +227,18 @@
             <div class="p-8 border-b border-white/5 flex items-center justify-between">
               <div>
                 <h2 class="text-xl font-black text-white italic">Estado de Documentación</h2>
-                <p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest mt-1">Requisitos de Inscripción 2025</p>
+                <p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest mt-1">Requisitos de Inscripción
+                  2025</p>
               </div>
               <div class="text-right">
                 <div class="w-48 h-2 bg-white/5 rounded-full overflow-hidden">
-                  <div id="doc-progress-bar" class="h-full bg-amber-500 transition-all duration-1000" style="width: 0%"></div>
+                  <div id="doc-progress-bar" class="h-full bg-amber-500 transition-all duration-1000" style="width: 0%">
+                  </div>
                 </div>
                 <p id="doc-progress-text" class="text-[10px] text-amber-500 font-black uppercase mt-2">Cargando 0%</p>
               </div>
             </div>
-            
+
             <div class="overflow-x-auto">
               <table class="w-full text-left">
                 <thead>
@@ -240,10 +263,13 @@
                       </div>
                     </td>
                     <td class="px-8 py-6">
-                      <span class="text-[9px] font-black uppercase tracking-widest px-3 py-1 bg-white/5 rounded-full text-slate-400 italic">No cargado</span>
+                      <span
+                        class="text-[9px] font-black uppercase tracking-widest px-3 py-1 bg-white/5 rounded-full text-slate-400 italic">No
+                        cargado</span>
                     </td>
                     <td class="px-8 py-6">
-                      <button class="text-amber-500 hover:text-white transition-colors text-xs font-black uppercase tracking-widest">Gestionar</button>
+                      <button
+                        class="text-amber-500 hover:text-white transition-colors text-xs font-black uppercase tracking-widest">Gestionar</button>
                     </td>
                   </tr>
                 </tbody>
@@ -258,41 +284,54 @@
         <div class="max-w-4xl glass rounded-[3rem] p-8 md:p-12">
           <div class="mb-10 text-center md:text-left">
             <h2 class="text-2xl font-black text-white italic">Información de Cuenta</h2>
-            <p class="text-slate-500 text-xs font-bold uppercase tracking-widest mt-1">Personaliza tu perfil públicamente</p>
+            <p class="text-slate-500 text-xs font-bold uppercase tracking-widest mt-1">Personaliza tu perfil
+              públicamente</p>
           </div>
 
           <form id="profile-form" class="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div class="md:col-span-2 flex justify-center mb-6">
               <div class="relative group">
-                <img id="profile-preview" src="https://ui-avatars.com/api/?name=User" class="w-32 h-32 rounded-[2.5rem] border-4 border-amber-500 p-2 object-cover glow-amber transition-transform group-hover:scale-105">
-                <button type="button" class="absolute -bottom-2 -right-2 w-12 h-12 bg-white text-slate-900 rounded-2xl flex items-center justify-center shadow-xl border-4 border-slate-950 hover:bg-amber-500 transition-colors">
+                <img id="profile-preview" src="https://ui-avatars.com/api/?name=User"
+                  class="w-32 h-32 rounded-[2.5rem] border-4 border-amber-500 p-2 object-cover glow-amber transition-transform group-hover:scale-105">
+                <button type="button"
+                  class="absolute -bottom-2 -right-2 w-12 h-12 bg-white text-slate-900 rounded-2xl flex items-center justify-center shadow-xl border-4 border-slate-950 hover:bg-amber-500 transition-colors">
                   <i class="fas fa-pen-nib text-xs"></i>
                 </button>
               </div>
             </div>
 
             <div class="space-y-2">
-              <label class="text-[10px] font-black text-amber-500 uppercase tracking-[0.2em] ml-2">Nombre Completo</label>
-              <input type="text" id="full_name" class="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 focus:ring-2 focus:ring-amber-500 outline-none text-white font-bold" required>
+              <label class="text-[10px] font-black text-amber-500 uppercase tracking-[0.2em] ml-2">Nombre
+                Completo</label>
+              <input type="text" id="full_name"
+                class="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 focus:ring-2 focus:ring-amber-500 outline-none text-white font-bold"
+                required>
             </div>
 
             <div class="space-y-2">
-              <label class="text-[10px] font-black text-amber-500 uppercase tracking-[0.2em] ml-2">Nombre Usuario</label>
-              <input type="text" id="username" class="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 focus:ring-2 focus:ring-amber-500 outline-none text-white font-bold" required>
+              <label class="text-[10px] font-black text-amber-500 uppercase tracking-[0.2em] ml-2">Nombre
+                Usuario</label>
+              <input type="text" id="username"
+                class="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 focus:ring-2 focus:ring-amber-500 outline-none text-white font-bold"
+                required>
             </div>
 
             <div class="md:col-span-2 space-y-2">
               <label class="text-[10px] font-black text-amber-500 uppercase tracking-[0.1em] ml-2">Biografía</label>
-              <textarea id="bio" rows="3" class="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 focus:ring-2 focus:ring-amber-500 outline-none text-white font-medium resize-none"></textarea>
+              <textarea id="bio" rows="3"
+                class="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 focus:ring-2 focus:ring-amber-500 outline-none text-white font-medium resize-none"></textarea>
             </div>
 
             <div class="md:col-span-2 space-y-2">
-              <label class="text-[10px] font-black text-amber-500 uppercase tracking-[0.2em] ml-2">URL Foto (Avatar)</label>
-              <input type="url" id="avatar_url" class="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 focus:ring-2 focus:ring-amber-500 outline-none text-blue-400 font-medium">
+              <label class="text-[10px] font-black text-amber-500 uppercase tracking-[0.2em] ml-2">URL Foto
+                (Avatar)</label>
+              <input type="url" id="avatar_url"
+                class="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 focus:ring-2 focus:ring-amber-500 outline-none text-blue-400 font-medium">
             </div>
 
             <div class="md:col-span-2 pt-6">
-              <button type="submit" class="w-full bg-amber-500 text-slate-900 py-5 rounded-[2rem] font-black text-sm uppercase tracking-[0.3em] hover:bg-white hover:scale-[1.02] transition-all shadow-2xl shadow-amber-500/20 active:scale-95">
+              <button type="submit"
+                class="w-full bg-amber-500 text-slate-900 py-5 rounded-[2rem] font-black text-sm uppercase tracking-[0.3em] hover:bg-white hover:scale-[1.02] transition-all shadow-2xl shadow-amber-500/20 active:scale-95">
                 Guardar Configuración
               </button>
               <p id="status-msg" class="text-center text-[10px] mt-6 font-bold uppercase tracking-widest hidden"></p>
@@ -307,9 +346,52 @@
           <h2 class="text-2xl font-black text-white italic">Gestor de Documentos</h2>
           <p class="text-slate-500 text-xs font-bold uppercase tracking-widest mt-1">Carga y verifica tus requisitos</p>
         </div>
-        
+
         <div id="docs-full-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           <!-- Documentation items will be injected here -->
+        </div>
+      </section>
+
+      <!-- Tab: Notifications -->
+      <section id="tab-notifications" class="hidden animate__animated animate__fadeIn">
+        <div class="max-w-2xl glass rounded-[3rem] p-8 md:p-12">
+          <div class="mb-10">
+            <h2 class="text-2xl font-black text-white italic">Notificaciones Push</h2>
+            <p class="text-slate-500 text-xs font-bold uppercase tracking-widest mt-1">Recibe alertas de convocatorias,
+              partidos y documentos</p>
+          </div>
+
+          <div class="glass p-8 rounded-[2rem] border border-white/5 space-y-6">
+            <div class="flex items-start gap-5">
+              <div class="w-14 h-14 bg-amber-500/10 rounded-2xl flex items-center justify-center flex-shrink-0">
+                <i class="fas fa-bell text-2xl text-amber-500"></i>
+              </div>
+              <div>
+                <h3 class="text-white font-black text-lg">Alertas Instantáneas</h3>
+                <p class="text-slate-400 text-sm mt-1">Recibe notificaciones en tu dispositivo incluso cuando no tengas
+                  el sitio abierto. El entrenador te avisará al momento de convocarte.</p>
+              </div>
+            </div>
+
+            <div id="push-status-row"
+              class="flex items-center justify-between p-5 bg-white/5 rounded-2xl border border-white/5">
+              <div>
+                <p id="push-status-text" class="text-sm font-bold text-white">Comprobando estado...</p>
+                <p id="push-status-sub" class="text-[10px] text-slate-500 font-bold uppercase tracking-widest mt-1">--
+                </p>
+              </div>
+              <button id="push-toggle-btn" disabled
+                class="px-6 py-3 rounded-2xl font-black text-xs uppercase tracking-widest transition-all border opacity-60"
+                style="background:rgba(255,255,255,.05);color:#94a3b8;border-color:rgba(255,255,255,.1)">
+                Cargando...
+              </button>
+            </div>
+
+            <p class="text-[10px] text-slate-600 font-bold uppercase tracking-wider text-center">
+              <i class="fas fa-shield-alt mr-1 text-amber-500/50"></i>
+              Tus datos nunca se comparten. Puedes desactivar las alertas en cualquier momento.
+            </p>
+          </div>
         </div>
       </section>
 
@@ -319,10 +401,10 @@
   <!-- External Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
   <script src="scripts/config.js"></script>
-  
+
   <script type="module">
     import { supabase, sanitizeDNI } from './scripts/supabaseClient.js';
-    
+
     // UI Elements
     const sidebar = document.getElementById('sidebar');
     const sidebarToggle = document.getElementById('sidebar-toggle');
@@ -332,7 +414,7 @@
     const linkSection = document.getElementById('link-section');
     const docsTableBody = document.getElementById('docs-table-body');
     const docsFullList = document.getElementById('docs-full-list');
-    
+
     let currentUser = null;
     let playerDNI = null;
     let displayName = "Jugador";
@@ -356,7 +438,7 @@
     window.switchTab = (tabId) => {
       document.querySelectorAll('#tab-content > section').forEach(s => s.classList.add('hidden'));
       document.getElementById(`tab-${tabId}`).classList.remove('hidden');
-      
+
       document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
       event.currentTarget.classList.add('active');
 
@@ -400,8 +482,8 @@
       } else if (userData.role !== 'admin') {
         // Solo ponemos el nombre de bienvenida si loadProfileData no encontró uno mejor
         if (welcomeName.innerText === 'Cargando...') {
-            displayName = currentUser.user_metadata.full_name || 'Nuevo Miembro';
-            welcomeName.innerText = `Bienvenido, ${displayName}`;
+          displayName = currentUser.user_metadata.full_name || 'Nuevo Miembro';
+          welcomeName.innerText = `Bienvenido, ${displayName}`;
         }
         linkSection.classList.remove('hidden');
       }
@@ -435,7 +517,7 @@
         document.getElementById('username').value = profile.username || '';
         document.getElementById('bio').value = profile.bio || '';
         document.getElementById('avatar_url').value = profile.avatar_url || '';
-        
+
         // El nombre del perfil GUARDADO tiene máxima prioridad si existe
         if (profile.full_name) {
           displayName = profile.full_name;
@@ -465,7 +547,7 @@
 
       const docsCount = docs ? docs.length : 0;
       const percent = Math.round((docsCount / DOC_TYPES.length) * 100);
-      
+
       document.getElementById('stat-docs').innerText = `${docsCount} / ${DOC_TYPES.length}`;
       document.getElementById('doc-percent-badge').innerText = `${percent}%`;
       document.getElementById('doc-progress-bar').style.width = `${percent}%`;
@@ -562,7 +644,7 @@
       status.classList.remove('hidden');
 
       const { data: exists } = await supabase.from('identificacion').select('nombre').eq('numero', dni).single();
-      
+
       if (!exists) {
         status.innerText = "DNI no encontrado en los registros oficiales.";
         status.className = "text-[10px] font-bold uppercase text-rose-500 mt-2 block";
@@ -571,15 +653,15 @@
       }
 
       // Actualizamos ambas tablas para consistencia
-      const { error: errorUsers } = await supabase.from('users').update({ 
-          identificacion_numero: dni, 
-          role: 'usuario' 
+      const { error: errorUsers } = await supabase.from('users').update({
+        identificacion_numero: dni,
+        role: 'usuario'
       }).eq('id', currentUser.id);
 
-      const { error: errorProfiles } = await supabase.from('profiles').update({ 
-          identificacion_numero: dni 
+      const { error: errorProfiles } = await supabase.from('profiles').update({
+        identificacion_numero: dni
       }).eq('id', currentUser.id);
-      
+
       if (errorUsers || errorProfiles) {
         console.error("Link error:", errorUsers, errorProfiles);
         status.innerText = "Error vinculando: El documento podría estar siendo usado.";
@@ -617,13 +699,64 @@
     });
 
     document.getElementById('logout-btn').addEventListener('click', async () => {
-      if(confirm('¿Cerrar sesión?')) {
+      if (confirm('¿Cerrar sesión?')) {
         await supabase.auth.signOut();
         window.location.href = 'index.html';
       }
     });
 
     document.addEventListener('DOMContentLoaded', init);
+
+    // ── WEB PUSH TOGGLE ─────────────────────────────────────
+    (async () => {
+      const { isPushSupported, getPushPermission, subscribeToPush, unsubscribeFromPush, isSubscribed } =
+        await import('./scripts/push-manager.js');
+
+      const btn = document.getElementById('push-toggle-btn');
+      const txt = document.getElementById('push-status-text');
+      const sub = document.getElementById('push-status-sub');
+
+      async function refreshPushUI() {
+        if (!isPushSupported()) {
+          txt.textContent = 'Tu navegador no soporta notificaciones push';
+          sub.textContent = 'Usa Chrome, Edge o Firefox';
+          btn.textContent = 'No disponible';
+          btn.disabled = true;
+          return;
+        }
+        const subscribed = await isSubscribed();
+        btn.disabled = false;
+        btn.style.opacity = '1';
+        if (subscribed) {
+          txt.textContent = '✅ Notificaciones activadas';
+          sub.textContent = 'Recibirás alertas de convocatorias y partidos';
+          btn.textContent = 'Desactivar';
+          btn.style.background = 'rgba(239,68,68,.1)';
+          btn.style.color = '#f87171';
+          btn.style.borderColor = 'rgba(239,68,68,.2)';
+        } else {
+          txt.textContent = '🔕 Notificaciones desactivadas';
+          sub.textContent = 'Actívalas para no perderte ninguna convocatoria';
+          btn.textContent = 'Activar';
+          btn.style.background = 'rgba(245,158,11,.1)';
+          btn.style.color = '#fbbf24';
+          btn.style.borderColor = 'rgba(245,158,11,.2)';
+        }
+      }
+
+      btn.addEventListener('click', async () => {
+        btn.disabled = true;
+        btn.textContent = 'Procesando...';
+        const subscribed = await isSubscribed();
+        const result = subscribed
+          ? await unsubscribeFromPush(supabase)
+          : await subscribeToPush(supabase);
+        txt.textContent = result.message;
+        setTimeout(refreshPushUI, 800);
+      });
+
+      refreshPushUI();
+    })();
   </script>
 </body>
 

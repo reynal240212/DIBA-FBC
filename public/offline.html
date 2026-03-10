@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Sin conexión — DIBA FBC</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="images/ESCUDO.ico" sizes="32x32">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: #0a0e14;
+            color: #e2e8f0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .shield {
+            width: 90px;
+            height: 90px;
+            object-fit: contain;
+            margin-bottom: 2rem;
+            opacity: 0.85;
+            filter: drop-shadow(0 0 24px rgba(255, 204, 0, 0.35));
+            animation: pulse 2.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+                opacity: 0.85;
+            }
+
+            50% {
+                transform: scale(1.06);
+                opacity: 1;
+            }
+        }
+
+        .wifi-icon {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            color: #334155;
+        }
+
+        h1 {
+            font-size: clamp(1.4rem, 5vw, 2rem);
+            font-weight: 900;
+            font-style: italic;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            margin-bottom: 0.75rem;
+        }
+
+        h1 span {
+            color: #ffcc00;
+        }
+
+        p {
+            font-size: 0.9rem;
+            color: #64748b;
+            max-width: 380px;
+            line-height: 1.6;
+            margin-bottom: 2.5rem;
+        }
+
+        .btn-retry {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            background: #ffcc00;
+            color: #0a0e14;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 900;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            padding: 0.8rem 2rem;
+            border: none;
+            border-radius: 999px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            text-decoration: none;
+        }
+
+        .btn-retry:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(255, 204, 0, 0.35);
+        }
+
+        .divider {
+            width: 40px;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.06);
+            border-radius: 2px;
+            margin: 2.5rem auto;
+        }
+
+        .cached-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            justify-content: center;
+        }
+
+        .cached-links a {
+            color: #94a3b8;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-decoration: none;
+            padding: 0.5rem 1.2rem;
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            border-radius: 999px;
+            transition: color 0.2s, border-color 0.2s;
+        }
+
+        .cached-links a:hover {
+            color: #ffcc00;
+            border-color: rgba(255, 204, 0, 0.4);
+        }
+
+        footer {
+            margin-top: 3rem;
+            font-size: 0.65rem;
+            color: #1e293b;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+        }
+    </style>
+</head>
+
+<body>
+    <img src="images/ESCUDO.png" alt="DIBA FBC" class="shield" onerror="this.style.display='none'">
+
+    <div class="wifi-icon">
+        <!-- Inline SVG wifi-slash -->
+        <svg xmlns="http://www.w3.org/2000/svg" width="56" height="56" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="1" y1="1" x2="23" y2="23" />
+            <path d="M16.72 11.06A10.94 10.94 0 0 1 19 12.55" />
+            <path d="M5 12.55a10.94 10.94 0 0 1 5.17-2.39" />
+            <path d="M10.71 5.05A16 16 0 0 1 22.56 9" />
+            <path d="M1.42 9a15.91 15.91 0 0 1 4.7-2.88" />
+            <path d="M8.53 16.11a6 6 0 0 1 6.95 0" />
+            <circle cx="12" cy="20" r="1" fill="currentColor" />
+        </svg>
+    </div>
+
+    <h1>Sin <span>Conexión</span></h1>
+    <p>Parece que no tienes acceso a internet en este momento. Algunas páginas están disponibles desde la caché.</p>
+
+    <button class="btn-retry" onclick="window.location.reload()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="23 4 23 10 17 10" />
+            <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10" />
+        </svg>
+        Reintentar
+    </button>
+
+    <div class="divider"></div>
+
+    <div class="cached-links">
+        <a href="/index.html">Inicio</a>
+        <a href="/Historia.html">Historia</a>
+        <a href="/galeria.html">Galería</a>
+        <a href="/partidos.html">Partidos</a>
+        <a href="/contacto.html">Contacto</a>
+    </div>
+
+    <footer>DIBA FBC &mdash; Barranquilla, Colombia</footer>
+</body>
+
+</html>
