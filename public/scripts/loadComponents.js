@@ -330,25 +330,40 @@ document.addEventListener("DOMContentLoaded", function () {
   loadComponent("footer-container", "layout/footer.html");
   loadComponent("fab-container", "layout/fab.html");
 
-  // --- 4. JUGADORES DINÁMICOS DESDE SUPABASE ---
+  // --- 4. JUGADORES DINÁMICOS DESDE SUPABASE (ÚNICA FUENTE DE VERDAD) ---
   const playersContainer = document.getElementById("players-container");
 
   if (playersContainer) {
     async function loadPlayersFromSupabase() {
-      playersContainer.innerHTML = '<div class="flex justify-center py-20 w-full"><i class="fas fa-circle-notch animate-spin text-3xl text-amber-500"></i></div>';
+      // Estado de carga elegante (Skeleton UI sutil)
+      playersContainer.innerHTML = `
+        <div class="col-span-full flex flex-col items-center justify-center py-20 opacity-50">
+          <i class="fas fa-circle-notch animate-spin text-4xl text-amber-500 mb-4"></i>
+          <p class="text-[10px] font-black uppercase tracking-widest text-slate-500">Cargando Plantilla Oficial DIBA FBC...</p>
+        </div>
+      `;
+
       try {
         const { createClient } = await import("https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm");
-        const { SUPABASE_URL, SUPABASE_ANON_KEY } = window.DIBA_CONFIG;
+        const { SUPABASE_URL, SUPABASE_ANON_KEY } = window.DIBA_CONFIG || {};
+        
+        if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
+          console.error("Configuración de Supabase no encontrada.");
+          playersContainer.innerHTML = '<p class="text-center py-10 text-red-500 font-bold uppercase text-xs">Error: Servidor DIBA-Connect no disponible.</p>';
+          return;
+        }
+
         const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         const { data: jugadores, error } = await supabase
           .from('identificacion')
-          .select('nombre, apellidos, categoria, foto_url, fecha_nacimiento')
+          .select('nombre, apellidos, categoria, foto_url, fecha_nacimiento, numero')
           .order('apellidos');
 
         if (error) throw error;
+
         if (!jugadores || jugadores.length === 0) {
-          playersContainer.innerHTML = '<p class="text-center text-slate-400 py-16 col-span-full uppercase text-xs font-bold">No hay jugadores registrados aún.</p>';
+          playersContainer.innerHTML = '<p class="text-center text-slate-400 py-16 col-span-full uppercase text-xs font-black italic tracking-widest">No hay jugadores registrados en la base de datos oficial.</p>';
           return;
         }
 
@@ -357,7 +372,7 @@ document.addEventListener("DOMContentLoaded", function () {
         jugadores.forEach(j => {
           let cat = j.categoria || 'General';
 
-          // Autocategorización si es General y tiene fecha de nacimiento
+          // Autocategorización lógica (Fallback dinámico)
           if ((cat === 'General' || !cat) && j.fecha_nacimiento) {
             const birthYear = new Date(j.fecha_nacimiento).getUTCFullYear();
             if (birthYear === 2012) cat = '2012';
@@ -370,39 +385,84 @@ document.addEventListener("DOMContentLoaded", function () {
         });
 
         playersContainer.innerHTML = '';
-        const defaultImg = "https://placehold.co/300x400/e2e8f0/64748b?text=Jugador";
+        const defaultImg = "https://placehold.co/400x500/1e293b/64748b?text=DIBA+FBC";
 
-        Object.entries(grouped).sort(([a], [b]) => a.localeCompare(b)).forEach(([catTitle, players]) => {
+        // Ordenar categorías (2012, 2013, 2014/15/16)
+        const sortedCategories = Object.keys(grouped).sort((a, b) => a.localeCompare(b));
+
+        sortedCategories.forEach(catTitle => {
+          const players = grouped[catTitle];
+          
           const section = document.createElement("section");
-          section.className = "mb-12 w-full";
+          section.className = "mb-24 w-full animate__animated animate__fadeIn";
           section.innerHTML = `
-            <div class="flex items-center mb-6 px-4">
-              <h2 class="text-xl font-extrabold text-slate-800 uppercase tracking-tight">Categoría ${catTitle}</h2>
-              <div class="flex-grow h-px bg-slate-200 ml-4"></div>
+            <div class="flex items-center mb-12 px-4 group">
+              <div class="relative">
+                <h2 class="text-3xl font-black text-slate-900 uppercase tracking-tighter italic mr-8 group-hover:text-amber-500 transition-colors">Categoría ${catTitle}</h2>
+                <div class="absolute -bottom-2 left-0 w-16 h-1.5 bg-amber-500 rounded-full"></div>
+              </div>
+              <div class="flex-grow h-[1px] bg-gradient-to-r from-slate-200 to-transparent"></div>
+              <div class="hidden sm:flex items-center gap-2 ml-4">
+                <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest">${players.length} GUERREROS</span>
+                <i class="fas fa-shield-alt text-slate-200 text-sm"></i>
+              </div>
             </div>`;
 
           const grid = document.createElement("div");
-          grid.className = "grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 px-4 w-full";
+          grid.className = "grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-8 px-4 w-full";
 
-          players.forEach(j => {
+          players.forEach((j, index) => {
             const playerName = `${j.nombre} ${j.apellidos}`.trim();
             const imageUrl = j.foto_url || defaultImg;
-
+            
+            // Carta Premium con Glassmorphism y Animaciones
             const card = document.createElement("article");
-            card.className = "group bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden hover:shadow-xl transition-all duration-300 cursor-pointer relative";
+            card.className = "group relative bg-white rounded-[2rem] overflow-hidden shadow-2xl shadow-slate-200/40 hover:shadow-amber-500/30 transition-all duration-700 cursor-pointer animate__animated animate__fadeInUp";
+            card.style.animationDelay = `${index * 0.05}s`;
+            
             card.innerHTML = `
-              <div class="aspect-[3/4] overflow-hidden bg-slate-100">
-                <img src="${imageUrl}" class="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-110" onerror="this.src='${defaultImg}'">
+              <div class="aspect-[4/5] overflow-hidden bg-slate-100 relative">
+                <!-- Overlay dinámico -->
+                <div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent opacity-40 group-hover:opacity-60 transition-opacity duration-700 z-10"></div>
+                
+                <img src="${imageUrl}" 
+                     class="w-full h-full object-cover object-top transition-transform duration-1000 group-hover:scale-110" 
+                     onerror="this.src='${defaultImg}'"
+                     loading="lazy">
+                
+                <!-- ID Badge -->
+                <div class="absolute top-4 right-4 z-20">
+                  <div class="bg-white/10 backdrop-blur-xl border border-white/20 rounded-full w-10 h-10 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500 translate-x-4 group-hover:translate-x-0">
+                    <span class="text-[9px] font-black text-white">#${j.numero?.slice(-3) || '??'}</span>
+                  </div>
+                </div>
               </div>
-              <div class="p-3 text-center">
-                <p class="text-[9px] font-black text-amber-500 uppercase mb-1">DIBA FBC</p>
-                <h3 class="text-[11px] font-bold text-slate-800 uppercase leading-tight min-h-[2.2rem] flex items-center justify-center">${playerName}</h3>
-              </div>`;
+
+              <div class="p-5 text-center relative z-20 bg-white group-hover:bg-slate-50 transition-colors duration-500">
+                <div class="absolute -top-4 inset-x-0 flex justify-center">
+                  <span class="bg-amber-500 text-slate-900 text-[10px] font-black uppercase tracking-widest px-4 py-1.5 rounded-full shadow-xl transform -rotate-1 group-hover:rotate-0 transition-all">
+                    OFICIAL
+                  </span>
+                </div>
+                <h3 class="mt-3 text-sm font-black text-slate-900 uppercase leading-snug tracking-tighter group-hover:text-amber-600 transition-colors duration-300 min-h-[40px] flex items-center justify-center">
+                  ${playerName}
+                </h3>
+                
+                <div class="mt-4 pt-3 border-t border-slate-100 flex justify-center items-center gap-2 opacity-0 group-hover:opacity-100 transition-all duration-700 transform translate-y-2 group-hover:translate-y-0">
+                  <span class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">VER DETALLES</span>
+                  <div class="w-6 h-6 rounded-full bg-amber-100 flex items-center justify-center">
+                    <i class="fas fa-chevron-right text-[8px] text-amber-600"></i>
+                  </div>
+                </div>
+              </div>
+            `;
 
             card.addEventListener('click', () => {
-              modalImg.src = imageUrl;
-              modalName.textContent = playerName;
-              modal.classList.add('active');
+              if (typeof modalImg !== 'undefined') {
+                modalImg.src = imageUrl;
+                modalName.textContent = playerName;
+                modal.classList.add('active');
+              }
             });
             grid.appendChild(card);
           });
@@ -412,126 +472,23 @@ document.addEventListener("DOMContentLoaded", function () {
         });
 
       } catch (err) {
-        console.error('[Players] Error cargando desde Supabase:', err);
-        playersContainer.innerHTML = '<p class="text-center text-red-400 py-16 col-span-full text-xs font-bold uppercase">Error al cargar jugadores. Intenta de nuevo.</p>';
+        console.error('[Plantilla] Error Crítico:', err);
+        playersContainer.innerHTML = `
+          <div class="col-span-full py-20 text-center animate__animated animate__shakeX">
+            <div class="inline-flex items-center justify-center w-20 h-20 rounded-full bg-red-50 text-red-500 mb-6">
+              <i class="fas fa-database text-3xl"></i>
+            </div>
+            <h3 class="text-lg font-black text-slate-900 uppercase tracking-tighter mb-2">Error de Sincronización</h3>
+            <p class="text-[10px] font-bold text-slate-500 uppercase tracking-widest max-w-xs mx-auto">No pudimos enlazar con la base de datos de jugadores.</p>
+            <button onclick="window.location.reload()" class="mt-8 px-8 py-3 bg-slate-900 text-white text-[10px] font-black uppercase tracking-widest rounded-full hover:bg-amber-500 hover:text-slate-900 shadow-xl shadow-slate-900/20 transition-all hover:-translate-y-1">
+              Reintentar Conexión
+            </button>
+          </div>
+        `;
       }
     }
 
     loadPlayersFromSupabase();
-
-    // ── [Fallback: datos estáticos por si el observer llama a algo antiguo] ──
-    const playersData = [
-      // 2014 / 2015
-      { name: "Mario perez", imageUrl: "images/DIBA FBC/MarioP.jpg" },
-      { name: "Eliuth Meza", imageUrl: "images/DIBA FBC/Eliuth.jpg" },
-      { name: "Abraham Pérez", imageUrl: "images/DIBA FBC/Abraham.jpg" },
-      { name: "Rey David Arrieta", imageUrl: "images/DIBA FBC/ReyDavid.jpg" },
-      { name: "Santy tobias", imageUrl: "images/DIBA FBC/SantyT.jpg" },
-      { name: "Santy Hernandez", imageUrl: "images/DIBA FBC/SantyH.jpg" },
-      { name: "ISAAC Ventura", imageUrl: "images/DIBA FBC/Isaac.jpg" },
-      { name: "Carlos moreno", imageUrl: "images/DIBA FBC/CarlosM.jpg" },
-      { name: "Cristian Marcano", imageUrl: "images/DIBA FBC/CristianM.jpg" },
-      { name: "Andrés Sierra", imageUrl: "images/DIBA FBC/AndresS.jpg" },
-      { name: "Juan Martínez", imageUrl: "images/DIBA FBC/Juansito.jpg" },
-      { name: "Estiben Gomez", imageUrl: "images/DIBA FBC/Estiben.jpg" },
-      { name: "Andrés Socarras", imageUrl: "images/jugadores/default.jpg" },
-      { name: "Eneldo Torregrosa", imageUrl: "images/DIBA FBC/Eneldo.jpg" },
-      { name: "Moisés Caballero", imageUrl: "images/jugadores/default.jpg" },
-      { name: "Enderson Marcano", imageUrl: "images/jugadores/default.jpg" },
-      { name: "JhoyFran de los Reyes", imageUrl: "images/DIBA FBC/Jhoyfran.jpg" },
-
-      // 2012
-      { name: "Dilan Sánchez", imageUrl: "images/DIBA FBC/DilanS.jpg" },
-      { name: "Larson orozco", imageUrl: "images/DIBA FBC/Larson.jpg" },
-      { name: "Daniel Rodríguez", imageUrl: "images/jugadores/rodriguez.jpg" },
-      { name: "Maicol Villar", imageUrl: "images/jugadores/default.jpg" },
-      { name: "Jair Miranda", imageUrl: "images/jugadores/default.jpg" },
-      { name: "Johan Navarro", imageUrl: "images/jugadores/default.jpg" },
-      { name: "Santiago Mendoza", imageUrl: "images/jugadores/mendoza.jpg" },
-      { name: "Oscar López", imageUrl: "images/jugadores/oscar.jpg" },
-      { name: "Miguel Aldana", imageUrl: "images/jugadores/migue.jpg" },
-      { name: "Stiven cabarca", imageUrl: "images/jugadores/default.jpg" },
-      { name: "Jonier Rondón", imageUrl: "images/jugadores/default.jpg" },
-      { name: "Yojainer Villalobos", imageUrl: "images/jugadores/yojainer.jpg" },
-      { name: "Sebastian Lugo", imageUrl: "images/jugadores/default.jpg" },
-      { name: "Jose Álvarez", imageUrl: "images/jugadores/josept.jpg" },
-      { name: "Antoni Ariza", imageUrl: "images/jugadores/default.jpg" },
-      { name: "Luis cadena", imageUrl: "images/jugadores/default.jpg" },
-
-      // 2013
-      { name: "Mateo Boscán", imageUrl: "images/jugadores/mateo.jpg" },
-      { name: "Daniel López", imageUrl: "images/jugadores/default.jpg" },
-      { name: "Jeikham Camaño", imageUrl: "images/jugadores/default.jpg" },
-      { name: "Dany Tapias", imageUrl: "images/jugadores/danny.jpg" },
-      { name: "Nelson Pauline", imageUrl: "images/DIBA FBC/NelsonP.jpg" },
-      { name: "Joseph Aldana", imageUrl: "images/jugadores/default.jpg" },
-      { name: "Ces cristiano", imageUrl: "images/jugadores/default.jpg" },
-      { name: "Juan Tobías", imageUrl: "images/jugadores/juan_t.jpg" },
-      { name: "René Cerpa", imageUrl: "images/jugadores/default.jpg" },
-      { name: "Cesar Brito", imageUrl: "images/jugadores/default.jpg" }
-    ];
-
-    const categories = [
-      {
-        id: "categoria-2012",
-        title: "Categoría 2012",
-        players: ["Dilan Sánchez", "Larson orozco", "Daniel Rodríguez", "Maicol Villar", "Jair Miranda", "Johan Navarro", "Santiago Mendoza", "Oscar López", "Miguel Aldana", "Stiven cabarca", "Jonier Rondón", "Yojainer Villalobos", "Sebastian Lugo", "Jose Álvarez", "Antoni Ariza", "Luis cadena"]
-      },
-      {
-        id: "categoria-2013",
-        title: "Categoría 2013",
-        players: ["Mateo Boscán", "Daniel López", "Jeikham Camaño", "Dany Tapias", "Nelson Pauline", "Joseph Aldana", "Ces cristiano", "Juan Tobías", "René Cerpa", "Cesar Brito"]
-      },
-      {
-        id: "categoria-2014-2015",
-        title: "Categoría 2014/15",
-        players: ["Mario perez", "Eliuth Meza", "Abraham Pérez", "Rey David Arrieta", "Santy tobias", "Santy Hernandez", "ISAAC Ventura", "Carlos moreno", "Cristian Marcano", "Andrés Sierra", "Juan Martínez", "Estiben Gomez", "Andrés Socarras", "Eneldo Torregrosa", "Moisés Caballero", "Enderson Marcano", "JhoyFran de los Reyes"]
-      }
-    ];
-
-    const defaultImg = "https://placehold.co/300x400/e2e8f0/64748b?text=Jugador";
-
-    categories.forEach((cat) => {
-      const section = document.createElement("section");
-      section.className = "mb-12 w-full";
-      section.innerHTML = `
-          <div class="flex items-center mb-6 px-4" >
-          <h2 class="text-xl font-extrabold text-slate-800 uppercase tracking-tight">${cat.title}</h2>
-          <div class="flex-grow h-px bg-slate-200 ml-4"></div>
-        </div>
-          `;
-
-      const grid = document.createElement("div");
-      grid.className = "grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 px-4 w-full";
-
-      cat.players.forEach((playerName) => {
-        const pData = playersData.find(p => p.name.trim().toLowerCase() === playerName.trim().toLowerCase());
-        const imageUrl = pData ? pData.imageUrl : defaultImg;
-
-        const card = document.createElement("article");
-        card.className = "group bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden hover:shadow-xl transition-all duration-300 cursor-pointer relative";
-
-        card.innerHTML = `
-          <div class="aspect-[3/4] overflow-hidden bg-slate-100" >
-            <img src="${imageUrl}" class="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-110" onerror="this.src='${defaultImg}'">
-          </div>
-          <div class="p-3 text-center">
-            <p class="text-[9px] font-black text-amber-500 uppercase mb-1">DIBA FBC</p>
-            <h3 class="text-[11px] font-bold text-slate-800 uppercase leading-tight min-h-[2.2rem] flex items-center justify-center">${playerName}</h3>
-          </div>
-        `;
-
-        card.addEventListener('click', () => {
-          modalImg.src = imageUrl;
-          modalName.textContent = playerName;
-          modal.classList.add('active');
-        });
-
-        grid.appendChild(card);
-      });
-      section.appendChild(grid);
-      playersContainer.appendChild(section);
-    });
   }
 
   // --- 5. TABLA DE GOLEADORES (SUPABASE) ---
