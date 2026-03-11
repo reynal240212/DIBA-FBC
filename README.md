@@ -60,8 +60,8 @@ El sitio utiliza una arquitectura moderna basada en **Componentes Reutilizables*
 ## 📄 Documentación
 
 Se ha generado documentación detallada y walkthroughs de las últimas actualizaciones:
-1. **Unificación Admin UI**: Rediseño integral de la plataforma de gestión.
-2. **Sistema de Perfiles**: Gestión dinámica de usuarios y roles.
+1. **[Documentación del Proyecto](DOCUMENTACION.md)**: Guía técnica completa y reglas de categorización.
+2. **Unificación Admin UI**: Rediseño integral de la plataforma de gestión.
 3. **Manuales Originales**: Disponibles en la carpeta `documentacion pagna diba`.
 
 ---

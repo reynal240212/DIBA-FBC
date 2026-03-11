@@ -343,7 +343,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         const { data: jugadores, error } = await supabase
           .from('identificacion')
-          .select('nombre, apellidos, categoria, foto_url')
+          .select('nombre, apellidos, categoria, foto_url, fecha_nacimiento')
           .order('apellidos');
 
         if (error) throw error;
@@ -355,7 +355,16 @@ document.addEventListener("DOMContentLoaded", function () {
         // Agrupar por categoría
         const grouped = {};
         jugadores.forEach(j => {
-          const cat = j.categoria || 'General';
+          let cat = j.categoria || 'General';
+
+          // Autocategorización si es General y tiene fecha de nacimiento
+          if ((cat === 'General' || !cat) && j.fecha_nacimiento) {
+            const birthYear = new Date(j.fecha_nacimiento).getUTCFullYear();
+            if (birthYear === 2012) cat = '2012';
+            else if (birthYear === 2013) cat = '2013';
+            else if (birthYear >= 2014 && birthYear <= 2016) cat = '2014/2015/2016';
+          }
+
           if (!grouped[cat]) grouped[cat] = [];
           grouped[cat].push(j);
         });
