@@ -188,12 +188,16 @@ document.addEventListener("DOMContentLoaded", function () {
         // Se encoge al ancho mínimo del contenido, snap center para scroll horizontal
         card.className = "flex-none w-80 sm:w-96 snap-center bg-white/5 border border-white/10 rounded-2xl p-4 flex flex-col gap-3 hover:bg-white/10 transition-colors duration-300";
 
-        // Helper function para manejar el escudo, logo DIBA si aplica, o iniciales autogeneradas si es rival
+        // Helper function para manejar el escudo con proxy para evitar bloqueos (wsrv.nl)
         const escudoImg = (url, equipoNombre) => {
           if (equipoNombre && equipoNombre.toUpperCase().includes('DIBA')) {
             return "images/ESCUDO.png";
           }
-          return url ? url : `https://ui-avatars.com/api/?name=${encodeURIComponent(equipoNombre || 'Rival')}&background=1e293b&color=cbd5e1&bold=true`;
+          if (!url) {
+            return `https://ui-avatars.com/api/?name=${encodeURIComponent(equipoNombre || 'Rival')}&background=1e293b&color=cbd5e1&bold=true`;
+          }
+          // Usar proxy para evitar errores de CORS/ORB
+          return `https://wsrv.nl/?url=${encodeURIComponent(url)}&default=https://ui-avatars.com/api/?name=${encodeURIComponent(equipoNombre || 'R')}&background=1e293b&color=cbd5e1`;
         };
 
         card.innerHTML = `

@@ -51,6 +51,17 @@ function mostrarInicialPanel(id, v) {
   if (el) el.style.display = v ? 'block' : 'none';
 }
 
+/** Helper para escudos con proxy anti-bloqueo */
+function getEscudoUrl(url, equipoNombre) {
+  if (equipoNombre && equipoNombre.toUpperCase().includes('DIBA')) {
+    return 'images/ESCUDO.png';
+  }
+  if (!url) {
+    return `https://ui-avatars.com/api/?name=${encodeURIComponent(equipoNombre || 'R')}&background=1e293b&color=cbd5e1`;
+  }
+  return `https://wsrv.nl/?url=${encodeURIComponent(url)}&default=https://ui-avatars.com/api/?name=R&background=1e293b&color=cbd5e1`;
+}
+
 // ──────────────────────────────────────────────────────────────────────────────
 //  TARJETA DE PARTIDO
 // ──────────────────────────────────────────────────────────────────────────────
@@ -74,7 +85,7 @@ function crearTarjetaPartido(p) {
       <div class="flex items-center justify-between gap-4">
         <!-- Local -->
         <div class="flex flex-col items-center w-1/3 text-center">
-          <img src="${p.escudo_local || 'images/ESCUDO.png'}" alt="${p.equipolocal}" class="w-12 h-12 object-contain mb-2 img-drop-shadow" onerror="this.src='images/ESCUDO.png'">
+          <img src="${getEscudoUrl(p.escudo_local || p.escudo, p.equipolocal)}" alt="${p.equipolocal}" class="w-12 h-12 object-contain mb-2 img-drop-shadow" onerror="this.src='images/ESCUDO.png'">
           <span class="text-white font-bold text-xs truncate w-full">${p.equipolocal || 'DIBA FBC'}</span>
         </div>
 
@@ -91,10 +102,10 @@ function crearTarjetaPartido(p) {
 
         <!-- Visitante -->
         <div class="flex flex-col items-center w-1/3 text-center">
-          <img src="${p.escudo_visitante || 'https://ui-avatars.com/api/?name=' + encodeURIComponent(p.equipovisitante || 'Rival') + '&background=1e293b&color=cbd5e1'}" 
+          <img src="${getEscudoUrl(p.escudo_visitante, p.equipovisitante)}" 
                alt="${p.equipovisitante}" 
                class="w-12 h-12 object-contain mb-2 img-drop-shadow" 
-               onerror="this.src='https://ui-avatars.com/api/?name=R&background=1e293b&color=cbd5e1'">
+               onerror="this.src='${getEscudoUrl(null, p.equipovisitante)}'">
           <span class="text-white font-bold text-xs truncate w-full">${p.equipovisitante || 'Visitante'}</span>
         </div>
       </div>
