@@ -260,7 +260,8 @@ import { cerrarSesion } from './auth.js';
         originalBtn.disabled = true;
 
         try {
-            const fileName = `${sanitizedDni}/${docType}_${Date.now()}_${file.name}`;
+            const extension = file.name.split('.').pop();
+            const fileName = `${sanitizedDni}/${docType}.${extension}`;
 
             // 1. Storage
             const { error: uploadError } = await supabase.storage

@@ -138,7 +138,7 @@ document.addEventListener("DOMContentLoaded", function () {
         return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
       };
 
-      const { data, error } = await supabase.from('partidos').select('*');
+      const { data, error } = await supabase.from('partidos').select('*').gte('fecha', targetDate);
 
       if (error) throw error;
 
