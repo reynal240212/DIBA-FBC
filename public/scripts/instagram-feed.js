@@ -129,7 +129,7 @@ document.addEventListener("DOMContentLoaded", function () {
             }
             if (!response.ok) throw new Error('Network response was not ok');
             const data = await response.json();
-            renderFeed(data);
+            renderFeed(data.posts);
         } catch (error) {
             console.error('Error fetching Instagram feed:', error);
             renderFeed([]);
