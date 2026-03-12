@@ -270,7 +270,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         const totalTrophies = 13 + 3 + 2;
 
-        let totalPlayers = 60;
+        let totalPlayers = 0;
         try {
           const { count, error } = await supabase
             .from('identificacion')
