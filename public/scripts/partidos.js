@@ -16,14 +16,11 @@ function formatearFecha(fechaISO) {
   });
 }
 
-/** Convierte una fecha ISO a YYYY-MM-DD en hora local */
+/** Convierte una fecha ISO a YYYY-MM-DD en hora local evitando desfases */
 function toLocalDate(fechaISO) {
-  const d = new Date(fechaISO);
-  return (
-    d.getFullYear() + '-' +
-    String(d.getMonth() + 1).padStart(2, '0') + '-' +
-    String(d.getDate()).padStart(2, '0')
-  );
+  if (!fechaISO) return '';
+  const parts = fechaISO.includes('T') ? fechaISO.split('T')[0].split('-') : fechaISO.split('-');
+  return `${parts[0]}-${parts[1]}-${parts[2]}`;
 }
 
 /** Determina badge de resultado para un partido */
@@ -68,24 +65,37 @@ function crearTarjetaPartido(p) {
 
   div.innerHTML = `
     <!-- Cabecera equipos -->
-    <div class="p-5 flex items-center gap-3">
-      ${p.escudo
-      ? `<img src="${p.escudo}" alt="Escudo" class="w-10 h-10 object-contain rounded-full ring-2 ring-amber-400/30 flex-shrink-0">`
-      : `<div class="w-10 h-10 rounded-full bg-amber-400/10 flex items-center justify-center flex-shrink-0">
-             <i class="fas fa-shield-alt text-amber-400 text-sm"></i>
-           </div>`}
-      <div class="flex-1 min-w-0">
-        <div class="flex items-center gap-2 flex-wrap">
-          <span class="font-black text-white text-sm truncate">${p.equipolocal || 'Local'}</span>
-          <span class="vs-badge">VS</span>
-          <span class="font-black text-white text-sm truncate">${p.equipovisitante || 'Visitante'}</span>
+    <div class="p-5">
+      <div class="flex items-center justify-between mb-3 text-[10px] uppercase font-black tracking-widest text-amber-500/80">
+        <span>${p.descripcion || 'Competición'}</span>
+        <span class="bg-amber-500/10 px-2 py-0.5 rounded-full">CAT. ${p.categoria || 'GENERAL'}</span>
+      </div>
+      
+      <div class="flex items-center justify-between gap-4">
+        <!-- Local -->
+        <div class="flex flex-col items-center w-1/3 text-center">
+          <img src="${p.escudo_local || 'images/ESCUDO.png'}" alt="${p.equipolocal}" class="w-12 h-12 object-contain mb-2 img-drop-shadow" onerror="this.src='images/ESCUDO.png'">
+          <span class="text-white font-bold text-xs truncate w-full">${p.equipolocal || 'DIBA FBC'}</span>
         </div>
-        <div class="flex items-center gap-3 mt-1.5">
-          ${tieneResult
-      ? `<span class="match-score font-black text-lg tracking-tight">${golesLocal} – ${golesVisitante}</span>`
-      : ''
-    }
-          ${badgeResultado(p.resultado)}
+
+        <!-- Score/VS -->
+        <div class="flex flex-col items-center justify-center w-1/3">
+           ${tieneResult 
+             ? `<span class="match-score font-black text-2xl tracking-tight text-white">${golesLocal} – ${golesVisitante}</span>`
+             : `<span class="vs-badge text-amber-500 font-black">VS</span>`
+           }
+           <div class="mt-2">
+             ${badgeResultado(p.resultado)}
+           </div>
+        </div>
+
+        <!-- Visitante -->
+        <div class="flex flex-col items-center w-1/3 text-center">
+          <img src="${p.escudo_visitante || 'https://ui-avatars.com/api/?name=' + encodeURIComponent(p.equipovisitante || 'Rival') + '&background=1e293b&color=cbd5e1'}" 
+               alt="${p.equipovisitante}" 
+               class="w-12 h-12 object-contain mb-2 img-drop-shadow" 
+               onerror="this.src='https://ui-avatars.com/api/?name=R&background=1e293b&color=cbd5e1'">
+          <span class="text-white font-bold text-xs truncate w-full">${p.equipovisitante || 'Visitante'}</span>
         </div>
       </div>
     </div>
