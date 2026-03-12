@@ -134,8 +134,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
       // Reutiliza la función toLocalDate si estuviera global, pero aquí la redefinimos para uso seguro
       const toLocalDateBanner = (fechaISO) => {
-        const d = new Date(fechaISO);
-        return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+        if (!fechaISO) return '';
+        // Usar split para evitar el desfase de zona horaria de JavaScript
+        const parts = fechaISO.includes('T') ? fechaISO.split('T')[0].split('-') : fechaISO.split('-');
+        return `${parts[0]}-${parts[1]}-${parts[2]}`;
       };
 
       const { data, error } = await supabase.from('partidos').select('*').gte('fecha', targetDate);
@@ -214,6 +216,15 @@ document.addEventListener("DOMContentLoaded", function () {
                  </div>
              </div>
 
+
+          <div class="flex items-center justify-between mt-1 px-1">
+            <span class="text-[9px] font-black text-amber-500 uppercase tracking-widest bg-amber-500/10 px-2 py-0.5 rounded-full">
+              CAT. ${p.categoria || 'GENERAL'}
+            </span>
+            <span class="text-[9px] font-bold text-slate-500 uppercase tracking-tighter italic">
+              DIBA FBC "Fuerza y Lealtad"
+            </span>
+          </div>
 
           <a href="partidos.html" class="w-full mt-2 inline-flex justify-center items-center gap-2 bg-slate-900/50 hover:bg-amber-500 hover:text-slate-900 border border-white/5 py-1.5 rounded-xl text-[10px] font-black text-white uppercase tracking-widest transition-all duration-300">
             Ver Detalles <i class="fas fa-external-link-alt text-[9px]"></i>
