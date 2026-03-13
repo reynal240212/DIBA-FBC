@@ -11,6 +11,7 @@ import { cerrarSesion } from './auth.js';
     const navName = document.getElementById("nav-user-name");
     const navRole = document.getElementById("nav-user-role");
     const mainTitle = document.getElementById("main-title");
+    const pageTitle = document.querySelector(".page-title"); // El título visible en el topbar
     const dynamicContent = document.getElementById("dynamic-content");
     const searchInput = document.getElementById("searchInput");
 
@@ -29,7 +30,10 @@ import { cerrarSesion } from './auth.js';
     let currentBucket = 'documents'; // Default display
 
     async function loadStorageBuckets() {
-        mainTitle.innerHTML = 'Storage <span class="text-slate-300">Universal</span>';
+        console.log("Iniciando Explorador de Storage Universal...");
+        if (pageTitle) pageTitle.innerHTML = 'Storage <span>Universal</span>';
+        if (mainTitle) mainTitle.innerHTML = 'Storage Universal';
+        
         setActiveFilter('filter-club-btn');
         dynamicContent.innerHTML = `
             <div id="buckets-container" class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12 animate__animated animate__fadeIn">
@@ -42,8 +46,18 @@ import { cerrarSesion } from './auth.js';
         const fileListContainer = document.getElementById("fileListContainer");
 
         try {
-            const { data: buckets, error } = await supabase.storage.listBuckets();
-            if (error) throw error;
+            console.log("Listando buckets...");
+            let { data: buckets, error } = await supabase.storage.listBuckets();
+            
+            // Fallback si listBuckets falla o viene vacío (a veces por RLS)
+            if (error || !buckets || buckets.length === 0) {
+                console.warn("listBuckets falló o está vacío. Usando buckets conocidos...", error);
+                buckets = [
+                    { id: 'documents', name: 'documents', public: true },
+                    { id: 'asistencia-fotos', name: 'asistencia-fotos', public: true },
+                    { id: 'statuses', name: 'statuses', public: true }
+                ];
+            }
 
             bucketsContainer.innerHTML = '';
             buckets.forEach(bucket => {
@@ -88,23 +102,38 @@ import { cerrarSesion } from './auth.js';
             if (error) throw error;
             fileListContainer.innerHTML = '';
 
+            // Render breadcrumb / Back button
+            if (path) {
+                const backDiv = document.createElement('div');
+                backDiv.className = "col-span-full mb-4";
+                backDiv.innerHTML = `
+                    <button class="flex items-center gap-2 text-[10px] font-black uppercase italic text-dibaGold hover:text-white transition-all bg-white/5 px-6 py-2 rounded-full border border-dibaGold/20" 
+                            onclick="window.openSubFolder('${path.split('/').slice(0, -1).join('/')}')">
+                        <i class="fas fa-chevron-left"></i> Volver a ${path.split('/').slice(-1)[0] || 'Raíz'}
+                    </button>
+                    <p class="text-[9px] text-slate-500 font-bold uppercase mt-2 pl-2">Ruta: ${bucketId}/${path}</p>
+                `;
+                fileListContainer.appendChild(backDiv);
+            }
+
             if (!files || files.length === 0) {
-                fileListContainer.innerHTML = `<p class="text-center text-slate-400 py-10 uppercase text-[10px] font-black italic tracking-widest col-span-full italic">No hay archivos en "${bucketId}"</p>`;
+                fileListContainer.innerHTML += `<p class="text-center text-slate-400 py-10 uppercase text-[10px] font-black italic tracking-widest col-span-full italic">No hay archivos en esta ubicación</p>`;
                 return;
             }
 
             files.forEach(file => {
                 if (file.name === '.emptyFolderPlaceholder') return;
                 
-                const isFolder = !file.metadata;
-                const { data: { publicUrl } } = supabase.storage.from(bucketId).getPublicUrl(file.name);
-                const isImg = /\.(jpg|jpeg|png|gif)$/i.test(file.name);
+                const isFolder = file.id === undefined && !file.metadata; // Supabase list returns undefined id for folders
+                const { data: { publicUrl } } = isFolder ? { data: { publicUrl: '#' } } : supabase.storage.from(bucketId).getPublicUrl(path ? `${path}/${file.name}` : file.name);
+                const isImg = !isFolder && /\.(jpg|jpeg|png|gif)$/i.test(file.name);
+                const fullPath = path ? `${path}/${file.name}` : file.name;
                 
                 const div = document.createElement('div');
                 div.className = `flex flex-col p-6 bg-white border border-slate-200 rounded-[2rem] hover:shadow-xl transition-all animate__animated animate__fadeIn group`;
                 div.innerHTML = `
                     <div class="flex items-center justify-between mb-4">
-                        <div class="w-12 h-12 bg-slate-50 rounded-2xl flex items-center justify-center text-slate-400 group-hover:bg-dibaGold/10 group-hover:text-dibaGold transition-colors">
+                        <div class="w-12 h-12 ${isFolder ? 'bg-blue-50 text-dibaBlue' : 'bg-slate-50 text-slate-400'} rounded-2xl flex items-center justify-center group-hover:bg-dibaGold/10 group-hover:text-dibaGold transition-colors">
                             <i class="fas ${isFolder ? 'fa-folder' : (isImg ? 'fa-image' : 'fa-file-alt')} text-xl"></i>
                         </div>
                     </div>
@@ -115,9 +144,15 @@ import { cerrarSesion } from './auth.js';
                         </p>
                     </div>
                     <div class="pt-4 border-t border-slate-50 mt-auto">
-                        <a href="${publicUrl}" target="_blank" class="w-full py-3 flex items-center justify-center gap-2 bg-dibaBlue text-white text-[10px] font-black uppercase italic rounded-xl hover:bg-dibaGold hover:text-dibaBlue transition-all">
-                            <i class="fas ${isFolder ? 'fa-folder-open' : 'fa-download'}"></i> ${isFolder ? 'Abrir' : 'Ver / Descargar'}
-                        </a>
+                        ${isFolder ? `
+                            <button onclick="window.openSubFolder('${fullPath}')" class="w-full py-3 flex items-center justify-center gap-2 bg-dibaBlue text-white text-[10px] font-black uppercase italic rounded-xl hover:bg-dibaGold hover:text-dibaBlue transition-all">
+                                <i class="fas fa-folder-open"></i> Abrir Carpeta
+                            </button>
+                        ` : `
+                            <a href="${publicUrl}" target="_blank" class="w-full py-3 flex items-center justify-center gap-2 bg-white border border-slate-200 text-dibaBlue text-[10px] font-black uppercase italic rounded-xl hover:bg-dibaGold hover:border-dibaGold transition-all">
+                                <i class="fas fa-eye"></i> Ver / Descargar
+                            </a>
+                        `}
                     </div>
                 `;
                 fileListContainer.appendChild(div);
@@ -128,8 +163,14 @@ import { cerrarSesion } from './auth.js';
         }
     }
 
+    // Funciones globales para navegación
+    window.openSubFolder = (path) => {
+        loadFilesFromBucket(currentBucket, path);
+    };
+
     async function loadDocuments() {
-        mainTitle.innerHTML = 'Gestor <span class="text-slate-300">Documental</span>';
+        if (pageTitle) pageTitle.innerHTML = 'Gestor <span>Documental</span>';
+        if (mainTitle) mainTitle.innerHTML = 'Gestor Documental';
         setActiveFilter('filter-docs-btn');
         dynamicContent.innerHTML = `
             <section id="uploadSection" class="${usuario.role !== 'admin' ? 'hidden' : ''} mb-12 animate__animated animate__fadeInUp">
@@ -197,7 +238,8 @@ import { cerrarSesion } from './auth.js';
     // ---------------------------------------------------------
 
     async function loadAsistencias() {
-        mainTitle.innerHTML = 'Registro de <span class="text-slate-300">Asistencias</span>';
+        if (pageTitle) pageTitle.innerHTML = 'Registro de <span>Asistencias</span>';
+        if (mainTitle) mainTitle.innerHTML = 'Asistencias';
         setActiveFilter('filter-asistencias-btn');
         dynamicContent.innerHTML = `<div id="fileListContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             <div class="flex justify-center py-20 col-span-full"><i class="fas fa-circle-notch animate-spin text-3xl text-dibaGold"></i></div>
@@ -273,7 +315,8 @@ import { cerrarSesion } from './auth.js';
     // ---------------------------------------------------------
 
     async function loadPlayers() {
-        mainTitle.innerHTML = 'Plantilla <span class="text-slate-300">Oficial</span>';
+        if (pageTitle) pageTitle.innerHTML = 'Plantilla <span>Oficial</span>';
+        if (mainTitle) mainTitle.innerHTML = 'Jugadores';
         setActiveFilter('view-players-btn');
         dynamicContent.innerHTML = '<div class="flex justify-center py-20"><i class="fas fa-circle-notch animate-spin text-3xl text-dibaGold"></i></div>';
 
