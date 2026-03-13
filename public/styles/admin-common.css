@@ -1,17 +1,37 @@
 :root {
-    --blue: #002a40;
-    --blue2: #003d5c;
+    /* Base Colors */
     --gold: #ffcc00;
     --gold2: #e6b800;
-    --dark: #0a0e14;
-    --dark2: #111823;
-    --dark3: #1a2332;
-    --slate: #8b9ab0;
-    --text: #e2e8f0;
-    --border: rgba(255, 255, 255, 0.07);
-    --sidebar-w: 270px;
+    --blue: #002a40;
+    --blue2: #003d5c;
     --red: #f43f5e;
     --green: #22c55e;
+    
+    /* Semantic Variables - Dark Mode (Default) */
+    --bg-main: #0a0e14;
+    --bg-panel: #111823;
+    --bg-input: #1a2332;
+    --text-main: #e2e8f0;
+    --text-muted: #8b9ab0;
+    --border-color: rgba(255, 255, 255, 0.07);
+    --sidebar-w: 270px;
+
+    /* Original aliases for backward compatibility */
+    --dark: var(--bg-main);
+    --dark2: var(--bg-panel);
+    --dark3: var(--bg-input);
+    --text: var(--text-main);
+    --slate: var(--text-muted);
+    --border: var(--border-color);
+}
+
+[data-theme="light"] {
+    --bg-main: #f8fafc;
+    --bg-panel: #ffffff;
+    --bg-input: #f1f5f9;
+    --text-main: #002a40; /* Azul Institucional */
+    --text-muted: #64748b;
+    --border-color: rgba(0, 0, 0, 0.1);
 }
 
 *,

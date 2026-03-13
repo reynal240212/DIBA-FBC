@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" data-bs-theme="light">
+<html lang="es">
 
 <head>
   <meta charset="UTF-8" />
@@ -18,284 +18,13 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
   <link rel="stylesheet" href="styles/styles.css" />
   <link rel="stylesheet" href="styles/background-animation.css" />
+  <link rel="stylesheet" href="/styles/admin-common.css">
+  <script src="/scripts/theme-switcher.js"></script>
 
   <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.8.2/dist/jspdf.plugin.autotable.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-
   <style>
-    /* ── Dashboard Base Styles ── */
-    *,
-    *::before,
-    *::after {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    :root {
-      --blue: #002a40;
-      --blue2: #003d5c;
-      --gold: #ffcc00;
-      --gold2: #e6b800;
-      --dark: #0a0e14;
-      --dark2: #111823;
-      --dark3: #1a2332;
-      --slate: #8b9ab0;
-      --text: #e2e8f0;
-      --border: rgba(255, 255, 255, 0.07);
-      --sidebar-w: 270px;
-      /* Bootstrap overrides and planilla specific */
-      --primary-color: var(--blue);
-      --bs-body-bg: var(--dark);
-    }
-
-    body {
-      font-family: 'Montserrat', sans-serif;
-      background: var(--dark);
-      color: var(--text);
-      min-height: 100vh;
-      display: flex;
-      overflow-x: hidden;
-    }
-
-    /* ── SIDEBAR (Dashboard Copy) ── */
-    .sidebar {
-      position: fixed;
-      top: 0;
-      left: 0;
-      bottom: 0;
-      width: var(--sidebar-w);
-      background: var(--dark2);
-      border-right: 1px solid var(--border);
-      display: flex;
-      flex-direction: column;
-      z-index: 100;
-      transition: transform .3s ease;
-    }
-
-    .sidebar-logo {
-      padding: 2rem 1.5rem 1.5rem;
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      gap: .8rem;
-    }
-
-    .sidebar-logo img {
-      width: 38px;
-      height: 38px;
-      object-fit: contain;
-    }
-
-    .sidebar-logo-text {
-      font-size: 1.05rem;
-      font-weight: 900;
-      font-style: italic;
-      text-transform: uppercase;
-      letter-spacing: .05em;
-      color: var(--gold);
-    }
-
-    .sidebar-logo-sub {
-      font-size: .55rem;
-      color: var(--slate);
-      text-transform: uppercase;
-      letter-spacing: .15em;
-      font-weight: 700;
-      margin-top: 1px;
-    }
-
-    .sidebar-nav {
-      flex: 1;
-      padding: 1.5rem 1rem;
-      display: flex;
-      flex-direction: column;
-      gap: .35rem;
-      overflow-y: auto;
-    }
-
-    .nav-section-label {
-      font-size: .55rem;
-      font-weight: 800;
-      letter-spacing: .2em;
-      text-transform: uppercase;
-      color: var(--slate);
-      padding: .8rem .6rem .4rem;
-      margin-top: .5rem;
-    }
-
-    .nav-link {
-      display: flex;
-      align-items: center;
-      gap: .85rem;
-      padding: .75rem 1rem;
-      border-radius: 12px;
-      text-decoration: none;
-      font-size: .78rem;
-      font-weight: 700;
-      color: var(--slate);
-      transition: all .2s ease;
-      position: relative;
-    }
-
-    .nav-link i {
-      width: 18px;
-      text-align: center;
-      font-size: .85rem;
-    }
-
-    .nav-link:hover {
-      background: rgba(255, 255, 255, .05);
-      color: var(--text);
-    }
-
-    .nav-link.active {
-      background: rgba(255, 204, 0, .1);
-      color: var(--gold);
-    }
-
-    .sidebar-footer {
-      padding: 1.2rem 1rem;
-      border-top: 1px solid var(--border);
-    }
-
-    .user-chip {
-      display: flex;
-      align-items: center;
-      gap: .75rem;
-      padding: .75rem 1rem;
-      border-radius: 12px;
-      background: rgba(255, 255, 255, .04);
-      margin-bottom: .6rem;
-    }
-
-    .user-avatar {
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      background: var(--gold);
-      color: var(--blue);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 900;
-      font-size: .8rem;
-    }
-
-    .user-name {
-      font-size: .75rem;
-      font-weight: 800;
-      color: var(--text);
-    }
-
-    .user-role {
-      font-size: .6rem;
-      color: var(--slate);
-      text-transform: uppercase;
-      letter-spacing: .1em;
-    }
-
-    .btn-logout {
-      width: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: .5rem;
-      padding: .7rem;
-      border-radius: 12px;
-      border: none;
-      background: rgba(239, 68, 68, .1);
-      color: #ef4444;
-      font-family: 'Montserrat', sans-serif;
-      font-size: .72rem;
-      font-weight: 800;
-      text-transform: uppercase;
-      cursor: pointer;
-      transition: all .2s;
-    }
-
-    .btn-logout:hover {
-      background: #ef4444;
-      color: #fff;
-    }
-
-    /* ── MAIN & TOPBAR ── */
-    .main {
-      margin-left: var(--sidebar-w);
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
-    }
-
-    .topbar {
-      padding: 1.5rem 2rem;
-      border-bottom: 1px solid var(--border);
-      background: var(--dark2);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 1rem;
-      position: sticky;
-      top: 0;
-      z-index: 50;
-    }
-
-    .page-title {
-      font-size: 1.4rem;
-      font-weight: 900;
-      font-style: italic;
-      text-transform: uppercase;
-      letter-spacing: .03em;
-    }
-
-    .page-title span {
-      color: var(--gold);
-    }
-
-    .page-subtitle {
-      font-size: .7rem;
-      color: var(--slate);
-      font-weight: 600;
-      margin-top: 2px;
-    }
-
-    .topbar-right {
-      display: flex;
-      align-items: center;
-      gap: .8rem;
-    }
-
-    .topbar-time {
-      font-size: .72rem;
-      font-weight: 700;
-      color: var(--slate);
-      background: var(--dark3);
-      padding: .45rem .9rem;
-      border-radius: 8px;
-      border: 1px solid var(--border);
-    }
-
-    .mobile-menu-btn {
-      display: none;
-      background: var(--dark3);
-      border: 1px solid var(--border);
-      color: var(--gold);
-      width: 38px;
-      height: 38px;
-      border-radius: 10px;
-      font-size: 1rem;
-      cursor: pointer;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .content {
-      padding: 2rem;
-      flex: 1;
-    }
-
     /* ── Planilla specific overrides (dark theme) ── */
     .card {
       background: var(--dark2);
@@ -551,7 +280,10 @@
         <div class="page-subtitle">Control de asistencia y pagos — DIBA FBC</div>
       </div>
       <div class="topbar-right">
-        <div class="topbar-time" id="clock">--:--</div>
+        <button id="theme-toggle" class="mobile-menu-btn" style="display: flex; margin-right: 0.5rem;" title="Cambiar Tema">
+          <i id="theme-icon" class="fas fa-sun"></i>
+        </button>
+        <div class="topbar-time" id="clock">00:00:00</div>
       </div>
     </header>
 
