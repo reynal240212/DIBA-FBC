@@ -16,6 +16,13 @@
     --border-color: rgba(255, 255, 255, 0.07);
     --sidebar-w: 270px;
 
+    /* Sidebar Specific (Institutional) */
+    --sidebar-bg: #111823;
+    --sidebar-text: #8b9ab0;
+    --sidebar-text-hover: #e2e8f0;
+    --sidebar-text-active: #ffcc00;
+    --sidebar-border: rgba(255, 255, 255, 0.07);
+
     /* Original aliases for backward compatibility */
     --dark: var(--bg-main);
     --dark2: var(--bg-panel);
@@ -29,9 +36,16 @@
     --bg-main: #f8fafc;
     --bg-panel: #ffffff;
     --bg-input: #f1f5f9;
-    --text-main: #002a40; /* Azul Institucional */
-    --text-muted: #64748b;
+    --text-main: #001a2e; /* Azul Profundo para mejor contraste */
+    --text-muted: #334155; /* Oscurecido de #64748b */
     --border-color: rgba(0, 0, 0, 0.1);
+
+    /* Sidebar stays Institutional (Dark) even in light mode */
+    --sidebar-bg: #002a40; /* Azul Institucional */
+    --sidebar-text: #94a3b8;
+    --sidebar-text-hover: #ffffff;
+    --sidebar-text-active: #ffcc00;
+    --sidebar-border: rgba(255, 255, 255, 0.1);
 }
 
 *,
@@ -58,17 +72,17 @@ body {
     left: 0;
     bottom: 0;
     width: var(--sidebar-w);
-    background: var(--dark2);
-    border-right: 1px solid var(--border);
+    background: var(--sidebar-bg); /* Use specific variable */
+    border-right: 1px solid var(--sidebar-border);
     display: flex;
     flex-direction: column;
     z-index: 100;
-    transition: transform .3s ease;
+    transition: transform .3s ease, background .3s ease;
 }
 
 .sidebar-logo {
     padding: 2rem 1.5rem 1.5rem;
-    border-bottom: 1px solid var(--border);
+    border-bottom: 1px solid var(--sidebar-border);
     display: flex;
     align-items: center;
     gap: .8rem;
@@ -91,7 +105,7 @@ body {
 
 .sidebar-logo-sub {
     font-size: .55rem;
-    color: var(--slate);
+    color: var(--sidebar-text);
     text-transform: uppercase;
     letter-spacing: .15em;
     font-weight: 700;
@@ -112,7 +126,7 @@ body {
     font-weight: 800;
     letter-spacing: .2em;
     text-transform: uppercase;
-    color: var(--slate);
+    color: var(--sidebar-text);
     padding: .8rem .6rem .4rem;
     margin-top: .5rem;
 }
@@ -126,7 +140,7 @@ body {
     text-decoration: none;
     font-size: .78rem;
     font-weight: 700;
-    color: var(--slate);
+    color: var(--sidebar-text);
     transition: all .2s ease;
     position: relative;
 }
@@ -139,12 +153,12 @@ body {
 
 .nav-link:hover {
     background: rgba(255, 255, 255, .05);
-    color: var(--text);
+    color: var(--sidebar-text-hover);
 }
 
 .nav-link.active {
     background: rgba(255, 204, 0, .1);
-    color: var(--gold);
+    color: var(--sidebar-text-active);
 }
 
 .nav-link.active::before {
@@ -154,13 +168,13 @@ body {
     top: 20%;
     bottom: 20%;
     width: 3px;
-    background: var(--gold);
+    background: var(--sidebar-text-active);
     border-radius: 0 3px 3px 0;
 }
 
 .sidebar-footer {
     padding: 1.2rem 1rem;
-    border-top: 1px solid var(--border);
+    border-top: 1px solid var(--sidebar-border);
 }
 
 .user-chip {
@@ -189,12 +203,12 @@ body {
 .user-name {
     font-size: .75rem;
     font-weight: 800;
-    color: var(--text);
+    color: var(--sidebar-text-hover);
 }
 
 .user-role {
     font-size: .6rem;
-    color: var(--slate);
+    color: var(--sidebar-text);
     text-transform: uppercase;
     letter-spacing: .1em;
 }
