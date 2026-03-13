@@ -14,9 +14,13 @@ import { cerrarSesion } from './auth.js';
     const dynamicContent = document.getElementById("dynamic-content");
     const searchInput = document.getElementById("searchInput");
 
-    // Inicializar UI básica
-    if (navName) navName.textContent = usuario.username;
-    if (navRole) navRole.textContent = usuario.role === 'admin' ? 'Administrador' : 'Técnico';
+    // Inicializar UI básica con seguridad
+    if (usuario) {
+        if (navName) navName.textContent = usuario.username || 'Usuario';
+        if (navRole) navRole.textContent = usuario.role === 'admin' ? 'Administrador' : 'Técnico';
+    } else {
+        console.warn("Objeto 'usuario' no encontrado en localStorage. Usando valores por defecto.");
+    }
 
     // ---------------------------------------------------------
     // 3. LÓGICA DEL GESTOR DE DOCUMENTOS & STORAGE UNIVERSAL
@@ -488,10 +492,11 @@ import { cerrarSesion } from './auth.js';
     // 5. MANEJO DE EVENTOS Y BUSCADOR
     // ---------------------------------------------------------
 
-    // Buscador universal (Filtra lo que esté en pantalla)
     searchInput?.addEventListener('input', (e) => {
         const val = e.target.value.toLowerCase();
-        const rows = dynamicContent.querySelectorAll('#fileListContainer > div, tbody tr');
+        const container = document.getElementById("fileListContainer");
+        if (!container) return;
+        const rows = container.querySelectorAll('.group, tbody tr');
         rows.forEach(row => {
             row.style.display = row.innerText.toLowerCase().includes(val) ? '' : 'none';
         });
@@ -521,6 +526,12 @@ import { cerrarSesion } from './auth.js';
     // Cerrar sesión
     document.getElementById("logout-btn")?.addEventListener("click", cerrarSesion);
 
-    // Carga inicial
-    loadDocuments();
+    // Carga inicial silenciada para evitar que errores detengan los listeners
+    try {
+        loadDocuments();
+    } catch (e) {
+        console.error("Error en carga inicial:", e);
+    }
+
+    console.log("Gestor Documental inicializado correctamente.");
 })();
