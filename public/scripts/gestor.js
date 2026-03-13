@@ -19,8 +19,110 @@ import { cerrarSesion } from './auth.js';
     if (navRole) navRole.textContent = usuario.role === 'admin' ? 'Administrador' : 'Técnico';
 
     // ---------------------------------------------------------
-    // 3. LÓGICA DEL GESTOR DE DOCUMENTOS
+    // 3. LÓGICA DEL GESTOR DE DOCUMENTOS & STORAGE UNIVERSAL
     // ---------------------------------------------------------
+
+    let currentBucket = 'documents'; // Default display
+
+    async function loadStorageBuckets() {
+        mainTitle.innerHTML = 'Storage <span class="text-slate-300">Universal</span>';
+        setActiveFilter('filter-club-btn');
+        dynamicContent.innerHTML = `
+            <div id="buckets-container" class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12 animate__animated animate__fadeIn">
+                <div class="flex justify-center py-10 col-span-full"><i class="fas fa-circle-notch animate-spin text-2xl text-dibaGold"></i></div>
+            </div>
+            <div id="fileListContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+        `;
+
+        const bucketsContainer = document.getElementById("buckets-container");
+        const fileListContainer = document.getElementById("fileListContainer");
+
+        try {
+            const { data: buckets, error } = await supabase.storage.listBuckets();
+            if (error) throw error;
+
+            bucketsContainer.innerHTML = '';
+            buckets.forEach(bucket => {
+                const card = document.createElement('div');
+                card.className = `p-6 bg-white border border-slate-200 rounded-[2rem] hover:shadow-xl transition-all cursor-pointer group flex items-center gap-4 ${currentBucket === bucket.id ? 'border-dibaGold bg-yellow-50/10' : ''}`;
+                card.onclick = () => {
+                    currentBucket = bucket.id;
+                    loadStorageBuckets(); // Reload to refresh active state
+                };
+                card.innerHTML = `
+                    <div class="w-12 h-12 ${currentBucket === bucket.id ? 'bg-dibaGold text-blue-900 border-dibaGold' : 'bg-slate-50 text-slate-400 group-hover:bg-dibaGold/10 group-hover:text-dibaGold'} rounded-2xl flex items-center justify-center text-xl transition-all">
+                        <i class="fas fa-archive"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-black text-slate-800 text-xs uppercase italic tracking-tight mb-1">${bucket.name}</h4>
+                        <p class="text-[9px] text-slate-400 font-bold uppercase tracking-widest">${bucket.public ? 'Público' : 'Privado'}</p>
+                    </div>
+                `;
+                bucketsContainer.appendChild(card);
+            });
+
+            // Load files for the currently selected bucket
+            loadFilesFromBucket(currentBucket);
+
+        } catch (err) {
+            console.error(err);
+            bucketsContainer.innerHTML = `<p class="text-rose-500 font-bold uppercase text-[10px] text-center col-span-full">Error al listar buckets: ${err.message}</p>`;
+        }
+    }
+
+    async function loadFilesFromBucket(bucketId, path = '') {
+        const fileListContainer = document.getElementById("fileListContainer");
+        fileListContainer.innerHTML = '<div class="flex justify-center py-20 col-span-full"><i class="fas fa-circle-notch animate-spin text-3xl text-dibaGold"></i></div>';
+
+        try {
+            const { data: files, error } = await supabase.storage.from(bucketId).list(path, {
+                limit: 100,
+                offset: 0,
+                sortBy: { column: 'name', order: 'desc' }
+            });
+
+            if (error) throw error;
+            fileListContainer.innerHTML = '';
+
+            if (!files || files.length === 0) {
+                fileListContainer.innerHTML = `<p class="text-center text-slate-400 py-10 uppercase text-[10px] font-black italic tracking-widest col-span-full italic">No hay archivos en "${bucketId}"</p>`;
+                return;
+            }
+
+            files.forEach(file => {
+                if (file.name === '.emptyFolderPlaceholder') return;
+                
+                const isFolder = !file.metadata;
+                const { data: { publicUrl } } = supabase.storage.from(bucketId).getPublicUrl(file.name);
+                const isImg = /\.(jpg|jpeg|png|gif)$/i.test(file.name);
+                
+                const div = document.createElement('div');
+                div.className = `flex flex-col p-6 bg-white border border-slate-200 rounded-[2rem] hover:shadow-xl transition-all animate__animated animate__fadeIn group`;
+                div.innerHTML = `
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="w-12 h-12 bg-slate-50 rounded-2xl flex items-center justify-center text-slate-400 group-hover:bg-dibaGold/10 group-hover:text-dibaGold transition-colors">
+                            <i class="fas ${isFolder ? 'fa-folder' : (isImg ? 'fa-image' : 'fa-file-alt')} text-xl"></i>
+                        </div>
+                    </div>
+                    <div>
+                        <h4 class="font-black text-slate-800 text-xs uppercase italic tracking-tight line-clamp-1 mb-1">${file.name}</h4>
+                        <p class="text-[9px] text-slate-400 font-bold uppercase tracking-widest mb-4">
+                            ${isFolder ? 'Carpeta' : `${(file.metadata.size / 1024).toFixed(1)} KB — ${new Date(file.created_at).toLocaleDateString()}`}
+                        </p>
+                    </div>
+                    <div class="pt-4 border-t border-slate-50 mt-auto">
+                        <a href="${publicUrl}" target="_blank" class="w-full py-3 flex items-center justify-center gap-2 bg-dibaBlue text-white text-[10px] font-black uppercase italic rounded-xl hover:bg-dibaGold hover:text-dibaBlue transition-all">
+                            <i class="fas ${isFolder ? 'fa-folder-open' : 'fa-download'}"></i> ${isFolder ? 'Abrir' : 'Ver / Descargar'}
+                        </a>
+                    </div>
+                `;
+                fileListContainer.appendChild(div);
+            });
+        } catch (err) {
+            console.error(err);
+            fileListContainer.innerHTML = `<p class="col-span-full py-20 text-center text-rose-500 font-black uppercase text-[10px]">Error al cargar archivos de ${bucketId}: ${err.message}</p>`;
+        }
+    }
 
     async function loadDocuments() {
         mainTitle.innerHTML = 'Gestor <span class="text-slate-300">Documental</span>';
@@ -83,64 +185,8 @@ import { cerrarSesion } from './auth.js';
     }
 
     // ---------------------------------------------------------
-    // 3.5 LÓGICA DE BUCKET CLUB (Storage "document")
+    // 3.8 ELIMINADO:loadBucketFiles (Reemplazado por explorador universal)
     // ---------------------------------------------------------
-
-    async function loadBucketFiles() {
-        mainTitle.innerHTML = 'Archivos <span class="text-slate-300">Club (Bucket)</span>';
-        setActiveFilter('filter-club-btn');
-        dynamicContent.innerHTML = `<div id="fileListContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            <div class="flex justify-center py-20 col-span-full"><i class="fas fa-circle-notch animate-spin text-3xl text-dibaGold"></i></div>
-        </div>`;
-
-        const fileListContainer = document.getElementById("fileListContainer");
-
-        try {
-            const { data: files, error } = await supabase.storage.from('document').list('', {
-                limit: 100,
-                offset: 0,
-                sortBy: { column: 'name', order: 'desc' }
-            });
-
-            if (error) throw error;
-            fileListContainer.innerHTML = '';
-
-            if (!files || files.length === 0) {
-                fileListContainer.innerHTML = '<p class="text-center text-slate-400 py-10 uppercase text-[10px] font-black italic tracking-widest col-span-full">No se encontraron archivos en el bucket "document"</p>';
-                return;
-            }
-
-            files.forEach(file => {
-                if (file.name === '.emptyFolderPlaceholder') return;
-                
-                const { data: { publicUrl } } = supabase.storage.from('document').getPublicUrl(file.name);
-                const isImg = /\.(jpg|jpeg|png|gif)$/i.test(file.name);
-                
-                const div = document.createElement('div');
-                div.className = `flex flex-col p-6 bg-white border border-slate-200 rounded-[2rem] hover:shadow-xl transition-all animate__animated animate__fadeIn group`;
-                div.innerHTML = `
-                    <div class="flex items-center justify-between mb-4">
-                        <div class="w-12 h-12 bg-slate-50 rounded-2xl flex items-center justify-center text-slate-400 group-hover:bg-dibaGold/10 group-hover:text-dibaGold transition-colors">
-                            <i class="fas ${isImg ? 'fa-image' : 'fa-file-alt'} text-xl"></i>
-                        </div>
-                    </div>
-                    <div>
-                        <h4 class="font-black text-slate-800 text-xs uppercase italic tracking-tight line-clamp-1 mb-1">${file.name}</h4>
-                        <p class="text-[9px] text-slate-400 font-bold uppercase tracking-widest mb-4">${(file.metadata.size / 1024).toFixed(1)} KB — ${new Date(file.created_at).toLocaleDateString()}</p>
-                    </div>
-                    <div class="pt-4 border-t border-slate-50 mt-auto">
-                        <a href="${publicUrl}" target="_blank" class="w-full py-3 flex items-center justify-center gap-2 bg-dibaBlue text-white text-[10px] font-black uppercase italic rounded-xl hover:bg-dibaGold hover:text-dibaBlue transition-all">
-                            <i class="fas fa-download"></i> Descargar / Ver
-                        </a>
-                    </div>
-                `;
-                fileListContainer.appendChild(div);
-            });
-        } catch (err) {
-            console.error(err);
-            fileListContainer.innerHTML = `<p class="text-center text-red-500 py-10 uppercase text-[10px] font-black italic tracking-widest col-span-full">Error al acceder al bucket: ${err.message}</p>`;
-        }
-    }
 
     // ---------------------------------------------------------
     // 3.6 LÓGICA DE ASISTENCIAS
@@ -464,7 +510,7 @@ import { cerrarSesion } from './auth.js';
 
     document.getElementById("filter-club-btn")?.addEventListener("click", (e) => {
         e.preventDefault();
-        loadBucketFiles();
+        loadStorageBuckets();
     });
 
     document.getElementById("filter-asistencias-btn")?.addEventListener("click", (e) => {
