@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 
 <head>
@@ -35,6 +35,181 @@
             color: var(--text);
             min-height: 100vh;
             display: flex;
+        }
+
+        /* ── Sidebar ── */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            width: var(--sidebar-w);
+            background: var(--dark2);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            z-index: 100;
+            transition: transform .3s;
+        }
+
+        .sidebar-logo {
+            padding: 2rem 1.5rem 1.5rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: .8rem;
+        }
+
+        .sidebar-logo img {
+            width: 38px;
+            height: 38px;
+            object-fit: contain;
+        }
+
+        .sidebar-logo-text {
+            font-size: 1.05rem;
+            font-weight: 900;
+            font-style: italic;
+            text-transform: uppercase;
+            letter-spacing: .05em;
+            color: var(--gold);
+        }
+
+        .sidebar-logo-sub {
+            font-size: .55rem;
+            color: var(--slate);
+            text-transform: uppercase;
+            letter-spacing: .15em;
+            font-weight: 700;
+            margin-top: 1px;
+        }
+
+        .sidebar-nav {
+            flex: 1;
+            padding: 1.5rem 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: .35rem;
+            overflow-y: auto;
+        }
+
+        .nav-section-label {
+            font-size: .55rem;
+            font-weight: 800;
+            letter-spacing: .2em;
+            text-transform: uppercase;
+            color: var(--slate);
+            padding: .8rem .6rem .4rem;
+            margin-top: .5rem;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: .85rem;
+            padding: .75rem 1rem;
+            border-radius: 12px;
+            text-decoration: none;
+            font-size: .78rem;
+            font-weight: 700;
+            color: var(--slate);
+            transition: all .2s;
+            position: relative;
+        }
+
+        .nav-link i {
+            width: 18px;
+            text-align: center;
+            font-size: .85rem;
+        }
+
+        .nav-link:hover {
+            background: rgba(255, 255, 255, .05);
+            color: var(--text);
+        }
+
+        .nav-link.active {
+            background: rgba(255, 204, 0, .1);
+            color: var(--gold);
+        }
+
+        .sidebar-footer {
+            padding: 1.2rem 1rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .user-chip {
+            display: flex;
+            align-items: center;
+            gap: .75rem;
+            padding: .75rem 1rem;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, .04);
+            margin-bottom: .6rem;
+        }
+
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--gold);
+            color: var(--blue);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: .8rem;
+        }
+
+        .user-name {
+            font-size: .75rem;
+            font-weight: 800;
+            color: var(--text);
+        }
+
+        .user-role {
+            font-size: .6rem;
+            color: var(--slate);
+            text-transform: uppercase;
+            letter-spacing: .1em;
+        }
+
+        .btn-logout {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: .5rem;
+            padding: .7rem;
+            border-radius: 12px;
+            border: none;
+            background: rgba(239, 68, 68, .1);
+            color: #ef4444;
+            font-family: 'Montserrat', sans-serif;
+            font-size: .72rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all .2s;
+        }
+
+        .btn-logout:hover {
+            background: #ef4444;
+            color: #fff;
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: var(--dark3);
+            border: 1px solid var(--border);
+            color: var(--gold);
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            font-size: 1rem;
+            cursor: pointer;
+            align-items: center;
+            justify-content: center;
         }
 
         /* ── Layout matching dashboard ── */
@@ -74,6 +249,16 @@
             color: var(--slate);
             font-weight: 600;
             margin-top: 2px;
+        }
+
+        .topbar-time {
+            font-size: .72rem;
+            font-weight: 700;
+            color: var(--slate);
+            background: var(--dark3);
+            padding: .45rem .9rem;
+            border-radius: 8px;
+            border: 1px solid var(--border);
         }
 
         .content {
@@ -282,6 +467,9 @@
             <a href="../analisis.html" class="nav-link"><i class="fas fa-chart-line"></i> Análisis</a>
             <a href="convocatorias.html" class="nav-link"><i class="fas fa-bullhorn"></i> Convocatorias</a>
 
+            <div class="nav-section-label">Comunicación</div>
+            <a href="push.html" class="nav-link"><i class="fas fa-bell"></i> Notificaciones Push</a>
+
             <div class="nav-section-label">Administración</div>
             <a href="GestorDocumental.html" class="nav-link"><i class="fas fa-folder-open"></i> Gestor Documental</a>
             <a href="usuarios.html" class="nav-link"><i class="fas fa-user-cog"></i> Usuarios</a>
@@ -465,4 +653,3 @@
 </body>
 
 </html>
-

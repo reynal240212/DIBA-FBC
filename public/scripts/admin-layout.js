@@ -26,6 +26,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     <a href="/" class="hover:text-amber-400 transition-colors">Inicio</a>
                     <a href="/admin/GestorDocumental" class="hover:text-amber-400 transition-colors">Documentos</a>
                     <a href="/admin/usuarios" class="hover:text-amber-400 transition-colors">Usuarios</a>
+                    <a href="/admin/push.html" class="hover:text-amber-400 transition-colors">Notificaciones</a>
                     
                     <button id="logout-btn" class="bg-red-900/50 hover:bg-red-600 text-white px-4 py-2 rounded flex items-center gap-2 transition-all border border-red-500/30">
                         <i class="fas fa-sign-out-alt"></i> SALIR

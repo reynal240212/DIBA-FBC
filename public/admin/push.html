@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Notificaciones Push — Admin DIBA FBC</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="/images/ESCUDO.ico" type="image/x-icon">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;900&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Montserrat', 'sans-serif'] },
+          colors: {
+            gold: '#ffcc00',
+            blue: '#002a40',
+            dark: '#0a0e14',
+            dark2: '#111823'
+          }
+        },
+      },
+    }
+  </script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+  <link rel="stylesheet" href="/styles/admin-common.css">
+</head>
+<body class="bg-dark text-white font-sans overflow-hidden">
+
+  <!-- ══ SIDEBAR ══ -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <img src="/images/ESCUDO.png" alt="DIBA FBC">
+      <div>
+        <div class="sidebar-logo-text">DIBA FBC</div>
+        <div class="sidebar-logo-sub">Panel de Control</div>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a href="dashboard.html" class="nav-link"><i class="fas fa-th-large"></i> Dashboard</a>
+
+      <div class="nav-section-label">Equipo</div>
+      <a href="planilla.html" class="nav-link"><i class="fas fa-clipboard-list"></i> Planilla</a>
+      <a href="../ficha.html" class="nav-link"><i class="fas fa-users"></i> Jugadores</a>
+      <a href="../partidos.html" class="nav-link"><i class="fas fa-futbol"></i> Partidos</a>
+      <a href="../analisis.html" class="nav-link"><i class="fas fa-chart-line"></i> Análisis</a>
+      <a href="convocatorias.html" class="nav-link"><i class="fas fa-bullhorn"></i> Convocatorias</a>
+
+      <div class="nav-section-label">Comunicación</div>
+      <a href="push.html" class="nav-link active"><i class="fas fa-bell"></i> Notificaciones Push</a>
+
+      <div class="nav-section-label">Administración</div>
+      <a href="GestorDocumental.html" class="nav-link"><i class="fas fa-folder-open"></i> Gestor Documental</a>
+      <a href="usuarios.html" class="nav-link"><i class="fas fa-user-cog"></i> Usuarios</a>
+      <a href="crear-usuario.html" class="nav-link"><i class="fas fa-user-plus"></i> Crear Usuario</a>
+      <a href="rifa_diba.html" class="nav-link"><i class="fas fa-ticket-alt"></i> Rifas</a>
+
+      <div class="nav-section-label">Sitio Web</div>
+      <a href="../index.html" class="nav-link"><i class="fas fa-globe"></i> Ver Sitio</a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="user-chip">
+        <div class="user-avatar" id="sb-avatar">A</div>
+        <div>
+          <div class="user-name" id="sb-name">Administrador</div>
+          <div class="user-role" id="sb-role">Admin</div>
+        </div>
+      </div>
+      <button class="btn-logout" id="logout-btn">
+        <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+      </button>
+    </div>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <button class="mobile-menu-btn" id="menu-btn">
+        <i class="fas fa-bars" id="menu-icon"></i>
+      </button>
+      <div>
+        <h1 class="page-title">Broadcast <span>Push</span></h1>
+        <p class="page-subtitle">Envía mensajes instantáneos a toda la comunidad DIBA FBC</p>
+      </div>
+      <div class="topbar-right">
+        <div class="topbar-time" id="topbar-clock">00:00:00</div>
+      </div>
+    </header>
+
+    <div class="content">
+      <div class="max-w-4xl mx-auto">
+        
+        <div class="panel animate-fade-up">
+          <div class="panel-header">
+            <h2 class="panel-title"><i class="fas fa-paper-plane"></i> Redactar Notificación</h2>
+            <span class="panel-badge">Oficial</span>
+          </div>
+          <div class="panel-body">
+            <form id="push-form" class="space-y-6">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Título -->
+                <div class="space-y-2">
+                  <label class="form-label">Título del Mensaje</label>
+                  <input type="text" id="push-title" required placeholder="Ej: ¡Nuevo Partido Programado!" 
+                         class="form-control w-full">
+                </div>
+                <!-- Categoría Target -->
+                <div class="space-y-2">
+                  <label class="form-label">Dirigido a:</label>
+                  <select id="push-target" class="form-select w-full">
+                    <option value="all">Todos los Suscriptores</option>
+                    <option value="2012">Categoría 2012</option>
+                    <option value="2013">Categoría 2013</option>
+                    <option value="2014/2015/2016">Categoría 2014/15/16</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- Cuerpo -->
+              <div class="space-y-2">
+                <label class="form-label">Contenido de la Notificación</label>
+                <textarea id="push-body" rows="4" required placeholder="Escribe el cuerpo del mensaje aquí..." 
+                          class="form-control w-full resize-none"></textarea>
+              </div>
+
+              <!-- URL de Destino -->
+              <div class="space-y-2">
+                <label class="form-label">URL de Redirección (Opcional)</label>
+                <div class="relative group">
+                  <span class="absolute inset-y-0 left-4 flex items-center text-slate">
+                    <i class="fas fa-link text-xs"></i>
+                  </span>
+                  <input type="text" id="push-url" placeholder="Ej: /partidos.html" 
+                         class="form-control w-full pl-10">
+                </div>
+                <p class="text-[10px] text-slate italic">Cuando el usuario haga clic, será llevado a esta página.</p>
+              </div>
+
+              <div id="status-container" class="hidden"></div>
+
+              <div class="flex justify-end pt-4">
+                <button type="submit" id="send-btn" class="btn btn-primary px-10 py-4 text-xs tracking-[0.2em]">
+                  <i class="fas fa-bolt"></i> <span id="btn-text">Lanzar Notificación</span>
+                  <i class="fas fa-circle-notch fa-spin hidden" id="btn-loader"></i>
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- Preview Section -->
+        <div class="panel animate-fade-up" style="animation-delay: 0.1s;">
+          <div class="panel-header">
+            <h2 class="panel-title"><i class="fas fa-mobile-alt"></i> Vista Previa (Simulada)</h2>
+          </div>
+          <div class="panel-body flex justify-center py-10">
+            <div class="w-72 bg-[#1c1c1e] rounded-[40px] p-4 shadow-2xl border border-white/10">
+               <div class="flex justify-between items-center mb-4 px-2">
+                  <span class="text-[10px] font-bold">DIBA FBC</span>
+                  <span class="text-[10px] text-slate">ahora</span>
+               </div>
+               <div class="bg-white/5 rounded-2xl p-4">
+                  <h3 id="preview-title" class="text-sm font-black text-gold truncate">Título de prueba</h3>
+                  <p id="preview-body" class="text-xs text-slate mt-1 line-clamp-3">El contenido que escribas arriba aparecerá aquí para los usuarios en sus dispositivos.</p>
+               </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <script src="/scripts/config.js"></script>
+  <script type="module" src="/scripts/admin-push.js"></script>
+  <script>
+    // Mobile Menu
+    const menuBtn = document.getElementById('menu-btn');
+    const menuIcon = document.getElementById('menu-icon');
+    const sidebar = document.getElementById('sidebar');
+    menuBtn?.addEventListener('click', () => {
+      sidebar.classList.toggle('open');
+      menuIcon.className = sidebar.classList.contains('open') ? 'fas fa-times' : 'fas fa-bars';
+    });
+
+    // Update Clock
+    setInterval(() => {
+      const now = new Date();
+      document.getElementById('topbar-clock').textContent = now.toLocaleTimeString('es-ES', { hour12: false });
+    }, 1000);
+
+    // Live Preview
+    const titleIn = document.getElementById('push-title');
+    const bodyIn = document.getElementById('push-body');
+    const titleOut = document.getElementById('preview-title');
+    const bodyOut = document.getElementById('preview-body');
+
+    titleIn.addEventListener('input', (e) => titleOut.textContent = e.target.value || 'Título de prueba');
+    bodyIn.addEventListener('input', (e) => bodyOut.textContent = e.target.value || 'El contenido que escribas arriba aparecerá aquí...');
+  </script>
+</body>
+</html>

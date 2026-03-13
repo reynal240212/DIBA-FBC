@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es" data-bs-theme="light">
 
 <head>
@@ -511,7 +511,10 @@
       <a href="../ficha.html" class="nav-link"><i class="fas fa-users"></i> Jugadores</a>
       <a href="../partidos.html" class="nav-link"><i class="fas fa-futbol"></i> Partidos</a>
       <a href="../analisis.html" class="nav-link"><i class="fas fa-chart-line"></i> Análisis</a>
-            <a href="convocatorias.html" class="nav-link"><i class="fas fa-bullhorn"></i> Convocatorias</a>
+      <a href="convocatorias.html" class="nav-link"><i class="fas fa-bullhorn"></i> Convocatorias</a>
+
+      <div class="nav-section-label">Comunicación</div>
+      <a href="push.html" class="nav-link"><i class="fas fa-bell"></i> Notificaciones Push</a>
 
       <div class="nav-section-label">Administración</div>
       <a href="GestorDocumental.html" class="nav-link"><i class="fas fa-folder-open"></i> Gestor Documental</a>
@@ -798,15 +801,14 @@
             appState.players = players.map(p => ({
               id: p.numero,
               name: `${p.nombre} ${p.apellidos}`.trim(),
-              categoria: p.categoria || 'General'
+              categoria: p.categoria
             }));
 
-            // 2. Obtener o crear Planilla del día
+            // 2. Buscar o Crear planilla para esta fecha
             const { data: planillas, error: plErr } = await supabase
               .from('planillas')
               .select('id')
-              .eq('fecha', fechaSeleccionada)
-              .limit(1);
+              .eq('fecha', fechaSeleccionada);
 
             if (plErr) throw plErr;
 
@@ -1190,6 +1192,3 @@
 </body>
 
 </html>
-
-</html>
-
