@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nuevo Usuario — DIBA FBC Admin</title>
+    <title>Editar Usuario — DIBA FBC Admin</title>
     <link rel="icon" href="/images/ESCUDO.ico" type="image/x-icon">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,600;0,700;0,900;1,700;1,900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
@@ -45,9 +45,8 @@
         <nav class="sidebar-nav">
             <a href="dashboard.html" class="nav-link"><i class="fas fa-th-large w-5"></i> Dashboard</a>
             <div class="text-[0.55rem] font-black uppercase text-slate-500 tracking-[0.2em] px-4 mt-6 mb-2">Administración</div>
-            <a href="usuarios.html" class="nav-link"><i class="fas fa-user-cog w-5"></i> Usuarios</a>
-            <a href="crear-usuario.html" class="nav-link active"><i class="fas fa-user-plus w-5"></i> Crear Usuario</a>
-            <a href="rifa_diba.html" class="nav-link"><i class="fas fa-ticket-alt w-5"></i> Rifas</a>
+            <a href="usuarios.html" class="nav-link active"><i class="fas fa-user-cog w-5"></i> Usuarios</a>
+            <a href="crear-usuario.html" class="nav-link"><i class="fas fa-user-plus w-5"></i> Crear Usuario</a>
         </nav>
 
         <div class="sidebar-footer">
@@ -64,8 +63,8 @@
                 <i class="fas fa-bars" id="menu-icon"></i>
             </button>
             <div>
-                <h1 class="text-xl md:text-2xl font-black italic uppercase tracking-tighter text-dibaText">Nuevo <span class="text-dibaGold">Miembro</span></h1>
-                <p class="text-[10px] font-bold text-dibaMuted uppercase tracking-widest mt-1">Registro oficial de personal administrativo</p>
+                <h1 class="text-xl md:text-2xl font-black italic uppercase tracking-tighter text-dibaText">Editar <span class="text-dibaGold">Perfil</span></h1>
+                <p class="text-[10px] font-bold text-dibaMuted uppercase tracking-widest mt-1">Modificación de permisos y datos oficiales</p>
             </div>
             <div class="topbar-right">
                 <button id="theme-toggle" class="mobile-menu-btn" style="display: flex; margin-right: 0.5rem;" title="Cambiar Tema">
@@ -77,38 +76,34 @@
 
         <div class="p-4 md:p-8 flex justify-center">
             <div class="w-full max-w-xl bg-dibaDark2 border border-white/5 rounded-[2rem] overflow-hidden shadow-2xl animate-fade-up">
-                <div class="p-8 border-b border-white/5 bg-white/[0.02]">
+                <div class="p-8 border-b border-white/5 bg-white/[0.02] flex items-center justify-between">
                     <div class="flex items-center gap-4">
                         <div class="w-12 h-12 bg-dibaGold/10 rounded-2xl flex items-center justify-center text-dibaGold">
-                            <i class="fas fa-user-shield text-xl"></i>
+                            <i class="fas fa-user-edit text-xl"></i>
                         </div>
                         <div>
-                            <h2 class="text-lg font-black italic uppercase text-dibaText">Credenciales de Acceso</h2>
-                            <p class="text-[10px] text-dibaMuted font-bold uppercase tracking-widest">Define el perfil y permisos</p>
+                            <h2 class="text-lg font-black italic uppercase text-dibaText" id="user-title">Cargando...</h2>
+                            <p class="text-[10px] text-dibaMuted font-bold uppercase tracking-widest" id="user-subtitle">Actualizando información de usuario</p>
                         </div>
                     </div>
                 </div>
 
                 <div class="p-8">
-                    <form id="createUserForm" class="space-y-6">
+                    <form id="editUserForm" class="space-y-6">
                         <div id="form-alert" class="hidden flex items-center gap-3 p-4 rounded-2xl text-xs font-bold uppercase tracking-widest"></div>
 
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div class="space-y-2">
-                                <label class="text-[10px] font-black uppercase tracking-widest text-dibaMuted ml-1">Usuario ID</label>
-                                <div class="relative">
-                                    <i class="fas fa-at absolute left-4 top-1/2 -translate-y-1/2 text-dibaGold"></i>
-                                    <input type="text" name="username" required placeholder="ej. tecnico_pro" 
-                                           class="w-full pl-10 pr-4 py-3 bg-white/5 border border-white/10 rounded-xl text-dibaText text-sm font-semibold outline-none focus:ring-2 focus:ring-dibaGold transition-all">
-                                </div>
-                            </div>
-                            <div class="space-y-2">
-                                <label class="text-[10px] font-black uppercase tracking-widest text-dibaMuted ml-1">Contraseña</label>
-                                <div class="relative">
-                                    <i class="fas fa-lock absolute left-4 top-1/2 -translate-y-1/2 text-dibaGold"></i>
-                                    <input type="password" name="password" required placeholder="••••••••" 
-                                           class="w-full pl-10 pr-4 py-3 bg-white/5 border border-white/10 rounded-xl text-dibaText text-sm font-semibold outline-none focus:ring-2 focus:ring-dibaGold transition-all">
-                                </div>
+                        <div class="space-y-2">
+                            <label class="text-[10px] font-black uppercase tracking-widest text-dibaMuted ml-1">ID del Registro</label>
+                            <input type="text" id="user-id-display" readonly 
+                                   class="w-full px-4 py-3 bg-white/5 border border-white/5 rounded-xl text-dibaMuted text-[10px] font-mono outline-none cursor-not-allowed">
+                        </div>
+
+                        <div class="space-y-2">
+                            <label class="text-[10px] font-black uppercase tracking-widest text-dibaMuted ml-1">Nombre de Usuario (@)</label>
+                            <div class="relative">
+                                <i class="fas fa-at absolute left-4 top-1/2 -translate-y-1/2 text-dibaGold"></i>
+                                <input type="text" name="username" id="username" required 
+                                       class="w-full pl-10 pr-4 py-3 bg-white/5 border border-white/10 rounded-xl text-dibaText text-sm font-semibold outline-none focus:ring-2 focus:ring-dibaGold transition-all">
                             </div>
                         </div>
 
@@ -116,28 +111,27 @@
                             <label class="text-[10px] font-black uppercase tracking-widest text-dibaMuted ml-1">Nombre Completo</label>
                             <div class="relative">
                                 <i class="fas fa-signature absolute left-4 top-1/2 -translate-y-1/2 text-dibaGold"></i>
-                                <input type="text" name="full_name" placeholder="ej. Alexander Hernández" 
+                                <input type="text" name="full_name" id="full_name" placeholder="ej. Alexander Hernández" 
                                        class="w-full pl-10 pr-4 py-3 bg-white/5 border border-white/10 rounded-xl text-dibaText text-sm font-semibold outline-none focus:ring-2 focus:ring-dibaGold transition-all">
                             </div>
                         </div>
 
                         <div class="space-y-2">
-                            <label class="text-[10px] font-black uppercase tracking-widest text-dibaMuted ml-1">Asignar Rol Administrativo</label>
-                            <select name="role_name" required 
+                            <label class="text-[10px] font-black uppercase tracking-widest text-dibaMuted ml-1">Rol Administrativo</label>
+                            <select name="role_name" id="role_name" required 
                                     class="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-dibaText text-sm font-semibold outline-none focus:ring-2 focus:ring-dibaGold appearance-none cursor-pointer">
                                 <option value="usuario">Usuario Estándar (Consulta)</option>
-                                <option value="tecnico" selected>Técnico / Entrenador (Planilla/Jugadores)</option>
+                                <option value="tecnico">Técnico / Entrenador (Planilla/Jugadores)</option>
                                 <option value="admin">Administrador (Control Total)</option>
                             </select>
-                            <p class="text-[9px] text-dibaMuted font-bold italic mt-2">* El rol determina las páginas visibles en el menú lateral.</p>
                         </div>
 
                         <div class="flex items-center gap-4 pt-4">
                             <a href="usuarios.html" class="flex-1 text-center py-4 bg-white/5 text-dibaMuted text-[10px] font-black uppercase tracking-widest rounded-2xl border border-white/5 hover:bg-white/10 transition-all">
-                                <i class="fas fa-arrow-left mr-2"></i> Cancelar
+                                <i class="fas fa-times mr-2"></i> Cancelar
                             </a>
                             <button type="submit" id="submit-btn" class="flex-[2] py-4 bg-dibaGold text-dibaBlue text-[10px] font-black uppercase tracking-widest rounded-2xl hover:scale-[1.02] transition-all shadow-lg shadow-dibaGold/20">
-                                <i class="fas fa-save mr-2"></i> Guardar Usuario
+                                <i class="fas fa-check mr-2"></i> Aplicar Cambios
                             </button>
                         </div>
                     </form>
@@ -150,11 +144,49 @@
     <script type="module">
         import { supabase, requireAdmin } from '../scripts/supabaseClient.js';
 
+        const form = document.getElementById('editUserForm');
+        const alertBox = document.getElementById('form-alert');
+        const submitBtn = document.getElementById('submit-btn');
+
+        // Obtener ID de la URL
+        const params = new URLSearchParams(window.location.search);
+        const userId = params.get('id');
+
+        async function loadUserData() {
+            if (!userId) {
+                window.location.href = 'usuarios.html';
+                return;
+            }
+
+            try {
+                const { data: user, error } = await supabase
+                    .from('users')
+                    .select('*')
+                    .eq('id', userId)
+                    .single();
+
+                if (error) throw error;
+
+                document.getElementById('user-id-display').value = user.id;
+                document.getElementById('username').value = user.username;
+                document.getElementById('full_name').value = user.full_name || '';
+                document.getElementById('role_name').value = user.role;
+                document.getElementById('user-title').textContent = user.username;
+                document.getElementById('user-subtitle').textContent = `Editando a ${user.full_name || user.username}`;
+
+            } catch (err) {
+                console.error(err);
+                alert("Error al cargar usuario: " + err.message);
+                window.location.href = 'usuarios.html';
+            }
+        }
+
         async function init() {
             try {
                 const session = await requireAdmin();
                 if (session) {
                     document.getElementById('admin-body').style.display = 'flex';
+                    loadUserData();
                 }
             } catch (error) {
                 console.error(error);
@@ -162,7 +194,7 @@
         }
         init();
 
-        // Clock & Menu logic
+        // UI Helpers
         const clockEl = document.getElementById('clock');
         setInterval(() => {
             clockEl.textContent = new Date().toLocaleTimeString('es-CO', { hour: '2-digit', minute: '2-digit' });
@@ -182,34 +214,29 @@
             }
         });
 
-        const form = document.getElementById('createUserForm');
-        const alertBox = document.getElementById('form-alert');
-        const submitBtn = document.getElementById('submit-btn');
-
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
             alertBox.classList.add('hidden');
             submitBtn.disabled = true;
-            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Procesando...';
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Guardando...';
 
             const fd = new FormData(form);
-            const username = fd.get('username').trim();
-            const password = fd.get('password');
-            const full_name = fd.get('full_name').trim();
-            const role_name = fd.get('role_name');
+            const new_username = fd.get('username').trim();
+            const new_full_name = fd.get('full_name').trim();
+            const new_role = fd.get('role_name');
 
             try {
-                const { data, error } = await supabase.rpc('admin_create_user', {
-                    new_username: username,
-                    new_password: password,
-                    new_full_name: full_name,
-                    new_role: role_name
+                const { error } = await supabase.rpc('admin_update_user', {
+                    target_user_id: userId,
+                    new_full_name: new_full_name,
+                    new_role: new_role,
+                    new_username: new_username
                 });
 
                 if (error) throw error;
 
                 alertBox.className = "flex items-center gap-3 p-4 rounded-2xl text-xs font-bold uppercase tracking-widest bg-green-500/10 text-green-500";
-                alertBox.innerHTML = '<i class="fas fa-check-circle"></i> Usuario creado. Redirigiendo...';
+                alertBox.innerHTML = '<i class="fas fa-check-circle"></i> Cambios guardados con éxito.';
                 alertBox.classList.remove('hidden');
                 
                 setTimeout(() => window.location.href = 'usuarios.html', 1500);
@@ -219,7 +246,7 @@
                 alertBox.innerHTML = '<i class="fas fa-exclamation-triangle"></i> ' + err.message;
                 alertBox.classList.remove('hidden');
                 submitBtn.disabled = false;
-                submitBtn.innerHTML = '<i class="fas fa-save mr-2"></i> Guardar Usuario';
+                submitBtn.innerHTML = '<i class="fas fa-check mr-2"></i> Aplicar Cambios';
             }
         });
     </script>
