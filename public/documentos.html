@@ -120,9 +120,20 @@
             let uploadedCount = 0;
             listEl.innerHTML = '';
 
-            DOC_TYPES.forEach((type, index) => {
+            for (const [index, type] of DOC_TYPES.entries()) {
                 const doc = docs?.find(d => d.doc_type === type.id);
                 if (doc) uploadedCount++;
+
+                let signedUrl = '#';
+                if (doc && doc.file_url) {
+                    const pathPart = doc.file_url.split('documents/')[1];
+                    if (pathPart) {
+                        const { data: sData } = await supabase.storage.from('documents').createSignedUrl(pathPart, 3600);
+                        if (sData) signedUrl = sData.signedUrl;
+                    } else {
+                        signedUrl = doc.file_url;
+                    }
+                }
 
                 const delay = 0.1 * index;
                 const card = document.createElement('div');
@@ -147,7 +158,7 @@
                                     ${doc.status}
                                 </span>
                             </div>
-                            <a href="${doc.file_url}" target="_blank" class="w-10 h-10 glass rounded-full flex items-center justify-center text-slate-300 hover:text-dibaGold transition-all">
+                            <a href="${signedUrl}" target="_blank" class="w-10 h-10 glass rounded-full flex items-center justify-center text-slate-300 hover:text-dibaGold transition-all">
                                 <i class="fas fa-eye"></i>
                             </a>
                         ` : ''}
@@ -161,7 +172,7 @@
                     </div>
                 `;
                 listEl.appendChild(card);
-            });
+            }
 
             // Update progress
             const pct = Math.round((uploadedCount / DOC_TYPES.length) * 100);
@@ -189,6 +200,8 @@
                 const { error: upError } = await supabase.storage.from('documents').upload(path, file);
                 if (upError) throw upError;
 
+                // Para buckets privados, ya no confiamos en publicUrl almacenado para visualización inmediata
+                // Pero almacenamos la URL base por compatibilidad si es necesario, o el path.
                 const { data: { publicUrl } } = supabase.storage.from('documents').getPublicUrl(path);
 
                 const { error: dbError } = await supabase.from('player_documents').upsert({

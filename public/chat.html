@@ -432,6 +432,8 @@
                     return;
                 }
 
+                // Buckets privados no usan publicUrl para visualización inmediata
+                // El renderizado de estados usará signedUrls en fetchStatuses
                 const { data: { publicUrl } } = supabaseClient.storage
                     .from('statuses')
                     .getPublicUrl(filePath);
@@ -523,14 +525,24 @@
             });
         }
 
-        function showStatusFullScreen(st) {
+        async function showStatusFullScreen(st) {
             const modal = document.createElement('div');
             modal.className = "fixed inset-0 z-[3000] bg-black/95 backdrop-blur-xl flex flex-col items-center justify-center p-4 animate-in fade-in duration-300";
 
             if (st.type === 'image' || st.type === 'video') {
-                const mediaTag = st.type === 'image'
-                    ? `<img src="${st.content}" class="w-full h-auto rounded-3xl shadow-2xl border border-white/10">`
-                    : `<video src="${st.content}" class="w-full h-auto rounded-3xl shadow-2xl border border-white/10" autoplay controls></video>`;
+            let contentUrl = st.content;
+            // Si es una URL de nuestro bucket privado, la firmamos
+            if (contentUrl && contentUrl.includes('statuses')) {
+                const pathPart = contentUrl.split('statuses/')[1];
+                if (pathPart) {
+                    const { data: sData } = await supabaseClient.storage.from('statuses').createSignedUrl(pathPart, 3600);
+                    if (sData) contentUrl = sData.signedUrl;
+                }
+            }
+
+            const mediaTag = st.type === 'image'
+                ? `<img src="${contentUrl}" class="w-full h-auto rounded-3xl shadow-2xl border border-white/10">`
+                : `<video src="${contentUrl}" class="w-full h-auto rounded-3xl shadow-2xl border border-white/10" autoplay controls></video>`;
 
                 modal.innerHTML = `
                     <button class="absolute top-6 right-6 text-white text-3xl hover:text-amber-500 transition-colors" onclick="this.parentElement.remove()">&times;</button>

@@ -121,11 +121,18 @@ import { cerrarSesion } from './auth.js';
                 return;
             }
 
-            files.forEach(file => {
+            for (const file of files) {
                 if (file.name === '.emptyFolderPlaceholder') return;
                 
-                const isFolder = file.id === undefined && !file.metadata; // Supabase list returns undefined id for folders
-                const { data: { publicUrl } } = isFolder ? { data: { publicUrl: '#' } } : supabase.storage.from(bucketId).getPublicUrl(path ? `${path}/${file.name}` : file.name);
+                const isFolder = file.id === undefined && !file.metadata;
+                let fileUrl = '#';
+
+                if (!isFolder) {
+                    const fullPath = path ? `${path}/${file.name}` : file.name;
+                    const { data: signedData, error: sError } = await supabase.storage.from(bucketId).createSignedUrl(fullPath, 3600); // 1 hour access
+                    if (!sError) fileUrl = signedData.signedUrl;
+                }
+
                 const isImg = !isFolder && /\.(jpg|jpeg|png|gif)$/i.test(file.name);
                 const fullPath = path ? `${path}/${file.name}` : file.name;
                 
@@ -149,14 +156,14 @@ import { cerrarSesion } from './auth.js';
                                 <i class="fas fa-folder-open"></i> Abrir Carpeta
                             </button>
                         ` : `
-                            <a href="${publicUrl}" target="_blank" class="w-full py-3 flex items-center justify-center gap-2 bg-white border border-slate-200 text-dibaBlue text-[10px] font-black uppercase italic rounded-xl hover:bg-dibaGold hover:border-dibaGold transition-all">
+                            <a href="${fileUrl}" target="_blank" class="w-full py-3 flex items-center justify-center gap-2 bg-white border border-slate-200 text-dibaBlue text-[10px] font-black uppercase italic rounded-xl hover:bg-dibaGold hover:border-dibaGold transition-all">
                                 <i class="fas fa-eye"></i> Ver / Descargar
                             </a>
                         `}
                     </div>
                 `;
                 fileListContainer.appendChild(div);
-            });
+            }
         } catch (err) {
             console.error(err);
             fileListContainer.innerHTML = `<p class="col-span-full py-20 text-center text-rose-500 font-black uppercase text-[10px]">Error al cargar archivos de ${bucketId}: ${err.message}</p>`;
@@ -203,8 +210,11 @@ import { cerrarSesion } from './auth.js';
             return;
         }
 
-        documents.forEach(doc => {
-            const { data: { publicUrl } } = supabase.storage.from("documents").getPublicUrl(doc.storage_path);
+        for (const doc of documents) {
+            // Documentos es privado, usamos createSignedUrl
+            const { data: signedData } = await supabase.storage.from("documents").createSignedUrl(doc.storage_path, 3600);
+            const fileUrl = signedData?.signedUrl || '#';
+            
             const div = document.createElement('div');
             div.className = `flex flex-col p-6 bg-white border border-slate-200 rounded-[2rem] hover:shadow-xl transition-all animate__animated animate__fadeIn group ${doc.is_signed ? 'border-l-8 border-l-emerald-500' : ''}`;
             div.innerHTML = `
@@ -219,14 +229,14 @@ import { cerrarSesion } from './auth.js';
                     <p class="text-[9px] text-slate-400 font-bold uppercase tracking-widest mb-4">${new Date(doc.created_at).toLocaleDateString('es-CO', { day: '2-digit', month: 'short', year: 'numeric' })}</p>
                 </div>
                 <div class="pt-4 border-t border-slate-50 flex items-center justify-between mt-auto">
-                    <a href="${publicUrl}" target="_blank" class="text-[9px] font-black uppercase italic text-dibaBlue hover:text-dibaGold flex items-center gap-1.5 transition-all">
+                    <a href="${fileUrl}" target="_blank" class="text-[9px] font-black uppercase italic text-dibaBlue hover:text-dibaGold flex items-center gap-1.5 transition-all">
                         <i class="fas fa-eye"></i> Visualizar
                     </a>
                     ${!doc.is_signed ? '<button class="sign-btn text-[9px] font-black uppercase italic text-emerald-600 hover:text-emerald-700 bg-emerald-50 px-4 py-2 rounded-xl border border-emerald-100 transition-all">Firmar Documento</button>' : ''}
                 </div>
             `;
             fileListContainer.appendChild(div);
-        });
+        }
     }
 
     // ---------------------------------------------------------
@@ -262,12 +272,22 @@ import { cerrarSesion } from './auth.js';
                 return;
             }
 
-            asistencias.forEach(reg => {
+            for (const reg of asistencias) {
                 const playerName = reg.identificacion ? `${reg.identificacion.nombre} ${reg.identificacion.apellidos}` : reg.identificacion_numero;
                 const dateStr = new Date(reg.fecha).toLocaleDateString();
                 
+                let photoUrl = reg.foto_tomada_url;
+                // Si la URL es de nuestro bucket privado, necesitamos firmarla
+                if (photoUrl && photoUrl.includes('asistencia-fotos')) {
+                    const path = photoUrl.split('asistencia-fotos/')[1];
+                    if (path) {
+                        const { data } = await supabase.storage.from('asistencia-fotos').createSignedUrl(path, 3600);
+                        if (data) photoUrl = data.signedUrl;
+                    }
+                }
+
                 const div = document.createElement('div');
-                div.className = `flex flex-col p-6 bg-white border border-slate-200 rounded-[2rem] hover:shadow-xl transition-all animate__animated animate__fadeIn group ${reg.foto_tomada_url ? 'border-amber-200' : ''}`;
+                div.className = `flex flex-col p-6 bg-white border border-slate-200 rounded-[2rem] hover:shadow-xl transition-all animate__animated animate__fadeIn group ${photoUrl ? 'border-amber-200' : ''}`;
                 div.innerHTML = `
                     <div class="flex items-center justify-between mb-4">
                         <div class="w-12 h-12 ${reg.asistio ? 'bg-emerald-50 text-emerald-500' : 'bg-rose-50 text-rose-500'} rounded-2xl flex items-center justify-center">
@@ -282,8 +302,8 @@ import { cerrarSesion } from './auth.js';
                         <p class="text-[9px] text-slate-400 font-bold uppercase tracking-widest mb-4">${reg.tipo_evento || 'Entrenamiento'} — ${dateStr}</p>
                     </div>
                     <div class="pt-4 border-t border-slate-50 mt-auto">
-                        ${reg.foto_tomada_url ? `
-                            <a href="${reg.foto_tomada_url}" target="_blank" class="w-full py-3 flex items-center justify-center gap-2 bg-amber-500 text-white text-[10px] font-black uppercase italic rounded-xl hover:bg-dibaBlue transition-all">
+                        ${photoUrl ? `
+                            <a href="${photoUrl}" target="_blank" class="w-full py-3 flex items-center justify-center gap-2 bg-amber-500 text-white text-[10px] font-black uppercase italic rounded-xl hover:bg-dibaBlue transition-all">
                                 <i class="fas fa-camera"></i> Ver Foto de Asistencia
                             </a>
                         ` : `
@@ -292,7 +312,7 @@ import { cerrarSesion } from './auth.js';
                     </div>
                 `;
                 fileListContainer.appendChild(div);
-            });
+            }
         } catch (err) {
             console.error(err);
             fileListContainer.innerHTML = `<p class="text-center text-red-500 py-10 uppercase text-[10px] font-black italic tracking-widest col-span-full">Error al cargar asistencias: ${err.message}</p>`;
