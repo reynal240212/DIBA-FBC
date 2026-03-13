@@ -11,7 +11,6 @@
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <link rel="stylesheet" href="/styles/admin-common.css">
-    <script src="/scripts/theme-switcher.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -221,232 +220,25 @@
 
     <script src="/scripts/config.js"></script>
     <script type="module">
-        import { supabase, requireAdmin } from '../scripts/supabaseClient.js';
+        import { initTheme } from '/src/core/theme-switcher.js';
+        import { initAdminLayout } from '/src/components/layout/admin-layout.js';
+        
+        initTheme();
+        initAdminLayout();
 
-        // ── AUTENTICACIÓN Y CARGA ──
-        async function init() {
-            try {
-                const session = await requireAdmin();
-                if (!session) return;
-
-                document.getElementById('admin-body').style.display = 'flex';
-
-                const user = session.user;
-                if (user) {
-                    const { data: profile } = await supabase
-                        .from('users')
-                        .select('username, role, full_name')
-                        .eq('id', user.id)
-                        .single();
-
-                    if (profile) {
-                        document.getElementById('sb-name').textContent = profile.username;
-                        document.getElementById('sb-role').textContent = profile.role;
-                        document.getElementById('sb-avatar').textContent = profile.username[0].toUpperCase();
-                    } else {
-                        document.getElementById('sb-name').textContent = user.email.split('@')[0];
-                        document.getElementById('sb-avatar').textContent = user.email[0].toUpperCase();
-                    }
-                }
-
-                loadUsers();
-            } catch (error) {
-                console.error("Init error:", error);
-            }
-        }
-
-        // ── RELOJ ──
+        document.getElementById('admin-body').style.display = 'flex';
+        
+        // Clock logic
         function updateClock() {
-            const now = new Date();
-            document.getElementById('clock').textContent = now.toLocaleTimeString('es-CO', {
+            const el = document.getElementById('clock');
+            if (el) el.textContent = new Date().toLocaleTimeString('es-CO', {
                 hour: '2-digit', minute: '2-digit', second: '2-digit'
             });
         }
         setInterval(updateClock, 1000);
         updateClock();
-
-        // ── MOBILE MENU ──
-        const menuBtn = document.getElementById('menu-btn');
-        const sidebar = document.getElementById('sidebar');
-        const menuIcon = document.getElementById('menu-icon');
-        menuBtn?.addEventListener('click', () => {
-            sidebar.classList.toggle('open');
-            menuIcon.className = sidebar.classList.contains('open') ? 'fas fa-times' : 'fas fa-bars';
-        });
-
-        // ── LOGOUT ──
-        document.getElementById('logout-btn')?.addEventListener('click', async () => {
-            if (confirm('¿Cerrar sesión administrativa?')) {
-                await supabase.auth.signOut();
-                window.location.href = 'login.html';
-            }
-        });
-
-        // ── LÓGICA DE USUARIOS ──
-        const tbody = document.getElementById('users-tbody');
-        const table = document.getElementById('usersTable');
-        const loadingEl = document.getElementById('loading-state');
-        const emptyEl = document.getElementById('empty-state');
-        const countBadge = document.getElementById('count-badge');
-        const alertBar = document.getElementById('alert-bar');
-
-        async function loadUsers() {
-            const { data, error } = await supabase
-                .from('users')
-                .select('*')
-                .order('created_at', { ascending: false });
-
-            loadingEl.classList.add('hidden');
-
-            if (error) {
-                alertBar.innerHTML = `<i class="fas fa-exclamation-triangle"></i> Falló la carga: ${error.message}`;
-                alertBar.classList.remove('hidden');
-                alertBar.classList.add('flex');
-                return;
-            }
-
-            if (!data || data.length === 0) {
-                emptyEl.classList.remove('hidden');
-                emptyEl.classList.add('flex');
-                return;
-            }
-
-            table.classList.remove('hidden');
-            countBadge.textContent = `${data.length} MIEMBROS`;
-
-            tbody.innerHTML = '';
-            data.forEach(u => {
-                const tr = document.createElement('tr');
-                tr.className = 'group hover:bg-white/[0.02] transition-all';
-                const isExpired = u.expiration_date ? new Date(u.expiration_date) < new Date() : false;
-                const statusLabel = u.is_active ? (isExpired ? 'Expirado' : 'Activo') : 'Inactivo';
-                const statusClass = u.is_active ? (isExpired ? 'text-red-500 bg-red-500/10' : 'text-green-500 bg-green-500/10') : 'text-slate-500 bg-slate-500/10';
-
-                const expDate = u.expiration_date ? new Date(u.expiration_date).toLocaleDateString('es-ES', {
-                    day: '2-digit', month: 'short', year: 'numeric'
-                }) : '—';
-
-                const roleColors = {
-                    admin: 'bg-dibaGold/20 text-dibaGold border-dibaGold/20',
-                    tecnico: 'bg-blue-500/10 text-blue-500 border-blue-500/20',
-                    usuario: 'bg-slate-500/10 text-slate-500 border-slate-500/20'
-                };
-
-                tr.innerHTML = `
-                    <td class="px-6 py-5">
-                        <span class="text-[9px] font-mono text-slate-600 bg-white/5 px-2 py-1 rounded" title="${u.id}">${u.id.substring(0, 8)}</span>
-                    </td>
-                    <td class="px-6 py-5">
-                        <div class="text-[13px] font-black italic uppercase tracking-tight text-dibaText">${u.username}</div>
-                    </td>
-                    <td class="px-6 py-5 text-[11px] font-bold text-dibaMuted">
-                        ${u.full_name || '—'}
-                    </td>
-                    <td class="px-6 py-5">
-                        <span class="px-3 py-1 rounded-full border text-[9px] font-black uppercase tracking-widest ${roleColors[u.role] || roleColors.usuario}">
-                            ${u.role}
-                        </span>
-                    </td>
-                    <td class="px-6 py-5">
-                        <div class="flex flex-col">
-                            <span class="text-[10px] font-black uppercase px-2 py-0.5 rounded-full inline-block w-fit ${statusClass}">
-                                ${statusLabel}
-                            </span>
-                            <span class="text-[9px] text-dibaMuted mt-1 font-bold">Vence: ${expDate}</span>
-                        </div>
-                    </td>
-                    <td class="px-6 py-5 text-right flex justify-end gap-2">
-                        <a href="editar-usuario.html?id=${u.id}" class="px-4 py-2 bg-dibaGold/10 text-dibaGold hover:bg-dibaGold hover:text-dibaBlue rounded-lg text-[9px] font-black uppercase tracking-widest border border-dibaGold/20 transition-all opacity-0 group-hover:opacity-100 flex items-center gap-1">
-                            <i class="fas fa-edit"></i> Editar
-                        </a>
-                        <button class="btn-toggle px-4 py-2 ${u.is_active ? 'bg-orange-500/10 text-orange-500 hover:bg-orange-500' : 'bg-green-500/10 text-green-500 hover:bg-green-500'} hover:text-white rounded-lg text-[9px] font-black uppercase tracking-widest border border-current/20 transition-all opacity-0 group-hover:opacity-100" 
-                                data-id="${u.id}" data-active="${u.is_active}" data-name="${u.username}">
-                            <i class="fas ${u.is_active ? 'fa-user-slash' : 'fa-user-check'} mr-1"></i> ${u.is_active ? 'Inactivar' : 'Activar'}
-                        </button>
-                    </td>
-                `;
-                tbody.appendChild(tr);
-            });
-        }
-
-        // ── GESTIONAR ESTADO USUARIO ──
-        let selectedUserId = null;
-        const activationModal = document.getElementById('activation-modal');
-
-        tbody.addEventListener('click', async (e) => {
-            const btn = e.target.closest('.btn-toggle');
-            if (!btn) return;
-
-            const { id, name, active } = btn.dataset;
-            const isCurrentlyActive = active === 'true';
-
-            if (isCurrentlyActive) {
-                // Desactivar directamente
-                if (!confirm(`¿Desactivar al usuario "${name}"? El usuario no podrá acceder al sistema.`)) return;
-                
-                btn.disabled = true;
-                btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
-
-                try {
-                    const { error } = await supabase
-                        .from('users')
-                        .update({ is_active: false })
-                        .eq('id', id);
-
-                    if (error) throw error;
-                    loadUsers();
-                } catch (error) {
-                    alertBar.innerHTML = `<i class="fas fa-exclamation-triangle"></i> Error: ${error.message}`;
-                    alertBar.classList.remove('hidden');
-                    loadUsers();
-                }
-            } else {
-                // Activar - Mostrar Modal para elegir fecha
-                selectedUserId = id;
-                document.getElementById('modal-username').textContent = name;
-                activationModal.style.display = 'block';
-            }
-        });
-
-        // Modal Actions
-        document.getElementById('cancel-activation').addEventListener('click', () => {
-            activationModal.style.display = 'none';
-        });
-
-        document.getElementById('confirm-activation').addEventListener('click', async () => {
-            const dateVal = document.getElementById('expiration-date').value;
-            if (!dateVal) {
-                alert('Por favor selecciona una fecha de expiración.');
-                return;
-            }
-
-            const btn = document.getElementById('confirm-activation');
-            btn.disabled = true;
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Procesando...';
-
-            try {
-                const { error } = await supabase
-                    .from('users')
-                    .update({ 
-                        is_active: true, 
-                        expiration_date: new Date(dateVal).toISOString() 
-                    })
-                    .eq('id', selectedUserId);
-
-                if (error) throw error;
-                
-                activationModal.style.display = 'none';
-                loadUsers();
-            } catch (error) {
-                alert('Error al activar usuario: ' + error.message);
-            } finally {
-                btn.disabled = false;
-                btn.innerHTML = 'Activar Usuario';
-            }
-        });
-
-        init();
     </script>
+    <script type="module" src="/src/features/users/admin.js"></script>
 
     <!-- Modal de Activación -->
     <div id="activation-modal" class="modal">

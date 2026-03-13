@@ -179,7 +179,11 @@
   </main>
 
   <script src="/scripts/config.js"></script>
-  <script type="module" src="/scripts/admin-push.js"></script>
+  <script type="module">
+    import { initAdminLayout } from '/src/components/layout/admin-layout.js';
+    initAdminLayout();
+  </script>
+  <script type="module" src="/src/features/push/admin.js"></script>
   <script>
     // Mobile Menu
     const menuBtn = document.getElementById('menu-btn');
