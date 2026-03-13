@@ -860,12 +860,12 @@
             }
           });
 
-          // Descargar localmente
-          const fileName = `DIBA_Planilla_${dateInput.value}.pdf`;
-          doc.save(fileName);
-
-          // Archivar en la nube
+          // Previsualizar en el visor de PDF del navegador
           const blob = doc.output('blob');
+          const blobURL = URL.createObjectURL(blob);
+          window.open(blobURL, '_blank');
+
+          // Archivar en la nube (segundo plano)
           archivePDF(blob, `Archivo_${dateInput.value}_${Date.now()}.pdf`);
         };
 
