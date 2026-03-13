@@ -16,7 +16,7 @@ import { cerrarSesion } from './auth.js';
 
     // Inicializar UI básica
     if (navName) navName.textContent = usuario.username;
-    if (navRole) navRole.textContent = usuario.role === 'admin' ? 'Administrador' : 'Deportista';
+    if (navRole) navRole.textContent = usuario.role === 'admin' ? 'Administrador' : 'Técnico';
 
     // ---------------------------------------------------------
     // 3. LÓGICA DEL GESTOR DE DOCUMENTOS
@@ -24,6 +24,7 @@ import { cerrarSesion } from './auth.js';
 
     async function loadDocuments() {
         mainTitle.innerHTML = 'Gestor <span class="text-slate-300">Documental</span>';
+        setActiveFilter('filter-docs-btn');
         dynamicContent.innerHTML = `
             <section id="uploadSection" class="${usuario.role !== 'admin' ? 'hidden' : ''} mb-12 animate__animated animate__fadeInUp">
                 <div id="dropZone" class="bg-white border-2 border-dashed border-slate-200 rounded-[2.5rem] p-12 flex flex-col items-center justify-center hover:bg-yellow-50/50 hover:border-dibaGold transition-all cursor-pointer">
@@ -32,7 +33,7 @@ import { cerrarSesion } from './auth.js';
                     <input type="file" id="newDocument" class="hidden" accept=".pdf,.jpg,.png">
                 </div>
             </section>
-            <div id="fileListContainer" class="space-y-4">
+            <div id="fileListContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 <div class="flex justify-center py-10"><i class="fas fa-circle-notch animate-spin text-2xl text-dibaGold"></i></div>
             </div>
         `;
@@ -41,7 +42,6 @@ import { cerrarSesion } from './auth.js';
         const dropZone = document.getElementById("dropZone");
         const fileInput = document.getElementById("newDocument");
 
-        // Eventos de subida (solo admin)
         dropZone?.addEventListener('click', () => fileInput.click());
         fileInput?.addEventListener('change', (e) => { if (e.target.files[0]) handleFileUpload(e.target.files[0]); });
 
@@ -52,28 +52,169 @@ import { cerrarSesion } from './auth.js';
         fileListContainer.innerHTML = '';
 
         if (error || !documents.length) {
-            fileListContainer.innerHTML = '<p class="text-center text-slate-400 py-10 uppercase text-[10px] font-black italic tracking-widest">No hay archivos disponibles</p>';
+            fileListContainer.innerHTML = '<p class="text-center text-slate-400 py-10 uppercase text-[10px] font-black italic tracking-widest col-span-full">No hay archivos disponibles</p>';
             return;
         }
 
         documents.forEach(doc => {
             const { data: { publicUrl } } = supabase.storage.from("documents").getPublicUrl(doc.storage_path);
             const div = document.createElement('div');
-            div.className = `flex items-center justify-between p-5 bg-white border border-slate-200 rounded-3xl animate__animated animate__fadeIn ${doc.is_signed ? 'border-l-8 border-l-green-500' : ''}`;
+            div.className = `flex flex-col p-6 bg-white border border-slate-200 rounded-[2rem] hover:shadow-xl transition-all animate__animated animate__fadeIn group ${doc.is_signed ? 'border-l-8 border-l-emerald-500' : ''}`;
             div.innerHTML = `
-                <div class="flex items-center gap-4">
-                    <div class="w-10 h-10 bg-slate-50 rounded-xl flex items-center justify-center text-slate-400"><i class="far fa-file-pdf"></i></div>
-                    <div>
-                        <p class="font-bold text-slate-700 text-xs uppercase italic">${doc.file_name}</p>
-                        <p class="text-[9px] text-slate-400 font-bold uppercase tracking-tighter">${new Date(doc.created_at).toLocaleDateString()}</p>
+                <div class="flex items-center justify-between mb-4">
+                    <div class="w-12 h-12 bg-slate-50 rounded-2xl flex items-center justify-center text-slate-400 group-hover:bg-dibaGold/10 group-hover:text-dibaGold transition-colors">
+                        <i class="far fa-file-pdf text-xl"></i>
                     </div>
+                    ${doc.is_signed ? '<span class="px-3 py-1 bg-emerald-50 text-emerald-600 text-[8px] font-black uppercase italic rounded-full tracking-widest border border-emerald-100"><i class="fas fa-signature mr-1"></i> Firmado</span>' : ''}
                 </div>
-                <div class="flex items-center gap-3">
-                    <a href="${publicUrl}" target="_blank" class="p-2 text-slate-400 hover:text-dibaBlue transition-all"><i class="fas fa-eye"></i></a>
-                    ${doc.is_signed ? '<span class="text-green-500 text-[9px] font-black italic uppercase"><i class="fas fa-check"></i></span>' : '<button class="sign-btn text-[9px] font-black uppercase italic text-green-600 bg-green-50 px-3 py-1 rounded-lg">Firmar</button>'}
+                <div>
+                    <h4 class="font-black text-slate-800 text-xs uppercase italic tracking-tight line-clamp-1 mb-1">${doc.file_name}</h4>
+                    <p class="text-[9px] text-slate-400 font-bold uppercase tracking-widest mb-4">${new Date(doc.created_at).toLocaleDateString('es-CO', { day: '2-digit', month: 'short', year: 'numeric' })}</p>
+                </div>
+                <div class="pt-4 border-t border-slate-50 flex items-center justify-between mt-auto">
+                    <a href="${publicUrl}" target="_blank" class="text-[9px] font-black uppercase italic text-dibaBlue hover:text-dibaGold flex items-center gap-1.5 transition-all">
+                        <i class="fas fa-eye"></i> Visualizar
+                    </a>
+                    ${!doc.is_signed ? '<button class="sign-btn text-[9px] font-black uppercase italic text-emerald-600 hover:text-emerald-700 bg-emerald-50 px-4 py-2 rounded-xl border border-emerald-100 transition-all">Firmar Documento</button>' : ''}
                 </div>
             `;
             fileListContainer.appendChild(div);
+        });
+    }
+
+    // ---------------------------------------------------------
+    // 3.5 LÓGICA DE BUCKET CLUB (Storage "document")
+    // ---------------------------------------------------------
+
+    async function loadBucketFiles() {
+        mainTitle.innerHTML = 'Archivos <span class="text-slate-300">Club (Bucket)</span>';
+        setActiveFilter('filter-club-btn');
+        dynamicContent.innerHTML = `<div id="fileListContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div class="flex justify-center py-20 col-span-full"><i class="fas fa-circle-notch animate-spin text-3xl text-dibaGold"></i></div>
+        </div>`;
+
+        const fileListContainer = document.getElementById("fileListContainer");
+
+        try {
+            const { data: files, error } = await supabase.storage.from('document').list('', {
+                limit: 100,
+                offset: 0,
+                sortBy: { column: 'name', order: 'desc' }
+            });
+
+            if (error) throw error;
+            fileListContainer.innerHTML = '';
+
+            if (!files || files.length === 0) {
+                fileListContainer.innerHTML = '<p class="text-center text-slate-400 py-10 uppercase text-[10px] font-black italic tracking-widest col-span-full">No se encontraron archivos en el bucket "document"</p>';
+                return;
+            }
+
+            files.forEach(file => {
+                if (file.name === '.emptyFolderPlaceholder') return;
+                
+                const { data: { publicUrl } } = supabase.storage.from('document').getPublicUrl(file.name);
+                const isImg = /\.(jpg|jpeg|png|gif)$/i.test(file.name);
+                
+                const div = document.createElement('div');
+                div.className = `flex flex-col p-6 bg-white border border-slate-200 rounded-[2rem] hover:shadow-xl transition-all animate__animated animate__fadeIn group`;
+                div.innerHTML = `
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="w-12 h-12 bg-slate-50 rounded-2xl flex items-center justify-center text-slate-400 group-hover:bg-dibaGold/10 group-hover:text-dibaGold transition-colors">
+                            <i class="fas ${isImg ? 'fa-image' : 'fa-file-alt'} text-xl"></i>
+                        </div>
+                    </div>
+                    <div>
+                        <h4 class="font-black text-slate-800 text-xs uppercase italic tracking-tight line-clamp-1 mb-1">${file.name}</h4>
+                        <p class="text-[9px] text-slate-400 font-bold uppercase tracking-widest mb-4">${(file.metadata.size / 1024).toFixed(1)} KB — ${new Date(file.created_at).toLocaleDateString()}</p>
+                    </div>
+                    <div class="pt-4 border-t border-slate-50 mt-auto">
+                        <a href="${publicUrl}" target="_blank" class="w-full py-3 flex items-center justify-center gap-2 bg-dibaBlue text-white text-[10px] font-black uppercase italic rounded-xl hover:bg-dibaGold hover:text-dibaBlue transition-all">
+                            <i class="fas fa-download"></i> Descargar / Ver
+                        </a>
+                    </div>
+                `;
+                fileListContainer.appendChild(div);
+            });
+        } catch (err) {
+            console.error(err);
+            fileListContainer.innerHTML = `<p class="text-center text-red-500 py-10 uppercase text-[10px] font-black italic tracking-widest col-span-full">Error al acceder al bucket: ${err.message}</p>`;
+        }
+    }
+
+    // ---------------------------------------------------------
+    // 3.6 LÓGICA DE ASISTENCIAS
+    // ---------------------------------------------------------
+
+    async function loadAsistencias() {
+        mainTitle.innerHTML = 'Registro de <span class="text-slate-300">Asistencias</span>';
+        setActiveFilter('filter-asistencias-btn');
+        dynamicContent.innerHTML = `<div id="fileListContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div class="flex justify-center py-20 col-span-full"><i class="fas fa-circle-notch animate-spin text-3xl text-dibaGold"></i></div>
+        </div>`;
+
+        const fileListContainer = document.getElementById("fileListContainer");
+
+        try {
+            const { data: asistencias, error } = await supabase
+                .from('asistencias')
+                .select('*, identificacion(nombre, apellidos)')
+                .order('fecha', { ascending: false })
+                .limit(50);
+
+            if (error) throw error;
+            fileListContainer.innerHTML = '';
+
+            if (!asistencias || asistencias.length === 0) {
+                fileListContainer.innerHTML = '<p class="text-center text-slate-400 py-10 uppercase text-[10px] font-black italic tracking-widest col-span-full">No se encontraron registros de asistencias</p>';
+                return;
+            }
+
+            asistencias.forEach(reg => {
+                const playerName = reg.identificacion ? `${reg.identificacion.nombre} ${reg.identificacion.apellidos}` : reg.identificacion_numero;
+                const dateStr = new Date(reg.fecha).toLocaleDateString();
+                
+                const div = document.createElement('div');
+                div.className = `flex flex-col p-6 bg-white border border-slate-200 rounded-[2rem] hover:shadow-xl transition-all animate__animated animate__fadeIn group ${reg.foto_tomada_url ? 'border-amber-200' : ''}`;
+                div.innerHTML = `
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="w-12 h-12 ${reg.asistio ? 'bg-emerald-50 text-emerald-500' : 'bg-rose-50 text-rose-500'} rounded-2xl flex items-center justify-center">
+                            <i class="fas ${reg.asistio ? 'fa-check' : 'fa-times'} text-xl"></i>
+                        </div>
+                        <span class="text-[8px] font-black uppercase px-2 py-1 rounded-lg ${reg.fuente === 'reconocimiento_facial' ? 'bg-indigo-50 text-indigo-500 border border-indigo-100' : 'bg-slate-50 text-slate-400 border border-slate-100'}">
+                            ${reg.fuente || 'Manual'}
+                        </span>
+                    </div>
+                    <div>
+                        <h4 class="font-black text-slate-800 text-xs uppercase italic tracking-tight line-clamp-1 mb-1">${playerName}</h4>
+                        <p class="text-[9px] text-slate-400 font-bold uppercase tracking-widest mb-4">${reg.tipo_evento || 'Entrenamiento'} — ${dateStr}</p>
+                    </div>
+                    <div class="pt-4 border-t border-slate-50 mt-auto">
+                        ${reg.foto_tomada_url ? `
+                            <a href="${reg.foto_tomada_url}" target="_blank" class="w-full py-3 flex items-center justify-center gap-2 bg-amber-500 text-white text-[10px] font-black uppercase italic rounded-xl hover:bg-dibaBlue transition-all">
+                                <i class="fas fa-camera"></i> Ver Foto de Asistencia
+                            </a>
+                        ` : `
+                            <div class="w-full py-3 text-center text-slate-300 text-[10px] font-black uppercase italic">Sin captura visual</div>
+                        `}
+                    </div>
+                `;
+                fileListContainer.appendChild(div);
+            });
+        } catch (err) {
+            console.error(err);
+            fileListContainer.innerHTML = `<p class="text-center text-red-500 py-10 uppercase text-[10px] font-black italic tracking-widest col-span-full">Error al cargar asistencias: ${err.message}</p>`;
+        }
+    }
+
+    function setActiveFilter(btnId) {
+        const buttons = document.querySelectorAll('#filter-container button');
+        buttons.forEach(btn => {
+            if (btn.id === btnId) {
+                btn.className = "px-6 py-2 rounded-full bg-dibaGold text-blue-900 text-[10px] font-black uppercase italic border border-dibaGold transition-all whitespace-nowrap";
+            } else {
+                btn.className = "px-6 py-2 rounded-full bg-white/5 text-slate-400 text-[10px] font-black uppercase italic border border-white/10 hover:border-dibaGold transition-all whitespace-nowrap";
+            }
         });
     }
 
@@ -83,6 +224,7 @@ import { cerrarSesion } from './auth.js';
 
     async function loadPlayers() {
         mainTitle.innerHTML = 'Plantilla <span class="text-slate-300">Oficial</span>';
+        setActiveFilter('view-players-btn');
         dynamicContent.innerHTML = '<div class="flex justify-center py-20"><i class="fas fa-circle-notch animate-spin text-3xl text-dibaGold"></i></div>';
 
         const { data: jugadores, error } = await supabase.from('identificacion').select('*').order('apellidos');
@@ -309,10 +451,25 @@ import { cerrarSesion } from './auth.js';
         });
     });
 
-    // Navegación Sidebar
+    // Navegación Sidebar / Filtros
     document.getElementById("view-players-btn")?.addEventListener("click", (e) => {
         e.preventDefault();
         loadPlayers();
+    });
+
+    document.getElementById("filter-docs-btn")?.addEventListener("click", (e) => {
+        e.preventDefault();
+        loadDocuments();
+    });
+
+    document.getElementById("filter-club-btn")?.addEventListener("click", (e) => {
+        e.preventDefault();
+        loadBucketFiles();
+    });
+
+    document.getElementById("filter-asistencias-btn")?.addEventListener("click", (e) => {
+        e.preventDefault();
+        loadAsistencias();
     });
 
     // Cerrar sesión
