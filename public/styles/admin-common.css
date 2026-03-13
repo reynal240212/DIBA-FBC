@@ -23,6 +23,12 @@
     --sidebar-text-active: #ffcc00;
     --sidebar-border: rgba(255, 255, 255, 0.07);
 
+    /* Topbar Specific (Institutional) */
+    --topbar-bg: #111823;
+    --topbar-text: #e2e8f0;
+    --topbar-border: rgba(255, 255, 255, 0.07);
+    --topbar-gold: #ffcc00;
+
     /* Original aliases for backward compatibility */
     --dark: var(--bg-main);
     --dark2: var(--bg-panel);
@@ -40,12 +46,11 @@
     --text-muted: #334155; /* Oscurecido de #64748b */
     --border-color: rgba(0, 0, 0, 0.1);
 
-    /* Sidebar stays Institutional (Dark) even in light mode */
-    --sidebar-bg: #002a40; /* Azul Institucional */
-    --sidebar-text: #94a3b8;
-    --sidebar-text-hover: #ffffff;
-    --sidebar-text-active: #ffcc00;
-    --sidebar-border: rgba(255, 255, 255, 0.1);
+    /* Topbar stays Institutional even in light mode for contrast */
+    --topbar-bg: #002a40;
+    --topbar-text: #ffffff;
+    --topbar-border: rgba(255, 255, 255, 0.1);
+    --topbar-gold: #ffcc00;
 }
 
 *,
@@ -249,8 +254,8 @@ body {
 /* ── TOPBAR ── */
 .topbar {
     padding: 1.5rem 2rem;
-    border-bottom: 1px solid var(--border);
-    background: var(--dark2);
+    border-bottom: 1px solid var(--topbar-border);
+    background: var(--topbar-bg);
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -258,6 +263,7 @@ body {
     position: sticky;
     top: 0;
     z-index: 50;
+    color: var(--topbar-text);
 }
 
 .page-title {
@@ -266,15 +272,17 @@ body {
     font-style: italic;
     text-transform: uppercase;
     letter-spacing: .03em;
+    color: var(--topbar-text);
 }
 
 .page-title span {
-    color: var(--gold);
+    color: var(--topbar-gold);
 }
 
 .page-subtitle {
     font-size: .7rem;
-    color: var(--slate);
+    color: var(--topbar-text);
+    opacity: 0.8;
     font-weight: 600;
     margin-top: 2px;
 }

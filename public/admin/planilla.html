@@ -128,9 +128,9 @@
     .form-control,
     .form-select,
     .search-input {
-      background: var(--dark3);
-      border-color: var(--border);
-      color: #fff;
+      background: var(--bg-input);
+      border-color: var(--border-color);
+      color: var(--text-main);
       border-radius: 8px;
     }
 
@@ -145,14 +145,14 @@
     .form-control:focus,
     .form-select:focus,
     .search-input:focus {
-      background: var(--dark);
-      color: #fff;
+      background: var(--bg-panel);
+      color: var(--text-main);
       border-color: var(--gold);
       box-shadow: 0 0 0 0.25rem rgba(255, 204, 0, 0.25);
     }
 
     .table th {
-      background-color: var(--dark3);
+      background-color: var(--bg-input);
       color: var(--gold);
       border-bottom: 2px solid var(--gold);
       font-weight: 700;
@@ -372,7 +372,7 @@
                 </span>
                 <input type="text" id="playerSearch" class="form-control border-0 shadow-none"
                   placeholder="Buscar jugador..."
-                  style="background: var(--dark3); color: white; border-radius: 0 8px 8px 0;">
+                  style="background: var(--bg-input); color: var(--text-main); border-radius: 0 8px 8px 0;">
               </div>
               <button id="generatePDF" class="btn btn-danger rounded-pill px-4"><i
                   class="fas fa-file-pdf me-2"></i>PDF</button>
