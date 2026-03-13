@@ -42,11 +42,11 @@
     --bg-main: #f8fafc;
     --bg-panel: #ffffff;
     --bg-input: #f1f5f9;
-    --text-main: #001a2e; /* Azul Profundo para mejor contraste */
-    --text-muted: #334155; /* Oscurecido de #64748b */
-    --border-color: rgba(0, 0, 0, 0.1);
+    --text-main: #001a2e; 
+    --text-muted: #1e293b; /* Texto secundario más oscuro */
+    --border-color: rgba(0, 0, 0, 0.15); /* Bordes más marcados */
 
-    /* Topbar stays Institutional even in light mode for contrast */
+    /* Topbar remains Institutional */
     --topbar-bg: #002a40;
     --topbar-text: #ffffff;
     --topbar-border: rgba(255, 255, 255, 0.1);
@@ -362,10 +362,15 @@ body {
     font-weight: 800;
     padding: .25rem .7rem;
     border-radius: 999px;
-    background: rgba(255, 204, 0, .12);
-    color: var(--gold);
+    background: rgba(255, 204, 0, .2); /* Más opaco para mejor visibilidad */
+    color: var(--text-main);
     text-transform: uppercase;
     letter-spacing: .1em;
+}
+
+[data-theme="dark"] .panel-badge {
+    background: rgba(255, 204, 0, .12);
+    color: var(--gold);
 }
 
 /* ── TABLES ── */

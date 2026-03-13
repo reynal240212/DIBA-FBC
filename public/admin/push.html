@@ -13,10 +13,11 @@
         extend: {
           fontFamily: { sans: ['Montserrat', 'sans-serif'] },
           colors: {
-            gold: '#ffcc00',
-            blue: '#002a40',
-            dark: '#0a0e14',
-            dark2: '#111823'
+            dibaGold: 'var(--gold)',
+            dibaBlue: 'var(--blue)',
+            dibaDark: 'var(--bg-main)',
+            dibaText: 'var(--text-main)',
+            dibaMuted: 'var(--text-muted)'
           }
         },
       },
@@ -27,7 +28,7 @@
   <link rel="stylesheet" href="/styles/admin-common.css">
   <script src="/scripts/theme-switcher.js"></script>
 </head>
-<body class="bg-dark text-white font-sans overflow-hidden">
+<body class="bg-[var(--bg-main)] text-[var(--text-main)] font-sans overflow-hidden">
 
   <!-- ══ SIDEBAR ══ -->
   <aside class="sidebar" id="sidebar">
@@ -139,7 +140,7 @@
                   <input type="text" id="push-url" placeholder="Ej: /partidos.html" 
                          class="form-control w-full pl-10">
                 </div>
-                <p class="text-[10px] text-slate italic">Cuando el usuario haga clic, será llevado a esta página.</p>
+                <p class="text-[10px] text-dibaMuted italic">Cuando el usuario haga clic, será llevado a esta página.</p>
               </div>
 
               <div id="status-container" class="hidden"></div>
@@ -162,12 +163,12 @@
           <div class="panel-body flex justify-center py-10">
             <div class="w-72 bg-[#1c1c1e] rounded-[40px] p-4 shadow-2xl border border-white/10">
                <div class="flex justify-between items-center mb-4 px-2">
-                  <span class="text-[10px] font-bold">DIBA FBC</span>
-                  <span class="text-[10px] text-slate">ahora</span>
+                  <span class="text-[10px] font-bold text-white">DIBA FBC</span>
+                  <span class="text-[10px] text-white/60">ahora</span>
                </div>
                <div class="bg-white/5 rounded-2xl p-4">
-                  <h3 id="preview-title" class="text-sm font-black text-gold truncate">Título de prueba</h3>
-                  <p id="preview-body" class="text-xs text-slate mt-1 line-clamp-3">El contenido que escribas arriba aparecerá aquí para los usuarios en sus dispositivos.</p>
+                  <h3 id="preview-title" class="text-sm font-black text-dibaGold truncate">Título de prueba</h3>
+                  <p id="preview-body" class="text-xs text-white/80 mt-1 line-clamp-3">El contenido que escribas arriba aparecerá aquí para los usuarios en sus dispositivos.</p>
                </div>
             </div>
           </div>
