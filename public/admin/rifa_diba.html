@@ -210,6 +210,58 @@
     .boleta-jugador { font-size: 0.75rem; font-weight: 900; color: #002a40; }
     .boleta-numeros { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; }
     .num-cell { background: white; color: #002a40; height: 32px; border: 2px solid #002a40; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 0.9rem; box-shadow: 0 2px 0 #002a40; }
+
+    /* ── PRINT STYLES ── */
+    @media print {
+      @page {
+        size: A4;
+        margin: 0;
+      }
+      
+      /* Hide admin UI */
+      .sidebar, 
+      .topbar, 
+      .toolbar, 
+      #status-bar, 
+      .mobile-menu-btn {
+        display: none !important;
+      }
+
+      /* Adjust main container */
+      .main {
+        margin-left: 0 !important;
+        padding: 0 !important;
+        width: 100% !important;
+      }
+
+      .content {
+        padding: 0 !important;
+        margin: 0 !important;
+      }
+
+      #contenedor {
+        padding: 0 !important;
+        margin: 0 !important;
+        background: none !important;
+        border: none !important;
+        gap: 0 !important;
+      }
+
+      .page-rifa {
+        box-shadow: none !important;
+        margin: 0 !important;
+        padding: 10mm !important; /* Keep internal padding for margin safety */
+        page-break-after: always;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      .boleta {
+        box-shadow: none !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+    }
   </style>
 </head>
 

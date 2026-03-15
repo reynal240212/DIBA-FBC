@@ -140,30 +140,18 @@ document.addEventListener("DOMContentLoaded", function () {
         return `${parts[0]}-${parts[1]}-${parts[2]}`;
       };
 
-      const { data, error } = await supabase.from('partidos').select('*').gte('fecha', targetDate);
+      const { data: displayMatches, error } = await supabase
+        .from('partidos')
+        .select('*')
+        .gte('fecha', targetDate)
+        .order('fecha', { ascending: true })
+        .limit(10);
 
       if (error) throw error;
 
-      const matches = (data || []).filter(p => toLocalDateBanner(p.fecha) === targetDate);
-
-      // Si no hay partidos hoy, busca los PRÓXIMOS partidos a futuro
-      let displayMatches = matches;
-      let isFuture = false;
-
-      if (displayMatches.length === 0) {
-        const futureMatches = (data || []).filter(p => new Date(p.fecha) >= new Date(targetDate));
-        // Agrupar por la fecha más cercana
-        if (futureMatches.length > 0) {
-          const sorted = futureMatches.sort((a, b) => new Date(a.fecha) - new Date(b.fecha));
-          const nextDate = toLocalDateBanner(sorted[0].fecha);
-          displayMatches = sorted.filter(p => toLocalDateBanner(p.fecha) === nextDate);
-          isFuture = true;
-        }
-      }
-
       if (loadingStatus) loadingStatus.style.display = 'none';
 
-      if (displayMatches.length === 0) {
+      if (!displayMatches || displayMatches.length === 0) {
         dynamicContainer.innerHTML = `
            <div class="w-full text-center text-slate-400 text-sm py-4 italic">
               No hay partidos programados próximamente.
@@ -175,7 +163,8 @@ document.addEventListener("DOMContentLoaded", function () {
       // Limpiar contenedor
       dynamicContainer.innerHTML = '';
 
-      // Título sutil si son partidos futuros
+      // Título sutil si el primer partido no es hoy
+      const isFuture = toLocalDateBanner(displayMatches[0].fecha) !== targetDate;
       if (isFuture) {
         const title = document.createElement("div");
         title.className = "w-full flex-none text-center text-amber-500 font-bold text-xs uppercase tracking-widest mb-2 snap-center";
@@ -185,18 +174,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
       displayMatches.forEach(p => {
         const card = document.createElement("div");
-        // Se encoge al ancho mínimo del contenido, snap center para scroll horizontal
         card.className = "flex-none w-80 sm:w-96 snap-center bg-white/5 border border-white/10 rounded-2xl p-4 flex flex-col gap-3 hover:bg-white/10 transition-colors duration-300";
 
-        // Helper function para manejar el escudo con proxy para evitar bloqueos (wsrv.nl)
         const escudoImg = (url, equipoNombre) => {
-          if (equipoNombre && equipoNombre.toUpperCase().includes('DIBA')) {
-            return "images/ESCUDO.png";
-          }
-          if (!url) {
-            return `https://ui-avatars.com/api/?name=${encodeURIComponent(equipoNombre || 'Rival')}&background=1e293b&color=cbd5e1&bold=true`;
-          }
-          // Usar proxy para evitar errores de CORS/ORB
+          if (equipoNombre && equipoNombre.toUpperCase().includes('DIBA')) return "images/ESCUDO.png";
+          if (!url) return `https://ui-avatars.com/api/?name=${encodeURIComponent(equipoNombre || 'Rival')}&background=1e293b&color=cbd5e1&bold=true`;
           return `https://wsrv.nl/?url=${encodeURIComponent(url)}&default=https://ui-avatars.com/api/?name=${encodeURIComponent(equipoNombre || 'R')}&background=1e293b&color=cbd5e1`;
         };
 
@@ -206,21 +188,17 @@ document.addEventListener("DOMContentLoaded", function () {
                      <img src="${escudoImg(p.escudo_local || p.escudo, p.equipolocal)}" alt="${p.equipolocal}" class="w-12 h-12 object-contain mb-2 img-drop-shadow" onerror="this.src='${escudoImg(null, p.equipolocal)}'">
                      <span class="text-white font-bold text-[10px] sm:text-xs uppercase text-center line-clamp-2 leading-tight">${p.equipolocal || 'DIBA FBC'}</span>
                  </div>
-
                  <div class="flex flex-col items-center justify-center w-1/3 px-1">
                      <span class="bg-amber-500 text-slate-900 text-[9px] font-black uppercase tracking-widest px-2 py-0.5 rounded shadow-lg shadow-amber-500/20 mb-1">
                         ${p.hora || 'VS'}
                      </span>
                      <span class="text-slate-400 text-[9px] sm:text-[10px] uppercase font-bold text-center w-full truncate">${p.Cancha || 'Cancha'}</span>
                  </div>
-                 
                  <div class="flex flex-col items-center w-1/3">
                      <img src="${escudoImg(p.escudo_visitante, p.equipovisitante)}" alt="${p.equipovisitante}" class="w-12 h-12 object-contain mb-2 img-drop-shadow" onerror="this.src='${escudoImg(null, p.equipovisitante)}'">
                      <span class="text-white font-bold text-[10px] sm:text-xs uppercase text-center line-clamp-2 leading-tight">${p.equipovisitante || 'Rival'}</span>
                  </div>
              </div>
-
-
           <div class="flex items-center justify-between mt-1 px-1">
             <span class="text-[9px] font-black text-amber-500 uppercase tracking-widest bg-amber-500/10 px-2 py-0.5 rounded-full">
               CAT. ${p.categoria || 'GENERAL'}
@@ -229,7 +207,6 @@ document.addEventListener("DOMContentLoaded", function () {
               DIBA FBC "Fuerza y Lealtad"
             </span>
           </div>
-
           <a href="partidos.html" class="w-full mt-2 inline-flex justify-center items-center gap-2 bg-slate-900/50 hover:bg-amber-500 hover:text-slate-900 border border-white/5 py-1.5 rounded-xl text-[10px] font-black text-white uppercase tracking-widest transition-all duration-300">
             Ver Detalles <i class="fas fa-external-link-alt text-[9px]"></i>
           </a>
@@ -237,39 +214,46 @@ document.addEventListener("DOMContentLoaded", function () {
         dynamicContainer.appendChild(card);
       });
 
-      // --- LOGICA DE SCROLL POR ARRASTRE DE RATÓN (DESKTOP) ---
+      // --- NAVEGACIÓN MEJORADA ---
+      dynamicContainer.addEventListener('wheel', (e) => {
+        if (e.deltaY !== 0) {
+          e.preventDefault();
+          dynamicContainer.scrollLeft += e.deltaY;
+        }
+      });
+
       let isDown = false;
       let startX;
       let scrollLeft;
 
       dynamicContainer.addEventListener('mousedown', (e) => {
         isDown = true;
-        dynamicContainer.classList.remove('snap-x', 'snap-mandatory'); // temporalmente quitar el snap al arrastrar
+        dynamicContainer.style.scrollSnapType = 'none';
+        dynamicContainer.style.cursor = 'grabbing';
         startX = e.pageX - dynamicContainer.offsetLeft;
         scrollLeft = dynamicContainer.scrollLeft;
       });
 
-      dynamicContainer.addEventListener('mouseleave', () => {
+      const stopDragging = () => {
         isDown = false;
-        dynamicContainer.classList.add('snap-x', 'snap-mandatory');
-      });
+        dynamicContainer.style.scrollSnapType = 'x mandatory';
+        dynamicContainer.style.cursor = 'grab';
+      };
 
-      dynamicContainer.addEventListener('mouseup', () => {
-        isDown = false;
-        dynamicContainer.classList.add('snap-x', 'snap-mandatory');
-      });
+      dynamicContainer.addEventListener('mouseleave', stopDragging);
+      dynamicContainer.addEventListener('mouseup', stopDragging);
 
       dynamicContainer.addEventListener('mousemove', (e) => {
         if (!isDown) return;
         e.preventDefault();
         const x = e.pageX - dynamicContainer.offsetLeft;
-        const walk = (x - startX) * 2; // velocidad de scroll
+        const walk = (x - startX) * 2;
         dynamicContainer.scrollLeft = scrollLeft - walk;
       });
 
     } catch (err) {
       console.error("Match banner fetch error:", err);
-      if (loadingStatus) loadingStatus.innerHTML = `<span class="text-red-400 text-xs" > Error cargando banner.</span> `;
+      if (loadingStatus) loadingStatus.innerHTML = `<span class="text-red-400 text-xs">Error cargando banner.</span>`;
     }
   }); loadComponent("hero-container", "layout/hero.html");
   loadComponent("stats-container", "layout/stats_counter.html", async () => {

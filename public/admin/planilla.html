@@ -438,12 +438,13 @@
           <table class="table table-hover mb-0" id="mainTable">
             <thead>
               <tr>
-                <th style="width: 8%;"># No.</th>
+                <th style="width: 5%;">#</th>
+                <th style="width: 5%;">Foto</th>
                 <th>Nombre del Jugador</th>
-                <th style="width: 20%;">Método de Pago</th>
+                <th style="width: 18%;">Pago</th>
                 <th style="width: 15%;">Asistencia</th>
                 <th style="width: 25%;">Observaciones</th>
-                <th style="width: 10%;" class="text-center">Doc.</th>
+                <th style="width: 8%;" class="text-center">Doc.</th>
               </tr>
             </thead>
             <tbody id="planillaBody">
@@ -575,12 +576,13 @@
             const fechaSeleccionada = dateInput.value;
 
             // 1. Cargar jugadores
-            const { data: players, error: pErr } = await supabase.from('identificacion').select('numero, nombre, apellidos, categoria').order('apellidos');
+            const { data: players, error: pErr } = await supabase.from('identificacion').select('numero, nombre, apellidos, categoria, foto_url').order('apellidos');
             if (pErr) throw pErr;
             appState.players = players.map(p => ({
               id: p.numero,
               name: `${p.nombre} ${p.apellidos}`.trim(),
-              categoria: p.categoria
+              categoria: p.categoria,
+              foto: p.foto_url
             }));
 
             // 2. Buscar o Crear planilla para esta fecha
@@ -659,15 +661,22 @@
             }
 
             categoryEnum++;
-            const d = appState.registros[p.id] || { pago: '', asistencia: 'P', obs: '' };
+            const d = appState.registros[p.id] || { pago: '', asistencia: '', obs: '' };
             const tr = document.createElement('tr');
             tr.dataset.dni = p.id;
+            
+            // Thumbnail de foto
+            const avatarUrl = p.foto || '/images/ESCUDO.png';
+            
             tr.innerHTML = `
             <td class="fw-bold text-center" style="background: rgba(255,204,0,0.03);">${categoryEnum}</td>
+            <td class="text-center">
+              <img src="${avatarUrl}" alt="Foto" class="rounded-circle shadow-sm" style="width: 32px; height: 32px; object-fit: cover; border: 1px solid var(--border);">
+            </td>
             <td class="fw-bold text-primary">${p.name}</td>
             <td>
               <select class="form-select form-select-sm in-pago">
-                <option value="" ${!d.pago ? 'selected' : ''}>Sin pago</option>
+                <option value="" ${!d.pago ? 'selected' : ''}>---</option>
                 <option value="Nequi" ${d.pago === 'Nequi' ? 'selected' : ''}>Nequi</option>
                 <option value="Efectivo" ${d.pago === 'Efectivo' ? 'selected' : ''}>Efectivo</option>
                 <option value="Daviplata" ${d.pago === 'Daviplata' ? 'selected' : ''}>Daviplata</option>
@@ -676,6 +685,7 @@
             </td>
             <td>
               <select class="form-select form-select-sm in-asist">
+                <option value="" ${!d.asistencia ? 'selected' : ''}>---</option>
                 <option value="P" ${d.asistencia === 'P' ? 'selected' : ''}>Presente</option>
                 <option value="A" ${d.asistencia === 'A' ? 'selected' : ''}>Ausente</option>
                 <option value="E" ${d.asistencia === 'E' ? 'selected' : ''}>Excusa</option>
@@ -697,7 +707,7 @@
           const total = appState.players.length;
           let p = 0, a = 0, e = 0;
           appState.players.forEach(pl => {
-            const d = appState.registros[pl.id] || { asistencia: 'P' };
+            const d = appState.registros[pl.id] || { asistencia: '' };
             if (d.asistencia === 'P') p++;
             else if (d.asistencia === 'A') a++;
             else if (d.asistencia === 'E') e++;
@@ -723,8 +733,8 @@
             planilla_id: appState.currentPlanillaId,
             jugador_dni: dni,
             pago: d.pago || null,
-            asistencia: d.asistencia,
-            observacion: d.obs
+            asistencia: d.asistencia || null,
+            observacion: (d.obs && d.obs.trim()) ? d.obs : null
           };
 
           try {

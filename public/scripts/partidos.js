@@ -216,7 +216,11 @@ async function filtrarPartidos() {
 
   mostrarSpinner('partidos-spinner', true);
 
-  const { data, error } = await sb.from('partidos').select('*');
+  const { data: filtrados, error } = await sb
+    .from('partidos')
+    .select('*')
+    .eq('fecha', fecha);
+
   mostrarSpinner('partidos-spinner', false);
 
   if (error) {
@@ -224,9 +228,7 @@ async function filtrarPartidos() {
     return;
   }
 
-  const filtrados = (data || []).filter(p => toLocalDate(p.fecha) === fecha);
-
-  if (filtrados.length === 0) {
+  if (!filtrados || filtrados.length === 0) {
     resultsPartidos.innerHTML = `
       <div class="text-center py-14">
         <div class="w-14 h-14 rounded-full bg-slate-800 flex items-center justify-center mx-auto mb-3">
@@ -260,7 +262,11 @@ async function filtrarEntrenamientos() {
 
   mostrarSpinner('entrenamientos-spinner', true);
 
-  const { data, error } = await sb.from('entrenamientos').select('*');
+  const { data: filtrados, error } = await sb
+    .from('entrenamientos')
+    .select('*')
+    .eq('fecha', fecha);
+
   mostrarSpinner('entrenamientos-spinner', false);
 
   if (error) {
@@ -268,9 +274,7 @@ async function filtrarEntrenamientos() {
     return;
   }
 
-  const filtrados = (data || []).filter(e => toLocalDate(e.fecha) === fecha);
-
-  if (filtrados.length === 0) {
+  if (!filtrados || filtrados.length === 0) {
     resultsEnt.innerHTML = `
       <div class="text-center py-14">
         <div class="w-14 h-14 rounded-full bg-slate-800 flex items-center justify-center mx-auto mb-3">
