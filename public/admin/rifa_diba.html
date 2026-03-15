@@ -329,8 +329,8 @@
       <div class="toolbar">
 
         <div class="field-group">
-          <label>Boletas por jugador</label>
-          <input type="number" id="cfg-boletas" min="1" max="20" value="1">
+          <label>Total de boletas</label>
+          <input type="number" id="cfg-total" min="1" max="1000" value="10">
         </div>
 
         <div class="field-group">
@@ -365,9 +365,9 @@
         </div>
 
         <div class="actions-row">
-          <button class="btn-action btn-primary-action" id="btn-generar" disabled>
-            <i class="fas fa-circle-notch fa-spin" id="gen-icon"></i>
-            Cargando jugadores...
+          <button class="btn-action btn-primary-action" id="btn-generar">
+            <i class="fas fa-ticket-alt" id="gen-icon"></i>
+            Generar Boletas
           </button>
           <button class="btn-action btn-secondary-action" onclick="window.print()">
             <i class="fas fa-print"></i> Imprimir / PDF
@@ -421,26 +421,8 @@
     });
 
     // ── LOAD PLAYERS ──────────────────────────────────────────
-    let jugadores = [];
-    async function loadJugadores() {
-      const btn = document.getElementById('btn-generar');
-      const icon = document.getElementById('gen-icon');
-      try {
-        const { data, error } = await supabase
-          .from('identificacion')
-          .select('numero, nombre, apellidos, categoria')
-          .order('apellidos');
-        if (error) throw error;
-        jugadores = data || [];
-        btn.disabled = false;
-        btn.innerHTML = `<i class="fas fa-ticket-alt"></i> Generar Boletas (${jugadores.length} jugadores)`;
-        btn.classList.add('btn-primary');
-      } catch (e) {
-        btn.innerHTML = `<i class="fas fa-exclamation-triangle"></i> Error cargando jugadores`;
-        console.error(e);
-      }
-    }
-    loadJugadores();
+    // Ya no se cargan jugadores de la base de datos
+    // loadJugadores();
 
     // ── NUMERO GENERATOR ──────────────────────────────────────
     const usados = new Set();
@@ -465,30 +447,25 @@
       const contenedor = document.getElementById('contenedor');
       contenedor.innerHTML = '';
 
-      const boletasPorJugador = parseInt(document.getElementById('cfg-boletas').value) || 1;
+      const totalBoletas = parseInt(document.getElementById('cfg-total').value) || 10;
       const numPorBoleta = parseInt(document.getElementById('cfg-numeros').value) || 6;
       const fecha = document.getElementById('cfg-fecha').value.trim();
       const loteria = document.getElementById('cfg-loteria').value.trim();
       const premio = document.getElementById('cfg-premio').value.trim();
       const valor = document.getElementById('cfg-valor').value.trim();
 
-      if (!jugadores.length) { alert('No hay jugadores cargados.'); return; }
-
       const statusBar = document.getElementById('status-bar');
       const statusText = document.getElementById('status-text');
       statusBar.style.display = 'flex';
 
-      // Crear todas las boletas (jugador × boletasPorJugador)
+      // Crear todas las boletas según el total solicitado
       let todasLasBoletas = [];
-      jugadores.forEach(j => {
-        for (let b = 0; b < boletasPorJugador; b++) {
-          todasLasBoletas.push({
-            jugador: `${j.nombre} ${j.apellidos}`.trim(),
-            categoria: j.categoria || 'General',
-            numeros: generarNumeros(numPorBoleta),
-          });
-        }
-      });
+      for (let b = 0; b < totalBoletas; b++) {
+        todasLasBoletas.push({
+          jugador: '____________________________',
+          numeros: generarNumeros(numPorBoleta),
+        });
+      }
 
       statusText.textContent = `${todasLasBoletas.length} boletas generadas → ${Math.ceil(todasLasBoletas.length / 5)} páginas`;
 
