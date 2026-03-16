@@ -1,5 +1,5 @@
-const url = 'https://wdnlqfiwuocmmcdowjyw.supabase.co/auth/v1/signup';
-const key = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndkbmxxZml3dW9jbW1jZG93anl3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg1MjY1ODAsImV4cCI6MjA2NDEwMjU4MH0.4SCS_NRDIYLQJ1XouqW111BxkMOlwMWOjje9gFTgW_Q';
+const url = process.env.SUPABASE_URL + '/auth/v1/signup';
+const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
 async function createAdmin() {
     const res = await fetch(url, {

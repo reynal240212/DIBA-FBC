@@ -424,26 +424,15 @@
     // Ya no se cargan jugadores de la base de datos
     // loadJugadores();
 
-    // ── NUMERO GENERATOR ──────────────────────────────────────
-    const usados = new Set();
-
-    function generarNumeros(count) {
-      const set = new Set();
-      let tries = 0;
-      while (set.size < count && tries < 500) {
-        const n = String(Math.floor(Math.random() * 100)).padStart(2, '0');
-        if (usados.size >= 100 || !usados.has(n)) {
-          set.add(n);
-          usados.add(n);
-        }
-        tries++;
+    // ── BALANCED GENERATOR ──────────────────────────────────────
+    function shuffleArray(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
       }
-      return [...set].sort((a, b) => parseInt(a) - parseInt(b));
     }
 
-    // ── GENERATE ──────────────────────────────────────────────
     window.generarBoletas = function () {
-      usados.clear();
       const contenedor = document.getElementById('contenedor');
       contenedor.innerHTML = '';
 
@@ -454,30 +443,68 @@
       const premio = document.getElementById('cfg-premio').value.trim();
       const valor = document.getElementById('cfg-valor').value.trim();
 
-      const statusBar = document.getElementById('status-bar');
-      const statusText = document.getElementById('status-text');
-      statusBar.style.display = 'flex';
+      const totalEspacios = totalBoletas * numPorBoleta;
+      
+      // 1. Crear bolsa de números (pool) balanceada
+      let pool = [];
+      const numVueltas = Math.ceil(totalEspacios / 100);
+      
+      for (let i = 0; i < numVueltas; i++) {
+        for (let n = 0; n < 100; n++) {
+          pool.push(String(n).padStart(2, '0'));
+        }
+      }
 
-      // Crear todas las boletas según el total solicitado
-      let todasLasBoletas = [];
+      // Mezclar la bolsa
+      shuffleArray(pool);
+
+      // 2. Repartir en boletas asegurando que no se repitan números EN LA MISMA boleta
+      let boletas = [];
+      let pivot = 0;
+
       for (let b = 0; b < totalBoletas; b++) {
-        todasLasBoletas.push({
+        let numerosBoleta = [];
+        
+        for (let n = 0; n < numPorBoleta; n++) {
+          let numSeleccionado = pool[pivot];
+          
+          // Si el número ya está en esta boleta, buscamos el siguiente distinto en el pool y lo intercambiamos
+          if (numerosBoleta.includes(numSeleccionado)) {
+            let buscaIdx = pivot + 1;
+            while (buscaIdx < pool.length && numerosBoleta.includes(pool[buscaIdx])) {
+              buscaIdx++;
+            }
+            // Intercambio
+            if (buscaIdx < pool.length) {
+              [pool[pivot], pool[buscaIdx]] = [pool[buscaIdx], pool[pivot]];
+              numSeleccionado = pool[pivot];
+            }
+          }
+          
+          numerosBoleta.push(numSeleccionado);
+          pivot++;
+        }
+        
+        boletas.push({
           jugador: '____________________________',
-          numeros: generarNumeros(numPorBoleta),
+          numeros: numerosBoleta.sort((x, y) => parseInt(x) - parseInt(y))
         });
       }
 
-      statusText.textContent = `${todasLasBoletas.length} boletas generadas → ${Math.ceil(todasLasBoletas.length / 5)} páginas`;
+      // 3. Renderizar
+      const statusBar = document.getElementById('status-bar');
+      const statusText = document.getElementById('status-text');
+      statusBar.style.display = 'flex';
+      statusText.textContent = `${boletas.length} boletas generadas | Distribución: Todas con ${numPorBoleta} números.`;
 
-      // Paginar: 5 boletas por página
       const BOLETAS_POR_PAG = 5;
       let globalIdx = 0;
 
-      for (let p = 0; p < Math.ceil(todasLasBoletas.length / BOLETAS_POR_PAG); p++) {
+      for (let p = 0; p < Math.ceil(boletas.length / BOLETAS_POR_PAG); p++) {
         const page = document.createElement('div');
         page.className = 'page-rifa';
 
-        const slice = todasLasBoletas.slice(p * BOLETAS_POR_PAG, (p + 1) * BOLETAS_POR_PAG);
+        const slice = boletas.slice(p * BOLETAS_POR_PAG, (p + 1) * BOLETAS_POR_PAG);
         slice.forEach(boleta => {
           globalIdx++;
           const numerosHTML = boleta.numeros.map(n =>
@@ -501,7 +528,7 @@
                     📅 Juega: <strong>${fecha}</strong><br>
                     🎰 Lotería: <strong>${loteria}</strong><br>
                     🏆 Premio: <strong>${premio}</strong><br>
-                    💰 Valor: <strong>${valor}</strong> por número
+                    💰 Valor: <strong>${valor}</strong>
                   </div>
                   <div class="boleta-numeros">${numerosHTML}</div>
                 </div>
