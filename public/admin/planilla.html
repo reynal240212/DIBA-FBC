@@ -28,10 +28,12 @@
 
 <body class="bg-dark text-white" style="overflow-x: hidden; font-family: 'Inter', sans-serif;">
   <!-- Loader Loader -->
-  <div id="app-loader" class="fixed-top w-100 h-100 d-flex align-items-center justify-content-center bg-dark" style="z-index: 9999;">
-    <div class="text-center">
-      <div class="spinner-border text-warning mb-3" role="status" style="width: 3rem; height: 3rem;"></div>
-      <p class="text-warning fw-black text-uppercase italic tracking-widest small">Cargando DIBA FBC...</p>
+  <div id="app-loader" class="fixed-top w-100 h-100 d-flex align-items-center justify-content-center bg-[#06090e]" style="z-index: 9999;">
+    <div class="text-center animate-fade-up">
+      <div class="relative w-16 h-16 mx-auto mb-4" style="position: relative; width: 64px; height: 64px;">
+        <div class="spinner-border text-warning" role="status" style="width: 100%; height: 100%; border-width: 4px;"></div>
+      </div>
+      <p class="text-warning fw-black text-uppercase italic tracking-widest small mt-3">DIBA FBC — Planilla Control</p>
     </div>
   </div>
 
@@ -88,18 +90,18 @@
   <div class="main">
     <!-- Top Bar -->
     <header class="topbar">
-      <button class="mobile-menu-btn" id="menu-btn">
+      <button class="mobile-menu-btn" id="menu-btn" style="display: none;">
         <i class="fas fa-bars" id="menu-icon"></i>
       </button>
-      <div>
-        <div class="page-title">Planilla de <span>Asistencia</span></div>
-        <div class="page-subtitle">Control de asistencia y pagos — DIBA FBC</div>
+      <div class="animate-fade-up">
+        <div class="page-title">Sincronización <span>Planilla</span></div>
+        <div class="page-subtitle">Control de asistencia y gestión — DIBA FBC</div>
       </div>
       <div class="topbar-right">
-        <button id="theme-toggle" class="mobile-menu-btn" style="display: flex; margin-right: 0.5rem;" title="Cambiar Tema">
+        <button id="theme-toggle" class="btn btn-outline" style="padding: 0.5rem; width: 40px; height: 40px; justify-content: center;" title="Cambiar Tema">
           <i id="theme-icon" class="fas fa-sun"></i>
         </button>
-        <div class="topbar-time" id="clock">00:00:00</div>
+        <div class="topbar-time glass" id="clock">00:00:00</div>
       </div>
     </header>
 
@@ -174,40 +176,34 @@
         </div>
 
         <!-- Controles -->
-        <div class="card shadow-lg mb-4 border-0" style="background: var(--dark2); border-radius: 16px;">
-          <div class="card-body d-flex justify-content-between align-items-center flex-wrap gap-3">
+        <div class="panel glass animate-fade-up border-0" style="animation-delay: 0.2s">
+          <div class="panel-body d-flex justify-content-between align-items-center flex-wrap gap-3">
             <div class="d-flex gap-2">
-              <a href="../ficha.html" class="btn btn-warning fw-bold text-dark rounded-pill px-4"><i
-                  class="fas fa-users-cog me-2"></i>Gestionar Jugadores</a>
+              <a href="../ficha.html" class="btn btn-primary"><i
+                  class="fas fa-users-cog"></i> Gestionar Jugadores</a>
             </div>
             <div class="d-flex gap-3 align-items-center">
-              <div class="input-group">
-                <span class="input-group-text border-0"
-                  style="background: var(--dark3); color: var(--gold); border-radius: 8px 0 0 8px;">
-                  <i class="fas fa-search"></i>
-                </span>
-                <input type="text" id="playerSearch" class="form-control border-0 shadow-none"
-                  placeholder="Buscar jugador..."
-                  style="background: var(--bg-input); color: var(--text-main); border-radius: 0 8px 8px 0;">
+              <div class="search-container">
+                <input type="text" id="playerSearch" class="form-control"
+                  placeholder="Buscar jugador...">
               </div>
-              <button id="generatePDF" class="btn btn-danger rounded-pill px-4"><i
-                  class="fas fa-file-pdf me-2"></i>PDF</button>
-              <button id="generateExcel" class="btn btn-success rounded-pill px-4"><i
-                  class="fas fa-file-excel me-2"></i>Excel</button>
-              <button id="saveAllBtn" class="btn btn-warning fw-bold text-dark rounded-pill px-4">
-                <i class="fas fa-cloud-upload-alt me-2"></i>Guardar Planilla
+              <button id="generatePDF" class="btn btn-outline" style="border-color: #f43f5e; color: #f43f5e;"><i
+                  class="fas fa-file-pdf"></i> PDF</button>
+              <button id="generateExcel" class="btn btn-outline" style="border-color: #22c55e; color: #22c55e;"><i
+                  class="fas fa-file-excel"></i> XLSX</button>
+              <button id="saveAllBtn" class="btn btn-primary">
+                <i class="fas fa-cloud-upload-alt"></i> Guardar Planilla
               </button>
-              <button onclick="openCreateModal()" class="btn btn-dark fw-bold text-warning rounded-pill px-4 border-warning">
-                <i class="fas fa-plus me-2"></i>Nuevo Jugador
+              <button onclick="openCreateModal()" class="btn btn-outline">
+                <i class="fas fa-plus"></i> Nuevo
               </button>
             </div>
           </div>
         </div>
 
         <!-- Tabla -->
-        <div class="table-responsive shadow-lg rounded-4 border-0 mb-5"
-          style="background: var(--dark2); overflow: hidden;">
-          <table class="table table-hover mb-0" id="mainTable">
+        <div class="panel glass animate-fade-up planilla-container" style="animation-delay: 0.3s">
+          <table class="table table-planilla mb-0" id="mainTable">
             <thead>
               <tr>
                 <th style="width: 5%;">#</th>

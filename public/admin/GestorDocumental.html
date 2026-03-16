@@ -39,7 +39,19 @@
     </style>
 </head>
 
-<body style="display: none;" id="admin-body">
+    <!-- Loader Loader -->
+    <div id="app-loader" class="fixed inset-0 z-[9999] flex items-center justify-center bg-[#06090e]">
+        <div class="text-center animate-fade-up">
+            <div class="relative w-16 h-16 mx-auto mb-6">
+                <div class="absolute inset-0 border-4 border-gold/10 rounded-full"></div>
+                <div class="absolute inset-0 border-4 border-t-gold rounded-full animate-spin"></div>
+            </div>
+            <p class="text-[10px] font-black uppercase tracking-[0.3em] text-gold italic opacity-80">Gestor Documental — Sistema</p>
+        </div>
+    </div>
+
+    <body class="bg-dark text-dibaText selection:bg-dibaGold/30 overflow-x-hidden font-inter" style="display: none;" id="admin-body">
+
 
     <!-- ══ SIDEBAR ══ -->
     <aside class="sidebar" id="sidebar">
@@ -91,24 +103,29 @@
 
     <div class="main">
         <!-- Top Bar -->
-        <header class="topbar">
-            <button class="mobile-menu-btn" id="menu-btn">
-                <i class="fas fa-bars" id="menu-icon"></i>
-            </button>
-            <div>
-                <div class="page-title">Gestor <span>Documental</span></div>
-                <div class="page-subtitle">Administración de archivos y registros — DIBA FBC</div>
+        <header class="topbar sticky top-0 z-50">
+            <div class="flex items-center gap-4 animate-fade-up">
+                <button
+                    class="mobile-menu-btn"
+                    id="menu-btn" style="display: none;">
+                    <i class="fas fa-bars" id="menu-icon"></i>
+                </button>
+                <div>
+                    <h1 class="page-title text-xl md:text-2xl">Gestor <span>Documental</span></h1>
+                    <p class="page-subtitle text-[10px] uppercase tracking-widest mt-1">Administración de archivos y registros — DIBA FBC</p>
+                </div>
             </div>
-            <div class="topbar-right">
-                <button id="theme-toggle" class="mobile-menu-btn" style="display: flex; margin-right: 0.5rem;" title="Cambiar Tema">
+            <div class="flex items-center gap-4">
+                <button id="theme-toggle" class="btn btn-outline" style="padding: 0.5rem; width: 40px; height: 40px; justify-content: center;" title="Cambiar Tema">
                   <i id="theme-icon" class="fas fa-sun"></i>
                 </button>
-                <div class="topbar-time" id="clock">--:--</div>
-                <div class="relative group">
+                <div class="hidden sm:block topbar-time glass"
+                    id="clock">--:--</div>
+                <div class="relative group hidden md:block">
                     <i
-                        class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-dibaGold transition-colors"></i>
+                        class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-gold transition-colors"></i>
                     <input type="text" id="searchInput" placeholder="Buscar..."
-                        class="pl-12 pr-4 py-2 bg-slate-100/10 text-dibaText rounded-xl border border-white/10 focus:ring-2 focus:ring-dibaGold outline-none font-medium transition-all text-sm">
+                        class="pl-12 pr-4 py-2 bg-white/5 text-dibaText rounded-xl border border-white/5 focus:ring-2 focus:ring-gold outline-none font-medium transition-all text-sm">
                 </div>
             </div>
         </header>
@@ -128,10 +145,10 @@
                     class="px-6 py-2 rounded-full bg-white/5 text-slate-400 text-[10px] font-black uppercase italic border border-white/10 hover:border-dibaGold transition-all whitespace-nowrap">Jugadores</button>
             </div>
 
-            <div id="dynamic-content" class="animate__animated animate__fadeIn">
+            <div id="dynamic-content" class="animate__animated animate__fadeIn panel glass" style="border-radius: 24px; min-height: 400px;">
                 <div class="flex flex-col items-center justify-center py-20 text-slate-500">
-                    <i class="fas fa-circle-notch animate-spin text-4xl mb-4"></i>
-                    <p class="text-xs font-bold uppercase tracking-widest">Sincronizando datos...</p>
+                    <i class="fas fa-circle-notch animate-spin text-4xl mb-4 text-gold"></i>
+                    <p class="text-[10px] font-black uppercase tracking-widest text-gold opacity-60">Sincronizando base de datos...</p>
                 </div>
             </div>
         </div>
