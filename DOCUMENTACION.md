@@ -52,6 +52,22 @@ Para evitar que los jugadores queden atrapados en la categoría "General" por fa
 
 ---
 
+## 📄 Reportes y Herramientas Deportivas
+
+### 1. Planilla Pro (PDF)
+Sistema de generación de reportes listo para impresión:
+- **Control Diario**: Tabla unificada de Asistencia y Pagos optimizada para llenado manual.
+- **Esquema Táctico**: Hoja con diagrama de cancha de fútbol a escala y cuadrícula de puntos estilo libreta para diseño de jugadas.
+- **Doble Cara**: Formato diseñado para optimizar el uso de papel en impresiones administrativas.
+
+### 2. Registro Extendido de Jugadores
+El formulario de creación de jugadores ha sido expandido para capturar toda la metadata necesaria de la tabla `identificacion`:
+- Datos básicos: Nombres, Apellidos, DNI.
+- Datos sociodemográficos: Nacionalidad, Sexo, Lugar de Nacimiento.
+- Datos de salud/expedición: Grupo Sanguíneo, Fechas de Expedición y Vencimiento del documento.
+
+---
+
 ## 🔐 Administración y Seguridad
 
 ### Roles (RBAC)

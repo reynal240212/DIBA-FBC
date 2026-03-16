@@ -27,7 +27,10 @@ Este proyecto es una plataforma integral para **informar, conectar y gestionar**
 ✅ **Simbología Interactiva**: Página dedicada a la explicación dinámica de los símbolos del escudo institucional.
 ✅ **Himno Oficial**: Sección multimedia para escuchar el himno oficial y consultar su letra.
 ✅ **Integración Social**: Feed dinámico de Instagram integrado directamente en la sección de noticias y muro social.
-✅ **Gestión Deportiva**: Control de plantillas, asistencia, pagos, partidos y análisis de rendimiento en tiempo real con banners de próximos encuentros.
+✅ **Gestión Deportiva**: Control de plantillas, asistencia, pagos, partidos y análisis de rendimiento en tiempo real.
+✅ **Planilla Pro (PDF)**: Generación de reportes profesionales de asistencia y pagos con formato para impresión a doble cara.
+✅ **Esquema Táctico**: Herramienta de entrenamiento con diagramas de cancha de fútbol y cuadrícula técnica integrados en los reportes.
+✅ **Registro de Jugadores**: Formulario extendido con recolección completa de datos de identificación (DNI, Nacionalidad, Salud, etc.).
 
 ---
 

@@ -291,33 +291,74 @@
         <div id="createPlayerModal" class="d-none fixed-top w-100 h-100 d-flex align-items-center justify-content-center p-4"
           style="background: rgba(10,14,20,0.9); z-index: 2000; backdrop-filter: blur(5px);">
           <div class="card border-0 shadow-2xl w-100 mx-auto"
-            style="max-width: 500px; background: #0a101b; border: 1px solid rgba(255,255,255,0.1) !important; border-radius: 2rem;">
+            style="max-width: 800px; background: #0a101b; border: 1px solid rgba(255,255,255,0.1) !important; border-radius: 2rem;">
             <div class="card-header border-0 p-4 d-flex justify-content-between align-items-center bg-transparent">
               <h3 class="h5 fw-black text-white text-uppercase italic mb-0">Nuevo Jugador</h3>
               <button onclick="closeCreateModal()" class="btn btn-dark rounded-circle p-0" style="width: 40px; height: 40px;">
                 <i class="fas fa-times"></i>
               </button>
             </div>
-            <div class="card-body p-4">
+            <div class="card-body p-4" style="max-height: 70vh; overflow-y: auto;">
               <form id="quickCreatePlayerForm">
-                <div class="mb-3">
-                  <label class="form-label text-muted small fw-bold text-uppercase">DNI / Número</label>
-                  <input type="text" id="newDni" class="form-control bg-dark border-secondary text-white rounded-3" required>
+                <div class="row g-3">
+                  <div class="col-md-6">
+                    <label class="form-label text-muted small fw-bold text-uppercase">Número de Identificación (DNI)</label>
+                    <input type="text" id="newDni" class="form-control bg-dark border-secondary text-white rounded-3" required>
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label text-muted small fw-bold text-uppercase">Categoría</label>
+                    <select id="newCategoria" class="form-select bg-dark border-secondary text-white rounded-3" required>
+                      <option value="2014/15/16">2014/15/16</option>
+                      <option value="2012">2012</option>
+                      <option value="2013">2013</option>
+                      <option value="General">General</option>
+                    </select>
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label text-muted small fw-bold text-uppercase">Nombres</label>
+                    <input type="text" id="newNombre" class="form-control bg-dark border-secondary text-white rounded-3" required>
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label text-muted small fw-bold text-uppercase">Apellidos</label>
+                    <input type="text" id="newApellidos" class="form-control bg-dark border-secondary text-white rounded-3" required>
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label text-muted small fw-bold text-uppercase">Fecha de Nacimiento</label>
+                    <input type="date" id="newFechaNac" class="form-control bg-dark border-secondary text-white rounded-3">
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label text-muted small fw-bold text-uppercase">Sexo</label>
+                    <select id="newSexo" class="form-select bg-dark border-secondary text-white rounded-3">
+                      <option value="M">Masculino</option>
+                      <option value="F">Femenino</option>
+                    </select>
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label text-muted small fw-bold text-uppercase">Nacionalidad</label>
+                    <input type="text" id="newNacionalidad" value="Colombiano" class="form-control bg-dark border-secondary text-white rounded-3">
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label text-muted small fw-bold text-uppercase">Lugar de Nacimiento</label>
+                    <input type="text" id="newLugarNac" class="form-control bg-dark border-secondary text-white rounded-3">
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label text-muted small fw-bold text-uppercase">Grupo Sanguíneo</label>
+                    <input type="text" id="newGrupoSangre" placeholder="O+" class="form-control bg-dark border-secondary text-white rounded-3">
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label text-muted small fw-bold text-uppercase">Fecha Expedición</label>
+                    <input type="date" id="newFechaExp" class="form-control bg-dark border-secondary text-white rounded-3">
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label text-muted small fw-bold text-uppercase">Lugar Expedición</label>
+                    <input type="text" id="newLugarExp" class="form-control bg-dark border-secondary text-white rounded-3">
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label text-muted small fw-bold text-uppercase">Fecha Vencimiento</label>
+                    <input type="date" id="newFechaVenc" class="form-control bg-dark border-secondary text-white rounded-3">
+                  </div>
                 </div>
-                <div class="mb-3">
-                  <label class="form-label text-muted small fw-bold text-uppercase">Nombre Completo</label>
-                  <input type="text" id="newNombre" class="form-control bg-dark border-secondary text-white rounded-3" required>
-                </div>
-                <div class="mb-3">
-                  <label class="form-label text-muted small fw-bold text-uppercase">Categoría</label>
-                  <select id="newCategoria" class="form-select bg-dark border-secondary text-white rounded-3" required>
-                    <option value="2014/2015/2016">2014/2015/2016</option>
-                    <option value="2012">2012</option>
-                    <option value="2013">2013</option>
-                    <option value="General">General</option>
-                  </select>
-                </div>
-                <button type="submit" class="btn btn-warning w-100 fw-bold rounded-pill py-3 mt-3">Crear Jugador</button>
+                <button type="submit" class="btn btn-warning w-100 fw-bold rounded-pill py-3 mt-4">Registrar Jugador Completo</button>
               </form>
             </div>
           </div>
@@ -1045,7 +1086,23 @@
           e.preventDefault();
           const dni = document.getElementById('newDni').value;
           const nombre = document.getElementById('newNombre').value;
+          const apellidos = document.getElementById('newApellidos').value;
           const categoria = document.getElementById('newCategoria').value;
+          
+          const payload = {
+            numero: dni,
+            nombre: nombre,
+            apellidos: apellidos,
+            categoria: categoria,
+            fecha_nacimiento: document.getElementById('newFechaNac').value || null,
+            sexo: document.getElementById('newSexo').value,
+            nacionalidad: document.getElementById('newNacionalidad').value,
+            lugar_nacimiento: document.getElementById('newLugarNac').value,
+            grupo_sanguineo: document.getElementById('newGrupoSangre').value,
+            fecha_expedicion: document.getElementById('newFechaExp').value || null,
+            lugar_expedicion: document.getElementById('newLugarExp').value,
+            fecha_vencimiento: document.getElementById('newFechaVenc').value || null
+          };
 
           const btn = e.target.querySelector('button[type="submit"]');
           const originalText = btn.innerHTML;
@@ -1053,27 +1110,25 @@
           btn.disabled = true;
 
           try {
-            // Reutilizar lógica (mismo patrón que admin-players.js)
+            // 1. Insertar en 'jugadores' (Mantenemos compatibilidad con el resto del sistema)
             const { error: pErr } = await supabase.from('jugadores').insert([{
-              nombre: nombre,
+              nombre: `${nombre} ${apellidos}`.trim(),
               categoria: categoria,
               status: 'Activo',
               fecha_registro: new Date().toISOString()
             }]);
             if (pErr) throw pErr;
 
-            const { error: idErr } = await supabase.from('identificacion').insert([{
-              numero: dni,
-              nombre: nombre.split(' ')[0],
-              apellidos: nombre.split(' ').slice(1).join(' '),
-              categoria: categoria
-            }]);
+            // 2. Insertar en 'identificacion' (Tabla detallada)
+            const { error: idErr } = await supabase.from('identificacion').insert([payload]);
             if (idErr) throw idErr;
 
-            showToast('¡Jugador creado con éxito!');
+            showToast('¡Jugador registrado con éxito!');
             closeCreateModal();
             loadData();
+            e.target.reset();
           } catch (err) {
+            console.error(err);
             alert('Error: ' + err.message);
           } finally {
             btn.innerHTML = originalText;
