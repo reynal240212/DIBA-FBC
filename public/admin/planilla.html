@@ -729,6 +729,7 @@
         };
 
         document.getElementById('generatePDFPro').onclick = async () => {
+          console.log("DIBA: Generando Planilla Pro v1.1...");
           const { jsPDF } = window.jspdf;
           const doc = new jsPDF('p', 'mm', 'letter');
           const categories = [...new Set(appState.players.map(p => p.categoria))].sort();
@@ -793,7 +794,7 @@
             for (let j = 0; j <= h; j += step) pdf.line(x, y + j, x + w, y + j);
           }
 
-          function drawArc(pdf, x, y, r, startAngle, endAngle) {
+          function libDrawArc(pdf, x, y, r, startAngle, endAngle) {
             const segments = 20;
             const points = [];
             for (let i = 0; i <= segments; i++) {
@@ -801,9 +802,6 @@
               const px = r * Math.cos(angle);
               const py = r * Math.sin(angle);
               if (i === 0) {
-                // First point needs to be absolute for the lines call to start correctly if we used move,
-                // but pdf.lines uses relative coordinates for segments.
-                // However, pdf.lines(points, x, y) starts at x,y and follows relative offsets.
                 points.push([px, py]);
               } else {
                 const prevAngle = startAngle + (endAngle - startAngle) * ((i - 1) / segments);
@@ -838,7 +836,7 @@
             // Left Penalty Spot
             pdf.circle(x + w / 9, y + h / 2, 0.5, 'F');
             // Left Penalty Arc
-            drawArc(pdf, x + w / 6, y + h / 2, 9, -Math.PI/4, Math.PI/4);
+            libDrawArc(pdf, x + w / 6, y + h / 2, 9, -Math.PI/4, Math.PI/4);
 
             // Right Penalty Area
             pdf.rect(x + w - w / 6, y + h / 4, w / 6, h / 2);
@@ -847,7 +845,7 @@
             // Right Penalty Spot
             pdf.circle(x + w - w / 9, y + h / 2, 0.5, 'F');
             // Right Penalty Arc
-            drawArc(pdf, x + w - w / 6, y + h / 2, 9, 3*Math.PI/4, 5*Math.PI/4);
+            libDrawArc(pdf, x + w - w / 6, y + h / 2, 9, 3*Math.PI/4, 5*Math.PI/4);
 
             // Goals lines
             pdf.line(x - 2, y + h * 0.4, x, y + h * 0.4);
