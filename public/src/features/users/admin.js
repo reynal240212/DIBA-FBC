@@ -6,42 +6,80 @@ import { supabase, requireAdmin } from '../../core/supabase.js';
 function qs(sel, root = document) { return root.querySelector(sel); }
 
 function renderRows(rows) {
-  const tbody = qs('#usersTable tbody');
+  const tbody = qs('#users-tbody');
+  const table = qs('#usersTable');
+  const loading = qs('#loading-state');
+  const empty = qs('#empty-state');
+  const badge = qs('#count-badge');
+
   if (!tbody) return;
   tbody.innerHTML = '';
+
+  // Actualizar contador
+  if (badge) badge.textContent = `${rows.length} usuarios`;
+
+  if (rows.length === 0) {
+    loading?.classList.add('hidden');
+    table?.classList.add('hidden');
+    empty?.classList.remove('hidden');
+    return;
+  }
+
   rows.forEach(u => {
     const tr = document.createElement('tr');
-    tr.className = "hover:bg-slate-50/50 transition-all";
+    tr.className = "hover:bg-white/[0.02] transition-all border-b border-white/5";
     tr.innerHTML = `
-      <td class="p-4 text-[11px] font-mono text-slate-400" title="${u.id}">${u.id.substring(0, 8)}...</td>
-      <td class="p-4"><span class="font-bold text-slate-700 uppercase italic text-xs">${u.username ?? ''}</span></td>
-      <td class="p-4"><span class="text-slate-500 font-medium text-xs">${u.full_name ?? ''}</span></td>
-      <td class="p-4">
-        <span class="px-3 py-1 bg-amber-50 text-amber-600 text-[8px] font-black uppercase italic rounded-full tracking-widest border border-amber-100">
+      <td class="px-6 py-4 text-[10px] font-mono text-slate-500" title="${u.id}">${u.id.substring(0, 8)}...</td>
+      <td class="px-6 py-4">
+        <div class="flex items-center gap-2">
+            <div class="w-7 h-7 rounded-lg bg-dibaGold/10 text-dibaGold flex items-center justify-center text-[10px] font-black uppercase">
+                ${(u.username || 'U')[0]}
+            </div>
+            <span class="font-bold text-dibaText uppercase italic text-xs tracking-tight">${u.username ?? ''}</span>
+        </div>
+      </td>
+      <td class="px-6 py-4"><span class="text-slate-400 font-bold text-[11px] uppercase tracking-wide">${u.full_name ?? ''}</span></td>
+      <td class="px-6 py-4">
+        <span class="px-3 py-1 bg-dibaGold/10 text-dibaGold text-[8px] font-black uppercase italic rounded-full tracking-widest border border-dibaGold/20">
           ${u.role}
         </span>
       </td>
-      <td class="p-4 text-[10px] text-slate-400 font-bold uppercase">${new Date(u.created_at).toLocaleDateString()}</td>
-      <td class="p-4 text-center">
-        <button class="w-8 h-8 rounded-full bg-rose-50 text-rose-500 hover:bg-rose-500 hover:text-white transition-all" data-action="del" data-id="${u.id}">
-          <i class="fas fa-trash text-[10px]"></i>
-        </button>
+      <td class="px-6 py-4 text-[10px] text-slate-500 font-bold uppercase tracking-widest">${new Date(u.created_at).toLocaleDateString('es-CO')}</td>
+      <td class="px-6 py-4 text-center">
+        <div class="flex items-center justify-center gap-2">
+            <button class="w-8 h-8 rounded-xl bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white transition-all border border-red-500/20" 
+                    data-action="del" data-id="${u.id}" title="Eliminar Usuario">
+              <i class="fas fa-trash text-[10px]"></i>
+            </button>
+        </div>
       </td>`;
     tbody.appendChild(tr);
   });
+
+  // Mostrar tabla, ocultar otros
+  loading?.classList.add('hidden');
+  empty?.classList.add('hidden');
+  table?.classList.remove('hidden');
 }
 
 async function loadUsers() {
-  const { data, error } = await supabase
-    .from('users')
-    .select('*')
-    .order('created_at', { ascending: false });
+  try {
+    const { data, error } = await supabase
+      .from('users')
+      .select('*')
+      .order('created_at', { ascending: false });
 
-  if (error) {
-    console.error('Error fetching users:', error);
-    return;
+    if (error) throw error;
+    renderRows(data || []);
+  } catch (err) {
+    console.error('Error fetching users:', err);
+    const alertBar = qs('#alert-bar');
+    if (alertBar) {
+        alertBar.textContent = '⚠️ Error al sincronizar: ' + err.message;
+        alertBar.classList.remove('hidden');
+        alertBar.classList.add('flex');
+    }
   }
-  renderRows(data);
 }
 
 function hookListEvents() {
