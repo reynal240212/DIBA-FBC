@@ -609,7 +609,7 @@
           const tr = e.target.closest('tr');
           if (!tr) return;
           const dni = tr.dataset.dni;
-          if (!appState.registros[dni]) appState.registros[dni] = { pago: '', asistencia: 'P', obs: '' };
+          if (!appState.registros[dni]) appState.registros[dni] = { pago: '', asistencia: '', obs: '' };
 
           let changed = false;
           if (e.target.classList.contains('in-pago')) {
@@ -629,7 +629,7 @@
           const tr = e.target.closest('tr');
           if (!tr) return;
           const dni = tr.dataset.dni;
-          if (!appState.registros[dni]) appState.registros[dni] = { pago: '', asistencia: 'P', obs: '' };
+          if (!appState.registros[dni]) appState.registros[dni] = { pago: '', asistencia: '', obs: '' };
 
           if (e.target.classList.contains('in-obs')) {
             appState.registros[dni].obs = e.target.value;
