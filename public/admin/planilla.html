@@ -697,61 +697,39 @@
             
             const playersInCat = appState.players.filter(p => p.categoria === cat).sort((a,b) => a.name.localeCompare(b.name));
             
-            // --- FRONT PAGE: ATTENDANCE ---
-            renderPDFHeader(doc, "PLANILLA DE ASISTENCIA", cat);
+            // --- FRONT PAGE: CONTROL DIARIO (ASISTENCIA + PAGO) ---
+            renderPDFHeader(doc, "PLANILLA DE CONTROL DIARIO", cat);
             
             const attendanceBody = playersInCat.map((p, i) => [
               i + 1,
               p.name,
-              '', '', '', '', '', '', '', '', '', '' // 10 empty columns for attendance
+              p.id,
+              '', '', '' // Pago, Asistencia, Observaciones (Empty for manual fill)
             ]);
 
             doc.autoTable({
               startY: 35,
-              head: [['#', 'Nombre del Jugador', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10']],
+              head: [['#', 'Nombre del Jugador', 'DNI', 'Método de Pago', 'Asist.', 'Observaciones']],
               body: attendanceBody,
               headStyles: { fillColor: [0, 42, 64], fontSize: 8 },
-              styles: { fontSize: 8, cellPadding: 2 },
-              columnStyles: {
-                0: { cellWidth: 8 },
-                1: { cellWidth: 60 }
-              },
-              theme: 'grid'
-            });
-
-            // --- BACK PAGE: PAYMENTS ---
-            doc.addPage();
-            renderPDFHeader(doc, "CONTROL DE PAGOS (RESPALDO)", cat);
-            
-            const paymentsBody = playersInCat.map((p, i) => [
-              i + 1,
-              p.name,
-              '', '', '', '', '' // Concepto, Valor, Fecha, Saldo, Firma
-            ]);
-
-            doc.autoTable({
-              startY: 35,
-              head: [['#', 'Nombre del Jugador', 'Concepto', 'Valor', 'Fecha', 'Saldo', 'Firma']],
-              body: paymentsBody,
-              headStyles: { fillColor: [212, 175, 55], textColor: [0, 0, 0], fontSize: 8 }, // Gold header
-              styles: { fontSize: 8, cellPadding: 2 },
+              styles: { fontSize: 8, cellPadding: 2, minCellHeight: 10 },
               columnStyles: {
                 0: { cellWidth: 8 },
                 1: { cellWidth: 50 },
-                2: { cellWidth: 30 },
-                3: { cellWidth: 20 },
-                4: { cellWidth: 25 },
-                5: { cellWidth: 20 },
-                6: { cellWidth: 35 }
+                2: { cellWidth: 25 },
+                3: { cellWidth: 30 },
+                4: { cellWidth: 15 },
+                5: { cellWidth: 54 }
               },
               theme: 'grid'
             });
 
-            // --- PAGE 3: TACTICAL SHEET ---
+            // --- PAGE 2: TACTICAL SHEET (With Grid) ---
             doc.addPage();
             renderPDFHeader(doc, "ESQUEMA TÁCTICO", cat);
-            drawSoccerField(doc, 14, 35, 182, 110); // Top field
-            drawSoccerField(doc, 14, 155, 182, 110); // Bottom field
+            drawTacticalGrid(doc, 14, 35, 182, 220); // Full page grid background
+            drawSoccerField(doc, 14, 40, 182, 105); // Top field
+            drawSoccerField(doc, 14, 155, 182, 105); // Bottom field
           });
 
           function renderPDFHeader(pdf, title, category) {
@@ -762,14 +740,26 @@
             pdf.text(title, 14, 22);
             pdf.setFontSize(9);
             pdf.setTextColor(100);
-            pdf.text(`Categoría: ${category} | Fecha: ${new Date().toLocaleDateString('es-CO')}`, 14, 28);
+            pdf.text(`Categoría: ${category} | Fecha: ________________`, 14, 28);
             pdf.setDrawColor(200);
             pdf.line(14, 30, 202, 30);
+          }
+
+          function drawTacticalGrid(pdf, x, y, w, h) {
+            pdf.setDrawColor(230);
+            pdf.setLineWidth(0.1);
+            const step = 5; // 5mm grid
+            for (let i = 0; i <= w; i += step) pdf.line(x + i, y, x + i, y + h);
+            for (let j = 0; j <= h; j += step) pdf.line(x, y + j, x + w, y + j);
           }
 
           function drawSoccerField(pdf, x, y, w, h) {
             pdf.setDrawColor(0, 42, 64);
             pdf.setLineWidth(0.5);
+            // White background for the field area to clear grid
+            pdf.setFillColor(255, 255, 255);
+            pdf.rect(x, y, w, h, 'F');
+            
             // Outer boundary
             pdf.rect(x, y, w, h);
             // Halfway line
@@ -786,7 +776,7 @@
             // Left Penalty Spot
             pdf.circle(x + w / 9, y + h / 2, 0.5, 'F');
             // Left Penalty Arc
-            pdf.arc(x + w / 6, y + h / 2, 9, 1.5 * Math.PI, 0.5 * Math.PI, false);
+            pdf.arc(x + w / 6, y + h / 2, 9, 3*Math.PI/2, Math.PI/2, false);
 
             // Right Penalty Area
             pdf.rect(x + w - w / 6, y + h / 4, w / 6, h / 2);
@@ -795,17 +785,13 @@
             // Right Penalty Spot
             pdf.circle(x + w - w / 9, y + h / 2, 0.5, 'F');
             // Right Penalty Arc
-            pdf.arc(x + w - w / 6, y + h / 2, 9, 0.5 * Math.PI, 1.5 * Math.PI, false);
+            pdf.arc(x + w - w / 6, y + h / 2, 9, Math.PI/2, 3*Math.PI/2, false);
 
-            // Goals
-            pdf.setLineWidth(0.8);
+            // Goals lines
             pdf.line(x - 2, y + h * 0.4, x, y + h * 0.4);
             pdf.line(x - 2, y + h * 0.6, x, y + h * 0.6);
-            pdf.line(x - 2, y + h * 0.4, x - 2, y + h * 0.6);
-
             pdf.line(x + w, y + h * 0.4, x + w + 2, y + h * 0.4);
             pdf.line(x + w, y + h * 0.6, x + w + 2, y + h * 0.6);
-            pdf.line(x + w + 2, y + h * 0.4, x + w + 2, y + h * 0.6);
           }
 
           const blob = doc.output('blob');
