@@ -424,14 +424,7 @@
     // Ya no se cargan jugadores de la base de datos
     // loadJugadores();
 
-    // ── BALANCED GENERATOR ──────────────────────────────────────
-    function shuffleArray(array) {
-      for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
-      }
-    }
-
+    // ── SEQUENTIAL GENERATOR ──────────────────────────────────────
     window.generarBoletas = function () {
       const contenedor = document.getElementById('contenedor');
       contenedor.innerHTML = '';
@@ -443,51 +436,27 @@
       const premio = document.getElementById('cfg-premio').value.trim();
       const valor = document.getElementById('cfg-valor').value.trim();
 
-      const totalEspacios = totalBoletas * numPorBoleta;
-      
-      // 1. Crear bolsa de números (pool) balanceada
-      let pool = [];
-      const numVueltas = Math.ceil(totalEspacios / 100);
-      
-      for (let i = 0; i < numVueltas; i++) {
-        for (let n = 0; n < 100; n++) {
-          pool.push(String(n).padStart(2, '0'));
-        }
-      }
-
-      // Mezclar la bolsa
-      shuffleArray(pool);
-
-      // 2. Repartir en boletas asegurando que no se repitan números EN LA MISMA boleta
       let boletas = [];
-      let pivot = 0;
+      let currentNum = 0;
 
       for (let b = 0; b < totalBoletas; b++) {
         let numerosBoleta = [];
         
         for (let n = 0; n < numPorBoleta; n++) {
-          let numSeleccionado = pool[pivot];
+          // Agregar el número actual formateado a 2 cifras
+          numerosBoleta.push(String(currentNum).padStart(2, '0'));
           
-          // Si el número ya está en esta boleta, buscamos el siguiente distinto en el pool y lo intercambiamos
-          if (numerosBoleta.includes(numSeleccionado)) {
-            let buscaIdx = pivot + 1;
-            while (buscaIdx < pool.length && numerosBoleta.includes(pool[buscaIdx])) {
-              buscaIdx++;
-            }
-            // Intercambio
-            if (buscaIdx < pool.length) {
-              [pool[pivot], pool[buscaIdx]] = [pool[buscaIdx], pool[pivot]];
-              numSeleccionado = pool[pivot];
-            }
+          // Si llegamos a 99, paramos esta boleta (quedará con menos de 6 si es necesario)
+          if (currentNum === 99) {
+            currentNum = 0; // Reiniciar para la siguiente boleta
+            break; 
           }
-          
-          numerosBoleta.push(numSeleccionado);
-          pivot++;
+          currentNum++;
         }
         
         boletas.push({
           jugador: '____________________________',
-          numeros: numerosBoleta.sort((x, y) => parseInt(x) - parseInt(y))
+          numeros: numerosBoleta // Mantener orden secuencial solicitado
         });
       }
 
@@ -495,7 +464,7 @@
       const statusBar = document.getElementById('status-bar');
       const statusText = document.getElementById('status-text');
       statusBar.style.display = 'flex';
-      statusText.textContent = `${boletas.length} boletas generadas | Distribución: Todas con ${numPorBoleta} números.`;
+      statusText.textContent = `${boletas.length} boletas generadas | Orden: Secuencial 00-99.`;
 
       const BOLETAS_POR_PAG = 5;
       let globalIdx = 0;
