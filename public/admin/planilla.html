@@ -26,18 +26,7 @@
   <link rel="stylesheet" href="../styles/planilla.css">
 </head>
 
-<body class="bg-dark text-white" style="overflow-x: hidden; font-family: 'Inter', sans-serif;">
-  <!-- Loader Loader -->
-  <div id="app-loader" class="fixed-top w-100 h-100 d-flex align-items-center justify-content-center bg-[#06090e]" style="z-index: 9999;">
-    <div class="text-center animate-fade-up">
-      <div class="relative w-16 h-16 mx-auto mb-4" style="position: relative; width: 64px; height: 64px;">
-        <div class="spinner-border text-warning" role="status" style="width: 100%; height: 100%; border-width: 4px;"></div>
-      </div>
-      <p class="text-warning fw-black text-uppercase italic tracking-widest small mt-3">DIBA FBC — Planilla Control</p>
-    </div>
-  </div>
-
-  <div id="admin-body" class="d-none" style="min-height: 100vh;">
+<body class="bg-dark text-white flex min-h-screen" id="admin-body" style="overflow-x: hidden; font-family: 'Inter', sans-serif; display: none;">
 
   <!-- ══ SIDEBAR ══ -->
   <aside class="sidebar" id="sidebar">
@@ -947,8 +936,6 @@
         };
       });
     </script>
-    </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>
