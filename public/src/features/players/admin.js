@@ -1,10 +1,10 @@
 // DIBA FBC - Player Management (Admin)
-import { supabase } from '../../core/supabase.js';
+import { supabase } from '../../../scripts/supabaseClient.js';
 
 /**
  * Handle player creation form
  */
-export function hookCreatePlayerForm() {
+function hookCreatePlayerForm() {
     const form = document.querySelector('#createPlayerForm');
     if (!form) return;
 
@@ -65,7 +65,7 @@ export function hookCreatePlayerForm() {
 /**
  * Update an existing player
  */
-export async function updatePlayer(dni, payload) {
+async function updatePlayer(dni, payload) {
     try {
         // 1. Update in jugadores (searching by name or adding a way to link)
         // Since we might not have the jugadores.id easily, we can try to find it via name/category or use a better mapping.
@@ -101,7 +101,7 @@ export async function updatePlayer(dni, payload) {
 /**
  * Delete a player
  */
-export async function deletePlayer(dni) {
+async function deletePlayer(dni) {
     try {
         // Warning: This will fail if there are foreign key constraints (asistencias, planillas)
         // A better approach would be to delete those first or use a 'status = Inactivo'
@@ -122,3 +122,12 @@ export async function deletePlayer(dni) {
         throw err;
     }
 }
+
+// Diagnostic Log
+console.log('DIBA Admin Players Module Loaded');
+
+export {
+    hookCreatePlayerForm,
+    updatePlayer,
+    deletePlayer
+};

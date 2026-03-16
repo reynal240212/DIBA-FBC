@@ -11,263 +11,31 @@
   <meta name="theme-color" content="#002a40" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="icon" href="images/ESCUDO.ico" sizes="32x32">
-  <link rel="stylesheet" href="styles/planilla.css" />
+
 
   <!-- Bootstrap 5.3.3 CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
-  <link rel="stylesheet" href="styles/styles.css" />
-  <link rel="stylesheet" href="styles/background-animation.css" />
+
   <link rel="stylesheet" href="../styles/admin-common.css">
   <script src="../scripts/theme-switcher.js"></script>
 
   <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.8.2/dist/jspdf.plugin.autotable.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-  <style>
-    /* ── Planilla specific overrides (dark theme) ── */
-    .card {
-      background: var(--dark2);
-      border: 1px solid var(--border);
-      color: var(--text);
-      border-radius: 16px;
-    }
-
-    .table {
-      color: var(--text);
-      border-color: var(--border);
-      vertical-align: middle;
-    }
-
-    .table-striped>tbody>tr:nth-of-type(odd)>* {
-      background-color: rgba(255, 255, 255, 0.02);
-      color: var(--text);
-    }
-
-    .table-hover>tbody>tr:hover>* {
-      background-color: rgba(255, 255, 255, 0.05);
-      color: var(--text);
-    }
-
-    .stats-bar {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 1rem;
-      margin-bottom: 1.5rem;
-    }
-
-    .stat-chip {
-      background: var(--dark3);
-      border: 1px solid var(--border);
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-      color: var(--text);
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      padding: 1.25rem;
-      border-radius: 16px;
-      transition: transform 0.2s, box-shadow 0.2s;
-    }
-
-    .stat-chip:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
-    }
-
-    .stat-icon {
-      font-size: 2rem;
-      width: 50px;
-      height: 50px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 12px;
-    }
-
-    .stat-chip.green .stat-icon {
-      color: #22c55e;
-      background: rgba(34, 197, 94, 0.1);
-    }
-
-    .stat-chip.red .stat-icon {
-      color: #ef4444;
-      background: rgba(239, 68, 68, 0.1);
-    }
-
-    .stat-chip.yellow .stat-icon {
-      color: #eab308;
-      background: rgba(234, 179, 8, 0.1);
-    }
-
-    .stat-chip.blue .stat-icon {
-      color: #3b82f6;
-      background: rgba(59, 130, 246, 0.1);
-    }
-
-    .stat-chip.purple .stat-icon {
-      color: #a855f7;
-      background: rgba(168, 85, 247, 0.1);
-    }
-
-    .stat-value {
-      color: var(--text);
-      font-size: 1.5rem;
-      font-weight: 800;
-      line-height: 1;
-      margin-bottom: 0.2rem;
-    }
-
-    .stat-label {
-      font-size: 0.8rem;
-      color: var(--slate);
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      font-weight: 600;
-    }
-
-    .form-control,
-    .form-select,
-    .search-input {
-      background: var(--bg-input);
-      border-color: var(--border-color);
-      color: var(--text-main);
-      border-radius: 8px;
-    }
-
-    .search-input {
-      padding: 0.5rem 1rem;
-      border: 1px solid var(--border);
-      outline: none;
-      width: 100%;
-      max-width: 250px;
-    }
-
-    .form-control:focus,
-    .form-select:focus,
-    .search-input:focus {
-      background: var(--bg-panel);
-      color: var(--text-main);
-      border-color: var(--gold);
-      box-shadow: 0 0 0 0.25rem rgba(255, 204, 0, 0.25);
-    }
-
-    .table th {
-      background-color: var(--bg-input);
-      color: var(--gold);
-      border-bottom: 2px solid var(--gold);
-      font-weight: 700;
-      text-transform: uppercase;
-      font-size: 0.85rem;
-      letter-spacing: 0.05em;
-      padding: 1rem;
-    }
-
-    .table td {
-      padding: 0.8rem 1rem;
-      border-color: var(--border);
-    }
-
-    .text-muted {
-      color: var(--slate) !important;
-    }
-
-    .att-progress-bar {
-      display: flex;
-      height: 8px;
-      border-radius: 4px;
-      overflow: hidden;
-      background: var(--dark3);
-      margin-bottom: 1.5rem;
-      box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2);
-    }
-
-    .att-seg {
-      transition: width 0.5s ease;
-    }
-
-    @media (max-width: 992px) {
-      .sidebar {
-        transform: translateX(-100%);
-      }
-
-      .sidebar.open {
-        transform: translateX(0);
-      }
-
-      .main {
-        margin-left: 0;
-      }
-
-      .mobile-menu-btn {
-        display: flex;
-      }
-    }
-
-    /* Category Header Styles */
-    .category-header-row {
-      background: linear-gradient(90deg, var(--blue2) 0%, var(--dark3) 100%) !important;
-    }
-
-    .category-header-row td {
-      color: var(--gold) !important;
-      font-weight: 800 !important;
-      text-transform: uppercase !important;
-      letter-spacing: 0.15em !important;
-      font-size: 0.85rem !important;
-      padding: 1rem !important;
-      border-left: 4px solid var(--gold) !important;
-    }
-
-    /* ── PRINT STYLES ── */
-    @media print {
-      .sidebar, .topbar, .stats-bar, .att-progress-bar, .card, .mobile-menu-btn, #theme-toggle, .btn-logout, .saving-indicator, .text-center button, td:last-child, th:last-child {
-        display: none !important;
-      }
-      .main {
-        margin-left: 0 !important;
-        padding: 0 !important;
-      }
-      .content {
-        padding: 0 !important;
-      }
-      body {
-        background: white !important;
-        color: black !important;
-      }
-      .table {
-        color: black !important;
-        width: 100% !important;
-        border-collapse: collapse !important;
-      }
-      .table th {
-        background-color: #f8f9fa !important;
-        color: black !important;
-        border-bottom: 2px solid black !important;
-      }
-      .table td {
-        border-bottom: 1px solid #dee2e6 !important;
-      }
-      .category-header-row {
-        background: #f1f5f9 !important;
-        page-break-after: avoid;
-      }
-      .category-header-row td {
-        color: black !important;
-        border-left: 5px solid #002a40 !important;
-      }
-      .page-title {
-        color: black !important;
-        margin-bottom: 20px;
-      }
-      .container-fluid {
-        width: 100% !important;
-        max-width: none !important;
-      }
-    }
-  </style>
+  <link rel="stylesheet" href="../styles/planilla.css">
 </head>
 
-<body style="display: none;" id="admin-body">
+<body class="bg-dark text-white" style="overflow-x: hidden; font-family: 'Inter', sans-serif;">
+  <!-- Loader Loader -->
+  <div id="app-loader" class="fixed-top w-100 h-100 d-flex align-items-center justify-content-center bg-dark" style="z-index: 9999;">
+    <div class="text-center">
+      <div class="spinner-border text-warning mb-3" role="status" style="width: 3rem; height: 3rem;"></div>
+      <p class="text-warning fw-black text-uppercase italic tracking-widest small">Cargando DIBA FBC...</p>
+    </div>
+  </div>
+
+  <div id="admin-body" class="d-none" style="min-height: 100vh;">
 
   <!-- ══ SIDEBAR ══ -->
   <aside class="sidebar" id="sidebar">
@@ -457,6 +225,8 @@
                     class="fas fa-spinner fa-spin ms-2"></i></td>
               </tr>
             </tbody>
+          </table>
+        </div>
         <!-- Modal de Gestión Documental Admin (Planilla) -->
         <div id="adminDocsModal"
           class="d-none fixed-top w-100 h-100 d-flex align-items-center justify-content-center p-4"
@@ -567,6 +337,8 @@
           const session = await requireAdmin();
           if (!session) return;
 
+          document.getElementById('app-loader')?.classList.add('d-none');
+          document.getElementById('admin-body').classList.remove('d-none');
           document.getElementById('admin-body').style.display = 'flex';
 
           const user = session.user;
@@ -1178,6 +950,7 @@
         };
       });
     </script>
+    </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 

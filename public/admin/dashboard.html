@@ -75,7 +75,16 @@
     </style>
 </head>
 
-<body class="bg-dibaDark text-slate-200" style="display: none;" id="admin-body">
+<body class="bg-dibaDark text-slate-200 overflow-x-hidden">
+    <!-- Loader Loader -->
+    <div id="app-loader" class="fixed inset-0 z-[9999] flex items-center justify-center bg-dibaDark">
+        <div class="text-center">
+            <div class="w-12 h-12 border-4 border-dibaGold/20 border-t-dibaGold rounded-full animate-spin mb-4 mx-auto"></div>
+            <p class="text-[10px] font-black uppercase tracking-[0.2em] text-dibaGold italic">Cargando Dashboard...</p>
+        </div>
+    </div>
+
+    <div id="admin-body" class="hidden min-h-screen">
 
     <!-- ══ SIDEBAR ══ -->
     <aside class="sidebar" id="sidebar">
@@ -333,6 +342,8 @@
                 const session = await requireAdmin();
                 if (!session) return;
 
+                document.getElementById('app-loader')?.classList.add('hidden');
+                document.getElementById('admin-body').classList.remove('hidden');
                 document.getElementById('admin-body').style.display = 'flex';
 
                 const user = session.user;
