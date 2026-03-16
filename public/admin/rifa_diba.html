@@ -330,7 +330,7 @@
 
         <div class="field-group">
           <label>Total de boletas</label>
-          <input type="number" id="cfg-total" min="1" max="1000" value="10">
+          <input type="number" id="cfg-total" min="1" max="1000" step="5" value="45">
         </div>
 
         <div class="field-group">
@@ -346,22 +346,33 @@
 
         <div class="field-group">
           <label>Fecha del sorteo</label>
-          <input type="text" id="cfg-fecha" value="Sábado 19 de abril de 2025">
+          <input type="date" id="cfg-fecha-picker">
+          <input type="hidden" id="cfg-fecha" value="Sábado 19 de abril de 2025">
         </div>
 
         <div class="field-group">
           <label>Lotería / Modalidad</label>
-          <input type="text" id="cfg-loteria" value="Sinuano Noche — Últimas 2 cifras">
+          <input type="text" id="cfg-loteria" list="loterias-list" value="Sinuano Noche — Últimas 2 cifras">
+          <datalist id="loterias-list">
+            <option value="Sinuano Noche / Últimas 2 cifras">
+            <option value="Sinuano Día / Últimas 2 cifras">
+            <option value="Caribeña Noche / Últimas 2 cifras">
+            <option value="Caribeña Día / Últimas 2 cifras">
+            <option value="Lotería de Medellín">
+            <option value="Lotería de Bogotá">
+            <option value="Lotería de Barranquilla">
+          </datalist>
         </div>
 
         <div class="field-group">
           <label>Premio</label>
-          <input type="text" id="cfg-premio" value="2 Perfumes para Caballeros">
+          <input type="text" id="cfg-premio" placeholder="Ej: Tablet de 10 pulg." value="2 Perfumes para Caballeros">
         </div>
 
         <div class="field-group">
-          <label>Valor por número</label>
-          <input type="text" id="cfg-valor" style="width:110px;" value="$3.000">
+          <label>Valor de Boleta ($)</label>
+          <input type="number" id="cfg-valor-num" step="100" value="3000">
+          <input type="hidden" id="cfg-valor" value="$3.000">
         </div>
 
         <div class="actions-row">
@@ -421,8 +432,32 @@
     });
 
     // ── LOAD PLAYERS ──────────────────────────────────────────
-    // Ya no se cargan jugadores de la base de datos
-    // loadJugadores();
+    // ── SELECTOR HELPERS ──────────────────────────────────────
+    const fechaPicker = document.getElementById('cfg-fecha-picker');
+    const fechaText = document.getElementById('cfg-fecha');
+    const valorNum = document.getElementById('cfg-valor-num');
+    const valorText = document.getElementById('cfg-valor');
+
+    // Inicializar fecha con una semana desde hoy
+    const defaultDate = new Date();
+    defaultDate.setDate(defaultDate.getDate() + 7);
+    fechaPicker.value = defaultDate.toISOString().split('T')[0];
+
+    function updateFechaText() {
+      const d = new Date(fechaPicker.value + 'T00:00:00');
+      const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+      fechaText.value = d.toLocaleDateString('es-CO', options);
+    }
+    fechaPicker.addEventListener('change', updateFechaText);
+    updateFechaText(); // Run once
+
+    function updateValorText() {
+      const v = parseFloat(valorNum.value) || 0;
+      valorText.value = '$' + v.toLocaleString('es-CO');
+    }
+    valorNum.addEventListener('input', updateValorText);
+    updateValorText(); // Run once
+
 
     // ── SEQUENTIAL GENERATOR ──────────────────────────────────────
     window.generarBoletas = function () {
