@@ -429,6 +429,9 @@
               <button id="saveAllBtn" class="btn btn-warning fw-bold text-dark rounded-pill px-4">
                 <i class="fas fa-cloud-upload-alt me-2"></i>Guardar Planilla
               </button>
+              <button onclick="openCreateModal()" class="btn btn-dark fw-bold text-warning rounded-pill px-4 border-warning">
+                <i class="fas fa-plus me-2"></i>Nuevo Jugador
+              </button>
             </div>
           </div>
         </div>
@@ -445,7 +448,7 @@
                 <th style="width: 18%;">Pago</th>
                 <th style="width: 15%;">Asistencia</th>
                 <th style="width: 25%;">Observaciones</th>
-                <th style="width: 8%;" class="text-center">Doc.</th>
+                <th style="width: 12%;" class="text-center">Acciones</th>
               </tr>
             </thead>
             <tbody id="planillaBody">
@@ -454,9 +457,6 @@
                     class="fas fa-spinner fa-spin ms-2"></i></td>
               </tr>
             </tbody>
-          </table>
-        </div>
-
         <!-- Modal de Gestión Documental Admin (Planilla) -->
         <div id="adminDocsModal"
           class="d-none fixed-top w-100 h-100 d-flex align-items-center justify-content-center p-4"
@@ -483,12 +483,83 @@
             </div>
           </div>
         </div>
+
+        <!-- Modal de Edición de Jugador -->
+        <div id="editPlayerModal" class="d-none fixed-top w-100 h-100 d-flex align-items-center justify-content-center p-4"
+          style="background: rgba(10,14,20,0.9); z-index: 2000; backdrop-filter: blur(5px);">
+          <div class="card border-0 shadow-2xl w-100 mx-auto"
+            style="max-width: 500px; background: #0a101b; border: 1px solid rgba(255,255,255,0.1) !important; border-radius: 2rem;">
+            <div class="card-header border-0 p-4 d-flex justify-content-between align-items-center bg-transparent">
+              <h3 class="h5 fw-black text-white text-uppercase italic mb-0">Editar Jugador</h3>
+              <button onclick="closeEditModal()" class="btn btn-dark rounded-circle p-0" style="width: 40px; height: 40px;">
+                <i class="fas fa-times"></i>
+              </button>
+            </div>
+            <div class="card-body p-4">
+              <form id="editPlayerForm">
+                <input type="hidden" id="editDni">
+                <input type="hidden" id="oldName">
+                <div class="mb-3">
+                  <label class="form-label text-muted small fw-bold text-uppercase">Nombre Completo</label>
+                  <input type="text" id="editNombre" class="form-control bg-dark border-secondary text-white rounded-3">
+                </div>
+                <div class="mb-3">
+                  <label class="form-label text-muted small fw-bold text-uppercase">Categoría</label>
+                  <select id="editCategoria" class="form-select bg-dark border-secondary text-white rounded-3">
+                    <option value="2014/2015/2016">2014/2015/2016</option>
+                    <option value="2012">2012</option>
+                    <option value="2013">2013</option>
+                    <option value="General">General</option>
+                  </select>
+                </div>
+                <button type="submit" class="btn btn-warning w-100 fw-bold rounded-pill py-3 mt-3">Guardar Cambios</button>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <!-- Modal de Creación de Jugador (Rápido) -->
+        <div id="createPlayerModal" class="d-none fixed-top w-100 h-100 d-flex align-items-center justify-content-center p-4"
+          style="background: rgba(10,14,20,0.9); z-index: 2000; backdrop-filter: blur(5px);">
+          <div class="card border-0 shadow-2xl w-100 mx-auto"
+            style="max-width: 500px; background: #0a101b; border: 1px solid rgba(255,255,255,0.1) !important; border-radius: 2rem;">
+            <div class="card-header border-0 p-4 d-flex justify-content-between align-items-center bg-transparent">
+              <h3 class="h5 fw-black text-white text-uppercase italic mb-0">Nuevo Jugador</h3>
+              <button onclick="closeCreateModal()" class="btn btn-dark rounded-circle p-0" style="width: 40px; height: 40px;">
+                <i class="fas fa-times"></i>
+              </button>
+            </div>
+            <div class="card-body p-4">
+              <form id="quickCreatePlayerForm">
+                <div class="mb-3">
+                  <label class="form-label text-muted small fw-bold text-uppercase">DNI / Número</label>
+                  <input type="text" id="newDni" class="form-control bg-dark border-secondary text-white rounded-3" required>
+                </div>
+                <div class="mb-3">
+                  <label class="form-label text-muted small fw-bold text-uppercase">Nombre Completo</label>
+                  <input type="text" id="newNombre" class="form-control bg-dark border-secondary text-white rounded-3" required>
+                </div>
+                <div class="mb-3">
+                  <label class="form-label text-muted small fw-bold text-uppercase">Categoría</label>
+                  <select id="newCategoria" class="form-select bg-dark border-secondary text-white rounded-3" required>
+                    <option value="2014/2015/2016">2014/2015/2016</option>
+                    <option value="2012">2012</option>
+                    <option value="2013">2013</option>
+                    <option value="General">General</option>
+                  </select>
+                </div>
+                <button type="submit" class="btn btn-warning w-100 fw-bold rounded-pill py-3 mt-3">Crear Jugador</button>
+              </form>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
     <script src="../scripts/config.js"></script>
     <script type="module">
       import { supabase, requireAdmin } from '../scripts/supabaseClient.js';
+      import { updatePlayer, deletePlayer } from '../src/features/players/admin.js';
 
       // ── AUTENTICACIÓN Y CARGA ──
       async function init() {
@@ -694,9 +765,17 @@
             </td>
             <td><input type="text" class="form-control form-control-sm in-obs" value="${d.obs || ''}" placeholder="..."></td>
             <td class="text-center">
-              <button onclick="openAdminDocs('${p.id}', '${p.name}')" class="btn btn-sm btn-outline-success border-0" title="Ver/Subir Documentos">
-                <i class="fas fa-file-medical"></i>
-              </button>
+              <div class="dropdown">
+                <button class="btn btn-sm btn-outline-warning border-0" data-bs-toggle="dropdown">
+                  <i class="fas fa-ellipsis-v"></i>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-dark">
+                  <li><a class="dropdown-item" href="#" onclick="openAdminDocs('${p.id}', '${p.name}')"><i class="fas fa-file-medical me-2 text-success"></i> Documentos</a></li>
+                  <li><a class="dropdown-item" href="#" onclick="openEditModal('${p.id}', '${p.name}', '${p.categoria}')"><i class="fas fa-edit me-2 text-warning"></i> Editar Jugador</a></li>
+                  <li><hr class="dropdown-divider border-secondary"></li>
+                  <li><a class="dropdown-item text-danger" href="#" onclick="handleDelete('${p.id}', '${p.name}')"><i class="fas fa-trash-alt me-2"></i> Eliminar</a></li>
+                </ul>
+              </div>
             </td>
           `;
             tableBody.appendChild(tr);
@@ -1002,6 +1081,99 @@
           } finally {
             originalBtn.innerHTML = originalIcon;
             originalBtn.disabled = false;
+          }
+        };
+
+        // ── CRUD HANDLERS ──
+        window.openEditModal = (dni, name, cat) => {
+          document.getElementById('editDni').value = dni;
+          document.getElementById('editNombre').value = name;
+          document.getElementById('oldName').value = name;
+          document.getElementById('editCategoria').value = cat;
+          document.getElementById('editPlayerModal').classList.remove('d-none');
+        };
+
+        window.closeEditModal = () => document.getElementById('editPlayerModal').classList.add('d-none');
+
+        document.getElementById('editPlayerForm').onsubmit = async (e) => {
+          e.preventDefault();
+          const dni = document.getElementById('editDni').value;
+          const oldName = document.getElementById('oldName').value;
+          const payload = {
+            nombre: document.getElementById('editNombre').value,
+            categoria: document.getElementById('editCategoria').value,
+            oldNombre: oldName
+          };
+
+          const btn = e.target.querySelector('button[type="submit"]');
+          const originalText = btn.innerHTML;
+          btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Guardando...';
+          btn.disabled = true;
+
+          try {
+            await updatePlayer(dni, payload);
+            showToast('Jugador actualizado con éxito');
+            closeEditModal();
+            loadData();
+          } catch (err) {
+            alert('Error: ' + err.message);
+          } finally {
+            btn.innerHTML = originalText;
+            btn.disabled = false;
+          }
+        };
+
+        window.handleDelete = async (dni, name) => {
+          if (!confirm(`¿Estás seguro de eliminar a ${name}? Esta acción no se puede deshacer y podría fallar si tiene registros vinculados.`)) return;
+          try {
+            await deletePlayer(dni);
+            showToast('Jugador eliminado');
+            loadData();
+          } catch (err) {
+            alert('Error al eliminar: ' + err.message);
+          }
+        };
+
+        window.openCreateModal = () => document.getElementById('createPlayerModal').classList.remove('d-none');
+        window.closeCreateModal = () => document.getElementById('createPlayerModal').classList.add('d-none');
+
+        document.getElementById('quickCreatePlayerForm').onsubmit = async (e) => {
+          e.preventDefault();
+          const dni = document.getElementById('newDni').value;
+          const nombre = document.getElementById('newNombre').value;
+          const categoria = document.getElementById('newCategoria').value;
+
+          const btn = e.target.querySelector('button[type="submit"]');
+          const originalText = btn.innerHTML;
+          btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Creando...';
+          btn.disabled = true;
+
+          try {
+            // Reutilizar lógica (mismo patrón que admin-players.js)
+            const { error: pErr } = await supabase.from('jugadores').insert([{
+              nombre: nombre,
+              categoria: categoria,
+              status: 'Activo',
+              fecha_registro: new Date().toISOString()
+            }]);
+            if (pErr) throw pErr;
+
+            const { error: idErr } = await supabase.from('identificacion').insert([{
+              numero: dni,
+              nombre: nombre.split(' ')[0],
+              apellidos: nombre.split(' ').slice(1).join(' '),
+              categoria: categoria
+            }]);
+            if (idErr) throw idErr;
+
+            showToast('¡Jugador creado con éxito!');
+            closeCreateModal();
+            loadData();
+          } catch (err) {
+            alert('Error: ' + err.message);
+          } finally {
+            btn.innerHTML = originalText;
+            btn.disabled = false;
           }
         };
       });
