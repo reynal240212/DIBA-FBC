@@ -7,6 +7,13 @@
   margin-bottom: 2.5rem;
 }
 
+@media (max-width: 640px) {
+  .stats-bar {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+}
+
 .stat-chip {
   background: var(--bg-panel);
   border: 1px solid var(--border-color);
