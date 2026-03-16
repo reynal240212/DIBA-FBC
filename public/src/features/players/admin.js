@@ -65,7 +65,7 @@ function hookCreatePlayerForm() {
 /**
  * Update an existing player
  */
-async function updatePlayer(dni, payload) {
+export async function updatePlayer(dni, payload) {
     try {
         // 1. Update in jugadores (searching by name or adding a way to link)
         // Since we might not have the jugadores.id easily, we can try to find it via name/category or use a better mapping.
@@ -101,7 +101,7 @@ async function updatePlayer(dni, payload) {
 /**
  * Delete a player
  */
-async function deletePlayer(dni) {
+export async function deletePlayer(dni) {
     try {
         // Warning: This will fail if there are foreign key constraints (asistencias, planillas)
         // A better approach would be to delete those first or use a 'status = Inactivo'
@@ -124,10 +124,4 @@ async function deletePlayer(dni) {
 }
 
 // Diagnostic Log
-console.log('DIBA Admin Players Module Loaded');
-
-export {
-    hookCreatePlayerForm,
-    updatePlayer,
-    deletePlayer
-};
+console.log('DIBA Admin Players Module Loaded v2');
