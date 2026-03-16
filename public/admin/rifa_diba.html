@@ -459,7 +459,14 @@
     updateValorText(); // Run once
 
 
-    // ── SEQUENTIAL GENERATOR ──────────────────────────────────────
+    // ── SHUFFLED CYCLE GENERATOR ──────────────────────────────────
+    function shuffleArray(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+    }
+
     window.generarBoletas = function () {
       const contenedor = document.getElementById('contenedor');
       contenedor.innerHTML = '';
@@ -471,35 +478,64 @@
       const premio = document.getElementById('cfg-premio').value.trim();
       const valor = document.getElementById('cfg-valor').value.trim();
 
+      const totalNumerosDeseados = totalBoletas * numPorBoleta;
+      
+      // 1. Crear Pool de números por ciclos de 100 (00-99)
+      // Cada ciclo se mezcla individualmente para mantener el balance pero con dinamismo
+      let masterPool = [];
+      const numCiclos = Math.ceil(totalNumerosDeseados / 100);
+      
+      for (let c = 0; c < numCiclos; c++) {
+        let ciclo = [];
+        for (let i = 0; i < 100; i++) {
+          ciclo.push(String(i).padStart(2, '0'));
+        }
+        shuffleArray(ciclo);
+        masterPool = masterPool.concat(ciclo);
+      }
+
+      // 2. Repartir en boletas
       let boletas = [];
-      let currentNum = 0;
+      let pivot = 0;
 
       for (let b = 0; b < totalBoletas; b++) {
         let numerosBoleta = [];
         
         for (let n = 0; n < numPorBoleta; n++) {
-          // Agregar el número actual formateado a 2 cifras
-          numerosBoleta.push(String(currentNum).padStart(2, '0'));
-          
-          // Si llegamos a 99, paramos esta boleta (quedará con menos de 6 si es necesario)
-          if (currentNum === 99) {
-            currentNum = 0; // Reiniciar para la siguiente boleta
-            break; 
+          if (pivot >= totalNumerosDeseados || pivot >= masterPool.length) break;
+
+          let numSugerido = masterPool[pivot];
+
+          // Evitar duplicados en la misma boleta (posible en la frontera de dos ciclos)
+          if (numerosBoleta.includes(numSugerido)) {
+            let buscaIdx = pivot + 1;
+            while (buscaIdx < masterPool.length && numerosBoleta.includes(masterPool[buscaIdx])) {
+              buscaIdx++;
+            }
+            if (buscaIdx < masterPool.length) {
+              // Intercambiar para no perder el número
+              [masterPool[pivot], masterPool[buscaIdx]] = [masterPool[buscaIdx], masterPool[pivot]];
+              numSugerido = masterPool[pivot];
+            }
           }
-          currentNum++;
+
+          numerosBoleta.push(numSugerido);
+          pivot++;
         }
         
-        boletas.push({
-          jugador: '____________________________',
-          numeros: numerosBoleta // Mantener orden secuencial solicitado
-        });
+        if (numerosBoleta.length > 0) {
+          boletas.push({
+            jugador: '____________________________',
+            numeros: numerosBoleta.sort((x, y) => parseInt(x) - parseInt(y))
+          });
+        }
       }
 
       // 3. Renderizar
       const statusBar = document.getElementById('status-bar');
       const statusText = document.getElementById('status-text');
       statusBar.style.display = 'flex';
-      statusText.textContent = `${boletas.length} boletas generadas | Orden: Secuencial 00-99.`;
+      statusText.textContent = `${boletas.length} boletas generadas | Dinamismo: Azar por ciclos 00-99.`;
 
       const BOLETAS_POR_PAG = 5;
       let globalIdx = 0;
