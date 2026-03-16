@@ -63,6 +63,10 @@ function renderRows(rows) {
 }
 
 async function loadUsers() {
+  const loading = qs('#loading-state');
+  const alertBar = qs('#alert-bar');
+  const badge = qs('#count-badge');
+
   try {
     const { data, error } = await supabase
       .from('users')
@@ -73,9 +77,11 @@ async function loadUsers() {
     renderRows(data || []);
   } catch (err) {
     console.error('Error fetching users:', err);
-    const alertBar = qs('#alert-bar');
+    if (loading) loading.classList.add('hidden');
+    if (badge) badge.textContent = 'Error';
+    
     if (alertBar) {
-        alertBar.textContent = '⚠️ Error al sincronizar: ' + err.message;
+        alertBar.textContent = '⚠️ Error de sincronización: ' + (err.message || 'Error desconocido');
         alertBar.classList.remove('hidden');
         alertBar.classList.add('flex');
     }
@@ -93,12 +99,12 @@ function hookListEvents() {
     if (btn.dataset.action === 'del') {
       if (!confirm('¿Seguro que deseas eliminar este usuario?')) return;
 
-      const { error } = await supabase.rpc('admin_delete_user', { target_user_id: id });
-
-      if (error) {
-        alert('Error al eliminar: ' + error.message);
-      } else {
+      try {
+        const { error } = await supabase.rpc('admin_delete_user', { target_user_id: id });
+        if (error) throw error;
         await loadUsers();
+      } catch (err) {
+        alert('Error al eliminar: ' + err.message);
       }
     }
   });
@@ -137,12 +143,20 @@ function hookCreateForm() {
 
 // Global initialization
 (async () => {
-    await requireAdmin();
-    if (qs('#usersTable')) {
-        await loadUsers();
-        hookListEvents();
-    }
-    if (qs('#createUserForm')) {
-        hookCreateForm();
+    try {
+        const session = await requireAdmin();
+        if (!session) return; // Redirección ya manejada en requireAdmin
+
+        if (qs('#usersTable')) {
+            await loadUsers();
+            hookListEvents();
+        }
+        if (qs('#createUserForm')) {
+            hookCreateForm();
+        }
+    } catch (err) {
+        console.error('Error in auth check:', err);
+        const loading = qs('#loading-state');
+        if (loading) loading.classList.add('hidden');
     }
 })();
