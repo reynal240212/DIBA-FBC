@@ -3,7 +3,15 @@
  * Global injection and logic
  */
 
-import { APP_VERSION } from './version.js';
+// Versión de respaldo si falla el import
+let APP_VERSION = '1.1.0_fallback';
+try {
+    const versionModule = await import('./version.js');
+    APP_VERSION = versionModule.APP_VERSION;
+} catch (e) {
+    console.warn("DIBA AI: Version file not found, using fallback.");
+}
+
 import { chatWithAI, checkAIStatus } from './aiClient.js';
 
 class AIWidget {
@@ -136,6 +144,12 @@ class AIWidget {
                 console.error("Speech Rec Error:", e);
                 this.isListening = false;
                 this.micBtn.classList.remove('listening');
+                
+                if (e.error === 'not-allowed') {
+                    alert("🎙️ Acceso al micrófono denegado.\n\nPor favor, haz clic en el icono del candado en la barra de direcciones y permite el uso del micrófono para este sitio.");
+                } else if (!window.isSecureContext) {
+                    alert("⚠️ Error de Seguridad:\n\nEl reconocimiento de voz requiere una conexión segura (HTTPS) para funcionar. Por favor, asegúrate de estar usando HTTPS.");
+                }
             };
         }
     }
