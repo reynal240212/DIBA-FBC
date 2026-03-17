@@ -43,6 +43,72 @@
             border-color: var(--gold);
             transform: translateY(-3px) scale(1.02);
         }
+
+        /* AI Assistant Widget */
+        .ai-chat-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            height: 100%;
+        }
+        .ai-messages {
+            flex-grow: 1;
+            max-height: 200px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            padding-right: 0.5rem;
+            font-size: 0.8rem;
+        }
+        .ai-message {
+            padding: 0.6rem;
+            border-radius: 10px;
+            max-width: 90%;
+        }
+        .ai-message.user {
+            align-self: flex-end;
+            background: rgba(255, 204, 0, 0.1);
+            color: var(--gold);
+            border: 1px solid rgba(255, 204, 0, 0.2);
+        }
+        .ai-message.bot {
+            align-self: flex-start;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+        }
+        .ai-input-group {
+            display: flex;
+            gap: 0.5rem;
+        }
+        #ai-input {
+            flex-grow: 1;
+            background: rgba(0,0,0,0.2);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 0.5rem;
+            color: white;
+            font-size: 0.8rem;
+        }
+        #ai-input:focus {
+            border-color: var(--gold);
+            outline: none;
+        }
+        .ai-status {
+            font-size: 0.6rem;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            opacity: 0.7;
+        }
+        .status-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #666;
+        }
+        .status-dot.online { background: #4ade80; }
+        .status-dot.offline { background: #fb7185; }
     </style>
 </head>
 
@@ -251,6 +317,29 @@
                     </div>
                 </div>
 
+                <!-- Asistente de IA (Ollama) -->
+                <div class="panel glass animate-fade-up" style="animation-delay: 0.25s">
+                    <div class="panel-header">
+                        <span class="panel-title"><i class="fas fa-robot"
+                                style="color:var(--gold);margin-right:.5rem"></i>Asistente DIBA (IA Local)</span>
+                        <div class="ai-status">
+                            <div id="ai-status-dot" class="status-dot"></div>
+                            <span id="ai-status-text">Detectando Ollama...</span>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <div class="ai-chat-container">
+                            <div class="ai-messages" id="ai-messages">
+                                <div class="ai-message bot">¡Hola! Soy tu asistente local. Puedes preguntarme sobre la gestión del club.</div>
+                            </div>
+                            <div class="ai-input-group">
+                                <input type="text" id="ai-input" placeholder="Pregunta algo..." autocomplete="off">
+                                <button id="ai-send" class="btn btn-gold" style="padding: 0.5rem 1rem;"><i class="fas fa-paper-plane"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
 
             <!-- Row 3: Próximos Partidos -->
@@ -308,6 +397,68 @@
     <script src="/scripts/config.js"></script>
     <script type="module">
         import { supabase, requireAdmin } from '../scripts/supabaseClient.js';
+        import { chatWithAI, checkOllamaAvailability } from '../src/core/ollamaClient.js';
+
+        // ── IA OLLAMA LOGIC ──
+        const aiInput = document.getElementById('ai-input');
+        const aiSend = document.getElementById('ai-send');
+        const aiMessages = document.getElementById('ai-messages');
+        const aiStatusDot = document.getElementById('ai-status-dot');
+        const aiStatusText = document.getElementById('ai-status-text');
+
+        async function updateAIStatus() {
+            const isAvailable = await checkOllamaAvailability();
+            if (isAvailable) {
+                aiStatusDot.className = 'status-dot online';
+                aiStatusText.textContent = 'Ollama Online';
+            } else {
+                aiStatusDot.className = 'status-dot offline';
+                aiStatusText.textContent = 'Ollama Offline';
+            }
+        }
+
+        async function handleAISend() {
+            const prompt = aiInput.value.trim();
+            if (!prompt) return;
+
+            // Bloquear entrada
+            aiInput.value = '';
+            aiInput.disabled = true;
+            aiSend.disabled = true;
+
+            // Agregar mensaje usuario
+            appendMessage('user', prompt);
+
+            // Loader mensaje bot
+            const botMsgDiv = appendMessage('bot', '<i class="fas fa-spinner fa-spin"></i> Pensando...');
+
+            try {
+                const response = await chatWithAI(prompt);
+                botMsgDiv.textContent = response;
+            } catch (error) {
+                botMsgDiv.innerHTML = '<span style="color:var(--red)">Error: No se pudo conectar con Ollama.</span>';
+            } finally {
+                aiInput.disabled = false;
+                aiSend.disabled = false;
+                aiInput.focus();
+                aiMessages.scrollTop = aiMessages.scrollHeight;
+            }
+        }
+
+        function appendMessage(role, text) {
+            const div = document.createElement('div');
+            div.className = `ai-message ${role}`;
+            div.innerHTML = text;
+            aiMessages.appendChild(div);
+            aiMessages.scrollTop = aiMessages.scrollHeight;
+            return div;
+        }
+
+        aiSend.addEventListener('click', handleAISend);
+        aiInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') handleAISend(); });
+
+        updateAIStatus();
+        setInterval(updateAIStatus, 10000);
 
         // ── AUTENTICACIÓN Y CARGA ──
         async function init() {
