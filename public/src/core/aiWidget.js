@@ -106,6 +106,23 @@ class AIWidget {
 
         const loadingMsg = this.appendMessage('bot', '<i class="fas fa-spinner fa-spin"></i> Pensando...');
         
+        // Rotación de mensajes para mejorar UX durante latencia
+        const loadingSteps = [
+            "Consultando base de datos...",
+            "Buscando en memoria neuronal...",
+            "Analizando tácticas...",
+            "Generando respuesta final..."
+        ];
+        let stepIdx = 0;
+        const interval = setInterval(() => {
+            if (loadingMsg.parentNode) {
+                loadingMsg.innerHTML = `<i class="fas fa-spinner fa-spin"></i> ${loadingSteps[stepIdx % loadingSteps.length]}`;
+                stepIdx++;
+            } else {
+                clearInterval(interval);
+            }
+        }, 3000);
+
         try {
             // Recoger contexto del dashboard si estamos en la página del dashboard
             let clubContext = null;
@@ -123,6 +140,8 @@ class AIWidget {
 
             const responseData = await chatWithAI(text, this.history, clubContext);
             
+            clearInterval(interval);
+
             // Si el backend retorna un error estructurado
             if (typeof responseData === 'object' && responseData.error) {
                 throw new Error(responseData.error);
@@ -134,6 +153,7 @@ class AIWidget {
             this.history.push({ role: 'user', content: text });
             this.history.push({ role: 'assistant', content: response });
         } catch (err) {
+            clearInterval(interval);
             console.error("AI Widget Error:", err);
             loadingMsg.innerHTML = `<span style="color:#ef4444">Error: ${err.message || 'No se pudo conectar.'}</span>`;
         }
