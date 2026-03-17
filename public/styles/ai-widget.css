@@ -13,7 +13,7 @@
 #ai-widget-trigger {
     position: fixed;
     bottom: 2rem;
-    right: 2rem;
+    right: 10rem; /* Aumentado a 10rem para asegurar separación total */
     width: 60px;
     height: 60px;
     background: var(--ai-primary);
@@ -37,7 +37,7 @@
 #ai-chat-window {
     position: fixed;
     bottom: 6.5rem;
-    right: 2rem;
+    right: 8rem; /* Alineado con el nuevo margen de seguridad */
     width: 380px;
     height: 550px;
     background: var(--ai-bg);
