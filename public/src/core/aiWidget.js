@@ -121,12 +121,21 @@ class AIWidget {
                 }
             }
 
-            const response = await chatWithAI(text, this.history, clubContext);
+            const responseData = await chatWithAI(text, this.history, clubContext);
+            
+            // Si el backend retorna un error estructurado
+            if (typeof responseData === 'object' && responseData.error) {
+                throw new Error(responseData.error);
+            }
+
+            const response = typeof responseData === 'string' ? responseData : responseData.content;
+            
             loadingMsg.textContent = response;
             this.history.push({ role: 'user', content: text });
             this.history.push({ role: 'assistant', content: response });
         } catch (err) {
-            loadingMsg.innerHTML = '<span style="color:#ef4444">Error al conectar. Revisa tu conexión.</span>';
+            console.error("AI Widget Error:", err);
+            loadingMsg.innerHTML = `<span style="color:#ef4444">Error: ${err.message || 'No se pudo conectar.'}</span>`;
         }
     }
 
