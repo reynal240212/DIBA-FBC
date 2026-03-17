@@ -316,7 +316,10 @@
                         </div>
                     </div>
                 </div>
-
+                <!-- Asistente de IA (IA Global) -->
+                <div class="panel glass animate-fade-up" style="animation-delay: 0.25s">
+                    <div class="panel-header">
+                        <span class="panel-title"><i class="fas fa-robot"
                                 style="color:var(--gold);margin-right:.5rem"></i>Asistente DIBA (IA Global)</span>
                         <div class="ai-status">
                             <div id="ai-status-dot" class="status-dot"></div>
@@ -576,9 +579,9 @@
         async function loadRecentActivity() {
             try {
                 const { data: recentPlayers } = await supabase
-                    .from('identificacion')
-                    .select('nombre, apellidos, created_at')
-                    .order('created_at', { ascending: false })
+                    .from('jugadores')
+                    .select('nombre, fecha_registro')
+                    .order('fecha_registro', { ascending: false })
                     .limit(3);
 
                 const { data: recentMessages } = await supabase
@@ -591,9 +594,9 @@
                 if (recentPlayers) {
                     recentPlayers.forEach(p => activities.push({
                         type: 'player',
-                        title: `${p.nombre} ${p.apellidos}`,
+                        title: p.nombre,
                         subtitle: 'Nuevo jugador registrado',
-                        time: new Date(p.created_at)
+                        time: new Date(p.fecha_registro)
                     }));
                 }
                 if (recentMessages) {
