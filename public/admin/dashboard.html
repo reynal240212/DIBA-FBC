@@ -432,7 +432,15 @@
             const botMsgDiv = appendMessage('bot', '<i class="fas fa-spinner fa-spin"></i> Pensando...');
 
             try {
-                const response = await chatWithAI(prompt);
+                // Obtener KPIs actuales para dar contexto a la IA
+                const clubContext = {
+                    jugadores: document.getElementById('kpi-players').textContent,
+                    partidos: document.getElementById('kpi-matches').textContent,
+                    asistencia: document.getElementById('kpi-attendance').textContent,
+                    pendientes: document.getElementById('kpi-pending').textContent
+                };
+
+                const response = await chatWithAI(prompt, [], clubContext);
                 botMsgDiv.textContent = response;
             } catch (error) {
                 botMsgDiv.innerHTML = '<span style="color:var(--red)">Error: No se pudo conectar con la IA Global.</span>';

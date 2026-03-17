@@ -9,12 +9,13 @@ import { supabase } from '../../scripts/supabaseClient.js';
  * Envía una petición de chat al asistente global en Supabase
  * @param {string} prompt - El mensaje para la IA
  * @param {Array} history - Historial de la conversación (opcional)
+ * @param {Object} clubContext - Datos en tiempo real del dashboard (opcional)
  * @returns {Promise<string>} - La respuesta de la IA
  */
-export async function chatWithAI(prompt, history = []) {
+export async function chatWithAI(prompt, history = [], clubContext = null) {
     try {
         const { data, error } = await supabase.functions.invoke('ai-assistant', {
-            body: { prompt, history },
+            body: { prompt, history, clubContext },
         });
 
         if (error) throw error;
