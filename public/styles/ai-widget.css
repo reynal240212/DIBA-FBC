@@ -140,16 +140,37 @@
     align-self: flex-start;
     background: var(--ai-glass);
     border: 1px solid var(--ai-border);
+    border-left: 3px solid var(--ai-primary);
     color: #e2e8f0;
     border-bottom-left-radius: 4px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.ai-msg strong {
+    color: var(--ai-primary);
+    font-weight: 700;
+}
+
+.ai-msg ul {
+    margin: 0.5rem 0;
+    padding-left: 1.2rem;
+}
+
+.ai-msg li {
+    margin-bottom: 0.3rem;
+}
+
+.ai-msg li::marker {
+    color: var(--ai-primary);
 }
 
 .ai-msg.user {
     align-self: flex-end;
-    background: var(--ai-primary);
+    background: linear-gradient(135deg, var(--ai-primary), #fbbf24);
     color: #0f172a;
     font-weight: 600;
     border-bottom-right-radius: 4px;
+    box-shadow: 0 4px 15px rgba(245, 158, 11, 0.2);
 }
 
 .ai-footer {

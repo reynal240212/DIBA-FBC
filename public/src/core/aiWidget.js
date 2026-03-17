@@ -91,10 +91,53 @@ class AIWidget {
     appendMessage(role, text) {
         const msg = document.createElement('div');
         msg.className = `ai-msg ${role}`;
-        msg.innerHTML = text;
-        this.messages.appendChild(msg);
+        
+        // Formateo básico de Markdown
+        const formatted = this.formatMarkdown(text);
+        
+        if (role === 'bot' && !text.includes('fa-spinner')) {
+            msg.innerHTML = ''; // Se llenará con el efecto de escritura
+            this.messages.appendChild(msg);
+            this.typeMessage(msg, formatted);
+        } else {
+            msg.innerHTML = formatted;
+            this.messages.appendChild(msg);
+        }
+        
         this.messages.scrollTop = this.messages.scrollHeight;
         return msg;
+    }
+
+    formatMarkdown(text) {
+        if (!text) return '';
+        return text
+            .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+            .replace(/\*(.*?)\*/g, '<em>$1</em>')
+            .replace(/^\- (.*$)/gim, '<li>$1</li>')
+            .replace(/(<li>.*<\/li>)/gim, '<ul>$1</ul>')
+            .replace(/<\/ul><ul>/gim, '') // Unir listas consecutivas
+            .replace(/\n/g, '<br>');
+    }
+
+    typeMessage(element, html) {
+        let i = 0;
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = html;
+        const fullContent = tempDiv.innerHTML;
+        
+        // Efecto de aparición suave por palabras para mejor UX "premium"
+        const words = fullContent.split(' ');
+        let currentWord = 0;
+        
+        const timer = setInterval(() => {
+            if (currentWord < words.length) {
+                element.innerHTML = words.slice(0, currentWord + 1).join(' ');
+                currentWord++;
+                this.messages.scrollTop = this.messages.scrollHeight;
+            } else {
+                clearInterval(timer);
+            }
+        }, 30); // Velocidad equilibrada
     }
 
     async handleSend() {
@@ -149,7 +192,9 @@ class AIWidget {
 
             const response = typeof responseData === 'string' ? responseData : responseData.content;
             
-            loadingMsg.textContent = response;
+            loadingMsg.remove(); // Quitamos el de carga
+            this.appendMessage('bot', response); // El nuevo con efecto typewriter
+
             this.history.push({ role: 'user', content: text });
             this.history.push({ role: 'assistant', content: response });
         } catch (err) {
