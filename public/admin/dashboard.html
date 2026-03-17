@@ -317,20 +317,16 @@
                     </div>
                 </div>
 
-                <!-- Asistente de IA (Ollama) -->
-                <div class="panel glass animate-fade-up" style="animation-delay: 0.25s">
-                    <div class="panel-header">
-                        <span class="panel-title"><i class="fas fa-robot"
-                                style="color:var(--gold);margin-right:.5rem"></i>Asistente DIBA (IA Local)</span>
+                                style="color:var(--gold);margin-right:.5rem"></i>Asistente DIBA (IA Global)</span>
                         <div class="ai-status">
                             <div id="ai-status-dot" class="status-dot"></div>
-                            <span id="ai-status-text">Detectando Ollama...</span>
+                            <span id="ai-status-text">Conectando con la IA...</span>
                         </div>
                     </div>
                     <div class="panel-body">
                         <div class="ai-chat-container">
                             <div class="ai-messages" id="ai-messages">
-                                <div class="ai-message bot">¡Hola! Soy tu asistente local. Puedes preguntarme sobre la gestión del club.</div>
+                                <div class="ai-message bot">¡Hola! Soy tu asistente global. Puedes preguntarme sobre la gestión del club.</div>
                             </div>
                             <div class="ai-input-group">
                                 <input type="text" id="ai-input" placeholder="Pregunta algo..." autocomplete="off">
@@ -436,7 +432,7 @@
                 const response = await chatWithAI(prompt);
                 botMsgDiv.textContent = response;
             } catch (error) {
-                botMsgDiv.innerHTML = '<span style="color:var(--red)">Error: No se pudo conectar con Ollama.</span>';
+                botMsgDiv.innerHTML = '<span style="color:var(--red)">Error: No se pudo conectar con la IA Global.</span>';
             } finally {
                 aiInput.disabled = false;
                 aiSend.disabled = false;

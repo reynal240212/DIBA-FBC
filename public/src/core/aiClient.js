@@ -26,14 +26,14 @@ export async function chatWithAI(prompt, history = []) {
 }
 
 /**
- * Verifica si el servicio de IA está activo
+ * Verifica si el servicio de IA está activo mediante un ping
  */
 export async function checkAIStatus() {
     try {
-        const { error } = await supabase.functions.invoke('ai-assistant', {
-            method: 'OPTIONS'
+        const { data, error } = await supabase.functions.invoke('ai-assistant', {
+            body: { ping: true }
         });
-        return !error;
+        return !error && data?.status === 'ok';
     } catch (e) {
         return false;
     }
