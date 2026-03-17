@@ -397,9 +397,9 @@
     <script src="/scripts/config.js"></script>
     <script type="module">
         import { supabase, requireAdmin } from '../scripts/supabaseClient.js';
-        import { chatWithAI, checkOllamaAvailability } from '../src/core/ollamaClient.js';
+        import { chatWithAI, checkAIStatus } from '../src/core/aiClient.js';
 
-        // ── IA OLLAMA LOGIC ──
+        // ── IA GLOBAL LOGIC ──
         const aiInput = document.getElementById('ai-input');
         const aiSend = document.getElementById('ai-send');
         const aiMessages = document.getElementById('ai-messages');
@@ -407,13 +407,13 @@
         const aiStatusText = document.getElementById('ai-status-text');
 
         async function updateAIStatus() {
-            const isAvailable = await checkOllamaAvailability();
+            const isAvailable = await checkAIStatus();
             if (isAvailable) {
                 aiStatusDot.className = 'status-dot online';
-                aiStatusText.textContent = 'Ollama Online';
+                aiStatusText.textContent = 'IA Global Online';
             } else {
                 aiStatusDot.className = 'status-dot offline';
-                aiStatusText.textContent = 'Ollama Offline';
+                aiStatusText.textContent = 'IA Offline (Configurando...)';
             }
         }
 
