@@ -83,7 +83,7 @@ Se ha generado documentación detallada y walkthroughs de las últimas actualiza
     - [x] Generar JSON del flujo de Aprendizaje en Tiempo Real <!-- id: 27 -->
     - [x] Documentar configuración de Webhooks en Supabase <!-- id: 28 -->
     - [x] Crear flujo de Notificaciones de Partidos <!-- id: 29 -->
-- [ ] Notificaciones de próximos encuentros vía Web Push.
+- [x] Notificaciones de próximos encuentros vía Web Push (Broadcast manual listo).
 
 ---
 
