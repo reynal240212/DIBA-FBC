@@ -332,7 +332,7 @@ document.addEventListener("DOMContentLoaded", function () {
   // --- 3.1 CARGA GLOBAL DE IA ASSISTANT (WIDGET) ---
   const loadAIWidget = async () => {
     try {
-      await import('../src/core/aiWidget.js');
+      await import('/src/core/aiWidget.js');
     } catch (err) {
       console.error("Error loading AI Widget:", err);
     }

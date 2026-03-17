@@ -1,4 +1,5 @@
 // Supabase Client para uso en el navegador
+import '/src/core/aiWidget.js'; 
 // Carga única del cliente en navegador
 // Las credenciales se leen del config.js centralizado (window.DIBA_CONFIG)
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';

@@ -34,4 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
         s.src = '/scripts/search.js';
         document.body.appendChild(s);
     }
+
+    // 5. Global AI Assistant Widget
+    import('./core/aiWidget.js').catch(err => console.error("Error loading AI Widget:", err));
 });

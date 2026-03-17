@@ -141,7 +141,8 @@ class AIWidget {
     }
 }
 
-// Auto-init only if in browser
-if (typeof window !== 'undefined') {
+// Auto-init with singleton check
+if (typeof window !== 'undefined' && !window.dibaAI) {
     window.dibaAI = new AIWidget();
+    console.log("DIBA AI Widget Initialized");
 }

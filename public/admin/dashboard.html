@@ -382,6 +382,7 @@
     <script type="module">
         import { supabase, requireAdmin } from '../scripts/supabaseClient.js';
         import { chatWithAI, checkAIStatus } from '../src/core/aiClient.js';
+        import '../src/core/aiWidget.js'; // Carga global del widget
 
         // La lógica de IA ahora es manejada globalmente por el Widget flotante
         // accesible en todo el sitio a través de public/src/core/aiWidget.js
