@@ -3,12 +3,22 @@
  * Global injection and logic
  */
 
+import { APP_VERSION } from './version.js';
 import { chatWithAI, checkAIStatus } from './aiClient.js';
 
 class AIWidget {
     constructor() {
         this.isOpen = false;
         this.history = [];
+        this.isListening = false;
+        this.isSpeaking = false;
+        this.speechEnabled = localStorage.getItem('diba-ai-speech') === 'true';
+        
+        // Voice configuration
+        this.recognition = null;
+        this.synth = window.speechSynthesis;
+        this.initVoice();
+        
         this.init();
     }
 
@@ -23,7 +33,7 @@ class AIWidget {
         if (!document.querySelector('link[href*="ai-widget.css"]')) {
             const link = document.createElement('link');
             link.rel = 'stylesheet';
-            link.href = '/styles/ai-widget.css';
+            link.href = `/styles/ai-widget.css?v=${APP_VERSION}`;
             document.head.appendChild(link);
         }
     }
@@ -49,6 +59,9 @@ class AIWidget {
                 </div>
                 <div class="ai-footer">
                     <form id="widget-input-form" class="ai-input-wrapper">
+                        <button type="button" id="ai-mic-btn" class="ai-mic-btn" title="Hablar">
+                            <i class="fas fa-microphone"></i>
+                        </button>
                         <input type="text" id="widget-input" placeholder="Escribe tu mensaje..." autocomplete="off">
                         <button type="submit" class="ai-send-btn">
                             <i class="fas fa-paper-plane"></i>
@@ -75,6 +88,99 @@ class AIWidget {
             e.preventDefault();
             this.handleSend();
         });
+
+        this.micBtn = document.getElementById('ai-mic-btn');
+        this.micBtn?.addEventListener('click', () => this.toggleListening());
+        
+        // Add speech toggle to header
+        const header = document.querySelector('.ai-header-status');
+        if (header) {
+            const voiceToggle = document.createElement('div');
+            voiceToggle.className = 'ai-voice-toggle';
+            voiceToggle.innerHTML = `
+                <i class="fas ${this.speechEnabled ? 'fa-volume-up' : 'fa-volume-mute'}" id="speech-icon"></i>
+            `;
+            voiceToggle.title = "Activar/Desactivar lectura en voz alta";
+            voiceToggle.onclick = () => this.toggleSpeech();
+            header.prepend(voiceToggle);
+        }
+    }
+
+    initVoice() {
+        if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+            const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+            this.recognition = new SpeechRec();
+            this.recognition.lang = 'es-CO';
+            this.recognition.continuous = false;
+            this.recognition.interimResults = false;
+
+            this.recognition.onstart = () => {
+                this.isListening = true;
+                this.micBtn.classList.add('listening');
+                this.input.placeholder = "Escuchando...";
+            };
+
+            this.recognition.onresult = (event) => {
+                const text = event.results[0][0].transcript;
+                this.input.value = text;
+                this.handleSend();
+            };
+
+            this.recognition.onend = () => {
+                this.isListening = false;
+                this.micBtn.classList.remove('listening');
+                this.input.placeholder = "Escribe tu mensaje...";
+            };
+
+            this.recognition.onerror = (e) => {
+                console.error("Speech Rec Error:", e);
+                this.isListening = false;
+                this.micBtn.classList.remove('listening');
+            };
+        }
+    }
+
+    toggleListening() {
+        if (!this.recognition) {
+            alert("Tu navegador no soporta reconocimiento de voz.");
+            return;
+        }
+        if (this.isListening) {
+            this.recognition.stop();
+        } else {
+            this.synth.cancel(); // Stop talking before listening
+            this.recognition.start();
+        }
+    }
+
+    toggleSpeech() {
+        this.speechEnabled = !this.speechEnabled;
+        localStorage.setItem('diba-ai-speech', this.speechEnabled);
+        const icon = document.getElementById('speech-icon');
+        if (icon) icon.className = `fas ${this.speechEnabled ? 'fa-volume-up' : 'fa-volume-mute'}`;
+        if (!this.speechEnabled) this.synth.cancel();
+    }
+
+    speak(text) {
+        if (!this.speechEnabled || !this.synth) return;
+        this.synth.cancel(); // Stop current speech
+        
+        // Clean markdown for speech
+        const cleanText = text.replace(/\*\*(.*?)\*\*/g, '$1')
+                               .replace(/\*(.*?)\*/g, '$1')
+                               .replace(/<li>/g, ' ')
+                               .replace(/<\/li>/g, '.')
+                               .replace(/<[^>]*>/g, '');
+
+        const utterance = new SpeechSynthesisUtterance(cleanText);
+        utterance.lang = 'es-CO';
+        utterance.rate = 1.0;
+        utterance.pitch = 1.0;
+        
+        this.isSpeaking = true;
+        this.synth.speak(utterance);
+        
+        utterance.onend = () => { this.isSpeaking = false; };
     }
 
     toggle() {
@@ -194,6 +300,8 @@ class AIWidget {
             
             loadingMsg.remove(); // Quitamos el de carga
             this.appendMessage('bot', response); // El nuevo con efecto typewriter
+            
+            this.speak(response); // Leer en voz alta si está activado
 
             this.history.push({ role: 'user', content: text });
             this.history.push({ role: 'assistant', content: response });

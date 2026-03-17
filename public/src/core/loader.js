@@ -2,13 +2,15 @@
  * DIBA FBC - Global Component Loader
  * Centralizes the injection of shared UI elements (Navbar, Footer, etc.)
  */
+import { APP_VERSION } from './version.js';
 
 export function loadComponent(containerId, filePath, callback) {
     const container = document.getElementById(containerId);
     if (!container) return;
     
     // Convert to absolute path if needed, assuming components are in /layout/
-    const url = filePath.startsWith('/') ? filePath : `/${filePath}`;
+    const baseUrl = filePath.startsWith('/') ? filePath : `/${filePath}`;
+    const url = `${baseUrl}?v=${APP_VERSION}`;
     
     fetch(url)
         .then(r => r.text())

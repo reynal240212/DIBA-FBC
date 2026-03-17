@@ -2,6 +2,7 @@
  * DIBA FBC - Main Entry Point (Public Site)
  * Orchestrates all feature initializations.
  */
+import { APP_VERSION } from './core/version.js';
 import { initTheme } from './core/theme-switcher.js';
 import { initCommonUI, loadComponent } from './core/loader.js';
 import { initNavbar } from './features/navigation/navbar.js';
@@ -36,5 +37,5 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // 5. Global AI Assistant Widget
-    import('./core/aiWidget.js').catch(err => console.error("Error loading AI Widget:", err));
+    import(`./core/aiWidget.js?v=${APP_VERSION}`).catch(err => console.error("Error loading AI Widget:", err));
 });
