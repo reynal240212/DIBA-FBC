@@ -316,26 +316,11 @@
                         </div>
                     </div>
                 </div>
-                <!-- Asistente de IA (IA Global) -->
-                <div class="panel glass animate-fade-up" style="animation-delay: 0.25s">
-                    <div class="panel-header">
-                        <span class="panel-title"><i class="fas fa-robot"
-                                style="color:var(--gold);margin-right:.5rem"></i>Asistente DIBA (IA Global)</span>
-                        <div class="ai-status">
-                            <div id="ai-status-dot" class="status-dot"></div>
-                            <span id="ai-status-text">Conectando con la IA...</span>
-                        </div>
-                    </div>
-                    <div class="panel-body">
-                        <div class="ai-chat-container">
-                            <div class="ai-messages" id="ai-messages">
-                                <div class="ai-message bot">¡Hola! Soy tu asistente global. Puedes preguntarme sobre la gestión del club.</div>
-                            </div>
-                            <div class="ai-input-group">
-                                <input type="text" id="ai-input" placeholder="Pregunta algo..." autocomplete="off">
-                                <button id="ai-send" class="btn btn-gold" style="padding: 0.5rem 1rem;"><i class="fas fa-paper-plane"></i></button>
-                            </div>
-                        </div>
+                <!-- Espacio para futuros widgets de administración -->
+                <div class="panel glass animate-fade-up" style="animation-delay: 0.25s; display: flex; align-items: center; justify-content: center; min-height: 200px;">
+                    <div style="text-align: center; opacity: 0.5;">
+                        <i class="fas fa-chart-pie" style="font-size: 2rem; color: var(--gold); margin-bottom: 1rem;"></i>
+                        <p style="font-size: 0.7rem; font-weight: 800; text-transform: uppercase;">Módulo de Análisis Próximamente</p>
                     </div>
                 </div>
 
@@ -398,74 +383,8 @@
         import { supabase, requireAdmin } from '../scripts/supabaseClient.js';
         import { chatWithAI, checkAIStatus } from '../src/core/aiClient.js';
 
-        // ── IA GLOBAL LOGIC ──
-        const aiInput = document.getElementById('ai-input');
-        const aiSend = document.getElementById('ai-send');
-        const aiMessages = document.getElementById('ai-messages');
-        const aiStatusDot = document.getElementById('ai-status-dot');
-        const aiStatusText = document.getElementById('ai-status-text');
-
-        async function updateAIStatus() {
-            const isAvailable = await checkAIStatus();
-            if (isAvailable) {
-                aiStatusDot.className = 'status-dot online';
-                aiStatusText.textContent = 'IA Global Online';
-            } else {
-                aiStatusDot.className = 'status-dot offline';
-                aiStatusText.textContent = 'IA Offline (Configurando...)';
-            }
-        }
-
-        async function handleAISend() {
-            const prompt = aiInput.value.trim();
-            if (!prompt) return;
-
-            // Bloquear entrada
-            aiInput.value = '';
-            aiInput.disabled = true;
-            aiSend.disabled = true;
-
-            // Agregar mensaje usuario
-            appendMessage('user', prompt);
-
-            // Loader mensaje bot
-            const botMsgDiv = appendMessage('bot', '<i class="fas fa-spinner fa-spin"></i> Pensando...');
-
-            try {
-                // Obtener KPIs actuales para dar contexto a la IA
-                const clubContext = {
-                    jugadores: document.getElementById('kpi-players').textContent,
-                    partidos: document.getElementById('kpi-matches').textContent,
-                    asistencia: document.getElementById('kpi-attendance').textContent,
-                    pendientes: document.getElementById('kpi-pending').textContent
-                };
-
-                const response = await chatWithAI(prompt, [], clubContext);
-                botMsgDiv.textContent = response;
-            } catch (error) {
-                botMsgDiv.innerHTML = '<span style="color:var(--red)">Error: No se pudo conectar con la IA Global.</span>';
-            } finally {
-                aiInput.disabled = false;
-                aiSend.disabled = false;
-                aiInput.focus();
-                aiMessages.scrollTop = aiMessages.scrollHeight;
-            }
-        }
-
-        function appendMessage(role, text) {
-            const div = document.createElement('div');
-            div.className = `ai-message ${role}`;
-            div.innerHTML = text;
-            aiMessages.appendChild(div);
-            aiMessages.scrollTop = aiMessages.scrollHeight;
-            return div;
-        }
-
-        aiSend.addEventListener('click', handleAISend);
-        aiInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') handleAISend(); });
-
-        updateAIStatus();
-        setInterval(updateAIStatus, 10000);
+        // La lógica de IA ahora es manejada globalmente por el Widget flotante
+        // accesible en todo el sitio a través de public/src/core/aiWidget.js
 
         // ── AUTENTICACIÓN Y CARGA ──
         async function init() {

@@ -329,6 +329,16 @@ document.addEventListener("DOMContentLoaded", function () {
   loadComponent("footer-container", "layout/footer.html");
   loadComponent("fab-container", "layout/fab.html");
 
+  // --- 3.1 CARGA GLOBAL DE IA ASSISTANT (WIDGET) ---
+  const loadAIWidget = async () => {
+    try {
+      await import('../src/core/aiWidget.js');
+    } catch (err) {
+      console.error("Error loading AI Widget:", err);
+    }
+  };
+  loadAIWidget();
+
   // --- 4. JUGADORES DINÁMICOS DESDE SUPABASE (ÚNICA FUENTE DE VERDAD) ---
   const playersContainer = document.getElementById("players-container");
 
