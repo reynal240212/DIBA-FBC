@@ -174,7 +174,20 @@ document.addEventListener("DOMContentLoaded", function () {
 
       displayMatches.forEach(p => {
         const card = document.createElement("div");
-        card.className = "flex-none w-80 sm:w-96 snap-center bg-white/5 border border-white/10 rounded-2xl p-4 flex flex-col gap-3 hover:bg-white/10 transition-colors duration-300";
+        card.className = "flex-none w-80 sm:w-96 snap-center bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-5 flex flex-col gap-4 hover:bg-white/10 hover:border-amber-500/30 transition-all duration-500 group/card relative overflow-hidden";
+
+        // Obtener estado real del partido
+        const esHoy = toLocalDateBanner(p.fecha) === targetDate;
+        const tieneResultado = p.resultado && p.resultado !== '' && p.resultado !== '-';
+        
+        let statusBadge = '';
+        if (tieneResultado) {
+          statusBadge = '<span class="bg-slate-700 text-slate-300 text-[8px] font-black px-2 py-0.5 rounded-full ring-1 ring-white/10 uppercase tracking-widest">Finalizado</span>';
+        } else if (esHoy) {
+          statusBadge = '<span class="bg-red-500 text-white text-[8px] font-black px-2 py-0.5 rounded-full animate-pulse uppercase tracking-widest flex items-center gap-1.5 shadow-lg shadow-red-500/20"><span class="w-1 h-1 bg-white rounded-full"></span> En Vivo</span>';
+        } else {
+          statusBadge = '<span class="bg-blue-600 text-white text-[8px] font-black px-2 py-0.5 rounded-full uppercase tracking-widest">Próximo</span>';
+        }
 
         const escudoImg = (url, equipoNombre) => {
           if (equipoNombre && equipoNombre.toUpperCase().includes('DIBA')) return "images/ESCUDO.png";
@@ -183,33 +196,60 @@ document.addEventListener("DOMContentLoaded", function () {
         };
 
         card.innerHTML = `
-             <div class="flex items-center justify-between gap-4 w-full">
-                 <div class="flex flex-col items-center w-1/3">
-                     <img src="${escudoImg(p.escudo_local || p.escudo, p.equipolocal)}" alt="${p.equipolocal}" class="w-12 h-12 object-contain mb-2 img-drop-shadow" onerror="this.src='${escudoImg(null, p.equipolocal)}'">
-                     <span class="text-white font-bold text-[10px] sm:text-xs uppercase text-center line-clamp-2 leading-tight">${p.equipolocal || 'DIBA FBC'}</span>
+             <!-- Glow background -->
+             <div class="absolute -top-10 -right-10 w-32 h-32 bg-amber-500/5 rounded-full blur-3xl group-hover/card:bg-amber-500/10 transition-all duration-700"></div>
+
+             <div class="flex items-center justify-between mb-1">
+               <span class="text-[9px] font-black text-amber-500/80 uppercase tracking-[0.2em]">CAT. ${p.categoria || 'GENERAL'}</span>
+               ${statusBadge}
+             </div>
+
+             <div class="flex items-center justify-between gap-4 w-full relative z-10">
+                 <!-- Local -->
+                 <div class="flex flex-col items-center w-[35%]">
+                     <div class="relative mb-3">
+                       <div class="absolute inset-0 bg-white/5 rounded-full blur-xl scale-150 group-hover/card:bg-white/10 transition-all duration-700"></div>
+                       <img src="${escudoImg(p.escudo_local || p.escudo, p.equipolocal)}" 
+                            alt="${p.equipolocal}" 
+                            class="w-14 h-14 object-contain relative z-10 drop-shadow-[0_0_15px_rgba(255,255,255,0.1)] group-hover/card:scale-110 transition-transform duration-500" 
+                            onerror="this.src='${escudoImg(null, p.equipolocal)}'">
+                     </div>
+                     <span class="text-white font-black text-[10px] sm:text-[11px] uppercase text-center line-clamp-2 leading-tight tracking-tight">${p.equipolocal || 'DIBA FBC'}</span>
                  </div>
-                 <div class="flex flex-col items-center justify-center w-1/3 px-1">
-                     <span class="bg-amber-500 text-slate-900 text-[9px] font-black uppercase tracking-widest px-2 py-0.5 rounded shadow-lg shadow-amber-500/20 mb-1">
-                        ${p.hora || 'VS'}
-                     </span>
-                     <span class="text-slate-400 text-[9px] sm:text-[10px] uppercase font-bold text-center w-full truncate">${p.Cancha || 'Cancha'}</span>
+
+                 <!-- VS / Score -->
+                 <div class="flex flex-col items-center justify-center w-[30%] px-1">
+                     <div class="mb-2 relative">
+                       ${tieneResultado 
+                         ? `<span class="text-2xl font-black text-white tracking-widest drop-shadow-[0_0_10px_rgba(255,255,255,0.2)]">${p.resultado}</span>`
+                         : `<div class="bg-amber-500 text-slate-950 text-[10px] font-black uppercase tracking-[0.2em] px-3 py-1 rounded-lg shadow-[0_4px_20px_-5px_rgba(245,158,11,0.5)] transform -rotate-2 group-hover/card:rotate-0 transition-all duration-500">${p.hora || 'VS'}</div>`
+                       }
+                     </div>
+                     <span class="text-slate-400 text-[9px] font-bold text-center w-full truncate tracking-tighter uppercase opacity-60">${p.Cancha || 'Cancha'}</span>
                  </div>
-                 <div class="flex flex-col items-center w-1/3">
-                     <img src="${escudoImg(p.escudo_visitante, p.equipovisitante)}" alt="${p.equipovisitante}" class="w-12 h-12 object-contain mb-2 img-drop-shadow" onerror="this.src='${escudoImg(null, p.equipovisitante)}'">
-                     <span class="text-white font-bold text-[10px] sm:text-xs uppercase text-center line-clamp-2 leading-tight">${p.equipovisitante || 'Rival'}</span>
+
+                 <!-- Visitante -->
+                 <div class="flex flex-col items-center w-[35%]">
+                     <div class="relative mb-3">
+                       <div class="absolute inset-0 bg-white/5 rounded-full blur-xl scale-150 group-hover/card:bg-white/10 transition-all duration-700"></div>
+                       <img src="${escudoImg(p.escudo_visitante, p.equipovisitante)}" 
+                            alt="${p.equipovisitante}" 
+                            class="w-14 h-14 object-contain relative z-10 drop-shadow-[0_0_15px_rgba(255,255,255,0.1)] group-hover/card:scale-110 transition-transform duration-500" 
+                            onerror="this.src='${escudoImg(null, p.equipovisitante)}'">
+                     </div>
+                     <span class="text-white font-black text-[10px] sm:text-[11px] uppercase text-center line-clamp-2 leading-tight tracking-tight">${p.equipovisitante || 'Rival'}</span>
                  </div>
              </div>
-          <div class="flex items-center justify-between mt-1 px-1">
-            <span class="text-[9px] font-black text-amber-500 uppercase tracking-widest bg-amber-500/10 px-2 py-0.5 rounded-full">
-              CAT. ${p.categoria || 'GENERAL'}
-            </span>
-            <span class="text-[9px] font-bold text-slate-500 uppercase tracking-tighter italic">
-              DIBA FBC "Fuerza y Lealtad"
-            </span>
+
+          <div class="mt-2 flex items-center justify-between gap-4">
+            <div class="flex items-center gap-1.5 opacity-40">
+              <i class="fas fa-calendar-day text-[9px] text-amber-500"></i>
+              <span class="text-[9px] font-bold text-white uppercase italic tracking-tighter">${toLocalDateBanner(p.fecha)}</span>
+            </div>
+            <a href="partidos.html" class="flex-grow inline-flex justify-center items-center gap-2 bg-white/5 hover:bg-amber-500 hover:text-slate-950 border border-white/5 py-2 rounded-xl text-[9px] font-black text-white uppercase tracking-[0.2em] transition-all duration-300">
+              Ficha Técnica <i class="fas fa-chevron-right text-[8px]"></i>
+            </a>
           </div>
-          <a href="partidos.html" class="w-full mt-2 inline-flex justify-center items-center gap-2 bg-slate-900/50 hover:bg-amber-500 hover:text-slate-900 border border-white/5 py-1.5 rounded-xl text-[10px] font-black text-white uppercase tracking-widest transition-all duration-300">
-            Ver Detalles <i class="fas fa-external-link-alt text-[9px]"></i>
-          </a>
         `;
         dynamicContainer.appendChild(card);
       });
@@ -250,6 +290,30 @@ document.addEventListener("DOMContentLoaded", function () {
         const walk = (x - startX) * 2;
         dynamicContainer.scrollLeft = scrollLeft - walk;
       });
+
+      // --- LOGICA DE BOTONES DE NAVEGACION (Desktop) ---
+      const btnPrev = document.getElementById('banner-prev');
+      const btnNext = document.getElementById('banner-next');
+
+      if (btnPrev && btnNext) {
+        const scrollAmount = 300;
+        btnPrev.addEventListener('click', () => {
+          dynamicContainer.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+        });
+        btnNext.addEventListener('click', () => {
+          dynamicContainer.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+        });
+
+        // Ocultar flechas si no hay scroll
+        const updateArrows = () => {
+          btnPrev.style.display = dynamicContainer.scrollLeft <= 0 ? 'none' : 'flex';
+          btnNext.style.display = (dynamicContainer.scrollLeft + dynamicContainer.clientWidth >= dynamicContainer.scrollWidth - 10) ? 'none' : 'flex';
+        };
+
+        dynamicContainer.addEventListener('scroll', updateArrows);
+        window.addEventListener('resize', updateArrows);
+        setTimeout(updateArrows, 500);
+      }
 
     } catch (err) {
       console.error("Match banner fetch error:", err);

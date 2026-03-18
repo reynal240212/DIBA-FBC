@@ -19,6 +19,10 @@ export async function chatWithAI(prompt, history = [], clubContext = null) {
         });
 
         if (error) throw error;
+        if (!data || !data.content) {
+            console.warn('AI: Respuesta vacía de Supabase Function');
+            return "Lo siento, no he podido generar una respuesta en este momento.";
+        }
         return data.content;
     } catch (error) {
         console.error('Error en aiClient:', error);

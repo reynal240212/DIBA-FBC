@@ -310,7 +310,11 @@ class AIWidget {
                 throw new Error(responseData.error);
             }
 
-            const response = typeof responseData === 'string' ? responseData : responseData.content;
+            if (!responseData) {
+                throw new Error("No se recibió respuesta del asistente.");
+            }
+
+            const response = typeof responseData === 'string' ? responseData : (responseData.content || "Error en formato de respuesta.");
             
             loadingMsg.remove(); // Quitamos el de carga
             this.appendMessage('bot', response); // El nuevo con efecto typewriter

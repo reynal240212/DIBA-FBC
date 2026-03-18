@@ -23,22 +23,56 @@ function toLocalDate(fechaISO) {
   return `${parts[0]}-${parts[1]}-${parts[2]}`;
 }
 
-/** Determina badge de resultado para un partido */
-function badgeResultado(resultado) {
-  if (!resultado || resultado === 'Pendiente' || resultado === '-') {
-    return '<span class="badge-resultado badge-pendiente">Pendiente</span>';
+/** Evalúa el resultado de un partido para DIBA FBC */
+function evaluarResultado(p) {
+  const r = p.resultado;
+  if (!r || r === 'Pendiente' || r === '-' || r === '—') return 'pendiente';
+
+  const partes = r.split(/[-:]/).map(x => {
+    const n = parseInt(x.trim());
+    return isNaN(n) ? null : n;
+  });
+
+  if (partes.length >= 2 && partes[0] !== null && partes[1] !== null) {
+    const golesL = partes[0];
+    const golesV = partes[1];
+    const localEsDiba = (p.equipolocal || '').toUpperCase().includes('DIBA');
+    const visitaEsDiba = (p.equipovisitante || '').toUpperCase().includes('DIBA');
+
+    if (golesL === golesV) return 'empate';
+    const ganoL = golesL > golesV;
+    if ((ganoL && localEsDiba) || (!ganoL && visitaEsDiba)) return 'victoria';
+    if ((ganoL && visitaEsDiba) || (!ganoL && localEsDiba)) return 'derrota';
   }
-  const lower = resultado.toLowerCase();
+
+  const lower = r.toLowerCase();
   if (lower.includes('victoria') || lower.includes('ganó') || lower.includes('ganamos') || lower.startsWith('w')) {
-    return `<span class="badge-resultado badge-victoria"><i class="fas fa-check mr-1"></i>Victoria</span>`;
+    return 'victoria';
   }
   if (lower.includes('derrota') || lower.includes('perdió') || lower.includes('perdimos') || lower.startsWith('l')) {
-    return `<span class="badge-resultado badge-derrota"><i class="fas fa-times mr-1"></i>Derrota</span>`;
+    return 'derrota';
   }
   if (lower.includes('empat')) {
-    return `<span class="badge-resultado badge-empate">Empate</span>`;
+    return 'empate';
   }
-  return `<span class="badge-resultado badge-pendiente">${resultado}</span>`;
+
+  return 'pendiente';
+}
+
+/** Determina badge de resultado para un partido */
+function badgeResultado(p) {
+  const res = evaluarResultado(p);
+  switch (res) {
+    case 'victoria':
+      return `<span class="badge-resultado badge-victoria"><i class="fas fa-check mr-1"></i>Victoria</span>`;
+    case 'derrota':
+      return `<span class="badge-resultado badge-derrota"><i class="fas fa-times mr-1"></i>Derrota</span>`;
+    case 'empate':
+      return `<span class="badge-resultado badge-empate">Empate</span>`;
+    default:
+      const label = (p.resultado && p.resultado !== '-' && p.resultado !== '—') ? p.resultado : 'Pendiente';
+      return `<span class="badge-resultado badge-pendiente">${label}</span>`;
+  }
 }
 
 function mostrarSpinner(id, v) {
@@ -95,9 +129,9 @@ function crearTarjetaPartido(p) {
              ? `<span class="match-score font-black text-2xl tracking-tight text-white">${golesLocal} – ${golesVisitante}</span>`
              : `<span class="vs-badge text-amber-500 font-black">VS</span>`
            }
-           <div class="mt-2">
-             ${badgeResultado(p.resultado)}
-           </div>
+            <div class="mt-2 text-center">
+             ${badgeResultado(p)}
+            </div>
         </div>
 
         <!-- Visitante -->
@@ -205,14 +239,17 @@ const inputFecha = document.getElementById('fecha');
 const resultsPartidos = document.getElementById('partidos-results');
 
 async function filtrarPartidos() {
-  const fecha = inputFecha?.value;
+  const sectionDiba = document.getElementById('section-diba-fbc');
   mostrarInicialPanel('partidos-estado-inicial', false);
   resultsPartidos.innerHTML = '';
 
   if (!fecha) {
     mostrarInicialPanel('partidos-estado-inicial', true);
+    if (sectionDiba) sectionDiba.style.display = 'block';
     return;
   }
+
+  if (sectionDiba) sectionDiba.style.display = 'none';
 
   mostrarSpinner('partidos-spinner', true);
 
@@ -409,7 +446,7 @@ async function mostrarPartidosDIBA() {
 async function cargarEstadisticasRapidas() {
   const { data } = await sb
     .from('partidos')
-    .select('resultado')
+    .select('*')
     .or('equipolocal.ilike.%DIBA%,equipovisitante.ilike.%DIBA%');
 
   if (!data) return;
@@ -418,10 +455,10 @@ async function cargarEstadisticasRapidas() {
   let victorias = 0, derrotas = 0, empates = 0;
 
   data.forEach(p => {
-    const r = (p.resultado || '').toLowerCase();
-    if (r.includes('victoria') || r.includes('ganó') || r.includes('ganamos')) victorias++;
-    else if (r.includes('derrota') || r.includes('perdió') || r.includes('perdimos')) derrotas++;
-    else if (r.includes('empat')) empates++;
+    const res = evaluarResultado(p);
+    if (res === 'victoria') victorias++;
+    else if (res === 'derrota') derrotas++;
+    else if (res === 'empate') empates++;
   });
 
   const animate = (id, val) => {
