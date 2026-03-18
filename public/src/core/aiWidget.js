@@ -331,13 +331,16 @@ class AIWidget {
     }
 
     async checkStatus() {
-        const isOnline = await checkAIStatus();
-        if (isOnline) {
-            this.statusDot.classList.add('online');
-            this.statusText.textContent = 'Global Online';
-        } else {
-            this.statusText.textContent = 'Offline';
+        for (let i = 0; i < 3; i++) {
+            const isOnline = await checkAIStatus();
+            if (isOnline) {
+                this.statusDot.classList.add('online');
+                this.statusText.textContent = 'Global Online';
+                return;
+            }
+            if (i < 2) await new Promise(r => setTimeout(r, 1000));
         }
+        this.statusText.textContent = 'Offline';
     }
 }
 

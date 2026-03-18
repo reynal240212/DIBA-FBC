@@ -40,6 +40,7 @@ export async function checkAIStatus() {
         });
         return !error && data?.status === 'ok';
     } catch (e) {
+        console.error('Ping AI Error:', e);
         return false;
     }
 }
