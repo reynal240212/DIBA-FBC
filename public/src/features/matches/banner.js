@@ -4,6 +4,20 @@
  */
 import { supabase } from '../../core/supabase.js';
 
+function formatFecha(fechaStr) {
+    if (!fechaStr) return '';
+    // Normaliza: toma solo la parte de fecha (YYYY-MM-DD) y agrega mediodía UTC para evitar desfase
+    const parteDate = fechaStr.includes('T') ? fechaStr.split('T')[0] : fechaStr;
+    const [year, month, day] = parteDate.split('-').map(Number);
+    const date = new Date(year, month - 1, day); // Fecha local, sin zona horaria
+    return date.toLocaleDateString('es-ES', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+    });
+}
+
 export async function initMatchBanner() {
     const dynamicContainer = document.getElementById("dynamic-match-banner-container");
     const loadingStatus = document.getElementById("banner-loading");
@@ -45,7 +59,7 @@ export async function initMatchBanner() {
         if (isFuture) {
             const title = document.createElement("div");
             title.className = "w-full flex-none text-center text-amber-500 font-bold text-xs uppercase tracking-widest mb-2 snap-center";
-            title.innerHTML = `PRÓXIMOS PARTIDOS: ${displayMatches[0].fecha}`;
+            title.innerHTML = `PRÓXIMOS PARTIDOS: ${formatFecha(displayMatches[0].fecha)}`;
             dynamicContainer.appendChild(title);
         }
 
@@ -123,7 +137,7 @@ function renderMatchCard(p) {
         <div class="mt-2 flex items-center justify-between gap-4">
             <div class="flex items-center gap-1.5 opacity-40">
                 <i class="fas fa-calendar-day text-[9px] text-amber-500"></i>
-                <span class="text-[9px] font-bold text-white uppercase italic tracking-tighter">${targetDate}</span>
+                <span class="text-[9px] font-bold text-white uppercase italic tracking-tighter">${formatFecha(p.fecha)}</span>
             </div>
             <a href="partidos.html" class="flex-grow inline-flex justify-center items-center gap-2 bg-white/5 hover:bg-amber-500 hover:text-slate-950 border border-white/5 py-2 rounded-xl text-[9px] font-black text-white uppercase tracking-[0.2em] transition-all duration-300">
                 Ficha Técnica <i class="fas fa-chevron-right text-[8px]"></i>
