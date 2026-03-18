@@ -77,7 +77,6 @@ Se ha generado documentación detallada y walkthroughs de las últimas actualiza
 - [x] Gestión dinámica de perfiles administrativos.
 - [x] Línea de tiempo histórica inmersiva con animaciones.
 - [x] Página de himno oficial y simbología del escudo interactiva.
-- [x] Integración de feed de Instagram en sección de Noticias.
 - [x] Subida individual de documentos (PDF/Imagen) por jugador desde el perfil.
 - [x] Automatización con n8n <!-- id: 26 -->
     - [x] Generar JSON del flujo de Aprendizaje en Tiempo Real <!-- id: 27 -->
