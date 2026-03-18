@@ -3,7 +3,9 @@
 =================================== */
 const btnVolverArriba = document.getElementById("btnVolverArriba");
 window.addEventListener("scroll", () => {
-  btnVolverArriba.style.display = window.scrollY > 300 ? "block" : "none";
+  if (btnVolverArriba) {
+    btnVolverArriba.style.display = window.scrollY > 300 ? "block" : "none";
+  }
 });
 btnVolverArriba?.addEventListener("click", () =>
   window.scrollTo({ top: 0, behavior: "smooth" })

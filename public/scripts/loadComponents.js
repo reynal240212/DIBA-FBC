@@ -1,7 +1,12 @@
 /* ==============================================
    DIBA FBC - GESTIÓN DE JUGADORES Y COMPONENTES
 ================================================= */
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", async function () {
+  // --- 0. CLIENTE SUPABASE ÚNICO ---
+  const { createClient } = await import("https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm");
+  const { SUPABASE_URL, SUPABASE_ANON_KEY } = window.DIBA_CONFIG;
+  const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  window.supabase = supabase; // Compartir instancia
 
   // --- 1. ESTILOS PARA EL MODAL Y MEJORA DE IMAGEN (ANTI-GRANULADO) ---
   const style = document.createElement('style');
@@ -124,9 +129,7 @@ document.addEventListener("DOMContentLoaded", function () {
     if (!dynamicContainer) return;
 
     try {
-      const { createClient } = await import("https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm");
-      const { SUPABASE_URL, SUPABASE_ANON_KEY } = window.DIBA_CONFIG;
-      const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+      // Usa la instancia única de supabase definida al inicio
 
       // Obtener la fecha actual del sistema dinámicamente
       const today = new Date();
@@ -162,15 +165,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
       // Limpiar contenedor
       dynamicContainer.innerHTML = '';
-
-      // Título sutil si el primer partido no es hoy
-      const isFuture = toLocalDateBanner(displayMatches[0].fecha) !== targetDate;
-      if (isFuture) {
-        const title = document.createElement("div");
-        title.className = "w-full flex-none text-center text-amber-500 font-bold text-xs uppercase tracking-widest mb-2 snap-center";
-        title.innerHTML = `PRÓXIMOS PARTIDOS: ${toLocalDateBanner(displayMatches[0].fecha)}`;
-        dynamicContainer.appendChild(title);
-      }
 
       displayMatches.forEach(p => {
         const card = document.createElement("div");
@@ -322,9 +316,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }); loadComponent("hero-container", "layout/hero.html");
   loadComponent("stats-container", "layout/stats_counter.html", async () => {
     try {
-      const { createClient } = await import("https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm");
-      const { SUPABASE_URL, SUPABASE_ANON_KEY } = window.DIBA_CONFIG;
-      const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+      // Usa la instancia única de supabase definida al inicio
 
       async function fetchAndSetValues() {
         const startYear = 2012;
@@ -417,16 +409,7 @@ document.addEventListener("DOMContentLoaded", function () {
       `;
 
       try {
-        const { createClient } = await import("https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm");
-        const { SUPABASE_URL, SUPABASE_ANON_KEY } = window.DIBA_CONFIG || {};
-        
-        if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
-          console.error("Configuración de Supabase no encontrada.");
-          playersContainer.innerHTML = '<p class="text-center py-10 text-red-500 font-bold uppercase text-xs">Error: Servidor DIBA-Connect no disponible.</p>';
-          return;
-        }
-
-        const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        // Usar la instancia única
 
         const { data: jugadores, error } = await supabase
           .from('identificacion')
@@ -570,9 +553,7 @@ document.addEventListener("DOMContentLoaded", function () {
     if (!container) return;
 
     try {
-      const { createClient } = await import("https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm");
-      const { SUPABASE_URL, SUPABASE_ANON_KEY } = window.DIBA_CONFIG;
-      const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+      // Usa la instancia única de supabase definida al inicio
 
       const { data, error } = await supabase.from("goleadores").select("*").order("goles", { ascending: false });
       if (error) throw error;
