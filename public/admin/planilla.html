@@ -459,49 +459,32 @@
             if (!dateInput.value) dateInput.valueAsDate = new Date();
             const fechaSeleccionada = dateInput.value;
 
-            // 1. Cargar jugadores
-            const { data: players, error: pErr } = await supabase.from('identificacion').select('numero, nombre, apellidos, categoria, foto_url').order('apellidos');
-            if (pErr) throw pErr;
+            // 1. Cargar jugadores desde el nuevo backend
+            const pResponse = await fetch('http://localhost:8080/api/players');
+            if (!pResponse.ok) throw new Error('Error al cargar jugadores');
+            const players = await pResponse.json();
+            
             appState.players = players.map(p => ({
               id: p.numero,
               name: `${p.nombre} ${p.apellidos}`.trim(),
               categoria: p.categoria,
-              foto: p.foto_url
+              foto: p.fotoUrl
             }));
 
-            // 2. Buscar o Crear planilla para esta fecha
-            const { data: planillas, error: plErr } = await supabase
-              .from('planillas')
-              .select('id')
-              .eq('fecha', fechaSeleccionada);
-
-            if (plErr) throw plErr;
-
-            let planillaId;
-            if (planillas.length === 0) {
-              const { data: newPl, error: createErr } = await supabase
-                .from('planillas')
-                .insert([{ fecha: fechaSeleccionada, categoria: 'General' }])
-                .select('id')
-                .single();
-              if (createErr) throw createErr;
-              planillaId = newPl.id;
-            } else {
-              planillaId = planillas[0].id;
-            }
-            appState.currentPlanillaId = planillaId;
+            // 2. Buscar o Crear planilla para esta fecha en el backend
+            const plResponse = await fetch(`http://localhost:8080/api/planillas/by-date?fecha=${fechaSeleccionada}`);
+            if (!plResponse.ok) throw new Error('Error al cargar planilla');
+            const planilla = await plResponse.json();
+            appState.currentPlanillaId = planilla.id;
 
             // 3. Cargar registros existentes
-            const { data: regs, error: rErr } = await supabase
-              .from('planilla_registros')
-              .select('*')
-              .eq('planilla_id', planillaId);
-
-            if (rErr) throw rErr;
+            const rResponse = await fetch(`http://localhost:8080/api/planillas/${planilla.id}/registros`);
+            if (!rResponse.ok) throw new Error('Error al cargar registros');
+            const regs = await rResponse.json();
 
             appState.registros = {};
             regs.forEach(r => {
-              appState.registros[r.jugador_dni] = {
+              appState.registros[r.jugadorDni] = {
                 db_id: r.id,
                 pago: r.pago || '',
                 asistencia: r.asistencia,
@@ -512,7 +495,7 @@
             render();
           } catch (e) {
             console.error(e);
-            showToast('Error de conexión: ' + (e.message || 'Supabase no responde'), true);
+            showToast('Error de conexión: ' + (e.message || 'El servidor backend no responde'), true);
           }
         };
 
@@ -521,7 +504,7 @@
           tableBody.innerHTML = '';
           const filtered = appState.players.filter(p => p.name.toLowerCase().includes(q));
 
-          // Ordenar por categoría según el deseo del usuario
+          // Ordenar por categoría
           const order = { '2014/2015/2016': 1, '2012': 2, '2013': 3, 'General': 4 };
           filtered.sort((a, b) => {
             if (order[a.categoria] !== order[b.categoria]) {
@@ -536,11 +519,11 @@
           filtered.forEach((p) => {
             if (p.categoria !== currentCategory) {
               currentCategory = p.categoria;
-              categoryEnum = 0; // Reiniciar contador por categoría
+              categoryEnum = 0;
 
               const headerTr = document.createElement('tr');
               headerTr.className = 'category-header-row';
-              headerTr.innerHTML = `<td colspan="6"><i class="fas fa-layer-group me-2"></i>CATEGORÍA ${currentCategory}</td>`;
+              headerTr.innerHTML = `<td colspan="7"><i class="fas fa-layer-group me-2"></i>CATEGORÍA ${currentCategory}</td>`;
               tableBody.appendChild(headerTr);
             }
 
@@ -549,7 +532,6 @@
             const tr = document.createElement('tr');
             tr.dataset.dni = p.id;
             
-            // Thumbnail de foto
             const avatarUrl = p.foto || '/images/ESCUDO.png';
             
             tr.innerHTML = `
@@ -583,9 +565,7 @@
                 </button>
                 <ul class="dropdown-menu dropdown-menu-dark">
                   <li><a class="dropdown-item" href="#" onclick="openAdminDocs('${p.id}', '${p.name}')"><i class="fas fa-file-medical me-2 text-success"></i> Documentos</a></li>
-                  <li><a class="dropdown-item" href="#" onclick="openEditModal('${p.id}', '${p.name}', '${p.categoria}')"><i class="fas fa-edit me-2 text-warning"></i> Editar Jugador</a></li>
-                  <li><hr class="dropdown-divider border-secondary"></li>
-                  <li><a class="dropdown-item text-danger" href="#" onclick="handleDelete('${p.id}', '${p.name}')"><i class="fas fa-trash-alt me-2"></i> Eliminar</a></li>
+                  <li><a class="dropdown-item" href="#" onclick="openEditModal('${p.id}', '${p.name}', '${p.categoria}')"><i class="fas fa-edit me-2 text-warning"></i> Editar</a></li>
                 </ul>
               </div>
             </td>
@@ -595,49 +575,29 @@
           updateStats();
         };
 
-        const updateStats = () => {
-          const total = appState.players.length;
-          let p = 0, a = 0, e = 0;
-          appState.players.forEach(pl => {
-            const d = appState.registros[pl.id] || { asistencia: '' };
-            if (d.asistencia === 'P') p++;
-            else if (d.asistencia === 'A') a++;
-            else if (d.asistencia === 'E') e++;
-          });
-
-          document.getElementById('stat-presentes').textContent = p;
-          document.getElementById('stat-ausentes').textContent = a;
-          document.getElementById('stat-excusas').textContent = e;
-          document.getElementById('stat-total').textContent = total;
-
-          const pct = total > 0 ? Math.round((p / total) * 100) : 0;
-          document.getElementById('stat-pct').textContent = pct + '%';
-          document.getElementById('prog-p').style.width = (total > 0 ? (p / total) * 100 : 0) + '%';
-          document.getElementById('prog-a').style.width = (total > 0 ? (a / total) * 100 : 0) + '%';
-          document.getElementById('prog-e').style.width = (total > 0 ? (e / total) * 100 : 0) + '%';
-        };
-
-        // Guardado automático en Supabase
         const saveRegistro = async (dni) => {
           syncStatus.innerHTML = '<i class="fas fa-cloud-upload-alt ms-2"></i> Guardando...';
           const d = appState.registros[dni];
+          
           const payload = {
-            planilla_id: appState.currentPlanillaId,
-            jugador_dni: dni,
+            planillaId: appState.currentPlanillaId,
+            jugadorDni: dni,
             pago: d.pago || null,
             asistencia: d.asistencia || null,
             observacion: (d.obs && d.obs.trim()) ? d.obs : null
           };
 
           try {
-            if (d.db_id) {
-              // Update
-              await supabase.from('planilla_registros').update(payload).eq('id', d.db_id);
-            } else {
-              // Insert
-              const { data, error } = await supabase.from('planilla_registros').insert([payload]).select('id').single();
-              if (!error) d.db_id = data.id;
-            }
+            const response = await fetch('http://localhost:8080/api/planillas/registros', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(payload)
+            });
+
+            if (!response.ok) throw new Error('Error al guardar registro');
+            const saved = await response.json();
+            d.db_id = saved.id;
+
             syncStatus.innerHTML = '<i class="fas fa-check-circle text-success ms-2"></i> Sincronizado';
           } catch (e) {
             console.error(e);
@@ -943,45 +903,51 @@
             { id: 'consentimiento_padres', label: 'Consentimiento Padres' }
           ];
 
-          const { data: docs } = await supabase.from('player_documents').select('*').eq('identificacion_numero', dni);
+          try {
+            const response = await fetch(`http://localhost:8080/api/player-documents/${dni}`);
+            if (!response.ok) throw new Error('Error al cargar documentos del jugador');
+            const docs = await response.json();
 
-          listEl.innerHTML = '';
-          for (const type of DOC_TYPES) {
-            const doc = docs?.find(d => d.doc_type === type.id);
-            let signedFileUrl = '#';
-            
-            if (doc && doc.file_url) {
-              // Extraer el path relativo al bucket 'documents'
-              const pathPart = doc.file_url.split('documents/')[1];
-              if (pathPart) {
-                const { data: sData } = await supabase.storage.from('documents').createSignedUrl(pathPart, 3600);
-                if (sData) signedFileUrl = sData.signedUrl;
-              } else {
-                signedFileUrl = doc.file_url; // Fallback por si acaso
+            listEl.innerHTML = '';
+            for (const type of DOC_TYPES) {
+              const doc = docs?.find(d => d.docType === type.id);
+              let signedFileUrl = '#';
+              
+              if (doc && doc.fileUrl) {
+                // Sigue usando Supabase Storage para URLs firmadas (Plan 1)
+                const pathPart = doc.fileUrl.split('documents/')[1];
+                if (pathPart) {
+                  const { data: sData } = await supabase.storage.from('documents').createSignedUrl(pathPart, 3600);
+                  if (sData) signedFileUrl = sData.signedUrl;
+                } else {
+                  signedFileUrl = doc.fileUrl;
+                }
               }
-            }
 
-            const item = document.createElement('div');
-            item.className = "d-flex align-items-center justify-content-between p-3 mb-2 rounded-4 text-white";
-            item.style.background = "rgba(255,255,255,0.03)";
-            item.style.border = "1px solid rgba(255,255,255,0.05)";
-            item.innerHTML = `
-              <div class="d-flex align-items-center gap-3">
-                <div class="rounded-3 d-flex align-items-center justify-center p-2" style="background: rgba(255,255,255,0.05); width: 40px; height: 40px;"><i class="fas fa-file-alt text-muted"></i></div>
-                <div>
-                  <p class="fw-bold mb-0 text-uppercase italic" style="font-size: 0.75rem;">${type.label}</p>
-                  <p class="small fw-bold text-uppercase mb-0 ${doc ? (doc.status === 'verificado' ? 'text-success' : 'text-warning') : 'text-muted'}" style="font-size: 0.6rem;">
-                    ${doc ? doc.status : 'No cargado'}
-                  </p>
+              const item = document.createElement('div');
+              item.className = "d-flex align-items-center justify-content-between p-3 mb-2 rounded-4 text-white";
+              item.style.background = "rgba(255,255,255,0.03)";
+              item.style.border = "1px solid rgba(255,255,255,0.05)";
+              item.innerHTML = `
+                <div class="d-flex align-items-center gap-3">
+                  <div class="rounded-3 d-flex align-items-center justify-center p-2" style="background: rgba(255,255,255,0.05); width: 40px; height: 40px;"><i class="fas fa-file-alt text-muted"></i></div>
+                  <div>
+                    <p class="fw-bold mb-0 text-uppercase italic" style="font-size: 0.75rem;">${type.label}</p>
+                    <p class="small fw-bold text-uppercase mb-0 ${doc ? (doc.status === 'verificado' ? 'text-success' : 'text-warning') : 'text-muted'}" style="font-size: 0.6rem;">
+                      ${doc ? doc.status : 'No cargado'}
+                    </p>
+                  </div>
                 </div>
-              </div>
-              <div class="d-flex align-items-center gap-2">
-                ${doc ? `<a href="${signedFileUrl}" target="_blank" class="btn btn-sm btn-link text-warning p-1"><i class="fas fa-eye"></i></a>` : ''}
-                <button onclick="document.getElementById('upload-${type.id}').click()" class="btn btn-sm btn-link text-success p-1"><i class="fas fa-upload"></i></button>
-                <input type="file" id="upload-${type.id}" class="d-none" onchange="window.adminUploadDoc('${dni}', '${type.id}', this)">
-              </div>
-            `;
-            listEl.appendChild(item);
+                <div class="d-flex align-items-center gap-2">
+                  ${doc ? `<a href="${signedFileUrl}" target="_blank" class="btn btn-sm btn-link text-warning p-1"><i class="fas fa-eye"></i></a>` : ''}
+                  <button onclick="document.getElementById('upload-${type.id}').click()" class="btn btn-sm btn-link text-success p-1"><i class="fas fa-upload"></i></button>
+                  <input type="file" id="upload-${type.id}" class="d-none" onchange="window.adminUploadDoc('${dni}', '${type.id}', this)">
+                </div>
+              `;
+              listEl.appendChild(item);
+            }
+          } catch (err) {
+            listEl.innerHTML = `<div class="text-danger small text-center">${err.message}</div>`;
           }
         };
 
@@ -1005,15 +971,21 @@
 
             const { data: { publicUrl } } = supabase.storage.from('documents').getPublicUrl(fileName);
 
-            const { error: dbError } = await supabase.from('player_documents').upsert({
-              identificacion_numero: dni,
-              doc_type: docType,
-              file_url: publicUrl,
-              status: 'verificado',
-              updated_at: new Date()
-            }, { onConflict: ['identificacion_numero', 'doc_type'] });
+            // Guardar METADATA en el backend
+            const payload = {
+              identificacionNumero: dni,
+              docType: docType,
+              fileUrl: publicUrl,
+              status: 'verificado'
+            };
 
-            if (dbError) throw dbError;
+            const response = await fetch('http://localhost:8080/api/player-documents/upsert', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(payload)
+            });
+
+            if (!response.ok) throw new Error('Error al sincronizar metadata del documento');
 
             const nameEl = document.getElementById('modalPlayerName').innerText;
             window.openAdminDocs(dni, nameEl);
@@ -1067,7 +1039,7 @@
         };
 
         window.handleDelete = async (dni, name) => {
-          if (!confirm(`¿Estás seguro de eliminar a ${name}? Esta acción no se puede deshacer y podría fallar si tiene registros vinculados.`)) return;
+          if (!confirm(`¿Estás seguro de eliminar a ${name}? Esta acción no se puede deshacer.`)) return;
           try {
             await deletePlayer(dni);
             showToast('Jugador eliminado');
@@ -1092,14 +1064,14 @@
             nombre: nombre,
             apellidos: apellidos,
             categoria: categoria,
-            fecha_nacimiento: document.getElementById('newFechaNac').value || null,
+            fechaNacimiento: document.getElementById('newFechaNac').value || null,
             sexo: document.getElementById('newSexo').value,
             nacionalidad: document.getElementById('newNacionalidad').value,
-            lugar_nacimiento: document.getElementById('newLugarNac').value,
-            grupo_sanguineo: document.getElementById('newGrupoSangre').value,
-            fecha_expedicion: document.getElementById('newFechaExp').value || null,
-            lugar_expedicion: document.getElementById('newLugarExp').value,
-            fecha_vencimiento: document.getElementById('newFechaVenc').value || null
+            lugarNacimiento: document.getElementById('newLugarNac').value,
+            grupoSanguineo: document.getElementById('newGrupoSangre').value,
+            fechaExpedicion: document.getElementById('newFechaExp').value || null,
+            lugarExpedicion: document.getElementById('newLugarExp').value,
+            fechaVencimiento: document.getElementById('newFechaVenc').value || null
           };
 
           const btn = e.target.querySelector('button[type="submit"]');
@@ -1108,18 +1080,13 @@
           btn.disabled = true;
 
           try {
-            // 1. Insertar en 'jugadores' (Mantenemos compatibilidad con el resto del sistema)
-            const { error: pErr } = await supabase.from('jugadores').insert([{
-              nombre: `${nombre} ${apellidos}`.trim(),
-              categoria: categoria,
-              status: 'Activo',
-              fecha_registro: new Date().toISOString()
-            }]);
-            if (pErr) throw pErr;
+            const response = await fetch('http://localhost:8080/api/players', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
 
-            // 2. Insertar en 'identificacion' (Tabla detallada)
-            const { error: idErr } = await supabase.from('identificacion').insert([payload]);
-            if (idErr) throw idErr;
+            if (!response.ok) throw new Error('Error al registrar jugador en el servidor');
 
             showToast('¡Jugador registrado con éxito!');
             closeCreateModal();
