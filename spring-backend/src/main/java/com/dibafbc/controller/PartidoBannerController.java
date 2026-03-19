@@ -21,6 +21,16 @@ public class PartidoBannerController {
 
     @GetMapping("/partidos")
     public ResponseEntity<?> getAllPartidos() {
-        return ResponseEntity.ok(bannerService.getBannerData().partidos());
+        return ResponseEntity.ok(bannerService.getAllPartidos());
+    }
+
+    @GetMapping("/partidos/fecha")
+    public ResponseEntity<?> getPartidosByFecha(@RequestParam("val") String fecha) {
+        return ResponseEntity.ok(bannerService.getPartidosByFecha(LocalDate.parse(fecha)));
+    }
+
+    @GetMapping("/partidos/equipo")
+    public ResponseEntity<?> getPartidosByEquipo(@RequestParam("val") String equipo) {
+        return ResponseEntity.ok(bannerService.getPartidosByEquipo(equipo));
     }
 }

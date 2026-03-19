@@ -26,6 +26,10 @@ public class PartidoBannerDTO {
     private String escudoLocal;
     private String escudoVisitante;
     private String estado;
+    private String descripcion;
+    private String uniforme;
+    private String valor;
+    private String observaciones;
 
     private static final DateTimeFormatter FORMATTER =
         DateTimeFormatter.ofPattern("EEEE, d 'de' MMMM 'de' yyyy", new Locale("es", "ES"));
@@ -43,6 +47,10 @@ public class PartidoBannerDTO {
                 .escudoLocal(resolveEscudo(p.getEscudoLocal() != null ? p.getEscudoLocal() : p.getEscudo(), p.getEquipoLocal()))
                 .escudoVisitante(resolveEscudo(p.getEscudoVisitante(), p.getEquipoVisitante()))
                 .estado(p.getEstado())
+                .descripcion(p.getDescripcion())
+                .uniforme(p.getUniforme())
+                .valor(p.getValor())
+                .observaciones(p.getObservaciones())
                 .build();
     }
 

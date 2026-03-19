@@ -39,6 +39,18 @@ public class Partido {
     @Column(name = "categoria")
     private String categoria;
 
+    @Column(name = "descripcion")
+    private String descripcion;
+
+    @Column(name = "uniforme")
+    private String uniforme;
+
+    @Column(name = "valor")
+    private String valor;
+
+    @Column(name = "observaciones")
+    private String observaciones;
+
     @Column(name = "escudo_local")
     private String escudoLocal;
 

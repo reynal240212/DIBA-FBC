@@ -284,24 +284,26 @@
             }
         });
 
+        const API_BASE = 'http://localhost:8080/api';
+
         // 2. Cargar partidos
         async function loadMatches() {
             const grid = document.getElementById('matches-grid');
-            const { data, error } = await supabase.from('partidos').select('*').order('fecha', { ascending: false });
-
-            if (error) {
+            try {
+                const response = await fetch(`${API_BASE}/partidos`);
+                if (!response.ok) throw new Error('Error al conectar con la API');
+                const data = await response.json();
+                allMatches = data;
+                renderMatches(data);
+            } catch (error) {
                 console.error(error);
                 grid.innerHTML = `<p class="col-span-full text-center text-red-400">Error al cargar datos: ${error.message}</p>`;
-                return;
             }
-
-            allMatches = data;
-            renderMatches(data);
         }
 
         function renderMatches(matches) {
             const grid = document.getElementById('matches-grid');
-            if (matches.length === 0) {
+            if (!matches || matches.length === 0) {
                 grid.innerHTML = `<div class="col-span-full text-center py-20 bg-white/5 rounded-[2.5rem] border border-dashed border-white/10">
                     <i class="fas fa-calendar-times text-4xl text-slate-600 mb-4 block"></i>
                     <p class="text-slate-500 uppercase font-black italic">No hay partidos registrados</p>
@@ -309,7 +311,10 @@
                 return;
             }
 
-            grid.innerHTML = matches.map(m => {
+            // Descending order by date
+            const sortedMatches = [...matches].sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
+
+            grid.innerHTML = sortedMatches.map(m => {
                 const fecha = new Date(m.fecha).toLocaleDateString('es-CO', { day: '2-digit', month: 'short', year: 'numeric' });
                 return `
                 <div class="bg-white/5 border border-white/10 rounded-[2.5rem] p-8 hover:bg-white/[0.08] transition-all group overflow-hidden relative">
@@ -322,12 +327,12 @@
                     </div>
                     <div class="mb-6">
                         <p class="text-[10px] text-slate-500 font-black uppercase tracking-widest mb-2">${fecha} · ${m.hora || '--:--'}</p>
-                        <h3 class="text-xl font-black uppercase italic leading-tight text-white group-hover:text-dibaGold transition-colors">${m.equipolocal} <span class="text-slate-500">vs</span> ${m.equipovisitante}</h3>
+                        <h3 class="text-xl font-black uppercase italic leading-tight text-white group-hover:text-dibaGold transition-colors">${m.equipoLocal} <span class="text-slate-500">vs</span> ${m.equipoVisitante}</h3>
                         ${m.resultado ? `<div class="mt-4 bg-black/40 px-4 py-2 rounded-xl inline-block font-black text-dibaGold italic text-lg">${m.resultado}</div>` : ''}
                     </div>
                     <div class="flex items-center gap-3 text-slate-400">
                         <i class="fas fa-map-marker-alt text-xs text-dibaGold"></i>
-                        <span class="text-[10px] font-bold uppercase">${m.Cancha || 'Cancha por definir'}</span>
+                        <span class="text-[10px] font-bold uppercase">${m.cancha || 'Cancha por definir'}</span>
                     </div>
                 </div>`;
             }).join('');
@@ -338,16 +343,16 @@
         const form = document.getElementById('match-form');
 
         window.editMatch = (id) => {
-            const match = allMatches.find(m => m.id === id);
+            const match = allMatches.find(m => String(m.id) === String(id));
             if (!match) return;
 
             document.getElementById('modal-title').textContent = 'Editar Partido';
             form.id.value = match.id;
-            form.equipolocal.value = match.equipolocal;
-            form.equipovisitante.value = match.equipovisitante;
+            form.equipolocal.value = match.equipoLocal;
+            form.equipovisitante.value = match.equipoVisitante;
             form.fecha.value = match.fecha ? match.fecha.split('T')[0] : '';
             form.hora.value = match.hora || '';
-            form.Cancha.value = match.Cancha || '';
+            form.Cancha.value = match.cancha || '';
             form.categoria.value = match.categoria || '';
             form.descripcion.value = match.descripcion || '';
             form.resultado.value = match.resultado || '';
@@ -358,9 +363,13 @@
 
         window.deleteMatch = async (id) => {
             if (!confirm('¿Seguro que deseas eliminar este partido?')) return;
-            const { error } = await supabase.from('partidos').delete().eq('id', id);
-            if (error) alert('Error: ' + error.message);
-            else loadMatches();
+            try {
+                const response = await fetch(`${API_BASE}/partidos/${id}`, { method: 'DELETE' });
+                if (!response.ok) throw new Error('Error al eliminar');
+                loadMatches();
+            } catch (error) {
+                alert('Error: ' + error.message);
+            }
         };
 
         document.getElementById('add-match-btn').addEventListener('click', () => {
@@ -378,21 +387,32 @@
             e.preventDefault();
             const fd = new FormData(form);
             const id = fd.get('id');
-            const data = Object.fromEntries(fd.entries());
-            delete data.id;
+            const data = {
+                equipoLocal: fd.get('equipolocal'),
+                equipoVisitante: fd.get('equipovisitante'),
+                fecha: fd.get('fecha'),
+                hora: fd.get('hora'),
+                cancha: fd.get('Cancha'),
+                categoria: fd.get('categoria'),
+                descripcion: fd.get('descripcion'),
+                resultado: fd.get('resultado'),
+                valor: fd.get('valor')
+            };
 
-            let result;
-            if (id) {
-                result = await supabase.from('partidos').update(data).eq('id', id);
-            } else {
-                result = await supabase.from('partidos').insert([data]);
-            }
+            try {
+                const url = id ? `${API_BASE}/partidos/${id}` : `${API_BASE}/partidos`;
+                const method = id ? 'PUT' : 'POST';
+                const response = await fetch(url, {
+                    method: method,
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
 
-            if (result.error) {
-                alert('Error al guardar: ' + result.error.message);
-            } else {
+                if (!response.ok) throw new Error('Error al guardar');
                 modal.classList.add('hidden');
                 loadMatches();
+            } catch (error) {
+                alert('Error al guardar: ' + error.message);
             }
         });
 

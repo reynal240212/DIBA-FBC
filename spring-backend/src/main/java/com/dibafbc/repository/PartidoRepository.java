@@ -16,6 +16,8 @@ public interface PartidoRepository extends JpaRepository<Partido, Long> {
 
     List<Partido> findByFecha(LocalDate fecha);
 
+    List<Partido> findByEquipoLocalContainingIgnoreCaseOrEquipoVisitanteContainingIgnoreCase(String equipoLocal, String equipoVisitante);
+
     @Query("SELECT MIN(p.fecha) FROM Partido p WHERE p.fecha >= :hoy")
     LocalDate findProximaFecha(@Param("hoy") LocalDate hoy);
 }

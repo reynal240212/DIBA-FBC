@@ -609,16 +609,19 @@
     <div class="toast-bar" id="toastBar"></div>
 
     <!-- ── SCRIPTS ── -->
-    <script src="/scripts/config.js"></script>
     <script type="module">
-        import { supabase, requireAdmin } from '../scripts/supabaseClient.js';
+        import { requireAdmin } from '../scripts/supabaseClient.js';
 
-        // ── AUTH & LAYOUT ──────────────────────────────────────────
+        const API_BASE = 'http://localhost:8080/api';
+
         async function init() {
             const session = await requireAdmin();
             if (!session) return;
 
             document.getElementById('admin-body').style.display = 'flex';
+            
+            // Note: Profile fetching remains via Supabase for now as it's part of the global session
+            const { supabase } = await import('../scripts/supabaseClient.js');
             const { data: profile } = await supabase.from('users').select('username,role').eq('id', session.user.id).single();
             if (profile) {
                 document.getElementById('sb-name').textContent = profile.username || session.user.email;
@@ -643,6 +646,7 @@
 
         // Logout
         document.getElementById('logout-btn').addEventListener('click', async () => {
+            const { supabase } = await import('../scripts/supabaseClient.js');
             if (confirm('¿Cerrar sesión?')) { await supabase.auth.signOut(); location.href = 'login.html'; }
         });
 
@@ -664,9 +668,9 @@
         async function loadJugadores() {
             const list = document.getElementById('playersList');
             try {
-                const { data, error } = await supabase.from('identificacion').select('numero, nombre, apellidos, categoria').order('apellidos');
-                if (error) throw error;
-                allJugadores = data || [];
+                const response = await fetch(`${API_BASE}/players`);
+                if (!response.ok) throw new Error('Error al conectar con la API');
+                allJugadores = await response.json();
                 renderJugadores(allJugadores);
             } catch (e) {
                 list.innerHTML = `<p style="text-align:center;color:#f87171;font-size:.72rem;padding:1rem;">Error cargando jugadores: ${e.message}</p>`;
@@ -681,7 +685,6 @@
             }
             list.innerHTML = '';
 
-            // Agrupar por categoría
             const grouped = {};
             jugadores.forEach(j => {
                 const cat = j.categoria || 'General';
@@ -692,23 +695,19 @@
             Object.entries(grouped)
                 .sort(([a], [b]) => a.localeCompare(b))
                 .forEach(([catName, players]) => {
-
                     const selInCat = () => players.filter(p => selectedDNIs.has(p.numero)).length;
+                    const catCheckId = `cat-chk-${catName.replace(/\s+/g, '-')}`;
 
-                    // ── HEADER de categoría ──
                     const header = document.createElement('div');
                     header.className = 'cat-header';
-
-                    const catCheckId = `cat-chk-${catName.replace(/\s+/g, '-')}`;
                     header.innerHTML = `
                         <div class="cat-header-left">
-                            <input type="checkbox" class="cat-check" id="${catCheckId}" title="Seleccionar todos">
-                            <span class="cat-header-title"><i class="fas fa-layer-group" style="margin-right:.4rem;font-size:.6rem;"></i>${catName}</span>
+                            <input type="checkbox" class="cat-check" id="${catCheckId}">
+                            <span class="cat-header-title">${catName}</span>
                             <span class="cat-header-count" id="cnt-${catCheckId}">${selInCat()} / ${players.length}</span>
                         </div>
                         <i class="fas fa-chevron-down cat-chevron open" id="chev-${catCheckId}"></i>`;
 
-                    // ── BODY de jugadores ──
                     const body = document.createElement('div');
                     body.className = 'cat-body';
                     body.id = `body-${catCheckId}`;
@@ -720,7 +719,6 @@
                             el.textContent = `${cnt} / ${players.length}`;
                             el.className = 'cat-header-count' + (cnt > 0 ? ' has-selected' : '');
                         }
-                        // Sincronizar estado del checkbox de categoría
                         const catChk = document.getElementById(catCheckId);
                         if (catChk) {
                             catChk.checked = cnt === players.length;
@@ -746,9 +744,8 @@
                         body.appendChild(item);
                     });
 
-                    // Toggle collapse al hacer clic en el header
                     header.addEventListener('click', e => {
-                        if (e.target.type === 'checkbox') return; // no colapsar al clic en checkbox
+                        if (e.target.type === 'checkbox') return;
                         const bodyEl = document.getElementById(`body-${catCheckId}`);
                         const chevron = document.getElementById(`chev-${catCheckId}`);
                         const isHidden = bodyEl.style.display === 'none';
@@ -756,9 +753,7 @@
                         chevron.className = 'fas fa-chevron-down cat-chevron ' + (isHidden ? 'open' : 'closed');
                     });
 
-                    // Checkbox de categoría → seleccionar/deseleccionar todos
                     header.querySelector('.cat-check').addEventListener('change', e => {
-                        e.stopPropagation();
                         const check = e.target.checked;
                         body.querySelectorAll('input[type=checkbox]').forEach((chk, i) => {
                             chk.checked = check;
@@ -787,104 +782,76 @@
         async function loadHistorial() {
             const cont = document.getElementById('historialList');
             try {
-                const { data, error } = await supabase
-                    .from('convocatorias')
-                    .select(`*, convocatoria_jugadores(count)`)
-                    .order('fecha', { ascending: false })
-                    .limit(15);
-
-                if (error) throw error;
+                const response = await fetch(`${API_BASE}/convocatorias`);
+                if (!response.ok) throw new Error('Error cargando historial');
+                const data = await response.json();
+                
                 if (!data || !data.length) {
                     cont.innerHTML = '<p style="text-align:center;color:var(--slate);padding:1.5rem;font-size:.72rem;">Todavía no hay convocatorias.</p>';
                     return;
                 }
-                cont.innerHTML = data.map(c => {
-                    const fecha = new Date(c.fecha).toLocaleString('es-CO', { weekday: 'short', day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' });
-                    const cnt = c.convocatoria_jugadores?.[0]?.count ?? '?';
-                    return `
-            <div class="conv-card">
-              <div style="display:flex;align-items:center;justify-content:space-between;">
-                <div class="conv-title">${c.titulo}</div>
-                <span class="conv-badge">${cnt} jugadores</span>
-              </div>
-              <div class="conv-meta">
-                <span><i class="fas fa-calendar-alt"></i> ${fecha}</span>
-                ${c.lugar ? `<span><i class="fas fa-map-marker-alt"></i> ${c.lugar}</span>` : ''}
-              </div>
-            </div>`;
-                }).join('');
+
+                const sorted = data.sort((a,b) => new Date(b.fecha) - new Date(a.fecha));
+
+                cont.innerHTML = sorted.map(c => `
+                    <div class="conv-card">
+                        <div style="display:flex;justify-content:space-between;">
+                            <span class="conv-title">${c.titulo}</span>
+                            <span class="conv-badge">${c.jugadores?.length || 0} Jugadores</span>
+                        </div>
+                        <div class="conv-meta">
+                            <span><i class="fas fa-calendar-day"></i> ${new Date(c.fecha).toLocaleString()}</span>
+                            <span><i class="fas fa-map-marker-alt"></i> ${c.lugar || 'N/A'}</span>
+                        </div>
+                    </div>
+                `).join('');
             } catch (e) {
-                cont.innerHTML = `<p style="color:#f87171;font-size:.72rem;padding:1rem;text-align:center;">Error: ${e.message}</p>`;
+                console.error(e);
+                cont.innerHTML = `<p style="text-align:center;color:#f87171;font-size:.72rem;">Error: ${e.message}</p>`;
             }
         }
 
-        // ── GUARDAR CONVOCATORIA ───────────────────────────────────
-        document.getElementById('formConvocatoria').addEventListener('submit', async (e) => {
+        // ── ENVÍO ──────────────────────────────────────────────────
+        document.getElementById('formConvocatoria').addEventListener('submit', async e => {
             e.preventDefault();
+            if (selectedDNIs.size === 0) return showToast('Selecciona al menos un jugador', 'error');
+
             const btn = document.getElementById('btnConvocar');
-
-            if (selectedDNIs.size === 0) {
-                showToast('Selecciona al menos un jugador.', 'error');
-                return;
-            }
-
-            const titulo = document.getElementById('convTitulo').value.trim();
-            const fecha = document.getElementById('convFecha').value;
-            const lugar = document.getElementById('convLugar').value.trim();
-            const descripcion = document.getElementById('convDescripcion').value.trim();
-
             btn.disabled = true;
-            btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Guardando...';
+            btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Procesando...';
 
             try {
-                const { data: { user } } = await supabase.auth.getUser();
+                const payload = {
+                    titulo: document.getElementById('convTitulo').value,
+                    fecha: new Date(document.getElementById('convFecha').value).toISOString(),
+                    lugar: document.getElementById('convLugar').value,
+                    descripcion: document.getElementById('convDescripcion').value,
+                    jugadores: Array.from(selectedDNIs).map(dni => {
+                        const j = allJugadores.find(x => x.numero === dni);
+                        return {
+                            identificacionNumero: dni,
+                            nombreJugador: `${j.nombre} ${j.apellidos}`,
+                            categoria: j.categoria
+                        };
+                    })
+                };
 
-                // 1. Crear convocatoria
-                const { data: conv, error: convErr } = await supabase
-                    .from('convocatorias')
-                    .insert({ titulo, fecha, lugar: lugar || null, descripcion: descripcion || null, created_by: user.id })
-                    .select()
-                    .single();
+                const response = await fetch(`${API_BASE}/convocatorias`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
 
-                if (convErr) throw convErr;
+                if (!response.ok) throw new Error('Error al guardar convocatoria');
 
-                // 2. Insertar jugadores convocados
-                const jugadoresConvocados = allJugadores
-                    .filter(j => selectedDNIs.has(j.numero))
-                    .map(j => ({
-                        convocatoria_id: conv.id,
-                        identificacion_numero: j.numero,
-                        nombre_jugador: `${j.nombre} ${j.apellidos}`,
-                        categoria: j.categoria || 'General',
-                        estado: 'convocado',
-                    }));
-
-                const { error: jErr } = await supabase.from('convocatoria_jugadores').insert(jugadoresConvocados);
-                if (jErr) throw jErr;
-
-                // 3. Intentar enviar push via Edge Function (si está desplegada)
-                try {
-                    await supabase.functions.invoke('send-push-notification', {
-                        body: {
-                            title: `📣 Convocatoria: ${titulo}`,
-                            body: `${lugar ? lugar + ' — ' : ''}${new Date(fecha).toLocaleString('es-CO', { weekday: 'short', day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' })}`,
-                            url: '/partidos.html',
-                        }
-                    });
-                } catch (_) { /* La edge function puede no estar aún, no es bloqueante */ }
-
-                showToast(`✅ Convocatoria creada con ${selectedDNIs.size} jugadores`, 'success');
-
-                // Reset
-                e.target.reset();
+                showToast('¡Convocatoria enviada exitosamente!', 'success');
+                document.getElementById('formConvocatoria').reset();
                 selectedDNIs.clear();
-                document.getElementById('selected-badge').textContent = '0 seleccionados';
                 renderJugadores(allJugadores);
                 loadHistorial();
 
-            } catch (err) {
-                console.error(err);
-                showToast(`Error: ${err.message}`, 'error');
+            } catch (e) {
+                showToast(e.message, 'error');
             } finally {
                 btn.disabled = false;
                 btn.innerHTML = '<i class="fas fa-paper-plane"></i> Convocar y Notificar';

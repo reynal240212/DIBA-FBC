@@ -1,79 +1,12 @@
-// public/scripts/paridos.js — Versión mejorada
+/** 
+ * public/scripts/partidos.js - Migrado a Spring Boot API
+ */
 
-const { createClient } = window.supabase;
-const { SUPABASE_URL, SUPABASE_ANON_KEY } = window.DIBA_CONFIG;
-const sb = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const API_BASE = 'http://localhost:8080/api';
 
 // ──────────────────────────────────────────────────────────────────────────────
 //  UTILIDADES
 // ──────────────────────────────────────────────────────────────────────────────
-
-/** Formatea una fecha ISO a "14 de marzo de 2025" */
-function formatearFecha(fechaISO) {
-  if (!fechaISO) return 'Sin fecha';
-  return new Date(fechaISO).toLocaleDateString('es-CO', {
-    year: 'numeric', month: 'long', day: 'numeric'
-  });
-}
-
-/** Convierte una fecha ISO a YYYY-MM-DD en hora local evitando desfases */
-function toLocalDate(fechaISO) {
-  if (!fechaISO) return '';
-  const parts = fechaISO.includes('T') ? fechaISO.split('T')[0].split('-') : fechaISO.split('-');
-  return `${parts[0]}-${parts[1]}-${parts[2]}`;
-}
-
-/** Evalúa el resultado de un partido para DIBA FBC */
-function evaluarResultado(p) {
-  const r = p.resultado;
-  if (!r || r === 'Pendiente' || r === '-' || r === '—') return 'pendiente';
-
-  const partes = r.split(/[-:]/).map(x => {
-    const n = parseInt(x.trim());
-    return isNaN(n) ? null : n;
-  });
-
-  if (partes.length >= 2 && partes[0] !== null && partes[1] !== null) {
-    const golesL = partes[0];
-    const golesV = partes[1];
-    const localEsDiba = (p.equipolocal || '').toUpperCase().includes('DIBA');
-    const visitaEsDiba = (p.equipovisitante || '').toUpperCase().includes('DIBA');
-
-    if (golesL === golesV) return 'empate';
-    const ganoL = golesL > golesV;
-    if ((ganoL && localEsDiba) || (!ganoL && visitaEsDiba)) return 'victoria';
-    if ((ganoL && visitaEsDiba) || (!ganoL && localEsDiba)) return 'derrota';
-  }
-
-  const lower = r.toLowerCase();
-  if (lower.includes('victoria') || lower.includes('ganó') || lower.includes('ganamos') || lower.startsWith('w')) {
-    return 'victoria';
-  }
-  if (lower.includes('derrota') || lower.includes('perdió') || lower.includes('perdimos') || lower.startsWith('l')) {
-    return 'derrota';
-  }
-  if (lower.includes('empat')) {
-    return 'empate';
-  }
-
-  return 'pendiente';
-}
-
-/** Determina badge de resultado para un partido */
-function badgeResultado(p) {
-  const res = evaluarResultado(p);
-  switch (res) {
-    case 'victoria':
-      return `<span class="badge-resultado badge-victoria"><i class="fas fa-check mr-1"></i>Victoria</span>`;
-    case 'derrota':
-      return `<span class="badge-resultado badge-derrota"><i class="fas fa-times mr-1"></i>Derrota</span>`;
-    case 'empate':
-      return `<span class="badge-resultado badge-empate">Empate</span>`;
-    default:
-      const label = (p.resultado && p.resultado !== '-' && p.resultado !== '—') ? p.resultado : 'Pendiente';
-      return `<span class="badge-resultado badge-pendiente">${label}</span>`;
-  }
-}
 
 function mostrarSpinner(id, v) {
   const el = document.getElementById(id);
@@ -85,17 +18,6 @@ function mostrarInicialPanel(id, v) {
   if (el) el.style.display = v ? 'block' : 'none';
 }
 
-/** Helper para escudos con proxy anti-bloqueo */
-function getEscudoUrl(url, equipoNombre) {
-  if (equipoNombre && equipoNombre.toUpperCase().includes('DIBA')) {
-    return 'images/ESCUDO.png';
-  }
-  if (!url) {
-    return `https://ui-avatars.com/api/?name=${encodeURIComponent(equipoNombre || 'R')}&background=1e293b&color=cbd5e1`;
-  }
-  return `https://wsrv.nl/?url=${encodeURIComponent(url)}&default=https://ui-avatars.com/api/?name=R&background=1e293b&color=cbd5e1`;
-}
-
 // ──────────────────────────────────────────────────────────────────────────────
 //  TARJETA DE PARTIDO
 // ──────────────────────────────────────────────────────────────────────────────
@@ -103,10 +25,16 @@ function crearTarjetaPartido(p) {
   const div = document.createElement('div');
   div.className = 'match-card animate__animated animate__fadeInUp';
 
-  const partes = (p.resultado || '').split(/[-:]/).map(x => x.trim());
-  const golesLocal = partes[0] || '—';
-  const golesVisitante = partes[1] || '—';
-  const tieneResult = partes.length >= 2 && partes[0] !== '' && partes[1] !== '';
+  let statusBadge = '';
+  if (p.estado === 'FINALIZADO') {
+    statusBadge = `<span class="badge-resultado badge-victoria"><i class="fas fa-check mr-1"></i>Finalizado</span>`;
+  } else if (p.estado === 'EN_VIVO') {
+    statusBadge = `<span class="badge-resultado bg-red-500 text-white animate-pulse border-none">En Vivo</span>`;
+  } else {
+    statusBadge = `<span class="badge-resultado badge-pendiente">Próximo</span>`;
+  }
+
+  const tieneResult = p.resultado && p.resultado !== '' && p.resultado !== '-';
 
   div.innerHTML = `
     <!-- Cabecera equipos -->
@@ -119,28 +47,25 @@ function crearTarjetaPartido(p) {
       <div class="flex items-center justify-between gap-4">
         <!-- Local -->
         <div class="flex flex-col items-center w-1/3 text-center">
-          <img src="${getEscudoUrl(p.escudo_local || p.escudo, p.equipolocal)}" alt="${p.equipolocal}" class="w-12 h-12 object-contain mb-2 img-drop-shadow" onerror="this.src='images/ESCUDO.png'">
-          <span class="text-white font-bold text-xs truncate w-full">${p.equipolocal || 'DIBA FBC'}</span>
+          <img src="${p.escudoLocal}" alt="${p.equipoLocal}" class="w-12 h-12 object-contain mb-2 img-drop-shadow" onerror="this.src='/images/ESCUDO.png'">
+          <span class="text-white font-bold text-xs truncate w-full">${p.equipoLocal}</span>
         </div>
 
         <!-- Score/VS -->
         <div class="flex flex-col items-center justify-center w-1/3">
            ${tieneResult 
-             ? `<span class="match-score font-black text-2xl tracking-tight text-white">${golesLocal} – ${golesVisitante}</span>`
+             ? `<span class="match-score font-black text-2xl tracking-tight text-white">${p.resultado}</span>`
              : `<span class="vs-badge text-amber-500 font-black">VS</span>`
            }
             <div class="mt-2 text-center">
-             ${badgeResultado(p)}
+             ${statusBadge}
             </div>
         </div>
 
         <!-- Visitante -->
         <div class="flex flex-col items-center w-1/3 text-center">
-          <img src="${getEscudoUrl(p.escudo_visitante, p.equipovisitante)}" 
-               alt="${p.equipovisitante}" 
-               class="w-12 h-12 object-contain mb-2 img-drop-shadow" 
-               onerror="this.src='${getEscudoUrl(null, p.equipovisitante)}'">
-          <span class="text-white font-bold text-xs truncate w-full">${p.equipovisitante || 'Visitante'}</span>
+          <img src="${p.escudoVisitante}" alt="${p.equipoVisitante}" class="w-12 h-12 object-contain mb-2 img-drop-shadow" onerror="this.src='/images/ESCUDO.png'">
+          <span class="text-white font-bold text-xs truncate w-full">${p.equipoVisitante}</span>
         </div>
       </div>
     </div>
@@ -149,7 +74,7 @@ function crearTarjetaPartido(p) {
     <div class="border-t border-slate-800 px-5 py-4 grid grid-cols-2 gap-3 text-xs text-slate-400">
       <div class="flex items-center gap-2">
         <i class="fas fa-calendar-alt text-amber-400 w-4 text-center"></i>
-        <span>${formatearFecha(p.fecha)}</span>
+        <span>${p.fecha}</span>
       </div>
       <div class="flex items-center gap-2">
         <i class="fas fa-clock text-amber-400 w-4 text-center"></i>
@@ -157,7 +82,7 @@ function crearTarjetaPartido(p) {
       </div>
       <div class="flex items-center gap-2 col-span-2">
         <i class="fas fa-map-marker-alt text-red-400 w-4 text-center"></i>
-        <span>${p.Cancha || 'No especificada'}</span>
+        <span>${p.cancha || 'No especificada'}</span>
       </div>
       ${p.descripcion ? `
       <div class="flex items-start gap-2 col-span-2">
@@ -174,59 +99,6 @@ function crearTarjetaPartido(p) {
         <i class="fas fa-dollar-sign text-green-400 w-4 text-center"></i>
         <span>$${p.valor}</span>
       </div>` : ''}
-      ${p.observaciones ? `
-      <div class="flex items-start gap-2 col-span-2">
-        <i class="fas fa-comment-dots text-indigo-400 w-4 text-center mt-0.5"></i>
-        <span>${p.observaciones}</span>
-      </div>` : ''}
-    </div>
-  `;
-  return div;
-}
-
-// ──────────────────────────────────────────────────────────────────────────────
-//  TARJETA DE ENTRENAMIENTO
-// ──────────────────────────────────────────────────────────────────────────────
-function crearTarjetaEntrenamiento(e) {
-  const div = document.createElement('div');
-  div.className = 'match-card animate__animated animate__fadeInUp';
-  div.style.borderColor = 'rgba(74,222,128,0.15)';
-
-  div.innerHTML = `
-    <div class="p-5">
-      <div class="flex items-center gap-3">
-        <div class="w-10 h-10 rounded-full bg-green-500/10 flex items-center justify-center flex-shrink-0">
-          <i class="fas fa-dumbbell text-green-400"></i>
-        </div>
-        <div>
-          <p class="font-black text-white text-sm">${e.titulo || 'Entrenamiento'}</p>
-          <p class="text-xs text-green-400 mt-0.5">Sesión de entrenamiento</p>
-        </div>
-      </div>
-    </div>
-    <div class="border-t border-slate-800 px-5 py-4 grid grid-cols-2 gap-3 text-xs text-slate-400">
-      <div class="flex items-center gap-2">
-        <i class="fas fa-calendar-alt text-green-400 w-4 text-center"></i>
-        <span>${formatearFecha(e.fecha)}</span>
-      </div>
-      <div class="flex items-center gap-2">
-        <i class="fas fa-clock text-green-400 w-4 text-center"></i>
-        <span>${e.hora || 'Sin hora'}</span>
-      </div>
-      <div class="flex items-center gap-2 col-span-2">
-        <i class="fas fa-map-marker-alt text-red-400 w-4 text-center"></i>
-        <span>${e.lugar || 'No especificado'}</span>
-      </div>
-      ${e.descripcion ? `
-      <div class="flex items-start gap-2 col-span-2">
-        <i class="fas fa-align-left text-sky-400 w-4 text-center mt-0.5"></i>
-        <span class="text-slate-300">${e.descripcion}</span>
-      </div>` : ''}
-      ${e.observaciones ? `
-      <div class="flex items-start gap-2 col-span-2">
-        <i class="fas fa-comment-dots text-indigo-400 w-4 text-center mt-0.5"></i>
-        <span>${e.observaciones}</span>
-      </div>` : ''}
     </div>
   `;
   return div;
@@ -239,6 +111,7 @@ const inputFecha = document.getElementById('fecha');
 const resultsPartidos = document.getElementById('partidos-results');
 
 async function filtrarPartidos() {
+  const fecha = inputFecha?.value;
   const sectionDiba = document.getElementById('section-diba-fbc');
   mostrarInicialPanel('partidos-estado-inicial', false);
   resultsPartidos.innerHTML = '';
@@ -253,161 +126,31 @@ async function filtrarPartidos() {
 
   mostrarSpinner('partidos-spinner', true);
 
-  const { data: filtrados, error } = await sb
-    .from('partidos')
-    .select('*')
-    .eq('fecha', fecha);
+  try {
+    const response = await fetch(`${API_BASE}/partidos/fecha?val=${fecha}`);
+    const filtrados = await response.json();
 
-  mostrarSpinner('partidos-spinner', false);
+    mostrarSpinner('partidos-spinner', false);
 
-  if (error) {
-    resultsPartidos.innerHTML = `<p class="text-center text-red-400 py-8"><i class="fas fa-exclamation-triangle mr-2"></i>Error al cargar partidos.</p>`;
-    return;
+    if (!filtrados || filtrados.length === 0) {
+      resultsPartidos.innerHTML = `
+        <div class="text-center py-14">
+          <div class="w-14 h-14 rounded-full bg-slate-800 flex items-center justify-center mx-auto mb-3">
+            <i class="fas fa-futbol text-slate-600 text-xl"></i>
+          </div>
+          <p class="text-slate-500 text-sm">No hay partidos registrados para esta fecha</p>
+        </div>`;
+      return;
+    }
+
+    filtrados.forEach(p => resultsPartidos.appendChild(crearTarjetaPartido(p)));
+  } catch (error) {
+    mostrarSpinner('partidos-spinner', false);
+    resultsPartidos.innerHTML = `<p class="text-center text-red-400 py-8"><i class="fas fa-exclamation-triangle mr-2"></i>Error al cargar partidos desde API.</p>`;
   }
-
-  if (!filtrados || filtrados.length === 0) {
-    resultsPartidos.innerHTML = `
-      <div class="text-center py-14">
-        <div class="w-14 h-14 rounded-full bg-slate-800 flex items-center justify-center mx-auto mb-3">
-          <i class="fas fa-futbol text-slate-600 text-xl"></i>
-        </div>
-        <p class="text-slate-500 text-sm">No hay partidos registrados para esta fecha</p>
-      </div>`;
-    return;
-  }
-
-  filtrados.forEach(p => resultsPartidos.appendChild(crearTarjetaPartido(p)));
 }
 
 if (inputFecha) inputFecha.addEventListener('change', filtrarPartidos);
-
-// ──────────────────────────────────────────────────────────────────────────────
-//  ENTRENAMIENTOS — FILTRO POR FECHA
-// ──────────────────────────────────────────────────────────────────────────────
-const inputFechaEnt = document.getElementById('fecha-entrenamiento');
-const resultsEnt = document.getElementById('entrenamientos-results');
-
-async function filtrarEntrenamientos() {
-  const fecha = inputFechaEnt?.value;
-  mostrarInicialPanel('entrenamientos-estado-inicial', false);
-  resultsEnt.innerHTML = '';
-
-  if (!fecha) {
-    mostrarInicialPanel('entrenamientos-estado-inicial', true);
-    return;
-  }
-
-  mostrarSpinner('entrenamientos-spinner', true);
-
-  const { data: filtrados, error } = await sb
-    .from('entrenamientos')
-    .select('*')
-    .eq('fecha', fecha);
-
-  mostrarSpinner('entrenamientos-spinner', false);
-
-  if (error) {
-    resultsEnt.innerHTML = `<p class="text-center text-red-400 py-8"><i class="fas fa-exclamation-triangle mr-2"></i>Error al cargar entrenamientos.</p>`;
-    return;
-  }
-
-  if (!filtrados || filtrados.length === 0) {
-    resultsEnt.innerHTML = `
-      <div class="text-center py-14">
-        <div class="w-14 h-14 rounded-full bg-slate-800 flex items-center justify-center mx-auto mb-3">
-          <i class="fas fa-dumbbell text-slate-600 text-xl"></i>
-        </div>
-        <p class="text-slate-500 text-sm">No hay entrenamientos registrados para esta fecha</p>
-      </div>`;
-    return;
-  }
-
-  filtrados.forEach(e => resultsEnt.appendChild(crearTarjetaEntrenamiento(e)));
-}
-
-if (inputFechaEnt) inputFechaEnt.addEventListener('change', filtrarEntrenamientos);
-
-// Botones limpiar
-const btnLimpiarPartidos = document.getElementById('btn-limpiar-partidos');
-if (btnLimpiarPartidos) {
-  btnLimpiarPartidos.addEventListener('click', () => {
-    const f = document.getElementById('fecha');
-    if (f) f.value = '';
-    resultsPartidos.innerHTML = '';
-    mostrarInicialPanel('partidos-estado-inicial', true);
-  });
-}
-
-const btnLimpiarEnt = document.getElementById('btn-limpiar-entrenamientos');
-if (btnLimpiarEnt) {
-  btnLimpiarEnt.addEventListener('click', () => {
-    const f = document.getElementById('fecha-entrenamiento');
-    if (f) f.value = '';
-    resultsEnt.innerHTML = '';
-    mostrarInicialPanel('entrenamientos-estado-inicial', true);
-  });
-}
-// ──────────────────────────────────────────────────────────────────────────────
-async function mostrarClasificacion() {
-  const container = document.getElementById('clasificacion-container');
-  const spinner = document.getElementById('clasificacion-spinner');
-  if (!container) return;
-
-  if (spinner) spinner.style.display = 'flex';
-
-  const { data, error } = await sb
-    .from('clasificacion_categoria_2014_15')
-    .select('*')
-    .order('posicion', { ascending: true });
-
-  if (spinner) spinner.style.display = 'none';
-
-  if (error || !data?.length) {
-    container.innerHTML = `<p class="text-center text-slate-500 py-8">No hay datos de clasificación disponibles.</p>`;
-    return;
-  }
-
-  const tabla = document.createElement('table');
-  tabla.className = 'tabla-clas w-full text-left text-white';
-  tabla.innerHTML = `
-    <thead>
-      <tr>
-        <th class="text-center">#</th>
-        <th>Equipo</th>
-        <th class="text-center">Pts</th>
-        <th class="text-center">PJ</th>
-        <th class="text-center">PG</th>
-        <th class="text-center">PE</th>
-        <th class="text-center">PP</th>
-        <th class="text-center">GF</th>
-        <th class="text-center">GC</th>
-        <th class="text-center">DIF</th>
-      </tr>
-    </thead>
-    <tbody>
-      ${data.map(e => {
-    const isDiba = e.equipo?.toLowerCase().includes('diba');
-    return `
-        <tr class="${isDiba ? 'diba-row' : ''}">
-          <td class="text-center font-bold">${e.posicion}</td>
-          <td class="font-semibold flex items-center gap-2">
-            ${isDiba ? '<i class="fas fa-star text-amber-400 text-xs"></i>' : ''}
-            ${e.equipo}
-          </td>
-          <td class="text-center font-bold ${isDiba ? '' : 'text-white'}">${e.puntos}</td>
-          <td class="text-center">${e.jugados}</td>
-          <td class="text-center text-green-400">${e.ganados}</td>
-          <td class="text-center">${e.empatados}</td>
-          <td class="text-center text-red-400">${e.perdidos}</td>
-          <td class="text-center">${e.goles_favor}</td>
-          <td class="text-center">${e.goles_contra}</td>
-          <td class="text-center ${e.diferencia > 0 ? 'text-green-400' : e.diferencia < 0 ? 'text-red-400' : ''}">${e.diferencia > 0 ? '+' : ''}${e.diferencia}</td>
-        </tr>`;
-  }).join('')}
-    </tbody>
-  `;
-  container.appendChild(tabla);
-}
 
 // ──────────────────────────────────────────────────────────────────────────────
 //  PARTIDOS DIBA FBC (sección inferior)
@@ -419,71 +162,87 @@ async function mostrarPartidosDIBA() {
 
   if (spinner) spinner.style.display = 'flex';
 
-  const { data, error } = await sb
-    .from('partidos')
-    .select('*')
-    .or('equipolocal.ilike.%DIBA%,equipovisitante.ilike.%DIBA%')
-    .order('fecha', { ascending: false });
+  try {
+    const response = await fetch(`${API_BASE}/partidos/equipo?val=DIBA`);
+    const data = await response.json();
 
-  if (spinner) spinner.style.display = 'none';
+    if (spinner) spinner.style.display = 'none';
 
-  if (error) {
-    container.innerHTML = `<p class="text-slate-500 text-sm text-center col-span-3">No se pudieron cargar los partidos de DIBA FBC.</p>`;
-    return;
+    if (!data?.length) {
+      container.innerHTML = `<p class="text-slate-500 text-sm text-center col-span-3">No hay partidos de DIBA FBC registrados.</p>`;
+      return;
+    }
+
+    data.forEach(p => container.appendChild(crearTarjetaPartido(p)));
+  } catch (error) {
+    if (spinner) spinner.style.display = 'none';
+    container.innerHTML = `<p class="text-slate-500 text-sm text-center col-span-3">Error al cargar partidos de DIBA FBC.</p>`;
   }
-
-  if (!data?.length) {
-    container.innerHTML = `<p class="text-slate-500 text-sm text-center col-span-3">No hay partidos de DIBA FBC registrados.</p>`;
-    return;
-  }
-
-  data.forEach(p => container.appendChild(crearTarjetaPartido(p)));
 }
 
 // ──────────────────────────────────────────────────────────────────────────────
 //  ESTADÍSTICAS RÁPIDAS (hero)
 // ──────────────────────────────────────────────────────────────────────────────
 async function cargarEstadisticasRapidas() {
-  const { data } = await sb
-    .from('partidos')
-    .select('*')
-    .or('equipolocal.ilike.%DIBA%,equipovisitante.ilike.%DIBA%');
+  try {
+    const response = await fetch(`${API_BASE}/partidos/equipo?val=DIBA`);
+    const data = await response.json();
 
-  if (!data) return;
+    if (!data) return;
 
-  const total = data.length;
-  let victorias = 0, derrotas = 0, empates = 0;
+    const total = data.length;
+    let victorias = 0, derrotas = 0, empates = 0;
 
-  data.forEach(p => {
-    const res = evaluarResultado(p);
-    if (res === 'victoria') victorias++;
-    else if (res === 'derrota') derrotas++;
-    else if (res === 'empate') empates++;
+    data.forEach(p => {
+      if (p.estado === 'FINALIZADO') {
+        // Lógica simple para stats rápidas
+        if (p.resultado.includes('-')) {
+          const res = p.resultado.split('-').map(x => parseInt(x.trim()));
+          const localEsDiba = p.equipoLocal.toUpperCase().includes('DIBA');
+          if (res[0] === res[1]) empates++;
+          else if ((res[0] > res[1] && localEsDiba) || (res[1] > res[0] && !localEsDiba)) victorias++;
+          else derrotas++;
+        }
+      }
+    });
+
+    const animate = (id, val) => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      let cur = 0;
+      const step = Math.max(1, Math.floor(val / 20));
+      const interval = setInterval(() => {
+        cur = Math.min(cur + step, val);
+        el.textContent = cur;
+        if (cur >= val) clearInterval(interval);
+      }, 40);
+    };
+
+    animate('stat-partidos', total);
+    animate('stat-victorias', victorias);
+    animate('stat-derrotas', derrotas);
+    animate('stat-empates', empates);
+  } catch (e) {
+    console.error("Error al cargar stats:", e);
+  }
+}
+
+// Botones limpiar
+const btnLimpiarPartidos = document.getElementById('btn-limpiar-partidos');
+if (btnLimpiarPartidos) {
+  btnLimpiarPartidos.addEventListener('click', () => {
+    if (inputFecha) inputFecha.value = '';
+    resultsPartidos.innerHTML = '';
+    mostrarInicialPanel('partidos-estado-inicial', true);
+    const sectionDiba = document.getElementById('section-diba-fbc');
+    if (sectionDiba) sectionDiba.style.display = 'block';
   });
-
-  const animate = (id, val) => {
-    const el = document.getElementById(id);
-    if (!el) return;
-    let cur = 0;
-    const step = Math.max(1, Math.floor(val / 20));
-    const interval = setInterval(() => {
-      cur = Math.min(cur + step, val);
-      el.textContent = cur;
-      if (cur >= val) clearInterval(interval);
-    }, 40);
-  };
-
-  animate('stat-partidos', total);
-  animate('stat-victorias', victorias);
-  animate('stat-derrotas', derrotas);
-  animate('stat-empates', empates);
 }
 
 // ──────────────────────────────────────────────────────────────────────────────
 //  INIT
 // ──────────────────────────────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
-  mostrarClasificacion();
   mostrarPartidosDIBA();
   cargarEstadisticasRapidas();
 });

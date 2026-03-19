@@ -36,6 +36,18 @@ public class PartidoBannerService {
         return new BannerResponse(toDto(proximosPartidos), true, proximaFecha.toString());
     }
 
+    public List<PartidoBannerDTO> getPartidosByFecha(LocalDate fecha) {
+        return toDto(repository.findByFecha(fecha));
+    }
+
+    public List<PartidoBannerDTO> getPartidosByEquipo(String equipo) {
+        return toDto(repository.findByEquipoLocalContainingIgnoreCaseOrEquipoVisitanteContainingIgnoreCase(equipo, equipo));
+    }
+
+    public List<PartidoBannerDTO> getAllPartidos() {
+        return toDto(repository.findAll());
+    }
+
     private List<PartidoBannerDTO> toDto(List<Partido> partidos) {
         return partidos.stream()
                 .map(PartidoBannerDTO::fromPartido)
