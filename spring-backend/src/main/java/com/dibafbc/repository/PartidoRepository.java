@@ -8,9 +8,10 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.UUID;
 
 @Repository
-public interface PartidoRepository extends JpaRepository<Partido, Long> {
+public interface PartidoRepository extends JpaRepository<Partido, UUID> {
 
     List<Partido> findByFechaGreaterThanEqualOrderByFechaAsc(LocalDate fecha);
 

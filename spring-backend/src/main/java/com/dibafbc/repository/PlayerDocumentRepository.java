@@ -6,9 +6,10 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Repository
-public interface PlayerDocumentRepository extends JpaRepository<PlayerDocument, Integer> {
+public interface PlayerDocumentRepository extends JpaRepository<PlayerDocument, UUID> {
     List<PlayerDocument> findByIdentificacionNumero(String identificacionNumero);
     Optional<PlayerDocument> findByIdentificacionNumeroAndDocType(String identificacionNumero, String docType);
 }

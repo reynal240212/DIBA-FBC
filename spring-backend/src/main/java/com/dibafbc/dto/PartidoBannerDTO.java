@@ -8,6 +8,7 @@ import lombok.Builder;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
+import java.util.UUID;
 
 @Data
 @Builder
@@ -15,7 +16,7 @@ import java.util.Locale;
 @AllArgsConstructor
 public class PartidoBannerDTO {
 
-    private Long id;
+    private UUID id;
     private String fecha;
     private String hora;
     private String equipoLocal;

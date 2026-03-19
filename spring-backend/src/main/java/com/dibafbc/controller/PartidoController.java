@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/partidos")
@@ -24,7 +25,7 @@ public class PartidoController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Partido> getById(@PathVariable Long id) {
+    public ResponseEntity<Partido> getById(@PathVariable UUID id) {
         return service.getById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
@@ -36,7 +37,7 @@ public class PartidoController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Partido> update(@PathVariable Long id, @RequestBody Partido partido) {
+    public ResponseEntity<Partido> update(@PathVariable UUID id, @RequestBody Partido partido) {
         return service.getById(id)
                 .map(existing -> {
                     partido.setId(id);
@@ -46,7 +47,7 @@ public class PartidoController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
+    public ResponseEntity<Void> delete(@PathVariable UUID id) {
         service.delete(id);
         return ResponseEntity.ok().build();
     }

@@ -5,6 +5,7 @@ import com.dibafbc.repository.PartidoRepository;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class PartidoService {
@@ -19,7 +20,7 @@ public class PartidoService {
         return repository.findAll();
     }
 
-    public Optional<Partido> getById(Long id) {
+    public Optional<Partido> getById(UUID id) {
         return repository.findById(id);
     }
 
@@ -27,7 +28,7 @@ public class PartidoService {
         return repository.save(partido);
     }
 
-    public void delete(Long id) {
+    public void delete(UUID id) {
         repository.deleteById(id);
     }
 }
