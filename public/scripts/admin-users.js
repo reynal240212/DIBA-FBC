@@ -1,5 +1,7 @@
 import { supabase, requireAdmin } from './supabaseClient.js';
 
+const API_BASE = 'http://localhost:8080/api/admin';
+
 function qs(sel, root = document) { return root.querySelector(sel); }
 function qsa(sel, root = document) { return [...root.querySelectorAll(sel)]; }
 
@@ -24,17 +26,15 @@ function renderRows(rows) {
 }
 
 async function loadUsers() {
-  const { data, error } = await supabase
-    .from('users')
-    .select('*')
-    .order('created_at', { ascending: false });
-
-  if (error) {
+  try {
+    const response = await fetch(`${API_BASE}/users`);
+    if (!response.ok) throw new Error('Error al cargar usuarios');
+    const data = await response.json();
+    renderRows(data);
+  } catch (error) {
     console.error('Error fetching users:', error);
     alert('Error al cargar la lista de usuarios.');
-    return;
   }
-  renderRows(data);
 }
 
 // Handlers
@@ -47,13 +47,13 @@ function hookListEvents() {
     if (btn.dataset.action === 'del') {
       if (!confirm('¿Seguro que deseas eliminar este usuario de forma permanente?')) return;
 
-      const { error } = await supabase.rpc('admin_delete_user', { target_user_id: id });
-
-      if (error) {
-        console.error('Error deleting user:', error);
-        alert('Error al eliminar el usuario: ' + error.message);
-      } else {
+      try {
+        const response = await fetch(`${API_BASE}/users/${id}`, { method: 'DELETE' });
+        if (!response.ok) throw new Error('Error al eliminar el usuario');
         await loadUsers();
+      } catch (error) {
+        console.error('Error deleting user:', error);
+        alert('Error al eliminar el usuario.');
       }
     }
   });

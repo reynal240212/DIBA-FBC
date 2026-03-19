@@ -456,50 +456,33 @@
         // ── KPIs desde Supabase ──
         // ── KPIs desde Supabase ──
         async function loadKPIs() {
-            // 1. Cargar Jugadores (Prioritario)
             try {
-                const { count } = await supabase.from('identificacion').select('*', { count: 'exact', head: true });
-                document.getElementById('kpi-players').textContent = count || 0;
-            } catch (e) { console.error('Error Jugadores:', e); }
+                const response = await fetch('http://localhost:8080/api/admin/dashboard/stats');
+                if (!response.ok) throw new Error('Error al cargar KPIs');
+                const stats = await response.json();
 
-            // 2. Cargar Partidos
-            try {
-                const count = await getMatchCount();
-                document.getElementById('kpi-matches').textContent = count || 0;
-            } catch (e) { console.error('Error Partidos:', e); }
+                document.getElementById('kpi-players').textContent = stats.totalPlayers;
+                document.getElementById('kpi-matches').textContent = stats.totalMatches;
+                document.getElementById('kpi-attendance').textContent = stats.attendancePercentage;
+                document.getElementById('kpi-pending').textContent = stats.pendingPayments;
 
-            // 3. Cargar Estadísticas (RPC)
-            try {
-                const { data: stats, error: statsError } = await supabase.rpc('get_dashboard_stats');
-                if (!statsError && stats && stats.length > 0) {
-                    const s = stats[0];
-                    if (s.presentes !== undefined) {
-                        const totalAsis = (s.presentes || 0) + (s.ausentes || 0) + (s.excusas || 0);
-                        const attPct = totalAsis > 0 ? Math.round((s.presentes / totalAsis) * 100) : 0;
-                        document.getElementById('kpi-attendance').textContent = `${attPct}%`;
+                // Si hay datos de asistencia detallados
+                if (stats.attendanceDetails) {
+                    const s = stats.attendanceDetails;
+                    document.getElementById('attendance-panel').style.display = '';
+                    document.getElementById('bar-p').style.width = s.presentesPct + '%';
+                    document.getElementById('bar-a').style.width = s.ausentesPct + '%';
+                    document.getElementById('bar-e').style.width = s.excusasPct + '%';
 
-                        document.getElementById('attendance-panel').style.display = '';
-                        document.getElementById('bar-p').style.width = (totalAsis > 0 ? (s.presentes / totalAsis) * 100 : 0) + '%';
-                        document.getElementById('bar-a').style.width = (totalAsis > 0 ? (s.ausentes / totalAsis) * 100 : 0) + '%';
-                        document.getElementById('bar-e').style.width = (totalAsis > 0 ? (s.excusas / totalAsis) * 100 : 0) + '%';
-
-                        document.getElementById('att-p').textContent = `${s.presentes} Presentes`;
-                        document.getElementById('att-a').textContent = `${s.ausentes} Ausentes`;
-                        document.getElementById('att-e').textContent = `${s.excusas} Excusas`;
-                    }
+                    document.getElementById('att-p').textContent = `${s.presentes} Presentes`;
+                    document.getElementById('att-a').textContent = `${s.ausentes} Ausentes`;
+                    document.getElementById('att-e').textContent = `${s.excusas} Excusas`;
                 }
-            } catch (e) { console.error('Error RPC Stats:', e); }
+            } catch (e) {
+                console.error('Error al cargar KPIs desde el backend:', e);
+            }
 
-            // 4. Pagos Pendientes
-            try {
-                const { count: pendingCount } = await supabase
-                    .from('planilla_registros')
-                    .select('*', { count: 'exact', head: true })
-                    .or('pago.is.null,pago.eq.0');
-                document.getElementById('kpi-pending').textContent = pendingCount > 0 ? pendingCount : '✓';
-            } catch (e) { console.error('Error Pagos:', e); }
-
-            // 5. Actividad y Partidos Próximos
+            // 5. Actividad y Partidos Próximos (Todavía vía Supabase o próximamente migrados)
             loadRecentActivity();
             loadUpcomingMatches();
         }
