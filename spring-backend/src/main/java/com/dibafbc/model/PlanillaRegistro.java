@@ -21,6 +21,9 @@ public class PlanillaRegistro {
     @Column(name = "planilla_id", nullable = false)
     private Integer planillaId;
 
+    @Column(name = "jugador_id")
+    private Integer jugadorId;
+
     @Column(name = "jugador_dni", nullable = false)
     private String jugadorDni;
 

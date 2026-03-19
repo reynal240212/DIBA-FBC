@@ -27,7 +27,7 @@ public class Document {
     private String storagePath;
 
     @Column(name = "owner_id")
-    private UUID ownerId;
+    private Integer ownerId;
 
     @Column(name = "is_signed")
     private Boolean isSigned = false;

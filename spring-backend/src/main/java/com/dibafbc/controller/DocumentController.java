@@ -17,7 +17,7 @@ public class DocumentController {
     private final DocumentService service;
 
     @GetMapping
-    public List<Document> getDocuments(@RequestParam(required = false) UUID ownerId) {
+    public List<Document> getDocuments(@RequestParam(required = false) Integer ownerId) {
         if (ownerId != null) {
             return service.getDocumentsByOwner(ownerId);
         }

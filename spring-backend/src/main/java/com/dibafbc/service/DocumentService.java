@@ -18,7 +18,7 @@ public class DocumentService {
         return repository.findAllByOrderByCreatedAtDesc();
     }
 
-    public List<Document> getDocumentsByOwner(UUID ownerId) {
+    public List<Document> getDocumentsByOwner(Integer ownerId) {
         return repository.findByOwnerIdOrderByCreatedAtDesc(ownerId);
     }
 
