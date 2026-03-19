@@ -48,7 +48,7 @@ Deno.serve(async (req: Request) => {
         );
 
         // 5. Send Notifications
-        const results = await Promise.allSettled(subs.map(async (sub) => {
+        const results = await Promise.allSettled(subs.map(async (sub: any) => {
             try {
                 await push.sendNotification(
                     {
@@ -66,8 +66,8 @@ Deno.serve(async (req: Request) => {
             }
         }));
 
-        const successCount = results.filter(r => r.status === 'fulfilled').length;
-        const failCount = results.filter(r => r.status === 'rejected').length;
+        const successCount = results.filter((r): r is PromiseFulfilledResult<void> => r.status === 'fulfilled').length;
+        const failCount = results.filter((r): r is PromiseRejectedResult => r.status === 'rejected').length;
 
         return new Response(JSON.stringify({ 
             message: 'Push broadcast complete', 
