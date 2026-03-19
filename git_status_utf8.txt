@@ -1,0 +1,52 @@
+﻿ M public/admin/convocatorias.html
+ M public/admin/dashboard.html
+ M public/admin/partidos.html
+ M public/admin/planilla.html
+ M public/admin/rifa_diba.html
+ M public/scripts/admin-users.js
+ M public/scripts/gestor-docs.js
+ M public/scripts/gestor-players.js
+ M public/scripts/partidos.js
+ M public/src/features/matches/banner.js
+ M public/src/features/players/admin.js
+ M spring-backend/src/main/java/com/dibafbc/controller/PartidoBannerController.java
+ M spring-backend/src/main/java/com/dibafbc/dto/PartidoBannerDTO.java
+ M spring-backend/src/main/java/com/dibafbc/model/Partido.java
+ M spring-backend/src/main/java/com/dibafbc/repository/PartidoRepository.java
+ M spring-backend/src/main/java/com/dibafbc/service/PartidoBannerService.java
+?? git_status.txt
+?? spring-backend/src/main/java/com/dibafbc/controller/ConvocatoriaController.java
+?? spring-backend/src/main/java/com/dibafbc/controller/DashboardController.java
+?? spring-backend/src/main/java/com/dibafbc/controller/DocumentController.java
+?? spring-backend/src/main/java/com/dibafbc/controller/JugadorController.java
+?? spring-backend/src/main/java/com/dibafbc/controller/PartidoController.java
+?? spring-backend/src/main/java/com/dibafbc/controller/PlanillaController.java
+?? spring-backend/src/main/java/com/dibafbc/controller/PlayerDocumentController.java
+?? spring-backend/src/main/java/com/dibafbc/controller/UserController.java
+?? spring-backend/src/main/java/com/dibafbc/dto/DashboardDTO.java
+?? spring-backend/src/main/java/com/dibafbc/dto/JugadorDTO.java
+?? spring-backend/src/main/java/com/dibafbc/model/Convocatoria.java
+?? spring-backend/src/main/java/com/dibafbc/model/ConvocatoriaJugador.java
+?? spring-backend/src/main/java/com/dibafbc/model/Document.java
+?? spring-backend/src/main/java/com/dibafbc/model/Jugador.java
+?? spring-backend/src/main/java/com/dibafbc/model/JugadorGeneral.java
+?? spring-backend/src/main/java/com/dibafbc/model/Planilla.java
+?? spring-backend/src/main/java/com/dibafbc/model/PlanillaRegistro.java
+?? spring-backend/src/main/java/com/dibafbc/model/PlayerDocument.java
+?? spring-backend/src/main/java/com/dibafbc/model/User.java
+?? spring-backend/src/main/java/com/dibafbc/repository/ConvocatoriaRepository.java
+?? spring-backend/src/main/java/com/dibafbc/repository/DocumentRepository.java
+?? spring-backend/src/main/java/com/dibafbc/repository/JugadorGeneralRepository.java
+?? spring-backend/src/main/java/com/dibafbc/repository/JugadorRepository.java
+?? spring-backend/src/main/java/com/dibafbc/repository/PlanillaRegistroRepository.java
+?? spring-backend/src/main/java/com/dibafbc/repository/PlanillaRepository.java
+?? spring-backend/src/main/java/com/dibafbc/repository/PlayerDocumentRepository.java
+?? spring-backend/src/main/java/com/dibafbc/repository/UserRepository.java
+?? spring-backend/src/main/java/com/dibafbc/service/ConvocatoriaService.java
+?? spring-backend/src/main/java/com/dibafbc/service/DashboardService.java
+?? spring-backend/src/main/java/com/dibafbc/service/DocumentService.java
+?? spring-backend/src/main/java/com/dibafbc/service/JugadorService.java
+?? spring-backend/src/main/java/com/dibafbc/service/PartidoService.java
+?? spring-backend/src/main/java/com/dibafbc/service/PlanillaService.java
+?? spring-backend/src/main/java/com/dibafbc/service/PlayerDocumentService.java
+?? spring-backend/src/main/java/com/dibafbc/service/UserService.java

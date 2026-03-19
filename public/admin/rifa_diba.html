@@ -403,18 +403,37 @@
   <script type="module">
     import { supabase, requireAdmin } from '../scripts/supabaseClient.js';
 
-    // ── AUTH ───────────────────────────────────────────────────
-    const session = await requireAdmin();
-    if (!session) { /* requireAdmin ya redirige */ }
-    else {
-      document.getElementById('admin-body').style.display = 'flex';
-      const { data: profile } = await supabase.from('users').select('username,role').eq('id', session.user.id).single();
-      if (profile) {
-        document.getElementById('sb-name').textContent = profile.username || session.user.email;
-        document.getElementById('sb-role').textContent = profile.role;
-        document.getElementById('sb-avatar').textContent = (profile.username || 'A')[0].toUpperCase();
-      }
+    // ── LOAD PLAYERS ──────────────────────────────────────────
+    let allPlayers = [];
+    async function fetchPlayers() {
+      try {
+        const response = await fetch('http://localhost:8080/api/players');
+        if (response.ok) {
+          allPlayers = await response.json();
+          renderPlayersDatalist();
+        }
+      } catch (err) { console.error("Error loading players:", err); }
     }
+
+    function renderPlayersDatalist() {
+      const dl = document.createElement('datalist');
+      dl.id = 'players-list';
+      allPlayers.forEach(p => {
+        const opt = document.createElement('option');
+        opt.value = `${p.nombre} ${p.apellidos}`;
+        dl.appendChild(opt);
+      });
+      document.body.appendChild(dl);
+      
+      // Update UI to use this list if needed (e.g., adding an input for player selection)
+      const toolbar = document.querySelector('.toolbar');
+      const group = document.createElement('div');
+      group.className = 'field-group';
+      group.innerHTML = `<label>Jugador Responsable</label>
+                         <input type="text" id="cfg-jugador-manual" list="players-list" placeholder="Opcional: Asignar a...">`;
+      toolbar.insertBefore(group, document.querySelector('.actions-row'));
+    }
+    fetchPlayers();
 
     // ── CLOCK ─────────────────────────────────────────────────
     const clockEl = document.getElementById('clock');
