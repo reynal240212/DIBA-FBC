@@ -4,6 +4,8 @@
  */
 import { supabase, sanitizeDNI } from './supabaseClient.js';
 
+const API_BASE = 'http://localhost:8080/api';
+
 export async function loadPlayers(dynamicContent, pageTitle, mainTitle, setActiveFilter) {
     if (pageTitle) pageTitle.innerHTML = 'Plantilla <span>Oficial</span>';
     if (mainTitle) mainTitle.innerHTML = 'Jugadores';
@@ -11,10 +13,13 @@ export async function loadPlayers(dynamicContent, pageTitle, mainTitle, setActiv
     dynamicContent.innerHTML = '<div class="flex justify-center py-20"><i class="fas fa-circle-notch animate-spin text-3xl text-dibaGold"></i></div>';
 
     try {
-        const { data: jugadores, error } = await supabase.from('identificacion').select('*').order('apellidos');
-        const { data: allDocs } = await supabase.from('player_documents').select('identificacion_numero, doc_type, status');
-
-        if (error) throw error;
+        const response = await fetch(`${API_BASE}/players`);
+        if (!response.ok) throw new Error('Error al conectar con la API de jugadores');
+        const jugadores = await response.json();
+        
+        const dResponse = await fetch('http://localhost:8080/api/player-documents');
+        if (!dResponse.ok) throw new Error('Error al cargar documentos');
+        const allDocs = await dResponse.json();
 
         const DOC_TYPES_MAP = [
             { id: 'tarjeta_identidad', icon: 'fa-id-card' },
@@ -26,7 +31,7 @@ export async function loadPlayers(dynamicContent, pageTitle, mainTitle, setActiv
 
         const totalJugadores = jugadores.length;
         const alDia = jugadores.filter(j => {
-            const jDocs = allDocs?.filter(d => d.identificacion_numero === j.numero && d.status === 'verificado');
+            const jDocs = allDocs?.filter(d => d.identificacionNumero === j.numero && d.status === 'verificado');
             return jDocs?.length === 5;
         }).length;
 
@@ -93,7 +98,7 @@ function renderStatCard(label, value, icon, colors) {
 }
 
 function renderPlayerRow(j, allDocs, DOC_TYPES_MAP) {
-    const jDocs = allDocs?.filter(d => d.identificacion_numero === j.numero) || [];
+    const jDocs = allDocs?.filter(d => d.identificacionNumero === j.numero) || [];
     return `
         <tr class="hover:bg-slate-50/50 transition-all">
             <td class="p-5">
@@ -104,7 +109,7 @@ function renderPlayerRow(j, allDocs, DOC_TYPES_MAP) {
             <td class="p-5">
                 <div class="flex gap-1.5">
                     ${DOC_TYPES_MAP.map(type => {
-                        const doc = jDocs.find(d => d.doc_type === type.id);
+                        const doc = jDocs.find(d => d.docType === type.id);
                         let colorClass = 'bg-slate-100 text-slate-300';
                         if (doc) colorClass = doc.status === 'verificado' ? 'bg-emerald-500 text-white' : 'bg-amber-500 text-white';
                         return `<div class="w-6 h-6 rounded-full flex items-center justify-center text-[10px] ${colorClass}" title="${type.id}"><i class="fas ${type.icon}"></i></div>`;
@@ -142,10 +147,12 @@ window.openAdminDocs = async (dni, name) => {
             { id: 'consentimiento_padres', label: 'Consentimiento Padres' }
         ];
 
-        const { data: docs } = await supabase.from('player_documents').select('*').eq('identificacion_numero', sanitizedDni);
+        const response = await fetch(`http://localhost:8080/api/player-documents/${sanitizedDni}`);
+        if (!response.ok) throw new Error('Error al cargar documentos del jugador');
+        const docs = await response.json();
         
         // --- OPTIMIZACIÓN: Batch Signed URLs for document preview ---
-        const filePaths = docs?.map(d => d.file_url.split('/documents/')[1]).filter(p => !!p) || [];
+        const filePaths = docs?.map(d => d.fileUrl.split('/documents/')[1]).filter(p => !!p) || [];
         let signedUrls = {};
         if (filePaths.length > 0) {
             const { data, error } = await supabase.storage.from('documents').createSignedUrls(filePaths, 3600);
@@ -154,8 +161,8 @@ window.openAdminDocs = async (dni, name) => {
 
         listEl.innerHTML = '';
         DOC_TYPES.forEach(type => {
-            const doc = docs?.find(d => d.doc_type === type.id);
-            const path = doc?.file_url.split('/documents/')[1];
+            const doc = docs?.find(d => d.docType === type.id);
+            const path = doc?.fileUrl.split('/documents/')[1];
             const signedUrl = signedUrls[path] || '#';
             
             const item = document.createElement('div');
@@ -206,15 +213,20 @@ window.adminUploadDoc = async (dni, docType, input) => {
 
         const { data: { publicUrl } } = supabase.storage.from('documents').getPublicUrl(fileName);
 
-        const { error: dbError } = await supabase.from('player_documents').upsert({
-            identificacion_numero: sanitizedDni,
-            doc_type: docType,
-            file_url: publicUrl,
-            status: 'verificado',
-            updated_at: new Date()
+        const payload = {
+            identificacionNumero: sanitizedDni,
+            docType: docType,
+            fileUrl: publicUrl,
+            status: 'verificado'
+        };
+
+        const response = await fetch('http://localhost:8080/api/player-documents/upsert', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
         });
 
-        if (dbError) throw dbError;
+        if (!response.ok) throw new Error('Error al sincronizar metadata del documento');
 
         const nameEl = document.getElementById('modalPlayerName').innerText;
         window.openAdminDocs(sanitizedDni, nameEl);

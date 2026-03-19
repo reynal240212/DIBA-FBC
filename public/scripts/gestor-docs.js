@@ -32,19 +32,20 @@ export async function loadDocuments(dynamicContent, pageTitle, mainTitle, setAct
     });
 
     try {
-        let query = supabase.from("documents").select("*").order("created_at", { ascending: false });
-        if (usuario.role !== 'admin') query = query.eq('owner_id', usuario.id);
+        let url = 'http://localhost:8080/api/documents';
+        if (usuario.role !== 'admin') url += `?ownerId=${usuario.id}`;
 
-        const { data: documents, error } = await query;
-        if (error) throw error;
+        const response = await fetch(url);
+        if (!response.ok) throw new Error('Error al cargar documentos');
+        const documents = await response.json();
 
         if (!documents || documents.length === 0) {
             fileListContainer.innerHTML = '<p class="text-center text-slate-400 py-10 uppercase text-[10px] font-black italic tracking-widest col-span-full">No hay archivos disponibles</p>';
             return;
         }
 
-        // --- OPTIMIZACIÓN: Batch Signed URLs ---
-        const paths = documents.map(d => d.storage_path);
+        // --- OPTIMIZACIÓN: Batch Signed URLs (Sigue vía Supabase Storage) ---
+        const paths = documents.map(d => d.storagePath);
         const { data: signedData, error: sError } = await supabase.storage.from("documents").createSignedUrls(paths, 3600);
         
         let urlMap = {};
@@ -52,20 +53,20 @@ export async function loadDocuments(dynamicContent, pageTitle, mainTitle, setAct
 
         fileListContainer.innerHTML = '';
         documents.forEach(doc => {
-            const fileUrl = urlMap[doc.storage_path] || '#';
-            const date = new Date(doc.created_at).toLocaleDateString('es-CO', { day: '2-digit', month: 'short', year: 'numeric' });
+            const fileUrl = urlMap[doc.storagePath] || '#';
+            const date = new Date(doc.createdAt).toLocaleDateString('es-CO', { day: '2-digit', month: 'short', year: 'numeric' });
             
             const div = document.createElement('div');
-            div.className = `flex flex-col p-6 bg-white border border-slate-200 rounded-[2rem] hover:shadow-xl transition-all animate__animated animate__fadeIn group ${doc.is_signed ? 'border-l-8 border-l-emerald-500' : ''}`;
+            div.className = `flex flex-col p-6 bg-white border border-slate-200 rounded-[2rem] hover:shadow-xl transition-all animate__animated animate__fadeIn group ${doc.isSigned ? 'border-l-8 border-l-emerald-500' : ''}`;
             div.innerHTML = `
                 <div class="flex items-center justify-between mb-4">
                     <div class="w-12 h-12 bg-slate-50 rounded-2xl flex items-center justify-center text-slate-400 group-hover:bg-dibaGold/10 group-hover:text-dibaGold transition-colors">
                         <i class="far fa-file-pdf text-xl"></i>
                     </div>
-                    ${doc.is_signed ? '<span class="px-3 py-1 bg-emerald-50 text-emerald-600 text-[8px] font-black uppercase italic rounded-full tracking-widest border border-emerald-100"><i class="fas fa-signature mr-1"></i> Firmado</span>' : ''}
+                    ${doc.isSigned ? '<span class="px-3 py-1 bg-emerald-50 text-emerald-600 text-[8px] font-black uppercase italic rounded-full tracking-widest border border-emerald-100"><i class="fas fa-signature mr-1"></i> Firmado</span>' : ''}
                 </div>
                 <div>
-                    <h4 class="font-black text-slate-800 text-xs uppercase italic tracking-tight line-clamp-1 mb-1">${doc.file_name}</h4>
+                    <h4 class="font-black text-slate-800 text-xs uppercase italic tracking-tight line-clamp-1 mb-1">${doc.fileName}</h4>
                     <p class="text-[9px] text-slate-400 font-bold uppercase tracking-widest mb-4">${date}</p>
                 </div>
                 <div class="pt-4 border-t border-slate-50 flex items-center justify-between mt-auto">
@@ -84,21 +85,28 @@ export async function loadDocuments(dynamicContent, pageTitle, mainTitle, setAct
 }
 
 async function handleFileUpload(file, dynamicContent, pageTitle, mainTitle, setActiveFilter, usuario) {
-    // Basic implementation of upload for the module
-    // This could be further refined with toast notifications
     try {
         const fileName = `${Date.now()}_${file.name}`;
+        // 1. Subir a Supabase Storage
         const { error: storageError } = await supabase.storage.from('documents').upload(fileName, file);
         if (storageError) throw storageError;
 
-        const { error: dbError } = await supabase.from('documents').insert({
-            file_name: file.name,
-            storage_path: fileName,
-            owner_id: usuario.id,
-            is_signed: false
+        // 2. Guardar METADATA en el nuevo backend
+        const metadataPayload = {
+            fileName: file.name,
+            storagePath: fileName,
+            ownerId: usuario.id,
+            isSigned: false
+        };
+
+        const response = await fetch('http://localhost:8080/api/documents/metadata', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(metadataPayload)
         });
 
-        if (dbError) throw dbError;
+        if (!response.ok) throw new Error('Error al guardar metadata del documento');
+
         loadDocuments(dynamicContent, pageTitle, mainTitle, setActiveFilter, usuario);
     } catch (err) {
         alert("Error al subir archivo: " + err.message);

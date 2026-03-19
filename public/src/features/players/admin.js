@@ -67,30 +67,17 @@ function hookCreatePlayerForm() {
  */
 export async function updatePlayer(dni, payload) {
     try {
-        // 1. Update in jugadores (searching by name or adding a way to link)
-        // Since we might not have the jugadores.id easily, we can try to find it via name/category or use a better mapping.
-        // For now, let's update identificacion which is the source for Planilla.
-        const { error: idError } = await supabase
-            .from('identificacion')
-            .update({
+        const response = await fetch(`http://localhost:8080/api/players/${dni}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
                 nombre: payload.nombre.split(' ')[0],
                 apellidos: payload.nombre.split(' ').slice(1).join(' '),
                 categoria: payload.categoria
             })
-            .eq('numero', dni);
+        });
 
-        if (idError) throw idError;
-
-        // Also update in jugadores if possible
-        // Note: This relies on name matching which is fragile, but without a clear FK in jugadores it's a best effort.
-        await supabase
-            .from('jugadores')
-            .update({
-                nombre: payload.nombre,
-                categoria: payload.categoria
-            })
-            .eq('nombre', payload.oldNombre); // We'll need the old name to match
-
+        if (!response.ok) throw new Error('Error al actualizar jugador en el servidor');
         return { success: true };
     } catch (err) {
         console.error('Error updating player:', err);
@@ -98,24 +85,13 @@ export async function updatePlayer(dni, payload) {
     }
 }
 
-/**
- * Delete a player
- */
 export async function deletePlayer(dni) {
     try {
-        // Warning: This will fail if there are foreign key constraints (asistencias, planillas)
-        // A better approach would be to delete those first or use a 'status = Inactivo'
-        const { error } = await supabase
-            .from('identificacion')
-            .delete()
-            .eq('numero', dni);
+        const response = await fetch(`http://localhost:8080/api/players/${dni}`, {
+            method: 'DELETE'
+        });
 
-        if (error) throw error;
-
-        // Also delete from jugadores if we can find them
-        // (Best effort since no direct link)
-        // We might want to pass the name too.
-        
+        if (!response.ok) throw new Error('Error al eliminar jugador en el servidor');
         return { success: true };
     } catch (err) {
         console.error('Error deleting player:', err);
