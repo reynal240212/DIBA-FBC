@@ -16,7 +16,7 @@ FROM openjdk:17-jdk-slim
 WORKDIR /app
 
 # Copiar el archivo JAR generado desde la etapa de compilación
-COPY --from:build /app/target/*.jar app.jar
+COPY --from=build /app/target/*.jar app.jar
 
 # Exponer el puerto por defecto de Spring Boot o el que asigne Render ($PORT)
 ENV PORT 8080
