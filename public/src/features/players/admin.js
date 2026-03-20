@@ -4,7 +4,7 @@ import { supabase } from '../../../scripts/supabaseClient.js';
 /**
  * Handle player creation form
  */
-function hookCreatePlayerForm() {
+export function hookCreatePlayerForm() {
     const form = document.querySelector('#createPlayerForm');
     if (!form) return;
 
