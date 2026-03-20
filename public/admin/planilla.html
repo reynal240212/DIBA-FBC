@@ -192,6 +192,8 @@
                   class="fas fa-file-pdf"></i> PDF Rápido</button>
               <button id="generatePDFPro" class="btn btn-primary"><i
                   class="fas fa-print"></i> Planilla Pro (Doble Cara)</button>
+              <button id="generateUnifiedPDF" class="btn btn-warning"><i
+                  class="fas fa-users"></i> Planilla Unificada</button>
               <button id="generateExcel" class="btn btn-outline" style="border-color: #22c55e; color: #22c55e;"><i
                   class="fas fa-file-excel"></i> XLSX</button>
               <button id="saveAllBtn" class="btn btn-primary">
@@ -773,86 +775,45 @@
             drawSoccerField(doc, 14, 60, 182, 130); // Single large centered field
           });
 
-          function renderPDFHeader(pdf, title, category) {
-            pdf.setFontSize(16);
-            pdf.setTextColor(0, 42, 64);
-            pdf.text("DIBA FBC", 14, 15);
-            pdf.setFontSize(10);
-            pdf.text(title, 14, 22);
-            pdf.setFontSize(9);
-            pdf.setTextColor(100);
-            pdf.text(`Categoría: ${category} | Fecha: ________________`, 14, 28);
-            pdf.setDrawColor(200);
-            pdf.line(14, 30, 202, 30);
-          }
+          const blob = doc.output('blob');
+          const blobURL = URL.createObjectURL(blob);
+          window.open(blobURL, '_blank');
+        };
 
-          function drawTacticalGrid(pdf, x, y, w, h) {
-            pdf.setDrawColor(230);
-            pdf.setLineWidth(0.1);
-            const step = 5; // 5mm grid
-            for (let i = 0; i <= w; i += step) pdf.line(x + i, y, x + i, y + h);
-            for (let j = 0; j <= h; j += step) pdf.line(x, y + j, x + w, y + j);
-          }
+        document.getElementById('generateUnifiedPDF').onclick = async () => {
+          console.log("DIBA: Generando Planilla Unificada...");
+          const { jsPDF } = window.jspdf;
+          const doc = new jsPDF('p', 'mm', 'letter');
+          
+          const sortedPlayers = [...appState.players].sort((a,b) => a.name.localeCompare(b.name));
+          
+          renderPDFHeader(doc, "PLANILLA UNIFICADA DE JUGADORES", "TODAS");
+          
+          const body = sortedPlayers.map((p, i) => [
+            i + 1,
+            p.name,
+            p.id,
+            p.categoria,
+            '', '', '' // Pago, Asist, Obs
+          ]);
 
-          function libDrawArc(pdf, x, y, r, startAngle, endAngle) {
-            const segments = 20;
-            const points = [];
-            for (let i = 0; i <= segments; i++) {
-              const angle = startAngle + (endAngle - startAngle) * (i / segments);
-              const px = r * Math.cos(angle);
-              const py = r * Math.sin(angle);
-              if (i === 0) {
-                points.push([px, py]);
-              } else {
-                const prevAngle = startAngle + (endAngle - startAngle) * ((i - 1) / segments);
-                const prevX = r * Math.cos(prevAngle);
-                const prevY = r * Math.sin(prevAngle);
-                points.push([px - prevX, py - prevY]);
-              }
-            }
-            pdf.lines(points, x, y);
-          }
-
-          function drawSoccerField(pdf, x, y, w, h) {
-            pdf.setDrawColor(0, 42, 64);
-            pdf.setLineWidth(0.5);
-            // White background for the field area to clear grid
-            pdf.setFillColor(255, 255, 255);
-            pdf.rect(x, y, w, h, 'F');
-            
-            // Outer boundary
-            pdf.rect(x, y, w, h);
-            // Halfway line
-            pdf.line(x + w / 2, y, x + w / 2, y + h);
-            // Center circle
-            pdf.circle(x + w / 2, y + h / 2, 9);
-            // Center spot
-            pdf.circle(x + w / 2, y + h / 2, 0.5, 'F');
-            
-            // Left Penalty Area
-            pdf.rect(x, y + h / 4, w / 6, h / 2);
-            // Left Goal Area
-            pdf.rect(x, y + h * 0.375, w / 15, h / 4);
-            // Left Penalty Spot
-            pdf.circle(x + w / 9, y + h / 2, 0.5, 'F');
-            // Left Penalty Arc
-            libDrawArc(pdf, x + w / 6, y + h / 2, 9, -Math.PI/4, Math.PI/4);
-
-            // Right Penalty Area
-            pdf.rect(x + w - w / 6, y + h / 4, w / 6, h / 2);
-            // Right Goal Area
-            pdf.rect(x + w - w / 15, y + h * 0.375, w / 15, h / 4);
-            // Right Penalty Spot
-            pdf.circle(x + w - w / 9, y + h / 2, 0.5, 'F');
-            // Right Penalty Arc
-            libDrawArc(pdf, x + w - w / 6, y + h / 2, 9, 3*Math.PI/4, 5*Math.PI/4);
-
-            // Goals lines
-            pdf.line(x - 2, y + h * 0.4, x, y + h * 0.4);
-            pdf.line(x - 2, y + h * 0.6, x, y + h * 0.6);
-            pdf.line(x + w, y + h * 0.4, x + w + 2, y + h * 0.4);
-            pdf.line(x + w, y + h * 0.6, x + w + 2, y + h * 0.6);
-          }
+          doc.autoTable({
+            startY: 35,
+            head: [['#', 'Nombre del Jugador', 'DNI', 'Cat.', 'Pago', 'Asist.', 'Obs.']],
+            body: body,
+            headStyles: { fillColor: [0, 42, 64], fontSize: 8 },
+            styles: { fontSize: 8, cellPadding: 2, minCellHeight: 8 },
+            columnStyles: {
+              0: { cellWidth: 8 },
+              1: { cellWidth: 50 },
+              2: { cellWidth: 22 },
+              3: { cellWidth: 20 },
+              4: { cellWidth: 20 },
+              5: { cellWidth: 12 },
+              6: { cellWidth: 54 }
+            },
+            theme: 'grid'
+          });
 
           const blob = doc.output('blob');
           const blobURL = URL.createObjectURL(blob);
