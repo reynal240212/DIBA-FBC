@@ -1,9 +1,9 @@
 :root {
     /* Base Colors - DIBA Brand Refined */
-    --gold: #ffcc00;
-    --gold-rgb: 255, 204, 0;
-    --gold-glow: rgba(255, 204, 0, 0.15);
-    --gold-dark: #cc9900;
+    --gold: #FFD700;
+    --gold-rgb: 255, 215, 0;
+    --gold-glow: rgba(255, 215, 0, 0.15);
+    --gold-dark: #C5A000;
     --blue: #002a40;
     --blue-rgb: 0, 42, 64;
     --blue-dark: #001a2e;
@@ -70,6 +70,12 @@ body {
     overflow-x: hidden;
     line-height: 1.5;
     -webkit-font-smoothing: antialiased;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+    transition: all 0.3s;
 }
 
 /* ── SCROLLBAR ── */

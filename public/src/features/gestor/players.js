@@ -31,23 +31,23 @@ export async function loadPlayers(dynamicContent, pageTitle, mainTitle, setActiv
 
         dynamicContent.innerHTML = `
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8 animate__animated animate__fadeInDown">
-                ${renderStatCard('Total Jugadores', totalJugadores, 'fa-users', 'bg-dibaBlue/5 text-dibaBlue')}
-                ${renderStatCard('Al Día', alDia, 'fa-check-double', 'bg-emerald-50 text-emerald-500')}
-                ${renderStatCard('Pendientes', totalJugadores - alDia, 'fa-exclamation-triangle', 'bg-amber-50 text-amber-500')}
+                ${renderStatCard('Total Jugadores', totalJugadores, 'fa-users', 'bg-gold/10 text-gold')}
+                ${renderStatCard('Al Día', alDia, 'fa-check-double', 'bg-emerald-500/10 text-emerald-500')}
+                ${renderStatCard('Pendientes', totalJugadores - alDia, 'fa-exclamation-triangle', 'bg-amber-500/10 text-amber-500')}
             </div>
 
-            <div class="bg-white rounded-[2.5rem] shadow-sm border border-slate-200 overflow-hidden animate__animated animate__fadeInUp">
+            <div class="glass rounded-[2.5rem] shadow-2xl overflow-hidden animate__animated animate__fadeInUp">
                 <div class="table-responsive">
                     <table class="w-full text-left">
-                        <thead class="bg-slate-50 border-b border-slate-100">
+                        <thead class="bg-white/5 border-b border-white/5">
                             <tr>
-                                <th class="p-5 text-[10px] font-black uppercase text-slate-400">Jugador</th>
-                                <th class="p-5 text-[10px] font-black uppercase text-slate-400">DNI</th>
-                                <th class="p-5 text-[10px] font-black uppercase text-slate-400">Docs</th>
-                                <th class="p-5 text-[10px] font-black uppercase text-slate-400 text-center">Acción</th>
+                                <th class="p-5 text-[10px] font-black uppercase text-slate-500 tracking-widest">Jugador</th>
+                                <th class="p-5 text-[10px] font-black uppercase text-slate-500 tracking-widest">DNI</th>
+                                <th class="p-5 text-[10px] font-black uppercase text-slate-500 tracking-widest">Docs</th>
+                                <th class="p-5 text-[10px] font-black uppercase text-slate-500 tracking-widest text-center">Acción</th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y divide-slate-50">
+                        <tbody class="divide-y divide-white/5">
                             ${jugadores.map(j => renderPlayerRow(j, allDocs, DOC_TYPES_MAP)).join('')}
                         </tbody>
                     </table>
@@ -80,11 +80,11 @@ export async function loadPlayers(dynamicContent, pageTitle, mainTitle, setActiv
 
 function renderStatCard(label, value, icon, colors) {
     return `
-        <div class="bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm flex items-center gap-4">
-            <div class="w-12 h-12 ${colors} rounded-2xl flex items-center justify-center text-xl"><i class="fas ${icon}"></i></div>
+        <div class="glass p-6 rounded-[2rem] shadow-lg flex items-center gap-4">
+            <div class="w-12 h-12 ${colors} rounded-2xl flex items-center justify-center text-xl shadow-inner"><i class="fas ${icon}"></i></div>
             <div>
-                <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">${label}</p>
-                <h4 class="text-2xl font-black text-slate-800 italic">${value}</h4>
+                <p class="text-[10px] font-black text-slate-500 uppercase tracking-widest">${label}</p>
+                <h4 class="text-2xl font-black text-white italic">${value}</h4>
             </div>
         </div>
     `;
@@ -93,24 +93,24 @@ function renderStatCard(label, value, icon, colors) {
 function renderPlayerRow(j, allDocs, DOC_TYPES_MAP) {
     const jDocs = allDocs?.filter(d => d.identificacion_numero === j.numero) || [];
     return `
-        <tr class="hover:bg-slate-50/50 transition-all">
+        <tr class="hover:bg-white/5 transition-all">
             <td class="p-5">
-                <p class="font-bold text-slate-700 text-xs uppercase italic">${j.nombre} ${j.apellidos}</p>
-                <p class="text-[9px] text-slate-400 uppercase font-medium">${j.nacionalidad}</p>
+                <p class="font-black text-white text-xs uppercase italic">${j.nombre} ${j.apellidos}</p>
+                <p class="text-[9px] text-slate-500 uppercase font-black tracking-widest">${j.nacionalidad}</p>
             </td>
-            <td class="p-5 font-mono text-xs text-slate-500">${j.numero}</td>
+            <td class="p-5 font-mono text-xs text-slate-400">${j.numero}</td>
             <td class="p-5">
                 <div class="flex gap-1.5">
                     ${DOC_TYPES_MAP.map(type => {
                         const doc = jDocs.find(d => d.doc_type === type.id);
-                        let colorClass = 'bg-slate-100 text-slate-300';
-                        if (doc) colorClass = doc.status === 'verificado' ? 'bg-emerald-500 text-white' : 'bg-amber-500 text-white';
+                        let colorClass = 'bg-white/5 text-slate-600';
+                        if (doc) colorClass = doc.status === 'verificado' ? 'bg-emerald-500 text-white shadow-[0_0_10px_rgba(16,185,129,0.3)]' : 'bg-amber-500 text-white shadow-[0_0_10px_rgba(245,158,11,0.3)]';
                         return `<div class="w-6 h-6 rounded-full flex items-center justify-center text-[10px] ${colorClass}" title="${type.id}"><i class="fas ${type.icon}"></i></div>`;
                     }).join('')}
                 </div>
             </td>
             <td class="p-5 flex justify-center gap-4">
-                <button onclick="window.openAdminDocs('${j.numero}', '${j.nombre} ${j.apellidos}')" class="text-emerald-600 hover:text-dibaGold transition-all font-black" title="Documentos">
+                <button onclick="window.openAdminDocs('${j.numero}', '${j.nombre} ${j.apellidos}')" class="text-white hover:text-gold transition-all" title="Documentos">
                     <i class="fas fa-file-medical text-lg"></i>
                 </button>
             </td>

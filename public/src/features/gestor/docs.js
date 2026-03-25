@@ -10,9 +10,9 @@ export async function loadDocuments(dynamicContent, pageTitle, mainTitle, setAct
     
     dynamicContent.innerHTML = `
         <section id="uploadSection" class="${usuario.role !== 'admin' ? 'hidden' : ''} mb-12 animate__animated animate__fadeInUp">
-            <div id="dropZone" class="bg-white border-2 border-dashed border-slate-200 rounded-[2.5rem] p-12 flex flex-col items-center justify-center hover:bg-yellow-50/50 hover:border-dibaGold transition-all cursor-pointer">
-                <i class="fas fa-cloud-upload-alt text-3xl text-slate-300 mb-4"></i>
-                <p class="font-bold text-slate-800 uppercase italic text-sm">Arrastra archivos aquí o haz clic</p>
+            <div id="dropZone" class="drop-zone animate__animated animate__fadeIn">
+                <i class="fas fa-cloud-upload-alt text-3xl text-gold/60 mb-2"></i>
+                <p class="font-black text-white uppercase italic text-[10px] tracking-widest">Arrastra archivos aquí o haz clic</p>
                 <input type="file" id="newDocument" class="hidden" accept=".pdf,.jpg,.png">
             </div>
         </section>
@@ -54,20 +54,20 @@ export async function loadDocuments(dynamicContent, pageTitle, mainTitle, setAct
             const date = new Date(doc.created_at).toLocaleDateString('es-CO', { day: '2-digit', month: 'short', year: 'numeric' });
             
             const div = document.createElement('div');
-            div.className = `flex flex-col p-6 bg-white border border-slate-200 rounded-[2rem] hover:shadow-xl transition-all animate__animated animate__fadeIn group ${doc.is_signed ? 'border-l-8 border-l-emerald-500' : ''}`;
+            div.className = `flex flex-col p-6 glass rounded-[2rem] hover:shadow-2xl transition-all animate__animated animate__fadeIn group ${doc.is_signed ? 'border-l-4 border-l-emerald-500' : ''}`;
             div.innerHTML = `
                 <div class="flex items-center justify-between mb-4">
-                    <div class="w-12 h-12 bg-slate-50 rounded-2xl flex items-center justify-center text-slate-400 group-hover:bg-dibaGold/10 group-hover:text-dibaGold transition-colors">
+                    <div class="w-12 h-12 bg-white/5 rounded-2xl flex items-center justify-center text-slate-400 group-hover:bg-gold/10 group-hover:text-gold transition-colors">
                         <i class="far fa-file-pdf text-xl"></i>
                     </div>
                     ${doc.is_signed ? '<span class="px-3 py-1 bg-emerald-50 text-emerald-600 text-[8px] font-black uppercase italic rounded-full tracking-widest border border-emerald-100"><i class="fas fa-signature mr-1"></i> Firmado</span>' : ''}
                 </div>
                 <div>
-                    <h4 class="font-black text-slate-800 text-xs uppercase italic tracking-tight line-clamp-1 mb-1">${doc.file_name}</h4>
-                    <p class="text-[9px] text-slate-400 font-bold uppercase tracking-widest mb-4">${date}</p>
+                    <h4 class="font-black text-white text-xs uppercase italic tracking-tight line-clamp-1 mb-1">${doc.file_name}</h4>
+                    <p class="text-[9px] text-slate-500 font-bold uppercase tracking-widest mb-4">${date}</p>
                 </div>
-                <div class="pt-4 border-t border-slate-50 flex items-center justify-between mt-auto">
-                    <a href="${fileUrl}" target="_blank" class="text-[9px] font-black uppercase italic text-dibaBlue hover:text-dibaGold flex items-center gap-1.5 transition-all">
+                <div class="pt-4 border-t border-white/5 flex items-center justify-between mt-auto">
+                    <a href="${fileUrl}" target="_blank" class="text-[9px] font-black uppercase italic text-gold hover:text-white flex items-center gap-1.5 transition-all">
                         <i class="fas fa-eye"></i> Visualizar
                     </a>
                 </div>
