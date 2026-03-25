@@ -193,6 +193,8 @@
                   class="fas fa-print"></i> Planilla Pro (Doble Cara)</button>
               <button id="generateUnifiedPDF" class="btn btn-warning"><i
                   class="fas fa-users"></i> Planilla Unificada</button>
+              <button id="generateOfficialPDF" class="btn btn-success"><i
+                  class="fas fa-id-card"></i> Planilla Oficial</button>
               <button id="generateExcel" class="btn btn-outline" style="border-color: #22c55e; color: #22c55e;"><i
                   class="fas fa-file-excel"></i> XLSX</button>
               <button id="saveAllBtn" class="btn btn-primary">
@@ -461,13 +463,14 @@
             const fechaSeleccionada = dateInput.value;
 
             // 1. Cargar jugadores
-            const { data: players, error: pErr } = await supabase.from('identificacion').select('numero, nombre, apellidos, categoria, foto_url').order('apellidos');
+            const { data: players, error: pErr } = await supabase.from('identificacion').select('numero, nombre, apellidos, categoria, foto_url, fecha_nacimiento').order('apellidos');
             if (pErr) throw pErr;
             appState.players = players.map(p => ({
               id: p.numero,
               name: `${p.nombre} ${p.apellidos}`.trim(),
               categoria: p.categoria,
-              foto: p.foto_url
+              foto: p.foto_url,
+              birthDate: p.fecha_nacimiento
             }));
 
             // 2. Buscar o Crear planilla para esta fecha
@@ -1097,16 +1100,78 @@
         function renderPDFHeader(pdf, title, category) {
           pdf.setFontSize(16);
           pdf.setTextColor(0, 42, 64);
-          pdf.text("DIBA FBC", 14, 15);
+          pdf.text("DIBA FBC", 40, 15);
           pdf.setFontSize(10);
-          pdf.text(title, 14, 22);
+          pdf.text(title, 40, 22);
           pdf.setFontSize(9);
           pdf.setTextColor(100);
           const hoy = new Date().toLocaleDateString('es-CO');
-          pdf.text(`Categoría: ${category} | Fecha: ${hoy}`, 14, 28);
+          pdf.text(`Categoría: ${category} | Fecha: ${hoy}`, 40, 28);
+          
+          // Intentar añadir el escudo si existe en el DOM o cargarlo
+          const logoImg = document.querySelector('.sidebar-logo img');
+          if (logoImg) {
+            try {
+              pdf.addImage(logoImg, 'PNG', 14, 8, 20, 20);
+            } catch (e) {
+              console.warn("No se pudo añadir el logo al PDF", e);
+            }
+          }
+
           pdf.setDrawColor(200);
           pdf.line(14, 30, 202, 30);
         }
+
+        document.getElementById('generateOfficialPDF').onclick = async () => {
+          console.log("DIBA: Generando Planilla Oficial por Categoría...");
+          const { jsPDF } = window.jspdf;
+          const doc = new jsPDF('p', 'mm', 'letter');
+          
+          // Obtener categorías únicas presentes en la vista actual (o todas)
+          const categories = [...new Set(appState.players.map(p => p.categoria))].sort();
+          
+          categories.forEach((cat, index) => {
+            if (index > 0) doc.addPage();
+            
+            const playersInCat = appState.players.filter(p => p.categoria === cat).sort((a,b) => a.name.localeCompare(b.name));
+            
+            renderPDFHeader(doc, "PLANILLA OFICIAL DE JUGADORES", cat);
+            
+            const body = playersInCat.map((p, i) => [
+              i + 1,
+              p.name.toUpperCase(),
+              p.id,
+              p.birthDate ? new Date(p.birthDate).toLocaleDateString('es-CO') : '---',
+              '' // Espacio para firma o nota
+            ]);
+
+            doc.autoTable({
+              startY: 35,
+              head: [['#', 'Nombre Completo', '# Tarjeta / DNI', 'F. Nacimiento', 'Firma / Observación']],
+              body: body,
+              headStyles: { fillColor: [0, 42, 64], fontSize: 9, halign: 'center' },
+              styles: { fontSize: 9, cellPadding: 3, minCellHeight: 12, valign: 'middle' },
+              columnStyles: {
+                0: { cellWidth: 10, halign: 'center' },
+                1: { cellWidth: 70 },
+                2: { cellWidth: 35, halign: 'center' },
+                3: { cellWidth: 35, halign: 'center' },
+                4: { cellWidth: 38 }
+              },
+              theme: 'grid'
+            });
+
+            // Pie de página
+            const pageHeight = doc.internal.pageSize.height;
+            doc.setFontSize(8);
+            doc.setTextColor(150);
+            doc.text("DIBA FBC — Formando Talentos, Construyendo Futuro", 105, pageHeight - 10, { align: 'center' });
+          });
+
+          const blob = doc.output('blob');
+          const blobURL = URL.createObjectURL(blob);
+          window.open(blobURL, '_blank');
+        };
 
         function drawTacticalGrid(pdf, x, y, w, h) {
           pdf.setDrawColor(230);
