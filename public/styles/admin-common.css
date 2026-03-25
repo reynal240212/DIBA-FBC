@@ -28,9 +28,18 @@
     --sidebar-w: 280px;      
     --sidebar-collapsed-w: 80px;
     --topbar-h: 80px;
+    /* Sizing & Borders Refined */
     --radius-xl: 32px;
     --radius-lg: 20px;
     --radius-md: 14px;
+    --radius-sm: 8px;
+    --glass-blur: 16px;
+
+    /* Mesh Gradients */
+    --mesh-gold: radial-gradient(at 0% 0%, rgba(255, 215, 0, 0.15) 0px, transparent 50%),
+                 radial-gradient(at 100% 100%, rgba(255, 215, 0, 0.05) 0px, transparent 50%);
+    --mesh-blue: radial-gradient(at 0% 0%, rgba(0, 42, 64, 0.4) 0px, transparent 50%),
+                 radial-gradient(at 100% 100%, rgba(0, 42, 64, 0.2) 0px, transparent 50%);
     
     /* Advanced Shadows */
     --shadow-premium: 0 0 0 1px rgba(255, 255, 255, 0.05),
@@ -97,9 +106,24 @@ a {
 /* ── UTILITIES ── */
 .glass {
     background: var(--bg-surface);
-    backdrop-filter: blur(20px) saturate(180%);
-    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    backdrop-filter: blur(var(--glass-blur)) saturate(180%);
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(180%);
     border: 1px solid var(--glass-border);
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.glass-premium {
+    background: linear-gradient(135deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%);
+    backdrop-filter: blur(24px) saturate(200%);
+    border: 1px solid rgba(255,255,255,0.08);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.4), inset 0 0 0 1px rgba(255,255,255,0.02);
+}
+
+.glass-premium:hover {
+    background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.02) 100%);
+    border-color: rgba(255,215,0,0.2);
+    transform: translateY(-5px);
+    box-shadow: 0 30px 60px rgba(0,0,0,0.5), inset 0 0 20px rgba(255,215,0,0.03);
 }
 
 .animate-fade-up {
