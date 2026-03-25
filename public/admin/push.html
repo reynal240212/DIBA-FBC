@@ -34,10 +34,7 @@
   <aside class="sidebar" id="sidebar">
     <div class="sidebar-logo">
       <img src="/images/ESCUDO.png" alt="DIBA FBC">
-      <div>
-        <div class="sidebar-logo-text">DIBA FBC</div>
-        <div class="sidebar-logo-sub">Panel de Control</div>
-      </div>
+      <div class="sidebar-logo-text">DIBA FBC</div>
     </div>
 
     <nav class="sidebar-nav">
@@ -45,6 +42,7 @@
 
       <div class="nav-section-label">Equipo</div>
       <a href="planilla.html" class="nav-link"><i class="fas fa-clipboard-list"></i> Planilla</a>
+      <a href="crear-jugador.html" class="nav-link"><i class="fas fa-user-plus"></i> Crear Jugador</a>
       <a href="../ficha.html" class="nav-link"><i class="fas fa-users"></i> Jugadores</a>
       <a href="../partidos.html" class="nav-link"><i class="fas fa-futbol"></i> Partidos</a>
       <a href="../analisis.html" class="nav-link"><i class="fas fa-chart-line"></i> Análisis</a>
@@ -66,7 +64,7 @@
     <div class="sidebar-footer">
       <div class="user-chip">
         <div class="user-avatar" id="sb-avatar">A</div>
-        <div>
+        <div style="min-width: 0;">
           <div class="user-name" id="sb-name">Administrador</div>
           <div class="user-role" id="sb-role">Admin</div>
         </div>
@@ -76,21 +74,24 @@
       </button>
     </div>
   </aside>
+  <div class="sidebar-overlay" onclick="document.getElementById('sidebar').classList.remove('open')"></div>
 
   <main class="main">
     <header class="topbar">
-      <button class="mobile-menu-btn" id="menu-btn">
-        <i class="fas fa-bars" id="menu-icon"></i>
-      </button>
-      <div>
-        <h1 class="page-title">Broadcast <span>Push</span></h1>
-        <p class="page-subtitle">Envía mensajes instantáneos a toda la comunidad DIBA FBC</p>
+      <div class="flex items-center">
+        <button class="mobile-menu-btn" id="menu-btn">
+          <i class="fas fa-bars" id="menu-icon"></i>
+        </button>
+        <div class="animate-fade-up">
+          <div class="page-title">Broadcast <span>Push</span></div>
+          <div class="page-subtitle">Envía mensajes instantáneos a toda la comunidad DIBA FBC</div>
+        </div>
       </div>
       <div class="topbar-right">
-        <button id="theme-toggle" class="mobile-menu-btn" style="display: flex; margin-right: 0.5rem;" title="Cambiar Tema">
+        <button id="theme-toggle" class="btn btn-outline" style="padding: 0.5rem; width: 40px; height: 40px; justify-content: center;" title="Cambiar Tema">
           <i id="theme-icon" class="fas fa-sun"></i>
         </button>
-        <div class="topbar-time" id="topbar-clock">00:00:00</div>
+        <div class="topbar-time glass" id="topbar-clock">00:00:00</div>
       </div>
     </header>
 

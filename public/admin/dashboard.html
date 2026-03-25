@@ -128,14 +128,11 @@
     <aside class="sidebar" id="sidebar">
         <div class="sidebar-logo">
             <img src="/images/ESCUDO.png" alt="DIBA FBC">
-            <div>
-                <div class="sidebar-logo-text">DIBA FBC</div>
-                <div class="sidebar-logo-sub">Panel de Control</div>
-            </div>
+            <div class="sidebar-logo-text">DIBA FBC</div>
         </div>
 
         <nav class="sidebar-nav">
-            <a href="index.html" class="nav-link active"><i class="fas fa-th-large"></i> Dashboard</a>
+            <a href="dashboard.html" class="nav-link active"><i class="fas fa-th-large"></i> Dashboard</a>
 
             <div class="nav-section-label">Equipo</div>
             <a href="planilla.html" class="nav-link"><i class="fas fa-clipboard-list"></i> Planilla</a>
@@ -161,7 +158,7 @@
         <div class="sidebar-footer">
             <div class="user-chip">
                 <div class="user-avatar" id="sb-avatar">A</div>
-                <div>
+                <div style="min-width: 0;">
                     <div class="user-name" id="sb-name">Administrador</div>
                     <div class="user-role" id="sb-role">Admin</div>
                 </div>
@@ -198,34 +195,28 @@
 
             <!-- KPI Cards -->
             <div class="kpi-grid">
-                <div class="kpi-card gold">
+                <div class="kpi-card gold glow-hover">
                     <div class="kpi-icon"><i class="fas fa-users"></i></div>
                     <div class="kpi-value" id="kpi-players">0</div>
                     <div class="kpi-label">Jugadores</div>
-                    <div class="kpi-delta up"><i class="fas fa-arrow-trend-up"></i> <span>En planilla activa</span>
-                    </div>
                 </div>
 
-                <div class="kpi-card blue">
+                <div class="kpi-card blue glow-hover">
                     <div class="kpi-icon"><i class="fas fa-futbol"></i></div>
                     <div class="kpi-value" id="kpi-matches">—</div>
                     <div class="kpi-label">Partidos</div>
-                    <div class="kpi-delta info"><i class="fas fa-calendar"></i> <span>Temporada actual</span></div>
                 </div>
 
-                <div class="kpi-card green">
+                <div class="kpi-card green glow-hover">
                     <div class="kpi-icon"><i class="fas fa-percent"></i></div>
                     <div class="kpi-value" id="kpi-attendance">—</div>
                     <div class="kpi-label">% Asistencia</div>
-                    <div class="kpi-delta up"><i class="fas fa-arrow-trend-up"></i> <span>Última sesión</span></div>
                 </div>
 
-                <div class="kpi-card red">
+                <div class="kpi-card red glow-hover">
                     <div class="kpi-icon"><i class="fas fa-money-bill-wave"></i></div>
                     <div class="kpi-value" id="kpi-pending">—</div>
                     <div class="kpi-label">Pagos Pendientes</div>
-                    <div class="kpi-delta info"><i class="fas fa-info-circle"></i> <span>Sin pago registrado</span>
-                    </div>
                 </div>
             </div>
 

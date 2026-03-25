@@ -267,17 +267,16 @@
 
 <body style="display:none;" id="admin-body">
 
-  <!-- SIDEBAR -->
+  <!-- ══ SIDEBAR ══ -->
   <aside class="sidebar" id="sidebar">
     <div class="sidebar-logo">
       <img src="/images/ESCUDO.png" alt="DIBA FBC">
-      <div>
-        <div class="sidebar-logo-text">DIBA FBC</div>
-        <div class="sidebar-logo-sub">Panel de Control</div>
-      </div>
+      <div class="sidebar-logo-text">DIBA FBC</div>
     </div>
+
     <nav class="sidebar-nav">
       <a href="dashboard.html" class="nav-link"><i class="fas fa-th-large"></i> Dashboard</a>
+
       <div class="nav-section-label">Equipo</div>
       <a href="planilla.html" class="nav-link"><i class="fas fa-clipboard-list"></i> Planilla</a>
       <a href="crear-jugador.html" class="nav-link"><i class="fas fa-user-plus"></i> Crear Jugador</a>
@@ -294,34 +293,43 @@
       <a href="usuarios.html" class="nav-link"><i class="fas fa-user-cog"></i> Usuarios</a>
       <a href="crear-usuario.html" class="nav-link"><i class="fas fa-user-plus"></i> Crear Usuario</a>
       <a href="rifa_diba.html" class="nav-link active"><i class="fas fa-ticket-alt"></i> Rifas</a>
+
       <div class="nav-section-label">Sitio Web</div>
       <a href="../index.html" class="nav-link"><i class="fas fa-globe"></i> Ver Sitio</a>
     </nav>
+
     <div class="sidebar-footer">
       <div class="user-chip">
         <div class="user-avatar" id="sb-avatar">A</div>
-        <div>
+        <div style="min-width: 0;">
           <div class="user-name" id="sb-name">Administrador</div>
           <div class="user-role" id="sb-role">Admin</div>
         </div>
       </div>
-      <button class="btn-logout" id="logout-btn"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</button>
+      <button class="btn-logout" id="logout-btn">
+        <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+      </button>
     </div>
   </aside>
+  <div class="sidebar-overlay" onclick="document.getElementById('sidebar').classList.remove('open')"></div>
 
-  <!-- MAIN -->
   <div class="main">
+    <!-- Top Bar -->
     <header class="topbar">
-      <button class="mobile-menu-btn" id="menu-btn"><i class="fas fa-bars" id="menu-icon"></i></button>
-      <div>
-        <div class="page-title">Generador de <span>Rifas</span></div>
-        <div class="page-subtitle">Boletas por jugador con exportación PDF</div>
+      <div class="flex items-center">
+        <button class="mobile-menu-btn" id="menu-btn">
+          <i class="fas fa-bars" id="menu-icon"></i>
+        </button>
+        <div class="animate-fade-up">
+          <div class="page-title">Generador de <span>Rifas</span></div>
+          <div class="page-subtitle">Boletas por jugador con exportación PDF — DIBA FBC</div>
+        </div>
       </div>
       <div class="topbar-right">
-        <button id="theme-toggle" class="mobile-menu-btn" style="display: flex; margin-right: 0.5rem;" title="Cambiar Tema">
+        <button id="theme-toggle" class="btn btn-outline" style="padding: 0.5rem; width: 40px; height: 40px; justify-content: center;" title="Cambiar Tema">
           <i id="theme-icon" class="fas fa-sun"></i>
         </button>
-        <div class="topbar-time" id="clock">--:--</div>
+        <div class="topbar-time glass" id="clock">--:--</div>
       </div>
     </header>
 

@@ -62,10 +62,7 @@
     <aside class="sidebar" id="sidebar">
         <div class="sidebar-logo">
             <img src="/images/ESCUDO.png" alt="DIBA FBC">
-            <div>
-                <div class="sidebar-logo-text">DIBA FBC</div>
-                <div class="sidebar-logo-sub">Panel de Control</div>
-            </div>
+            <div class="sidebar-logo-text">DIBA FBC</div>
         </div>
 
         <nav class="sidebar-nav">
@@ -94,7 +91,7 @@
         <div class="sidebar-footer">
             <div class="user-chip">
                 <div class="user-avatar" id="sb-avatar">A</div>
-                <div>
+                <div style="min-width: 0;">
                     <div class="user-name" id="sb-name">Administrador</div>
                     <div class="user-role" id="sb-role">Admin</div>
                 </div>
@@ -104,26 +101,28 @@
             </button>
         </div>
     </aside>
+    <div class="sidebar-overlay" onclick="document.getElementById('sidebar').classList.remove('open')"></div>
 
     <div class="main">
         <!-- Top Bar -->
         <header class="topbar">
-            <button class="mobile-menu-btn" id="menu-btn">
-                <i class="fas fa-bars" id="menu-icon"></i>
-            </button>
-            <div>
-                <div class="page-title">Gestión de <span>Partidos</span></div>
-                <div class="page-subtitle">Programación y resultados de encuentros — DIBA FBC</div>
+            <div class="flex items-center">
+                <button class="mobile-menu-btn" id="menu-btn">
+                    <i class="fas fa-bars" id="menu-icon"></i>
+                </button>
+                <div class="animate-fade-up">
+                    <div class="page-title">Gestión de <span>Partidos</span></div>
+                    <div class="page-subtitle">Programación y resultados de encuentros — DIBA FBC</div>
+                </div>
             </div>
             <div class="topbar-right">
-                <button id="theme-toggle" class="mobile-menu-btn" style="display: flex; margin-right: 0.5rem;" title="Cambiar Tema">
+                <button id="add-match-btn" class="btn btn-primary">
+                    <i class="fas fa-plus"></i> <span class="hidden sm:inline">Nuevo Partido</span>
+                </button>
+                <button id="theme-toggle" class="btn btn-outline" style="padding: 0.5rem; width: 40px; height: 40px; justify-content: center;" title="Cambiar Tema">
                   <i id="theme-icon" class="fas fa-sun"></i>
                 </button>
-                <div class="topbar-time" id="clock">--:--</div>
-                <button id="add-match-btn"
-                    class="bg-dibaGold text-dibaBlue px-6 py-2 rounded-xl font-black uppercase italic text-[10px] flex items-center gap-2 hover:scale-105 transition-all shadow-lg active:scale-95">
-                    <i class="fas fa-plus"></i> Nuevo Partido
-                </button>
+                <div class="topbar-time glass" id="clock">--:--</div>
             </div>
         </header>
 

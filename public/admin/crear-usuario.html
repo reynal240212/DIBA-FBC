@@ -35,48 +35,66 @@
     <!-- ══ SIDEBAR ══ -->
     <aside class="sidebar" id="sidebar">
         <div class="sidebar-logo">
-            <img src="/images/ESCUDO.png" alt="DIBA FBC" class="w-[38px] h-[38px]">
-            <div>
-                <div class="text-[1.05rem] font-black italic uppercase tracking-wider text-dibaGold leading-none">DIBA FBC</div>
-                <div class="text-[0.55rem] text-slate-500 uppercase tracking-widest font-bold mt-1">Panel de Control</div>
-            </div>
+            <img src="/images/ESCUDO.png" alt="DIBA FBC">
+            <div class="sidebar-logo-text">DIBA FBC</div>
         </div>
 
         <nav class="sidebar-nav">
-            <a href="dashboard.html" class="nav-link"><i class="fas fa-th-large w-5"></i> Dashboard</a>
-            
-            <div class="text-[0.55rem] font-black uppercase text-slate-500 tracking-[0.2em] px-4 mt-6 mb-2">Equipo</div>
-            <a href="planilla.html" class="nav-link"><i class="fas fa-clipboard-list w-5"></i> Planilla</a>
-            <a href="crear-jugador.html" class="nav-link"><i class="fas fa-user-plus w-5"></i> Crear Jugador</a>
+            <a href="dashboard.html" class="nav-link"><i class="fas fa-th-large"></i> Dashboard</a>
 
-            <div class="text-[0.55rem] font-black uppercase text-slate-500 tracking-[0.2em] px-4 mt-6 mb-2">Administración</div>
-            <a href="usuarios.html" class="nav-link"><i class="fas fa-user-cog w-5"></i> Usuarios</a>
-            <a href="crear-usuario.html" class="nav-link active"><i class="fas fa-user-plus w-5"></i> Crear Usuario</a>
-            <a href="rifa_diba.html" class="nav-link"><i class="fas fa-ticket-alt w-5"></i> Rifas</a>
+            <div class="nav-section-label">Equipo</div>
+            <a href="planilla.html" class="nav-link"><i class="fas fa-clipboard-list"></i> Planilla</a>
+            <a href="crear-jugador.html" class="nav-link"><i class="fas fa-user-plus"></i> Crear Jugador</a>
+            <a href="../ficha.html" class="nav-link"><i class="fas fa-users"></i> Jugadores</a>
+            <a href="../partidos.html" class="nav-link"><i class="fas fa-futbol"></i> Partidos</a>
+            <a href="../analisis.html" class="nav-link"><i class="fas fa-chart-line"></i> Análisis</a>
+            <a href="convocatorias.html" class="nav-link"><i class="fas fa-bullhorn"></i> Convocatorias</a>
+
+            <div class="nav-section-label">Comunicación</div>
+            <a href="push.html" class="nav-link"><i class="fas fa-bell"></i> Notificaciones Push</a>
+
+            <div class="nav-section-label">Administración</div>
+            <a href="GestorDocumental.html" class="nav-link"><i class="fas fa-folder-open"></i> Gestor Documental</a>
+            <a href="usuarios.html" class="nav-link"><i class="fas fa-user-cog"></i> Usuarios</a>
+            <a href="crear-usuario.html" class="nav-link active"><i class="fas fa-user-plus"></i> Crear Usuario</a>
+            <a href="rifa_diba.html" class="nav-link"><i class="fas fa-ticket-alt"></i> Rifas</a>
+
+            <div class="nav-section-label">Sitio Web</div>
+            <a href="../index.html" class="nav-link"><i class="fas fa-globe"></i> Ver Sitio</a>
         </nav>
 
         <div class="sidebar-footer">
-            <button class="w-full flex items-center justify-center gap-2 p-3 bg-red-500/10 text-red-500 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-red-500 hover:text-white transition-all" id="logout-btn">
+            <div class="user-chip">
+                <div class="user-avatar" id="sb-avatar">A</div>
+                <div style="min-width: 0;">
+                    <div class="user-name" id="sb-name">Administrador</div>
+                    <div class="user-role" id="sb-role">Admin</div>
+                </div>
+            </div>
+            <button class="btn-logout" id="logout-btn">
                 <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
             </button>
         </div>
     </aside>
+    <div class="sidebar-overlay" onclick="document.getElementById('sidebar').classList.remove('open')"></div>
 
     <div class="main">
         <!-- Top Bar -->
         <header class="topbar">
-            <button class="mobile-menu-btn" id="menu-btn">
-                <i class="fas fa-bars" id="menu-icon"></i>
-            </button>
-            <div>
-                <h1 class="text-xl md:text-2xl font-black italic uppercase tracking-tighter text-dibaText">Nuevo <span class="text-dibaGold">Miembro</span></h1>
-                <p class="text-[10px] font-bold text-dibaMuted uppercase tracking-widest mt-1">Registro oficial de personal administrativo</p>
+            <div class="flex items-center">
+                <button class="mobile-menu-btn" id="menu-btn">
+                    <i class="fas fa-bars" id="menu-icon"></i>
+                </button>
+                <div class="animate-fade-up">
+                    <div class="page-title">Nuevo <span>Miembro</span></div>
+                    <div class="page-subtitle">Registro oficial de personal administrativo — DIBA FBC</div>
+                </div>
             </div>
             <div class="topbar-right">
-                <button id="theme-toggle" class="mobile-menu-btn" style="display: flex; margin-right: 0.5rem;" title="Cambiar Tema">
+                <button id="theme-toggle" class="btn btn-outline" style="padding: 0.5rem; width: 40px; height: 40px; justify-content: center;" title="Cambiar Tema">
                   <i id="theme-icon" class="fas fa-sun"></i>
                 </button>
-                <div class="topbar-time" id="clock">00:00</div>
+                <div class="topbar-time glass" id="clock">00:00</div>
             </div>
         </header>
 

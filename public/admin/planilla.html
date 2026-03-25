@@ -43,10 +43,7 @@
   <aside class="sidebar" id="sidebar">
     <div class="sidebar-logo">
       <img src="/images/ESCUDO.png" alt="DIBA FBC">
-      <div>
-        <div class="sidebar-logo-text">DIBA FBC</div>
-        <div class="sidebar-logo-sub">Panel de Control</div>
-      </div>
+      <div class="sidebar-logo-text">DIBA FBC</div>
     </div>
 
     <nav class="sidebar-nav">
@@ -76,7 +73,7 @@
     <div class="sidebar-footer">
       <div class="user-chip">
         <div class="user-avatar" id="sb-avatar">A</div>
-        <div>
+        <div style="min-width: 0;">
           <div class="user-name" id="sb-name">Administrador</div>
           <div class="user-role" id="sb-role">Admin</div>
         </div>
@@ -91,12 +88,14 @@
   <div class="main">
     <!-- Top Bar -->
     <header class="topbar">
-      <button class="mobile-menu-btn" id="menu-btn">
-        <i class="fas fa-bars" id="menu-icon"></i>
-      </button>
-      <div class="animate-fade-up">
-        <div class="page-title">Sincronización <span>Planilla</span></div>
-        <div class="page-subtitle">Control de asistencia y gestión — DIBA FBC</div>
+      <div class="flex items-center">
+        <button class="mobile-menu-btn" id="menu-btn">
+          <i class="fas fa-bars" id="menu-icon"></i>
+        </button>
+        <div class="animate-fade-up">
+          <div class="page-title">Sincronización <span>Planilla</span></div>
+          <div class="page-subtitle">Control de asistencia y gestión — DIBA FBC</div>
+        </div>
       </div>
       <div class="topbar-right">
         <button id="theme-toggle" class="btn btn-outline" style="padding: 0.5rem; width: 40px; height: 40px; justify-content: center;" title="Cambiar Tema">
