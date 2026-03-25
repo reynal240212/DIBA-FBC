@@ -181,45 +181,36 @@
         <div class="content">
 
             <!-- KPI Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12 animate-fade-up">
-                <div class="glass-premium p-8 rounded-[2.5rem] relative overflow-hidden group">
-                    <div class="absolute top-0 right-0 w-32 h-32 mesh-gold opacity-20 group-hover:opacity-40 transition-opacity"></div>
-                    <div class="relative z-10">
-                        <div class="w-14 h-14 bg-gold/10 rounded-2xl flex items-center justify-center text-gold mb-6 shadow-lg shadow-gold/5">
-                            <i class="fas fa-users text-2xl"></i>
-                        </div>
+            <div class="kpi-grid animate-fade-up">
+                <div class="kpi-card-v2 gold">
+                    <div class="kpi-icon-v2"><i class="fas fa-users"></i></div>
+                    <div class="kpi-content-v2">
                         <div class="stat-value mb-2" id="kpi-players">0</div>
-                        <div class="text-[11px] font-black text-slate-500 uppercase tracking-[0.2em] italic">Jugadores Activos</div>
+                        <div class="text-[11px] font-black text-slate-500 uppercase tracking-widest italic">Jugadores Activos</div>
                     </div>
                 </div>
 
-                <div class="glass-premium p-8 rounded-[2.5rem] relative overflow-hidden group">
-                    <div class="absolute top-0 right-0 w-32 h-32 mesh-blue opacity-20 group-hover:opacity-40 transition-opacity"></div>
-                    <div class="relative z-10">
-                        <div class="w-14 h-14 bg-blue-500/10 rounded-2xl flex items-center justify-center text-blue-400 mb-6">
-                            <i class="fas fa-futbol text-2xl"></i>
-                        </div>
+                <div class="kpi-card-v2 blue">
+                    <div class="kpi-icon-v2"><i class="fas fa-futbol"></i></div>
+                    <div class="kpi-content-v2">
                         <div class="stat-value mb-2" id="kpi-matches">0</div>
-                        <div class="text-[11px] font-black text-slate-500 uppercase tracking-[0.2em] italic">Partidos Temporada</div>
+                        <div class="text-[11px] font-black text-slate-500 uppercase tracking-widest italic">Partidos Temporada</div>
                     </div>
                 </div>
 
-                <div class="glass-premium p-8 rounded-[2.5rem] relative overflow-hidden group">
-                    <div class="absolute top-0 right-0 w-32 h-32 mesh-gold opacity-10 group-hover:opacity-30 transition-opacity"></div>
-                    <div class="relative z-10">
+                <div class="kpi-card-v2 amber">
+                    <div class="kpi-icon-v2"><i class="fas fa-chart-line"></i></div>
+                    <div class="kpi-content-v2">
                         <div class="stat-value mb-2" id="kpi-attendance">0%</div>
-                        <div class="text-[11px] font-black text-slate-500 uppercase tracking-[0.2em] italic">Asistencia Prom.</div>
+                        <div class="text-[11px] font-black text-slate-500 uppercase tracking-widest italic">Asistencia Prom.</div>
                     </div>
                 </div>
 
-                <div class="glass-premium p-8 rounded-[2.5rem] relative overflow-hidden group">
-                    <div class="absolute top-0 right-0 w-32 h-32 mesh-blue opacity-10 group-hover:opacity-30 transition-opacity"></div>
-                    <div class="relative z-10">
-                        <div class="w-14 h-14 bg-emerald-500/10 rounded-2xl flex items-center justify-center text-emerald-400 mb-6 font-mono font-black italic">
-                            <i class="fas fa-check-double text-2xl"></i>
-                        </div>
+                <div class="kpi-card-v2 emerald">
+                    <div class="kpi-icon-v2"><i class="fas fa-check-double"></i></div>
+                    <div class="kpi-content-v2">
                         <div class="stat-value mb-2" id="kpi-pending">0</div>
-                        <div class="text-[11px] font-black text-slate-500 uppercase tracking-[0.2em] italic">Gestiones Pendientes</div>
+                        <div class="text-[11px] font-black text-slate-500 uppercase tracking-widest italic">Gestiones Pendientes</div>
                     </div>
                 </div>
             </div>
