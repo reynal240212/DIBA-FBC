@@ -393,6 +393,7 @@
                 const session = await requireAdmin();
                 if (!session) return;
 
+                document.getElementById('app-loader')?.classList.add('hidden');
                 document.getElementById('admin-body').classList.remove('hidden');
                 document.getElementById('admin-body').style.display = 'flex';
 
