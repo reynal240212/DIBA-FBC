@@ -1100,11 +1100,13 @@
         function renderPDFHeader(pdf, title) {
           pdf.setFontSize(16);
           pdf.setTextColor(0, 42, 64);
+          pdf.setFont(undefined, 'bold');
           pdf.text("DIBA FBC", 40, 15);
           pdf.setFontSize(10);
           pdf.text(title, 40, 22);
           pdf.setFontSize(9);
           pdf.setTextColor(100);
+          pdf.setFont(undefined, 'normal');
           const hoy = new Date().toLocaleDateString('es-CO');
           pdf.text(`Fecha de impresión: ${hoy}`, 40, 28);
           
@@ -1115,74 +1117,82 @@
             } catch (e) { console.warn(e); }
           }
 
-          pdf.setDrawColor(200);
+          pdf.setDrawColor(0, 42, 64);
+          pdf.setLineWidth(0.5);
           pdf.line(14, 30, 202, 30);
         }
 
         document.getElementById('generateOfficialPDF').onclick = async () => {
-          console.log("DIBA: Generando Planilla Oficial Refinada...");
+          console.log("DIBA: Generando Planilla Oficial Unificada...");
           const { jsPDF } = window.jspdf;
           const doc = new jsPDF('p', 'mm', 'letter');
           
           const title = "PLANILLA OFICIAL DE JUGADORES";
           const categories = [...new Set(appState.players.map(p => p.categoria))].sort();
           
-          let currentY = 35;
-
-          categories.forEach((cat, index) => {
+          const tableBody = [];
+          
+          categories.forEach((cat) => {
             const playersInCat = appState.players.filter(p => p.categoria === cat).sort((a,b) => a.name.localeCompare(b.name));
             if (playersInCat.length === 0) return;
 
-            // Si no hay espacio para al menos el encabezado de categoría y 2 filas, saltar página
-            if (currentY > 230) {
-              doc.addPage();
-              currentY = 35;
-            }
-
-            // Encabezado de Categoría
-            doc.setFontSize(11);
-            doc.setTextColor(0, 42, 64);
-            doc.setFont(undefined, 'bold');
-            doc.text(`CATEGORÍA: ${cat.toUpperCase()}`, 14, currentY);
-            doc.setFont(undefined, 'normal');
-            currentY += 5;
-
-            const body = playersInCat.map((p, i) => [
-              i + 1,
-              p.name.toUpperCase(),
-              p.id,
-              p.birthDate ? new Date(p.birthDate).toLocaleDateString('es-CO') : '---',
-              ''
+            // Fila de Encabezado de Categoría
+            tableBody.push([
+              { content: `CATEGORÍA: ${cat.toUpperCase()}`, colSpan: 5, styles: { fillColor: [240, 240, 240], textColor: [0, 42, 64], fontStyle: 'bold', halign: 'left' } }
             ]);
 
-            doc.autoTable({
-              startY: currentY,
-              head: [['#', 'Nombre Completo', '# Tarjeta / DNI', 'F. Nacimiento', 'Firma / Observación']],
-              body: body,
-              headStyles: { fillColor: [0, 42, 64], fontSize: 9, halign: 'center', lineWidth: 0.4, lineColor: [0, 42, 64] },
-              styles: { fontSize: 9, cellPadding: 3, minCellHeight: 12, valign: 'middle', lineWidth: 0.4, lineColor: [80, 80, 80] },
-              columnStyles: {
-                0: { cellWidth: 10, halign: 'center' },
-                1: { cellWidth: 70 },
-                2: { cellWidth: 35, halign: 'center' },
-                3: { cellWidth: 35, halign: 'center' },
-                4: { cellWidth: 38 }
-              },
-              theme: 'grid',
-              didDrawPage: (data) => {
-                // Dibujar encabezado en cada página
-                renderPDFHeader(doc, title);
-                
-                // Pie de página
-                const pageHeight = doc.internal.pageSize.height;
-                doc.setFontSize(8);
-                doc.setTextColor(150);
-                doc.text("DIBA FBC — Formando Talentos, Construyendo Futuro", 105, pageHeight - 10, { align: 'center' });
-              },
-              margin: { top: 35, bottom: 20 }
+            playersInCat.forEach((p, i) => {
+              tableBody.push([
+                i + 1,
+                p.name.toUpperCase(),
+                p.id,
+                p.birthDate ? new Date(p.birthDate).toLocaleDateString('es-CO') : '---',
+                ''
+              ]);
             });
+          });
 
-            currentY = doc.lastAutoTable.finalY + 12;
+          doc.autoTable({
+            startY: 35,
+            head: [['#', 'Nombre Completo', '# Tarjeta / DNI', 'F. Nacimiento', 'Firma / Observación']],
+            body: tableBody,
+            headStyles: { 
+              fillColor: [0, 42, 64], 
+              fontSize: 9, 
+              halign: 'center', 
+              lineWidth: 0.5, 
+              lineColor: [0, 42, 64] 
+            },
+            styles: { 
+              fontSize: 9, 
+              cellPadding: 3, 
+              minCellHeight: 12, 
+              valign: 'middle', 
+              lineWidth: 0.6, // Líneas más gruesas como pidió el usuario
+              lineColor: [40, 40, 40] 
+            },
+            columnStyles: {
+              0: { cellWidth: 10, halign: 'center' },
+              1: { cellWidth: 70 },
+              2: { cellWidth: 35, halign: 'center' },
+              3: { cellWidth: 35, halign: 'center' },
+              4: { cellWidth: 38 }
+            },
+            theme: 'grid',
+            didDrawPage: (data) => {
+              renderPDFHeader(doc, title);
+              const pageHeight = doc.internal.pageSize.height;
+              doc.setFontSize(8);
+              doc.setTextColor(150);
+              doc.text(`Página ${doc.internal.getNumberOfPages()} — DIBA FBC — Formando Talentos, Construyendo Futuro`, 105, pageHeight - 10, { align: 'center' });
+            },
+            margin: { top: 35, bottom: 20 },
+            // Evitar que la fila de categoría quede sola al final de la página
+            didParseCell: function(data) {
+                if (data.row.raw[0] && data.row.raw[0].content && data.row.raw[0].content.includes('CATEGORÍA')) {
+                    data.cell.styles.fontSize = 10;
+                }
+            }
           });
 
           const blob = doc.output('blob');
