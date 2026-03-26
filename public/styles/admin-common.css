@@ -1747,3 +1747,17 @@ tbody td {
     letter-spacing: 0.1em;
 }
 
+/* Responsive Elite Match Hero */
+@media (max-width: 1024px) {
+    .elite-match-teams { font-size: 2.5rem; gap: 1rem; }
+    .vs-badge { font-size: 1rem; padding: 0.3rem 0.8rem; }
+    .elite-match-hero { padding: 2.5rem; flex-direction: column; gap: 2.5rem; align-items: flex-start; }
+    .elite-countdown { align-self: stretch; }
+}
+
+@media (max-width: 640px) {
+    .elite-match-teams { font-size: 1.75rem; flex-wrap: wrap; }
+    .elite-match-meta { flex-direction: column; gap: 0.5rem; }
+    .elite-match-hero { padding: 1.5rem; }
+}
+
