@@ -120,39 +120,39 @@
         </div>
 
         <nav class="sidebar-nav">
-            <a href="dashboard.html" class="nav-link active"><i class="fas fa-th-large"></i> Dashboard</a>
+            <a href="dashboard.html" class="premium-nav-item active"><i class="fas fa-grid-2"></i> Dashboard</a>
 
             <div class="nav-section-label">Equipo</div>
-            <a href="planilla.html" class="nav-link"><i class="fas fa-clipboard-list"></i> Planilla</a>
-            <a href="crear-jugador.html" class="nav-link"><i class="fas fa-user-plus"></i> Crear Jugador</a>
-            <a href="../ficha.html" class="nav-link"><i class="fas fa-users"></i> Jugadores</a>
-            <a href="../partidos.html" class="nav-link"><i class="fas fa-futbol"></i> Partidos</a>
-            <a href="../analisis.html" class="nav-link"><i class="fas fa-chart-line"></i> Análisis</a>
-            <a href="convocatorias.html" class="nav-link"><i class="fas fa-bullhorn"></i> Convocatorias</a>
+            <a href="planilla.html" class="premium-nav-item"><i class="fas fa-list-check"></i> Planilla</a>
+            <a href="crear-jugador.html" class="premium-nav-item"><i class="fas fa-user-plus"></i> Crear Jugador</a>
+            <a href="../ficha.html" class="premium-nav-item"><i class="fas fa-users-viewfinder"></i> Jugadores</a>
+            <a href="../partidos.html" class="premium-nav-item"><i class="fas fa-volleyball"></i> Partidos</a>
+            <a href="../analisis.html" class="premium-nav-item"><i class="fas fa-chart-mixed"></i> Análisis</a>
+            <a href="convocatorias.html" class="premium-nav-item"><i class="fas fa-bullhorn"></i> Convocatorias</a>
 
             <div class="nav-section-label">Comunicación</div>
-            <a href="push.html" class="nav-link"><i class="fas fa-bell"></i> Notificaciones Push</a>
+            <a href="push.html" class="premium-nav-item"><i class="fas fa-paper-plane"></i> Notificaciones</a>
 
             <div class="nav-section-label">Administración</div>
-            <a href="GestorDocumental.html" class="nav-link"><i class="fas fa-folder-open"></i> Gestor Documental</a>
-            <a href="usuarios.html" class="nav-link"><i class="fas fa-user-cog"></i> Usuarios</a>
-            <a href="crear-usuario.html" class="nav-link"><i class="fas fa-user-plus"></i> Crear Usuario</a>
-            <a href="rifa_diba.html" class="nav-link"><i class="fas fa-ticket-alt"></i> Rifas</a>
+            <a href="GestorDocumental.html" class="premium-nav-item"><i class="fas fa-box-archive"></i> Gestión Doc</a>
+            <a href="usuarios.html" class="premium-nav-item"><i class="fas fa-user-gear"></i> Usuarios</a>
+            <a href="crear-usuario.html" class="premium-nav-item"><i class="fas fa-shield-plus"></i> Nuevo Acceso</a>
+            <a href="rifa_diba.html" class="premium-nav-item"><i class="fas fa-ticket"></i> Rifas</a>
 
-            <div class="nav-section-label">Sitio Web</div>
-            <a href="../index.html" class="nav-link"><i class="fas fa-globe"></i> Ver Sitio</a>
+            <div class="nav-section-label">Sistema</div>
+            <a href="../index.html" class="premium-nav-item"><i class="fas fa-external-link"></i> Ver Sitio</a>
         </nav>
 
         <div class="sidebar-footer">
             <div class="user-chip">
-                <div class="user-avatar" id="sb-avatar">A</div>
+                <div class="user-avatar" id="sb-avatar" style="border: 2px solid rgba(255,255,255,0.1)">A</div>
                 <div style="min-width: 0;">
-                    <div class="user-name" id="sb-name">Administrador</div>
-                    <div class="user-role" id="sb-role">Admin</div>
+                    <div class="user-name" id="sb-name" style="letter-spacing: 0.05em;">Administrador</div>
+                    <div class="user-role" id="sb-role" style="font-weight: 900; opacity: 0.5;">Admin</div>
                 </div>
             </div>
             <button class="btn-logout" id="logout-btn">
-                <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+                <i class="fas fa-power-off"></i> Salir del Sistema
             </button>
         </div>
     </aside>
@@ -164,17 +164,17 @@
         <!-- Top Bar -->
         <header class="topbar">
             <button class="mobile-menu-btn" id="menu-btn">
-                <i class="fas fa-bars" id="menu-icon"></i>
+                <i class="fas fa-bars-staggered" id="menu-icon"></i>
             </button>
             <div class="animate-fade-up">
-                <div class="page-title">Dashboard <span>Admin</span></div>
-                <div class="page-subtitle">Panel de Control General · DIBA FBC</div>
+                <div class="page-title" style="letter-spacing: -0.05em;">DIBA <span style="font-weight: 400; font-style: normal; opacity: 0.6;">PANEL</span></div>
+                <div class="page-subtitle" style="letter-spacing: 0.3em;">SISTEMA DE GESTIÓN DEPORTIVA</div>
             </div>
             <div class="topbar-right">
-                <button id="theme-toggle" class="btn btn-outline" style="padding: 0.5rem; width: 40px; height: 40px; justify-content: center;" title="Cambiar Tema">
-                  <i id="theme-icon" class="fas fa-sun"></i>
+                <button id="theme-toggle" class="glass" style="padding: 0.5rem; width: 45px; height: 45px; border-radius: 14px; display: flex; align-items: center; justify-content: center; color: var(--gold);" title="Cambiar Tema">
+                  <i id="theme-icon" class="fas fa-sparkles"></i>
                 </button>
-                <div class="topbar-time glass" id="clock">--:--</div>
+                <div class="topbar-time glass" id="clock" style="font-family: 'Montserrat'; font-weight: 800; letter-spacing: 0.1em;">--:--</div>
             </div>
         </header>
 
@@ -183,35 +183,35 @@
 
             <!-- KPI Grid -->
             <div class="kpi-grid animate-fade-up">
-                <div class="kpi-card-v2 gold premium-shine">
-                    <div class="kpi-icon-v2"><i class="fas fa-users"></i></div>
-                    <div class="kpi-content-v2">
-                        <div class="stat-value mb-2" id="kpi-players">0</div>
-                        <div class="text-[11px] font-black text-slate-500 uppercase tracking-widest italic">Jugadores Activos</div>
+                <div class="premium-stat-card premium-shine">
+                    <div class="premium-stat-icon"><i class="fas fa-users-crown"></i></div>
+                    <div class="premium-stat-content">
+                        <div class="premium-stat-value" id="kpi-players">0</div>
+                        <div class="premium-stat-label">Jugadores Activos</div>
                     </div>
                 </div>
 
-                <div class="kpi-card-v2 blue premium-shine">
-                    <div class="kpi-icon-v2"><i class="fas fa-futbol"></i></div>
-                    <div class="kpi-content-v2">
-                        <div class="stat-value mb-2" id="kpi-matches">0</div>
-                        <div class="text-[11px] font-black text-slate-500 uppercase tracking-widest italic">Partidos Temporada</div>
+                <div class="premium-stat-card premium-shine">
+                    <div class="premium-stat-icon" style="color:#60a5fa"><i class="fas fa-soccer-ball"></i></div>
+                    <div class="premium-stat-content">
+                        <div class="premium-stat-value" id="kpi-matches">0</div>
+                        <div class="premium-stat-label">Partidos Temporada</div>
                     </div>
                 </div>
 
-                <div class="kpi-card-v2 amber premium-shine">
-                    <div class="kpi-icon-v2"><i class="fas fa-chart-line"></i></div>
-                    <div class="kpi-content-v2">
-                        <div class="stat-value mb-2" id="kpi-attendance">0%</div>
-                        <div class="text-[11px] font-black text-slate-500 uppercase tracking-widest italic">Asistencia Prom.</div>
+                <div class="premium-stat-card premium-shine">
+                    <div class="premium-stat-icon" style="color:#fbbf24"><i class="fas fa-medal"></i></div>
+                    <div class="premium-stat-content">
+                        <div class="premium-stat-value" id="kpi-attendance">0%</div>
+                        <div class="premium-stat-label">Asistencia Prom.</div>
                     </div>
                 </div>
 
-                <div class="kpi-card-v2 emerald premium-shine">
-                    <div class="kpi-icon-v2"><i class="fas fa-check-double"></i></div>
-                    <div class="kpi-content-v2">
-                        <div class="stat-value mb-2" id="kpi-pending">0</div>
-                        <div class="text-[11px] font-black text-slate-500 uppercase tracking-widest italic">Gestiones Pendientes</div>
+                <div class="premium-stat-card premium-shine">
+                    <div class="premium-stat-icon" style="color:#34d399"><i class="fas fa-badge-check"></i></div>
+                    <div class="premium-stat-content">
+                        <div class="premium-stat-value" id="kpi-pending">0</div>
+                        <div class="premium-stat-label">Gestiones OK</div>
                     </div>
                 </div>
             </div>
@@ -293,8 +293,10 @@
                         <h3 class="premium-p-title">Actividad Reciente</h3>
                     </div>
                     
-                    <div class="timeline-ledger" id="activity-list">
-                        <div class="flex justify-center py-10"><i class="fas fa-circle-notch animate-spin text-gold"></i></div>
+                    <div class="panel-body">
+                        <div class="premium-timeline" id="activity-list">
+                            <div class="flex justify-center py-10"><i class="fas fa-circle-notch animate-spin text-gold"></i></div>
+                        </div>
                     </div>
                 </div>
                 <!-- Espacio para futuros widgets de administración -->
@@ -572,14 +574,13 @@
             list.innerHTML = activities.map(act => {
                 const timeStr = act.time.toLocaleDateString('es-CO', { day: '2-digit', month: 'short' });
                 return `
-                  <div class="timeline-item">
-                    <div class="timeline-dot"></div>
-                    <div class="timeline-content">
-                      <div class="flex justify-between items-start mb-1">
-                        <div class="text-[11px] font-black text-white uppercase italic tracking-tight">${act.title}</div>
+                  <div class="premium-timeline-item">
+                    <div class="premium-timeline-content">
+                      <div class="flex justify-between items-start mb-2">
+                        <div class="text-[11px] font-black text-gold uppercase italic tracking-tight">${act.title}</div>
                         <div class="text-[9px] font-bold text-slate-500 uppercase">${timeStr}</div>
                       </div>
-                      <div class="text-[10px] text-slate-400 font-medium">${act.subtitle}</div>
+                      <div class="text-[10px] text-slate-300 font-medium leading-relaxed">${act.subtitle}</div>
                     </div>
                   </div>`;
             }).join('');
