@@ -7,28 +7,49 @@
   <link rel="icon" href="/images/ESCUDO.ico" type="image/x-icon">
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;900&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: { sans: ['Montserrat', 'sans-serif'] },
-          colors: {
-            dibaGold: 'var(--gold)',
-            dibaBlue: 'var(--blue)',
-            dibaDark: 'var(--bg-main)',
-            dibaText: 'var(--text-main)',
-            dibaMuted: 'var(--text-muted)'
-          }
-        },
-      },
-    }
-  </script>
+    <style>
+        /* Push Notification refinements */
+        .push-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .preview-device {
+            width: 300px;
+            background: #000;
+            border-radius: 40px;
+            padding: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .preview-device::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(var(--gold-rgb), 0.05) 0%, transparent 100%);
+            pointer-events: none;
+        }
+
+        .notification-bubble {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(10px);
+            border-radius: 18px;
+            padding: 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+    </style>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
   <link rel="stylesheet" href="/styles/admin-common.css">
   <script src="/scripts/theme-switcher.js"></script>
 </head>
-<body class="bg-[var(--bg-main)] text-[var(--text-main)] font-sans overflow-hidden">
+<body style="display: none;" id="admin-body">
 
   <!-- ══ SIDEBAR ══ -->
   <aside class="sidebar" id="sidebar">
@@ -96,84 +117,82 @@
     </header>
 
     <div class="content">
-      <div class="max-w-4xl mx-auto">
-        
-        <div class="panel animate-fade-up">
-          <div class="panel-header">
-            <h2 class="panel-title"><i class="fas fa-paper-plane"></i> Redactar Notificación</h2>
-            <span class="panel-badge">Oficial</span>
-          </div>
-          <div class="panel-body">
-            <form id="push-form" class="space-y-6">
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <!-- Título -->
-                <div class="space-y-2">
-                  <label class="form-label">Título del Mensaje</label>
-                  <input type="text" id="push-title" required placeholder="Ej: ¡Nuevo Partido Programado!" 
-                         class="form-control w-full">
-                </div>
-                <!-- Categoría Target -->
-                <div class="space-y-2">
-                  <label class="form-label">Dirigido a:</label>
-                  <select id="push-target" class="form-select w-full">
-                    <option value="all">Todos los Suscriptores</option>
-                    <option value="2012">Categoría 2012</option>
-                    <option value="2013">Categoría 2013</option>
-                    <option value="2014/2015/2016">Categoría 2014/15/16</option>
-                  </select>
-                </div>
+      <div class="push-container">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          
+          <!-- Broadcast Form -->
+          <div class="glass-premium animate-fade-up" style="padding: 2.5rem;">
+            <div class="mb-8 flex items-center gap-4">
+              <div class="w-12 h-12 bg-gold/10 rounded-xl flex items-center justify-center text-gold border border-gold/20">
+                <i class="fas fa-paper-plane text-xl"></i>
+              </div>
+              <div>
+                <h2 class="text-xl font-black italic uppercase text-white leading-tight">Redactar <span class="text-gold">Broadcast</span></h2>
+                <p class="text-[10px] text-dibaMuted font-bold uppercase tracking-widest mt-1">Envío masivo oficial</p>
+              </div>
+            </div>
+
+            <form id="push-form">
+              <div class="premium-form-group">
+                <label class="premium-label">Título del Mensaje</label>
+                <input type="text" id="push-title" required placeholder="Ej: ¡Nuevo Partido Programado!" class="premium-input">
               </div>
 
-              <!-- Cuerpo -->
-              <div class="space-y-2">
-                <label class="form-label">Contenido de la Notificación</label>
-                <textarea id="push-body" rows="4" required placeholder="Escribe el cuerpo del mensaje aquí..." 
-                          class="form-control w-full resize-none"></textarea>
+              <div class="premium-form-group">
+                <label class="premium-label">Dirigido a:</label>
+                <select id="push-target" class="premium-input">
+                  <option value="all">Todos los Suscriptores</option>
+                  <option value="2012">Categoría 2012</option>
+                  <option value="2013">Categoría 2013</option>
+                  <option value="2014/2015/2016">Categoría 2014/15/16</option>
+                </select>
               </div>
 
-              <!-- URL de Destino -->
-              <div class="space-y-2">
-                <label class="form-label">URL de Redirección (Opcional)</label>
-                <div class="relative group">
-                  <span class="absolute inset-y-0 left-4 flex items-center text-slate">
-                    <i class="fas fa-link text-xs"></i>
+              <div class="premium-form-group">
+                <label class="premium-label">Contenido de la Notificación</label>
+                <textarea id="push-body" rows="4" required placeholder="Escribe el cuerpo del mensaje aquí..." class="premium-input resize-none"></textarea>
+              </div>
+
+              <div class="premium-form-group">
+                <label class="premium-label">URL de Redirección (Opcional)</label>
+                <input type="text" id="push-url" placeholder="Ej: /partidos.html" class="premium-input">
+                <p class="text-[9px] text-dibaMuted font-bold italic mt-2">* El clic llevará al usuario a esta ruta.</p>
+              </div>
+
+              <div id="status-container" class="hidden mb-6"></div>
+
+              <div class="mt-8">
+                <button type="submit" id="send-btn" class="btn btn-primary w-full" style="padding: 1rem;">
+                  <span id="btn-text" class="flex items-center justify-center gap-2">
+                    <i class="fas fa-bolt"></i> Lanzar Notificación
                   </span>
-                  <input type="text" id="push-url" placeholder="Ej: /partidos.html" 
-                         class="form-control w-full pl-10">
-                </div>
-                <p class="text-[10px] text-dibaMuted italic">Cuando el usuario haga clic, será llevado a esta página.</p>
-              </div>
-
-              <div id="status-container" class="hidden"></div>
-
-              <div class="flex justify-end pt-4">
-                <button type="submit" id="send-btn" class="btn btn-primary px-10 py-4 text-xs tracking-[0.2em]">
-                  <i class="fas fa-bolt"></i> <span id="btn-text">Lanzar Notificación</span>
                   <i class="fas fa-circle-notch fa-spin hidden" id="btn-loader"></i>
                 </button>
               </div>
             </form>
           </div>
-        </div>
 
-        <!-- Preview Section -->
-        <div class="panel animate-fade-up" style="animation-delay: 0.1s;">
-          <div class="panel-header">
-            <h2 class="panel-title"><i class="fas fa-mobile-alt"></i> Vista Previa (Simulada)</h2>
-          </div>
-          <div class="panel-body flex justify-center py-10">
-            <div class="w-72 bg-[#1c1c1e] rounded-[40px] p-4 shadow-2xl border border-white/10">
-               <div class="flex justify-between items-center mb-4 px-2">
-                  <span class="text-[10px] font-bold text-white">DIBA FBC</span>
-                  <span class="text-[10px] text-white/60">ahora</span>
+          <!-- Preview Device -->
+          <div class="flex flex-col items-center justify-center animate-fade-up" style="animation-delay: 0.1s;">
+            <div class="preview-device">
+               <div class="flex justify-between items-center mb-6 px-2">
+                  <span class="text-[10px] font-black italic text-gold tracking-widest">DIBA FBC</span>
+                  <span class="text-[9px] text-white/40 uppercase font-bold">Ahora</span>
                </div>
-               <div class="bg-white/5 rounded-2xl p-4">
-                  <h3 id="preview-title" class="text-sm font-black text-dibaGold truncate">Título de prueba</h3>
-                  <p id="preview-body" class="text-xs text-white/80 mt-1 line-clamp-3">El contenido que escribas arriba aparecerá aquí para los usuarios en sus dispositivos.</p>
+               <div class="notification-bubble">
+                  <h3 id="preview-title" class="text-sm font-black text-white italic truncate uppercase">Título de prueba</h3>
+                  <p id="preview-body" class="text-[11px] text-white/70 mt-2 leading-relaxed">El contenido que escribas aparecerá aquí para los usuarios.</p>
+               </div>
+               <div class="mt-8 flex justify-center">
+                  <div class="w-20 h-1 bg-white/10 rounded-full"></div>
                </div>
             </div>
+            <p class="text-[10px] text-dibaMuted font-bold uppercase tracking-[0.2em] mt-8 italic text-center">Vista previa en tiempo real</p>
           </div>
+
         </div>
+      </div>
+    </div>
 
       </div>
     </div>

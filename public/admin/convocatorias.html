@@ -14,11 +14,123 @@
     <script src="/scripts/theme-switcher.js"></script>
 
     <style>
-        /* Convocatorias specific styles */
-        .content {
-            padding: 2rem;
-            flex: 1;
+        /* Convocatorias specific refinements */
+        .conv-grid {
+            display: grid;
+            grid-template-columns: 1fr 420px;
+            gap: 2rem;
         }
+
+        @media (max-width: 1200px) {
+            .conv-grid { grid-template-columns: 1fr; }
+        }
+
+        /* ── LISTA DE JUGADORES ── */
+        .players-list {
+            max-height: 500px;
+            overflow-y: auto;
+            padding: 0.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .player-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.85rem 1.25rem;
+            border-radius: 16px;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+        }
+
+        .player-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(var(--gold-rgb), 0.2);
+            transform: translateX(5px);
+        }
+
+        .player-item.selected {
+            background: linear-gradient(135deg, rgba(var(--gold-rgb), 0.15) 0%, rgba(var(--gold-rgb), 0.05) 100%);
+            border-color: rgba(var(--gold-rgb), 0.4);
+            box-shadow: 0 4px 15px rgba(var(--gold-rgb), 0.1);
+        }
+
+        .player-item input[type=checkbox] {
+            accent-color: var(--gold);
+            width: 18px;
+            height: 18px;
+        }
+
+        .player-name-text {
+            font-size: 0.85rem;
+            font-weight: 800;
+            color: #fff;
+        }
+
+        .player-cat {
+            font-size: 0.65rem;
+            color: var(--text-dim);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* ── CATEGORY HEADERS ── */
+        .cat-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.75rem 1.25rem;
+            background: rgba(var(--gold-rgb), 0.05);
+            border: 1px solid rgba(var(--gold-rgb), 0.1);
+            border-radius: 14px;
+            margin-top: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .cat-header:hover {
+            background: rgba(var(--gold-rgb), 0.1);
+            border-color: rgba(var(--gold-rgb), 0.3);
+        }
+
+        .cat-header-title {
+            font-size: 0.7rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--gold);
+        }
+
+        /* ── HISTORIAL CARDS ── */
+        .conv-card {
+            padding: 1.25rem 1.75rem;
+            border-bottom: 1px solid var(--glass-border);
+            transition: all 0.3s;
+        }
+
+        .conv-card:hover {
+            background: rgba(255, 255, 255, 0.03);
+            transform: translateX(5px);
+        }
+
+        .conv-title {
+            font-size: 0.9rem;
+            font-weight: 800;
+            color: #fff;
+        }
+
+        /* ── STICKY SIDE PANEL ── */
+        .side-panel-sticky {
+            position: sticky;
+            top: calc(var(--topbar-h) + 2rem);
+            height: fit-content;
+        }
+    </style>
 
         /* ── LAYOUT DOS COLUMNAS ── */
         .conv-grid {
@@ -114,321 +226,6 @@
             background: var(--dark3);
         }
 
-        /* ── BTN PRINCIPAL ── */
-        .btn-convocar {
-            width: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: .7rem;
-            padding: 1rem;
-            border-radius: 14px;
-            border: none;
-            background: linear-gradient(135deg, var(--gold), #e6a800);
-            color: var(--dark);
-            font-family: 'Montserrat', sans-serif;
-            font-size: .8rem;
-            font-weight: 900;
-            text-transform: uppercase;
-            letter-spacing: .1em;
-            cursor: pointer;
-            transition: transform .2s, box-shadow .2s;
-        }
-
-        .btn-convocar:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(255, 204, 0, .3);
-        }
-
-        .btn-convocar:active {
-            transform: translateY(0);
-        }
-
-        .btn-convocar:disabled {
-            opacity: .5;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        /* ── LISTA DE JUGADORES (checkboxes) ── */
-        .search-players {
-            width: 100%;
-            background: var(--dark3);
-            border: 1px solid var(--border);
-            color: var(--text);
-            border-radius: 10px;
-            padding: .65rem 1rem;
-            font-family: 'Montserrat', sans-serif;
-            font-size: .75rem;
-            outline: none;
-            margin-bottom: 1rem;
-            transition: border-color .2s;
-        }
-
-        .search-players:focus {
-            border-color: var(--gold);
-        }
-
-        .players-list {
-            max-height: 420px;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: .4rem;
-        }
-
-        .players-list::-webkit-scrollbar {
-            width: 4px;
-        }
-
-        .players-list::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, .1);
-            border-radius: 4px;
-        }
-
-        .player-item {
-            display: flex;
-            align-items: center;
-            gap: .85rem;
-            padding: .7rem 1rem;
-            border-radius: 12px;
-            background: var(--dark3);
-            border: 1px solid transparent;
-            transition: all .2s;
-            cursor: pointer;
-        }
-
-        .player-item:hover {
-            border-color: rgba(255, 204, 0, .2);
-            background: rgba(255, 255, 255, .03);
-        }
-
-        .player-item.selected {
-            border-color: rgba(255, 204, 0, .5);
-            background: rgba(255, 204, 0, .06);
-        }
-
-        .player-item input[type=checkbox] {
-            accent-color: var(--gold);
-            width: 16px;
-            height: 16px;
-            cursor: pointer;
-            flex-shrink: 0;
-        }
-
-        .player-cat {
-            font-size: .55rem;
-            color: var(--slate);
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: .08em;
-        }
-
-        .player-name-text {
-            font-size: .76rem;
-            font-weight: 700;
-            color: var(--text);
-        }
-
-        .selected-count {
-            font-size: .65rem;
-            color: var(--gold);
-            font-weight: 800;
-            text-align: right;
-            padding: .5rem 0 .2rem;
-        }
-
-        /* ── CATEGORY HEADERS ── */
-        .cat-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: .55rem .85rem;
-            background: rgba(255, 204, 0, .07);
-            border: 1px solid rgba(255, 204, 0, .15);
-            border-radius: 10px;
-            margin-top: .5rem;
-            cursor: pointer;
-            user-select: none;
-            transition: background .15s;
-        }
-
-        .cat-header:hover {
-            background: rgba(255, 204, 0, .12);
-        }
-
-        .cat-header-left {
-            display: flex;
-            align-items: center;
-            gap: .65rem;
-        }
-
-        .cat-header-title {
-            font-size: .65rem;
-            font-weight: 900;
-            text-transform: uppercase;
-            letter-spacing: .15em;
-            color: var(--gold);
-        }
-
-        .cat-header-count {
-            font-size: .6rem;
-            font-weight: 800;
-            color: var(--slate);
-            background: rgba(255, 255, 255, .06);
-            padding: .15rem .55rem;
-            border-radius: 999px;
-        }
-
-        .cat-header-count.has-selected {
-            color: var(--gold);
-            background: rgba(255, 204, 0, .15);
-        }
-
-        .cat-check {
-            accent-color: var(--gold);
-            width: 14px;
-            height: 14px;
-            cursor: pointer;
-            flex-shrink: 0;
-        }
-
-        .cat-chevron {
-            font-size: .65rem;
-            color: var(--slate);
-            transition: transform .2s;
-            flex-shrink: 0;
-        }
-
-        .cat-chevron.open {
-            transform: rotate(0deg);
-        }
-
-        .cat-chevron.closed {
-            transform: rotate(-90deg);
-        }
-
-        .cat-body {
-            display: flex;
-            flex-direction: column;
-            gap: .35rem;
-            padding: .3rem 0 .2rem 0;
-        }
-
-        /* ── HISTORIAL ── */
-        .conv-card {
-            padding: 1rem 1.25rem;
-            border-bottom: 1px solid var(--border);
-            transition: background .2s;
-        }
-
-        .conv-card:last-child {
-            border-bottom: none;
-        }
-
-        .conv-card:hover {
-            background: rgba(255, 255, 255, .02);
-        }
-
-        .conv-title {
-            font-size: .82rem;
-            font-weight: 800;
-            color: var(--text);
-        }
-
-        .conv-meta {
-            font-size: .62rem;
-            color: var(--slate);
-            margin-top: .25rem;
-            display: flex;
-            gap: .8rem;
-            flex-wrap: wrap;
-        }
-
-        .conv-meta i {
-            color: var(--gold);
-        }
-
-        .conv-badge {
-            display: inline-block;
-            font-size: .55rem;
-            font-weight: 800;
-            text-transform: uppercase;
-            padding: .2rem .55rem;
-            border-radius: 999px;
-            background: rgba(255, 204, 0, .12);
-            color: var(--gold);
-            margin-left: auto;
-        }
-
-        /* ── TOAST ── */
-        .toast-bar {
-            position: fixed;
-            bottom: 2rem;
-            right: 2rem;
-            z-index: 9999;
-            display: flex;
-            flex-direction: column;
-            gap: .6rem;
-            pointer-events: none;
-        }
-
-        .toast {
-            pointer-events: auto;
-            display: flex;
-            align-items: center;
-            gap: .75rem;
-            padding: .9rem 1.3rem;
-            border-radius: 14px;
-            font-size: .75rem;
-            font-weight: 700;
-            min-width: 260px;
-            max-width: 380px;
-            animation: slideIn .3s ease;
-            box-shadow: 0 8px 30px rgba(0, 0, 0, .5);
-        }
-
-        .toast.success {
-            background: #14532d;
-            border: 1px solid #22c55e30;
-            color: #86efac;
-        }
-
-        .toast.error {
-            background: #450a0a;
-            border: 1px solid #ef444430;
-            color: #fca5a5;
-        }
-
-        .toast.info {
-            background: var(--dark3);
-            border: 1px solid var(--border);
-            color: var(--text);
-        }
-
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateX(30px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-
-        @keyframes fadeUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
 
         @media(max-width:768px) {
             .sidebar {
@@ -518,42 +315,38 @@
                 <button id="theme-toggle" class="btn btn-outline" style="padding: 0.5rem; width: 40px; height: 40px; justify-content: center;" title="Cambiar Tema">
                   <i id="theme-icon" class="fas fa-sun"></i>
                 </button>
-                <div class="topbar-time glass" id="clock">--:--</div>
-            </div>
-        </header>
-
-        <div class="content">
+         <div class="content">
             <div class="conv-grid">
 
                 <!-- ── IZQUIERDA: Selección de jugadores ── -->
                 <div style="display:flex; flex-direction:column; gap:1.5rem;">
 
                     <!-- Jugadores -->
-                    <div class="panel">
+                    <div class="glass-premium">
                         <div class="panel-header">
-                            <span class="panel-title"><i class="fas fa-users"
-                                    style="color:var(--gold);margin-right:.5rem;"></i>Seleccionar Jugadores</span>
-                            <span class="panel-badge" id="selected-badge">0 seleccionados</span>
+                            <span class="panel-title"><i class="fas fa-users"></i>Seleccionar Jugadores</span>
+                            <span class="badge-gold" id="selected-badge">0 seleccionados</span>
                         </div>
                         <div class="panel-body">
-                            <input type="text" class="search-players" id="searchPlayers"
-                                placeholder="🔍  Buscar jugador...">
+                            <div class="premium-form-group">
+                                <input type="text" class="premium-input" id="searchPlayers"
+                                    placeholder="🔍  Buscar jugador...">
+                            </div>
                             <div class="players-list" id="playersList">
-                                <div style="text-align:center;padding:2rem;color:var(--slate);">
-                                    <i class="fas fa-circle-notch fa-spin" style="font-size:1.5rem;"></i>
+                                <div style="text-align:center;padding:3rem;color:var(--text-dim);">
+                                    <i class="fas fa-circle-notch fa-spin" style="font-size:2rem;color:var(--gold);"></i>
                                 </div>
                             </div>
                         </div>
                     </div>
 
                     <!-- Historial -->
-                    <div class="panel">
+                    <div class="glass-premium">
                         <div class="panel-header">
-                            <span class="panel-title"><i class="fas fa-history"
-                                    style="color:var(--gold);margin-right:.5rem;"></i>Convocatorias Anteriores</span>
+                            <span class="panel-title"><i class="fas fa-history"></i>Convocatorias Anteriores</span>
                         </div>
-                        <div id="historialList" style="min-height:80px;">
-                            <div style="text-align:center;padding:2rem;color:var(--slate);font-size:.75rem;">
+                        <div id="historialList" style="min-height:100px;">
+                            <div style="text-align:center;padding:3rem;color:var(--text-dim);font-size:.75rem;">
                                 <i class="fas fa-circle-notch fa-spin"></i>
                             </div>
                         </div>
@@ -561,46 +354,50 @@
                 </div>
 
                 <!-- ── DERECHA: Formulario ── -->
-                <div class="panel" style="position:sticky;top:90px;">
+                <div class="glass-premium side-panel-sticky">
                     <div class="panel-header">
-                        <span class="panel-title"><i class="fas fa-bullhorn"
-                                style="color:var(--gold);margin-right:.5rem;"></i>Nueva Convocatoria</span>
+                        <span class="panel-title"><i class="fas fa-bullhorn"></i>Nueva Convocatoria</span>
                     </div>
                     <div class="panel-body">
                         <form id="formConvocatoria" autocomplete="off">
 
-                            <div class="field">
-                                <label>Título *</label>
-                                <input type="text" id="convTitulo" placeholder="Ej: Partido vs Atlético Real" required>
+                            <div class="premium-form-group">
+                                <label class="premium-label">Título de la convocatoria *</label>
+                                <input type="text" class="premium-input" id="convTitulo" placeholder="Ej: Partido vs Atlético Real" required>
                             </div>
 
-                            <div class="field">
-                                <label>Fecha y Hora *</label>
-                                <input type="datetime-local" id="convFecha" required>
+                            <div class="premium-form-group">
+                                <label class="premium-label">Fecha y Hora *</label>
+                                <input type="datetime-local" class="premium-input" id="convFecha" required>
                             </div>
 
-                            <div class="field">
-                                <label>Lugar / Cancha</label>
-                                <input type="text" id="convLugar" placeholder="Ej: Cancha La Pradera">
+                            <div class="premium-form-group">
+                                <label class="premium-label">Lugar / Cancha</label>
+                                <input type="text" class="premium-input" id="convLugar" placeholder="Ej: Cancha La Pradera">
                             </div>
 
-                            <div class="field">
-                                <label>Descripción / Instrucciones</label>
-                                <textarea id="convDescripcion"
+                            <div class="premium-form-group">
+                                <label class="premium-label">Descripción / Instrucciones</label>
+                                <textarea class="premium-input" id="convDescripcion" style="min-height: 120px;"
                                     placeholder="Indicaciones para los jugadores, puntos de encuentro, uniformes, etc."></textarea>
                             </div>
 
-                            <div
-                                style="padding:.9rem 1rem;background:var(--dark3);border-radius:12px;margin-bottom:1.2rem;font-size:.72rem;color:var(--slate);">
+                            <div class="glass" style="padding:1.25rem; border-radius:18px; margin-bottom:1.5rem; font-size:.72rem; color:var(--text-muted); border-color: rgba(var(--gold-rgb), 0.1);">
                                 <i class="fas fa-bell" style="color:var(--gold);margin-right:.5rem;"></i>
-                                Se enviará una <strong style="color:var(--text);">notificación push</strong> a todos los
-                                jugadores convocados que tengan activadas las alertas.
+                                Se enviará una <strong style="color:#fff;">notificación push</strong> instantánea a todos los jugadores seleccionados.
                             </div>
 
-                            <button type="submit" class="btn-convocar" id="btnConvocar">
+                            <button type="submit" class="btn btn-primary w-full" id="btnConvocar">
                                 <i class="fas fa-paper-plane"></i>
-                                Convocar y Notificar
+                                Lanzar Convocatoria
                             </button>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </button>
                         </form>
                     </div>
                 </div>

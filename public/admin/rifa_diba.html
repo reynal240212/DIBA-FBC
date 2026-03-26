@@ -13,129 +13,41 @@
   <script src="/scripts/theme-switcher.js"></script>
 
   <style>
-    /* ── RIFA SPECIFIC STYLES ── */
+    /* ── RIFA SPECIFIC REFINEMENTS ── */
     .toolbar {
-      background: var(--bg-panel);
-      border: 1px solid var(--border-color);
-      border-radius: 18px;
-      padding: 1.5rem 1.75rem;
-      margin-bottom: 1.5rem;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 1.2rem;
-      align-items: flex-end;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1.5rem;
+        align-items: flex-end;
+        padding: 2.5rem;
+        margin-bottom: 2rem;
     }
 
-    .field-group {
-      display: flex;
-      flex-direction: column;
-      gap: .35rem;
+    .boletas-grid-preview {
+        background: rgba(var(--navy-rgb), 0.2);
+        padding: 4rem 2rem;
+        display: flex;
+        flex-direction: column;
+        gap: 4rem;
+        border-radius: var(--radius-xl);
+        border: 1px solid var(--border-color);
+        box-shadow: inset 0 0 100px rgba(0,0,0,0.5);
     }
 
-    .field-group label {
-      font-size: .6rem;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: .12em;
-      color: var(--text-muted);
+    /* Print Logic remains specialized */
+    .page-rifa {
+        width: 210mm;
+        height: 297mm;
+        margin: 0 auto;
+        padding: 10mm;
+        background: white;
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+        page-break-after: always;
+        box-shadow: 0 0 40px rgba(0, 0, 0, 0.5);
     }
-
-    .field-group input,
-    .field-group select {
-      background: var(--bg-input);
-      border: 1px solid var(--border-color);
-      color: var(--text-main);
-      border-radius: 10px;
-      padding: .6rem .85rem;
-      font-family: 'Montserrat', sans-serif;
-      font-size: .75rem;
-      font-weight: 700;
-      outline: none;
-      transition: border-color .2s;
-    }
-
-    .field-group input:focus,
-    .field-group select:focus {
-      border-color: var(--gold);
-    }
-
-    .field-group input[type=number] {
-      width: 90px;
-    }
-
-    .field-group input[type=text], .field-group select {
-      width: 200px;
-    }
-
-    .btn-action {
-      display: inline-flex;
-      align-items: center;
-      gap: .5rem;
-      padding: .7rem 1.4rem;
-      border: none;
-      border-radius: 12px;
-      font-family: 'Montserrat', sans-serif;
-      font-size: .72rem;
-      font-weight: 900;
-      text-transform: uppercase;
-      letter-spacing: .07em;
-      cursor: pointer;
-      transition: all .2s;
-      white-space: nowrap;
-    }
-
-    .btn-primary-action {
-      background: var(--gold);
-      color: var(--blue);
-      box-shadow: 0 4px 15px rgba(255, 204, 0, .2);
-    }
-
-    .btn-primary-action:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(255, 204, 0, .35);
-    }
-
-    .btn-secondary-action {
-      background: var(--bg-input);
-      color: var(--gold);
-      border: 1px solid var(--border-color);
-    }
-
-    .btn-secondary-action:hover {
-      background: rgba(255, 204, 0, .08);
-      border-color: rgba(255, 204, 0, .3);
-    }
-
-    #status-bar {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      padding: 1rem 1.5rem;
-      background: var(--bg-panel);
-      border: 1px solid var(--border-color);
-      border-radius: 14px;
-      margin-bottom: 1.5rem;
-      font-size: .75rem;
-    }
-
-    .actions-row {
-      display: flex;
-      gap: .6rem;
-      align-items: flex-end;
-      margin-left: auto;
-      flex-wrap: wrap;
-    }
-
-    /* ── BOLETAS PREVIEW area ── */
-    #contenedor {
-      background: var(--bg-input);
-      padding: 2.5rem 0;
-      display: flex;
-      flex-direction: column;
-      gap: 2.5rem;
-      border-radius: 20px;
-      border: 1px solid var(--border-color);
-    }
+  </style>
 
     /* Print Logic remains specialized */
     .page-rifa {
@@ -335,16 +247,16 @@
 
     <div class="content">
       <!-- TOOLBAR -->
-      <div class="toolbar">
+      <div class="glass-premium toolbar">
 
-        <div class="field-group">
-          <label>Total de boletas</label>
-          <input type="number" id="cfg-total" min="1" max="1000" step="5" value="45">
+        <div class="premium-form-group">
+          <label class="premium-label">Total de boletas</label>
+          <input type="number" class="premium-input" id="cfg-total" min="1" max="1000" step="5" value="45" style="width: 100px;">
         </div>
 
-        <div class="field-group">
-          <label>Números por boleta</label>
-          <select id="cfg-numeros">
+        <div class="premium-form-group">
+          <label class="premium-label">Números por boleta</label>
+          <select class="premium-input" id="cfg-numeros" style="width: 140px;">
             <option value="4">4 números</option>
             <option value="5">5 números</option>
             <option value="6" selected>6 números</option>
@@ -353,15 +265,15 @@
           </select>
         </div>
 
-        <div class="field-group">
-          <label>Fecha del sorteo</label>
-          <input type="date" id="cfg-fecha-picker">
+        <div class="premium-form-group">
+          <label class="premium-label">Fecha del sorteo</label>
+          <input type="date" class="premium-input" id="cfg-fecha-picker" style="width: 160px;">
           <input type="hidden" id="cfg-fecha" value="Sábado 19 de abril de 2025">
         </div>
 
-        <div class="field-group">
-          <label>Lotería / Modalidad</label>
-          <input type="text" id="cfg-loteria" list="loterias-list" value="Sinuano Noche — Últimas 2 cifras">
+        <div class="premium-form-group">
+          <label class="premium-label">Lotería / Modalidad</label>
+          <input type="text" class="premium-input" id="cfg-loteria" list="loterias-list" value="Sinuano Noche — Últimas 2 cifras" style="width: 240px;">
           <datalist id="loterias-list">
             <option value="Sinuano Noche / Últimas 2 cifras">
             <option value="Sinuano Día / Últimas 2 cifras">
@@ -373,36 +285,36 @@
           </datalist>
         </div>
 
-        <div class="field-group">
-          <label>Premio</label>
-          <input type="text" id="cfg-premio" placeholder="Ej: Tablet de 10 pulg." value="2 Perfumes para Caballeros">
+        <div class="premium-form-group">
+          <label class="premium-label">Premio</label>
+          <input type="text" class="premium-input" id="cfg-premio" placeholder="Ej: Tablet de 10 pulg." value="2 Perfumes para Caballeros" style="width: 240px;">
         </div>
 
-        <div class="field-group">
-          <label>Valor de Boleta ($)</label>
-          <input type="number" id="cfg-valor-num" step="100" value="3000">
+        <div class="premium-form-group">
+          <label class="premium-label">Valor de Boleta ($)</label>
+          <input type="number" class="premium-input" id="cfg-valor-num" step="100" value="3000" style="width: 120px;">
           <input type="hidden" id="cfg-valor" value="$3.000">
         </div>
 
-        <div class="actions-row">
-          <button class="btn-action btn-primary-action" id="btn-generar">
-            <i class="fas fa-ticket-alt" id="gen-icon"></i>
+        <div class="flex-grow flex justify-end gap-3 mb-6">
+          <button class="btn btn-primary" id="btn-generar">
+            <i class="fas fa-ticket-alt"></i>
             Generar Boletas
           </button>
-          <button class="btn-action btn-secondary-action" onclick="window.print()">
-            <i class="fas fa-print"></i> Imprimir / PDF
+          <button class="btn btn-outline" onclick="window.print()">
+            <i class="fas fa-print"></i> PDF
           </button>
         </div>
       </div>
 
       <!-- STATUS -->
-      <div id="status-bar" style="display:none;">
-        <div class="dot"></div>
-        <span id="status-text">Generando...</span>
+      <div id="status-bar" class="glass" style="display:none; padding: 1.25rem 2rem; border-radius: 18px; margin-bottom: 2rem; align-items: center; gap: 1rem; border-color: rgba(var(--gold-rgb), 0.1);">
+        <div class="w-2 h-2 rounded-full bg-gold animate-pulse"></div>
+        <span id="status-text" class="text-xs font-bold text-gold uppercase tracking-widest">Generando...</span>
       </div>
 
       <!-- BOLETAS OUTPUT -->
-      <div id="contenedor"></div>
+      <div id="contenedor" class="boletas-grid-preview"></div>
     </div>
   </div>
 

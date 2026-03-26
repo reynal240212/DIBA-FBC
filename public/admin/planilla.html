@@ -10,7 +10,7 @@
   <meta name="robots" content="index, follow" />
   <meta name="theme-color" content="#002a40" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="icon" href="images/ESCUDO.ico" sizes="32x32">
+  <link rel="icon" href="../images/ESCUDO.ico" type="image/x-icon">
 
 
   <!-- Bootstrap 5.3.3 CSS & JS -->
@@ -129,37 +129,37 @@
           </div>
         </div>
 
-        <!-- Stats -->
-        <div class="stats-bar">
-          <div class="stat-chip green">
+        <!-- Stats Bar -->
+        <div class="stats-bar mb-10">
+          <div class="stat-chip green premium-shine">
             <div class="stat-icon"><i class="fas fa-check-circle"></i></div>
             <div>
               <div class="stat-value" id="stat-presentes">0</div>
               <div class="stat-label">Presentes</div>
             </div>
           </div>
-          <div class="stat-chip red">
+          <div class="stat-chip red premium-shine">
             <div class="stat-icon"><i class="fas fa-times-circle"></i></div>
             <div>
               <div class="stat-value" id="stat-ausentes">0</div>
               <div class="stat-label">Ausentes</div>
             </div>
           </div>
-          <div class="stat-chip yellow">
+          <div class="stat-chip yellow premium-shine">
             <div class="stat-icon"><i class="fas fa-clock"></i></div>
             <div>
               <div class="stat-value" id="stat-excusas">0</div>
               <div class="stat-label">Excusas</div>
             </div>
           </div>
-          <div class="stat-chip blue">
+          <div class="stat-chip blue premium-shine">
             <div class="stat-icon"><i class="fas fa-users"></i></div>
             <div>
               <div class="stat-value" id="stat-total">0</div>
               <div class="stat-label">Total DB</div>
             </div>
           </div>
-          <div class="stat-chip purple">
+          <div class="stat-chip purple premium-shine">
             <div class="stat-icon"><i class="fas fa-percent"></i></div>
             <div>
               <div class="stat-value" id="stat-pct">0%</div>
@@ -176,31 +176,31 @@
         </div>
 
         <!-- Controles -->
-        <div class="panel glass animate-fade-up border-0" style="animation-delay: 0.2s">
-          <div class="panel-body d-flex justify-content-between align-items-center flex-wrap gap-3">
-            <div class="d-flex gap-2">
-              <a href="../ficha.html" class="btn btn-primary"><i
+        <div class="glass-premium animate-fade-up border-0 p-6 mb-10" style="animation-delay: 0.2s">
+          <div class="panel-body d-flex justify-content-between align-items-center flex-wrap gap-4 p-0">
+            <div class="d-flex gap-3">
+              <a href="../ficha.html" class="btn btn-primary premium-shine"><i
                   class="fas fa-users-cog"></i> Gestionar Jugadores</a>
             </div>
-            <div class="d-flex gap-3 align-items-center">
+            <div class="d-flex gap-3 align-items-center flex-wrap">
               <div class="search-container">
-                <input type="text" id="playerSearch" class="form-control"
+                <input type="text" id="playerSearch" class="form-control bg-white/5 border-white/10 text-white rounded-2xl px-6 py-3"
                   placeholder="Buscar jugador...">
               </div>
-              <button id="generatePDF" class="btn btn-outline" style="border-color: #f43f5e; color: #f43f5e;"><i
+              <button id="generatePDF" class="btn btn-outline premium-shine" style="border-color: #f43f5e; color: #f43f5e;"><i
                   class="fas fa-file-pdf"></i> PDF Rápido</button>
-              <button id="generatePDFPro" class="btn btn-primary"><i
-                  class="fas fa-print"></i> Planilla Pro (Doble Cara)</button>
-              <button id="generateUnifiedPDF" class="btn btn-warning"><i
-                  class="fas fa-users"></i> Planilla Unificada</button>
-              <button id="generateOfficialPDF" class="btn btn-success"><i
-                  class="fas fa-id-card"></i> Planilla Oficial</button>
-              <button id="generateExcel" class="btn btn-outline" style="border-color: #22c55e; color: #22c55e;"><i
+              <button id="generatePDFPro" class="btn btn-primary premium-shine"><i
+                  class="fas fa-print"></i> Planilla Pro</button>
+              <button id="generateUnifiedPDF" class="btn btn-warning premium-shine"><i
+                  class="fas fa-users"></i> Unificada</button>
+              <button id="generateOfficialPDF" class="btn btn-success premium-shine"><i
+                  class="fas fa-id-card"></i> Oficial</button>
+              <button id="generateExcel" class="btn btn-outline premium-shine" style="border-color: #22c55e; color: #22c55e;"><i
                   class="fas fa-file-excel"></i> XLSX</button>
-              <button id="saveAllBtn" class="btn btn-primary">
-                <i class="fas fa-cloud-upload-alt"></i> Guardar Planilla
+              <button id="saveAllBtn" class="btn btn-primary premium-shine">
+                <i class="fas fa-cloud-upload-alt"></i> Guardar
               </button>
-              <button onclick="openCreateModal()" class="btn btn-outline">
+              <button onclick="openCreateModal()" class="btn btn-outline premium-shine">
                 <i class="fas fa-plus"></i> Nuevo
               </button>
             </div>
@@ -208,7 +208,7 @@
         </div>
 
         <!-- Tabla -->
-        <div class="panel glass animate-fade-up planilla-container" style="animation-delay: 0.3s">
+        <div class="panel glass-premium animate-fade-up planilla-container mb-12" style="animation-delay: 0.3s">
           <table class="table table-planilla mb-0" id="mainTable">
             <thead>
               <tr>

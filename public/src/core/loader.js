@@ -8,9 +8,8 @@ export function loadComponent(containerId, filePath, callback) {
     const container = document.getElementById(containerId);
     if (!container) return;
     
-    // Convert to absolute path if needed, assuming components are in /layout/
-    const baseUrl = filePath.startsWith('/') ? filePath : `/${filePath}`;
-    const url = `${baseUrl}?v=${APP_VERSION}`;
+    // Use relative path to support hosting in subdirectories
+    const url = `${filePath}?v=${APP_VERSION}`;
     
     fetch(url)
         .then(r => r.text())

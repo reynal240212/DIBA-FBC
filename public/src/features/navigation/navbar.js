@@ -11,6 +11,7 @@ export async function initNavbar() {
     if (navToggle && mobileMenu) {
         navToggle.addEventListener('click', () => {
             mobileMenu.classList.toggle('hidden');
+            document.body.classList.toggle('nav-open');
         });
     }
 

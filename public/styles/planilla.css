@@ -15,16 +15,18 @@
 }
 
 .stat-chip {
-  background: var(--bg-panel);
-  border: 1px solid var(--border-color);
-  padding: 1.5rem;
-  border-radius: var(--radius-lg);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 1.75rem;
+  border-radius: var(--radius-xl);
   display: flex;
   align-items: center;
-  gap: 1.25rem;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  gap: 1.5rem;
+  transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   position: relative;
   overflow: hidden;
+  backdrop-filter: blur(20px);
+  box-shadow: var(--shadow-premium), var(--glass-inner-glow);
 }
 
 .stat-chip::after {
@@ -42,14 +44,15 @@
 }
 
 .stat-icon {
-  width: 54px;
-  height: 54px;
+  width: 58px;
+  height: 58px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 18px;
-  font-size: 1.5rem;
+  border-radius: 20px;
+  font-size: 1.6rem;
   flex-shrink: 0;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.3);
 }
 
 /* Color variants aligned with global tokens */
@@ -79,9 +82,11 @@
 /* Table Enhancements */
 .planilla-container {
   background: var(--bg-panel);
-  border-radius: var(--radius-lg);
-  border: 1px solid var(--border-color);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--shadow-premium);
   overflow: hidden;
+  backdrop-filter: blur(var(--glass-blur));
 }
 
 .table-planilla th {

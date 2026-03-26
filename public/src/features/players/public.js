@@ -66,7 +66,7 @@ function createPlayerCard(j, i) {
     card.style.animationDelay = `${i * 0.05}s`;
     
     const name = `${j.nombre} ${j.apellidos}`;
-    const img = j.foto_url || "/images/ESCUDO.png";
+    const img = j.foto_url || "images/ESCUDO.png";
 
     card.innerHTML = `
         <div class="aspect-[4/5] overflow-hidden bg-slate-100 relative">
@@ -108,7 +108,7 @@ export async function initScorers() {
             item.className = "flex items-center justify-between p-4 border-b hover:bg-slate-50 transition-all";
             item.innerHTML = `
                 <div class="flex items-center gap-3">
-                    <img src="${g.escudo_url || '/images/ESCUDO.png'}" class="w-8 h-8 object-contain">
+                    <img src="${g.escudo_url || 'images/ESCUDO.png'}" class="w-8 h-8 object-contain">
                     <div>
                         <div class="text-sm font-bold">${g.nombre_jugador}</div>
                         <div class="text-[10px] text-slate-400 uppercase">${g.equipo}</div>

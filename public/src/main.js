@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // 4. Search Overlay (Dynamic import fallback)
     if (!document.getElementById('search-overlay')) {
         const s = document.createElement('script');
-        s.src = '/scripts/search.js';
+        s.src = 'scripts/search.js';
         document.body.appendChild(s);
     }
 

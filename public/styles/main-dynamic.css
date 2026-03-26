@@ -1,0 +1,122 @@
+/* public/styles/main-dynamic.css */
+:root {
+  /* DIBA Brand Colors - Unified */
+  --diba-yellow: #FFD700;
+  --diba-yellow-rgb: 255, 215, 0;
+  --diba-navy: #002a40;
+  --diba-navy-dark: #001a2e;
+  
+  /* Shared Glassmorphism */
+  --glass-bg: rgba(15, 23, 42, 0.6);
+  --glass-blur: 12px;
+  --glass-border: rgba(255, 255, 255, 0.1);
+  
+  /* Animations */
+  --transition-smooth: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+/* Player Detail Modal */
+.player-modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.93);
+  z-index: 10000;
+  padding: 20px;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+.player-modal.active {
+  opacity: 1;
+  display: flex;
+}
+
+.modal-content-wrapper {
+  transform: scale(0.8);
+  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  max-width: 480px;
+  width: 100%;
+  text-align: center;
+}
+
+.player-modal.active .modal-content-wrapper {
+  transform: scale(1);
+}
+
+/* Photo Correction (Anti-grain) */
+#modal-img {
+  width: 100%;
+  border-radius: 24px;
+  border: 4px solid var(--diba-yellow);
+  box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.8);
+  filter: brightness(1.05) contrast(1.02) saturate(1.1);
+  image-rendering: auto;
+}
+
+#close-modal {
+  position: absolute;
+  top: 25px;
+  right: 25px;
+  background: var(--diba-yellow);
+  color: #000;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  font-weight: 900;
+  cursor: pointer;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.4);
+  transition: var(--transition-smooth);
+  z-index: 10001;
+}
+
+#close-modal:hover {
+  transform: scale(1.1) rotate(90deg);
+  background: #fff;
+}
+
+@keyframes shine {
+  0% { transform: translateX(-100%) skewX(-15deg); }
+  100% { transform: translateX(200%) skewX(-15deg); }
+}
+
+/* Player Cards Enhancements */
+.player-card-premium {
+  transition: var(--transition-smooth);
+}
+
+.player-card-premium:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px rgba(var(--diba-yellow-rgb), 0.15);
+}
+
+/* Skeleton UI Refined */
+.skeleton-box {
+  background: linear-gradient(90deg, #1e293b 25%, #334155 50%, #1e293b 75%);
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s infinite;
+}
+
+@keyframes skeleton-loading {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Global Transitions */
+.smooth-scroll {
+  scroll-behavior: smooth;
+}
+
+/* Responsive Utilities for custom components */
+@media (max-width: 640px) {
+  .modal-content-wrapper {
+    max-width: 90%;
+  }
+}

@@ -8,70 +8,7 @@ document.addEventListener("DOMContentLoaded", async function () {
   const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
   window.supabase = supabase; // Compartir instancia
 
-  // --- 1. ESTILOS PARA EL MODAL Y MEJORA DE IMAGEN (ANTI-GRANULADO) ---
-  const style = document.createElement('style');
-  style.innerHTML = `
-    .player-modal {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.93);
-      z-index: 10000;
-      padding: 20px;
-      align-items: center;
-      justify-content: center;
-      opacity: 0;
-      transition: opacity 0.3s ease;
-      backdrop-filter: blur(10px);
-    }
-    .player-modal.active {
-      opacity: 1;
-      display: flex;
-    }
-    .modal-content-wrapper {
-      transform: scale(0.8);
-      transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-      max-width: 480px;
-      width: 100%;
-      text-align: center;
-    }
-    .player-modal.active .modal-content-wrapper {
-      transform: scale(1);
-    }
-
-    /* FILTRO PARA CORREGIR EL RUIDO/GRANULADO DE LAS FOTOS */
-    #modal-img {
-      width: 100%;
-      border-radius: 24px;
-      border: 4px solid #f59e0b;
-      box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.8);
-      /* El blur mínimo mezcla los puntos del granulado y el brillo limpia las sombras */
-      filter: brightness(1.06) contrast(1.03) saturate(1.1) blur(0.15px);
-      image-rendering: auto;
-    }
-
-    #close-modal {
-      position: absolute;
-      top: 25px;
-      right: 25px;
-      background: #f59e0b;
-      color: #000;
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 32px;
-      font-weight: 900;
-      cursor: pointer;
-      box-shadow: 0 10px 20px rgba(0,0,0,0.4);
-      transition: all 0.2s;
-      z-index: 10001;
-    }
-    #close-modal:hover { transform: scale(1.1) rotate(90deg); background: #fff; }
-  `;
-  document.head.appendChild(style);
+  // --- 1. ESTILOS MOVIDOS A main-dynamic.css ---
 
   // --- 2. ESTRUCTURA DEL MODAL ---
   const modalHTML = `
@@ -402,9 +339,13 @@ document.addEventListener("DOMContentLoaded", async function () {
     async function loadPlayersFromSupabase() {
       // Estado de carga elegante (Skeleton UI sutil)
       playersContainer.innerHTML = `
-        <div class="col-span-full flex flex-col items-center justify-center py-20 opacity-50">
-          <i class="fas fa-circle-notch animate-spin text-4xl text-amber-500 mb-4"></i>
-          <p class="text-[10px] font-black uppercase tracking-widest text-slate-500">Cargando Plantilla Oficial DIBA FBC...</p>
+        <div class="col-span-full grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-8 py-20 px-4">
+          ${Array(12).fill(0).map(() => `
+            <div class="skeleton-box h-64 rounded-[2rem] opacity-20"></div>
+          `).join('')}
+          <div class="col-span-full text-center mt-6">
+            <p class="text-[10px] font-black uppercase tracking-widest text-slate-500 animate-pulse">Sincronizando Plantilla Oficial...</p>
+          </div>
         </div>
       `;
 

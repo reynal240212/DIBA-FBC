@@ -14,221 +14,39 @@
   <link rel="stylesheet" href="/styles/admin-common.css">
   <script src="/scripts/theme-switcher.js"></script>
   <style>
-    /* Profile specific styles */
-    .content {
-      padding: 2rem;
-      flex: 1;
-    }
-  </style>
-
-    .btn-logout {
-      width: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: .5rem;
-      padding: .7rem;
-      border-radius: 12px;
-      border: none;
-      background: rgba(239, 68, 68, .1);
-      color: #ef4444;
-      font-family: 'Montserrat', sans-serif;
-      font-size: .72rem;
-      font-weight: 800;
-      text-transform: uppercase;
-      cursor: pointer;
-      transition: all .2s;
-    }
-
-    .btn-logout:hover {
-      background: #ef4444;
-      color: #fff;
-    }
-
-    /* ── MAIN & TOPBAR ── */
-    .main {
-      margin-left: var(--sidebar-w);
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
-    }
-
-    .topbar {
-      padding: 1.5rem 2rem;
-      border-bottom: 1px solid var(--border);
-      background: var(--dark2);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 1rem;
-      position: sticky;
-      top: 0;
-      z-index: 50;
-    }
-
-    .page-title {
-      font-size: 1.4rem;
-      font-weight: 900;
-      font-style: italic;
-      text-transform: uppercase;
-      letter-spacing: .03em;
-    }
-
-    .page-title span {
-      color: var(--gold);
-    }
-
-    .page-subtitle {
-      font-size: .7rem;
-      color: var(--slate);
-      font-weight: 600;
-      margin-top: 2px;
-    }
-
-    .topbar-right {
-      display: flex;
-      align-items: center;
-      gap: .8rem;
-    }
-
-    .topbar-time {
-      font-size: .72rem;
-      font-weight: 700;
-      color: var(--slate);
-      background: var(--dark3);
-      padding: .45rem .9rem;
-      border-radius: 8px;
-      border: 1px solid var(--border);
-    }
-
-    .mobile-menu-btn {
-      display: none;
-      background: var(--dark3);
-      border: 1px solid var(--border);
-      color: var(--gold);
-      width: 38px;
-      height: 38px;
-      border-radius: 10px;
-      font-size: 1rem;
-      cursor: pointer;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .content {
-      padding: 2rem;
-      flex: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    /* ── Profile Card Specific ── */
+    /* Profile specific refinements */
     .profile-card {
-      max-width: 500px;
+      max-width: 600px;
       width: 100%;
-      background: var(--dark2);
-      border: 1px solid var(--border);
-      border-radius: 24px;
-      padding: 2.5rem;
-      position: relative;
+      padding: 3rem;
     }
 
     .avatar-preview-wrapper {
       text-align: center;
-      margin-bottom: 2rem;
+      margin-bottom: 2.5rem;
+      position: relative;
     }
 
     .avatar-preview {
-      width: 110px;
-      height: 110px;
-      border-radius: 50%;
+      width: 140px;
+      height: 140px;
+      border-radius: 40px;
       object-fit: cover;
-      border: 4px solid var(--gold);
-      background: var(--dark3);
+      border: 3px solid var(--gold);
+      background: var(--bg-input);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 3rem;
-      color: var(--slate);
+      font-size: 4rem;
+      color: var(--gold);
       margin: 0 auto;
-      box-shadow: 0 8px 25px rgba(255, 204, 0, 0.2);
+      box-shadow: 0 15px 35px rgba(var(--gold-rgb), 0.2);
+      transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
 
-    .form-label {
-      font-size: .7rem;
-      font-weight: 800;
-      color: var(--slate);
-      text-transform: uppercase;
-      letter-spacing: .1em;
-      margin-bottom: .6rem;
-      display: block;
-    }
-
-    .form-control {
-      background: var(--dark3);
-      border: 1px solid var(--border);
-      color: #fff;
-      padding: .8rem 1.2rem;
-      border-radius: 14px;
-      font-size: .85rem;
-      font-weight: 600;
-      transition: all .2s;
-      width: 100%;
-    }
-
-    .form-control:focus {
-      outline: none;
-      border-color: var(--gold);
-      box-shadow: 0 0 0 4px rgba(255, 204, 0, 0.1);
-    }
-
-    .btn-submit {
-      background: var(--gold);
-      color: var(--blue);
-      border: none;
-      padding: 1rem;
-      border-radius: 16px;
-      font-size: .85rem;
-      font-weight: 900;
-      font-style: italic;
-      text-transform: uppercase;
-      cursor: pointer;
-      transition: all .2s;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: .8rem;
-      width: 100%;
-      margin-top: 1rem;
-    }
-
-    .btn-submit:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 25px rgba(255, 204, 0, 0.3);
-    }
-
-    @media (max-width: 992px) {
-      .sidebar {
-        transform: translateX(-100%);
-      }
-
-      .sidebar.open {
-        transform: translateX(0);
-      }
-
-      .main {
-        margin-left: 0;
-      }
-
-      .mobile-menu-btn {
-        display: flex;
-      }
-
-      .profile-card {
-        padding: 1.5rem;
-      }
+    .avatar-preview-wrapper:hover .avatar-preview {
+        transform: scale(1.05) rotate(5deg);
+        box-shadow: 0 20px 45px rgba(var(--gold-rgb), 0.3);
     }
   </style>
 </head>
@@ -302,42 +120,47 @@
         </header>
 
     <div class="content">
-      <div class="profile-card shadow-2xl">
+      <div class="glass-premium profile-card animate-fade-up">
+
         <!-- Avatar Preview -->
         <div class="avatar-preview-wrapper">
           <img id="avatar-preview-img" class="avatar-preview" src="" alt="">
+          <div class="premium-shine"></div>
         </div>
 
-        <h2 class="text-xl font-black text-center mb-8 uppercase italic tracking-tight">Completa tu <span
-            class="text-gold">Perfil</span></h2>
+        <h2 class="text-xl font-black text-center mb-10 uppercase italic tracking-tight">
+          Completa tu <span class="text-gold">Perfil</span>
+        </h2>
 
         <div id="alert-container"></div>
 
-        <form id="profile-form" class="space-y-5">
-          <div>
-            <label for="full_name" class="form-label">Nombre Completo</label>
-            <input type="text" class="form-control" id="full_name" name="full_name" placeholder="Ej: Lionel Messi"
+        <form id="profile-form">
+          <div class="premium-form-group">
+            <label for="full_name" class="premium-label">Nombre Completo</label>
+            <input type="text" class="premium-input" id="full_name" name="full_name" placeholder="Ej: Lionel Messi"
               required />
           </div>
-          <div>
-            <label for="username" class="form-label">Nombre de Usuario</label>
-            <input type="text" class="form-control" id="username" name="username" placeholder="Ej: lio_messi"
+          <div class="premium-form-group">
+            <label for="username" class="premium-label">Nombre de Usuario</label>
+            <input type="text" class="premium-input" id="username" name="username" placeholder="Ej: lio_messi"
               required />
           </div>
-          <div>
-            <label for="bio" class="form-label">Biografía</label>
-            <textarea class="form-control" id="bio" name="bio" rows="3"
+          <div class="premium-form-group">
+            <label for="bio" class="premium-label">Biografía</label>
+            <textarea class="premium-input" id="bio" name="bio" rows="3"
               placeholder="Cuéntanos algo sobre ti..."></textarea>
           </div>
-          <div>
-            <label for="avatar_url" class="form-label">URL de tu foto (opcional)</label>
-            <input type="url" class="form-control" id="avatar_url" name="avatar_url"
+          <div class="premium-form-group">
+            <label for="avatar_url" class="premium-label">URL de tu foto (opcional)</label>
+            <input type="url" class="premium-input" id="avatar_url" name="avatar_url"
               placeholder="https://ejemplo.com/tu-foto.jpg" />
           </div>
-          <button type="submit" id="submit-button" class="btn-submit">
-            <span class="button-text">Guardar Perfil</span>
-            <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
-          </button>
+          <div class="mt-8">
+            <button type="submit" id="submit-button" class="btn btn-primary w-full" style="padding: 1rem;">
+              <span id="button-text"><i class="fas fa-save me-2"></i>Guardar Perfil</span>
+              <span class="spinner-border spinner-border-sm d-none ms-2" role="status" aria-hidden="true"></span>
+            </button>
+          </div>
         </form>
       </div>
     </div>

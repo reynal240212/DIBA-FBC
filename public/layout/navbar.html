@@ -1,5 +1,32 @@
 <nav
-  class="fixed top-0 inset-x-0 z-[1000] bg-slate-900 border-b border-slate-800 shadow-2xl transition-all duration-300">
+  class="fixed top-0 inset-x-0 z-[1000] bg-slate-900/80 backdrop-blur-xl border-b border-white/5 shadow-2xl transition-all duration-500">
+  <style>
+    /* Supresión de widgets flotantes cuando el menú está abierto */
+    body.nav-open {
+      overflow: hidden !important;
+    }
+    
+    body.nav-open nav {
+      z-index: 20000 !important;
+      background: #0f172a !important;
+      height: 100vh !important;
+      overflow-y: auto !important;
+    }
+
+    body.nav-open #ai-widget-trigger,
+    body.nav-open .fixed.bottom-8.right-8 {
+      opacity: 0 !important;
+      pointer-events: none !important;
+      transform: translateY(20px) !important;
+      transition: all 0.3s ease !important;
+    }
+    
+    /* Mejoras de visualización en móvil */
+    #mobile-menu {
+      max-height: calc(100vh - 80px);
+      overflow-y: auto;
+    }
+  </style>
   <div class="max-w-6xl mx-auto px-4">
     <div class="flex items-center justify-between h-20">
 
@@ -22,7 +49,7 @@
               <i class="fas fa-chevron-down text-[9px] transition-transform group-hover:rotate-180"></i>
             </button>
             <ul
-              class="absolute left-0 top-[90%] w-48 bg-slate-900 border border-slate-700 rounded-xl shadow-[0_20px_50px_rgba(0,0,0,0.6)] py-3 opacity-0 invisible translate-y-3 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 transition-all duration-300 z-[1100]">
+              class="absolute left-0 top-full w-48 bg-slate-900/95 backdrop-blur-2xl border border-white/10 rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.7)] py-3 opacity-0 invisible translate-y-4 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 transition-all duration-500 z-[1100]">
               <li><a href="Historia.html"
                   class="block px-5 py-2.5 hover:bg-amber-500 hover:text-slate-900 transition-colors">Historia</a></li>
               <li><a href="escudo.html"
@@ -60,7 +87,7 @@
               <i class="fas fa-chevron-down text-[9px] transition-transform group-hover:rotate-180"></i>
             </button>
             <ul
-              class="absolute left-0 top-[90%] w-64 bg-slate-900 border border-slate-700 rounded-xl shadow-[0_20px_50px_rgba(0,0,0,0.6)] py-3 opacity-0 invisible translate-y-3 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 transition-all duration-300 z-[1100]">
+              class="absolute left-0 top-full w-64 bg-slate-900/95 backdrop-blur-2xl border border-white/10 rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.7)] py-3 opacity-0 invisible translate-y-4 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 transition-all duration-500 z-[1100]">
               <li><a href="ficha.html"
                   class="block px-5 py-2.5 hover:bg-amber-500 hover:text-slate-900 transition-colors">Plantilla</a></li>
               <li><a href="partidos.html"
@@ -88,7 +115,7 @@
           <li>
             <button id="search-open" aria-label="Abrir buscador"
               class="text-white hover:text-amber-400 p-2 transition-colors">
-              <i class="fas fa-search"></i>
+              <i class="fas fa-search" aria-hidden="true"></i>
             </button>
           </li>
 
@@ -133,14 +160,14 @@
         </ul>
       </div>
 
-      <button id="nav-toggle" class="lg:hidden p-2 text-white">
+      <button id="nav-toggle" class="lg:hidden p-2 text-white" aria-label="Abrir menú de navegación" aria-expanded="false">
         <svg class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
         </svg>
       </button>
     </div>
 
-    <div id="mobile-menu" class="hidden lg:hidden pb-8 space-y-3">
+    <div id="mobile-menu" class="hidden lg:hidden pb-12 space-y-4 px-2">
       <a href="index.html" class="block px-4 py-3 rounded-xl bg-slate-800 text-amber-400 font-bold">INICIO</a>
 
       <details class="group bg-slate-800/40 rounded-xl">

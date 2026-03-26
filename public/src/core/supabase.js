@@ -16,7 +16,7 @@ export async function requireAdmin() {
     const { data: { session }, error: sessionError } = await supabase.auth.getSession();
 
     if (sessionError || !session) {
-        window.location.replace('/admin/login.html');
+        window.location.replace('/admin/login.html'); // Keeping absolute for now as admin is a top-level folder in public
         return null;
     }
 
@@ -28,7 +28,7 @@ export async function requireAdmin() {
 
     if (userData?.role !== 'admin') {
         alert('⚠️ Acceso restringido.');
-        window.location.replace('/index.html');
+        window.location.replace('/index.html'); // Keeping absolute for now
         return null;
     }
 
