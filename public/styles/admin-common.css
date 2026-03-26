@@ -1,17 +1,18 @@
 :root {
-    /* Base Colors - DIBA Brand Ultra-Premium */
+    /* Elite Sports Palette (60:30:10 Rule) */
     --gold: #FFD700;
     --gold-rgb: 255, 215, 0;
-    --gold-glow: rgba(255, 215, 0, 0.2);
+    --gold-glow: rgba(255, 215, 0, 0.3);
     --gold-dark: #B8860B;
-    --navy: #002a40;
-    --navy-rgb: 0, 42, 64;
+    --navy: #0a111a;      /* Deep Professional Navy */
+    --navy-light: #162130;
+    --navy-rgb: 10, 17, 26;
     
-    /* Semantic Dark Theme - Deep Space Night */
-    --bg-main: #05070a;      
-    --bg-panel: rgba(13, 17, 23, 0.8);     
-    --bg-surface: rgba(10, 14, 20, 0.6); 
-    --bg-input: rgba(20, 27, 38, 0.8);
+    /* Semantic Dark Theme - Elite 60% */
+    --bg-main: #05080d;      
+    --bg-panel: rgba(10, 17, 26, 0.9);     
+    --bg-surface: rgba(15, 25, 38, 0.7); 
+    --bg-input: rgba(20, 31, 46, 0.8);
     
     /* Text System - High Readability */
     --text-main: #fcfcfc;
@@ -30,13 +31,13 @@
     --radius-lg: 24px;
     --radius-md: 16px;
 
-    /* Mesh Gradients - The 'WOW' Factor - Enhanced Depth */
+    /* Mesh Gradients - Elite Depth */
     --mesh-bg: 
-        radial-gradient(at 0% 0%, rgba(var(--gold-rgb), 0.12) 0px, transparent 50%),
-        radial-gradient(at 100% 0%, rgba(0, 42, 64, 0.4) 0px, transparent 60%),
+        radial-gradient(at 0% 0%, rgba(var(--gold-rgb), 0.1) 0px, transparent 50%),
+        radial-gradient(at 100% 0%, rgba(10, 17, 26, 0.4) 0px, transparent 60%),
         radial-gradient(at 50% 100%, rgba(var(--gold-rgb), 0.05) 0px, transparent 50%),
-        radial-gradient(at 80% 80%, rgba(0, 42, 64, 0.2) 0px, transparent 40%),
-        #05070a;
+        radial-gradient(at 80% 80%, rgba(10, 17, 26, 0.2) 0px, transparent 40%),
+        #05080c;
     
     /* Premium Shadows - More Dramatic */
     --shadow-premium: 0 30px 60px -15px rgba(0, 0, 0, 0.8);
@@ -893,6 +894,113 @@ a {
 .kpi-card-v2.blue .kpi-icon-v2 { background: rgba(59, 130, 246, 0.1); color: #60a5fa; }
 .kpi-card-v2.emerald .kpi-icon-v2 { background: rgba(16, 185, 129, 0.1); color: #34d399; }
 .kpi-card-v2.amber .kpi-icon-v2 { background: rgba(245, 158, 11, 0.1); color: #fbbf24; }
+
+/* Elite Match Hero Component */
+.elite-match-hero {
+    background: linear-gradient(135deg, var(--navy-light) 0%, var(--bg-main) 100%);
+    border: 1px solid rgba(var(--gold-rgb), 0.2);
+    border-radius: var(--radius-xl);
+    padding: 3rem;
+    margin-bottom: 3rem;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 40px 80px rgba(0,0,0,0.6), inset 0 0 40px rgba(var(--gold-rgb), 0.05);
+}
+
+.elite-match-hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: url('https://www.transparenttextures.com/patterns/carbon-fibre.png');
+    opacity: 0.05;
+}
+
+.elite-match-info {
+    position: relative;
+    z-index: 1;
+}
+
+.elite-match-label {
+    font-size: 0.75rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.4em;
+    color: var(--gold);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.elite-match-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(to right, rgba(var(--gold-rgb), 0.4), transparent);
+}
+
+.elite-match-teams {
+    font-size: 3.5rem;
+    font-weight: 900;
+    font-style: italic;
+    color: #fff;
+    text-transform: uppercase;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    letter-spacing: -0.05em;
+}
+
+.vs-badge {
+    font-size: 1.5rem;
+    color: var(--gold);
+    background: rgba(var(--gold-rgb), 0.1);
+    padding: 0.5rem 1.25rem;
+    border-radius: 12px;
+    border: 1px solid rgba(var(--gold-rgb), 0.2);
+}
+
+.elite-match-meta {
+    margin-top: 1.5rem;
+    display: flex;
+    gap: 2rem;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+.elite-countdown {
+    background: rgba(var(--gold-rgb), 0.1);
+    border: 1px solid rgba(var(--gold-rgb), 0.3);
+    padding: 1.5rem 2rem;
+    border-radius: 20px;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+}
+
+.countdown-val {
+    font-size: 2rem;
+    font-weight: 900;
+    color: #fff;
+    font-family: 'Montserrat';
+    line-height: 1;
+}
+
+.countdown-label {
+    font-size: 0.6rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--gold);
+    margin-top: 0.5rem;
+}
 
 /* Quick Access Grid - Premium Refinement */
 .quick-grid {

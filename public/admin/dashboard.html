@@ -181,10 +181,29 @@
         <!-- Content -->
         <div class="content">
 
+            <!-- Elite Match Hero -->
+            <div class="elite-match-hero animate-fade-up">
+                <div class="elite-match-info">
+                    <div class="elite-match-label">PRÓXIMO ENCUENTRO</div>
+                    <div class="elite-match-teams">
+                        DIBA FBC <span class="vs-badge">VS</span> <span id="next-opponent">RIVAL</span>
+                    </div>
+                    <div class="elite-match-meta">
+                        <span><i class="fas fa-calendar-star mr-2"></i> <span id="next-match-date">--/--</span></span>
+                        <span><i class="fas fa-location-dot mr-2"></i> <span id="next-match-venue">CANCHA</span></span>
+                        <span><i class="fas fa-clock-three mr-2"></i> <span id="next-match-time">00:00</span></span>
+                    </div>
+                </div>
+                <div class="elite-countdown">
+                    <div class="countdown-val">04</div>
+                    <div class="countdown-label">DÍAS RESTANTES</div>
+                </div>
+            </div>
+
             <!-- KPI Grid -->
             <div class="kpi-grid animate-fade-up">
                 <div class="premium-stat-card premium-shine">
-                    <div class="premium-stat-icon"><i class="fas fa-users-crown"></i></div>
+                    <div class="premium-stat-icon" style="background: rgba(var(--gold-rgb), 0.1);"><i class="fas fa-users-crown"></i></div>
                     <div class="premium-stat-content">
                         <div class="premium-stat-value" id="kpi-players">0</div>
                         <div class="premium-stat-label">Jugadores Activos</div>
@@ -192,7 +211,7 @@
                 </div>
 
                 <div class="premium-stat-card premium-shine">
-                    <div class="premium-stat-icon" style="color:#60a5fa"><i class="fas fa-soccer-ball"></i></div>
+                    <div class="premium-stat-icon" style="background: rgba(var(--gold-rgb), 0.05); color:#fff"><i class="fas fa-soccer-ball"></i></div>
                     <div class="premium-stat-content">
                         <div class="premium-stat-value" id="kpi-matches">0</div>
                         <div class="premium-stat-label">Partidos Temporada</div>
@@ -200,7 +219,7 @@
                 </div>
 
                 <div class="premium-stat-card premium-shine">
-                    <div class="premium-stat-icon" style="color:#fbbf24"><i class="fas fa-medal"></i></div>
+                    <div class="premium-stat-icon" style="background: rgba(var(--gold-rgb), 0.1);"><i class="fas fa-medal"></i></div>
                     <div class="premium-stat-content">
                         <div class="premium-stat-value" id="kpi-attendance">0%</div>
                         <div class="premium-stat-label">Asistencia Prom.</div>
@@ -208,7 +227,7 @@
                 </div>
 
                 <div class="premium-stat-card premium-shine">
-                    <div class="premium-stat-icon" style="color:#34d399"><i class="fas fa-badge-check"></i></div>
+                    <div class="premium-stat-icon" style="background: rgba(255, 255, 255, 0.05); color:#fff"><i class="fas fa-badge-check"></i></div>
                     <div class="premium-stat-content">
                         <div class="premium-stat-value" id="kpi-pending">0</div>
                         <div class="premium-stat-label">Gestiones OK</div>
@@ -533,6 +552,20 @@
                     .gte('fecha', new Date().toISOString().split('T')[0])
                     .order('fecha', { ascending: true })
                     .limit(3);
+
+                if (upcomingMatches && upcomingMatches.length > 0) {
+                    const next = upcomingMatches[0];
+                    document.getElementById('next-opponent').textContent = next.equipovisitante === 'DIBA FBC' ? next.equipolocal : next.equipovisitante;
+                    document.getElementById('next-match-date').textContent = new Date(next.fecha).toLocaleDateString('es-CO', { day: '2-digit', month: 'short' });
+                    document.getElementById('next-match-venue').textContent = next.Cancha || 'Sede Club';
+                    document.getElementById('next-match-time').textContent = next.hora || '--:--';
+
+                    // Countdown mock logic
+                    const matchDate = new Date(next.fecha);
+                    const diff = Math.ceil((matchDate - new Date()) / (1000 * 60 * 60 * 24));
+                    const countdownVal = document.querySelector('.countdown-val');
+                    if (countdownVal) countdownVal.textContent = diff > 0 ? (diff < 10 ? '0' + diff : diff) : '!!!';
+                }
 
                 renderMatches(upcomingMatches);
             } catch (e) { console.error('Error Upcoming Matches:', e); }
