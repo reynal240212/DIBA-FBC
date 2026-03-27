@@ -4,145 +4,294 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Partidos — DIBA FBC Admin</title>
+    <title>DIBA FBC — Gestión de Partidos</title>
     <link rel="icon" href="/images/ESCUDO.ico" type="image/x-icon">
-    
-    <!-- Dependencies -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="/styles/admin-common.css">
+    <script src="/scripts/theme-switcher.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
-    <link rel="stylesheet" href="../styles/admin-common.css">
-
     <script>
         tailwind.config = {
             theme: {
                 extend: {
-                    colors: {
-                        'diba-blue': '#004d98',
-                        'diba-red': '#a50044',
-                        'diba-gold': '#FFD700',
-                    },
-                    fontFamily: {
-                        'montserrat': ['Montserrat', 'sans-serif'],
-                        'inter': ['Inter', 'sans-serif'],
+                    fontFamily: { sans: ['Montserrat', 'sans-serif'] },
+                    colors: { 
+                        dibaGold: 'var(--gold)', 
+                        dibaBlue: 'var(--blue)', 
+                        dibaDark: 'var(--bg-main)',
+                        dibaDark2: 'var(--bg-panel)',
+                        dibaDark3: 'var(--bg-input)'
                     }
-                }
-            }
+                },
+            },
         }
     </script>
+    <style>
+        /* Partidos specific styles */
+        .content {
+            padding: 2rem;
+            flex: 1;
+        }
+
+        @media (max-width: 992px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+        }
+    </style>
+
+            .main {
+                margin-left: 0;
+            }
+
+            .mobile-menu-btn {
+                display: flex;
+            }
+        }
+    </style>
 </head>
 
-<body class="bg-white font-['Inter']">
-    <div id="admin-nav"></div>
+<body style="display: none;" id="admin-body">
 
-    <main class="lg:ml-[280px] min-h-screen transition-all duration-300 bg-white pb-20">
-        <div class="p-6 lg:p-10 space-y-8 max-w-7xl mx-auto text-diba-blue uppercase italic">
-            
-            <!-- Header -->
-            <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 animate-fade-up">
+    <!-- ══ SIDEBAR ══ -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-logo">
+            <img src="/images/ESCUDO.png" alt="DIBA FBC">
+            <div>
+                <div class="sidebar-logo-text">DIBA FBC</div>
+                <div class="sidebar-logo-sub">Panel de Control</div>
+            </div>
+        </div>
+
+        <nav class="sidebar-nav">
+            <a href="dashboard.html" class="nav-link"><i class="fas fa-th-large"></i> Dashboard</a>
+
+            <div class="nav-section-label">Equipo</div>
+            <a href="planilla.html" class="nav-link"><i class="fas fa-clipboard-list"></i> Planilla</a>
+            <a href="crear-jugador.html" class="nav-link"><i class="fas fa-user-plus"></i> Crear Jugador</a>
+            <a href="../ficha.html" class="nav-link"><i class="fas fa-users"></i> Jugadores</a>
+            <a href="partidos.html" class="nav-link active"><i class="fas fa-futbol"></i> Partidos</a>
+            <a href="convocatorias.html" class="nav-link"><i class="fas fa-bullhorn"></i> Convocatorias</a>
+
+            <div class="nav-section-label">Comunicación</div>
+            <a href="push.html" class="nav-link"><i class="fas fa-bell"></i> Notificaciones Push</a>
+
+            <div class="nav-section-label">Administración</div>
+            <a href="GestorDocumental.html" class="nav-link"><i class="fas fa-folder-open"></i> Gestor Documental</a>
+            <a href="usuarios.html" class="nav-link"><i class="fas fa-user-cog"></i> Usuarios</a>
+            <a href="crear-usuario.html" class="nav-link"><i class="fas fa-user-plus"></i> Crear Usuario</a>
+            <a href="rifa_diba.html" class="nav-link"><i class="fas fa-ticket-alt"></i> Rifas</a>
+
+            <div class="nav-section-label">Sitio Web</div>
+            <a href="../index.html" class="nav-link"><i class="fas fa-globe"></i> Ver Sitio</a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="user-chip">
+                <div class="user-avatar" id="sb-avatar">A</div>
                 <div>
-                    <h2 class="text-3xl font-black italic tracking-tighter">Calendario de <span class="text-diba-red">Encuentros</span></h2>
-                    <p class="text-[10px] text-slate-400 font-bold tracking-widest mt-1">Programación y Resultados Oficiales · DIBA FBC</p>
+                    <div class="user-name" id="sb-name">Administrador</div>
+                    <div class="user-role" id="sb-role">Admin</div>
                 </div>
-                <button id="add-match-btn" class="px-6 py-3.5 rounded-2xl bg-diba-blue text-white text-[10px] font-black italic tracking-widest hover:bg-diba-red transition-all shadow-lg shadow-blue-900/10 flex items-center gap-3">
-                    <i class="fas fa-plus text-sm text-diba-gold"></i> Nuevo Partido
+            </div>
+            <button class="btn-logout" id="logout-btn">
+                <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+            </button>
+        </div>
+    </aside>
+
+    <div class="main">
+        <!-- Top Bar -->
+        <header class="topbar">
+            <button class="mobile-menu-btn" id="menu-btn">
+                <i class="fas fa-bars" id="menu-icon"></i>
+            </button>
+            <div>
+                <div class="page-title">Gestión de <span>Partidos</span></div>
+                <div class="page-subtitle">Programación y resultados de encuentros — DIBA FBC</div>
+            </div>
+            <div class="topbar-right">
+                <button id="theme-toggle" class="mobile-menu-btn" style="display: flex; margin-right: 0.5rem;" title="Cambiar Tema">
+                  <i id="theme-icon" class="fas fa-sun"></i>
+                </button>
+                <div class="topbar-time" id="clock">--:--</div>
+                <button id="add-match-btn"
+                    class="bg-dibaGold text-dibaBlue px-6 py-2 rounded-xl font-black uppercase italic text-[10px] flex items-center gap-2 hover:scale-105 transition-all shadow-lg active:scale-95">
+                    <i class="fas fa-plus"></i> Nuevo Partido
                 </button>
             </div>
+        </header>
 
-            <!-- Matches Grid -->
-            <div id="matches-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <!-- Skeletons -->
-                <div class="bg-slate-50 border border-slate-100 rounded-[2.5rem] h-64 animate-pulse"></div>
-                <div class="bg-slate-50 border border-slate-100 rounded-[2.5rem] h-64 animate-pulse"></div>
-                <div class="bg-slate-50 border border-slate-100 rounded-[2.5rem] h-64 animate-pulse"></div>
-            </div>
+        <div class="content">
 
-        </div>
-    </main>
-
-    <!-- Modal Partido (Azul Grana Premium) -->
-    <div id="match-modal" class="hidden fixed inset-0 z-[100] flex items-center justify-center p-4 lg:p-10 pointer-events-none">
-        <div class="absolute inset-0 bg-diba-blue/60 backdrop-blur-xl pointer-events-auto" id="modal-backdrop"></div>
-        <div class="bg-white w-full max-w-2xl rounded-[3rem] shadow-2xl relative z-10 overflow-hidden animate-fade-up pointer-events-auto border border-white/20">
-            <div class="p-8 lg:p-12">
-                <div class="flex justify-between items-center mb-10">
-                    <h3 class="text-2xl font-black text-diba-blue italic uppercase tracking-tighter" id="modal-title">Registrar Partido</h3>
-                    <button id="close-modal" class="w-12 h-12 rounded-2xl bg-slate-50 text-slate-400 flex items-center justify-center hover:bg-rose-50 hover:text-rose-500 transition-all">
-                        <i class="fas fa-times"></i>
-                    </button>
+            <div class="p-6 md:p-10 max-w-7xl mx-auto w-full">
+                <div id="matches-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Skeleton loader -->
+                    <div class="animate-pulse bg-white/5 rounded-3xl h-64 border border-white/10"></div>
+                    <div class="animate-pulse bg-white/5 rounded-3xl h-64 border border-white/10"></div>
+                    <div class="animate-pulse bg-white/5 rounded-3xl h-64 border border-white/10"></div>
                 </div>
-                <form id="match-form" class="space-y-6 max-h-[60vh] overflow-y-auto pr-4 custom-scrollbar">
-                    <input type="hidden" name="id">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div class="space-y-2">
-                           <label class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Equipo Local</label>
-                           <input type="text" name="equipolocal" required class="w-full px-5 py-3.5 bg-slate-50 border-slate-100 rounded-2xl font-bold text-xs text-diba-blue outline-none focus:bg-white transition-all">
-                        </div>
-                        <div class="space-y-2">
-                           <label class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Equipo Visitante</label>
-                           <input type="text" name="equipovisitante" required class="w-full px-5 py-3.5 bg-slate-50 border-slate-100 rounded-2xl font-bold text-xs text-diba-blue outline-none focus:bg-white transition-all">
-                        </div>
-                        <div class="space-y-2">
-                           <label class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Fecha</label>
-                           <input type="date" name="fecha" required class="w-full px-5 py-3.5 bg-slate-50 border-slate-100 rounded-2xl font-bold text-xs text-diba-blue outline-none transition-all">
-                        </div>
-                        <div class="space-y-2">
-                           <label class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Hora</label>
-                           <input type="time" name="hora" required class="w-full px-5 py-3.5 bg-slate-50 border-slate-100 rounded-2xl font-bold text-xs text-diba-blue outline-none transition-all">
-                        </div>
-                        <div class="space-y-2">
-                           <label class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Cancha / Lugar</label>
-                           <input type="text" name="Cancha" class="w-full px-5 py-3.5 bg-slate-50 border-slate-100 rounded-2xl font-bold text-xs text-diba-blue outline-none transition-all">
-                        </div>
-                        <div class="space-y-2">
-                           <label class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Categoría</label>
-                           <input type="text" name="categoria" class="w-full px-5 py-3.5 bg-slate-50 border-slate-100 rounded-2xl font-bold text-xs text-diba-blue outline-none transition-all">
-                        </div>
-                        <div class="col-span-full space-y-2">
-                           <label class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Detalles Adicionales</label>
-                           <textarea name="descripcion" class="w-full px-5 py-3.5 bg-slate-50 border-slate-100 rounded-2xl font-bold text-xs text-diba-blue outline-none transition-all h-24"></textarea>
-                        </div>
-                        <div class="space-y-2">
-                           <label class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Resultado Final</label>
-                           <input type="text" name="resultado" placeholder="0 - 0" class="w-full px-5 py-3.5 bg-slate-50 border-slate-100 rounded-2xl font-bold text-xs text-diba-blue outline-none transition-all">
-                        </div>
-                        <div class="space-y-2">
-                           <label class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Costo / Inversión</label>
-                           <input type="number" name="valor" class="w-full px-5 py-3.5 bg-slate-50 border-slate-100 rounded-2xl font-bold text-xs text-diba-blue outline-none transition-all">
-                        </div>
-                    </div>
-                    <div class="flex gap-4 pt-6">
-                        <button type="button" id="cancel-modal" class="flex-1 py-4 text-[10px] font-black uppercase tracking-widest text-slate-400 hover:bg-slate-50 rounded-2xl transition-all">Descartar</button>
-                        <button type="submit" class="flex-1 py-4 text-[10px] font-black uppercase tracking-widest bg-diba-blue text-white rounded-2xl hover:bg-diba-red transition-all shadow-xl shadow-blue-900/10">Guardar Encuentro</button>
-                    </div>
-                </form>
-            </div>
-            <div class="p-6 bg-slate-50 border-t border-slate-100 flex items-center justify-center text-[7px] font-black text-slate-300 uppercase tracking-[.4em]">
-                Módulo de Programación Deportiva · DIBA FBC
             </div>
         </div>
     </div>
 
-    <script src="../scripts/config.js"></script>
+    <!-- Modal para crear/editar -->
+    <div id="match-modal" class="fixed inset-0 z-[100] hidden flex items-center justify-center p-4">
+        <div class="absolute inset-0 bg-black/80 backdrop-blur-sm" id="modal-backdrop"></div>
+        <div
+            class="relative bg-dibaDark border border-white/10 w-full max-w-2xl rounded-[2.5rem] shadow-2xl overflow-hidden animate__animated animate__zoomIn">
+            <div class="p-8 border-b border-white/5 flex justify-between items-center">
+                <h3 class="text-xl font-black uppercase italic" id="modal-title">Registrar Partido</h3>
+                <button class="text-slate-400 hover:text-white" id="close-modal"><i class="fas fa-times"></i></button>
+            </div>
+            <form id="match-form" class="p-8 space-y-6 max-h-[70vh] overflow-y-auto custom-scrollbar">
+                <input type="hidden" name="id">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="space-y-2">
+                        <label class="text-[10px] font-black uppercase tracking-widest text-slate-500">Equipo
+                            Local</label>
+                        <input type="text" name="equipolocal" required
+                            class="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 focus:ring-2 focus:ring-dibaGold outline-none font-bold">
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-[10px] font-black uppercase tracking-widest text-slate-500">Equipo
+                            Visitante</label>
+                        <input type="text" name="equipovisitante" required
+                            class="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 focus:ring-2 focus:ring-dibaGold outline-none font-bold">
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-[10px] font-black uppercase tracking-widest text-slate-500">Fecha</label>
+                        <input type="date" name="fecha" required
+                            class="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 focus:ring-2 focus:ring-dibaGold outline-none font-bold">
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-[10px] font-black uppercase tracking-widest text-slate-500">Hora</label>
+                        <input type="time" name="hora" required
+                            class="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 focus:ring-2 focus:ring-dibaGold outline-none font-bold">
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-[10px] font-black uppercase tracking-widest text-slate-500">Cancha /
+                            Lugar</label>
+                        <input type="text" name="Cancha"
+                            class="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 focus:ring-2 focus:ring-dibaGold outline-none font-bold"
+                            placeholder="Ej: Cancha Municipal">
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-[10px] font-black uppercase tracking-widest text-slate-500">Categoría</label>
+                        <input type="text" name="categoria"
+                            class="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 focus:ring-2 focus:ring-dibaGold outline-none font-bold"
+                            placeholder="Ej: Sub-12">
+                    </div>
+                    <div class="space-y-2 md:col-span-2">
+                        <label class="text-[10px] font-black uppercase tracking-widest text-slate-500">Descripción /
+                            Detalles</label>
+                        <textarea name="descripcion"
+                            class="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 focus:ring-2 focus:ring-dibaGold outline-none font-bold h-24"
+                            placeholder="Detalles del partido..."></textarea>
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-[10px] font-black uppercase tracking-widest text-slate-500">Resultado</label>
+                        <input type="text" name="resultado"
+                            class="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 focus:ring-2 focus:ring-dibaGold outline-none font-bold"
+                            placeholder="Ej: 2 - 1">
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-[10px] font-black uppercase tracking-widest text-slate-500">Valor /
+                            Costo</label>
+                        <input type="number" name="valor"
+                            class="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 focus:ring-2 focus:ring-dibaGold outline-none font-bold">
+                    </div>
+                </div>
+                <div class="flex justify-end gap-4 p-8 bg-white/5 mt-8 -mx-8 -mb-8">
+                    <button type="button" id="cancel-modal"
+                        class="px-8 py-4 rounded-2xl text-slate-400 font-black uppercase italic text-xs hover:bg-white/5">Cancelar</button>
+                    <button type="submit"
+                        class="bg-dibaGold text-dibaBlue px-10 py-4 rounded-2xl font-black uppercase italic text-xs shadow-lg hover:scale-105 active:scale-95 transition-all">Guardar
+                        Cambios</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="/scripts/config.js"></script>
     <script type="module">
-        import { initAdminLayout } from '../src/components/layout/admin-layout.js';
         import { supabase, requireAdmin } from '../scripts/supabaseClient.js';
 
         let allMatches = [];
 
+        // ── AUTENTICACIÓN Y CARGA ──
         async function init() {
-            const session = await requireAdmin();
-            if (!session) return;
-            initAdminLayout();
-            loadMatches();
+            try {
+                const session = await requireAdmin();
+                if (!session) return;
+
+                document.getElementById('admin-body').style.display = 'flex';
+
+                const user = session.user;
+                if (user) {
+                    const { data: profile } = await supabase
+                        .from('users')
+                        .select('username, role, full_name')
+                        .eq('id', user.id)
+                        .single();
+
+                    if (profile) {
+                        document.getElementById('sb-name').textContent = profile.username;
+                        document.getElementById('sb-role').textContent = profile.role;
+                        document.getElementById('sb-avatar').textContent = profile.username[0].toUpperCase();
+                    } else {
+                        const emailName = user.email.split('@')[0];
+                        document.getElementById('sb-name').textContent = emailName;
+                        document.getElementById('sb-avatar').textContent = emailName[0].toUpperCase();
+                    }
+                }
+                loadMatches();
+            } catch (error) {
+                console.error("Init error:", error);
+            }
         }
 
+        init();
+
+        // Clock
+        const clockEl = document.getElementById('clock');
+        function updateClock() {
+            const now = new Date();
+            if (clockEl) clockEl.textContent = now.toLocaleTimeString('es-CO', { hour: '2-digit', minute: '2-digit' });
+        }
+        updateClock();
+        setInterval(updateClock, 1000);
+
+        // Mobile Menu
+        const menuBtn = document.getElementById('menu-btn');
+        const menuIcon = document.getElementById('menu-icon');
+        const sidebar = document.getElementById('sidebar');
+        menuBtn?.addEventListener('click', () => {
+            sidebar.classList.toggle('open');
+            if (menuIcon) menuIcon.className = sidebar.classList.contains('open') ? 'fas fa-times' : 'fas fa-bars';
+        });
+
+        // Logout
+        document.getElementById('logout-btn')?.addEventListener('click', async () => {
+            if (confirm('¿Cerrar sesión?')) {
+                await supabase.auth.signOut();
+                window.location.href = 'login.html';
+            }
+        });
+
+        // 2. Cargar partidos
         async function loadMatches() {
             const grid = document.getElementById('matches-grid');
             const { data, error } = await supabase.from('partidos').select('*').order('fecha', { ascending: false });
 
             if (error) {
-                grid.innerHTML = `<div class="col-span-full py-20 text-center text-rose-500 font-black uppercase italic">Error al cargar datos maestro</div>`;
+                console.error(error);
+                grid.innerHTML = `<p class="col-span-full text-center text-red-400">Error al cargar datos: ${error.message}</p>`;
                 return;
             }
 
@@ -153,110 +302,106 @@
         function renderMatches(matches) {
             const grid = document.getElementById('matches-grid');
             if (matches.length === 0) {
-                grid.innerHTML = `<div class="col-span-full py-32 text-center opacity-20"><i class="fas fa-calendar-times text-5xl mb-6"></i><p class="text-[10px] font-black italic tracking-widest uppercase">Sin encuentros programados</p></div>`;
+                grid.innerHTML = `<div class="col-span-full text-center py-20 bg-white/5 rounded-[2.5rem] border border-dashed border-white/10">
+                    <i class="fas fa-calendar-times text-4xl text-slate-600 mb-4 block"></i>
+                    <p class="text-slate-500 uppercase font-black italic">No hay partidos registrados</p>
+                </div>`;
                 return;
             }
 
             grid.innerHTML = matches.map(m => {
-                const dateObj = new Date(m.fecha + 'T12:00:00'); 
-                const dia = dateObj.getDate();
-                const mes = dateObj.toLocaleDateString('es-CO', { month: 'short' }).toUpperCase().replace('.','');
-                
+                const fecha = new Date(m.fecha).toLocaleDateString('es-CO', { day: '2-digit', month: 'short', year: 'numeric' });
                 return `
-                <div class="bg-white border border-slate-50 rounded-[2.5rem] p-8 hover:shadow-premium transition-all group relative overflow-hidden animate-fade-up">
+                <div class="bg-white/5 border border-white/10 rounded-[2.5rem] p-8 hover:bg-white/[0.08] transition-all group overflow-hidden relative">
                     <div class="flex justify-between items-start mb-6">
-                        <div class="flex flex-col items-center bg-slate-50 w-12 py-2 rounded-2xl border border-slate-100">
-                           <span class="text-[8px] font-black text-slate-400">${mes}</span>
-                           <span class="text-xl font-black text-diba-blue">${dia}</span>
-                        </div>
+                        <span class="bg-dibaGold/10 text-dibaGold px-4 py-1.5 rounded-full text-[9px] font-black uppercase italic tracking-widest border border-dibaGold/20">${m.categoria || 'GENERAL'}</span>
                         <div class="flex gap-2">
-                           <button onclick="editMatch('${m.id}')" class="w-10 h-10 rounded-xl bg-slate-50 text-slate-300 flex items-center justify-center hover:bg-diba-blue hover:text-white transition-all shadow-sm"><i class="fas fa-edit text-xs"></i></button>
-                           <button onclick="deleteMatch('${m.id}')" class="w-10 h-10 rounded-xl bg-rose-50 text-rose-300 flex items-center justify-center hover:bg-rose-500 hover:text-white transition-all shadow-sm"><i class="fas fa-trash text-xs"></i></button>
+                            <button onclick="editMatch('${m.id}')" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-slate-400 hover:text-white hover:bg-white/10 transition-all"><i class="fas fa-edit"></i></button>
+                            <button onclick="deleteMatch('${m.id}')" class="w-10 h-10 rounded-full bg-red-500/10 flex items-center justify-center text-red-500 hover:bg-red-500 hover:text-white transition-all"><i class="fas fa-trash"></i></button>
                         </div>
                     </div>
-                    
-                    <div class="space-y-4">
-                        <div class="flex items-center gap-2">
-                           <span class="px-3 py-1 bg-diba-blue/5 text-diba-blue text-[7px] font-black uppercase italic rounded-full tracking-widest border border-diba-blue/10">${m.categoria || 'CLUB'}</span>
-                           <span class="text-[8px] font-bold text-slate-300 uppercase tracking-widest underline decoration-diba-gold/40 decoration-2 underline-offset-4">${m.hora || '--:--'}</span>
-                        </div>
-                        
-                        <div class="space-y-1">
-                           <h3 class="text-lg font-black italic leading-tight text-diba-blue group-hover:text-diba-red transition-colors uppercase tracking-tighter">${m.equipolocal}</h3>
-                           <div class="text-[8px] font-black text-slate-300 tracking-widest">VS</div>
-                           <h3 class="text-lg font-black italic leading-tight text-diba-blue group-hover:text-diba-red transition-colors uppercase tracking-tighter">${m.equipovisitante}</h3>
-                        </div>
-                        
-                        ${m.resultado ? `<div class="mt-4 bg-diba-gold/10 px-4 py-2 rounded-xl inline-block font-black text-diba-blue italic text-base shadow-inner border border-diba-gold/20 tracking-widest">${m.resultado}</div>` : ''}
-                        
-                        <div class="flex items-center gap-2 pt-4 border-t border-slate-50">
-                            <i class="fas fa-map-marker-alt text-[10px] text-diba-red"></i>
-                            <span class="text-[9px] font-bold text-slate-400 uppercase tracking-widest">${m.Cancha || 'Sede DIBA FBC'}</span>
-                        </div>
+                    <div class="mb-6">
+                        <p class="text-[10px] text-slate-500 font-black uppercase tracking-widest mb-2">${fecha} · ${m.hora || '--:--'}</p>
+                        <h3 class="text-xl font-black uppercase italic leading-tight text-white group-hover:text-dibaGold transition-colors">${m.equipolocal} <span class="text-slate-500">vs</span> ${m.equipovisitante}</h3>
+                        ${m.resultado ? `<div class="mt-4 bg-black/40 px-4 py-2 rounded-xl inline-block font-black text-dibaGold italic text-lg">${m.resultado}</div>` : ''}
+                    </div>
+                    <div class="flex items-center gap-3 text-slate-400">
+                        <i class="fas fa-map-marker-alt text-xs text-dibaGold"></i>
+                        <span class="text-[10px] font-bold uppercase">${m.Cancha || 'Cancha por definir'}</span>
                     </div>
                 </div>`;
             }).join('');
         }
 
-        // Global Handlers
+        // 3. Modal logic
+        const modal = document.getElementById('match-modal');
+        const form = document.getElementById('match-form');
+
         window.editMatch = (id) => {
-            const m = allMatches.find(x => x.id === id);
-            if (!m) return;
+            const match = allMatches.find(m => m.id === id);
+            if (!match) return;
+
             document.getElementById('modal-title').textContent = 'Editar Partido';
-            const f = document.getElementById('match-form');
-            f.id.value = m.id;
-            f.equipolocal.value = m.equipolocal;
-            f.equipovisitante.value = m.equipovisitante;
-            f.fecha.value = m.fecha ? m.fecha.split('T')[0] : '';
-            f.hora.value = m.hora || '';
-            f.Cancha.value = m.Cancha || '';
-            f.categoria.value = m.categoria || '';
-            f.descripcion.value = m.descripcion || '';
-            f.resultado.value = m.resultado || '';
-            f.valor.value = m.valor || '';
-            document.getElementById('match-modal').classList.remove('hidden');
+            form.id.value = match.id;
+            form.equipolocal.value = match.equipolocal;
+            form.equipovisitante.value = match.equipovisitante;
+            form.fecha.value = match.fecha ? match.fecha.split('T')[0] : '';
+            form.hora.value = match.hora || '';
+            form.Cancha.value = match.Cancha || '';
+            form.categoria.value = match.categoria || '';
+            form.descripcion.value = match.descripcion || '';
+            form.resultado.value = match.resultado || '';
+            form.valor.value = match.valor || '';
+
+            modal.classList.remove('hidden');
         };
 
         window.deleteMatch = async (id) => {
-            if (confirm('¿Eliminar encuentro?')) {
-                const { error } = await supabase.from('partidos').delete().eq('id', id);
-                if (error) alert(error.message); else loadMatches();
-            }
+            if (!confirm('¿Seguro que deseas eliminar este partido?')) return;
+            const { error } = await supabase.from('partidos').delete().eq('id', id);
+            if (error) alert('Error: ' + error.message);
+            else loadMatches();
         };
 
         document.getElementById('add-match-btn').addEventListener('click', () => {
             document.getElementById('modal-title').textContent = 'Registrar Partido';
-            document.getElementById('match-form').reset();
-            document.getElementById('match-form').id.value = '';
-            document.getElementById('match-modal').classList.remove('hidden');
+            form.reset();
+            form.id.value = '';
+            modal.classList.remove('hidden');
         });
 
-        const closeFunc = () => document.getElementById('match-modal').classList.add('hidden');
-        document.getElementById('close-modal').onclick = closeFunc;
-        document.getElementById('cancel-modal').onclick = closeFunc;
-        document.getElementById('modal-backdrop').onclick = closeFunc;
+        document.getElementById('close-modal').addEventListener('click', () => modal.classList.add('hidden'));
+        document.getElementById('cancel-modal').addEventListener('click', () => modal.classList.add('hidden'));
+        document.getElementById('modal-backdrop').addEventListener('click', () => modal.classList.add('hidden'));
 
-        document.getElementById('match-form').onsubmit = async (e) => {
+        form.addEventListener('submit', async (e) => {
             e.preventDefault();
-            const f = e.target;
-            const id = f.id.value;
-            const data = {
-                equipolocal: f.equipolocal.value,
-                equipovisitante: f.equipovisitante.value,
-                fecha: f.fecha.value,
-                hora: f.hora.value,
-                Cancha: f.Cancha.value,
-                categoria: f.categoria.value,
-                descripcion: f.descripcion.value,
-                resultado: f.resultado.value,
-                valor: f.valor.value ? parseInt(f.valor.value) : null
-            };
+            const fd = new FormData(form);
+            const id = fd.get('id');
+            const data = Object.fromEntries(fd.entries());
+            delete data.id;
 
-            const { error } = id ? await supabase.from('partidos').update(data).eq('id', id) : await supabase.from('partidos').insert([data]);
-            if (error) alert(error.message); else { closeFunc(); loadMatches(); }
-        };
+            let result;
+            if (id) {
+                result = await supabase.from('partidos').update(data).eq('id', id);
+            } else {
+                result = await supabase.from('partidos').insert([data]);
+            }
 
-        init();
+            if (result.error) {
+                alert('Error al guardar: ' + result.error.message);
+            } else {
+                modal.classList.add('hidden');
+                loadMatches();
+            }
+        });
+
+        // Make functions global for HTML strings
+        window.editMatch = editMatch;
+        window.deleteMatch = deleteMatch;
+
     </script>
 </body>
+
 </html>
+

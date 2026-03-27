@@ -6,211 +6,423 @@
     <title>Dashboard — DIBA FBC Admin</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="icon" href="/images/ESCUDO.ico" type="image/x-icon">
-    
-    <!-- Dependencies -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
-    <link rel="stylesheet" href="../styles/admin-common.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,600;0,700;0,900;1,700;1,900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+    <link rel="stylesheet" href="/styles/admin-common.css">
+    <script src="/scripts/theme-switcher.js"></script>
 
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        'diba-blue': '#004d98',
-                        'diba-red': '#a50044',
-                        'diba-gold': '#FFD700',
-                    },
-                    fontFamily: {
-                        'montserrat': ['Montserrat', 'sans-serif'],
-                        'inter': ['Inter', 'sans-serif'],
-                    }
-                }
-            }
+    <style>
+        /* ── DASHBOARD SPECIFIC BLOCKS ── */
+        .kpi-card::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            background: radial-gradient(circle at 50% 0%, rgba(255,255,255,0.05), transparent);
+            pointer-events: none;
         }
-    </script>
+
+        .bar-seg {
+            height: 100%;
+            transition: width .5s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 999px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+        }
+
+        .quick-btn {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            backdrop-filter: blur(5px);
+        }
+
+        .quick-btn:hover {
+            background: rgba(255,255,255,0.05);
+            border-color: var(--gold);
+            transform: translateY(-3px) scale(1.02);
+        }
+
+        /* AI Assistant Widget */
+        .ai-chat-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            height: 100%;
+        }
+        .ai-messages {
+            flex-grow: 1;
+            max-height: 200px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            padding-right: 0.5rem;
+            font-size: 0.8rem;
+        }
+        .ai-message {
+            padding: 0.6rem;
+            border-radius: 10px;
+            max-width: 90%;
+        }
+        .ai-message.user {
+            align-self: flex-end;
+            background: rgba(255, 204, 0, 0.1);
+            color: var(--gold);
+            border: 1px solid rgba(255, 204, 0, 0.2);
+        }
+        .ai-message.bot {
+            align-self: flex-start;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+        }
+        .ai-input-group {
+            display: flex;
+            gap: 0.5rem;
+        }
+        #ai-input {
+            flex-grow: 1;
+            background: rgba(0,0,0,0.2);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 0.5rem;
+            color: white;
+            font-size: 0.8rem;
+        }
+        #ai-input:focus {
+            border-color: var(--gold);
+            outline: none;
+        }
+        .ai-status {
+            font-size: 0.6rem;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            opacity: 0.7;
+        }
+        .status-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #666;
+        }
+        .status-dot.online { background: #4ade80; }
+        .status-dot.offline { background: #fb7185; }
+    </style>
 </head>
 
-<body class="bg-white font-['Inter']">
-    <div id="admin-nav"></div>
-
-    <main class="lg:ml-[280px] min-h-screen transition-all duration-300 bg-white pb-20">
-        <div class="p-6 lg:p-10 space-y-8 max-w-7xl mx-auto">
-            
-            <!-- Header -->
-            <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 animate-fade-up">
-                <div>
-                    <h2 class="text-3xl font-black text-diba-blue italic tracking-tighter uppercase">Panel de <span class="text-diba-red">Control</span></h2>
-                    <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-1">Dashboard General · DIBA FBC Admin</p>
+    <body class="bg-dibaDark text-slate-200 overflow-x-hidden" id="admin-body" style="display: none;">
+        <!-- Loader Loader -->
+        <div id="app-loader" class="fixed inset-0 z-[9999] flex items-center justify-center bg-[#06090e]">
+            <div class="text-center animate-fade-up">
+                <div class="relative w-16 h-16 mx-auto mb-6">
+                    <div class="absolute inset-0 border-4 border-gold/10 rounded-full"></div>
+                    <div class="absolute inset-0 border-4 border-t-gold rounded-full animate-spin"></div>
                 </div>
-                <div class="flex items-center gap-3">
-                    <div class="bg-slate-50 border border-slate-100 px-5 py-2.5 rounded-2xl text-[10px] font-black text-diba-blue italic uppercase shadow-sm" id="clock">--:--</div>
+                <p class="text-[10px] font-black uppercase tracking-[0.3em] text-gold italic opacity-80">DIBA FBC — Sistema Admin</p>
+            </div>
+        </div>
+
+    <!-- ══ SIDEBAR ══ -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-logo">
+            <img src="/images/ESCUDO.png" alt="DIBA FBC">
+            <div>
+                <div class="sidebar-logo-text">DIBA FBC</div>
+                <div class="sidebar-logo-sub">Panel de Control</div>
+            </div>
+        </div>
+
+        <nav class="sidebar-nav">
+            <a href="index.html" class="nav-link active"><i class="fas fa-th-large"></i> Dashboard</a>
+
+            <div class="nav-section-label">Equipo</div>
+            <a href="planilla.html" class="nav-link"><i class="fas fa-clipboard-list"></i> Planilla</a>
+            <a href="crear-jugador.html" class="nav-link"><i class="fas fa-user-plus"></i> Crear Jugador</a>
+            <a href="../ficha.html" class="nav-link"><i class="fas fa-users"></i> Jugadores</a>
+            <a href="../partidos.html" class="nav-link"><i class="fas fa-futbol"></i> Partidos</a>
+            <a href="../analisis.html" class="nav-link"><i class="fas fa-chart-line"></i> Análisis</a>
+            <a href="convocatorias.html" class="nav-link"><i class="fas fa-bullhorn"></i> Convocatorias</a>
+
+            <div class="nav-section-label">Comunicación</div>
+            <a href="push.html" class="nav-link"><i class="fas fa-bell"></i> Notificaciones Push</a>
+
+            <div class="nav-section-label">Administración</div>
+            <a href="GestorDocumental.html" class="nav-link"><i class="fas fa-folder-open"></i> Gestor Documental</a>
+            <a href="usuarios.html" class="nav-link"><i class="fas fa-user-cog"></i> Usuarios</a>
+            <a href="crear-usuario.html" class="nav-link"><i class="fas fa-user-plus"></i> Crear Usuario</a>
+            <a href="rifa_diba.html" class="nav-link"><i class="fas fa-ticket-alt"></i> Rifas</a>
+
+            <div class="nav-section-label">Sitio Web</div>
+            <a href="../index.html" class="nav-link"><i class="fas fa-globe"></i> Ver Sitio</a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="user-chip">
+                <div class="user-avatar" id="sb-avatar">A</div>
+                <div>
+                    <div class="user-name" id="sb-name">Administrador</div>
+                    <div class="user-role" id="sb-role">Admin</div>
                 </div>
             </div>
+            <button class="btn-logout" id="logout-btn">
+                <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+            </button>
+        </div>
+    </aside>
+    <div class="sidebar-overlay" onclick="document.getElementById('sidebar').classList.remove('open')"></div>
+
+    <!-- ══ MAIN ══ -->
+    <div class="main">
+
+        <!-- Top Bar -->
+        <header class="topbar">
+            <button class="mobile-menu-btn" id="menu-btn">
+                <i class="fas fa-bars" id="menu-icon"></i>
+            </button>
+            <div class="animate-fade-up">
+                <div class="page-title">Dashboard <span>Admin</span></div>
+                <div class="page-subtitle">Panel de Control General · DIBA FBC</div>
+            </div>
+            <div class="topbar-right">
+                <button id="theme-toggle" class="btn btn-outline" style="padding: 0.5rem; width: 40px; height: 40px; justify-content: center;" title="Cambiar Tema">
+                  <i id="theme-icon" class="fas fa-sun"></i>
+                </button>
+                <div class="topbar-time glass" id="clock">--:--</div>
+            </div>
+        </header>
+
+        <!-- Content -->
+        <div class="content">
 
             <!-- KPI Cards -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 animate-fade-up" style="animation-delay: 0.1s">
-                <div class="bg-white rounded-[2.5rem] p-8 border border-slate-50 shadow-premium group hover:scale-[1.03] transition-all relative overflow-hidden">
-                    <div class="absolute top-0 right-0 w-24 h-24 bg-diba-gold/5 rounded-bl-[4rem] -mr-8 -mt-8 transition-all group-hover:bg-diba-gold/10"></div>
-                    <div class="flex items-center justify-between mb-6 relative z-10">
-                        <div class="w-12 h-12 bg-diba-blue/5 rounded-2xl flex items-center justify-center text-diba-blue text-xl shadow-inner"><i class="fas fa-users"></i></div>
-                        <span class="px-3 py-1 bg-emerald-50 text-emerald-600 text-[8px] font-black uppercase italic rounded-full border border-emerald-100 italic">Activos</span>
-                    </div>
-                    <div class="text-4xl font-black text-diba-blue italic tracking-tighter mb-1 uppercase" id="kpi-players">0</div>
-                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Jugadores Oficiales</p>
-                </div>
-
-                <div class="bg-white rounded-[2.5rem] p-8 border border-slate-50 shadow-premium group hover:scale-[1.03] transition-all relative overflow-hidden">
-                    <div class="absolute top-0 right-0 w-24 h-24 bg-diba-blue/5 rounded-bl-[4rem] -mr-8 -mt-8 transition-all group-hover:bg-diba-blue/10"></div>
-                    <div class="flex items-center justify-between mb-6 relative z-10">
-                        <div class="w-12 h-12 bg-diba-red/5 rounded-2xl flex items-center justify-center text-diba-red text-xl shadow-inner"><i class="fas fa-futbol"></i></div>
-                        <span class="px-3 py-1 bg-diba-blue/5 text-diba-blue text-[8px] font-black uppercase italic rounded-full border border-diba-blue/10 italic">Calendario</span>
-                    </div>
-                    <div class="text-4xl font-black text-diba-blue italic tracking-tighter mb-1 uppercase" id="kpi-matches">0</div>
-                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Partidos Próximos</p>
-                </div>
-
-                <div class="bg-white rounded-[2.5rem] p-8 border border-slate-50 shadow-premium group hover:scale-[1.03] transition-all relative overflow-hidden">
-                    <div class="absolute top-0 right-0 w-24 h-24 bg-diba-red/5 rounded-bl-[4rem] -mr-8 -mt-8 transition-all group-hover:bg-diba-red/10"></div>
-                    <div class="flex items-center justify-between mb-6 relative z-10">
-                        <div class="w-12 h-12 bg-emerald-50 rounded-2xl flex items-center justify-center text-emerald-500 text-xl shadow-inner"><i class="fas fa-percent"></i></div>
-                        <span class="px-3 py-1 bg-emerald-50 text-emerald-600 text-[8px] font-black uppercase italic rounded-full border border-emerald-100 italic">Asistencia</span>
-                    </div>
-                    <div class="text-4xl font-black text-diba-blue italic tracking-tighter mb-1 uppercase" id="kpi-attendance">0%</div>
-                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Promedio General</p>
-                </div>
-
-                <div class="bg-white rounded-[2.5rem] p-8 border border-slate-50 shadow-premium group hover:scale-[1.03] transition-all relative overflow-hidden">
-                    <div class="absolute top-0 right-0 w-24 h-24 bg-slate-50 rounded-bl-[4rem] -mr-8 -mt-8 transition-all group-hover:bg-slate-100"></div>
-                    <div class="flex items-center justify-between mb-6 relative z-10">
-                        <div class="w-12 h-12 bg-slate-50 rounded-2xl flex items-center justify-center text-slate-400 text-xl shadow-inner"><i class="fas fa-wallet"></i></div>
-                        <span class="px-3 py-1 bg-rose-50 text-rose-600 text-[8px] font-black uppercase italic rounded-full border border-rose-100 italic">Cartera</span>
-                    </div>
-                    <div class="text-4xl font-black text-diba-blue italic tracking-tighter mb-1 uppercase" id="kpi-pending">0</div>
-                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Cargos Pendientes</p>
-                </div>
-            </div>
-
-            <!-- Main Grid -->
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 animate-fade-up" style="animation-delay: 0.2s">
-                
-                <!-- Quick Access -->
-                <div class="lg:col-span-2 bg-white rounded-[2.5rem] border border-slate-50 shadow-premium p-8 md:p-10">
-                    <div class="flex items-center justify-between mb-10">
-                        <h3 class="text-sm font-black text-diba-blue italic uppercase tracking-tighter flex items-center gap-3">
-                            <i class="fas fa-bolt text-diba-gold"></i> Accesos Directos
-                        </h3>
-                    </div>
-                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                        <a href="planilla.html" class="flex flex-col items-center justify-center p-6 bg-slate-50 rounded-[2rem] border border-slate-50 hover:border-diba-blue hover:bg-white hover:shadow-xl transition-all group">
-                            <div class="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-diba-blue mb-4 shadow-sm group-hover:bg-diba-blue group-hover:text-white transition-all">
-                                <i class="fas fa-clipboard-list text-xl"></i>
-                            </div>
-                            <span class="text-[9px] font-black text-diba-blue uppercase italic tracking-widest">Planilla</span>
-                        </a>
-                        <a href="GestorDocumental.html" class="flex flex-col items-center justify-center p-6 bg-slate-50 rounded-[2rem] border border-slate-50 hover:border-diba-blue hover:bg-white hover:shadow-xl transition-all group">
-                            <div class="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-diba-blue mb-4 shadow-sm group-hover:bg-diba-blue group-hover:text-white transition-all">
-                                <i class="fas fa-folder-open text-xl"></i>
-                            </div>
-                            <span class="text-[9px] font-black text-diba-blue uppercase italic tracking-widest">Gestor</span>
-                        </a>
-                        <a href="usuarios.html" class="flex flex-col items-center justify-center p-6 bg-slate-50 rounded-[2rem] border border-slate-50 hover:border-diba-blue hover:bg-white hover:shadow-xl transition-all group">
-                            <div class="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-diba-blue mb-4 shadow-sm group-hover:bg-diba-blue group-hover:text-white transition-all">
-                                <i class="fas fa-user-cog text-xl"></i>
-                            </div>
-                            <span class="text-[9px] font-black text-diba-blue uppercase italic tracking-widest">Usuarios</span>
-                        </a>
-                        <a href="convocatorias.html" class="flex flex-col items-center justify-center p-6 bg-slate-50 rounded-[2rem] border border-slate-50 hover:border-diba-blue hover:bg-white hover:shadow-xl transition-all group">
-                            <div class="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-diba-blue mb-4 shadow-sm group-hover:bg-diba-blue group-hover:text-white transition-all">
-                                <i class="fas fa-bullhorn text-xl"></i>
-                            </div>
-                            <span class="text-[9px] font-black text-diba-blue uppercase italic tracking-widest">Citatorio</span>
-                        </a>
-                    </div>
-
-                    <!-- Attendance Visualization -->
-                    <div class="mt-12 pt-10 border-t border-slate-50" id="attendance-panel" style="display:none">
-                        <div class="flex items-center justify-between mb-8">
-                            <h3 class="text-[11px] font-black text-diba-blue italic uppercase tracking-widest">Asistencia Última Sesión</h3>
-                        </div>
-                        <div class="space-y-6">
-                            <div class="flex items-center gap-3">
-                                <div class="flex-1 h-3 bg-slate-50 rounded-full overflow-hidden flex shadow-inner border border-slate-50">
-                                    <div id="bar-p" class="h-full bg-emerald-500 transition-all duration-1000 shadow-[0_0_15px_rgba(16,185,129,0.3)]"></div>
-                                    <div id="bar-a" class="h-full bg-rose-500 transition-all duration-1000 shadow-[0_0_15px_rgba(244,63,94,0.3)]"></div>
-                                    <div id="bar-e" class="h-full bg-diba-gold transition-all duration-1000 shadow-[0_0_15px_rgba(255,215,0,0.3)]"></div>
-                                </div>
-                            </div>
-                            <div class="grid grid-cols-3 gap-4">
-                                <div class="flex items-center gap-2">
-                                    <div class="w-2 h-2 rounded-full bg-emerald-500"></div>
-                                    <span class="text-[9px] font-black text-slate-400 uppercase italic">Presentes: <span id="att-p" class="text-diba-blue">0</span></span>
-                                </div>
-                                <div class="flex items-center gap-2">
-                                    <div class="w-2 h-2 rounded-full bg-rose-500"></div>
-                                    <span class="text-[9px] font-black text-slate-400 uppercase italic">Ausentes: <span id="att-a" class="text-diba-blue">0</span></span>
-                                </div>
-                                <div class="flex items-center gap-2">
-                                    <div class="w-2 h-2 rounded-full bg-diba-gold"></div>
-                                    <span class="text-[9px] font-black text-slate-400 uppercase italic">Excusas: <span id="att-e" class="text-diba-blue">0</span></span>
-                                </div>
-                            </div>
-                        </div>
+            <div class="kpi-grid">
+                <div class="kpi-card gold">
+                    <div class="kpi-icon"><i class="fas fa-users"></i></div>
+                    <div class="kpi-value" id="kpi-players">0</div>
+                    <div class="kpi-label">Jugadores</div>
+                    <div class="kpi-delta up"><i class="fas fa-arrow-trend-up"></i> <span>En planilla activa</span>
                     </div>
                 </div>
 
-                <!-- Recent Activity -->
-                <div class="bg-white rounded-[2.5rem] border border-slate-50 shadow-premium p-8 md:p-10 flex flex-col">
-                    <div class="flex items-center justify-between mb-10">
-                        <h3 class="text-sm font-black text-diba-blue italic uppercase tracking-tighter flex items-center gap-3">
-                            <i class="fas fa-history text-diba-red"></i> Actividad
-                        </h3>
-                    </div>
-                    <div class="space-y-8 flex-grow" id="activity-list">
-                        <div class="flex flex-col items-center justify-center py-20 opacity-20 text-diba-blue">
-                            <i class="fas fa-circle-notch fa-spin text-3xl mb-4"></i>
-                            <p class="text-[9px] font-black uppercase tracking-widest italic">Actualizando...</p>
-                        </div>
+                <div class="kpi-card blue">
+                    <div class="kpi-icon"><i class="fas fa-futbol"></i></div>
+                    <div class="kpi-value" id="kpi-matches">—</div>
+                    <div class="kpi-label">Partidos</div>
+                    <div class="kpi-delta info"><i class="fas fa-calendar"></i> <span>Temporada actual</span></div>
+                </div>
+
+                <div class="kpi-card green">
+                    <div class="kpi-icon"><i class="fas fa-percent"></i></div>
+                    <div class="kpi-value" id="kpi-attendance">—</div>
+                    <div class="kpi-label">% Asistencia</div>
+                    <div class="kpi-delta up"><i class="fas fa-arrow-trend-up"></i> <span>Última sesión</span></div>
+                </div>
+
+                <div class="kpi-card red">
+                    <div class="kpi-icon"><i class="fas fa-money-bill-wave"></i></div>
+                    <div class="kpi-value" id="kpi-pending">—</div>
+                    <div class="kpi-label">Pagos Pendientes</div>
+                    <div class="kpi-delta info"><i class="fas fa-info-circle"></i> <span>Sin pago registrado</span>
                     </div>
                 </div>
             </div>
 
-            <!-- Match Grid -->
-            <div class="bg-white rounded-[2.5rem] border border-slate-50 shadow-premium p-8 md:p-10 animate-fade-up" style="animation-delay: 0.3s">
-                <div class="flex items-center justify-between mb-10">
-                    <h3 class="text-sm font-black text-diba-blue italic uppercase tracking-tighter flex items-center gap-3">
-                        <i class="fas fa-calendar-alt text-diba-blue"></i> Próximos Partidos
-                    </h3>
-                    <a href="partidos.html" class="px-5 py-2.5 bg-diba-blue text-white text-[9px] font-black uppercase italic tracking-widest rounded-xl hover:bg-diba-red transition-all shadow-lg shadow-blue-900/10">
-                        Calendario Completo
-                    </a>
+            <!-- Row 2 -->
+            <div class="row-2">
+
+                <!-- Accesos rápidos -->
+                <div class="panel glass animate-fade-up" style="animation-delay: 0.1s">
+                    <div class="panel-header">
+                        <span class="panel-title"><i class="fas fa-bolt"
+                                style="color:var(--gold);margin-right:.5rem"></i>Accesos Rápidos</span>
+                        <span class="panel-badge">Admin</span>
+                    </div>
+                    <div class="panel-body">
+                        <div class="quick-grid">
+                            <a href="planilla.html" class="quick-btn">
+                                <div class="quick-btn-icon" style="background:rgba(255,204,0,.12);color:var(--gold)"><i
+                                        class="fas fa-clipboard-list"></i></div>
+                                <div>
+                                    <div class="quick-btn-label">Planilla</div>
+                                    <div class="quick-btn-sub">Control asistencia</div>
+                                </div>
+                            </a>
+                            <a href="GestorDocumental.html" class="quick-btn">
+                                <div class="quick-btn-icon" style="background:rgba(59,130,246,.12);color:#60a5fa"><i
+                                        class="fas fa-folder-open"></i></div>
+                                <div>
+                                    <div class="quick-btn-label">Gestor</div>
+                                    <div class="quick-btn-sub">Documentos</div>
+                                </div>
+                            </a>
+                            <a href="usuarios.html" class="quick-btn">
+                                <div class="quick-btn-icon" style="background:rgba(168,85,247,.12);color:#c084fc"><i
+                                        class="fas fa-user-cog"></i></div>
+                                <div>
+                                    <div class="quick-btn-label">Usuarios</div>
+                                    <div class="quick-btn-sub">Gestión accesos</div>
+                                </div>
+                            </a>
+                            <a href="crear-usuario.html" class="quick-btn">
+                                <div class="quick-btn-icon" style="background:rgba(34,197,94,.12);color:#4ade80"><i
+                                        class="fas fa-user-plus"></i></div>
+                                <div>
+                                    <div class="quick-btn-label">Nuevo Usuario</div>
+                                    <div class="quick-btn-sub">Crear acceso</div>
+                                </div>
+                            </a>
+                            <a href="rifa_diba.html" class="quick-btn">
+                                <div class="quick-btn-icon" style="background:rgba(251,146,60,.12);color:#fb923c"><i
+                                        class="fas fa-ticket-alt"></i></div>
+                                <div>
+                                    <div class="quick-btn-label">Rifas</div>
+                                    <div class="quick-btn-sub">Control boletas</div>
+                                </div>
+                            </a>
+                            <a href="partidos.html" class="quick-btn">
+                                <div class="quick-btn-icon" style="background:rgba(239,68,68,.12);color:#fb7185"><i
+                                        class="fas fa-futbol"></i></div>
+                                <div>
+                                    <div class="quick-btn-label">Partidos</div>
+                                    <div class="quick-btn-sub">Gestionar eventos</div>
+                                </div>
+                            </a>
+                            <a href="../analisis.html" class="quick-btn">
+                                <div class="quick-btn-icon" style="background:rgba(20,184,166,.12);color:#2dd4bf"><i
+                                        class="fas fa-chart-line"></i></div>
+                                <div>
+                                    <div class="quick-btn-label">Análisis</div>
+                                    <div class="quick-btn-sub">Stats equipo</div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
                 </div>
-                <div id="matches-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    <div class="flex flex-col items-center justify-center py-20 opacity-20 text-diba-blue col-span-full">
-                        <i class="fas fa-futbol fa-bounce text-4xl mb-6"></i>
-                        <p class="text-[9px] font-black uppercase tracking-widest italic">Consultando encuentros...</p>
+
+                <!-- Actividad reciente -->
+                <div class="panel glass animate-fade-up" style="animation-delay: 0.2s">
+                    <div class="panel-header">
+                        <span class="panel-title"><i class="fas fa-history"
+                                style="color:var(--gold);margin-right:.5rem"></i>Actividad Reciente</span>
+                    </div>
+                    <div class="panel-body">
+                        <div class="activity-list" id="activity-list">
+                            <div class="empty-state">
+                                <i class="fas fa-inbox"></i>
+                                <p>Sin actividad registrada</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Espacio para futuros widgets de administración -->
+                <div class="panel glass animate-fade-up" style="animation-delay: 0.25s; display: flex; align-items: center; justify-content: center; min-height: 200px;">
+                    <div style="text-align: center; opacity: 0.5;">
+                        <i class="fas fa-chart-pie" style="font-size: 2rem; color: var(--gold); margin-bottom: 1rem;"></i>
+                        <p style="font-size: 0.7rem; font-weight: 800; text-transform: uppercase;">Módulo de Análisis Próximamente</p>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Row 3: Próximos Partidos -->
+            <div class="panel glass animate-fade-up" id="matches-panel" style="margin-bottom: 2rem; animation-delay: 0.3s">
+                <div class="panel-header">
+                    <span class="panel-title"><i class="fas fa-calendar-alt"
+                            style="color:var(--gold);margin-right:.5rem"></i>Próximos Partidos</span>
+                    <a href="partidos.html"
+                        style="font-size:.7rem;font-weight:800;color:var(--gold);text-decoration:none;text-transform:uppercase;letter-spacing:.1em">Gestionar
+                        →</a>
+                </div>
+                <div class="panel-body">
+                    <div id="matches-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <!-- Matches will be rendered here -->
+                        <div class="empty-state">
+                            <i class="fas fa-search"></i>
+                            <p>Buscando encuentros...</p>
+                        </div>
                     </div>
                 </div>
             </div>
-            
-        </div>
-    </main>
 
-    <script src="../scripts/config.js"></script>
+            <!-- Asistencia última sesión -->
+            <div class="panel glass animate-fade-up" id="attendance-panel" style="display:none; animation-delay: 0.4s">
+                <div class="panel-header">
+                    <span class="panel-title"><i class="fas fa-chart-pie"
+                            style="color:var(--gold);margin-right:.5rem"></i>Asistencia Última Sesión</span>
+                    <a href="planilla.html"
+                        style="font-size:.7rem;font-weight:800;color:var(--gold);text-decoration:none;text-transform:uppercase;letter-spacing:.1em">Ver
+                        Planilla →</a>
+                </div>
+                <div class="panel-body">
+                    <div class="attendance-labels">
+                        <div class="att-chip">
+                            <div class="att-dot" style="background:#4ade80"></div> <span id="att-p">0 Presentes</span>
+                        </div>
+                        <div class="att-chip">
+                            <div class="att-dot" style="background:#fb7185"></div> <span id="att-a">0 Ausentes</span>
+                        </div>
+                        <div class="att-chip">
+                            <div class="att-dot" style="background:#facc15"></div> <span id="att-e">0 Excusas</span>
+                        </div>
+                    </div>
+                    <div class="bar-track">
+                        <div class="bar-seg" id="bar-p" style="background:#4ade80;width:0%"></div>
+                        <div class="bar-seg" id="bar-a" style="background:#fb7185;width:0%;margin-left:2px"></div>
+                        <div class="bar-seg" id="bar-e" style="background:#facc15;width:0%;margin-left:2px"></div>
+                    </div>
+                </div>
+            </div>
+
+        </div><!-- /content -->
+    </div><!-- /main -->
+
+    <script src="/scripts/config.js"></script>
     <script type="module">
-        import { initAdminLayout } from '../src/components/layout/admin-layout.js';
         import { supabase, requireAdmin } from '../scripts/supabaseClient.js';
-        
+        import { chatWithAI, checkAIStatus } from '../src/core/aiClient.js';
+        import '../src/core/aiWidget.js'; // Carga global del widget
+
+        // La lógica de IA ahora es manejada globalmente por el Widget flotante
+        // accesible en todo el sitio a través de public/src/core/aiWidget.js
+
+        // ── AUTENTICACIÓN Y CARGA ──
         async function init() {
-            const session = await requireAdmin();
-            if (!session) return;
-            initAdminLayout();
-            loadKPIs();
+            try {
+                const session = await requireAdmin();
+                if (!session) return;
+
+                document.getElementById('admin-body').classList.remove('hidden');
+                document.getElementById('admin-body').style.display = 'flex';
+
+                const user = session.user;
+                if (user) {
+                    const { data: profile } = await supabase
+                        .from('users')
+                        .select('username, role, full_name')
+                        .eq('id', user.id)
+                        .single();
+
+                    if (profile) {
+                        document.getElementById('sb-name').textContent = profile.username;
+                        document.getElementById('sb-role').textContent = profile.role;
+                        document.getElementById('sb-avatar').textContent = profile.username[0].toUpperCase();
+                    } else {
+                        const emailName = user.email.split('@')[0];
+                        document.getElementById('sb-name').textContent = emailName;
+                        document.getElementById('sb-avatar').textContent = emailName[0].toUpperCase();
+                    }
+                }
+                loadKPIs();
+            } catch (error) {
+                console.error("Init error:", error);
+            }
         }
+
         init();
 
-        // Reloj
+        // ── RELOJ ──
         const clockEl = document.getElementById('clock');
         function updateClock() {
             const now = new Date();
@@ -219,21 +431,44 @@
         updateClock();
         setInterval(updateClock, 1000);
 
-        // Core logic
+        // ── MOBILE MENU ──
+        const menuBtn = document.getElementById('menu-btn');
+        const menuIcon = document.getElementById('menu-icon');
+        const sidebar = document.getElementById('sidebar');
+        menuBtn.addEventListener('click', () => {
+            sidebar.classList.toggle('open');
+            menuIcon.className = sidebar.classList.contains('open') ? 'fas fa-times' : 'fas fa-bars';
+        });
+
+        // ── LOGOUT ──
+        document.getElementById('logout-btn').addEventListener('click', async () => {
+            if (confirm('¿Cerrar sesión?')) {
+                await supabase.auth.signOut();
+                window.location.href = 'login.html';
+            }
+        });
+
+        async function getMatchCount() {
+            const { count } = await supabase.from('partidos').select('*', { count: 'exact', head: true });
+            return count || 0;
+        }
+
+        // ── KPIs desde Supabase ──
+        // ── KPIs desde Supabase ──
         async function loadKPIs() {
-            // 1. Jugadores
+            // 1. Cargar Jugadores (Prioritario)
             try {
                 const { count } = await supabase.from('identificacion').select('*', { count: 'exact', head: true });
                 document.getElementById('kpi-players').textContent = count || 0;
-            } catch (e) { console.error(e); }
+            } catch (e) { console.error('Error Jugadores:', e); }
 
-            // 2. Partidos
+            // 2. Cargar Partidos
             try {
-                const { count } = await supabase.from('partidos').select('*', { count: 'exact', head: true });
+                const count = await getMatchCount();
                 document.getElementById('kpi-matches').textContent = count || 0;
-            } catch (e) { console.error(e); }
+            } catch (e) { console.error('Error Partidos:', e); }
 
-            // 3. Stats RPC
+            // 3. Cargar Estadísticas (RPC)
             try {
                 const { data: stats, error: statsError } = await supabase.rpc('get_dashboard_stats');
                 if (!statsError && stats && stats.length > 0) {
@@ -243,91 +478,138 @@
                         const attPct = totalAsis > 0 ? Math.round((s.presentes / totalAsis) * 100) : 0;
                         document.getElementById('kpi-attendance').textContent = `${attPct}%`;
 
-                        document.getElementById('attendance-panel').style.display = 'block';
+                        document.getElementById('attendance-panel').style.display = '';
                         document.getElementById('bar-p').style.width = (totalAsis > 0 ? (s.presentes / totalAsis) * 100 : 0) + '%';
                         document.getElementById('bar-a').style.width = (totalAsis > 0 ? (s.ausentes / totalAsis) * 100 : 0) + '%';
                         document.getElementById('bar-e').style.width = (totalAsis > 0 ? (s.excusas / totalAsis) * 100 : 0) + '%';
 
-                        document.getElementById('att-p').textContent = s.presentes;
-                        document.getElementById('att-a').textContent = s.ausentes;
-                        document.getElementById('att-e').textContent = s.excusas;
+                        document.getElementById('att-p').textContent = `${s.presentes} Presentes`;
+                        document.getElementById('att-a').textContent = `${s.ausentes} Ausentes`;
+                        document.getElementById('att-e').textContent = `${s.excusas} Excusas`;
                     }
                 }
-            } catch (e) { console.error(e); }
+            } catch (e) { console.error('Error RPC Stats:', e); }
 
-            // 4. Cartera
+            // 4. Pagos Pendientes
             try {
-                const { count } = await supabase.from('planilla_registros').select('*', { count: 'exact', head: true }).or('pago.is.null,pago.eq.0');
-                document.getElementById('kpi-pending').textContent = count > 0 ? count : '✓';
-            } catch (e) { console.error(e); }
+                const { count: pendingCount } = await supabase
+                    .from('planilla_registros')
+                    .select('*', { count: 'exact', head: true })
+                    .or('pago.is.null,pago.eq.0');
+                document.getElementById('kpi-pending').textContent = pendingCount > 0 ? pendingCount : '✓';
+            } catch (e) { console.error('Error Pagos:', e); }
 
+            // 5. Actividad y Partidos Próximos
             loadRecentActivity();
             loadUpcomingMatches();
         }
 
         async function loadRecentActivity() {
             try {
-                const { data } = await supabase.from('jugadores').select('nombre, fecha_registro').order('fecha_registro', { ascending: false }).limit(5);
-                const list = document.getElementById('activity-list');
-                if (!data || data.length === 0) {
-                    list.innerHTML = '<div class="text-center py-10 text-[9px] font-black text-slate-300 uppercase italic">Sin actividad reciente</div>';
-                    return;
+                const { data: recentPlayers } = await supabase
+                    .from('jugadores')
+                    .select('nombre, fecha_registro')
+                    .order('fecha_registro', { ascending: false })
+                    .limit(3);
+
+                const { data: recentMessages } = await supabase
+                    .from('mensajes')
+                    .select('full_name, content, created_at')
+                    .order('created_at', { ascending: false })
+                    .limit(3);
+
+                const activities = [];
+                if (recentPlayers) {
+                    recentPlayers.forEach(p => activities.push({
+                        type: 'player',
+                        title: p.nombre,
+                        subtitle: 'Nuevo jugador registrado',
+                        time: new Date(p.fecha_registro)
+                    }));
                 }
-                list.innerHTML = data.map(act => `
-                    <div class="flex items-center gap-5 group cursor-pointer animate-fade-in">
-                        <div class="w-12 h-12 rounded-2xl bg-slate-50 flex items-center justify-center text-diba-blue group-hover:bg-diba-blue group-hover:text-white transition-all border border-slate-100 shadow-sm relative overflow-hidden">
-                            <i class="fas fa-user-plus text-xs relative z-10"></i>
-                            <div class="absolute inset-0 bg-diba-gold/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                        </div>
-                        <div class="flex-1 border-b border-slate-50 pb-4 group-last:border-0">
-                            <div class="text-[11px] font-black text-diba-blue italic uppercase tracking-tighter group-hover:text-diba-red transition-colors">${act.nombre}</div>
-                            <div class="text-[8px] font-bold text-slate-400 uppercase tracking-[0.2em] mt-1">NUEVO JUGADOR REGISTRADO • ${new Date(act.fecha_registro).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
-                        </div>
-                    </div>
-                `).join('');
-            } catch (e) { console.error(e); }
+                if (recentMessages) {
+                    recentMessages.forEach(m => activities.push({
+                        type: 'message',
+                        title: m.full_name || 'Usuario Anónimo',
+                        subtitle: `Mensaje: "${m.content.substring(0, 30)}..."`,
+                        time: new Date(m.created_at)
+                    }));
+                }
+
+                activities.sort((a, b) => b.time - a.time);
+                renderRecentActivity(activities.slice(0, 5));
+            } catch (e) { console.error('Error Actividad:', e); }
         }
 
         async function loadUpcomingMatches() {
             try {
-                const { data } = await supabase.from('partidos').select('*').gte('fecha', new Date().toISOString().split('T')[0]).order('fecha', { ascending: true }).limit(3);
-                const container = document.getElementById('matches-list');
-                if (!data || data.length === 0) {
-                    container.innerHTML = '<div class="col-span-full py-16 bg-slate-50 rounded-[2.5rem] border border-slate-100 text-center text-[9px] font-black text-slate-400 uppercase tracking-widest italic">No hay encuentros programados</div>';
-                    return;
-                }
-                container.innerHTML = data.map(m => `
-                    <div class="bg-slate-50 border border-slate-50 p-8 rounded-[2.5rem] hover:bg-white hover:shadow-premium hover:border-diba-blue/10 transition-all group animate-fade-in">
-                        <div class="flex justify-between items-center mb-6">
-                            <span class="px-4 py-2 bg-diba-red/5 text-diba-red text-[8px] font-black uppercase italic rounded-xl border border-diba-red/10">${m.categoria}</span>
-                            <span class="text-[9px] font-black text-slate-400 uppercase italic">${new Date(m.fecha).toLocaleDateString('es-CO', { day: '2-digit', month: 'short' }).toUpperCase()}</span>
-                        </div>
-                        <div class="text-sm font-black text-diba-blue uppercase italic tracking-tighter mb-6 flex flex-col gap-2">
-                            <div class="flex items-center gap-3">
-                                <div class="w-1.5 h-1.5 rounded-full bg-diba-gold group-hover:scale-150 transition-transform"></div>
-                                <span>${m.equipolocal}</span>
-                            </div>
-                            <div class="flex items-center gap-3 opacity-30 px-4 text-[9px]">VS</div>
-                            <div class="flex items-center gap-3">
-                                <div class="w-1.5 h-1.5 rounded-full bg-diba-blue group-hover:scale-150 transition-transform"></div>
-                                <span>${m.equipovisitante}</span>
-                            </div>
-                        </div>
-                        <div class="flex flex-col gap-3 pt-6 border-t border-slate-100">
-                             <div class="flex items-center gap-3">
-                                <div class="w-8 h-8 rounded-xl bg-white flex items-center justify-center text-diba-blue shadow-sm border border-slate-50 group-hover:text-diba-red transition-colors"><i class="fas fa-clock text-[10px]"></i></div>
-                                <span class="text-[10px] font-black text-diba-blue uppercase italic">${m.hora}</span>
-                            </div>
-                            <div class="flex items-center gap-3">
-                                <div class="w-8 h-8 rounded-xl bg-white flex items-center justify-center text-diba-blue shadow-sm border border-slate-50 group-hover:text-diba-red transition-colors"><i class="fas fa-map-marker-alt text-[10px]"></i></div>
-                                <span class="text-[9px] font-bold text-slate-400 uppercase tracking-tight line-clamp-1">${m.Cancha}</span>
-                            </div>
-                        </div>
-                    </div>
-                `).join('');
-            } catch (e) { console.error(e); }
+                const { data: upcomingMatches } = await supabase
+                    .from('partidos')
+                    .select('*')
+                    .gte('fecha', new Date().toISOString().split('T')[0])
+                    .order('fecha', { ascending: true })
+                    .limit(3);
+
+                renderMatches(upcomingMatches);
+            } catch (e) { console.error('Error Upcoming Matches:', e); }
         }
+
+        function renderMatches(matches) {
+            const container = document.getElementById('matches-list');
+            if (!matches || matches.length === 0) {
+                container.innerHTML = `<div class="empty-state"><i class="fas fa-futbol"></i><p>No hay partidos programados</p></div>`;
+                return;
+            }
+
+            container.innerHTML = matches.map(m => `
+                <div style="background:var(--dark3); border:1px solid var(--border); border-radius:14px; padding:1.2rem; display:flex; flex-direction:column; gap:0.5rem">
+                    <div style="display:flex; justify-content:space-between; align-items:center">
+                        <span style="font-size:0.6rem; font-weight:800; color:var(--gold); text-transform:uppercase">${m.categoria}</span>
+                        <span style="font-size:0.6rem; color:var(--slate)">${new Date(m.fecha).toLocaleDateString()}</span>
+                    </div>
+                    <div style="font-size:0.85rem; font-weight:900; font-style:italic; text-transform:uppercase; display:flex; align-items:center; gap:0.5rem">
+                        <span>${m.equipolocal}</span>
+                        <span style="color:var(--gold)">VS</span>
+                        <span>${m.equipovisitante}</span>
+                    </div>
+                    <div style="font-size:0.65rem; color:var(--slate); display:flex; flex-direction:column; gap:0.2rem">
+                        <span><i class="fas fa-clock" style="margin-right:0.3rem"></i> ${m.hora}</span>
+                        <span><i class="fas fa-map-marker-alt" style="margin-right:0.3rem"></i> ${m.Cancha}</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderRecentActivity(activities) {
+            const list = document.getElementById('activity-list');
+            const icons = {
+                player: { bg: 'rgba(255,204,0,.12)', color: 'var(--gold)', icon: 'fa-user-plus' },
+                message: { bg: 'rgba(59,130,246,.12)', color: '#60a5fa', icon: 'fa-envelope' }
+            };
+
+            const items = activities.map(act => {
+                const conf = icons[act.type];
+                const timeStr = act.time.toLocaleDateString() + ' ' + act.time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                return `
+                  <div class="activity-item">
+                    <div class="activity-dot" style="background:${conf.bg};color:${conf.color}">
+                      <i class="fas ${conf.icon}"></i>
+                    </div>
+                    <div>
+                      <div class="activity-text">${act.title}</div>
+                      <div class="activity-time">${act.subtitle} · ${timeStr}</div>
+                    </div>
+                  </div>`;
+            }).join('');
+
+            list.innerHTML = items || `<div class="empty-state"><i class="fas fa-inbox"></i><p>Sin actividad</p></div>`;
+        }
+
+        // Inicializar
+        loadKPIs();
     </script>
+
 </body>
 
 </html>
+

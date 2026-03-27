@@ -3,433 +3,564 @@
 
 <head>
   <meta charset="UTF-8" />
-  <title>Planilla — DIBA FBC Admin</title>
+  <title>Planilla - DIBA FBC</title>
+  <meta name="author" content="REINALDO DE JESUS PEREZ NAVAS" />
+  <meta name="keywords"
+    content="DIBA FBC, Deportivo Internacional De Barranquilla Atlántico, Fútbol, Barranquilla, Atlántico, Colombia" />
+  <meta name="robots" content="index, follow" />
+  <meta name="theme-color" content="#002a40" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="icon" href="/images/ESCUDO.ico" sizes="32x32">
+  <link rel="icon" href="images/ESCUDO.ico" sizes="32x32">
 
-  <!-- Core Dependencies -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+
+  <!-- Bootstrap 5.3.3 CSS & JS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
-  
-  <!-- UI Components -->
+
   <link rel="stylesheet" href="../styles/admin-common.css">
-  <link rel="stylesheet" href="../styles/planilla.css">
-  
-  <!-- Logic Libraries -->
+  <script src="../scripts/theme-switcher.js"></script>
+
   <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.8.2/dist/jspdf.plugin.autotable.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-  
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            'diba-blue': '#004d98',
-            'diba-red': '#a50044',
-            'diba-gold': '#FFD700',
-          },
-          fontFamily: {
-            'montserrat': ['Montserrat', 'sans-serif'],
-            'inter': ['Inter', 'sans-serif'],
-          }
-        }
-      }
-    }
-  </script>
+  <link rel="stylesheet" href="../styles/planilla.css">
 </head>
 
-<body class="bg-white font-['Inter']">
-    <div id="admin-nav"></div>
-
-    <main class="lg:ml-[280px] min-h-screen transition-all duration-300 bg-white pb-20">
-        <div class="p-6 lg:p-10 space-y-8 max-w-7xl mx-auto">
-            
-            <!-- Header -->
-            <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
-                <div class="animate-fade-up">
-                    <h2 class="text-3xl font-black text-diba-blue italic tracking-tighter uppercase">Planilla de <span class="text-diba-red">Control</span></h2>
-                    <p class="text-sm text-slate-400 font-bold uppercase tracking-widest mt-1">Gestión de Asistencia y Pagos · DIBA FBC <span id="sync-status" class="ml-4 text-xs italic font-black text-diba-blue opacity-50 uppercase tracking-tight"></span></p>
-                </div>
-                <div class="flex items-center gap-4">
-                    <div class="flex items-center bg-slate-50 border border-slate-100 rounded-2xl p-1 shadow-sm">
-                        <label for="planillaDate" class="text-[9px] font-black text-slate-400 uppercase italic px-3">Fecha de Control</label>
-                        <input type="date" id="planillaDate" class="bg-white border-none rounded-xl text-xs font-black text-diba-blue focus:ring-0 px-3 py-2 cursor-pointer">
-                    </div>
-                </div>
+<body class="bg-dark text-white flex min-h-screen" id="admin-body" style="overflow-x: hidden; font-family: 'Inter', sans-serif; display: none;">
+    <!-- Loader -->
+    <div id="app-loader" class="fixed inset-0 z-[9999] flex items-center justify-center bg-[#06090e]">
+        <div class="text-center animate-fade-up">
+            <div class="relative w-16 h-16 mx-auto mb-6">
+                <div class="absolute inset-0 border-4 border-gold/10 rounded-full"></div>
+                <div class="absolute inset-0 border-4 border-t-gold rounded-full animate-spin"></div>
             </div>
-
-            <!-- Stats Bar -->
-            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 stats-bar">
-                <div class="stat-chip green">
-                    <div class="stat-icon"><i class="fas fa-check-circle"></i></div>
-                    <div>
-                        <div class="stat-value" id="stat-presentes">0</div>
-                        <div class="stat-label">Presentes</div>
-                    </div>
-                </div>
-                <div class="stat-chip red">
-                    <div class="stat-icon"><i class="fas fa-times-circle"></i></div>
-                    <div>
-                        <div class="stat-value" id="stat-ausentes">0</div>
-                        <div class="stat-label">Ausentes</div>
-                    </div>
-                </div>
-                <div class="stat-chip yellow">
-                    <div class="stat-icon"><i class="fas fa-clock"></i></div>
-                    <div>
-                        <div class="stat-value" id="stat-excusas">0</div>
-                        <div class="stat-label">Excusas</div>
-                    </div>
-                </div>
-                <div class="stat-chip blue">
-                    <div class="stat-icon"><i class="fas fa-users"></i></div>
-                    <div>
-                        <div class="stat-value" id="stat-total">0</div>
-                        <div class="stat-label">Total Nómina</div>
-                    </div>
-                </div>
-                <div class="stat-chip purple">
-                    <div class="stat-icon"><i class="fas fa-percent"></i></div>
-                    <div>
-                        <div class="stat-value" id="stat-pct">0%</div>
-                        <div class="stat-label">Asistencia</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Progress Indicator -->
-            <div class="att-progress-bar">
-                <div id="prog-p" class="att-seg bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.3)]"></div>
-                <div id="prog-a" class="att-seg bg-rose-500 shadow-[0_0_10px_rgba(244,63,94,0.3)]"></div>
-                <div id="prog-e" class="att-seg bg-amber-500 shadow-[0_0_10px_rgba(245,158,11,0.3)]"></div>
-            </div>
-
-            <!-- Toolbar -->
-            <div class="bg-white rounded-[2.5rem] p-4 border border-slate-50 shadow-premium flex flex-col lg:flex-row items-center justify-between gap-4 animate-fade-up">
-                <div class="flex items-center gap-3 w-full lg:w-auto">
-                    <div class="relative flex-grow lg:w-80 search-container">
-                        <i class="fas fa-search absolute left-5 top-1/2 -translate-y-1/2 text-slate-300 text-sm"></i>
-                        <input type="text" id="playerSearch" placeholder="Buscar jugador por nombre/DNI..." class="w-full pl-12 pr-6 py-3.5 bg-slate-50 border-slate-100 rounded-2xl text-sm font-bold text-diba-blue focus:bg-white focus:ring-4 focus:ring-diba-blue/5 transition-all outline-none">
-                    </div>
-                    <button onclick="openCreateModal()" class="w-12 h-12 rounded-2xl bg-diba-blue text-white flex items-center justify-center hover:bg-diba-red hover:rotate-90 transition-all shadow-lg shadow-blue-900/10" title="Nuevo Jugador">
-                        <i class="fas fa-plus"></i>
-                    </button>
-                    <button id="saveAllBtn" class="px-6 py-3.5 rounded-2xl bg-emerald-500 text-white text-[10px] font-black uppercase italic tracking-widest hover:bg-emerald-600 transition-all shadow-lg shadow-emerald-500/20 flex items-center gap-3">
-                        <i class="fas fa-cloud-upload-alt text-sm"></i> Guardar Todo
-                    </button>
-                </div>
-
-                <div class="flex items-center gap-2 overflow-x-auto w-full lg:w-auto no-scrollbar pb-2 lg:pb-0">
-                    <button id="generatePDFPro" class="px-5 py-3 rounded-xl bg-slate-900 text-white text-[9px] font-black uppercase italic tracking-widest hover:bg-diba-blue transition-all whitespace-nowrap shadow-lg">
-                        <i class="fas fa-print mr-2 text-diba-gold"></i> Planilla Pro
-                    </button>
-                    <button id="generatePDF" class="px-5 py-3 rounded-xl border border-rose-100 bg-rose-50 text-rose-600 text-[9px] font-black uppercase italic tracking-widest hover:bg-rose-100 transition-all whitespace-nowrap">
-                        <i class="fas fa-file-pdf mr-2"></i> Reporte PDF
-                    </button>
-                    <button id="generateExcel" class="px-5 py-3 rounded-xl border border-emerald-100 bg-emerald-50 text-emerald-600 text-[9px] font-black uppercase italic tracking-widest hover:bg-emerald-100 transition-all whitespace-nowrap">
-                        <i class="fas fa-file-excel mr-2"></i> Excel XLSX
-                    </button>
-                </div>
-            </div>
-
-            <!-- Table Container -->
-            <div class="planilla-container animate-fade-up" style="animation-delay: 0.1s">
-                <div class="overflow-x-auto">
-                    <table class="w-full table-planilla" id="mainTable">
-                        <thead>
-                            <tr class="text-left">
-                                <th class="w-16 text-center">#</th>
-                                <th class="w-16">Foto</th>
-                                <th>Jugador</th>
-                                <th class="w-48">Estado de Pago</th>
-                                <th class="w-40">Asistencia</th>
-                                <th>Observaciones</th>
-                                <th class="w-20 text-center">Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody id="planillaBody">
-                            <tr>
-                                <td colspan="7" class="py-20 text-center">
-                                    <div class="flex flex-col items-center gap-4 opacity-20">
-                                        <i class="fas fa-circle-notch fa-spin text-4xl text-diba-blue"></i>
-                                        <p class="text-[10px] font-black uppercase tracking-[0.3em]">Cargando datos maestros...</p>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </main>
-
-    <!-- Modals (Styled for Azul Grana Premium) -->
-    
-    <!-- Modal Admin Docs -->
-    <div id="adminDocsModal" class="hidden fixed inset-0 z-[100] flex items-center justify-center p-4 lg:p-10 pointer-events-none">
-        <div class="absolute inset-0 bg-diba-blue/60 backdrop-blur-xl pointer-events-auto" onclick="closeAdminDocs()"></div>
-        <div class="bg-white w-full max-w-2xl rounded-[3rem] shadow-2xl relative z-10 overflow-hidden animate-fade-up pointer-events-auto border border-white/20">
-            <div class="p-8 lg:p-12 pb-4">
-                <div class="flex justify-between items-start mb-8">
-                    <div>
-                        <h3 id="modalPlayerName" class="text-2xl font-black text-diba-blue italic uppercase tracking-tighter">Cargando...</h3>
-                        <p id="modalPlayerDni" class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">DNI: ---</p>
-                    </div>
-                    <button onclick="closeAdminDocs()" class="w-12 h-12 rounded-2xl bg-slate-50 text-slate-400 flex items-center justify-center hover:bg-rose-50 hover:text-rose-500 transition-all">
-                        <i class="fas fa-times"></i>
-                    </button>
-                </div>
-                <div id="modalDocsList" class="space-y-3 max-h-[60vh] overflow-y-auto pr-2 custom-scrollbar">
-                    <!-- Doc items populated by JS -->
-                </div>
-            </div>
-            <div class="p-6 bg-slate-50 border-t border-slate-100 flex items-center justify-center text-[8px] font-black text-slate-300 uppercase tracking-[.4em]">
-                Sistema de Gestión Documental · DIBA FBC
-            </div>
+            <p class="text-[10px] font-black uppercase tracking-[0.3em] text-gold italic opacity-80">DIBA FBC — Planilla Control</p>
         </div>
     </div>
 
-    <!-- Modal Editar Jugador -->
-    <div id="editPlayerModal" class="hidden fixed inset-0 z-[100] flex items-center justify-center p-4 pointer-events-none">
-        <div class="absolute inset-0 bg-diba-blue/60 backdrop-blur-xl pointer-events-auto" onclick="closeEditModal()"></div>
-        <div class="bg-white w-full max-w-md rounded-[3rem] shadow-2xl relative z-10 overflow-hidden animate-fade-up pointer-events-auto border border-white/20">
-            <div class="p-10">
-                <div class="flex justify-between items-center mb-8">
-                    <h3 class="text-xl font-black text-diba-blue italic uppercase tracking-tighter">Editar <span class="text-diba-red">Jugador</span></h3>
-                    <button onclick="closeEditModal()" class="text-slate-300 hover:text-rose-500 transition-colors"><i class="fas fa-times"></i></button>
-                </div>
-                <form id="editPlayerForm" class="space-y-6">
-                    <input type="hidden" id="editDni">
-                    <input type="hidden" id="oldName">
-                    <div class="space-y-2">
-                        <label class="text-[9px] font-black text-slate-400 uppercase tracking-widest ml-1">Nombre Completo</label>
-                        <input type="text" id="editNombre" class="w-full px-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl font-bold text-sm text-diba-blue focus:bg-white focus:ring-4 focus:ring-diba-blue/5 outline-none transition-all">
-                    </div>
-                    <div class="space-y-2">
-                        <label class="text-[9px] font-black text-slate-400 uppercase tracking-widest ml-1">Categoría</label>
-                        <select id="editCategoria" class="w-full px-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl font-bold text-sm text-diba-blue focus:bg-white focus:ring-4 focus:ring-diba-blue/5 outline-none transition-all appearance-none">
-                            <option value="2014/2015/2016">2014/2015/2016</option>
-                            <option value="2012">2012</option>
-                            <option value="2013">2013</option>
-                            <option value="General">General</option>
-                        </select>
-                    </div>
-                    <button type="submit" class="w-full py-5 rounded-[2rem] bg-diba-blue text-white font-black italic uppercase tracking-widest hover:bg-diba-red transition-all shadow-xl shadow-blue-900/10 mt-4">Actualizar Registro</button>
-                </form>
-            </div>
-        </div>
+  <!-- ══ SIDEBAR ══ -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <img src="/images/ESCUDO.png" alt="DIBA FBC">
+      <div>
+        <div class="sidebar-logo-text">DIBA FBC</div>
+        <div class="sidebar-logo-sub">Panel de Control</div>
+      </div>
     </div>
 
-    <!-- Modal Nuevo Jugador -->
-    <div id="createPlayerModal" class="hidden fixed inset-0 z-[100] flex items-center justify-center p-4 lg:p-10 pointer-events-none">
-        <div class="absolute inset-0 bg-diba-blue/60 backdrop-blur-xl pointer-events-auto" onclick="closeCreateModal()"></div>
-        <div class="bg-white w-full max-w-4xl rounded-[3rem] shadow-2xl relative z-10 overflow-hidden animate-fade-up pointer-events-auto border border-white/20">
-            <div class="p-8 lg:p-12">
-                <div class="flex justify-between items-center mb-10">
-                    <h3 class="text-2xl font-black text-diba-blue italic uppercase tracking-tighter">Nuevo <span class="text-diba-red">Jugador</span></h3>
-                    <button onclick="closeCreateModal()" class="w-12 h-12 rounded-2xl bg-slate-50 text-slate-400 flex items-center justify-center hover:bg-rose-50 hover:text-rose-500 transition-all">
-                        <i class="fas fa-times"></i>
-                    </button>
-                </div>
-                <form id="quickCreatePlayerForm" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-h-[60vh] overflow-y-auto pr-4 custom-scrollbar">
-                    <div class="space-y-2">
-                        <label class="text-[9px] font-black text-slate-400 uppercase tracking-widest">DNI / Identificación</label>
-                        <input type="text" id="newDni" required class="w-full px-5 py-3.5 bg-slate-50 border-slate-100 rounded-2xl font-bold text-xs text-diba-blue outline-none focus:bg-white transition-all">
-                    </div>
-                    <div class="space-y-2">
-                        <label class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Categoría</label>
-                        <select id="newCategoria" required class="w-full px-5 py-3.5 bg-slate-50 border-slate-100 rounded-2xl font-bold text-xs text-diba-blue outline-none transition-all">
-                            <option value="2014/15/16">2014/15/16</option>
-                            <option value="2012">2012</option>
-                            <option value="2013">2013</option>
-                            <option value="General">General</option>
-                        </select>
-                    </div>
-                    <div class="space-y-2">
-                        <label class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Nombres</label>
-                        <input type="text" id="newNombre" required class="w-full px-5 py-3.5 bg-slate-50 border-slate-100 rounded-2xl font-bold text-xs text-diba-blue outline-none transition-all">
-                    </div>
-                    <div class="space-y-2">
-                        <label class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Apellidos</label>
-                        <input type="text" id="newApellidos" required class="w-full px-5 py-3.5 bg-slate-50 border-slate-100 rounded-2xl font-bold text-xs text-diba-blue outline-none transition-all">
-                    </div>
-                    <div class="space-y-2">
-                        <label class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Fecha Nacimiento</label>
-                        <input type="date" id="newFechaNac" class="w-full px-5 py-3.5 bg-slate-50 border-slate-100 rounded-2xl font-bold text-xs text-diba-blue outline-none transition-all">
-                    </div>
-                    <div class="space-y-2">
-                        <label class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Sexo</label>
-                        <select id="newSexo" class="w-full px-5 py-3.5 bg-slate-50 border-slate-100 rounded-2xl font-bold text-xs text-diba-blue outline-none transition-all">
-                            <option value="M">Masculino</option>
-                            <option value="F">Femenino</option>
-                        </select>
-                    </div>
-                    <div class="space-y-2">
-                        <label class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Nacionalidad</label>
-                        <input type="text" id="newNacionalidad" value="Colombiano" class="w-full px-5 py-3.5 bg-slate-50 border-slate-100 rounded-2xl font-bold text-xs text-diba-blue outline-none transition-all">
-                    </div>
-                    <div class="space-y-2">
-                        <label class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Lugar Nacimiento</label>
-                        <input type="text" id="newLugarNac" class="w-full px-5 py-3.5 bg-slate-50 border-slate-100 rounded-2xl font-bold text-xs text-diba-blue outline-none transition-all">
-                    </div>
-                    <div class="space-y-2">
-                        <label class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Grupo Sanguíneo</label>
-                        <input type="text" id="newGrupoSangre" placeholder="O+" class="w-full px-5 py-3.5 bg-slate-50 border-slate-100 rounded-2xl font-bold text-xs text-diba-blue outline-none transition-all">
-                    </div>
-                     <div class="col-span-full">
-                         <button type="submit" class="w-full py-5 rounded-[2rem] bg-emerald-500 text-white font-black italic uppercase tracking-widest hover:bg-emerald-600 transition-all shadow-xl shadow-emerald-500/10 mt-6 flex items-center justify-center gap-3">
-                            <i class="fas fa-user-check"></i> Registrar Jugador Completo
-                        </button>
-                     </div>
-                </form>
-            </div>
-        </div>
-    </div>
+    <nav class="sidebar-nav">
+      <a href="dashboard.html" class="nav-link"><i class="fas fa-th-large"></i> Dashboard</a>
 
-    <!-- Toast Container -->
-    <div id="toast-container" class="fixed bottom-10 right-10 z-[200] space-y-3 pointer-events-none"></div>
+      <div class="nav-section-label">Equipo</div>
+      <a href="planilla.html" class="nav-link active"><i class="fas fa-clipboard-list"></i> Planilla</a>
+      <a href="crear-jugador.html" class="nav-link"><i class="fas fa-user-plus"></i> Crear Jugador</a>
+      <a href="../ficha.html" class="nav-link"><i class="fas fa-users"></i> Jugadores</a>
+      <a href="../partidos.html" class="nav-link"><i class="fas fa-futbol"></i> Partidos</a>
+      <a href="../analisis.html" class="nav-link"><i class="fas fa-chart-line"></i> Análisis</a>
+      <a href="convocatorias.html" class="nav-link"><i class="fas fa-bullhorn"></i> Convocatorias</a>
+
+      <div class="nav-section-label">Comunicación</div>
+      <a href="push.html" class="nav-link"><i class="fas fa-bell"></i> Notificaciones Push</a>
+
+      <div class="nav-section-label">Administración</div>
+      <a href="GestorDocumental.html" class="nav-link"><i class="fas fa-folder-open"></i> Gestor Documental</a>
+      <a href="usuarios.html" class="nav-link"><i class="fas fa-user-cog"></i> Usuarios</a>
+      <a href="crear-usuario.html" class="nav-link"><i class="fas fa-user-plus"></i> Crear Usuario</a>
+      <a href="rifa_diba.html" class="nav-link"><i class="fas fa-ticket-alt"></i> Rifas</a>
+
+      <div class="nav-section-label">Sitio Web</div>
+      <a href="../index.html" class="nav-link"><i class="fas fa-globe"></i> Ver Sitio</a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="user-chip">
+        <div class="user-avatar" id="sb-avatar">A</div>
+        <div>
+          <div class="user-name" id="sb-name">Administrador</div>
+          <div class="user-role" id="sb-role">Admin</div>
+        </div>
+      </div>
+      <button class="btn-logout" id="logout-btn">
+        <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+      </button>
+    </div>
+  </aside>
+  <div class="sidebar-overlay" onclick="document.getElementById('sidebar').classList.remove('open')"></div>
+
+  <div class="main">
+    <!-- Top Bar -->
+    <header class="topbar">
+      <button class="mobile-menu-btn" id="menu-btn">
+        <i class="fas fa-bars" id="menu-icon"></i>
+      </button>
+      <div class="animate-fade-up">
+        <div class="page-title">Sincronización <span>Planilla</span></div>
+        <div class="page-subtitle">Control de asistencia y gestión — DIBA FBC</div>
+      </div>
+      <div class="topbar-right">
+        <button id="theme-toggle" class="btn btn-outline" style="padding: 0.5rem; width: 40px; height: 40px; justify-content: center;" title="Cambiar Tema">
+          <i id="theme-icon" class="fas fa-sun"></i>
+        </button>
+        <div class="topbar-time glass" id="clock">00:00:00</div>
+      </div>
+    </header>
+
+    <div class="content">
+      <!-- Toast -->
+      <div class="toast-container position-fixed top-0 end-0 p-3">
+        <div id="appToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+          <div class="toast-header">
+            <i class="fas fa-check-circle text-success me-2"></i>
+            <strong class="me-auto">Notificación</strong>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+          </div>
+          <div class="toast-body"></div>
+        </div>
+      </div>
+
+      <div class="container-fluid mt-2">
+        <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap">
+          <div>
+            <h2 class="mb-0 fw-bold">Planilla de Asistencia <span id="sync-status" class="saving-indicator"></span></h2>
+          </div>
+          <div class="d-flex gap-2 align-items-center mt-2 mt-md-0">
+            <label for="planillaDate" class="form-label mb-0 fw-bold">Fecha:</label>
+            <input type="date" class="form-control" id="planillaDate">
+          </div>
+        </div>
+
+        <!-- Stats -->
+        <div class="stats-bar">
+          <div class="stat-chip green">
+            <div class="stat-icon"><i class="fas fa-check-circle"></i></div>
+            <div>
+              <div class="stat-value" id="stat-presentes">0</div>
+              <div class="stat-label">Presentes</div>
+            </div>
+          </div>
+          <div class="stat-chip red">
+            <div class="stat-icon"><i class="fas fa-times-circle"></i></div>
+            <div>
+              <div class="stat-value" id="stat-ausentes">0</div>
+              <div class="stat-label">Ausentes</div>
+            </div>
+          </div>
+          <div class="stat-chip yellow">
+            <div class="stat-icon"><i class="fas fa-clock"></i></div>
+            <div>
+              <div class="stat-value" id="stat-excusas">0</div>
+              <div class="stat-label">Excusas</div>
+            </div>
+          </div>
+          <div class="stat-chip blue">
+            <div class="stat-icon"><i class="fas fa-users"></i></div>
+            <div>
+              <div class="stat-value" id="stat-total">0</div>
+              <div class="stat-label">Total DB</div>
+            </div>
+          </div>
+          <div class="stat-chip purple">
+            <div class="stat-icon"><i class="fas fa-percent"></i></div>
+            <div>
+              <div class="stat-value" id="stat-pct">0%</div>
+              <div class="stat-label">Asistencia</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Barra de progreso -->
+        <div class="att-progress-bar">
+          <div class="att-seg" id="prog-p" style="background:#22c55e;width:0%"></div>
+          <div class="att-seg" id="prog-a" style="background:#ef4444;width:0%"></div>
+          <div class="att-seg" id="prog-e" style="background:#eab308;width:0%"></div>
+        </div>
+
+        <!-- Controles -->
+        <div class="panel glass animate-fade-up border-0" style="animation-delay: 0.2s">
+          <div class="panel-body d-flex justify-content-between align-items-center flex-wrap gap-3">
+            <div class="d-flex gap-2">
+              <a href="../ficha.html" class="btn btn-primary"><i
+                  class="fas fa-users-cog"></i> Gestionar Jugadores</a>
+            </div>
+            <div class="d-flex gap-3 align-items-center">
+              <div class="search-container">
+                <input type="text" id="playerSearch" class="form-control"
+                  placeholder="Buscar jugador...">
+              </div>
+              <button id="generatePDF" class="btn btn-outline" style="border-color: #f43f5e; color: #f43f5e;"><i
+                  class="fas fa-file-pdf"></i> PDF Rápido</button>
+              <button id="generatePDFPro" class="btn btn-primary"><i
+                  class="fas fa-print"></i> Planilla Pro (Doble Cara)</button>
+              <button id="generateExcel" class="btn btn-outline" style="border-color: #22c55e; color: #22c55e;"><i
+                  class="fas fa-file-excel"></i> XLSX</button>
+              <button id="saveAllBtn" class="btn btn-primary">
+                <i class="fas fa-cloud-upload-alt"></i> Guardar Planilla
+              </button>
+              <button onclick="openCreateModal()" class="btn btn-outline">
+                <i class="fas fa-plus"></i> Nuevo
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tabla -->
+        <div class="panel glass animate-fade-up planilla-container" style="animation-delay: 0.3s">
+          <table class="table table-planilla mb-0" id="mainTable">
+            <thead>
+              <tr>
+                <th style="width: 5%;">#</th>
+                <th style="width: 5%;">Foto</th>
+                <th>Nombre del Jugador</th>
+                <th style="width: 18%;">Pago</th>
+                <th style="width: 15%;">Asistencia</th>
+                <th style="width: 25%;">Observaciones</th>
+                <th style="width: 12%;" class="text-center">Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="planillaBody">
+              <tr>
+                <td colspan="6" class="text-center p-5 text-muted">Cargando datos desde la nube... <i
+                    class="fas fa-spinner fa-spin ms-2"></i></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <!-- Modal de Gestión Documental Admin (Planilla) -->
+        <div id="adminDocsModal"
+          class="d-none fixed-top w-100 h-100 d-flex align-items-center justify-content-center p-4"
+          style="background: rgba(10,14,20,0.9); z-index: 2000; backdrop-filter: blur(5px);">
+          <div class="card border-0 shadow-2xl w-100 mx-auto"
+            style="max-width: 650px; background: #0a101b; border: 1px solid rgba(255,255,255,0.1) !important; border-radius: 2rem;">
+            <div class="card-header border-0 p-4 d-flex justify-content-between align-items-center bg-transparent">
+              <div>
+                <h3 id="modalPlayerName" class="h5 fw-black text-white text-uppercase italic mb-0">Cargando...</h3>
+                <p id="modalPlayerDni" class="small text-muted fw-bold text-uppercase tracking-widest mb-0 mt-1"></p>
+              </div>
+              <button onclick="closeAdminDocs()"
+                class="btn btn-dark rounded-circle d-flex align-items-center justify-content-center p-0"
+                style="width: 40px; height: 40px; background: rgba(255,255,255,0.05);">
+                <i class="fas fa-times"></i>
+              </button>
+            </div>
+            <div class="card-body p-4 overflow-y-auto" id="modalDocsList" style="max-height: 450px;">
+              <!-- Items de documentos se insertan aquí -->
+            </div>
+            <div class="card-footer border-0 p-3 bg-transparent text-center">
+              <p class="small text-muted fw-bold text-uppercase tracking-widest mb-0" style="font-size: 0.6rem;">Panel
+                Administrativo — DIBA FBC</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Modal de Edición de Jugador -->
+        <div id="editPlayerModal" class="d-none fixed-top w-100 h-100 d-flex align-items-center justify-content-center p-4"
+          style="background: rgba(10,14,20,0.9); z-index: 2000; backdrop-filter: blur(5px);">
+          <div class="card border-0 shadow-2xl w-100 mx-auto"
+            style="max-width: 500px; background: #0a101b; border: 1px solid rgba(255,255,255,0.1) !important; border-radius: 2rem;">
+            <div class="card-header border-0 p-4 d-flex justify-content-between align-items-center bg-transparent">
+              <h3 class="h5 fw-black text-white text-uppercase italic mb-0">Editar Jugador</h3>
+              <button onclick="closeEditModal()" class="btn btn-dark rounded-circle p-0" style="width: 40px; height: 40px;">
+                <i class="fas fa-times"></i>
+              </button>
+            </div>
+            <div class="card-body p-4">
+              <form id="editPlayerForm">
+                <input type="hidden" id="editDni">
+                <input type="hidden" id="oldName">
+                <div class="mb-3">
+                  <label class="form-label text-muted small fw-bold text-uppercase">Nombre Completo</label>
+                  <input type="text" id="editNombre" class="form-control bg-dark border-secondary text-white rounded-3">
+                </div>
+                <div class="mb-3">
+                  <label class="form-label text-muted small fw-bold text-uppercase">Categoría</label>
+                  <select id="editCategoria" class="form-select bg-dark border-secondary text-white rounded-3">
+                    <option value="2014/2015/2016">2014/2015/2016</option>
+                    <option value="2012">2012</option>
+                    <option value="2013">2013</option>
+                    <option value="General">General</option>
+                  </select>
+                </div>
+                <button type="submit" class="btn btn-warning w-100 fw-bold rounded-pill py-3 mt-3">Guardar Cambios</button>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <!-- Modal de Creación de Jugador (Rápido) -->
+        <div id="createPlayerModal" class="d-none fixed-top w-100 h-100 d-flex align-items-center justify-content-center p-4"
+          style="background: rgba(10,14,20,0.9); z-index: 2000; backdrop-filter: blur(5px);">
+          <div class="card border-0 shadow-2xl w-100 mx-auto"
+            style="max-width: 800px; background: #0a101b; border: 1px solid rgba(255,255,255,0.1) !important; border-radius: 2rem;">
+            <div class="card-header border-0 p-4 d-flex justify-content-between align-items-center bg-transparent">
+              <h3 class="h5 fw-black text-white text-uppercase italic mb-0">Nuevo Jugador</h3>
+              <button onclick="closeCreateModal()" class="btn btn-dark rounded-circle p-0" style="width: 40px; height: 40px;">
+                <i class="fas fa-times"></i>
+              </button>
+            </div>
+            <div class="card-body p-4" style="max-height: 70vh; overflow-y: auto;">
+              <form id="quickCreatePlayerForm">
+                <div class="row g-3">
+                  <div class="col-md-6">
+                    <label class="form-label text-muted small fw-bold text-uppercase">Número de Identificación (DNI)</label>
+                    <input type="text" id="newDni" class="form-control bg-dark border-secondary text-white rounded-3" required>
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label text-muted small fw-bold text-uppercase">Categoría</label>
+                    <select id="newCategoria" class="form-select bg-dark border-secondary text-white rounded-3" required>
+                      <option value="2014/15/16">2014/15/16</option>
+                      <option value="2012">2012</option>
+                      <option value="2013">2013</option>
+                      <option value="General">General</option>
+                    </select>
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label text-muted small fw-bold text-uppercase">Nombres</label>
+                    <input type="text" id="newNombre" class="form-control bg-dark border-secondary text-white rounded-3" required>
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label text-muted small fw-bold text-uppercase">Apellidos</label>
+                    <input type="text" id="newApellidos" class="form-control bg-dark border-secondary text-white rounded-3" required>
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label text-muted small fw-bold text-uppercase">Fecha de Nacimiento</label>
+                    <input type="date" id="newFechaNac" class="form-control bg-dark border-secondary text-white rounded-3">
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label text-muted small fw-bold text-uppercase">Sexo</label>
+                    <select id="newSexo" class="form-select bg-dark border-secondary text-white rounded-3">
+                      <option value="M">Masculino</option>
+                      <option value="F">Femenino</option>
+                    </select>
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label text-muted small fw-bold text-uppercase">Nacionalidad</label>
+                    <input type="text" id="newNacionalidad" value="Colombiano" class="form-control bg-dark border-secondary text-white rounded-3">
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label text-muted small fw-bold text-uppercase">Lugar de Nacimiento</label>
+                    <input type="text" id="newLugarNac" class="form-control bg-dark border-secondary text-white rounded-3">
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label text-muted small fw-bold text-uppercase">Grupo Sanguíneo</label>
+                    <input type="text" id="newGrupoSangre" placeholder="O+" class="form-control bg-dark border-secondary text-white rounded-3">
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label text-muted small fw-bold text-uppercase">Fecha Expedición</label>
+                    <input type="date" id="newFechaExp" class="form-control bg-dark border-secondary text-white rounded-3">
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label text-muted small fw-bold text-uppercase">Lugar Expedición</label>
+                    <input type="text" id="newLugarExp" class="form-control bg-dark border-secondary text-white rounded-3">
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label text-muted small fw-bold text-uppercase">Fecha Vencimiento</label>
+                    <input type="date" id="newFechaVenc" class="form-control bg-dark border-secondary text-white rounded-3">
+                  </div>
+                </div>
+                <button type="submit" class="btn btn-warning w-100 fw-bold rounded-pill py-3 mt-4">Registrar Jugador Completo</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <script src="../scripts/config.js"></script>
     <script type="module">
-      import { initAdminLayout } from '../src/components/layout/admin-layout.js';
       import { supabase, requireAdmin } from '../scripts/supabaseClient.js';
-      import { updatePlayer, deletePlayer } from '../src/features/players/admin.js?v=3';
+      import { updatePlayer, deletePlayer } from '../src/features/players/admin.js?v=2';
 
       // ── AUTENTICACIÓN Y CARGA ──
       async function init() {
-        const session = await requireAdmin();
-        if (!session) return;
-        initAdminLayout();
-        loadData();
+        try {
+          const session = await requireAdmin();
+          if (!session) return;
+
+          document.getElementById('app-loader')?.classList.add('d-none');
+          document.getElementById('admin-body').classList.remove('d-none');
+          document.getElementById('admin-body').style.display = 'flex';
+
+          const user = session.user;
+          if (user) {
+            const { data: profile } = await supabase
+              .from('users')
+              .select('username, role, full_name')
+              .eq('id', user.id)
+              .single();
+
+            if (profile) {
+              document.getElementById('sb-name').textContent = profile.username;
+              document.getElementById('sb-role').textContent = profile.role;
+              document.getElementById('sb-avatar').textContent = profile.username[0].toUpperCase();
+            } else {
+              const emailName = user.email.split('@')[0];
+              document.getElementById('sb-name').textContent = emailName;
+              document.getElementById('sb-avatar').textContent = emailName[0].toUpperCase();
+            }
+          }
+        } catch (error) {
+          console.error("Init error:", error);
+        }
       }
 
       init();
 
-      // UI Helpers
-      const showToast = (message, isError = false) => {
-        const container = document.getElementById('toast-container');
-        const toast = document.createElement('div');
-        toast.className = `px-6 py-4 rounded-2xl shadow-xl border bg-white flex items-center gap-4 animate-fade-left pointer-events-auto`;
-        toast.innerHTML = `
-            <div class="w-8 h-8 rounded-full flex items-center justify-center ${isError ? 'bg-rose-50 text-rose-500' : 'bg-emerald-50 text-emerald-500'}">
-                <i class="fas ${isError ? 'fa-exclamation-triangle' : 'fa-check-circle'}"></i>
-            </div>
-            <div class="text-[10px] font-black uppercase text-diba-blue tracking-widest">${message}</div>
-        `;
-        container.appendChild(toast);
-        setTimeout(() => {
-            toast.classList.add('animate-fade-out');
-            setTimeout(() => toast.remove(), 500);
-        }, 4000);
-      };
+      // ── RELOJ ──
+      const clockEl = document.getElementById('clock');
+      function updateClock() {
+        const now = new Date();
+        clockEl.textContent = now.toLocaleTimeString('es-CO', { hour: '2-digit', minute: '2-digit' });
+      }
+      updateClock();
+      setInterval(updateClock, 1000);
 
-      // State Management
-      let appState = {
-        players: [],
-        currentPlanillaId: null,
-        registros: {} // { dni: { id_db, pago, asistencia, observacion } }
-      };
+      // ── MOBILE MENU ──
+      const menuBtn = document.getElementById('menu-btn');
+      const menuIcon = document.getElementById('menu-icon');
+      const sidebar = document.getElementById('sidebar');
+      menuBtn?.addEventListener('click', () => {
+        sidebar.classList.toggle('open');
+        menuIcon.className = sidebar.classList.contains('open') ? 'fas fa-times' : 'fas fa-bars';
+      });
 
-      const tableBody = document.getElementById('planillaBody');
-      const dateInput = document.getElementById('planillaDate');
-      const playerSearch = document.getElementById('playerSearch');
-      const syncStatus = document.getElementById('sync-status');
+      // ── LOGOUT ──
+      document.getElementById('logout-btn')?.addEventListener('click', async () => {
+        if (confirm('¿Cerrar sesión?')) {
+          await supabase.auth.signOut();
+          window.location.href = 'login.html';
+        }
+      });
 
-      const loadData = async () => {
-        try {
-          syncStatus.textContent = '· SINCRONIZANDO...';
-          if (!dateInput.value) dateInput.valueAsDate = new Date();
-          const fechaSeleccionada = dateInput.value;
+      document.addEventListener('DOMContentLoaded', () => {
+        const tableBody = document.getElementById('planillaBody');
+        const dateInput = document.getElementById('planillaDate');
+        const playerSearch = document.getElementById('playerSearch');
+        const syncStatus = document.getElementById('sync-status');
+        const toastElement = document.getElementById('appToast');
+        const bsToast = new bootstrap.Toast(toastElement);
 
-          // 1. Cargar jugadores
-          const { data: players, error: pErr } = await supabase.from('identificacion').select('numero, nombre, apellidos, categoria, foto_url').order('apellidos');
-          if (pErr) throw pErr;
-          appState.players = players.map(p => ({
-            id: p.numero,
-            name: `${p.nombre} ${p.apellidos}`.trim(),
-            categoria: p.categoria,
-            foto: p.foto_url
-          }));
+        let appState = {
+          players: [],
+          currentPlanillaId: null,
+          registros: {} // { dni: { id_db, pago, asistencia, observacion } }
+        };
 
-          // 2. Gestionar planilla
-          const { data: planillas } = await supabase.from('planillas').select('id').eq('fecha', fechaSeleccionada);
-          let planillaId;
-          if (!planillas || planillas.length === 0) {
-            const { data: newPl } = await supabase.from('planillas').insert([{ fecha: fechaSeleccionada, categoria: 'General' }]).select('id').single();
-            planillaId = newPl.id;
-          } else {
-            planillaId = planillas[0].id;
+        const showToast = (message, isError = false) => {
+          toastElement.querySelector('.toast-body').textContent = message;
+          toastElement.querySelector('i').className = isError ? 'fas fa-exclamation-circle text-danger me-2' : 'fas fa-check-circle text-success me-2';
+          bsToast.show();
+        };
+
+        const loadData = async () => {
+          try {
+            tableBody.innerHTML = '<tr><td colspan="6" class="text-center p-5 text-muted">Sincronizando con base de datos... <i class="fas fa-spinner fa-spin ms-2"></i></td></tr>';
+
+            if (!dateInput.value) dateInput.valueAsDate = new Date();
+            const fechaSeleccionada = dateInput.value;
+
+            // 1. Cargar jugadores
+            const { data: players, error: pErr } = await supabase.from('identificacion').select('numero, nombre, apellidos, categoria, foto_url').order('apellidos');
+            if (pErr) throw pErr;
+            appState.players = players.map(p => ({
+              id: p.numero,
+              name: `${p.nombre} ${p.apellidos}`.trim(),
+              categoria: p.categoria,
+              foto: p.foto_url
+            }));
+
+            // 2. Buscar o Crear planilla para esta fecha
+            const { data: planillas, error: plErr } = await supabase
+              .from('planillas')
+              .select('id')
+              .eq('fecha', fechaSeleccionada);
+
+            if (plErr) throw plErr;
+
+            let planillaId;
+            if (planillas.length === 0) {
+              const { data: newPl, error: createErr } = await supabase
+                .from('planillas')
+                .insert([{ fecha: fechaSeleccionada, categoria: 'General' }])
+                .select('id')
+                .single();
+              if (createErr) throw createErr;
+              planillaId = newPl.id;
+            } else {
+              planillaId = planillas[0].id;
+            }
+            appState.currentPlanillaId = planillaId;
+
+            // 3. Cargar registros existentes
+            const { data: regs, error: rErr } = await supabase
+              .from('planilla_registros')
+              .select('*')
+              .eq('planilla_id', planillaId);
+
+            if (rErr) throw rErr;
+
+            appState.registros = {};
+            regs.forEach(r => {
+              appState.registros[r.jugador_dni] = {
+                db_id: r.id,
+                pago: r.pago || '',
+                asistencia: r.asistencia,
+                obs: r.observacion
+              };
+            });
+
+            render();
+          } catch (e) {
+            console.error(e);
+            showToast('Error de conexión: ' + (e.message || 'Supabase no responde'), true);
           }
-          appState.currentPlanillaId = planillaId;
+        };
 
-          // 3. Cargar registros
-          const { data: regs } = await supabase.from('planilla_registros').select('*').eq('planilla_id', planillaId);
-          appState.registros = {};
-          regs?.forEach(r => {
-            appState.registros[r.jugador_dni] = {
-              db_id: r.id,
-              pago: r.pago || '',
-              asistencia: r.asistencia,
-              obs: r.observacion
-            };
+        const render = () => {
+          const q = playerSearch.value.toLowerCase();
+          tableBody.innerHTML = '';
+          const filtered = appState.players.filter(p => p.name.toLowerCase().includes(q));
+
+          // Ordenar por categoría según el deseo del usuario
+          const order = { '2014/2015/2016': 1, '2012': 2, '2013': 3, 'General': 4 };
+          filtered.sort((a, b) => {
+            if (order[a.categoria] !== order[b.categoria]) {
+              return (order[a.categoria] || 99) - (order[b.categoria] || 99);
+            }
+            return a.name.localeCompare(b.name);
           });
 
-          render();
-          syncStatus.textContent = '· CONECTADO';
-        } catch (e) {
-          console.error(e);
-          showToast('Error de sincronización', true);
-        }
-      };
+          let currentCategory = null;
+          let categoryEnum = 0;
 
-      const render = () => {
-        const q = playerSearch.value.toLowerCase();
-        const filtered = appState.players.filter(p => p.name.toLowerCase().includes(q) || p.id.toString().includes(q));
+          filtered.forEach((p) => {
+            if (p.categoria !== currentCategory) {
+              currentCategory = p.categoria;
+              categoryEnum = 0; // Reiniciar contador por categoría
 
-        const order = { '2014/2015/2016': 1, '2012': 2, '2013': 3, 'General': 4 };
-        filtered.sort((a, b) => {
-          if (order[a.categoria] !== order[b.categoria]) return (order[a.categoria] || 99) - (order[b.categoria] || 99);
-          return a.name.localeCompare(b.name);
-        });
+              const headerTr = document.createElement('tr');
+              headerTr.className = 'category-header-row';
+              headerTr.innerHTML = `<td colspan="6"><i class="fas fa-layer-group me-2"></i>CATEGORÍA ${currentCategory}</td>`;
+              tableBody.appendChild(headerTr);
+            }
 
-        tableBody.innerHTML = '';
-        let currentCategory = null;
-        let categoryEnum = 0;
-
-        filtered.forEach((p) => {
-          if (p.categoria !== currentCategory) {
-            currentCategory = p.categoria;
-            categoryEnum = 0;
-            const headerTr = document.createElement('tr');
-            headerTr.className = 'category-header-row';
-            headerTr.innerHTML = `<td colspan="7"><div class="flex items-center gap-3"><i class="fas fa-layer-group text-diba-gold"></i> CATEGORÍA ${currentCategory}</div></td>`;
-            tableBody.appendChild(headerTr);
-          }
-
-          categoryEnum++;
-          const d = appState.registros[p.id] || { pago: '', asistencia: '', obs: '' };
-          const tr = document.createElement('tr');
-          tr.className = 'group hover:bg-slate-50 transition-colors border-b border-slate-50';
-          tr.dataset.dni = p.id;
-          
-          const avatarUrl = p.foto || '/images/ESCUDO.png';
-          
-          tr.innerHTML = `
-            <td class="text-center text-[10px] font-black text-slate-300 italic">${categoryEnum}</td>
-            <td class="py-4">
-              <div class="w-10 h-10 rounded-xl overflow-hidden shadow-sm border border-slate-100">
-                <img src="${avatarUrl}" class="w-full h-full object-cover">
-              </div>
+            categoryEnum++;
+            const d = appState.registros[p.id] || { pago: '', asistencia: '', obs: '' };
+            const tr = document.createElement('tr');
+            tr.dataset.dni = p.id;
+            
+            // Thumbnail de foto
+            const avatarUrl = p.foto || '/images/ESCUDO.png';
+            
+            tr.innerHTML = `
+            <td class="fw-bold text-center" style="background: rgba(255,204,0,0.03);">${categoryEnum}</td>
+            <td class="text-center">
+              <img src="${avatarUrl}" alt="Foto" class="rounded-circle shadow-sm" style="width: 32px; height: 32px; object-fit: cover; border: 1px solid var(--border);">
             </td>
+            <td class="fw-bold text-primary">${p.name}</td>
             <td>
-              <div class="text-xs font-black text-diba-blue uppercase italic tracking-tight">${p.name}</div>
-              <div class="text-[8px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">DNI: ${p.id}</div>
-            </td>
-            <td>
-              <select class="p-2 bg-slate-50 border-slate-100 rounded-xl text-[10px] font-bold text-diba-blue outline-none in-pago focus:bg-white focus:shadow-sm w-full">
-                <option value="" ${!d.pago ? 'selected' : ''}>MÉTODO PAGO</option>
+              <select class="form-select form-select-sm in-pago">
+                <option value="" ${!d.pago ? 'selected' : ''}>---</option>
                 <option value="Nequi" ${d.pago === 'Nequi' ? 'selected' : ''}>Nequi</option>
                 <option value="Efectivo" ${d.pago === 'Efectivo' ? 'selected' : ''}>Efectivo</option>
                 <option value="Daviplata" ${d.pago === 'Daviplata' ? 'selected' : ''}>Daviplata</option>
@@ -437,193 +568,301 @@
               </select>
             </td>
             <td>
-              <select class="p-2 bg-slate-50 border-slate-100 rounded-xl text-[10px] font-black italic uppercase text-diba-blue outline-none in-asist focus:bg-white w-full">
+              <select class="form-select form-select-sm in-asist">
                 <option value="" ${!d.asistencia ? 'selected' : ''}>---</option>
-                <option value="P" ${d.asistencia === 'P' ? 'selected' : ''} class="text-emerald-600 font-black">PRESENTE</option>
-                <option value="A" ${d.asistencia === 'A' ? 'selected' : ''} class="text-rose-600 font-black">AUSENTE</option>
-                <option value="E" ${d.asistencia === 'E' ? 'selected' : ''} class="text-amber-600 font-black">EXCUSA</option>
+                <option value="P" ${d.asistencia === 'P' ? 'selected' : ''}>Presente</option>
+                <option value="A" ${d.asistencia === 'A' ? 'selected' : ''}>Ausente</option>
+                <option value="E" ${d.asistencia === 'E' ? 'selected' : ''}>Excusa</option>
               </select>
             </td>
-            <td>
-              <input type="text" class="w-full p-2 bg-slate-50 border-slate-100 rounded-xl text-[10px] font-bold text-diba-blue outline-none in-obs focus:bg-white" value="${d.obs || ''}" placeholder="Anotar observación...">
-            </td>
-            <td class="text-center relative">
-               <button class="w-8 h-8 rounded-lg text-slate-300 hover:bg-diba-blue hover:text-white transition-all peer" title="Acciones">
-                   <i class="fas fa-ellipsis-h text-xs"></i>
-               </button>
-               <div class="absolute right-full mr-2 top-1/2 -translate-y-1/2 bg-white shadow-2xl rounded-2xl border border-slate-100 p-2 flex gap-1 opacity-0 pointer-events-none hover:opacity-100 peer-hover:opacity-100 hover:pointer-events-auto peer-hover:pointer-events-auto transition-all z-20">
-                   <button onclick="openAdminDocs('${p.id}', '${p.name}')" class="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-500 hover:bg-emerald-500 hover:text-white transition-all"><i class="fas fa-file-medical text-[10px]"></i></button>
-                   <button onclick="openEditModal('${p.id}', '${p.name}', '${p.categoria}')" class="w-8 h-8 rounded-lg bg-amber-50 text-amber-500 hover:bg-amber-500 hover:text-white transition-all"><i class="fas fa-edit text-[10px]"></i></button>
-                   <button onclick="handleDelete('${p.id}', '${p.name}')" class="w-8 h-8 rounded-lg bg-rose-50 text-rose-500 hover:bg-rose-500 hover:text-white transition-all"><i class="fas fa-trash-alt text-[10px]"></i></button>
-               </div>
+            <td><input type="text" class="form-control form-control-sm in-obs" value="${d.obs || ''}" placeholder="..."></td>
+            <td class="text-center">
+              <div class="dropdown">
+                <button class="btn btn-sm btn-outline-warning border-0" data-bs-toggle="dropdown">
+                  <i class="fas fa-ellipsis-v"></i>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-dark">
+                  <li><a class="dropdown-item" href="#" onclick="openAdminDocs('${p.id}', '${p.name}')"><i class="fas fa-file-medical me-2 text-success"></i> Documentos</a></li>
+                  <li><a class="dropdown-item" href="#" onclick="openEditModal('${p.id}', '${p.name}', '${p.categoria}')"><i class="fas fa-edit me-2 text-warning"></i> Editar Jugador</a></li>
+                  <li><hr class="dropdown-divider border-secondary"></li>
+                  <li><a class="dropdown-item text-danger" href="#" onclick="handleDelete('${p.id}', '${p.name}')"><i class="fas fa-trash-alt me-2"></i> Eliminar</a></li>
+                </ul>
+              </div>
             </td>
           `;
-          tableBody.appendChild(tr);
-        });
-        updateStats();
-      };
-
-      const updateStats = () => {
-        const total = appState.players.length;
-        let p = 0, a = 0, e = 0;
-        appState.players.forEach(pl => {
-          const d = appState.registros[pl.id] || { asistencia: '' };
-          if (d.asistencia === 'P') p++;
-          else if (d.asistencia === 'A') a++;
-          else if (d.asistencia === 'E') e++;
-        });
-
-        document.getElementById('stat-presentes').textContent = p;
-        document.getElementById('stat-ausentes').textContent = a;
-        document.getElementById('stat-excusas').textContent = e;
-        document.getElementById('stat-total').textContent = total;
-
-        const pct = total > 0 ? Math.round((p / total) * 100) : 0;
-        document.getElementById('stat-pct').textContent = pct + '%';
-        document.getElementById('prog-p').style.width = (total > 0 ? (p / total) * 100 : 0) + '%';
-        document.getElementById('prog-a').style.width = (total > 0 ? (a / total) * 100 : 0) + '%';
-        document.getElementById('prog-e').style.width = (total > 0 ? (e / total) * 100 : 0) + '%';
-      };
-
-      const saveRegistro = async (dni) => {
-        syncStatus.textContent = '· GUARDANDO...';
-        const d = appState.registros[dni];
-        const payload = {
-          planilla_id: appState.currentPlanillaId,
-          jugador_dni: dni,
-          pago: d.pago || null,
-          asistencia: d.asistencia || null,
-          observacion: (d.obs && d.obs.trim()) ? d.obs : null
+            tableBody.appendChild(tr);
+          });
+          updateStats();
         };
 
-        try {
-          if (d.db_id) await supabase.from('planilla_registros').update(payload).eq('id', d.db_id);
-          else {
-            const { data } = await supabase.from('planilla_registros').insert([payload]).select('id').single();
-            if (data) d.db_id = data.id;
+        const updateStats = () => {
+          const total = appState.players.length;
+          let p = 0, a = 0, e = 0;
+          appState.players.forEach(pl => {
+            const d = appState.registros[pl.id] || { asistencia: '' };
+            if (d.asistencia === 'P') p++;
+            else if (d.asistencia === 'A') a++;
+            else if (d.asistencia === 'E') e++;
+          });
+
+          document.getElementById('stat-presentes').textContent = p;
+          document.getElementById('stat-ausentes').textContent = a;
+          document.getElementById('stat-excusas').textContent = e;
+          document.getElementById('stat-total').textContent = total;
+
+          const pct = total > 0 ? Math.round((p / total) * 100) : 0;
+          document.getElementById('stat-pct').textContent = pct + '%';
+          document.getElementById('prog-p').style.width = (total > 0 ? (p / total) * 100 : 0) + '%';
+          document.getElementById('prog-a').style.width = (total > 0 ? (a / total) * 100 : 0) + '%';
+          document.getElementById('prog-e').style.width = (total > 0 ? (e / total) * 100 : 0) + '%';
+        };
+
+        // Guardado automático en Supabase
+        const saveRegistro = async (dni) => {
+          syncStatus.innerHTML = '<i class="fas fa-cloud-upload-alt ms-2"></i> Guardando...';
+          const d = appState.registros[dni];
+          const payload = {
+            planilla_id: appState.currentPlanillaId,
+            jugador_dni: dni,
+            pago: d.pago || null,
+            asistencia: d.asistencia || null,
+            observacion: (d.obs && d.obs.trim()) ? d.obs : null
+          };
+
+          try {
+            if (d.db_id) {
+              // Update
+              await supabase.from('planilla_registros').update(payload).eq('id', d.db_id);
+            } else {
+              // Insert
+              const { data, error } = await supabase.from('planilla_registros').insert([payload]).select('id').single();
+              if (!error) d.db_id = data.id;
+            }
+            syncStatus.innerHTML = '<i class="fas fa-check-circle text-success ms-2"></i> Sincronizado';
+          } catch (e) {
+            console.error(e);
+            syncStatus.innerHTML = '<i class="fas fa-times-circle text-danger ms-2"></i> Error al guardar';
           }
-          syncStatus.textContent = '· SINCRONIZADO';
-        } catch (e) {
-          syncStatus.textContent = '· ERROR';
-        }
-      };
+        };
 
-      // Events
-      tableBody.addEventListener('change', (e) => {
-        const tr = e.target.closest('tr');
-        if (!tr) return;
-        const dni = tr.dataset.dni;
-        if (!appState.registros[dni]) appState.registros[dni] = { pago: '', asistencia: '', obs: '' };
-
-        if (e.target.classList.contains('in-pago')) appState.registros[dni].pago = e.target.value;
-        if (e.target.classList.contains('in-asist')) {
-          appState.registros[dni].asistencia = e.target.value;
-          updateStats();
-        }
-        saveRegistro(dni);
-      });
-
-      tableBody.addEventListener('input', (e) => {
-        if (e.target.classList.contains('in-obs')) {
-          const dni = e.target.closest('tr').dataset.dni;
+        // Handlers
+        tableBody.addEventListener('change', (e) => {
+          const tr = e.target.closest('tr');
+          if (!tr) return;
+          const dni = tr.dataset.dni;
           if (!appState.registros[dni]) appState.registros[dni] = { pago: '', asistencia: '', obs: '' };
-          appState.registros[dni].obs = e.target.value;
-          clearTimeout(window.saveTimer);
-          window.saveTimer = setTimeout(() => saveRegistro(dni), 1000);
-        }
-      });
 
-      dateInput.onchange = loadData;
-      playerSearch.oninput = render;
+          let changed = false;
+          if (e.target.classList.contains('in-pago')) {
+            appState.registros[dni].pago = e.target.value;
+            changed = true;
+          }
+          if (e.target.classList.contains('in-asist')) {
+            appState.registros[dni].asistencia = e.target.value;
+            changed = true;
+            updateStats();
+          }
 
-      // Logic Export/PDF
-      const getExportData = () => {
-        const order = { '2014/2015/2016': 1, '2012': 2, '2013': 3, 'General': 4 };
-        return [...appState.players].sort((a, b) => {
-          if (order[a.categoria] !== order[b.categoria]) return (order[a.categoria] || 99) - (order[b.categoria] || 99);
-          return a.name.localeCompare(b.name);
+          if (changed) saveRegistro(dni);
         });
-      };
 
-      document.getElementById('generateExcel').onclick = () => {
-        const rows = [['Categoría', 'Nombre', 'DNI', 'Pago', 'Asistencia', 'Observación']];
-        getExportData().forEach(p => {
-          const d = appState.registros[p.id] || { asistencia: 'P' };
-          rows.push([p.categoria, p.name, p.id, d.pago || 'Ninguno', d.asistencia, d.obs]);
+        tableBody.addEventListener('input', (e) => {
+          const tr = e.target.closest('tr');
+          if (!tr) return;
+          const dni = tr.dataset.dni;
+          if (!appState.registros[dni]) appState.registros[dni] = { pago: '', asistencia: '', obs: '' };
+
+          if (e.target.classList.contains('in-obs')) {
+            appState.registros[dni].obs = e.target.value;
+            // Debounce simple
+            clearTimeout(window.saveTimer);
+            window.saveTimer = setTimeout(() => saveRegistro(dni), 1000);
+          }
         });
-        const ws = XLSX.utils.aoa_to_sheet(rows);
-        const wb = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(wb, ws, 'DIBA_Planilla');
-        XLSX.writeFile(wb, `Planilla_${dateInput.value}.xlsx`);
-      };
 
-      document.getElementById('generatePDFPro').onclick = async () => {
+
+        dateInput.onchange = loadData;
+        playerSearch.oninput = render;
+
+        // Export
+        const getExportData = () => {
+          const order = { '2014/2015/2016': 1, '2012': 2, '2013': 3, 'General': 4 };
+          const sorted = [...appState.players].sort((a, b) => {
+            if (order[a.categoria] !== order[b.categoria]) {
+              return (order[a.categoria] || 99) - (order[b.categoria] || 99);
+            }
+            return a.name.localeCompare(b.name);
+          });
+          return sorted;
+        };
+
+        document.getElementById('generateExcel').onclick = () => {
+          const rows = [['Categoría', 'Nombre', 'DNI', 'Pago', 'Asistencia', 'Observación']];
+          getExportData().forEach(p => {
+            const d = appState.registros[p.id] || { asistencia: 'P' };
+            rows.push([p.categoria, p.name, p.id, d.pago || 'Ninguno', d.asistencia, d.obs]);
+          });
+          const ws = XLSX.utils.aoa_to_sheet(rows);
+          const wb = XLSX.utils.book_new();
+          XLSX.utils.book_append_sheet(wb, ws, 'DIBA_Planilla');
+          XLSX.writeFile(wb, `Planilla_${dateInput.value}.xlsx`);
+        };
+
+        const archivePDF = async (pdfBlob, fileName) => {
+          try {
+            const { error } = await supabase.storage.from('planillas').upload(fileName, pdfBlob, {
+              upsert: true,
+              contentType: 'application/pdf'
+            });
+            if (error) {
+              if (error.message.includes('not found')) {
+                console.warn("Bucket 'planillas' no existe. Saltando archivado.");
+                return;
+              }
+              throw error;
+            }
+            showToast('Planilla archivada en la nube correctamente');
+          } catch (err) {
+            console.error('Error al archivar PDF:', err);
+            // No bloqueamos al usuario si falla el archivado de fondo
+          }
+        };
+
+        document.getElementById('generatePDFPro').onclick = async () => {
+          console.log("DIBA: Generando Planilla Pro v1.1...");
           const { jsPDF } = window.jspdf;
           const doc = new jsPDF('p', 'mm', 'letter');
           const categories = [...new Set(appState.players.map(p => p.categoria))].sort();
           
           categories.forEach((cat, index) => {
             if (index > 0) doc.addPage();
+            
             const playersInCat = appState.players.filter(p => p.categoria === cat).sort((a,b) => a.name.localeCompare(b.name));
+            
+            // --- FRONT PAGE: CONTROL DIARIO (ASISTENCIA + PAGO) ---
             renderPDFHeader(doc, "PLANILLA DE CONTROL DIARIO", cat);
-            const attendanceBody = playersInCat.map((p, i) => [i + 1, p.name, p.id, '', '', '']);
+            
+            const attendanceBody = playersInCat.map((p, i) => [
+              i + 1,
+              p.name,
+              p.id,
+              '', '', '' // Pago, Asistencia, Observaciones (Empty for manual fill)
+            ]);
 
             doc.autoTable({
               startY: 35,
               head: [['#', 'Nombre del Jugador', 'DNI', 'Método de Pago', 'Asist.', 'Observaciones']],
               body: attendanceBody,
-              headStyles: { fillColor: [0, 77, 152], fontSize: 8 },
+              headStyles: { fillColor: [0, 42, 64], fontSize: 8 },
               styles: { fontSize: 8, cellPadding: 2, minCellHeight: 10 },
-              columnStyles: { 0: { cellWidth: 8 }, 1: { cellWidth: 50 }, 2: { cellWidth: 25 }, 3: { cellWidth: 30 }, 4: { cellWidth: 15 }, 5: { cellWidth: 54 } },
+              columnStyles: {
+                0: { cellWidth: 8 },
+                1: { cellWidth: 50 },
+                2: { cellWidth: 25 },
+                3: { cellWidth: 30 },
+                4: { cellWidth: 15 },
+                5: { cellWidth: 54 }
+              },
               theme: 'grid'
             });
 
+            // --- PAGE 2: TACTICAL SHEET (With Grid) ---
             doc.addPage();
             renderPDFHeader(doc, "ESQUEMA TÁCTICO", cat);
-            drawTacticalGrid(doc, 14, 35, 182, 220);
-            drawSoccerField(doc, 14, 60, 182, 130);
+            drawTacticalGrid(doc, 14, 35, 182, 220); // Full page grid background
+            drawSoccerField(doc, 14, 60, 182, 130); // Single large centered field
           });
 
           function renderPDFHeader(pdf, title, category) {
             pdf.setFontSize(16);
-            pdf.setTextColor(0, 77, 152);
+            pdf.setTextColor(0, 42, 64);
             pdf.text("DIBA FBC", 14, 15);
             pdf.setFontSize(10);
             pdf.text(title, 14, 22);
             pdf.setFontSize(9);
             pdf.setTextColor(100);
-            pdf.text(`Categoría: ${category} | Fecha: ${dateInput.value}`, 14, 28);
+            pdf.text(`Categoría: ${category} | Fecha: ________________`, 14, 28);
+            pdf.setDrawColor(200);
             pdf.line(14, 30, 202, 30);
           }
 
           function drawTacticalGrid(pdf, x, y, w, h) {
-            pdf.setDrawColor(240);
+            pdf.setDrawColor(230);
             pdf.setLineWidth(0.1);
-            for (let i = 0; i <= w; i += 5) pdf.line(x + i, y, x + i, y + h);
-            for (let j = 0; j <= h; j += 5) pdf.line(x, y + j, x + w, y + j);
+            const step = 5; // 5mm grid
+            for (let i = 0; i <= w; i += step) pdf.line(x + i, y, x + i, y + h);
+            for (let j = 0; j <= h; j += step) pdf.line(x, y + j, x + w, y + j);
+          }
+
+          function libDrawArc(pdf, x, y, r, startAngle, endAngle) {
+            const segments = 20;
+            const points = [];
+            for (let i = 0; i <= segments; i++) {
+              const angle = startAngle + (endAngle - startAngle) * (i / segments);
+              const px = r * Math.cos(angle);
+              const py = r * Math.sin(angle);
+              if (i === 0) {
+                points.push([px, py]);
+              } else {
+                const prevAngle = startAngle + (endAngle - startAngle) * ((i - 1) / segments);
+                const prevX = r * Math.cos(prevAngle);
+                const prevY = r * Math.sin(prevAngle);
+                points.push([px - prevX, py - prevY]);
+              }
+            }
+            pdf.lines(points, x, y);
           }
 
           function drawSoccerField(pdf, x, y, w, h) {
-            pdf.setDrawColor(0, 77, 152);
+            pdf.setDrawColor(0, 42, 64);
             pdf.setLineWidth(0.5);
+            // White background for the field area to clear grid
             pdf.setFillColor(255, 255, 255);
             pdf.rect(x, y, w, h, 'F');
+            
+            // Outer boundary
             pdf.rect(x, y, w, h);
+            // Halfway line
             pdf.line(x + w / 2, y, x + w / 2, y + h);
+            // Center circle
             pdf.circle(x + w / 2, y + h / 2, 9);
+            // Center spot
             pdf.circle(x + w / 2, y + h / 2, 0.5, 'F');
+            
+            // Left Penalty Area
             pdf.rect(x, y + h / 4, w / 6, h / 2);
+            // Left Goal Area
+            pdf.rect(x, y + h * 0.375, w / 15, h / 4);
+            // Left Penalty Spot
+            pdf.circle(x + w / 9, y + h / 2, 0.5, 'F');
+            // Left Penalty Arc
+            libDrawArc(pdf, x + w / 6, y + h / 2, 9, -Math.PI/4, Math.PI/4);
+
+            // Right Penalty Area
             pdf.rect(x + w - w / 6, y + h / 4, w / 6, h / 2);
+            // Right Goal Area
+            pdf.rect(x + w - w / 15, y + h * 0.375, w / 15, h / 4);
+            // Right Penalty Spot
+            pdf.circle(x + w - w / 9, y + h / 2, 0.5, 'F');
+            // Right Penalty Arc
+            libDrawArc(pdf, x + w - w / 6, y + h / 2, 9, 3*Math.PI/4, 5*Math.PI/4);
+
+            // Goals lines
+            pdf.line(x - 2, y + h * 0.4, x, y + h * 0.4);
+            pdf.line(x - 2, y + h * 0.6, x, y + h * 0.6);
+            pdf.line(x + w, y + h * 0.4, x + w + 2, y + h * 0.4);
+            pdf.line(x + w, y + h * 0.6, x + w + 2, y + h * 0.6);
           }
 
-          window.open(URL.createObjectURL(doc.output('blob')), '_blank');
-      };
+          const blob = doc.output('blob');
+          const blobURL = URL.createObjectURL(blob);
+          window.open(blobURL, '_blank');
+        };
 
-      document.getElementById('generatePDF').onclick = async () => {
+        document.getElementById('generatePDF').onclick = async () => {
           const { jsPDF } = window.jspdf;
           const doc = new jsPDF();
           doc.setFontSize(18);
-          doc.setTextColor(0, 77, 152);
           doc.text(`DIBA FBC - Planilla de Control`, 14, 20);
           doc.setFontSize(10);
           doc.text(`Fecha: ${dateInput.value}`, 14, 28);
@@ -633,50 +872,68 @@
           getExportData().forEach(p => {
             if (p.categoria !== currentCat) {
               currentCat = p.categoria;
-              body.push([{ content: `CATEGORÍA: ${currentCat}`, colSpan: 6, styles: { fillColor: [248, 250, 252], textColor: [0, 77, 152], fontStyle: 'bold' } }]);
+              // Add a category header row to the PDF table
+              body.push([{ content: `CATEGORÍA: ${currentCat}`, colSpan: 6, styles: { fillColor: [241, 245, 249], textColor: [0, 42, 64], fontStyle: 'bold' } }]);
             }
             const d = appState.registros[p.id] || { asistencia: 'P' };
-            const asistText = { P: 'Presente', A: 'Ausente', E: 'Excusa' }[d.asistencia] || '---';
+            const asistText = { P: 'Presente', A: 'Ausente', E: 'Excusa' }[d.asistencia];
             body.push([p.categoria, p.name, p.id, d.pago || 'Ninguno', asistText, d.obs || '']);
           });
 
           doc.autoTable({
             startY: 35,
-            head: [['Cat', 'Jugador', 'DNI', 'Pago', 'Asist', 'Obs']],
+            head: [['Cat', 'Nombre del Jugador', 'DNI', 'Método de Pago', 'Asist', 'Obs']],
             body,
-            headStyles: { fillColor: [0, 77, 152] },
-            theme: 'striped'
+            headStyles: { fillColor: [0, 42, 64] },
+            theme: 'striped',
+            didParseCell: function(data) {
+              if (data.row.raw && data.row.raw[0] && data.row.raw[0].content && data.row.raw[0].content.includes('CATEGORÍA')) {
+                // Keep the styling for category rows
+              }
+            }
           });
 
-          window.open(URL.createObjectURL(doc.output('blob')), '_blank');
-      };
+          // Previsualizar en el visor de PDF del navegador
+          const blob = doc.output('blob');
+          const blobURL = URL.createObjectURL(blob);
+          window.open(blobURL, '_blank');
 
-      document.getElementById('saveAllBtn').onclick = async () => {
-        const btn = document.getElementById('saveAllBtn');
-        const icon = btn.querySelector('i');
-        icon.className = 'fas fa-circle-notch fa-spin mr-3';
-        btn.disabled = true;
+          // Archivar en la nube (segundo plano)
+          archivePDF(blob, `Archivo_${dateInput.value}_${Date.now()}.pdf`);
+        };
 
-        try {
-          const dnis = Object.keys(appState.registros);
-          await Promise.all(dnis.map(dni => saveRegistro(dni)));
-          showToast('¡Planilla guardada con éxito!');
-        } catch (err) {
-          showToast('Error al guardar algunos datos', true);
-        } finally {
-          icon.className = 'fas fa-cloud-upload-alt mr-3';
-          btn.disabled = false;
-        }
-      };
+        document.getElementById('saveAllBtn').onclick = async () => {
+          const btn = document.getElementById('saveAllBtn');
+          const originalHtml = btn.innerHTML;
+          btn.innerHTML = '<i class="fas fa-circle-notch fa-spin me-2"></i>Guardando...';
+          btn.disabled = true;
 
-      // Modals Logic
-      window.openAdminDocs = async (dni, name) => {
+          try {
+            const dnis = Object.keys(appState.registros);
+            const promises = dnis.map(dni => saveRegistro(dni));
+            await Promise.all(promises);
+            showToast('¡Todos los cambios han sido guardados!');
+          } catch (err) {
+            showToast('Error al guardar algunos registros', true);
+          } finally {
+            btn.innerHTML = originalHtml;
+            btn.disabled = false;
+          }
+        };
+
+        loadData();
+
+        // ── LÓGICA DE DOCUMENTOS ADMIN (COMPARTIDA) ──
+        window.openAdminDocs = async (dni, name) => {
           const modal = document.getElementById('adminDocsModal');
-          document.getElementById('modalPlayerName').innerText = name;
-          document.getElementById('modalPlayerDni').innerText = `DNI: ${dni}`;
-          modal.classList.remove('hidden');
+          const nameEl = document.getElementById('modalPlayerName');
+          const dniEl = document.getElementById('modalPlayerDni');
           const listEl = document.getElementById('modalDocsList');
-          listEl.innerHTML = '<div class="flex justify-center py-20"><i class="fas fa-circle-notch fa-spin text-3xl text-diba-blue opacity-20"></i></div>';
+
+          nameEl.innerText = name;
+          dniEl.innerText = `DNI: ${dni}`;
+          modal.classList.remove('d-none');
+          listEl.innerHTML = '<div class="text-center py-5"><i class="fas fa-circle-notch fa-spin h3 text-warning"></i></div>';
 
           const DOC_TYPES = [
             { id: 'tarjeta_identidad', label: 'Tarjeta de Identidad' },
@@ -693,137 +950,191 @@
             const doc = docs?.find(d => d.doc_type === type.id);
             let signedFileUrl = '#';
             
-            if (doc?.file_url) {
+            if (doc && doc.file_url) {
+              // Extraer el path relativo al bucket 'documents'
               const pathPart = doc.file_url.split('documents/')[1];
               if (pathPart) {
                 const { data: sData } = await supabase.storage.from('documents').createSignedUrl(pathPart, 3600);
                 if (sData) signedFileUrl = sData.signedUrl;
+              } else {
+                signedFileUrl = doc.file_url; // Fallback por si acaso
               }
             }
 
             const item = document.createElement('div');
-            item.className = "flex items-center justify-between p-5 bg-slate-50 rounded-[1.5rem] border border-slate-100 hover:border-diba-blue/20 transition-all group";
+            item.className = "d-flex align-items-center justify-content-between p-3 mb-2 rounded-4 text-white";
+            item.style.background = "rgba(255,255,255,0.03)";
+            item.style.border = "1px solid rgba(255,255,255,0.05)";
             item.innerHTML = `
-              <div class="flex items-center gap-4">
-                <div class="w-10 h-10 rounded-xl bg-white border border-slate-100 flex items-center justify-center text-slate-400 group-hover:text-diba-blue transition-colors shadow-sm"><i class="fas fa-file-alt"></i></div>
+              <div class="d-flex align-items-center gap-3">
+                <div class="rounded-3 d-flex align-items-center justify-center p-2" style="background: rgba(255,255,255,0.05); width: 40px; height: 40px;"><i class="fas fa-file-alt text-muted"></i></div>
                 <div>
-                  <div class="text-[10px] font-black text-diba-blue uppercase italic tracking-tighter">${type.label}</div>
-                  <div class="text-[8px] font-bold uppercase tracking-widest ${doc ? (doc.status === 'verificado' ? 'text-emerald-500' : 'text-amber-500') : 'text-slate-300'}">
+                  <p class="fw-bold mb-0 text-uppercase italic" style="font-size: 0.75rem;">${type.label}</p>
+                  <p class="small fw-bold text-uppercase mb-0 ${doc ? (doc.status === 'verificado' ? 'text-success' : 'text-warning') : 'text-muted'}" style="font-size: 0.6rem;">
                     ${doc ? doc.status : 'No cargado'}
-                  </div>
+                  </p>
                 </div>
               </div>
-              <div class="flex items-center gap-2">
-                ${doc ? `<a href="${signedFileUrl}" target="_blank" class="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-500 flex items-center justify-center hover:bg-emerald-500 hover:text-white transition-all"><i class="fas fa-eye text-[10px]"></i></a>` : ''}
-                <button onclick="document.getElementById('upload-${type.id}').click()" class="w-8 h-8 rounded-lg bg-diba-blue/5 text-diba-blue flex items-center justify-center hover:bg-diba-blue hover:text-white transition-all"><i class="fas fa-upload text-[10px]"></i></button>
-                <input type="file" id="upload-${type.id}" class="hidden" onchange="window.adminUploadDoc('${dni}', '${type.id}', this)">
+              <div class="d-flex align-items-center gap-2">
+                ${doc ? `<a href="${signedFileUrl}" target="_blank" class="btn btn-sm btn-link text-warning p-1"><i class="fas fa-eye"></i></a>` : ''}
+                <button onclick="document.getElementById('upload-${type.id}').click()" class="btn btn-sm btn-link text-success p-1"><i class="fas fa-upload"></i></button>
+                <input type="file" id="upload-${type.id}" class="d-none" onchange="window.adminUploadDoc('${dni}', '${type.id}', this)">
               </div>
             `;
             listEl.appendChild(item);
           }
-      };
+        };
 
-      window.closeAdminDocs = () => document.getElementById('adminDocsModal').classList.add('hidden');
+        window.closeAdminDocs = () => {
+          document.getElementById('adminDocsModal').classList.add('d-none');
+        };
 
-      window.adminUploadDoc = async (dni, docType, input) => {
-        const file = input.files[0];
-        if (!file) return;
-        try {
-          const fileName = `${dni}/${docType}_${Date.now()}_${file.name}`;
-          await supabase.storage.from('documents').upload(fileName, file, { upsert: true });
-          const { data: { publicUrl } } = supabase.storage.from('documents').getPublicUrl(fileName);
-          await supabase.from('player_documents').upsert({
-            identificacion_numero: dni,
-            doc_type: docType,
-            file_url: publicUrl,
-            status: 'verificado',
-            updated_at: new Date()
-          }, { onConflict: ['identificacion_numero', 'doc_type'] });
-          window.openAdminDocs(dni, document.getElementById('modalPlayerName').innerText);
-          showToast('Documento actualizado');
-        } catch (err) {
-          alert("Error: " + err.message);
-        }
-      };
+        window.adminUploadDoc = async (dni, docType, input) => {
+          const file = input.files[0];
+          if (!file) return;
 
-      window.openEditModal = (dni, name, cat) => {
-        document.getElementById('editDni').value = dni;
-        document.getElementById('editNombre').value = name;
-        document.getElementById('oldName').value = name;
-        document.getElementById('editCategoria').value = cat;
-        document.getElementById('editPlayerModal').classList.remove('hidden');
-      };
+          const originalBtn = input.previousElementSibling;
+          const originalIcon = originalBtn.innerHTML;
+          originalBtn.innerHTML = '<i class="fas fa-circle-notch fa-spin text-success"></i>';
+          originalBtn.disabled = true;
 
-      window.closeEditModal = () => document.getElementById('editPlayerModal').classList.add('hidden');
+          try {
+            const fileName = `${dni}/${docType}_${Date.now()}_${file.name}`;
+            const { error: uploadError } = await supabase.storage.from('documents').upload(fileName, file, { upsert: true });
+            if (uploadError) throw uploadError;
 
-      document.getElementById('editPlayerForm').onsubmit = async (e) => {
-        e.preventDefault();
-        const btn = e.target.querySelector('button[type="submit"]');
-        const originalText = btn.textContent;
-        btn.textContent = 'Actualizando...';
-        btn.disabled = true;
-        try {
-          await updatePlayer(document.getElementById('editDni').value, {
+            const { data: { publicUrl } } = supabase.storage.from('documents').getPublicUrl(fileName);
+
+            const { error: dbError } = await supabase.from('player_documents').upsert({
+              identificacion_numero: dni,
+              doc_type: docType,
+              file_url: publicUrl,
+              status: 'verificado',
+              updated_at: new Date()
+            }, { onConflict: ['identificacion_numero', 'doc_type'] });
+
+            if (dbError) throw dbError;
+
+            const nameEl = document.getElementById('modalPlayerName').innerText;
+            window.openAdminDocs(dni, nameEl);
+
+          } catch (err) {
+            console.error(err);
+            alert("Error al subir: " + err.message);
+          } finally {
+            originalBtn.innerHTML = originalIcon;
+            originalBtn.disabled = false;
+          }
+        };
+
+        // ── CRUD HANDLERS ──
+        window.openEditModal = (dni, name, cat) => {
+          document.getElementById('editDni').value = dni;
+          document.getElementById('editNombre').value = name;
+          document.getElementById('oldName').value = name;
+          document.getElementById('editCategoria').value = cat;
+          document.getElementById('editPlayerModal').classList.remove('d-none');
+        };
+
+        window.closeEditModal = () => document.getElementById('editPlayerModal').classList.add('d-none');
+
+        document.getElementById('editPlayerForm').onsubmit = async (e) => {
+          e.preventDefault();
+          const dni = document.getElementById('editDni').value;
+          const oldName = document.getElementById('oldName').value;
+          const payload = {
             nombre: document.getElementById('editNombre').value,
             categoria: document.getElementById('editCategoria').value,
-            oldNombre: document.getElementById('oldName').value
-          });
-          showToast('Registro actualizado');
-          closeEditModal();
-          loadData();
-        } catch (err) {
-          alert(err.message);
-        } finally {
-          btn.textContent = originalText;
-          btn.disabled = false;
-        }
-      };
+            oldNombre: oldName
+          };
 
-      window.handleDelete = async (dni, name) => {
-        if (confirm(`¿Eliminar a ${name}?`)) {
+          const btn = e.target.querySelector('button[type="submit"]');
+          const originalText = btn.innerHTML;
+          btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Guardando...';
+          btn.disabled = true;
+
+          try {
+            await updatePlayer(dni, payload);
+            showToast('Jugador actualizado con éxito');
+            closeEditModal();
+            loadData();
+          } catch (err) {
+            alert('Error: ' + err.message);
+          } finally {
+            btn.innerHTML = originalText;
+            btn.disabled = false;
+          }
+        };
+
+        window.handleDelete = async (dni, name) => {
+          if (!confirm(`¿Estás seguro de eliminar a ${name}? Esta acción no se puede deshacer y podría fallar si tiene registros vinculados.`)) return;
           try {
             await deletePlayer(dni);
             showToast('Jugador eliminado');
             loadData();
           } catch (err) {
-            alert(err.message);
+            alert('Error al eliminar: ' + err.message);
           }
-        }
-      };
+        };
 
-      window.openCreateModal = () => document.getElementById('createPlayerModal').classList.remove('hidden');
-      window.closeCreateModal = () => document.getElementById('createPlayerModal').classList.add('hidden');
+        window.openCreateModal = () => document.getElementById('createPlayerModal').classList.remove('d-none');
+        window.closeCreateModal = () => document.getElementById('createPlayerModal').classList.add('d-none');
 
-      document.getElementById('quickCreatePlayerForm').onsubmit = async (e) => {
-        e.preventDefault();
-        const btn = e.target.querySelector('button[type="submit"]');
-        btn.textContent = 'Procesando...';
-        btn.disabled = true;
-        try {
+        document.getElementById('quickCreatePlayerForm').onsubmit = async (e) => {
+          e.preventDefault();
+          const dni = document.getElementById('newDni').value;
+          const nombre = document.getElementById('newNombre').value;
+          const apellidos = document.getElementById('newApellidos').value;
+          const categoria = document.getElementById('newCategoria').value;
+          
           const payload = {
-            numero: document.getElementById('newDni').value,
-            nombre: document.getElementById('newNombre').value,
-            apellidos: document.getElementById('newApellidos').value,
-            categoria: document.getElementById('newCategoria').value,
+            numero: dni,
+            nombre: nombre,
+            apellidos: apellidos,
+            categoria: categoria,
             fecha_nacimiento: document.getElementById('newFechaNac').value || null,
             sexo: document.getElementById('newSexo').value,
             nacionalidad: document.getElementById('newNacionalidad').value,
             lugar_nacimiento: document.getElementById('newLugarNac').value,
-            grupo_sanguineo: document.getElementById('newGrupoSangre').value
+            grupo_sanguineo: document.getElementById('newGrupoSangre').value,
+            fecha_expedicion: document.getElementById('newFechaExp').value || null,
+            lugar_expedicion: document.getElementById('newLugarExp').value,
+            fecha_vencimiento: document.getElementById('newFechaVenc').value || null
           };
-          await supabase.from('jugadores').insert([{ nombre: `${payload.nombre} ${payload.apellidos}`, categoria: payload.categoria, status: 'Activo' }]);
-          await supabase.from('identificacion').insert([payload]);
-          showToast('Jugador registrado');
-          closeCreateModal();
-          loadData();
-          e.target.reset();
-        } catch (err) {
-          alert(err.message);
-        } finally {
-          btn.innerHTML = '<i class="fas fa-user-check"></i> Registrar Jugador Completo';
-          btn.disabled = false;
-        }
-      };
+
+          const btn = e.target.querySelector('button[type="submit"]');
+          const originalText = btn.innerHTML;
+          btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Creando...';
+          btn.disabled = true;
+
+          try {
+            // 1. Insertar en 'jugadores' (Mantenemos compatibilidad con el resto del sistema)
+            const { error: pErr } = await supabase.from('jugadores').insert([{
+              nombre: `${nombre} ${apellidos}`.trim(),
+              categoria: categoria,
+              status: 'Activo',
+              fecha_registro: new Date().toISOString()
+            }]);
+            if (pErr) throw pErr;
+
+            // 2. Insertar en 'identificacion' (Tabla detallada)
+            const { error: idErr } = await supabase.from('identificacion').insert([payload]);
+            if (idErr) throw idErr;
+
+            showToast('¡Jugador registrado con éxito!');
+            closeCreateModal();
+            loadData();
+            e.target.reset();
+          } catch (err) {
+            console.error(err);
+            alert('Error: ' + err.message);
+          } finally {
+            btn.innerHTML = originalText;
+            btn.disabled = false;
+          }
+        };
+      });
     </script>
 </body>
+
 </html>

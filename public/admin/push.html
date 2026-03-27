@@ -1,193 +1,213 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
-    <meta charset="UTF-8">
-    <title>Notificaciones Broadcast — DIBA FBC Admin</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="icon" href="/images/ESCUDO.ico" type="image/x-icon">
-    
-    <!-- Dependencies -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
-    <link rel="stylesheet" href="../styles/admin-common.css">
-
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        'diba-blue': '#004d98',
-                        'diba-red': '#a50044',
-                        'diba-gold': '#FFD700',
-                    },
-                    fontFamily: {
-                        'montserrat': ['Montserrat', 'sans-serif'],
-                        'inter': ['Inter', 'sans-serif'],
-                    }
-                }
-            }
-        }
-    </script>
+  <meta charset="UTF-8">
+  <title>Notificaciones Push — Admin DIBA FBC</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="/images/ESCUDO.ico" type="image/x-icon">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;900&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Montserrat', 'sans-serif'] },
+          colors: {
+            dibaGold: 'var(--gold)',
+            dibaBlue: 'var(--blue)',
+            dibaDark: 'var(--bg-main)',
+            dibaText: 'var(--text-main)',
+            dibaMuted: 'var(--text-muted)'
+          }
+        },
+      },
+    }
+  </script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+  <link rel="stylesheet" href="/styles/admin-common.css">
+  <script src="/scripts/theme-switcher.js"></script>
 </head>
+<body class="bg-[var(--bg-main)] text-[var(--text-main)] font-sans overflow-hidden">
 
-<body class="bg-white font-['Inter']">
-    <div id="admin-nav"></div>
+  <!-- ══ SIDEBAR ══ -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <img src="/images/ESCUDO.png" alt="DIBA FBC">
+      <div>
+        <div class="sidebar-logo-text">DIBA FBC</div>
+        <div class="sidebar-logo-sub">Panel de Control</div>
+      </div>
+    </div>
 
-    <main class="lg:ml-[280px] min-h-screen transition-all duration-300 bg-white pb-20">
-        <div class="p-6 lg:p-10 space-y-8 max-w-5xl mx-auto">
-            
-            <!-- Header -->
-            <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 animate-fade-up">
-                <div>
-                    <h2 class="text-3xl font-black text-diba-blue italic tracking-tighter uppercase">Emisión <span class="text-diba-red">Push</span></h2>
-                    <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-1">Comunicación Instantánea · DIBA FBC Admin</p>
-                </div>
-                <div class="flex items-center gap-3">
-                    <div class="bg-slate-50 border border-slate-100 px-5 py-2.5 rounded-2xl text-[10px] font-black text-diba-blue italic uppercase shadow-sm" id="topbar-clock">--:--:--</div>
-                </div>
-            </div>
+    <nav class="sidebar-nav">
+      <a href="dashboard.html" class="nav-link"><i class="fas fa-th-large"></i> Dashboard</a>
 
-            <div class="grid grid-cols-1 lg:grid-cols-5 gap-8">
-                <!-- Composer -->
-                <div class="lg:col-span-3 bg-white rounded-[2.5rem] border border-slate-50 shadow-premium p-8 md:p-10 animate-fade-up" style="animation-delay: 0.1s">
-                    <div class="flex items-center gap-4 mb-10">
-                        <div class="w-12 h-12 bg-diba-blue/5 rounded-2xl flex items-center justify-center text-diba-blue shadow-inner">
-                            <i class="fas fa-paper-plane text-xl"></i>
-                        </div>
-                        <div>
-                            <h3 class="text-sm font-black text-diba-blue italic uppercase tracking-tighter">Redactar Mensaje</h3>
-                            <p class="text-[9px] text-slate-400 font-bold uppercase tracking-widest">Broadcast oficial de la academia</p>
-                        </div>
-                    </div>
+      <div class="nav-section-label">Equipo</div>
+      <a href="planilla.html" class="nav-link"><i class="fas fa-clipboard-list"></i> Planilla</a>
+      <a href="../ficha.html" class="nav-link"><i class="fas fa-users"></i> Jugadores</a>
+      <a href="../partidos.html" class="nav-link"><i class="fas fa-futbol"></i> Partidos</a>
+      <a href="../analisis.html" class="nav-link"><i class="fas fa-chart-line"></i> Análisis</a>
+      <a href="convocatorias.html" class="nav-link"><i class="fas fa-bullhorn"></i> Convocatorias</a>
 
-                    <form id="push-form" class="space-y-6">
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div class="space-y-3">
-                                <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Título del Mensaje</label>
-                                <input type="text" id="push-title" required placeholder="Ej: ¡Nuevo Partido!" 
-                                       class="w-full px-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-diba-blue text-sm font-extrabold outline-none focus:ring-4 focus:ring-diba-blue/5 focus:bg-white focus:border-diba-blue transition-all italic">
-                            </div>
-                            <div class="space-y-3">
-                                <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Audiencia Objetivo</label>
-                                <div class="relative group">
-                                    <select id="push-target" class="w-full px-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-diba-blue text-sm font-extrabold outline-none focus:ring-4 focus:ring-diba-blue/5 focus:bg-white focus:border-diba-blue appearance-none cursor-pointer transition-all italic">
-                                        <option value="all">TODOS LOS SUSCRIPTORES</option>
-                                        <option value="2012">CATEGORÍA 2012</option>
-                                        <option value="2013">CATEGORÍA 2013</option>
-                                        <option value="2014/2015/2016">CATEGORÍA 2014/15/16</option>
-                                    </select>
-                                    <i class="fas fa-chevron-down absolute right-6 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none text-xs"></i>
-                                </div>
-                            </div>
-                        </div>
+      <div class="nav-section-label">Comunicación</div>
+      <a href="push.html" class="nav-link active"><i class="fas fa-bell"></i> Notificaciones Push</a>
 
-                        <div class="space-y-3">
-                            <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Cuerpo de la Notificación</label>
-                            <textarea id="push-body" rows="4" required placeholder="Describe el anuncio oficial..." 
-                                      class="w-full px-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-diba-blue text-sm font-bold outline-none focus:ring-4 focus:ring-diba-blue/5 focus:bg-white focus:border-diba-blue transition-all italic resize-none"></textarea>
-                        </div>
+      <div class="nav-section-label">Administración</div>
+      <a href="GestorDocumental.html" class="nav-link"><i class="fas fa-folder-open"></i> Gestor Documental</a>
+      <a href="usuarios.html" class="nav-link"><i class="fas fa-user-cog"></i> Usuarios</a>
+      <a href="crear-usuario.html" class="nav-link"><i class="fas fa-user-plus"></i> Crear Usuario</a>
+      <a href="rifa_diba.html" class="nav-link"><i class="fas fa-ticket-alt"></i> Rifas</a>
 
-                        <div class="space-y-3">
-                            <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">URL de Destino (Enlace)</label>
-                            <div class="relative group">
-                                <i class="fas fa-link absolute left-6 top-1/2 -translate-y-1/2 text-diba-gold"></i>
-                                <input type="text" id="push-url" placeholder="Ej: /partidos.html" 
-                                       class="w-full pl-14 pr-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-diba-blue text-sm font-bold outline-none focus:ring-4 focus:ring-diba-blue/5 focus:bg-white focus:border-diba-blue transition-all">
-                            </div>
-                        </div>
+      <div class="nav-section-label">Sitio Web</div>
+      <a href="../index.html" class="nav-link"><i class="fas fa-globe"></i> Ver Sitio</a>
+    </nav>
 
-                        <div id="status-container" class="hidden animate-fade-in mb-6"></div>
-
-                        <div class="flex justify-end pt-4">
-                            <button type="submit" id="send-btn" class="w-full md:w-auto px-12 py-4 bg-diba-blue text-diba-gold text-[10px] font-black uppercase tracking-[0.2em] rounded-2xl hover:scale-[1.02] active:scale-[0.98] transition-all shadow-xl shadow-blue-900/10 italic flex items-center justify-center gap-3">
-                                <i class="fas fa-bolt" id="btn-icon"></i>
-                                <span id="btn-text">Lanzar Notificación</span>
-                                <i class="fas fa-circle-notch fa-spin hidden" id="btn-loader"></i>
-                            </button>
-                        </div>
-                    </form>
-                </div>
-
-                <!-- Preview -->
-                <div class="lg:col-span-2 space-y-8 animate-fade-up" style="animation-delay: 0.2s">
-                    <div class="bg-slate-50 rounded-[2.5rem] border border-slate-100 p-8 flex flex-col items-center justify-center py-16">
-                        <div class="w-full max-w-[280px]">
-                            <div class="bg-white rounded-[2rem] p-5 shadow-2xl border border-slate-100 relative overflow-hidden group">
-                                <div class="absolute inset-0 bg-diba-blue/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                                <div class="flex justify-between items-center mb-5 relative z-10 px-1">
-                                    <div class="flex items-center gap-2">
-                                        <img src="/images/ESCUDO.png" class="w-4 h-4" alt="logo">
-                                        <span class="text-[8px] font-black text-diba-blue italic tracking-tighter uppercase">DIBA FBC WEBAPP</span>
-                                    </div>
-                                    <span class="text-[8px] font-bold text-slate-300 uppercase italic">ahora</span>
-                                </div>
-                                <div class="space-y-2 relative z-10">
-                                    <h3 id="preview-title" class="text-[11px] font-black text-diba-blue italic uppercase tracking-tighter line-clamp-1">DIBA INFORMA</h3>
-                                    <p id="preview-body" class="text-[9px] text-slate-500 font-bold uppercase tracking-tight line-clamp-3 leading-relaxed">El contenido aparecerá aquí en tiempo real para todos los suscriptores activos del club.</p>
-                                </div>
-                                <div class="mt-5 pt-4 border-t border-slate-50 flex items-center justify-between relative z-10">
-                                    <span class="text-[7px] font-black text-diba-gold uppercase tracking-[0.2em]">Deslizar para ver</span>
-                                    <i class="fas fa-chevron-right text-[8px] text-slate-300"></i>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="mt-10 text-center space-y-2">
-                            <p class="text-[10px] font-black text-diba-blue uppercase tracking-widest italic">Simulación de Dispositivo</p>
-                            <p class="text-[9px] text-slate-400 font-bold uppercase italic tracking-tighter">Vista previa dinámica del mensaje</p>
-                        </div>
-                    </div>
-
-                    <div class="p-8 bg-diba-blue rounded-[2.5rem] text-white shadow-xl shadow-blue-900/20 relative overflow-hidden">
-                        <div class="absolute -top-10 -right-10 w-32 h-32 bg-white/5 rounded-full blur-2xl"></div>
-                        <h4 class="text-[10px] font-black uppercase tracking-[0.2em] mb-4 text-diba-gold">Protocolo de Emisión</h4>
-                        <ul class="space-y-3">
-                            <li class="flex items-start gap-4">
-                                <i class="fas fa-check-circle text-diba-gold mt-0.5"></i>
-                                <span class="text-[9px] font-bold uppercase tracking-tight leading-relaxed opacity-80">Las notificaciones llegan a dispositivos Android, iOS y Desktop.</span>
-                            </li>
-                            <li class="flex items-start gap-4">
-                                <i class="fas fa-check-circle text-diba-gold mt-0.5"></i>
-                                <span class="text-[9px] font-bold uppercase tracking-tight leading-relaxed opacity-80">El sistema utiliza web-push de Supabase & Edge Functions.</span>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
+    <div class="sidebar-footer">
+      <div class="user-chip">
+        <div class="user-avatar" id="sb-avatar">A</div>
+        <div>
+          <div class="user-name" id="sb-name">Administrador</div>
+          <div class="user-role" id="sb-role">Admin</div>
         </div>
-    </main>
+      </div>
+      <button class="btn-logout" id="logout-btn">
+        <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+      </button>
+    </div>
+  </aside>
 
-    <script src="../scripts/config.js"></script>
-    <script type="module">
-        import { initAdminLayout } from '../src/components/layout/admin-layout.js';
-        import { requireAdmin } from '../scripts/supabaseClient.js';
+  <main class="main">
+    <header class="topbar">
+      <button class="mobile-menu-btn" id="menu-btn">
+        <i class="fas fa-bars" id="menu-icon"></i>
+      </button>
+      <div>
+        <h1 class="page-title">Broadcast <span>Push</span></h1>
+        <p class="page-subtitle">Envía mensajes instantáneos a toda la comunidad DIBA FBC</p>
+      </div>
+      <div class="topbar-right">
+        <button id="theme-toggle" class="mobile-menu-btn" style="display: flex; margin-right: 0.5rem;" title="Cambiar Tema">
+          <i id="theme-icon" class="fas fa-sun"></i>
+        </button>
+        <div class="topbar-time" id="topbar-clock">00:00:00</div>
+      </div>
+    </header>
 
-        async function init() {
-            const session = await requireAdmin();
-            if (!session) return;
-            initAdminLayout();
-        }
-        init();
+    <div class="content">
+      <div class="max-w-4xl mx-auto">
+        
+        <div class="panel animate-fade-up">
+          <div class="panel-header">
+            <h2 class="panel-title"><i class="fas fa-paper-plane"></i> Redactar Notificación</h2>
+            <span class="panel-badge">Oficial</span>
+          </div>
+          <div class="panel-body">
+            <form id="push-form" class="space-y-6">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Título -->
+                <div class="space-y-2">
+                  <label class="form-label">Título del Mensaje</label>
+                  <input type="text" id="push-title" required placeholder="Ej: ¡Nuevo Partido Programado!" 
+                         class="form-control w-full">
+                </div>
+                <!-- Categoría Target -->
+                <div class="space-y-2">
+                  <label class="form-label">Dirigido a:</label>
+                  <select id="push-target" class="form-select w-full">
+                    <option value="all">Todos los Suscriptores</option>
+                    <option value="2012">Categoría 2012</option>
+                    <option value="2013">Categoría 2013</option>
+                    <option value="2014/2015/2016">Categoría 2014/15/16</option>
+                  </select>
+                </div>
+              </div>
 
-        // Reloj
-        setInterval(() => {
-            const now = new Date();
-            document.getElementById('topbar-clock').textContent = now.toLocaleTimeString('es-ES', { hour12: false });
-        }, 1000);
+              <!-- Cuerpo -->
+              <div class="space-y-2">
+                <label class="form-label">Contenido de la Notificación</label>
+                <textarea id="push-body" rows="4" required placeholder="Escribe el cuerpo del mensaje aquí..." 
+                          class="form-control w-full resize-none"></textarea>
+              </div>
 
-        // Preview dinámica
-        const titleIn = document.getElementById('push-title');
-        const bodyIn = document.getElementById('push-body');
-        const titleOut = document.getElementById('preview-title');
-        const bodyOut = document.getElementById('preview-body');
+              <!-- URL de Destino -->
+              <div class="space-y-2">
+                <label class="form-label">URL de Redirección (Opcional)</label>
+                <div class="relative group">
+                  <span class="absolute inset-y-0 left-4 flex items-center text-slate">
+                    <i class="fas fa-link text-xs"></i>
+                  </span>
+                  <input type="text" id="push-url" placeholder="Ej: /partidos.html" 
+                         class="form-control w-full pl-10">
+                </div>
+                <p class="text-[10px] text-dibaMuted italic">Cuando el usuario haga clic, será llevado a esta página.</p>
+              </div>
 
-        titleIn.addEventListener('input', (e) => titleOut.textContent = e.target.value.toUpperCase() || 'DIBA INFORMA');
-        bodyIn.addEventListener('input', (e) => bodyOut.textContent = e.target.value.toUpperCase() || 'El contenido aparecerá aquí en tiempo real...');
-    </script>
-    <script type="module" src="../src/features/push/admin.js"></script>
+              <div id="status-container" class="hidden"></div>
+
+              <div class="flex justify-end pt-4">
+                <button type="submit" id="send-btn" class="btn btn-primary px-10 py-4 text-xs tracking-[0.2em]">
+                  <i class="fas fa-bolt"></i> <span id="btn-text">Lanzar Notificación</span>
+                  <i class="fas fa-circle-notch fa-spin hidden" id="btn-loader"></i>
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- Preview Section -->
+        <div class="panel animate-fade-up" style="animation-delay: 0.1s;">
+          <div class="panel-header">
+            <h2 class="panel-title"><i class="fas fa-mobile-alt"></i> Vista Previa (Simulada)</h2>
+          </div>
+          <div class="panel-body flex justify-center py-10">
+            <div class="w-72 bg-[#1c1c1e] rounded-[40px] p-4 shadow-2xl border border-white/10">
+               <div class="flex justify-between items-center mb-4 px-2">
+                  <span class="text-[10px] font-bold text-white">DIBA FBC</span>
+                  <span class="text-[10px] text-white/60">ahora</span>
+               </div>
+               <div class="bg-white/5 rounded-2xl p-4">
+                  <h3 id="preview-title" class="text-sm font-black text-dibaGold truncate">Título de prueba</h3>
+                  <p id="preview-body" class="text-xs text-white/80 mt-1 line-clamp-3">El contenido que escribas arriba aparecerá aquí para los usuarios en sus dispositivos.</p>
+               </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <script src="/scripts/config.js"></script>
+  <script type="module">
+    import { initAdminLayout } from '/src/components/layout/admin-layout.js';
+    initAdminLayout();
+  </script>
+  <script type="module" src="/src/features/push/admin.js"></script>
+  <script>
+    // Mobile Menu
+    const menuBtn = document.getElementById('menu-btn');
+    const menuIcon = document.getElementById('menu-icon');
+    const sidebar = document.getElementById('sidebar');
+    menuBtn?.addEventListener('click', () => {
+      sidebar.classList.toggle('open');
+      menuIcon.className = sidebar.classList.contains('open') ? 'fas fa-times' : 'fas fa-bars';
+    });
+
+    // Update Clock
+    setInterval(() => {
+      const now = new Date();
+      document.getElementById('topbar-clock').textContent = now.toLocaleTimeString('es-ES', { hour12: false });
+    }, 1000);
+
+    // Live Preview
+    const titleIn = document.getElementById('push-title');
+    const bodyIn = document.getElementById('push-body');
+    const titleOut = document.getElementById('preview-title');
+    const bodyOut = document.getElementById('preview-body');
+
+    titleIn.addEventListener('input', (e) => titleOut.textContent = e.target.value || 'Título de prueba');
+    bodyIn.addEventListener('input', (e) => bodyOut.textContent = e.target.value || 'El contenido que escribas arriba aparecerá aquí...');
+  </script>
 </body>
-
 </html>
