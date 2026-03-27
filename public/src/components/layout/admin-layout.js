@@ -17,7 +17,7 @@ export async function initAdminLayout() {
 
     // Sidebar Injection (Azul Grana Gradient)
     const sidebarHTML = `
-    <aside class="fixed top-0 left-0 bottom-0 w-[280px] bg-gradient-to-b from-[#004d98] to-[#a50044] z-50 transition-transform duration-500 lg:translate-x-0 -translate-x-full sidebar shadow-2xl overflow-hidden" id="sidebar">
+    <aside class="fixed top-0 left-0 bottom-0 w-[280px] bg-[#020617] z-50 transition-transform duration-500 lg:translate-x-0 -translate-x-full sidebar shadow-2xl overflow-hidden" id="sidebar">
         <!-- Visual Decorator -->
         <div class="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full -mr-16 -mt-16 blur-2xl"></div>
         
@@ -78,28 +78,28 @@ export async function initAdminLayout() {
     // Header Injection (Azul Grana Styled)
     const pageTitle = document.title.split('—')[0].trim();
     const headerHTML = `
-    <header class="sticky top-0 z-40 bg-white px-8 h-[70px] flex items-center justify-between border-b border-slate-100 shadow-sm relative overflow-hidden">
+    <header class="sticky top-0 z-40 bg-[#020617] px-8 h-[70px] flex items-center justify-between border-b border-white/5 shadow-sm relative overflow-hidden">
         <!-- Visual Accent -->
-        <div class="absolute top-0 left-0 w-1 h-full bg-[#004d98]"></div>
+        <div class="absolute top-0 left-0 w-1 h-full bg-[#FFD700]"></div>
         
         <div class="flex items-center gap-6">
-            <button class="lg:hidden w-11 h-11 rounded-xl bg-slate-50 flex items-center justify-center text-[#004d98] hover:bg-slate-100 transition-all border border-slate-100" id="menu-btn-layout">
+            <button class="lg:hidden w-11 h-11 rounded-xl bg-white/5 flex items-center justify-center text-white hover:bg-white/10 transition-all border border-white/10" id="menu-btn-layout">
                 <i class="fas fa-bars-staggered"></i>
             </button>
             <div class="animate-fade-up">
-                <h1 class="text-xl font-black italic text-[#004d98] uppercase tracking-tighter font-montserrat">${pageTitle} <span class="text-[#a50044] font-normal">PANEL</span></h1>
+                <h1 class="text-xl font-black italic text-white uppercase tracking-tighter font-montserrat">${pageTitle} <span class="text-[#FFD700] font-normal">PANEL</span></h1>
                 <p class="text-[0.55rem] font-bold text-slate-400 uppercase tracking-[0.4em] mt-0.5">Club Deportivo DIBA FBC</p>
             </div>
         </div>
         
         <div class="flex items-center gap-6">
             <div class="hidden md:flex flex-col items-end">
-                <div class="text-[1rem] font-black text-[#004d98] italic tracking-tighter" id="layout-clock">00:00:00</div>
+                <div class="text-[1rem] font-black text-white italic tracking-tighter" id="layout-clock">00:00:00</div>
                 <div class="text-[0.55rem] font-bold text-slate-400 uppercase tracking-widest" id="layout-date">---</div>
             </div>
-            <div class="w-[1px] h-8 bg-slate-100 hidden md:block"></div>
+            <div class="w-[1px] h-8 bg-white/10 hidden md:block"></div>
             <div class="flex items-center gap-3">
-                <button class="w-10 h-10 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-center text-[#004d98] hover:text-[#a50044] transition-colors shadow-sm">
+                <button class="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-white hover:text-[#FFD700] transition-colors shadow-sm">
                     <i class="fas fa-bell text-sm"></i>
                 </button>
                 <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-[#004d98] to-[#a50044] flex items-center justify-center text-white font-black text-xs shadow-md shadow-blue-900/10 border border-white/20">
