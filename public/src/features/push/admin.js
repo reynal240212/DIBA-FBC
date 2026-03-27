@@ -47,21 +47,31 @@ import { supabase, requireAdmin } from '../../core/supabase.js';
             const { data, error } = await supabase.functions.invoke('send-push', { body: payload });
             if (error) throw error;
 
-            status.innerHTML = `<div class="p-4 bg-emerald-50 text-emerald-600 rounded-xl border border-emerald-100 flex items-center gap-3 animate__animated animate__fadeIn">
-                <i class="fas fa-check-circle text-xl"></i>
+            status.innerHTML = `<div class="p-6 bg-emerald-50 text-emerald-600 rounded-2xl border border-emerald-100 flex items-center gap-4 animate-fade-up shadow-sm">
+                <div class="w-10 h-10 bg-emerald-100 rounded-full flex items-center justify-center flex-shrink-0">
+                    <i class="fas fa-check-circle text-xl"></i>
+                </div>
                 <div>
-                    <p class="font-black uppercase italic text-[10px]">¡Enviado con éxito!</p>
-                    <p class="text-[9px] font-bold">La notificación se ha enviado a ${data.success || 0} dispositivos.</p>
+                    <p class="font-black uppercase italic text-[11px] leading-none mb-1">¡Enviado con éxito!</p>
+                    <p class="text-[10px] font-bold opacity-80">La notificación se ha emitido a ${data.success || 0} dispositivos registrados.</p>
                 </div>
             </div>`;
             status.classList.remove('hidden');
             form.reset();
         } catch (err) {
-            status.innerHTML = `<div class="p-4 bg-rose-50 text-rose-600 rounded-xl border border-rose-100 font-bold text-[10px] uppercase">Error: ${err.message}</div>`;
+            status.innerHTML = `<div class="p-6 bg-rose-50 text-rose-600 rounded-2xl border border-rose-100 flex items-center gap-4 animate-fade-up shadow-sm">
+                <div class="w-10 h-10 bg-rose-100 rounded-full flex items-center justify-center flex-shrink-0">
+                    <i class="fas fa-exclamation-triangle text-xl"></i>
+                </div>
+                <div>
+                    <p class="font-black uppercase italic text-[11px] leading-none mb-1">Error de Emisión</p>
+                    <p class="text-[10px] font-bold opacity-80">${err.message}</p>
+                </div>
+            </div>`;
             status.classList.remove('hidden');
         } finally {
             btn.disabled = false;
-            btn.innerHTML = '<i class="fas fa-paper-plane mr-2"></i> Enviar Notificación';
+            btn.innerHTML = '<span class="relative z-10 flex items-center justify-center gap-3"><i class="fas fa-bolt"></i> Lanzar Notificación</span>';
         }
     });
 

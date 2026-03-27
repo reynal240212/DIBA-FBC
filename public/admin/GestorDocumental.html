@@ -44,157 +44,66 @@
     </style>
 </head>
 
-    <!-- Loader Loader -->
-    <div id="app-loader" class="fixed inset-0 z-[9999] flex items-center justify-center bg-[#06090e]">
-        <div class="text-center animate-fade-up">
-            <div class="relative w-16 h-16 mx-auto mb-6">
-                <div class="absolute inset-0 border-4 border-gold/10 rounded-full"></div>
-                <div class="absolute inset-0 border-4 border-t-gold rounded-full animate-spin"></div>
-            </div>
-            <p class="text-[10px] font-black uppercase tracking-[0.3em] text-gold italic opacity-80">Gestor Documental — Sistema</p>
-        </div>
-    </div>
+<body class="bg-[#F4F7FA] text-slate-900 font-sans min-h-screen selection:bg-[#FFD700]/30" id="admin-body" style="display: none;">
 
-    <body class="bg-dark text-dibaText selection:bg-dibaGold/30 overflow-x-hidden font-inter flex min-h-screen" style="display: none;" id="admin-body">
+    <!-- ══ NAVIGATION (Sidebar + Header) ══ -->
+    <div id="admin-nav"></div>
 
-
-    <!-- ══ SIDEBAR ══ -->
-    <aside class="sidebar" id="sidebar">
-        <div class="sidebar-logo">
-            <img src="/images/ESCUDO.png" alt="DIBA FBC">
-            <div class="sidebar-logo-text">DIBA FBC</div>
-        </div>
-
-        <nav class="sidebar-nav">
-            <a href="dashboard.html" class="nav-link"><i class="fas fa-th-large"></i> Dashboard</a>
-
-            <div class="nav-section-label">Equipo</div>
-            <a href="planilla.html" class="nav-link"><i class="fas fa-clipboard-list"></i> Planilla</a>
-            <a href="crear-jugador.html" class="nav-link"><i class="fas fa-user-plus"></i> Crear Jugador</a>
-            <a href="../ficha.html" class="nav-link"><i class="fas fa-users"></i> Jugadores</a>
-            <a href="../partidos.html" class="nav-link"><i class="fas fa-futbol"></i> Partidos</a>
-            <a href="../analisis.html" class="nav-link"><i class="fas fa-chart-line"></i> Análisis</a>
-            <a href="convocatorias.html" class="nav-link"><i class="fas fa-bullhorn"></i> Convocatorias</a>
-
-            <div class="nav-section-label">Comunicación</div>
-            <a href="push.html" class="nav-link"><i class="fas fa-bell"></i> Notificaciones Push</a>
-
-            <div class="nav-section-label">Administración</div>
-            <a href="GestorDocumental.html" class="nav-link active"><i class="fas fa-folder-open"></i> Gestor Documental</a>
-            <a href="usuarios.html" class="nav-link"><i class="fas fa-user-cog"></i> Usuarios</a>
-            <a href="crear-usuario.html" class="nav-link"><i class="fas fa-user-plus"></i> Crear Usuario</a>
-            <a href="rifa_diba.html" class="nav-link"><i class="fas fa-ticket-alt"></i> Rifas</a>
-
-            <div class="nav-section-label">Sitio Web</div>
-            <a href="../index.html" class="nav-link"><i class="fas fa-globe"></i> Ver Sitio</a>
-        </nav>
-
-        <div class="sidebar-footer">
-            <div class="user-chip">
-                <div class="user-avatar" id="sb-avatar">A</div>
-                <div style="min-width: 0;">
-                    <div class="user-name" id="sb-name">Administrador</div>
-                    <div class="user-role" id="sb-role">Admin</div>
+    <div class="lg:ml-[280px] min-h-screen transition-all duration-500">
+        <div class="content p-8">
+            <div class="max-w-7xl mx-auto w-full">
+                
+                <!-- Filter Tabs -->
+                <div id="filter-container" class="flex items-center gap-3 mb-8 overflow-x-auto pb-4 custom-scrollbar">
+                    <button id="filter-docs-btn"
+                        class="px-8 py-3 rounded-xl bg-[#003366] text-[#FFD700] text-[10px] font-black uppercase tracking-widest border border-[#003366] transition-all whitespace-nowrap shadow-lg hover:shadow-xl hover:scale-[1.02]">
+                        <i class="fas fa-file-alt mr-2"></i> Documentos
+                    </button>
+                    <button id="filter-club-btn"
+                        class="px-8 py-3 rounded-xl bg-white text-slate-500 text-[10px] font-black uppercase tracking-widest border border-slate-100 hover:border-[#FFD700] hover:text-[#003366] transition-all whitespace-nowrap shadow-sm">
+                        <i class="fas fa-folder-open mr-2"></i> Explorador de Storage
+                    </button>
+                    <button id="filter-asistencias-btn"
+                        class="px-8 py-3 rounded-xl bg-white text-slate-500 text-[10px] font-black uppercase tracking-widest border border-slate-100 hover:border-[#FFD700] hover:text-[#003366] transition-all whitespace-nowrap shadow-sm">
+                        <i class="fas fa-calendar-check mr-2"></i> Asistencias
+                    </button>
+                    <button id="view-players-btn"
+                        class="px-8 py-3 rounded-xl bg-white text-slate-500 text-[10px] font-black uppercase tracking-widest border border-slate-100 hover:border-[#FFD700] hover:text-[#003366] transition-all whitespace-nowrap shadow-sm">
+                        <i class="fas fa-users mr-2"></i> Jugadores
+                    </button>
                 </div>
-            </div>
-            <button class="btn-logout" id="logout-btn">
-                <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
-            </button>
-        </div>
-    </aside>
-    <div class="sidebar-overlay" onclick="document.getElementById('sidebar').classList.remove('open')"></div>
 
-    <div class="main">
-        <!-- Top Bar -->
-        <header class="topbar">
-            <div class="flex items-center">
-                <button class="mobile-menu-btn" id="menu-btn">
-                    <i class="fas fa-bars" id="menu-icon"></i>
-                </button>
-                <div class="animate-fade-up">
-                    <div class="page-title">Gestor <span>Documental</span></div>
-                    <div class="page-subtitle">Administración de archivos y registros — DIBA FBC</div>
+                <!-- Main Content Area -->
+                <div id="dynamic-content" class="bg-white shadow-premium rounded-elite border border-slate-100 min-h-[500px] transition-all duration-500 overflow-hidden">
+                    <div class="flex flex-col items-center justify-center py-40 opacity-30">
+                        <i class="fas fa-circle-notch fa-spin text-4xl mb-4 text-[#003366]"></i>
+                        <p class="text-[10px] font-black uppercase tracking-[0.3em] text-[#003366]">Sincronizando base de datos...</p>
+                    </div>
                 </div>
-            </div>
-            <div class="topbar-right">
-                <div class="relative group hidden md:block">
-                    <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-gold transition-colors"></i>
-                    <input type="text" id="searchInput" placeholder="Buscar..."
-                        class="pl-12 pr-4 py-2 bg-white/5 text-dibaText rounded-xl border border-white/5 focus:ring-2 focus:ring-gold outline-none font-medium transition-all text-sm">
-                </div>
-                <button id="theme-toggle" class="btn btn-outline" style="padding: 0.5rem; width: 40px; height: 40px; justify-content: center;" title="Cambiar Tema">
-                  <i id="theme-icon" class="fas fa-sun"></i>
-                </button>
-                <div class="topbar-time glass" id="clock">--:--</div>
-            </div>
-        </header>
 
-        <div class="content">
-            <!-- Título fallback para gestor.js selector si es necesario -->
-            <h1 id="main-title" class="hidden">Gestor Documental</h1>
-
-            <div id="filter-container" class="flex items-center gap-3 mb-8 overflow-x-auto pb-2 no-scrollbar">
-                <button id="filter-docs-btn"
-                    class="px-6 py-2 rounded-full bg-dibaGold text-blue-900 text-[10px] font-black uppercase italic border border-dibaGold transition-all whitespace-nowrap premium-shine">Documentos</button>
-                <button id="filter-club-btn"
-                    class="px-6 py-2 rounded-full bg-white/5 text-slate-400 text-[10px] font-black uppercase italic border border-white/10 hover:border-dibaGold transition-all whitespace-nowrap premium-shine">Explorador de Storage</button>
-                <button id="filter-asistencias-btn"
-                    class="px-6 py-2 rounded-full bg-white/5 text-slate-400 text-[10px] font-black uppercase italic border border-white/10 hover:border-dibaGold transition-all whitespace-nowrap premium-shine">Asistencias</button>
-                <button id="view-players-btn"
-                    class="px-6 py-2 rounded-full bg-white/5 text-slate-400 text-[10px] font-black uppercase italic border border-white/10 hover:border-dibaGold transition-all whitespace-nowrap premium-shine">Jugadores</button>
-            </div>
-
-            <div id="dynamic-content" class="animate__animated animate__fadeIn glass-premium premium-shine mb-12" style="border-radius: 24px; min-height: 400px;">
-                <div class="flex flex-col items-center justify-center py-20 text-slate-500">
-                    <i class="fas fa-circle-notch animate-spin text-4xl mb-4 text-gold"></i>
-                    <p class="text-[10px] font-black uppercase tracking-widest text-gold opacity-60">Sincronizando base de datos...</p>
-                </div>
             </div>
         </div>
     </div>
 
-    <script src="../scripts/config.js"></script>
-    <script src="../scripts/config.js"></script>
+    <!-- ══ SCRIPTS ══ -->
+    <script src="/scripts/config.js"></script>
     <script type="module">
-        import { supabase, requireAdmin } from '/src/core/supabase.js';
         import { initAdminLayout } from '/src/components/layout/admin-layout.js';
+        import '/src/core/aiWidget.js';
 
-        // ── AUTENTICACIÓN Y CARGA ──
         async function init() {
             try {
-                // Initialize Shared Layout
+                // Unified Layout Injection
                 await initAdminLayout();
-
-                const session = await requireAdmin();
-                if (!session) return;
-
-                document.getElementById('app-loader')?.classList.add('hidden');
-                document.getElementById('admin-body').style.display = 'flex';
-
-                const user = session.user;
-                if (user) {
-                    const { data: profile } = await supabase
-                        .from('users')
-                        .select('username, role')
-                        .eq('id', user.id)
-                        .single();
-
-                    if (profile) {
-                        document.getElementById('sb-name').textContent = profile.username;
-                        document.getElementById('sb-role').textContent = profile.role;
-                        document.getElementById('sb-avatar').textContent = profile.username[0].toUpperCase();
-                    }
-                }
+                
+                // Show Body
+                document.getElementById('admin-body').style.display = 'block';
             } catch (error) {
                 console.error("Init error:", error);
             }
         }
-
         init();
-        
-        // ... rest of the page logic ... (Clock and Mobile Menu)
     </script>
-
     <script type="module" src="/src/features/gestor/main.js"></script>
 </body>
 

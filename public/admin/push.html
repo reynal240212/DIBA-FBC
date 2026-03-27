@@ -52,185 +52,133 @@
   <link rel="stylesheet" href="/styles/admin-common.css">
   <script src="/scripts/theme-switcher.js"></script>
 </head>
-<body style="display: none;" id="admin-body">
+<body class="bg-[#F4F7FA] text-slate-900 font-sans min-h-screen selection:bg-[#FFD700]/30" id="admin-body" style="display: none;">
 
-  <!-- ══ SIDEBAR ══ -->
-  <aside class="sidebar" id="sidebar">
-    <div class="sidebar-logo">
-      <img src="/images/ESCUDO.png" alt="DIBA FBC">
-      <div class="sidebar-logo-text">DIBA FBC</div>
-    </div>
+    <!-- ══ NAVIGATION (Sidebar + Header) ══ -->
+    <div id="admin-nav"></div>
 
-    <nav class="sidebar-nav">
-      <a href="dashboard.html" class="nav-link"><i class="fas fa-th-large"></i> Dashboard</a>
+    <main class="lg:ml-[280px] min-h-screen transition-all duration-500">
+        <div class="content p-8">
+            <div class="max-w-6xl mx-auto w-full">
+                
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+                    
+                    <!-- Broadcast Form -->
+                    <div class="bg-white shadow-premium rounded-elite border border-slate-100 p-10 animate-fade-up">
+                        <div class="mb-10 flex items-center gap-5">
+                            <div class="w-14 h-14 bg-[#003366]/5 rounded-2xl flex items-center justify-center text-[#003366] border border-[#003366]/10">
+                                <i class="fas fa-paper-plane text-2xl"></i>
+                            </div>
+                            <div>
+                                <h2 class="text-2xl font-black italic uppercase text-[#003366] leading-tight">Broadcast <span class="text-[#FFD700]">Push</span></h2>
+                                <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-1 italic">Envío masivo oficial</p>
+                            </div>
+                        </div>
 
-      <div class="nav-section-label">Equipo</div>
-      <a href="planilla.html" class="nav-link"><i class="fas fa-clipboard-list"></i> Planilla</a>
-      <a href="crear-jugador.html" class="nav-link"><i class="fas fa-user-plus"></i> Crear Jugador</a>
-      <a href="../ficha.html" class="nav-link"><i class="fas fa-users"></i> Jugadores</a>
-      <a href="../partidos.html" class="nav-link"><i class="fas fa-futbol"></i> Partidos</a>
-      <a href="../analisis.html" class="nav-link"><i class="fas fa-chart-line"></i> Análisis</a>
-      <a href="convocatorias.html" class="nav-link"><i class="fas fa-bullhorn"></i> Convocatorias</a>
+                        <form id="push-form" class="space-y-6">
+                            <div class="form-group">
+                                <label class="text-[10px] font-black uppercase tracking-widest text-slate-500 mb-2 block">Título del Mensaje</label>
+                                <input type="text" id="push-title" required placeholder="Ej: ¡Nuevo Partido Programado!" 
+                                    class="w-full bg-slate-50 border-slate-100 rounded-xl p-4 text-[#003366] font-bold outline-none focus:ring-2 focus:ring-[#FFD700] transition-all">
+                            </div>
 
-      <div class="nav-section-label">Comunicación</div>
-      <a href="push.html" class="nav-link active"><i class="fas fa-bell"></i> Notificaciones Push</a>
+                            <div class="form-group">
+                                <label class="text-[10px] font-black uppercase tracking-widest text-slate-500 mb-2 block">Dirigido a:</label>
+                                <select id="push-target" 
+                                    class="w-full bg-slate-50 border-slate-100 rounded-xl p-4 text-[#003366] font-bold outline-none focus:ring-2 focus:ring-[#FFD700] appearance-none cursor-pointer">
+                                    <option value="all">Todos los Suscriptores</option>
+                                    <option value="2012">Categoría 2012</option>
+                                    <option value="2013">Categoría 2013</option>
+                                    <option value="2014/2015/2016">Categoría 2014/15/16</option>
+                                </select>
+                            </div>
 
-      <div class="nav-section-label">Administración</div>
-      <a href="GestorDocumental.html" class="nav-link"><i class="fas fa-folder-open"></i> Gestor Documental</a>
-      <a href="usuarios.html" class="nav-link"><i class="fas fa-user-cog"></i> Usuarios</a>
-      <a href="crear-usuario.html" class="nav-link"><i class="fas fa-user-plus"></i> Crear Usuario</a>
-      <a href="rifa_diba.html" class="nav-link"><i class="fas fa-ticket-alt"></i> Rifas</a>
+                            <div class="form-group">
+                                <label class="text-[10px] font-black uppercase tracking-widest text-slate-500 mb-2 block">Contenido de la Notificación</label>
+                                <textarea id="push-body" rows="4" required placeholder="Escribe el cuerpo del mensaje aquí..." 
+                                    class="w-full bg-slate-50 border-slate-100 rounded-xl p-4 text-[#003366] font-bold outline-none focus:ring-2 focus:ring-[#FFD700] resize-none transition-all"></textarea>
+                            </div>
 
-      <div class="nav-section-label">Sitio Web</div>
-      <a href="../index.html" class="nav-link"><i class="fas fa-globe"></i> Ver Sitio</a>
-    </nav>
+                            <div class="form-group">
+                                <label class="text-[10px] font-black uppercase tracking-widest text-slate-500 mb-2 block">URL de Redirección (Opcional)</label>
+                                <input type="text" id="push-url" placeholder="Ej: /partidos.html" 
+                                    class="w-full bg-slate-50 border-slate-100 rounded-xl p-4 text-[#003366] font-bold outline-none focus:ring-2 focus:ring-[#FFD700] transition-all">
+                                <p class="text-[9px] text-slate-400 font-bold italic mt-2">* El clic llevará al usuario a esta ruta.</p>
+                            </div>
 
-    <div class="sidebar-footer">
-      <div class="user-chip">
-        <div class="user-avatar" id="sb-avatar">A</div>
-        <div style="min-width: 0;">
-          <div class="user-name" id="sb-name">Administrador</div>
-          <div class="user-role" id="sb-role">Admin</div>
-        </div>
-      </div>
-      <button class="btn-logout" id="logout-btn">
-        <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
-      </button>
-    </div>
-  </aside>
-  <div class="sidebar-overlay" onclick="document.getElementById('sidebar').classList.remove('open')"></div>
+                            <div id="status-container" class="hidden animate-fade-up"></div>
 
-  <main class="main">
-    <header class="topbar">
-      <div class="flex items-center">
-        <button class="mobile-menu-btn" id="menu-btn">
-          <i class="fas fa-bars" id="menu-icon"></i>
-        </button>
-        <div class="animate-fade-up">
-          <div class="page-title">Broadcast <span>Push</span></div>
-          <div class="page-subtitle">Envía mensajes instantáneos a toda la comunidad DIBA FBC</div>
-        </div>
-      </div>
-      <div class="topbar-right">
-        <button id="theme-toggle" class="btn btn-outline" style="padding: 0.5rem; width: 40px; height: 40px; justify-content: center;" title="Cambiar Tema">
-          <i id="theme-icon" class="fas fa-sun"></i>
-        </button>
-        <div class="topbar-time glass" id="topbar-clock">00:00:00</div>
-      </div>
-    </header>
+                            <div class="pt-4">
+                                <button type="submit" id="send-btn" class="w-full h-16 bg-[#003366] text-[#FFD700] rounded-xl font-black uppercase text-xs tracking-widest shadow-lg hover:shadow-xl hover:scale-[1.02] transition-all group overflow-hidden relative">
+                                    <span id="btn-text" class="relative z-10 flex items-center justify-center gap-3">
+                                        <i class="fas fa-bolt group-hover:animate-pulse"></i> Lanzar Notificación
+                                    </span>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
 
-    <div class="content">
-      <div class="push-container">
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          
-          <!-- Broadcast Form -->
-          <div class="glass-premium animate-fade-up" style="padding: 2.5rem;">
-            <div class="mb-8 flex items-center gap-4">
-              <div class="w-12 h-12 bg-gold/10 rounded-xl flex items-center justify-center text-gold border border-gold/20">
-                <i class="fas fa-paper-plane text-xl"></i>
-              </div>
-              <div>
-                <h2 class="text-xl font-black italic uppercase text-white leading-tight">Redactar <span class="text-gold">Broadcast</span></h2>
-                <p class="text-[10px] text-dibaMuted font-bold uppercase tracking-widest mt-1">Envío masivo oficial</p>
-              </div>
+                    <!-- Preview Device -->
+                    <div class="flex flex-col items-center justify-center animate-fade-up sticky top-8" style="animation-delay: 0.1s;">
+                        <div class="w-[320px] h-[640px] bg-slate-900 rounded-[3rem] p-4 relative border-[8px] border-slate-800 shadow-2xl overflow-hidden">
+                            <!-- Notch -->
+                            <div class="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-6 bg-slate-800 rounded-b-2xl z-20"></div>
+                            
+                            <!-- Screen Content -->
+                            <div class="h-full w-full bg-[#F4F7FA] rounded-[2rem] p-4 pt-10 relative overflow-hidden">
+                                <!-- Status Icons -->
+                                <div class="flex justify-between items-center mb-8 px-2 opacity-30">
+                                    <span class="text-[10px] font-bold">9:41</span>
+                                    <div class="flex gap-1.5 items-center">
+                                        <i class="fas fa-signal text-[8px]"></i>
+                                        <i class="fas fa-wifi text-[8px]"></i>
+                                        <i class="fas fa-battery-full text-[10px]"></i>
+                                    </div>
+                                </div>
+
+                                <!-- Notification Bubble -->
+                                <div class="bg-white/90 backdrop-blur-md border border-white rounded-2xl p-4 shadow-sm animate-fade-down">
+                                    <div class="flex justify-between items-center mb-2">
+                                        <div class="flex items-center gap-2">
+                                            <div class="w-5 h-5 bg-[#003366] rounded-md flex items-center justify-center">
+                                                <img src="/images/ESCUDO.png" class="w-3.5 h-3.5 object-contain" alt="">
+                                            </div>
+                                            <span class="text-[10px] font-black text-[#003366] uppercase tracking-tighter">DIBA FBC</span>
+                                        </div>
+                                        <span class="text-[8px] text-slate-400 font-bold">ahora</span>
+                                    </div>
+                                    <h3 id="preview-title" class="text-xs font-black text-slate-800 uppercase italic leading-tight">Título de prueba</h3>
+                                    <p id="preview-body" class="text-[10px] text-slate-500 mt-1.5 leading-relaxed font-medium">El contenido que escribas aparecerá aquí para los usuarios.</p>
+                                </div>
+
+                                <!-- Wallpaper Simulation -->
+                                <div class="absolute inset-0 -z-10 bg-gradient-to-tr from-[#003366]/10 to-[#FFD700]/10"></div>
+                            </div>
+                        </div>
+                        <p class="text-[10px] text-slate-400 font-black uppercase tracking-[0.3em] mt-10 italic">Previsualización Real</p>
+                    </div>
+
+                </div>
             </div>
-
-            <form id="push-form">
-              <div class="premium-form-group">
-                <label class="premium-label">Título del Mensaje</label>
-                <input type="text" id="push-title" required placeholder="Ej: ¡Nuevo Partido Programado!" class="premium-input">
-              </div>
-
-              <div class="premium-form-group">
-                <label class="premium-label">Dirigido a:</label>
-                <select id="push-target" class="premium-input">
-                  <option value="all">Todos los Suscriptores</option>
-                  <option value="2012">Categoría 2012</option>
-                  <option value="2013">Categoría 2013</option>
-                  <option value="2014/2015/2016">Categoría 2014/15/16</option>
-                </select>
-              </div>
-
-              <div class="premium-form-group">
-                <label class="premium-label">Contenido de la Notificación</label>
-                <textarea id="push-body" rows="4" required placeholder="Escribe el cuerpo del mensaje aquí..." class="premium-input resize-none"></textarea>
-              </div>
-
-              <div class="premium-form-group">
-                <label class="premium-label">URL de Redirección (Opcional)</label>
-                <input type="text" id="push-url" placeholder="Ej: /partidos.html" class="premium-input">
-                <p class="text-[9px] text-dibaMuted font-bold italic mt-2">* El clic llevará al usuario a esta ruta.</p>
-              </div>
-
-              <div id="status-container" class="hidden mb-6"></div>
-
-              <div class="mt-8">
-                <button type="submit" id="send-btn" class="btn btn-primary w-full" style="padding: 1rem;">
-                  <span id="btn-text" class="flex items-center justify-center gap-2">
-                    <i class="fas fa-bolt"></i> Lanzar Notificación
-                  </span>
-                  <i class="fas fa-circle-notch fa-spin hidden" id="btn-loader"></i>
-                </button>
-              </div>
-            </form>
-          </div>
-
-          <!-- Preview Device -->
-          <div class="flex flex-col items-center justify-center animate-fade-up" style="animation-delay: 0.1s;">
-            <div class="preview-device">
-               <div class="flex justify-between items-center mb-6 px-2">
-                  <span class="text-[10px] font-black italic text-gold tracking-widest">DIBA FBC</span>
-                  <span class="text-[9px] text-white/40 uppercase font-bold">Ahora</span>
-               </div>
-               <div class="notification-bubble">
-                  <h3 id="preview-title" class="text-sm font-black text-white italic truncate uppercase">Título de prueba</h3>
-                  <p id="preview-body" class="text-[11px] text-white/70 mt-2 leading-relaxed">El contenido que escribas aparecerá aquí para los usuarios.</p>
-               </div>
-               <div class="mt-8 flex justify-center">
-                  <div class="w-20 h-1 bg-white/10 rounded-full"></div>
-               </div>
-            </div>
-            <p class="text-[10px] text-dibaMuted font-bold uppercase tracking-[0.2em] mt-8 italic text-center">Vista previa en tiempo real</p>
-          </div>
-
         </div>
-      </div>
-    </div>
+    </main>
 
-      </div>
-    </div>
-  </main>
-
-  <script src="/scripts/config.js"></script>
-  <script type="module">
-    import { initAdminLayout } from '/src/components/layout/admin-layout.js';
-    initAdminLayout();
-  </script>
-  <script type="module" src="/src/features/push/admin.js"></script>
-  <script>
-    // Mobile Menu
-    const menuBtn = document.getElementById('menu-btn');
-    const menuIcon = document.getElementById('menu-icon');
-    const sidebar = document.getElementById('sidebar');
-    menuBtn?.addEventListener('click', () => {
-      sidebar.classList.toggle('open');
-      menuIcon.className = sidebar.classList.contains('open') ? 'fas fa-times' : 'fas fa-bars';
-    });
-
-    // Update Clock
-    setInterval(() => {
-      const now = new Date();
-      document.getElementById('topbar-clock').textContent = now.toLocaleTimeString('es-ES', { hour12: false });
-    }, 1000);
-
-    // Live Preview
-    const titleIn = document.getElementById('push-title');
-    const bodyIn = document.getElementById('push-body');
-    const titleOut = document.getElementById('preview-title');
-    const bodyOut = document.getElementById('preview-body');
-
-    titleIn.addEventListener('input', (e) => titleOut.textContent = e.target.value || 'Título de prueba');
-    bodyIn.addEventListener('input', (e) => bodyOut.textContent = e.target.value || 'El contenido que escribas arriba aparecerá aquí...');
-  </script>
+    <!-- SCRIPTS -->
+    <script src="/scripts/config.js"></script>
+    <script type="module">
+        import { initAdminLayout } from '/src/components/layout/admin-layout.js';
+        import '/src/core/aiWidget.js';
+        
+        async function init() {
+            try {
+                await initAdminLayout();
+                document.getElementById('admin-body').style.display = 'block';
+            } catch (error) {
+                console.error(error);
+            }
+        }
+        init();
+    </script>
+    <script type="module" src="/src/features/push/admin.js"></script>
 </body>
 </html>

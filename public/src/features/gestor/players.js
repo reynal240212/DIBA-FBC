@@ -1,5 +1,5 @@
 /**
- * DIBA FBC - Gestor Players Module (Reorganized)
+ * DIBA FBC - Gestor Players Module (Refactored for Light Mode)
  */
 import { supabase, sanitizeDNI } from '../../core/supabase.js';
 
@@ -7,7 +7,7 @@ export async function loadPlayers(dynamicContent, pageTitle, mainTitle, setActiv
     if (pageTitle) pageTitle.innerHTML = 'Plantilla <span>Oficial</span>';
     if (mainTitle) mainTitle.innerHTML = 'Jugadores';
     setActiveFilter('view-players-btn');
-    dynamicContent.innerHTML = '<div class="flex justify-center py-20"><i class="fas fa-circle-notch animate-spin text-3xl text-dibaGold"></i></div>';
+    dynamicContent.innerHTML = '<div class="flex justify-center py-20"><i class="fas fa-circle-notch animate-spin text-3xl text-[#003366]"></i></div>';
 
     try {
         const { data: jugadores, error } = await supabase.from('identificacion').select('*').order('apellidos');
@@ -30,61 +30,61 @@ export async function loadPlayers(dynamicContent, pageTitle, mainTitle, setActiv
         }).length;
 
         dynamicContent.innerHTML = `
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8 animate__animated animate__fadeInDown">
-                ${renderStatCard('Total Jugadores', totalJugadores, 'fa-users', 'bg-gold/10 text-gold')}
-                ${renderStatCard('Al Día', alDia, 'fa-check-double', 'bg-emerald-500/10 text-emerald-500')}
-                ${renderStatCard('Pendientes', totalJugadores - alDia, 'fa-exclamation-triangle', 'bg-amber-500/10 text-amber-500')}
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12 animate-fade-up">
+                ${renderStatCard('Total Jugadores', totalJugadores, 'fa-users', 'bg-[#003366]/5 text-[#003366]')}
+                ${renderStatCard('Al Día', alDia, 'fa-check-double', 'bg-emerald-50 text-emerald-600')}
+                ${renderStatCard('Pendientes', totalJugadores - alDia, 'fa-exclamation-triangle', 'bg-amber-50 text-amber-600')}
             </div>
 
-            <div class="glass rounded-[2.5rem] shadow-2xl overflow-hidden animate__animated animate__fadeInUp">
-                <div class="table-responsive">
-                    <table class="w-full text-left">
-                        <thead class="bg-white/5 border-b border-white/5">
-                            <tr>
-                                <th class="p-5 text-[10px] font-black uppercase text-slate-500 tracking-widest">Jugador</th>
-                                <th class="p-5 text-[10px] font-black uppercase text-slate-500 tracking-widest">DNI</th>
-                                <th class="p-5 text-[10px] font-black uppercase text-slate-500 tracking-widest">Docs</th>
-                                <th class="p-5 text-[10px] font-black uppercase text-slate-500 tracking-widest text-center">Acción</th>
+            <div class="bg-white rounded-elite shadow-premium border border-slate-100 overflow-hidden animate-fade-up">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-slate-50 border-b border-slate-100">
+                                <th class="p-6 text-[10px] font-black uppercase text-slate-500 tracking-widest">Identidad del Jugador</th>
+                                <th class="p-6 text-[10px] font-black uppercase text-slate-500 tracking-widest">DNI / Documento</th>
+                                <th class="p-6 text-[10px] font-black uppercase text-slate-500 tracking-widest">Estado Documental</th>
+                                <th class="p-6 text-[10px] font-black uppercase text-slate-500 tracking-widest text-center">Acciones</th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y divide-white/5">
+                        <tbody class="divide-y divide-slate-50">
                             ${jugadores.map(j => renderPlayerRow(j, allDocs, DOC_TYPES_MAP)).join('')}
                         </tbody>
                     </table>
                 </div>
             </div>
 
-            <div id="adminDocsModal" class="hidden fixed inset-0 bg-slate-900/80 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
-                <div class="bg-slate-900 border border-white/10 w-full max-w-2xl rounded-[2.5rem] overflow-hidden shadow-2xl">
-                    <div class="p-8 border-b border-white/5 flex justify-between items-center bg-gradient-to-r from-slate-900 to-slate-800">
+            <div id="adminDocsModal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-md z-[100] flex items-center justify-center p-4 animate-fade-in">
+                <div class="bg-white w-full max-w-2xl rounded-[2.5rem] overflow-hidden shadow-2xl animate-scale-up">
+                    <div class="p-10 border-b border-slate-100 flex justify-between items-center bg-gradient-to-r from-white to-slate-50">
                         <div>
-                            <h3 id="modalPlayerName" class="text-xl font-black text-white uppercase italic">Cargando...</h3>
-                            <p id="modalPlayerDni" class="text-[10px] text-slate-400 font-bold uppercase mt-1"></p>
+                            <h3 id="modalPlayerName" class="text-xl font-black text-[#003366] uppercase italic tracking-tight">Cargando...</h3>
+                            <p id="modalPlayerDni" class="text-[10px] text-slate-400 font-bold uppercase mt-2 tracking-widest"></p>
                         </div>
-                        <button onclick="window.closeAdminDocs()" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-slate-400 hover:text-rose-500 transition-all">
-                            <i class="fas fa-times"></i>
+                        <button onclick="window.closeAdminDocs()" class="w-12 h-12 rounded-2xl bg-slate-50 flex items-center justify-center text-slate-400 hover:text-rose-500 hover:bg-rose-50 transition-all border border-slate-100 group">
+                            <i class="fas fa-times group-hover:rotate-90 transition-transform"></i>
                         </button>
                     </div>
-                    <div class="p-8 space-y-4 max-h-[60vh] overflow-y-auto" id="modalDocsList"></div>
-                    <div class="p-6 bg-slate-950/50 text-center">
-                        <p class="text-[9px] text-slate-500 font-bold uppercase tracking-widest">Gestión Administrativa DIBA FBC</p>
+                    <div class="p-10 space-y-4 max-h-[60vh] overflow-y-auto custom-scrollbar" id="modalDocsList"></div>
+                    <div class="p-6 bg-slate-50 text-center border-t border-slate-100">
+                        <p class="text-[9px] text-slate-400 font-bold uppercase tracking-widest">Sistema de Gestión de Talento — DIBA FBC</p>
                     </div>
                 </div>
             </div>
         `;
     } catch (err) {
         console.error(err);
-        dynamicContent.innerHTML = `<p class="text-rose-500 text-center py-20 font-black">Error: ${err.message}</p>`;
+        dynamicContent.innerHTML = `<div class="p-20 text-center text-rose-500 font-black uppercase text-xs">Error: ${err.message}</div>`;
     }
 }
 
 function renderStatCard(label, value, icon, colors) {
     return `
-        <div class="glass p-6 rounded-[2rem] shadow-lg flex items-center gap-4">
-            <div class="w-12 h-12 ${colors} rounded-2xl flex items-center justify-center text-xl shadow-inner"><i class="fas ${icon}"></i></div>
+        <div class="bg-white p-8 rounded-[2rem] border border-slate-100 shadow-premium flex items-center gap-6 group hover:shadow-xl transition-all">
+            <div class="w-14 h-14 ${colors} rounded-2xl flex items-center justify-center text-xl shadow-inner group-hover:scale-110 transition-transform"><i class="fas ${icon}"></i></div>
             <div>
-                <p class="text-[10px] font-black text-slate-500 uppercase tracking-widest">${label}</p>
-                <h4 class="text-2xl font-black text-white italic">${value}</h4>
+                <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">${label}</p>
+                <h4 class="text-3xl font-black text-[#003366] italic">${value}</h4>
             </div>
         </div>
     `;
@@ -93,26 +93,35 @@ function renderStatCard(label, value, icon, colors) {
 function renderPlayerRow(j, allDocs, DOC_TYPES_MAP) {
     const jDocs = allDocs?.filter(d => d.identificacion_numero === j.numero) || [];
     return `
-        <tr class="hover:bg-white/5 transition-all">
-            <td class="p-5">
-                <p class="font-black text-white text-xs uppercase italic">${j.nombre} ${j.apellidos}</p>
-                <p class="text-[9px] text-slate-500 uppercase font-black tracking-widest">${j.nacionalidad}</p>
+        <tr class="hover:bg-slate-50/50 transition-all group">
+            <td class="p-6">
+                <div class="flex items-center gap-4">
+                    <div class="w-10 h-10 bg-[#003366] rounded-xl flex items-center justify-center text-[#FFD700] font-black text-xs italic shadow-lg">
+                        ${j.nombre.charAt(0)}${j.apellidos.charAt(0)}
+                    </div>
+                    <div>
+                        <p class="font-black text-[#003366] text-xs uppercase italic">${j.nombre} ${j.apellidos}</p>
+                        <p class="text-[9px] text-slate-400 uppercase font-black tracking-widest mt-0.5">${j.nacionalidad}</p>
+                    </div>
+                </div>
             </td>
-            <td class="p-5 font-mono text-xs text-slate-400">${j.numero}</td>
-            <td class="p-5">
-                <div class="flex gap-1.5">
+            <td class="p-6 font-mono text-xs text-slate-500 font-bold italic tracking-wider">${j.numero}</td>
+            <td class="p-6">
+                <div class="flex gap-2">
                     ${DOC_TYPES_MAP.map(type => {
                         const doc = jDocs.find(d => d.doc_type === type.id);
-                        let colorClass = 'bg-white/5 text-slate-600';
-                        if (doc) colorClass = doc.status === 'verificado' ? 'bg-emerald-500 text-white shadow-[0_0_10px_rgba(16,185,129,0.3)]' : 'bg-amber-500 text-white shadow-[0_0_10px_rgba(245,158,11,0.3)]';
-                        return `<div class="w-6 h-6 rounded-full flex items-center justify-center text-[10px] ${colorClass}" title="${type.id}"><i class="fas ${type.icon}"></i></div>`;
+                        let colorClass = 'bg-slate-100 text-slate-300';
+                        if (doc) colorClass = doc.status === 'verificado' ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/20' : 'bg-amber-500 text-white shadow-lg shadow-amber-500/20';
+                        return `<div class="w-7 h-7 rounded-lg flex items-center justify-center text-[10px] ${colorClass} transition-all hover:scale-110" title="${type.id}"><i class="fas ${type.icon}"></i></div>`;
                     }).join('')}
                 </div>
             </td>
-            <td class="p-5 flex justify-center gap-4">
-                <button onclick="window.openAdminDocs('${j.numero}', '${j.nombre} ${j.apellidos}')" class="text-white hover:text-gold transition-all" title="Documentos">
-                    <i class="fas fa-file-medical text-lg"></i>
-                </button>
+            <td class="p-6">
+                <div class="flex justify-center">
+                    <button onclick="window.openAdminDocs('${j.numero}', '${j.nombre} ${j.apellidos}')" class="px-5 py-2.5 bg-[#003366] text-white text-[9px] font-black uppercase italic tracking-widest rounded-xl hover:bg-[#002244] transition-all flex items-center gap-2 shadow-lg shadow-[#003366]/20">
+                        <i class="fas fa-file-medical text-[#FFD700]"></i> Expediente
+                    </button>
+                </div>
             </td>
         </tr>
     `;
@@ -127,9 +136,9 @@ window.openAdminDocs = async (dni, name) => {
 
     if (!modal) return;
     nameEl.innerText = name;
-    dniEl.innerText = `DNI: ${sanitizedDni}`;
+    dniEl.innerText = `ID de Expediente: ${sanitizedDni}`;
     modal.classList.remove('hidden');
-    listEl.innerHTML = '<div class="flex justify-center py-10"><i class="fas fa-circle-notch animate-spin text-2xl text-dibaGold"></i></div>';
+    listEl.innerHTML = '<div class="flex justify-center py-20"><i class="fas fa-circle-notch animate-spin text-3xl text-[#003366]"></i></div>';
 
     try {
         const DOC_TYPES = [
@@ -156,27 +165,27 @@ window.openAdminDocs = async (dni, name) => {
             const signedUrl = signedUrls[path] || '#';
             
             const item = document.createElement('div');
-            item.className = "flex items-center justify-between p-4 bg-white/5 border border-white/10 rounded-2xl hover:bg-white/[0.07] transition-all";
+            item.className = "group flex items-center justify-between p-5 bg-slate-50 border border-slate-100 rounded-3xl hover:bg-white hover:border-[#FFD700] hover:shadow-premium transition-all";
             item.innerHTML = `
-                <div class="flex items-center gap-4">
-                    <div class="w-10 h-10 bg-slate-800 rounded-xl flex items-center justify-center text-slate-500"><i class="fas fa-file-alt"></i></div>
+                <div class="flex items-center gap-5">
+                    <div class="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-slate-400 border border-slate-100 group-hover:text-[#003366] transition-colors shadow-inner"><i class="fas fa-file-alt"></i></div>
                     <div>
-                        <p class="text-[11px] font-black text-white italic uppercase">${type.label}</p>
-                        <p class="text-[9px] uppercase font-bold ${doc ? (doc.status === 'verificado' ? 'text-emerald-500' : 'text-amber-500') : 'text-slate-500'}">
+                        <p class="text-[11px] font-black text-[#003366] italic uppercase">${type.label}</p>
+                        <p class="text-[9px] uppercase font-bold py-1 px-3 mt-1 inline-block rounded-full ${doc ? (doc.status === 'verificado' ? 'bg-emerald-50 text-emerald-600' : 'bg-amber-50 text-amber-600') : 'bg-slate-100 text-slate-400'}">
                             ${doc ? doc.status : 'No cargado'}
                         </p>
                     </div>
                 </div>
-                <div class="flex items-center gap-2">
-                    ${doc ? `<a href="${signedUrl}" target="_blank" class="p-2 text-slate-400 hover:text-dibaGold"><i class="fas fa-eye"></i></a>` : ''}
-                    <button onclick="document.getElementById('upload-${type.id}').click()" class="p-2 text-slate-400 hover:text-emerald-500"><i class="fas fa-upload"></i></button>
+                <div class="flex items-center gap-3">
+                    ${doc ? `<a href="${signedUrl}" target="_blank" class="w-10 h-10 rounded-xl bg-white flex items-center justify-center text-[#003366] border border-slate-100 hover:border-[#FFD700] hover:bg-[#FFD700]/5 shadow-sm transition-all" title="Ver"><i class="fas fa-eye"></i></a>` : ''}
+                    <button onclick="document.getElementById('upload-${type.id}').click()" class="w-10 h-10 rounded-xl bg-white flex items-center justify-center text-emerald-500 border border-slate-100 hover:border-emerald-500 hover:bg-emerald-50 shadow-sm transition-all" title="Cargar"><i class="fas fa-upload"></i></button>
                     <input type="file" id="upload-${type.id}" class="hidden" onchange="window.adminUploadDoc('${sanitizedDni}', '${type.id}', this)">
                 </div>
             `;
             listEl.appendChild(item);
         });
     } catch (err) {
-        listEl.innerHTML = `<p class="text-rose-500 text-center font-bold text-[10px]">${err.message}</p>`;
+        listEl.innerHTML = `<div class="p-10 text-center text-rose-500 font-bold text-xs uppercase italic">${err.message}</div>`;
     }
 };
 
@@ -223,3 +232,4 @@ window.adminUploadDoc = async (dni, docType, input) => {
         originalBtn.disabled = false;
     }
 };
+

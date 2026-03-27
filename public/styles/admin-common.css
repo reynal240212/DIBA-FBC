@@ -1,88 +1,59 @@
 :root {
-    /* Elite Sports Palette (60:30:10 Rule) */
+    /* DIBA FBC - Premium Light Palette */
     --gold: #FFD700;
     --gold-rgb: 255, 215, 0;
-    --gold-glow: rgba(255, 215, 0, 0.3);
+    --gold-light: rgba(255, 215, 0, 0.15);
     --gold-dark: #B8860B;
-    --navy: #0a111a;      /* Deep Professional Navy */
-    --navy-light: #162130;
-    --navy-rgb: 10, 17, 26;
     
-    /* Semantic Dark Theme - Elite 60% */
-    --bg-main: #05080d;      
-    --bg-panel: rgba(10, 17, 26, 0.9);     
-    --bg-surface: rgba(15, 25, 38, 0.7); 
-    --bg-input: rgba(20, 31, 46, 0.8);
+    --blue-diba: #003366;    /* Deep Professional DIBA Blue */
+    --blue-rgb: 0, 51, 102;
+    --blue-light: rgba(0, 51, 102, 0.05);
     
-    /* Text System - High Readability */
-    --text-main: #fcfcfc;
-    --text-muted: #8b9db7;
-    --text-dim: #4a5568;
+    /* Semantic Light Theme (DEFAULT) */
+    --bg-main: #F4F7FA;      
+    --bg-panel: #FFFFFF;     
+    --bg-surface: rgba(255, 255, 255, 0.9); 
+    --bg-input: #F8FAFC;
     
-    /* Advanced Glassmorphism */
-    --glass-border: rgba(255, 255, 255, 0.08);
-    --glass-inner-glow: inset 0 0 0 1px rgba(255, 255, 255, 0.05);
-    --glass-blur: 24px;
+    /* Text System - Contrast Optimized */
+    --text-main: #0F172A;
+    --text-muted: #64748B;
+    --text-dim: #94A3B8;
+    
+    /* UI Decorators */
+    --border-color: rgba(0, 51, 102, 0.08);
+    --glass-border: rgba(255, 255, 255, 0.5);
+    --glass-blur: 16px;
     
     /* Layout Constants */
-    --sidebar-w: 290px;      
-    --topbar-h: 85px;
-    --radius-xl: 36px;
-    --radius-lg: 24px;
-    --radius-md: 16px;
+    --sidebar-w: 280px;      
+    --topbar-h: 80px;
+    --radius-xl: 32px;
+    --radius-lg: 20px;
+    --radius-md: 12px;
 
-    /* Mesh Gradients - Elite Depth */
+    /* Mesh Gradients - Light & Professional */
     --mesh-bg: 
-        radial-gradient(at 0% 0%, rgba(var(--gold-rgb), 0.1) 0px, transparent 50%),
-        radial-gradient(at 100% 0%, rgba(10, 17, 26, 0.4) 0px, transparent 60%),
-        radial-gradient(at 50% 100%, rgba(var(--gold-rgb), 0.05) 0px, transparent 50%),
-        radial-gradient(at 80% 80%, rgba(10, 17, 26, 0.2) 0px, transparent 40%),
-        #05080c;
+        radial-gradient(at 0% 0%, rgba(var(--gold-rgb), 0.05) 0px, transparent 50%),
+        radial-gradient(at 100% 0%, rgba(var(--blue-rgb), 0.03) 0px, transparent 60%),
+        #F4F7FA;
     
-    /* Premium Shadows - More Dramatic */
-    --shadow-premium: 0 30px 60px -15px rgba(0, 0, 0, 0.8);
-    --shadow-gold: 0 0 40px rgba(var(--gold-rgb), 0.2);
-    --gold-shine: linear-gradient(90deg, transparent, rgba(var(--gold-rgb), 0.5), transparent);
+    /* Premium Shadows - Soft & Elegant */
+    --shadow-premium: 0 10px 40px -10px rgba(0, 51, 102, 0.12);
+    --shadow-gold: 0 8px 25px rgba(255, 215, 0, 0.2);
+    --gold-shine: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8), transparent);
 }
 
-@keyframes shine {
-    0% { left: -100%; opacity: 0; }
-    20% { opacity: 0.5; }
-    100% { left: 100%; opacity: 0; }
+[data-theme="dark"] {
+    --bg-main: #05080d;      
+    --bg-panel: #0a111a;     
+    --bg-surface: rgba(15, 25, 38, 0.7); 
+    --bg-input: rgba(20, 31, 46, 0.8);
+    --text-main: #fcfcfc;
+    --text-muted: #8b9db7;
+    --border-color: rgba(255, 255, 255, 0.08);
 }
 
-.premium-shine {
-    position: relative;
-    overflow: hidden;
-}
-
-.premium-shine::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: var(--gold-shine);
-    transform: skewX(-25deg);
-    transition: none;
-}
-
-.premium-shine:hover::after {
-    animation: shine 0.8s ease-in-out;
-}
-
-[data-theme="light"] {
-    --bg-main: #f1f5f9;
-    --bg-panel: #ffffff;
-    --bg-surface: rgba(255, 255, 255, 0.8);
-    --bg-input: #f8fafc;
-    --text-main: #0f172a; 
-    --text-muted: #475569;
-    --text-dim: #94a3b8;
-    --border-color: rgba(0, 0, 0, 0.06);
-    --glass-border: rgba(0, 0, 0, 0.04);
-}
 
 *, *::before, *::after {
     box-sizing: border-box;
@@ -1895,3 +1866,76 @@ tbody td {
     box-shadow: var(--shadow-premium);
     overflow: hidden;
 }
+
+/* ── ELITE MODULES - DIBA FBC PREMIUM ── */
+.glass-morph {
+    background: rgba(255, 255, 255, 0.03) !important;
+    backdrop-filter: blur(24px) !important;
+    -webkit-backdrop-filter: blur(24px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37) !important;
+}
+
+.gold-gradient {
+    background: linear-gradient(135deg, #FFD700 0%, #B8860B 100%) !important;
+}
+
+.text-glow-gold {
+    text-shadow: 0 0 15px rgba(255, 215, 0, 0.5) !important;
+}
+
+.rounded-premium {
+    border-radius: 1.25rem !important;
+}
+
+.rounded-elite {
+    border-radius: 2rem !important;
+}
+
+.shadow-glass {
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37) !important;
+}
+
+.shadow-gold-shine {
+    box-shadow: 0 10px 40px -10px rgba(255, 215, 0, 0.2) !important;
+}
+
+@keyframes fade-up {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-up { 
+    animation: fade-up 0.6s cubic-bezier(0.23, 1, 0.32, 1) forwards; 
+}
+
+.kpi-card {
+    transition: all 0.5s ease;
+}
+
+.kpi-card:hover {
+    border-color: rgba(255, 215, 0, 0.3) !important;
+}
+
+.kpi-card:hover .kpi-icon { 
+    transform: scale(1.1) rotate(5deg); 
+}
+
+.kpi-icon { 
+    transition: all 0.4s ease; 
+}
+
+/* Sidebar & Layout Fixes */
+.sidebar.open {
+    transform: translateX(0) !important;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+    width: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 99px;
+}
+

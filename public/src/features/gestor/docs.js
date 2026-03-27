@@ -1,5 +1,5 @@
 /**
- * DIBA FBC - Gestor Documents Module (Reorganized)
+ * DIBA FBC - Gestor Documents Module (Refactored for Light Mode)
  */
 import { supabase } from '../../core/supabase.js';
 
@@ -10,14 +10,23 @@ export async function loadDocuments(dynamicContent, pageTitle, mainTitle, setAct
     
     dynamicContent.innerHTML = `
         <section id="uploadSection" class="${usuario.role !== 'admin' ? 'hidden' : ''} mb-12 animate__animated animate__fadeInUp">
-            <div id="dropZone" class="drop-zone animate__animated animate__fadeIn">
-                <i class="fas fa-cloud-upload-alt text-3xl text-gold/60 mb-2"></i>
-                <p class="font-black text-white uppercase italic text-[10px] tracking-widest">Arrastra archivos aquí o haz clic</p>
+            <div id="dropZone" class="group relative overflow-hidden bg-slate-50 border-2 border-dashed border-slate-200 rounded-[2rem] p-12 text-center cursor-pointer hover:border-[#FFD700] hover:bg-white transition-all shadow-inner">
+                <div class="absolute inset-0 bg-[#FFD700]/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                <div class="relative z-10">
+                    <div class="w-16 h-16 bg-white rounded-2xl shadow-premium flex items-center justify-center text-[#003366] mx-auto mb-6 group-hover:scale-110 transition-transform">
+                        <i class="fas fa-cloud-upload-alt text-2xl"></i>
+                    </div>
+                    <p class="font-black text-[#003366] uppercase italic text-xs tracking-widest mb-2">Arrastra archivos aquí o haz clic</p>
+                    <p class="text-[9px] text-slate-400 font-bold uppercase tracking-widest">Formatos permitidos: PDF, JPG, PNG (Máx 5MB)</p>
+                </div>
                 <input type="file" id="newDocument" class="hidden" accept=".pdf,.jpg,.png">
             </div>
         </section>
-        <div id="fileListContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            <div class="flex justify-center py-10 col-span-full"><i class="fas fa-circle-notch animate-spin text-2xl text-dibaGold"></i></div>
+        <div id="fileListContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div class="flex flex-col items-center justify-center py-20 col-span-full opacity-30">
+                <i class="fas fa-circle-notch fa-spin text-3xl text-[#003366] mb-4"></i>
+                <p class="text-[10px] font-black uppercase tracking-widest">Consultando Expedientes...</p>
+            </div>
         </div>
     `;
 
@@ -38,7 +47,14 @@ export async function loadDocuments(dynamicContent, pageTitle, mainTitle, setAct
         if (error) throw error;
 
         if (!documents || documents.length === 0) {
-            fileListContainer.innerHTML = '<p class="text-center text-slate-400 py-10 uppercase text-[10px] font-black italic tracking-widest col-span-full">No hay archivos disponibles</p>';
+            fileListContainer.innerHTML = `
+                <div class="p-20 text-center col-span-full">
+                    <div class="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center text-slate-200 mx-auto mb-6 border border-slate-100">
+                        <i class="fas fa-folder-open text-3xl"></i>
+                    </div>
+                    <p class="text-slate-400 uppercase text-[10px] font-black italic tracking-widest">Todavía no has cargado ningún documento</p>
+                </div>
+            `;
             return;
         }
 
@@ -54,21 +70,23 @@ export async function loadDocuments(dynamicContent, pageTitle, mainTitle, setAct
             const date = new Date(doc.created_at).toLocaleDateString('es-CO', { day: '2-digit', month: 'short', year: 'numeric' });
             
             const div = document.createElement('div');
-            div.className = `flex flex-col p-6 glass rounded-[2rem] hover:shadow-2xl transition-all animate__animated animate__fadeIn group ${doc.is_signed ? 'border-l-4 border-l-emerald-500' : ''}`;
+            div.className = `group flex flex-col p-8 bg-white rounded-[2.5rem] border border-slate-100 shadow-premium hover:shadow-2xl transition-all animate-fade-up relative overflow-hidden ${doc.is_signed ? 'border-l-[6px] border-l-emerald-500' : ''}`;
             div.innerHTML = `
-                <div class="flex items-center justify-between mb-4">
-                    <div class="w-12 h-12 bg-white/5 rounded-2xl flex items-center justify-center text-slate-400 group-hover:bg-gold/10 group-hover:text-gold transition-colors">
-                        <i class="far fa-file-pdf text-xl"></i>
+                <div class="flex items-center justify-between mb-6">
+                    <div class="w-14 h-14 bg-slate-50 rounded-2xl flex items-center justify-center text-slate-400 group-hover:bg-[#FFD700]/10 group-hover:text-[#003366] transition-all border border-slate-100 shadow-inner">
+                        <i class="far fa-file-pdf text-2xl"></i>
                     </div>
-                    ${doc.is_signed ? '<span class="px-3 py-1 bg-emerald-50 text-emerald-600 text-[8px] font-black uppercase italic rounded-full tracking-widest border border-emerald-100"><i class="fas fa-signature mr-1"></i> Firmado</span>' : ''}
+                    ${doc.is_signed ? '<span class="px-4 py-2 bg-emerald-50 text-emerald-600 text-[9px] font-black uppercase italic rounded-xl tracking-widest border border-emerald-100 shadow-sm"><i class="fas fa-signature mr-2"></i> Firmado</span>' : '<span class="px-4 py-2 bg-slate-50 text-slate-400 text-[9px] font-black uppercase italic rounded-xl tracking-widest border border-slate-100 shadow-sm">Pendiente</span>'}
                 </div>
-                <div>
-                    <h4 class="font-black text-white text-xs uppercase italic tracking-tight line-clamp-1 mb-1">${doc.file_name}</h4>
-                    <p class="text-[9px] text-slate-500 font-bold uppercase tracking-widest mb-4">${date}</p>
+                <div class="mb-8">
+                    <h4 class="font-black text-[#003366] text-sm uppercase italic tracking-tight line-clamp-2 mb-2 group-hover:text-[#FFD700] transition-colors">${doc.file_name}</h4>
+                    <p class="text-[9px] text-slate-400 font-bold uppercase tracking-widest flex items-center gap-2">
+                        <i class="fas fa-calendar-day text-[#FFD700]"></i> ${date}
+                    </p>
                 </div>
-                <div class="pt-4 border-t border-white/5 flex items-center justify-between mt-auto">
-                    <a href="${fileUrl}" target="_blank" class="text-[9px] font-black uppercase italic text-gold hover:text-white flex items-center gap-1.5 transition-all">
-                        <i class="fas fa-eye"></i> Visualizar
+                <div class="pt-6 border-t border-slate-50 flex items-center justify-between mt-auto">
+                    <a href="${fileUrl}" target="_blank" class="px-5 py-2.5 bg-[#003366] text-white text-[9px] font-black uppercase italic tracking-widest rounded-xl hover:bg-[#002244] transition-all flex items-center gap-2 shadow-lg shadow-[#003366]/20">
+                        <i class="fas fa-eye text-[#FFD700]"></i> Abrir Archivo
                     </a>
                 </div>
             `;
@@ -77,7 +95,7 @@ export async function loadDocuments(dynamicContent, pageTitle, mainTitle, setAct
 
     } catch (err) {
         console.error(err);
-        fileListContainer.innerHTML = `<p class="text-center text-rose-500 py-10 col-span-full">Error: ${err.message}</p>`;
+        fileListContainer.innerHTML = `<div class="p-10 text-center col-span-full text-rose-500 font-black uppercase text-xs">Error: ${err.message}</div>`;
     }
 }
 
@@ -100,3 +118,4 @@ async function handleFileUpload(file, dynamicContent, pageTitle, mainTitle, setA
         alert("Error al subir archivo: " + err.message);
     }
 }
+

@@ -2,517 +2,395 @@
 <html lang="es">
 
 <head>
-  <meta charset="UTF-8" />
-  <title>Generador de Rifas — DIBA FBC</title>
-  <link rel="icon" href="/images/ESCUDO.ico" type="image/x-icon">
-  <link
-    href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,600;0,700;0,900;1,700;1,900&display=swap"
-    rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-  
-  <!-- Bootstrap 5.3.3 CSS & JS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <meta charset="UTF-8" />
+    <title>Generador de Rifas — DIBA FBC</title>
+    <link rel="icon" href="/images/ESCUDO.ico" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,600;0,700;0,900;1,700;1,900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Montserrat', 'sans-serif'] },
+                },
+            },
+        }
+    </script>
+    <link rel="stylesheet" href="/styles/admin-common.css">
+    <script src="/scripts/theme-switcher.js"></script>
 
-  <link rel="stylesheet" href="/styles/admin-common.css">
-  <script src="/scripts/theme-switcher.js"></script>
+    <style>
+        /* ── PRINT STYLES ── */
+        @media print {
+            @page {
+                size: A4;
+                margin: 0;
+            }
 
-  <style>
-    /* ── RIFA SPECIFIC REFINEMENTS ── */
-    .toolbar {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 1.5rem;
-        align-items: flex-end;
-        padding: 2.5rem;
-        margin-bottom: 2rem;
-    }
+            /* Hide everything except the print container */
+            body * {
+                visibility: hidden;
+            }
 
-    .boletas-grid-preview {
-        background: rgba(var(--navy-rgb), 0.2);
-        padding: 4rem 2rem;
-        display: flex;
-        flex-direction: column;
-        gap: 4rem;
-        border-radius: var(--radius-xl);
-        border: 1px solid var(--border-color);
-        box-shadow: inset 0 0 100px rgba(0,0,0,0.5);
-    }
+            #contenedor, #contenedor * {
+                visibility: visible;
+            }
 
-    /* Print Logic remains specialized */
-    .page-rifa {
-        width: 210mm;
-        height: 297mm;
-        margin: 0 auto;
-        padding: 10mm;
-        background: white;
-        display: flex;
-        flex-direction: column;
-        gap: 0;
-        page-break-after: always;
-        box-shadow: 0 0 40px rgba(0, 0, 0, 0.5);
-    }
-  </style>
+            #contenedor {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100% !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                background: none !important;
+                box-shadow: none !important;
+                border: none !important;
+            }
 
-    /* Print Logic remains specialized */
-    .page-rifa {
-      width: 210mm;
-      height: 297mm;
-      margin: 0 auto;
-      padding: 10mm;
-      background: white;
-      display: flex;
-      flex-direction: column;
-      gap: 0;
-      page-break-after: always;
-      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-    }
+            .page-rifa {
+                visibility: visible;
+                box-shadow: none !important;
+                margin: 0 !important;
+                padding: 10mm !important;
+                page-break-after: always;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
 
-    .boleta-container {
-      height: 55.4mm;
-      width: 100%;
-      display: flex;
-      align-items: center;
-      position: relative;
-      border-bottom: 1px dashed #cbd5e1;
-    }
+            .boleta {
+                visibility: visible;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+        }
 
-    .boleta-container:last-child {
-      border-bottom: none;
-    }
+        /* Preview styles */
+        .page-rifa {
+            background: white;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e2e8f0;
+            transition: transform 0.3s ease;
+        }
+        
+        .page-rifa:hover {
+            transform: translateY(-5px);
+        }
 
-    /* Cut line indicator */
-    .boleta-container::after {
-      content: '\f0c4';
-      font-family: 'Font Awesome 6 Free';
-      font-weight: 900;
-      position: absolute;
-      bottom: -7px;
-      left: 10px;
-      font-size: 10px;
-      color: #94a3b8;
-      background: white;
-      padding: 0 5px;
-      z-index: 10;
-    }
+        .boleta::before { 
+            content: ''; 
+            position: absolute; 
+            top: 0; 
+            left: 65px; 
+            bottom: 0; 
+            width: 1px; 
+            border-right: 2px dotted rgba(0, 42, 64, 0.2); 
+        }
 
-    .boleta {
-      width: 100%;
-      height: 48mm;
-      background: linear-gradient(135deg, #FFD700 0%, #ffec8b 50%, #e6b800 100%);
-      border: 2px solid #002a40;
-      border-radius: 12px;
-      padding: 10px 15px;
-      color: #002a40;
-      display: flex;
-      gap: 15px;
-      align-items: center;
-      box-shadow: inset 0 0 40px rgba(255, 255, 255, 0.3);
-      position: relative;
-      overflow: hidden;
-    }
+        .num-cell {
+            background: white;
+            color: #002a40;
+            height: 32px;
+            border: 2px solid #002a40;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 0.9rem;
+            box-shadow: 0 2px 0 #002a40;
+        }
 
-    /* (Rest of existing specialized boleta styles...) */
-    .boleta::before { content: ''; position: absolute; top: 0; left: 65px; bottom: 0; width: 1px; border-right: 2px dotted rgba(0, 42, 64, 0.2); }
-    .boleta-left { width: 50px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; flex-shrink: 0; }
-    .boleta-logo { width: 45px; height: 45px; object-fit: contain; filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1)); }
-    .boleta-main { flex: 1; display: flex; flex-direction: column; justify-content: space-between; height: 100%; }
-    .boleta-header { display: flex; justify-content: space-between; align-items: flex-start; }
-    .boleta-titulo { font-size: 1.1rem; font-weight: 900; font-style: italic; text-transform: uppercase; color: #002a40; }
-    .boleta-number-id { font-size: 0.8rem; font-weight: 900; background: #002a40; color: #ffcc00; padding: 2px 8px; border-radius: 4px; }
-    .boleta-content { display: grid; grid-template-columns: 1fr 180px; gap: 15px; align-items: flex-end; }
-    .boleta-info { font-size: 0.65rem; font-weight: 700; line-height: 1.4; color: #002a40; }
-    .boleta-jugador-box { margin-top: 5px; padding: 4px 8px; background: rgba(255, 255, 255, 0.6); border: 1px solid #002a40; border-radius: 6px; }
-    .boleta-jugador-label { font-size: 0.45rem; font-weight: 800; text-transform: uppercase; color: rgba(0, 42, 64, 0.6); }
-    .boleta-jugador { font-size: 0.75rem; font-weight: 900; color: #002a40; }
-    .boleta-numeros { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; }
-    .num-cell { background: white; color: #002a40; height: 32px; border: 2px solid #002a40; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 0.9rem; box-shadow: 0 2px 0 #002a40; }
-
-    /* ── PRINT STYLES ── */
-    @media print {
-      @page {
-        size: A4;
-        margin: 0;
-      }
-      
-      /* Hide admin UI */
-      .sidebar, 
-      .topbar, 
-      .toolbar, 
-      #status-bar, 
-      .mobile-menu-btn {
-        display: none !important;
-      }
-
-      /* Adjust main container */
-      .main {
-        margin-left: 0 !important;
-        padding: 0 !important;
-        width: 100% !important;
-      }
-
-      .content {
-        padding: 0 !important;
-        margin: 0 !important;
-      }
-
-      #contenedor {
-        padding: 0 !important;
-        margin: 0 !important;
-        background: none !important;
-        border: none !important;
-        gap: 0 !important;
-      }
-
-      .page-rifa {
-        box-shadow: none !important;
-        margin: 0 !important;
-        padding: 10mm !important; /* Keep internal padding for margin safety */
-        page-break-after: always;
-        -webkit-print-color-adjust: exact;
-        print-color-adjust: exact;
-      }
-
-      .boleta {
-        box-shadow: none !important;
-        -webkit-print-color-adjust: exact;
-        print-color-adjust: exact;
-      }
-    }
-  </style>
+        /* Custom Scrollbar */
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #f1f5f9; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #003366; border-radius: 10px; }
+    </style>
 </head>
 
-<body style="display:none;" id="admin-body">
+<body class="bg-[#F4F7FA] text-slate-900 font-sans min-h-screen selection:bg-[#FFD700]/30" id="admin-body" style="display: none;">
 
-  <!-- ══ SIDEBAR ══ -->
-  <aside class="sidebar" id="sidebar">
-    <div class="sidebar-logo">
-      <img src="/images/ESCUDO.png" alt="DIBA FBC">
-      <div class="sidebar-logo-text">DIBA FBC</div>
+    <div id="admin-nav"></div>
+
+    <div class="lg:ml-[280px] min-h-screen transition-all duration-500">
+        <div class="content p-8 lg:p-12">
+            <div class="max-w-7xl mx-auto w-full">
+                
+                <!-- HEADER SECT -->
+                <div class="mb-12 flex flex-col md:flex-row md:items-center justify-between gap-6 animate-fade-up">
+                    <div>
+                        <h1 class="text-4xl font-black text-[#003366] uppercase italic tracking-tighter leading-none mb-3">Generador de <span class="text-[#FFD700]">Rifas</span></h1>
+                        <p class="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">Herramienta de recaudación oficial DIBA FBC</p>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <div class="w-12 h-12 rounded-2xl bg-white shadow-premium flex items-center justify-center text-[#FFD700] border border-slate-100">
+                            <i class="fas fa-ticket-alt text-xl"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TOOLBAR -->
+                <div class="bg-white shadow-premium rounded-[2.5rem] border border-slate-100 p-10 mb-12 animate-fade-up transition-all hover:shadow-2xl">
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                        
+                        <div class="space-y-2">
+                            <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-2">Total Boletas</label>
+                            <div class="relative group">
+                                <i class="fas fa-layer-group absolute left-5 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-[#FFD700] transition-colors"></i>
+                                <input type="number" class="w-full bg-slate-50 border border-slate-100 rounded-2xl py-4 pl-12 pr-5 text-[#003366] font-black outline-none focus:ring-4 focus:ring-[#FFD700]/10 focus:bg-white focus:border-[#FFD700] transition-all" id="cfg-total" min="1" max="1000" step="5" value="45">
+                            </div>
+                        </div>
+
+                        <div class="space-y-2">
+                            <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-2">Números por Boleta</label>
+                            <div class="relative group">
+                                <i class="fas fa-list-ol absolute left-5 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-[#FFD700] transition-colors"></i>
+                                <select class="w-full bg-slate-50 border border-slate-100 rounded-2xl py-4 pl-12 pr-5 text-[#003366] font-black outline-none focus:ring-4 focus:ring-[#FFD700]/10 focus:bg-white focus:border-[#FFD700] transition-all appearance-none cursor-pointer" id="cfg-numeros">
+                                    <option value="4">4 números</option>
+                                    <option value="5">5 números</option>
+                                    <option value="6" selected>6 números</option>
+                                    <option value="8">8 números</option>
+                                    <option value="10">10 números</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="space-y-2">
+                            <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-2">Fecha del Sorteo</label>
+                            <div class="relative group">
+                                <i class="fas fa-calendar-alt absolute left-5 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-[#FFD700] transition-colors"></i>
+                                <input type="date" class="w-full bg-slate-50 border border-slate-100 rounded-2xl py-4 pl-12 pr-5 text-[#003366] font-black outline-none focus:ring-4 focus:ring-[#FFD700]/10 focus:bg-white focus:border-[#FFD700] transition-all" id="cfg-fecha-picker">
+                                <input type="hidden" id="cfg-fecha">
+                            </div>
+                        </div>
+
+                        <div class="space-y-2">
+                            <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-2">Valor Boleta ($)</label>
+                            <div class="relative group">
+                                <i class="fas fa-dollar-sign absolute left-5 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-[#FFD700] transition-colors"></i>
+                                <input type="number" class="w-full bg-slate-50 border border-slate-100 rounded-2xl py-4 pl-12 pr-5 text-[#003366] font-black outline-none focus:ring-4 focus:ring-[#FFD700]/10 focus:bg-white focus:border-[#FFD700] transition-all" id="cfg-valor-num" step="100" value="3000">
+                                <input type="hidden" id="cfg-valor" value="$3.000">
+                            </div>
+                        </div>
+
+                        <div class="space-y-2 lg:col-span-2">
+                            <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-2">Lotería / Modalidad</label>
+                            <div class="relative group">
+                                <i class="fas fa-dice absolute left-5 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-[#FFD700] transition-colors"></i>
+                                <input type="text" class="w-full bg-slate-50 border border-slate-100 rounded-2xl py-4 pl-12 pr-5 text-[#003366] font-black outline-none focus:ring-4 focus:ring-[#FFD700]/10 focus:bg-white focus:border-[#FFD700] transition-all" id="cfg-loteria" list="loterias-list" value="Sinuano Noche — Últimas 2 cifras">
+                                <datalist id="loterias-list">
+                                    <option value="Sinuano Noche / Últimas 2 cifras">
+                                    <option value="Sinuano Día / Últimas 2 cifras">
+                                    <option value="Caribeña Noche / Últimas 2 cifras">
+                                    <option value="Caribeña Día / Últimas 2 cifras">
+                                    <option value="Lotería de Medellín">
+                                    <option value="Lotería de Bogotá">
+                                </datalist>
+                            </div>
+                        </div>
+
+                        <div class="space-y-2 lg:col-span-1">
+                            <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-2">Gran Premio</label>
+                            <div class="relative group">
+                                <i class="fas fa-trophy absolute left-5 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-[#FFD700] transition-colors"></i>
+                                <input type="text" class="w-full bg-slate-50 border border-slate-100 rounded-2xl py-4 pl-12 pr-5 text-[#003366] font-black outline-none focus:ring-4 focus:ring-[#FFD700]/10 focus:bg-white focus:border-[#FFD700] transition-all" id="cfg-premio" placeholder="Ej: Tablet de 10 pulg." value="2 Perfumes para Caballeros">
+                            </div>
+                        </div>
+
+                        <div class="flex items-end gap-4">
+                            <button class="flex-1 h-[60px] bg-[#003366] text-white rounded-2xl font-black uppercase text-[11px] tracking-widest shadow-lg shadow-[#003366]/20 hover:shadow-xl hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-3" id="btn-generar">
+                                <i class="fas fa-magic text-[#FFD700]"></i> Generar
+                            </button>
+                            <button class="w-[60px] h-[60px] bg-white text-slate-400 rounded-2xl flex items-center justify-center border border-slate-100 hover:border-[#FFD700] hover:text-[#003366] hover:shadow-premium transition-all shadow-sm" onclick="window.print()">
+                                <i class="fas fa-print"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- STATUS -->
+                <div id="status-bar" class="hidden bg-[#003366] border border-[#003366] text-white p-6 rounded-[2rem] mb-12 items-center gap-4 animate-fade-up shadow-xl relative overflow-hidden">
+                    <div class="absolute inset-0 bg-gradient-to-r from-[#FFD700]/10 to-transparent"></div>
+                    <div class="relative z-10 flex items-center gap-4 w-full">
+                        <div class="w-3 h-3 rounded-full bg-[#FFD700] animate-pulse shadow-[0_0_10px_#FFD700]"></div>
+                        <span id="status-text" class="text-[10px] font-black uppercase tracking-[0.2em]">Cargando configuración...</span>
+                        <div class="ml-auto flex items-center gap-2 text-[#FFD700]">
+                            <i class="fas fa-check-circle"></i>
+                            <span class="text-[9px] font-bold uppercase">Listo para imprimir</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- BOLETAS OUTPUT -->
+                <div id="contenedor" class="bg-slate-50 rounded-[3rem] border-2 border-dashed border-slate-200 p-12 min-h-[500px] shadow-inner flex flex-col items-center gap-16 transition-all">
+                    <div class="flex flex-col items-center justify-center py-40 opacity-20 text-center">
+                        <div class="w-32 h-32 bg-white rounded-[2.5rem] shadow-premium flex items-center justify-center text-[#003366] mb-8">
+                            <i class="fas fa-ticket-alt text-5xl"></i>
+                        </div>
+                        <h3 class="text-2xl font-black text-[#003366] uppercase italic mb-2">Panel de Previsualización</h3>
+                        <p class="text-[10px] font-black uppercase tracking-[0.4em] text-[#003366]">Ajusta los parámetros y pulsa generar</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
     </div>
 
-    <nav class="sidebar-nav">
-      <a href="dashboard.html" class="nav-link"><i class="fas fa-th-large"></i> Dashboard</a>
+    <!-- SCRIPTS -->
+    <script src="/scripts/config.js"></script>
+    <script type="module">
+        import { supabase, requireAdmin } from '/src/core/supabase.js';
+        import { initAdminLayout } from '/src/components/layout/admin-layout.js';
+        import '/src/core/aiWidget.js';
 
-      <div class="nav-section-label">Equipo</div>
-      <a href="planilla.html" class="nav-link"><i class="fas fa-clipboard-list"></i> Planilla</a>
-      <a href="crear-jugador.html" class="nav-link"><i class="fas fa-user-plus"></i> Crear Jugador</a>
-      <a href="../ficha.html" class="nav-link"><i class="fas fa-users"></i> Jugadores</a>
-      <a href="../partidos.html" class="nav-link"><i class="fas fa-futbol"></i> Partidos</a>
-      <a href="../analisis.html" class="nav-link"><i class="fas fa-chart-line"></i> Análisis</a>
-      <a href="convocatorias.html" class="nav-link"><i class="fas fa-bullhorn"></i> Convocatorias</a>
-
-      <div class="nav-section-label">Comunicación</div>
-      <a href="push.html" class="nav-link"><i class="fas fa-bell"></i> Notificaciones Push</a>
-
-      <div class="nav-section-label">Administración</div>
-      <a href="GestorDocumental.html" class="nav-link"><i class="fas fa-folder-open"></i> Gestor Documental</a>
-      <a href="usuarios.html" class="nav-link"><i class="fas fa-user-cog"></i> Usuarios</a>
-      <a href="crear-usuario.html" class="nav-link"><i class="fas fa-user-plus"></i> Crear Usuario</a>
-      <a href="rifa_diba.html" class="nav-link active"><i class="fas fa-ticket-alt"></i> Rifas</a>
-
-      <div class="nav-section-label">Sitio Web</div>
-      <a href="../index.html" class="nav-link"><i class="fas fa-globe"></i> Ver Sitio</a>
-    </nav>
-
-    <div class="sidebar-footer">
-      <div class="user-chip">
-        <div class="user-avatar" id="sb-avatar">A</div>
-        <div style="min-width: 0;">
-          <div class="user-name" id="sb-name">Administrador</div>
-          <div class="user-role" id="sb-role">Admin</div>
-        </div>
-      </div>
-      <button class="btn-logout" id="logout-btn">
-        <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
-      </button>
-    </div>
-  </aside>
-  <div class="sidebar-overlay" onclick="document.getElementById('sidebar').classList.remove('open')"></div>
-
-  <div class="main">
-    <!-- Top Bar -->
-    <header class="topbar">
-      <div class="flex items-center">
-        <button class="mobile-menu-btn" id="menu-btn">
-          <i class="fas fa-bars" id="menu-icon"></i>
-        </button>
-        <div class="animate-fade-up">
-          <div class="page-title">Generador de <span>Rifas</span></div>
-          <div class="page-subtitle">Boletas por jugador con exportación PDF — DIBA FBC</div>
-        </div>
-      </div>
-      <div class="topbar-right">
-        <button id="theme-toggle" class="btn btn-outline" style="padding: 0.5rem; width: 40px; height: 40px; justify-content: center;" title="Cambiar Tema">
-          <i id="theme-icon" class="fas fa-sun"></i>
-        </button>
-        <div class="topbar-time glass" id="clock">--:--</div>
-      </div>
-    </header>
-
-    <div class="content">
-      <!-- TOOLBAR -->
-      <div class="glass-premium toolbar">
-
-        <div class="premium-form-group">
-          <label class="premium-label">Total de boletas</label>
-          <input type="number" class="premium-input" id="cfg-total" min="1" max="1000" step="5" value="45" style="width: 100px;">
-        </div>
-
-        <div class="premium-form-group">
-          <label class="premium-label">Números por boleta</label>
-          <select class="premium-input" id="cfg-numeros" style="width: 140px;">
-            <option value="4">4 números</option>
-            <option value="5">5 números</option>
-            <option value="6" selected>6 números</option>
-            <option value="8">8 números</option>
-            <option value="10">10 números</option>
-          </select>
-        </div>
-
-        <div class="premium-form-group">
-          <label class="premium-label">Fecha del sorteo</label>
-          <input type="date" class="premium-input" id="cfg-fecha-picker" style="width: 160px;">
-          <input type="hidden" id="cfg-fecha" value="Sábado 19 de abril de 2025">
-        </div>
-
-        <div class="premium-form-group">
-          <label class="premium-label">Lotería / Modalidad</label>
-          <input type="text" class="premium-input" id="cfg-loteria" list="loterias-list" value="Sinuano Noche — Últimas 2 cifras" style="width: 240px;">
-          <datalist id="loterias-list">
-            <option value="Sinuano Noche / Últimas 2 cifras">
-            <option value="Sinuano Día / Últimas 2 cifras">
-            <option value="Caribeña Noche / Últimas 2 cifras">
-            <option value="Caribeña Día / Últimas 2 cifras">
-            <option value="Lotería de Medellín">
-            <option value="Lotería de Bogotá">
-            <option value="Lotería de Barranquilla">
-          </datalist>
-        </div>
-
-        <div class="premium-form-group">
-          <label class="premium-label">Premio</label>
-          <input type="text" class="premium-input" id="cfg-premio" placeholder="Ej: Tablet de 10 pulg." value="2 Perfumes para Caballeros" style="width: 240px;">
-        </div>
-
-        <div class="premium-form-group">
-          <label class="premium-label">Valor de Boleta ($)</label>
-          <input type="number" class="premium-input" id="cfg-valor-num" step="100" value="3000" style="width: 120px;">
-          <input type="hidden" id="cfg-valor" value="$3.000">
-        </div>
-
-        <div class="flex-grow flex justify-end gap-3 mb-6">
-          <button class="btn btn-primary" id="btn-generar">
-            <i class="fas fa-ticket-alt"></i>
-            Generar Boletas
-          </button>
-          <button class="btn btn-outline" onclick="window.print()">
-            <i class="fas fa-print"></i> PDF
-          </button>
-        </div>
-      </div>
-
-      <!-- STATUS -->
-      <div id="status-bar" class="glass" style="display:none; padding: 1.25rem 2rem; border-radius: 18px; margin-bottom: 2rem; align-items: center; gap: 1rem; border-color: rgba(var(--gold-rgb), 0.1);">
-        <div class="w-2 h-2 rounded-full bg-gold animate-pulse"></div>
-        <span id="status-text" class="text-xs font-bold text-gold uppercase tracking-widest">Generando...</span>
-      </div>
-
-      <!-- BOLETAS OUTPUT -->
-      <div id="contenedor" class="boletas-grid-preview"></div>
-    </div>
-  </div>
-
-  <!-- SCRIPTS -->
-  <script src="/scripts/config.js"></script>
-  <script type="module">
-    import { supabase, requireAdmin } from '../scripts/supabaseClient.js';
-
-    // ── AUTH ───────────────────────────────────────────────────
-    const session = await requireAdmin();
-    if (!session) { /* requireAdmin ya redirige */ }
-    else {
-      document.getElementById('admin-body').style.display = 'flex';
-      const { data: profile } = await supabase.from('users').select('username,role').eq('id', session.user.id).single();
-      if (profile) {
-        document.getElementById('sb-name').textContent = profile.username || session.user.email;
-        document.getElementById('sb-role').textContent = profile.role;
-        document.getElementById('sb-avatar').textContent = (profile.username || 'A')[0].toUpperCase();
-      }
-    }
-
-    // ── CLOCK ─────────────────────────────────────────────────
-    const clockEl = document.getElementById('clock');
-    (function tick() { clockEl.textContent = new Date().toLocaleTimeString('es-CO', { hour: '2-digit', minute: '2-digit' }); setTimeout(tick, 1000); })();
-
-    // ── MOBILE MENU ───────────────────────────────────────────
-    document.getElementById('menu-btn').addEventListener('click', () => {
-      const s = document.getElementById('sidebar');
-      s.classList.toggle('open');
-      document.getElementById('menu-icon').className = s.classList.contains('open') ? 'fas fa-times' : 'fas fa-bars';
-    });
-
-    // ── LOGOUT ────────────────────────────────────────────────
-    document.getElementById('logout-btn').addEventListener('click', async () => {
-      if (confirm('¿Cerrar sesión?')) { await supabase.auth.signOut(); location.href = 'login.html'; }
-    });
-
-    // ── LOAD PLAYERS ──────────────────────────────────────────
-    // ── SELECTOR HELPERS ──────────────────────────────────────
-    const fechaPicker = document.getElementById('cfg-fecha-picker');
-    const fechaText = document.getElementById('cfg-fecha');
-    const valorNum = document.getElementById('cfg-valor-num');
-    const valorText = document.getElementById('cfg-valor');
-
-    // Inicializar fecha con una semana desde hoy
-    const defaultDate = new Date();
-    defaultDate.setDate(defaultDate.getDate() + 7);
-    fechaPicker.value = defaultDate.toISOString().split('T')[0];
-
-    function updateFechaText() {
-      const d = new Date(fechaPicker.value + 'T00:00:00');
-      const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-      fechaText.value = d.toLocaleDateString('es-CO', options);
-    }
-    fechaPicker.addEventListener('change', updateFechaText);
-    updateFechaText(); // Run once
-
-    function updateValorText() {
-      const v = parseFloat(valorNum.value) || 0;
-      valorText.value = '$' + v.toLocaleString('es-CO');
-    }
-    valorNum.addEventListener('input', updateValorText);
-    updateValorText(); // Run once
-
-
-    // ── SHUFFLED CYCLE GENERATOR ──────────────────────────────────
-    function shuffleArray(array) {
-      for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
-      }
-    }
-
-    window.generarBoletas = function () {
-      const contenedor = document.getElementById('contenedor');
-      contenedor.innerHTML = '';
-
-      const totalBoletas = parseInt(document.getElementById('cfg-total').value) || 10;
-      const numPorBoleta = parseInt(document.getElementById('cfg-numeros').value) || 6;
-      const fecha = document.getElementById('cfg-fecha').value.trim();
-      const loteria = document.getElementById('cfg-loteria').value.trim();
-      const premio = document.getElementById('cfg-premio').value.trim();
-      const valor = document.getElementById('cfg-valor').value.trim();
-
-      const totalNumerosDeseados = totalBoletas * numPorBoleta;
-      
-      // 1. Crear Pool de números por ciclos de 100 (00-99)
-      // Cada ciclo se mezcla individualmente para mantener el balance pero con dinamismo
-      let masterPool = [];
-      const numCiclos = Math.ceil(totalNumerosDeseados / 100);
-      
-      for (let c = 0; c < numCiclos; c++) {
-        let ciclo = [];
-        for (let i = 0; i < 100; i++) {
-          ciclo.push(String(i).padStart(2, '0'));
-        }
-        shuffleArray(ciclo);
-        masterPool = masterPool.concat(ciclo);
-      }
-
-      // 2. Repartir en boletas
-      let boletas = [];
-      let pivot = 0;
-
-      for (let b = 0; b < totalBoletas; b++) {
-        let numerosBoleta = [];
-        
-        for (let n = 0; n < numPorBoleta; n++) {
-          if (pivot >= totalNumerosDeseados || pivot >= masterPool.length) break;
-
-          let numSugerido = masterPool[pivot];
-
-          // Evitar duplicados en la misma boleta (posible en la frontera de dos ciclos)
-          if (numerosBoleta.includes(numSugerido)) {
-            let buscaIdx = pivot + 1;
-            while (buscaIdx < masterPool.length && numerosBoleta.includes(masterPool[buscaIdx])) {
-              buscaIdx++;
+        async function init() {
+            try {
+                await initAdminLayout();
+                const session = await requireAdmin();
+                if (session) {
+                    document.getElementById('admin-body').style.display = 'block';
+                }
+            } catch (error) {
+                console.error(error);
             }
-            if (buscaIdx < masterPool.length) {
-              // Intercambiar para no perder el número
-              [masterPool[pivot], masterPool[buscaIdx]] = [masterPool[buscaIdx], masterPool[pivot]];
-              numSugerido = masterPool[pivot];
+        }
+        init();
+
+        const fechaPicker = document.getElementById('cfg-fecha-picker');
+        const fechaText = document.getElementById('cfg-fecha');
+        const valorNum = document.getElementById('cfg-valor-num');
+        const valorText = document.getElementById('cfg-valor');
+
+        const defaultDate = new Date();
+        defaultDate.setDate(defaultDate.getDate() + 7);
+        fechaPicker.value = defaultDate.toISOString().split('T')[0];
+
+        function updateFechaText() {
+            const d = new Date(fechaPicker.value + 'T00:00:00');
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            fechaText.value = d.toLocaleDateString('es-CO', options);
+        }
+        fechaPicker.addEventListener('change', updateFechaText);
+        updateFechaText();
+
+        function updateValorText() {
+            const v = parseFloat(valorNum.value) || 0;
+            valorText.value = '$' + v.toLocaleString('es-CO');
+        }
+        valorNum.addEventListener('input', updateValorText);
+        updateValorText();
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
             }
-          }
-
-          numerosBoleta.push(numSugerido);
-          pivot++;
         }
-        
-        if (numerosBoleta.length > 0) {
-          boletas.push({
-            jugador: '____________________________',
-            numeros: numerosBoleta.sort((x, y) => parseInt(x) - parseInt(y))
-          });
-        }
-      }
 
-      // 3. Renderizar
-      const statusBar = document.getElementById('status-bar');
-      const statusText = document.getElementById('status-text');
-      statusBar.style.display = 'flex';
-      statusText.textContent = `${boletas.length} boletas generadas | Dinamismo: Azar por ciclos 00-99.`;
+        window.generarBoletas = function () {
+            const contenedor = document.getElementById('contenedor');
+            contenedor.innerHTML = '';
+            contenedor.classList.remove('bg-slate-50', 'p-12', 'border-2', 'border-dashed');
+            contenedor.classList.add('bg-transparent', 'p-0', 'border-none');
 
-      const BOLETAS_POR_PAG = 5;
-      let globalIdx = 0;
+            const totalBoletas = parseInt(document.getElementById('cfg-total').value) || 10;
+            const numPorBoleta = parseInt(document.getElementById('cfg-numeros').value) || 6;
+            const fecha = document.getElementById('cfg-fecha').value.trim();
+            const loteria = document.getElementById('cfg-loteria').value.trim();
+            const premio = document.getElementById('cfg-premio').value.trim();
+            const valor = document.getElementById('cfg-valor').value.trim();
 
-      for (let p = 0; p < Math.ceil(boletas.length / BOLETAS_POR_PAG); p++) {
-        const page = document.createElement('div');
-        page.className = 'page-rifa';
+            const totalNumerosDeseados = totalBoletas * numPorBoleta;
+            let masterPool = [];
+            const numCiclos = Math.ceil(totalNumerosDeseados / 100);
+            
+            for (let c = 0; c < numCiclos; c++) {
+                let ciclo = [];
+                for (let i = 0; i < 100; i++) ciclo.push(String(i).padStart(2, '0'));
+                shuffleArray(ciclo);
+                masterPool = masterPool.concat(ciclo);
+            }
 
-        const slice = boletas.slice(p * BOLETAS_POR_PAG, (p + 1) * BOLETAS_POR_PAG);
-        slice.forEach(boleta => {
-          globalIdx++;
-          const numerosHTML = boleta.numeros.map(n =>
-            `<div class="num-cell">${n}</div>`
-          ).join('');
+            let boletas = [];
+            let pivot = 0;
+            for (let b = 0; b < totalBoletas; b++) {
+                let numerosBoleta = [];
+                for (let n = 0; n < numPorBoleta; n++) {
+                    if (pivot >= masterPool.length) break;
+                    let numSugerido = masterPool[pivot];
+                    if (numerosBoleta.includes(numSugerido)) {
+                        let buscaIdx = pivot + 1;
+                        while (buscaIdx < masterPool.length && numerosBoleta.includes(masterPool[buscaIdx])) buscaIdx++;
+                        if (buscaIdx < masterPool.length) {
+                            [masterPool[pivot], masterPool[buscaIdx]] = [masterPool[buscaIdx], masterPool[pivot]];
+                            numSugerido = masterPool[pivot];
+                        }
+                    }
+                    numerosBoleta.push(numSugerido);
+                    pivot++;
+                }
+                if (numerosBoleta.length > 0) {
+                    boletas.push({
+                        jugador: '____________________________',
+                        numeros: numerosBoleta.sort((x, y) => parseInt(x) - parseInt(y))
+                    });
+                }
+            }
 
-          const el = document.createElement('div');
-          el.className = 'boleta-container';
-          el.innerHTML = `
-            <div class="boleta">
-              <div class="boleta-left">
-                <img src="/images/ESCUDO.png" class="boleta-logo" alt="Logo">
-              </div>
-              <div class="boleta-main">
-                <div class="boleta-header">
-                  <div class="boleta-titulo">RIFA DIBA FBC</div>
-                  <div class="boleta-number-id">#${String(globalIdx).padStart(3, '0')}</div>
-                </div>
-                <div class="boleta-content">
-                  <div class="boleta-info">
-                    📅 Juega: <strong>${fecha}</strong><br>
-                    🎰 Lotería: <strong>${loteria}</strong><br>
-                    🏆 Premio: <strong>${premio}</strong><br>
-                    💰 Valor: <strong>${valor}</strong>
-                  </div>
-                  <div class="boleta-numeros">${numerosHTML}</div>
-                </div>
-                <div class="boleta-jugador-box">
-                  <div class="boleta-jugador-label">Jugador Responsable</div>
-                  <div class="boleta-jugador">👤 ${boleta.jugador}</div>
-                </div>
-              </div>
-            </div>`;
-          page.appendChild(el);
-        });
+            const statusBar = document.getElementById('status-bar');
+            const statusText = document.getElementById('status-text');
+            statusBar.style.display = 'flex';
+            statusText.textContent = `${boletas.length} boletas generadas con éxito para imprimir.`;
 
-        contenedor.appendChild(page);
-      }
-    };
+            const BOLETAS_POR_PAG = 5;
+            let globalIdx = 0;
 
-    document.getElementById('btn-generar').addEventListener('click', window.generarBoletas);
-  </script>
+            for (let p = 0; p < Math.ceil(boletas.length / BOLETAS_POR_PAG); p++) {
+                const page = document.createElement('div');
+                page.className = 'page-rifa mx-auto mb-12 flex flex-col overflow-hidden';
+                page.style.cssText = 'width: 210mm; height: 297mm; padding: 10mm;';
+
+                const slice = boletas.slice(p * BOLETAS_POR_PAG, (p + 1) * BOLETAS_POR_PAG);
+                slice.forEach(boleta => {
+                    globalIdx++;
+                    const numerosHTML = boleta.numeros.map(n => `<div class="num-cell">${n}</div>`).join('');
+
+                    const el = document.createElement('div');
+                    el.className = 'boleta-container h-[55.4mm] w-full flex items-center relative border-b border-dashed border-slate-300';
+                    el.innerHTML = `
+                        <div class="boleta w-full h-[48mm] bg-gradient-to-br from-[#FFD700] via-[#ffec8b] to-[#e6b800] border-2 border-[#002a40] rounded-2xl p-5 text-[#002a40] flex gap-5 items-center shadow-inner relative overflow-hidden">
+                            <div class="w-[50px] flex flex-col items-center justify-center gap-2 shrink-0 border-r border-dotted border-[#002a40]/20 pr-4">
+                                <img src="/images/ESCUDO.png" class="w-12 h-12 object-contain filter drop-shadow-md" alt="Logo">
+                            </div>
+                            <div class="flex-1 flex flex-col justify-between h-full py-1">
+                                <div class="flex justify-between items-start">
+                                    <h3 class="text-lg font-black italic uppercase leading-none">RIFA DIBA FBC</h3>
+                                    <div class="text-[10px] font-black bg-[#002a40] text-[#FFD700] px-3 py-1 rounded-lg">#${String(globalIdx).padStart(3, '0')}</div>
+                                </div>
+                                <div class="grid grid-cols-[1fr_auto] gap-5 items-end">
+                                    <div class="text-[10px] font-bold leading-relaxed">
+                                        📅 Juega: <strong>${fecha}</strong><br>
+                                        🎰 Lotería: <strong>${loteria}</strong><br>
+                                        🏆 Premio: <strong>${premio}</strong><br>
+                                        💰 Valor: <strong>${valor}</strong>
+                                    </div>
+                                    <div class="grid grid-cols-3 gap-1.5">${numerosHTML}</div>
+                                </div>
+                                <div class="bg-white/40 border border-[#002a40]/30 rounded-xl p-2 mt-2">
+                                    <p class="text-[7px] font-black uppercase text-[#002a40]/60 mb-0.5">Jugador Responsable</p>
+                                    <p class="text-[10px] font-black italic">👤 ${boleta.jugador}</p>
+                                </div>
+                            </div>
+                        </div>`;
+                    page.appendChild(el);
+                });
+                contenedor.appendChild(page);
+            }
+        };
+
+        document.getElementById('btn-generar').addEventListener('click', window.generarBoletas);
+    </script>
 </body>
 
 </html>
