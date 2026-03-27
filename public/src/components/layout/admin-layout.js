@@ -144,6 +144,9 @@ export async function initAdminLayout() {
         if (dateEl) dateEl.textContent = now.toLocaleDateString('es-CO', { weekday: 'long', day: 'numeric', month: 'long' });
     }
     setInterval(tick, 1000); tick();
+    
+    // Hide Loader
+    document.getElementById('app-loader')?.remove();
 }
 
 function isActive(path) {
