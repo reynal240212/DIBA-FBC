@@ -1,6 +1,5 @@
 # === CREDENCIALES Y SECRETS ===
-# ¡NUNCA subir este archivo! Contiene las claves de Supabase.
-public/scripts/config.js
+# public/scripts/config.js (Habilitado temporalmente para Vercel)
 
 # Variables de entorno del servidor
 .env
