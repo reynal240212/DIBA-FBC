@@ -25,6 +25,60 @@
   <script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.8.2/dist/jspdf.plugin.autotable.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
   <link rel="stylesheet" href="../styles/planilla.css">
+
+  <!-- Tailwind Play CDN & Elite Config -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            gold: {
+              DEFAULT: '#FFD700',
+              glow: 'rgba(255, 215, 0, 0.3)',
+              dark: '#B8860B'
+            },
+            navy: {
+              DEFAULT: '#0a111a',
+              light: '#162130',
+              deep: '#05080d'
+            }
+          },
+          fontFamily: {
+            sans: ['Montserrat', 'sans-serif'],
+            inter: ['Inter', 'sans-serif']
+          },
+          borderRadius: {
+            'elite': '24px',
+            'elite-lg': '36px'
+          },
+          boxShadow: {
+            'premium': '0 30px 60px -15px rgba(0, 0, 0, 0.8)',
+            'gold-glow': '0 0 20px rgba(255, 215, 0, 0.15)'
+          },
+          animation: {
+            'fade-up': 'fade-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+            'spin-slow': 'spin 3s linear infinite'
+          },
+          keyframes: {
+            'fade-up': {
+              '0%': { opacity: '0', transform: 'translateY(20px)' },
+              '100%': { opacity: '1', transform: 'translateY(0)' }
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style type="text/tailwind">
+    @layer utilities {
+      .bg-navy-deep { background-color: #05080d; }
+      .bg-navy-light { background-color: #162130; }
+    }
+    .sidebar.open { @apply translate-x-0; }
+    .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { @apply bg-white/10 rounded-full; }
+  </style>
 </head>
 
 <body class="bg-dark text-white flex min-h-screen" id="admin-body" style="overflow-x: hidden; font-family: 'Inter', sans-serif; display: none;">
@@ -40,61 +94,84 @@
     </div>
 
   <!-- ══ SIDEBAR ══ -->
-  <aside class="sidebar" id="sidebar">
-    <div class="sidebar-logo">
-      <img src="/images/ESCUDO.png" alt="DIBA FBC">
-      <div class="sidebar-logo-text">DIBA FBC</div>
+  <aside class="fixed top-0 left-0 bottom-0 w-72 bg-navy-deep border-r border-white/5 z-50 transition-transform duration-500 lg:translate-x-0 -translate-x-full sidebar" id="sidebar">
+    <div class="p-8 flex items-center gap-4 mb-4">
+        <img src="/images/ESCUDO.png" alt="DIBA FBC" class="w-12 h-12 object-contain drop-shadow-[0_0_15px_rgba(255,215,0,0.3)]">
+        <div class="text-xl font-black italic tracking-tighter text-white">DIBA <span class="text-gold">FBC</span></div>
     </div>
 
-    <nav class="sidebar-nav">
-      <a href="dashboard.html" class="nav-link"><i class="fas fa-th-large"></i> Dashboard</a>
+    <nav class="px-4 space-y-1 overflow-y-auto h-[calc(100vh-200px)] custom-scrollbar">
+        <a href="dashboard.html" class="flex items-center gap-4 px-6 py-4 rounded-2xl text-white/60 font-bold uppercase text-[0.7rem] tracking-widest hover:bg-white/5 hover:text-white transition-all">
+            <i class="fas fa-grid-2 opacity-50"></i> Dashboard
+        </a>
 
-      <div class="nav-section-label">Equipo</div>
-      <a href="planilla.html" class="nav-link active"><i class="fas fa-clipboard-list"></i> Planilla</a>
-      <a href="crear-jugador.html" class="nav-link"><i class="fas fa-user-plus"></i> Crear Jugador</a>
-      <a href="../ficha.html" class="nav-link"><i class="fas fa-users"></i> Jugadores</a>
-      <a href="../partidos.html" class="nav-link"><i class="fas fa-futbol"></i> Partidos</a>
-      <a href="../analisis.html" class="nav-link"><i class="fas fa-chart-line"></i> Análisis</a>
-      <a href="convocatorias.html" class="nav-link"><i class="fas fa-bullhorn"></i> Convocatorias</a>
+        <div class="px-6 pt-6 pb-2 text-[0.6rem] font-black uppercase tracking-[0.3em] text-white/30 italic">Equipo</div>
+        <a href="planilla.html" class="flex items-center gap-4 px-6 py-4 rounded-2xl bg-gold text-navy-deep font-black italic uppercase text-[0.75rem] tracking-widest shadow-[0_10px_30px_rgba(255,215,0,0.2)]">
+            <i class="fas fa-list-check text-lg"></i> Planilla
+        </a>
+        <a href="crear-jugador.html" class="flex items-center gap-4 px-6 py-4 rounded-2xl text-white/60 font-bold uppercase text-[0.7rem] tracking-widest hover:bg-white/5 hover:text-white transition-all">
+            <i class="fas fa-user-plus opacity-50"></i> Crear Jugador
+        </a>
+        <a href="../ficha.html" class="flex items-center gap-4 px-6 py-4 rounded-2xl text-white/60 font-bold uppercase text-[0.7rem] tracking-widest hover:bg-white/5 hover:text-white transition-all">
+            <i class="fas fa-users-viewfinder opacity-50"></i> Jugadores
+        </a>
+        <a href="../partidos.html" class="flex items-center gap-4 px-6 py-4 rounded-2xl text-white/60 font-bold uppercase text-[0.7rem] tracking-widest hover:bg-white/5 hover:text-white transition-all">
+            <i class="fas fa-volleyball opacity-50"></i> Partidos
+        </a>
+        <a href="../analisis.html" class="flex items-center gap-4 px-6 py-4 rounded-2xl text-white/60 font-bold uppercase text-[0.7rem] tracking-widest hover:bg-white/5 hover:text-white transition-all">
+            <i class="fas fa-chart-mixed opacity-50"></i> Análisis
+        </a>
+        <a href="convocatorias.html" class="flex items-center gap-4 px-6 py-4 rounded-2xl text-white/60 font-bold uppercase text-[0.7rem] tracking-widest hover:bg-white/5 hover:text-white transition-all">
+            <i class="fas fa-bullhorn opacity-50"></i> Convocatorias
+        </a>
 
-      <div class="nav-section-label">Comunicación</div>
-      <a href="push.html" class="nav-link"><i class="fas fa-bell"></i> Notificaciones Push</a>
+        <div class="px-6 pt-6 pb-2 text-[0.6rem] font-black uppercase tracking-[0.3em] text-white/30 italic">Comunicación</div>
+        <a href="push.html" class="flex items-center gap-4 px-6 py-4 rounded-2xl text-white/60 font-bold uppercase text-[0.7rem] tracking-widest hover:bg-white/5 hover:text-white transition-all">
+            <i class="fas fa-paper-plane opacity-50"></i> Notificaciones
+        </a>
 
-      <div class="nav-section-label">Administración</div>
-      <a href="GestorDocumental.html" class="nav-link"><i class="fas fa-folder-open"></i> Gestor Documental</a>
-      <a href="usuarios.html" class="nav-link"><i class="fas fa-user-cog"></i> Usuarios</a>
-      <a href="crear-usuario.html" class="nav-link"><i class="fas fa-user-plus"></i> Crear Usuario</a>
-      <a href="rifa_diba.html" class="nav-link"><i class="fas fa-ticket-alt"></i> Rifas</a>
+        <div class="px-6 pt-6 pb-2 text-[0.6rem] font-black uppercase tracking-[0.3em] text-white/30 italic">Administración</div>
+        <a href="GestorDocumental.html" class="flex items-center gap-4 px-6 py-4 rounded-2xl text-white/60 font-bold uppercase text-[0.7rem] tracking-widest hover:bg-white/5 hover:text-white transition-all">
+            <i class="fas fa-box-archive opacity-50"></i> Gestión Doc
+        </a>
+        <a href="usuarios.html" class="flex items-center gap-4 px-6 py-4 rounded-2xl text-white/60 font-bold uppercase text-[0.7rem] tracking-widest hover:bg-white/5 hover:text-white transition-all">
+            <i class="fas fa-user-gear opacity-50"></i> Usuarios
+        </a>
+        <a href="rifa_diba.html" class="flex items-center gap-4 px-6 py-4 rounded-2xl text-white/60 font-bold uppercase text-[0.7rem] tracking-widest hover:bg-white/5 hover:text-white transition-all">
+            <i class="fas fa-ticket opacity-50"></i> Rifas
+        </a>
 
-      <div class="nav-section-label">Sitio Web</div>
-      <a href="../index.html" class="nav-link"><i class="fas fa-globe"></i> Ver Sitio</a>
+        <div class="px-6 pt-6 pb-2 text-[0.6rem] font-black uppercase tracking-[0.3em] text-white/30 italic">Sistema</div>
+        <a href="../index.html" class="flex items-center gap-4 px-6 py-4 rounded-2xl text-white/60 font-bold uppercase text-[0.7rem] tracking-widest hover:bg-white/5 hover:text-white transition-all">
+            <i class="fas fa-external-link opacity-50"></i> Ver Sitio
+        </a>
     </nav>
 
-    <div class="sidebar-footer">
-      <div class="user-chip">
-        <div class="user-avatar" id="sb-avatar">A</div>
-        <div style="min-width: 0;">
-          <div class="user-name" id="sb-name">Administrador</div>
-          <div class="user-role" id="sb-role">Admin</div>
+    <div class="absolute bottom-0 left-0 right-0 p-6 bg-navy-deep/80 backdrop-blur-md border-t border-white/5">
+        <div class="flex items-center gap-3 p-3 bg-white/5 rounded-2xl mb-4 border border-white/5">
+            <div class="w-10 h-10 rounded-xl bg-gold/10 flex items-center justify-center text-gold font-black italic border border-gold/20" id="sb-avatar">A</div>
+            <div class="min-w-0">
+                <div class="text-[0.7rem] font-black text-white truncate italic tracking-tight" id="sb-name">Administrador</div>
+                <div class="text-[0.55rem] font-bold text-gold uppercase tracking-widest" id="sb-role">Admin</div>
+            </div>
         </div>
-      </div>
-      <button class="btn-logout" id="logout-btn">
-        <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
-      </button>
+        <button class="w-full flex items-center justify-center gap-3 py-3 rounded-xl bg-red-500/10 text-red-400 text-[0.65rem] font-black uppercase tracking-[0.2em] hover:bg-red-500/20 transition-all border border-red-500/20" id="logout-btn">
+            <i class="fas fa-power-off"></i> Salir
+        </button>
     </div>
   </aside>
-  <div class="sidebar-overlay" onclick="document.getElementById('sidebar').classList.remove('open')"></div>
+  <div class="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 hidden sidebar-overlay" id="sidebar-overlay" onclick="document.getElementById('sidebar').classList.remove('open'); document.getElementById('sidebar-overlay').classList.add('hidden')"></div>
 
-  <div class="main">
+  <div class="lg:ml-72 min-h-screen transition-all duration-500">
     <!-- Top Bar -->
-    <header class="topbar">
-      <div class="flex items-center">
-        <button class="mobile-menu-btn" id="menu-btn">
-          <i class="fas fa-bars" id="menu-icon"></i>
+    <header class="sticky top-0 z-40 bg-navy-deep/80 backdrop-blur-xl border-b border-white/5 px-8 h-24 flex items-center justify-between">
+      <div class="flex items-center gap-6">
+        <button class="lg:hidden text-white/50 hover:text-gold transition-colors text-xl" id="menu-btn" onclick="document.getElementById('sidebar').classList.add('open'); document.getElementById('sidebar-overlay').classList.remove('hidden')">
+          <i class="fas fa-bars-staggered" id="menu-icon"></i>
         </button>
         <div class="animate-fade-up">
-          <div class="page-title">Sincronización <span>Planilla</span></div>
-          <div class="page-subtitle">Control de asistencia y gestión — DIBA FBC</div>
+          <div class="text-[0.65rem] font-black uppercase tracking-[0.4em] text-gold/60 mb-1 leading-none">SECCIÓN ACTIVA</div>
+          <div class="text-xl md:text-2xl font-black italic tracking-tight text-white uppercase">SINCRONIZACIÓN <span class="font-normal opacity-40">PLANILLA</span></div>
         </div>
       </div>
       <div class="topbar-right">

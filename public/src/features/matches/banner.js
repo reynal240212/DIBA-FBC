@@ -94,7 +94,7 @@ export async function initMatchBanner() {
 
 function renderMatchCard(p) {
     const card = document.createElement("div");
-    card.className = "flex-none w-[320px] sm:w-[380px] snap-center bg-slate-900/40 backdrop-blur-xl border border-white/5 rounded-[2rem] p-6 flex flex-col gap-5 hover:bg-slate-800/60 hover:border-amber-500/30 transition-all duration-500 group/card relative overflow-hidden shadow-2xl animate__animated animate__fadeInUp";
+    card.className = "flex-none w-[85vw] max-w-[360px] sm:w-[380px] snap-center bg-slate-900/40 backdrop-blur-xl border border-white/5 rounded-[2rem] p-5 sm:p-6 flex flex-col gap-5 hover:bg-slate-800/60 hover:border-amber-500/30 transition-all duration-500 group/card relative overflow-hidden shadow-2xl animate__animated animate__fadeInUp";
     
     const today = new Date().toISOString().split('T')[0];
     const targetDate = p.fecha?.includes('T') ? p.fecha.split('T')[0] : p.fecha;

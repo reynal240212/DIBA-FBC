@@ -9,94 +9,80 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,600;0,700;0,900;1,700;1,900&display=swap"
         rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+    <!-- Bootstrap 5.3.3 CSS & JS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
     <link rel="stylesheet" href="../styles/admin-common.css">
     <link rel="stylesheet" href="../styles/main-dynamic.css">
     <script src="../scripts/theme-switcher.js"></script>
 
-    <style>
-        /* ── DASHBOARD SPECIFIC BLOCKS ── */
-        .kpi-card::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            border-radius: inherit;
-            background: radial-gradient(circle at 50% 0%, rgba(255,255,255,0.05), transparent);
-            pointer-events: none;
+    <!-- Tailwind Play CDN & Elite Config -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        gold: {
+                            DEFAULT: '#FFD700',
+                            glow: 'rgba(255, 215, 0, 0.3)',
+                            dark: '#B8860B'
+                        },
+                        navy: {
+                            DEFAULT: '#0a111a',
+                            light: '#162130',
+                            deep: '#05080d'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Montserrat', 'sans-serif'],
+                        inter: ['Inter', 'sans-serif']
+                    },
+                    borderRadius: {
+                        'elite': '24px',
+                        'elite-lg': '36px'
+                    },
+                    boxShadow: {
+                        'premium': '0 30px 60px -15px rgba(0, 0, 0, 0.8)',
+                        'gold-glow': '0 0 20px rgba(255, 215, 0, 0.15)'
+                    },
+                    keyframes: {
+                        'fade-up': {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' }
+                        },
+                        'glow': {
+                            '0%, 100%': { boxShadow: '0 0 10px rgba(255, 215, 0, 0.2)' },
+                            '50%': { boxShadow: '0 0 25px rgba(255, 215, 0, 0.4)' }
+                        }
+                    },
+                    animation: {
+                        'fade-up': 'fade-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+                        'glow': 'glow 2s infinite'
+                    }
+                }
+            }
         }
+    </script>
 
-        .bar-seg {
-            height: 100%;
-            transition: width .5s cubic-bezier(0.4, 0, 0.2, 1);
-            border-radius: 999px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+        /* AI Assistant Widget (Tailwind-ready) */
+        .ai-message.user { @apply self-end bg-gold/10 text-gold border border-gold/20; }
+        .ai-message.bot { @apply self-start bg-white/5 border border-white/10; }
+        
+        /* Custom Scrollbar */
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { @apply bg-white/10 rounded-full; }
+        
+        /* Sidebar transition helper */
+        .sidebar.open { @apply translate-x-0; }
+    </style>
+    <style type="text/tailwind">
+        @layer utilities {
+            .bg-navy-deep { background-color: #05080d; }
+            .bg-navy-light { background-color: #162130; }
         }
-
-        /* AI Assistant Widget */
-        .ai-chat-container {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-            height: 100%;
-        }
-        .ai-messages {
-            flex-grow: 1;
-            max-height: 200px;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-            padding-right: 0.5rem;
-            font-size: 0.8rem;
-        }
-        .ai-message {
-            padding: 0.6rem;
-            border-radius: 10px;
-            max-width: 90%;
-        }
-        .ai-message.user {
-            align-self: flex-end;
-            background: rgba(255, 204, 0, 0.1);
-            color: var(--gold);
-            border: 1px solid rgba(255, 204, 0, 0.2);
-        }
-        .ai-message.bot {
-            align-self: flex-start;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid var(--border-color);
-        }
-        .ai-input-group {
-            display: flex;
-            gap: 0.5rem;
-        }
-        #ai-input {
-            flex-grow: 1;
-            background: rgba(0,0,0,0.2);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 0.5rem;
-            color: white;
-            font-size: 0.8rem;
-        }
-        #ai-input:focus {
-            border-color: var(--gold);
-            outline: none;
-        }
-        .ai-status {
-            font-size: 0.6rem;
-            display: flex;
-            align-items: center;
-            gap: 0.3rem;
-            opacity: 0.7;
-        }
-        .status-dot {
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
-            background: #666;
-        }
-        .status-dot.online { background: #4ade80; }
-        .status-dot.offline { background: #fb7185; }
     </style>
 </head>
 
@@ -113,68 +99,91 @@
         </div>
 
     <!-- ══ SIDEBAR ══ -->
-    <aside class="sidebar" id="sidebar">
-        <div class="sidebar-logo">
-            <img src="/images/ESCUDO.png" alt="DIBA FBC">
-            <div class="sidebar-logo-text">DIBA FBC</div>
+    <aside class="fixed top-0 left-0 bottom-0 w-72 bg-navy-deep border-r border-white/5 z-50 transition-transform duration-500 lg:translate-x-0 -translate-x-full sidebar" id="sidebar">
+        <div class="p-8 flex items-center gap-4 mb-4">
+            <img src="/images/ESCUDO.png" alt="DIBA FBC" class="w-12 h-12 object-contain drop-shadow-[0_0_15px_rgba(255,215,0,0.3)]">
+            <div class="text-xl font-black italic tracking-tighter text-white">DIBA <span class="text-gold">FBC</span></div>
         </div>
 
-        <nav class="sidebar-nav">
-            <a href="dashboard.html" class="premium-nav-item active"><i class="fas fa-grid-2"></i> Dashboard</a>
+        <nav class="px-4 space-y-1 overflow-y-auto h-[calc(100vh-200px)] custom-scrollbar">
+            <a href="dashboard.html" class="flex items-center gap-4 px-6 py-4 rounded-2xl bg-gold text-navy-deep font-black italic uppercase text-[0.75rem] tracking-widest shadow-[0_10px_30px_rgba(255,215,0,0.2)]">
+                <i class="fas fa-grid-2 text-lg"></i> Dashboard
+            </a>
 
-            <div class="nav-section-label">Equipo</div>
-            <a href="planilla.html" class="premium-nav-item"><i class="fas fa-list-check"></i> Planilla</a>
-            <a href="crear-jugador.html" class="premium-nav-item"><i class="fas fa-user-plus"></i> Crear Jugador</a>
-            <a href="../ficha.html" class="premium-nav-item"><i class="fas fa-users-viewfinder"></i> Jugadores</a>
-            <a href="../partidos.html" class="premium-nav-item"><i class="fas fa-volleyball"></i> Partidos</a>
-            <a href="../analisis.html" class="premium-nav-item"><i class="fas fa-chart-mixed"></i> Análisis</a>
-            <a href="convocatorias.html" class="premium-nav-item"><i class="fas fa-bullhorn"></i> Convocatorias</a>
+            <div class="px-6 pt-6 pb-2 text-[0.6rem] font-black uppercase tracking-[0.3em] text-white/30 italic">Equipo</div>
+            <a href="planilla.html" class="flex items-center gap-4 px-6 py-4 rounded-2xl text-white/60 font-bold uppercase text-[0.7rem] tracking-widest hover:bg-white/5 hover:text-white transition-all">
+                <i class="fas fa-list-check opacity-50"></i> Planilla
+            </a>
+            <a href="crear-jugador.html" class="flex items-center gap-4 px-6 py-4 rounded-2xl text-white/60 font-bold uppercase text-[0.7rem] tracking-widest hover:bg-white/5 hover:text-white transition-all">
+                <i class="fas fa-user-plus opacity-50"></i> Crear Jugador
+            </a>
+            <a href="../ficha.html" class="flex items-center gap-4 px-6 py-4 rounded-2xl text-white/60 font-bold uppercase text-[0.7rem] tracking-widest hover:bg-white/5 hover:text-white transition-all">
+                <i class="fas fa-users-viewfinder opacity-50"></i> Jugadores
+            </a>
+            <a href="../partidos.html" class="flex items-center gap-4 px-6 py-4 rounded-2xl text-white/60 font-bold uppercase text-[0.7rem] tracking-widest hover:bg-white/5 hover:text-white transition-all">
+                <i class="fas fa-volleyball opacity-50"></i> Partidos
+            </a>
+            <a href="../analisis.html" class="flex items-center gap-4 px-6 py-4 rounded-2xl text-white/60 font-bold uppercase text-[0.7rem] tracking-widest hover:bg-white/5 hover:text-white transition-all">
+                <i class="fas fa-chart-mixed opacity-50"></i> Análisis
+            </a>
+            <a href="convocatorias.html" class="flex items-center gap-4 px-6 py-4 rounded-2xl text-white/60 font-bold uppercase text-[0.7rem] tracking-widest hover:bg-white/5 hover:text-white transition-all">
+                <i class="fas fa-bullhorn opacity-50"></i> Convocatorias
+            </a>
 
-            <div class="nav-section-label">Comunicación</div>
-            <a href="push.html" class="premium-nav-item"><i class="fas fa-paper-plane"></i> Notificaciones</a>
+            <div class="px-6 pt-6 pb-2 text-[0.6rem] font-black uppercase tracking-[0.3em] text-white/30 italic">Comunicación</div>
+            <a href="push.html" class="flex items-center gap-4 px-6 py-4 rounded-2xl text-white/60 font-bold uppercase text-[0.7rem] tracking-widest hover:bg-white/5 hover:text-white transition-all">
+                <i class="fas fa-paper-plane opacity-50"></i> Notificaciones
+            </a>
 
-            <div class="nav-section-label">Administración</div>
-            <a href="GestorDocumental.html" class="premium-nav-item"><i class="fas fa-box-archive"></i> Gestión Doc</a>
-            <a href="usuarios.html" class="premium-nav-item"><i class="fas fa-user-gear"></i> Usuarios</a>
-            <a href="crear-usuario.html" class="premium-nav-item"><i class="fas fa-shield-plus"></i> Nuevo Acceso</a>
-            <a href="rifa_diba.html" class="premium-nav-item"><i class="fas fa-ticket"></i> Rifas</a>
+            <div class="px-6 pt-6 pb-2 text-[0.6rem] font-black uppercase tracking-[0.3em] text-white/30 italic">Administración</div>
+            <a href="GestorDocumental.html" class="flex items-center gap-4 px-6 py-4 rounded-2xl text-white/60 font-bold uppercase text-[0.7rem] tracking-widest hover:bg-white/5 hover:text-white transition-all">
+                <i class="fas fa-box-archive opacity-50"></i> Gestión Doc
+            </a>
+            <a href="usuarios.html" class="flex items-center gap-4 px-6 py-4 rounded-2xl text-white/60 font-bold uppercase text-[0.7rem] tracking-widest hover:bg-white/5 hover:text-white transition-all">
+                <i class="fas fa-user-gear opacity-50"></i> Usuarios
+            </a>
+            <a href="rifa_diba.html" class="flex items-center gap-4 px-6 py-4 rounded-2xl text-white/60 font-bold uppercase text-[0.7rem] tracking-widest hover:bg-white/5 hover:text-white transition-all">
+                <i class="fas fa-ticket opacity-50"></i> Rifas
+            </a>
 
-            <div class="nav-section-label">Sistema</div>
-            <a href="../index.html" class="premium-nav-item"><i class="fas fa-external-link"></i> Ver Sitio</a>
+            <div class="px-6 pt-6 pb-2 text-[0.6rem] font-black uppercase tracking-[0.3em] text-white/30 italic">Sistema</div>
+            <a href="../index.html" class="flex items-center gap-4 px-6 py-4 rounded-2xl text-white/60 font-bold uppercase text-[0.7rem] tracking-widest hover:bg-white/5 hover:text-white transition-all">
+                <i class="fas fa-external-link opacity-50"></i> Ver Sitio
+            </a>
         </nav>
 
-        <div class="sidebar-footer">
-            <div class="user-chip">
-                <div class="user-avatar" id="sb-avatar" style="border: 2px solid rgba(255,255,255,0.1)">A</div>
-                <div style="min-width: 0;">
-                    <div class="user-name" id="sb-name" style="letter-spacing: 0.05em;">Administrador</div>
-                    <div class="user-role" id="sb-role" style="font-weight: 900; opacity: 0.5;">Admin</div>
+        <div class="absolute bottom-0 left-0 right-0 p-6 bg-navy-deep/80 backdrop-blur-md border-t border-white/5">
+            <div class="flex items-center gap-3 p-3 bg-white/5 rounded-2xl mb-4 border border-white/5">
+                <div class="w-10 h-10 rounded-xl bg-gold/10 flex items-center justify-center text-gold font-black italic border border-gold/20" id="sb-avatar">A</div>
+                <div class="min-w-0">
+                    <div class="text-[0.7rem] font-black text-white truncate italic tracking-tight" id="sb-name">Administrador</div>
+                    <div class="text-[0.55rem] font-bold text-gold uppercase tracking-widest" id="sb-role">Admin</div>
                 </div>
             </div>
-            <button class="btn-logout" id="logout-btn">
-                <i class="fas fa-power-off"></i> Salir del Sistema
+            <button class="w-full flex items-center justify-center gap-3 py-3 rounded-xl bg-red-500/10 text-red-400 text-[0.65rem] font-black uppercase tracking-[0.2em] hover:bg-red-500/20 transition-all border border-red-500/20" id="logout-btn">
+                <i class="fas fa-power-off"></i> Salir
             </button>
         </div>
     </aside>
-    <div class="sidebar-overlay" onclick="document.getElementById('sidebar').classList.remove('open')"></div>
+    <div class="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 hidden sidebar-overlay" id="sidebar-overlay" onclick="document.getElementById('sidebar').classList.remove('open'); document.getElementById('sidebar-overlay').classList.add('hidden')"></div>
 
     <!-- ══ MAIN ══ -->
-    <div class="main">
+    <div class="lg:ml-72 min-h-screen transition-all duration-500">
 
         <!-- Top Bar -->
-        <header class="topbar">
-            <button class="mobile-menu-btn" id="menu-btn">
+        <header class="sticky top-0 z-40 bg-navy-deep/80 backdrop-blur-xl border-b border-white/5 px-8 h-24 flex items-center justify-between">
+            <button class="lg:hidden text-white/50 hover:text-gold transition-colors text-xl" id="menu-btn" onclick="document.getElementById('sidebar').classList.add('open'); document.getElementById('sidebar-overlay').classList.remove('hidden')">
                 <i class="fas fa-bars-staggered" id="menu-icon"></i>
             </button>
             <div class="animate-fade-up">
-                <div class="page-title" style="letter-spacing: -0.05em;">DIBA <span style="font-weight: 400; font-style: normal; opacity: 0.6;">PANEL</span></div>
-                <div class="page-subtitle" style="letter-spacing: 0.3em;">SISTEMA DE GESTIÓN DEPORTIVA</div>
+                <div class="text-[0.65rem] font-black uppercase tracking-[0.4em] text-gold/60 mb-1">DIBA STATUS</div>
+                <div class="text-xl md:text-2xl font-black italic tracking-tight text-white uppercase">PANEL <span class="font-normal opacity-40">GENERAL</span></div>
             </div>
-            <div class="topbar-right">
-                <button id="theme-toggle" class="glass" style="padding: 0.5rem; width: 45px; height: 45px; border-radius: 14px; display: flex; align-items: center; justify-content: center; color: var(--gold);" title="Cambiar Tema">
+            <div class="flex items-center gap-4">
+                <button id="theme-toggle" class="w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-gold hover:bg-white/10 transition-all shadow-lg" title="Cambiar Tema">
                   <i id="theme-icon" class="fas fa-sparkles"></i>
                 </button>
-                <div class="topbar-time glass" id="clock" style="font-family: 'Montserrat'; font-weight: 800; letter-spacing: 0.1em;">--:--</div>
+                <div class="hidden md:flex h-12 items-center px-6 rounded-xl bg-navy-light/60 border border-white/5 text-white font-black italic tracking-widest text-sm shadow-inner" id="clock">--:--</div>
             </div>
         </header>
 
@@ -182,55 +191,66 @@
         <div class="content">
 
             <!-- Elite Match Hero -->
-            <div class="elite-match-hero animate-fade-up">
-                <div class="elite-match-info">
-                    <div class="elite-match-label">PRÓXIMO ENCUENTRO</div>
-                    <div class="elite-match-teams">
-                        DIBA FBC <span class="vs-badge">VS</span> <span id="next-opponent">RIVAL</span>
+            <div class="elite-match-hero bg-gradient-to-br from-navy-light to-navy-deep border border-gold/20 rounded-elite p-8 mb-8 relative overflow-hidden flex flex-col lg:flex-row items-center justify-between shadow-premium animate-fade-up">
+                <div class="elite-match-info relative z-10 w-full lg:w-auto">
+                    <div class="elite-match-label text-[0.75rem] font-black uppercase tracking-[0.4em] text-gold mb-4 flex items-center gap-4">
+                        PRÓXIMO ENCUENTRO
+                        <div class="flex-1 h-[1px] bg-gradient-to-r from-gold/40 to-transparent"></div>
                     </div>
-                    <div class="elite-match-meta">
-                        <span><i class="fas fa-calendar-star mr-2"></i> <span id="next-match-date">--/--</span></span>
-                        <span><i class="fas fa-location-dot mr-2"></i> <span id="next-match-venue">CANCHA</span></span>
-                        <span><i class="fas fa-clock-three mr-2"></i> <span id="next-match-time">00:00</span></span>
+                    <div class="elite-match-teams text-3xl md:text-5xl font-black italic text-white uppercase leading-none flex items-center gap-4 md:gap-8 tracking-tighter">
+                        DIBA FBC <span class="vs-badge text-xl md:text-2xl text-gold bg-gold/10 px-4 py-2 rounded-xl border border-gold/20">VS</span> <span id="next-opponent" class="text-white/90">RIVAL</span>
+                    </div>
+                    <div class="elite-match-meta mt-6 flex flex-wrap gap-6 text-[0.85rem] font-bold text-white/50 uppercase tracking-widest">
+                        <span class="flex items-center"><i class="fas fa-calendar-star text-gold/60 mr-2"></i> <span id="next-match-date">--/--</span></span>
+                        <span class="flex items-center"><i class="fas fa-location-dot text-gold/60 mr-2"></i> <span id="next-match-venue">CANCHA</span></span>
+                        <span class="flex items-center"><i class="fas fa-clock-three text-gold/60 mr-2"></i> <span id="next-match-time">00:00</span></span>
                     </div>
                 </div>
-                <div class="elite-countdown">
-                    <div class="countdown-val">04</div>
-                    <div class="countdown-label">DÍAS RESTANTES</div>
+                <div class="elite-countdown mt-8 lg:mt-0 bg-gold/10 border border-gold/30 p-6 md:p-8 rounded-[20px] text-center relative z-10 min-w-[160px] self-stretch lg:self-auto">
+                    <div class="countdown-val text-3xl md:text-4xl font-black text-white leading-none">04</div>
+                    <div class="countdown-label text-[0.65rem] font-black uppercase tracking-[0.2em] text-gold mt-2">DÍAS RESTANTES</div>
                 </div>
             </div>
 
-            <!-- KPI Grid -->
-            <div class="kpi-grid animate-fade-up">
-                <div class="premium-stat-card premium-shine">
-                    <div class="premium-stat-icon" style="background: rgba(var(--gold-rgb), 0.1);"><i class="fas fa-users-crown"></i></div>
-                    <div class="premium-stat-content">
-                        <div class="premium-stat-value" id="kpi-players">0</div>
-                        <div class="premium-stat-label">Jugadores Activos</div>
+            <!-- KPI Grid (Bootstrap Optimized) -->
+            <div class="row g-4 mb-10 animate-fade-up">
+                <div class="col-12 col-sm-6 col-lg-3">
+                    <div class="premium-stat-card premium-shine bg-navy-light/60 backdrop-blur-xl border border-white/5 p-6 sm:p-8 rounded-elite relative overflow-hidden transition-all duration-500 hover:-translate-y-2 hover:border-gold/30">
+                        <div class="w-14 h-14 rounded-2xl flex items-center justify-center text-xl bg-gold/10 border border-gold/20 text-gold mb-6 relative z-10"><i class="fas fa-users-crown"></i></div>
+                        <div class="relative z-10">
+                            <div class="text-4xl font-black text-white italic mb-1" id="kpi-players">0</div>
+                            <div class="text-[0.65rem] font-black uppercase tracking-widest text-white/40">Jugadores Activos</div>
+                        </div>
                     </div>
                 </div>
 
-                <div class="premium-stat-card premium-shine">
-                    <div class="premium-stat-icon" style="background: rgba(var(--gold-rgb), 0.05); color:#fff"><i class="fas fa-soccer-ball"></i></div>
-                    <div class="premium-stat-content">
-                        <div class="premium-stat-value" id="kpi-matches">0</div>
-                        <div class="premium-stat-label">Partidos Temporada</div>
+                <div class="col-12 col-sm-6 col-lg-3">
+                    <div class="premium-stat-card premium-shine bg-navy-light/60 backdrop-blur-xl border border-white/5 p-6 sm:p-8 rounded-elite relative overflow-hidden transition-all duration-500 hover:-translate-y-2 hover:border-gold/30">
+                        <div class="w-14 h-14 rounded-2xl flex items-center justify-center text-xl bg-gold/10/50 border border-gold/20 text-white mb-6 relative z-10"><i class="fas fa-soccer-ball"></i></div>
+                        <div class="relative z-10">
+                            <div class="text-4xl font-black text-white italic mb-1" id="kpi-matches">0</div>
+                            <div class="text-[0.65rem] font-black uppercase tracking-widest text-white/40">Partidos Temporada</div>
+                        </div>
                     </div>
                 </div>
 
-                <div class="premium-stat-card premium-shine">
-                    <div class="premium-stat-icon" style="background: rgba(var(--gold-rgb), 0.1);"><i class="fas fa-medal"></i></div>
-                    <div class="premium-stat-content">
-                        <div class="premium-stat-value" id="kpi-attendance">0%</div>
-                        <div class="premium-stat-label">Asistencia Prom.</div>
+                <div class="col-12 col-sm-6 col-lg-3">
+                    <div class="premium-stat-card premium-shine bg-navy-light/60 backdrop-blur-xl border border-white/5 p-6 sm:p-8 rounded-elite relative overflow-hidden transition-all duration-500 hover:-translate-y-2 hover:border-gold/30">
+                        <div class="w-14 h-14 rounded-2xl flex items-center justify-center text-xl bg-gold/10 border border-gold/20 text-gold mb-6 relative z-10"><i class="fas fa-medal"></i></div>
+                        <div class="relative z-10">
+                            <div class="text-4xl font-black text-white italic mb-1" id="kpi-attendance">0%</div>
+                            <div class="text-[0.65rem] font-black uppercase tracking-widest text-white/40">Asistencia Prom.</div>
+                        </div>
                     </div>
                 </div>
 
-                <div class="premium-stat-card premium-shine">
-                    <div class="premium-stat-icon" style="background: rgba(255, 255, 255, 0.05); color:#fff"><i class="fas fa-badge-check"></i></div>
-                    <div class="premium-stat-content">
-                        <div class="premium-stat-value" id="kpi-pending">0</div>
-                        <div class="premium-stat-label">Gestiones OK</div>
+                <div class="col-12 col-sm-6 col-lg-3">
+                    <div class="premium-stat-card premium-shine bg-navy-light/60 backdrop-blur-xl border border-white/5 p-6 sm:p-8 rounded-elite relative overflow-hidden transition-all duration-500 hover:-translate-y-2 hover:border-gold/30">
+                        <div class="w-14 h-14 rounded-2xl flex items-center justify-center text-xl bg-white/5 border border-white/10 text-white mb-6 relative z-10"><i class="fas fa-badge-check"></i></div>
+                        <div class="relative z-10">
+                            <div class="text-4xl font-black text-white italic mb-1" id="kpi-pending">0</div>
+                            <div class="text-[0.65rem] font-black uppercase tracking-widest text-white/40">Gestiones OK</div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -239,83 +259,71 @@
             <div class="row-2">
 
                 <!-- Accesos rápidos -->
-                <div class="glass-premium animate-fade-up" style="animation-delay: 0.1s">
-                    <div class="premium-p-header">
-                        <h3 class="premium-p-title">Accesos Rápidos</h3>
-                        <span class="premium-p-badge">Admin Panel</span>
+                <div class="bg-navy-light/40 backdrop-blur-xl border border-white/5 rounded-elite p-8 shadow-premium animate-fade-up" style="animation-delay: 0.1s">
+                    <div class="flex items-center justify-between mb-8">
+                        <h3 class="flex items-center gap-3 text-[0.7rem] font-black italic uppercase tracking-[0.2em] text-white">
+                            <div class="w-1.5 h-6 bg-gold rounded-full shadow-[0_0_15px_rgba(255,215,0,0.4)]"></div>
+                            Accesos Rápidos
+                        </h3>
+                        <span class="px-3 py-1 bg-gold/10 text-gold text-[0.6rem] font-black uppercase rounded-full border border-gold/20 tracking-widest">Admin Panel</span>
                     </div>
-                    <div class="panel-body">
-                        <div class="quick-grid">
-                            <a href="planilla.html" class="quick-btn premium-shine">
-                                <div class="quick-btn-icon" style="background:rgba(255,204,0,.12);color:var(--gold)"><i
-                                        class="fas fa-clipboard-list"></i></div>
-                                <div>
-                                    <div class="quick-btn-label">Planilla</div>
-                                    <div class="quick-btn-sub">Control asistencia</div>
-                                </div>
-                            </a>
-                            <a href="GestorDocumental.html" class="quick-btn premium-shine">
-                                <div class="quick-btn-icon" style="background:rgba(59,130,246,.12);color:#60a5fa"><i
-                                        class="fas fa-folder-open"></i></div>
-                                <div>
-                                    <div class="quick-btn-label">Gestor</div>
-                                    <div class="quick-btn-sub">Documentos</div>
-                                </div>
-                            </a>
-                            <a href="usuarios.html" class="quick-btn premium-shine">
-                                <div class="quick-btn-icon" style="background:rgba(168,85,247,.12);color:#c084fc"><i
-                                        class="fas fa-user-cog"></i></div>
-                                <div>
-                                    <div class="quick-btn-label">Usuarios</div>
-                                    <div class="quick-btn-sub">Gestión accesos</div>
-                                </div>
-                            </a>
-                            <a href="crear-usuario.html" class="quick-btn premium-shine">
-                                <div class="quick-btn-icon" style="background:rgba(34,197,94,.12);color:#4ade80"><i
-                                        class="fas fa-user-plus"></i></div>
-                                <div>
-                                    <div class="quick-btn-label">Nuevo Usuario</div>
-                                    <div class="quick-btn-sub">Crear acceso</div>
-                                </div>
-                            </a>
-                            <a href="rifa_diba.html" class="quick-btn premium-shine">
-                                <div class="quick-btn-icon" style="background:rgba(251,146,60,.12);color:#fb923c"><i
-                                        class="fas fa-ticket-alt"></i></div>
-                                <div>
-                                    <div class="quick-btn-label">Rifas</div>
-                                    <div class="quick-btn-sub">Control boletas</div>
-                                </div>
-                            </a>
-                            <a href="partidos.html" class="quick-btn premium-shine">
-                                <div class="quick-btn-icon" style="background:rgba(239,68,68,.12);color:#fb7185"><i
-                                        class="fas fa-futbol"></i></div>
-                                <div>
-                                    <div class="quick-btn-label">Partidos</div>
-                                    <div class="quick-btn-sub">Gestionar eventos</div>
-                                </div>
-                            </a>
-                            <a href="../analisis.html" class="quick-btn premium-shine">
-                                <div class="quick-btn-icon" style="background:rgba(20,184,166,.12);color:#2dd4bf"><i
-                                        class="fas fa-chart-line"></i></div>
-                                <div>
-                                    <div class="quick-btn-label">Análisis</div>
-                                    <div class="quick-btn-sub">Stats equipo</div>
-                                </div>
-                            </a>
-                        </div>
+                    <div class="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                        <a href="planilla.html" class="flex items-center gap-4 p-4 bg-white/[0.02] border border-white/5 rounded-[20px] transition-all duration-500 hover:bg-white/[0.06] hover:border-gold/20 hover:-translate-y-1 group">
+                            <div class="w-12 h-12 flex-shrink-0 rounded-xl flex items-center justify-center text-lg bg-gold/10 text-gold group-hover:scale-110 group-hover:rotate-6 transition-all duration-500"><i class="fas fa-clipboard-list"></i></div>
+                            <div class="min-w-0">
+                                <div class="text-[0.8rem] font-black text-white uppercase tracking-tight group-hover:text-gold transition-colors">Planilla</div>
+                                <div class="text-[0.6rem] font-bold text-white/40 uppercase truncate">Asistencia</div>
+                            </div>
+                        </a>
+                        <a href="GestorDocumental.html" class="flex items-center gap-4 p-4 bg-white/[0.02] border border-white/5 rounded-[20px] transition-all duration-500 hover:bg-white/[0.06] hover:border-gold/20 hover:-translate-y-1 group">
+                            <div class="w-12 h-12 flex-shrink-0 rounded-xl flex items-center justify-center text-lg bg-blue-500/10 text-blue-400 group-hover:scale-110 group-hover:rotate-6 transition-all duration-500"><i class="fas fa-folder-open"></i></div>
+                            <div class="min-w-0">
+                                <div class="text-[0.8rem] font-black text-white uppercase tracking-tight group-hover:text-blue-400 transition-colors">Gestor</div>
+                                <div class="text-[0.6rem] font-bold text-white/40 uppercase truncate">Documentos</div>
+                            </div>
+                        </a>
+                        <a href="usuarios.html" class="flex items-center gap-4 p-4 bg-white/[0.02] border border-white/5 rounded-[20px] transition-all duration-500 hover:bg-white/[0.06] hover:border-gold/20 hover:-translate-y-1 group">
+                            <div class="w-12 h-12 flex-shrink-0 rounded-xl flex items-center justify-center text-lg bg-purple-500/10 text-purple-400 group-hover:scale-110 group-hover:rotate-6 transition-all duration-500"><i class="fas fa-user-cog"></i></div>
+                            <div class="min-w-0">
+                                <div class="text-[0.8rem] font-black text-white uppercase tracking-tight group-hover:text-purple-400 transition-colors">Usuarios</div>
+                                <div class="text-[0.6rem] font-bold text-white/40 uppercase truncate">Gestión</div>
+                            </div>
+                        </a>
+                        <a href="crear-usuario.html" class="flex items-center gap-4 p-4 bg-white/[0.02] border border-white/5 rounded-[20px] transition-all duration-500 hover:bg-white/[0.06] hover:border-gold/20 hover:-translate-y-1 group">
+                            <div class="w-12 h-12 flex-shrink-0 rounded-xl flex items-center justify-center text-lg bg-green-500/10 text-green-400 group-hover:scale-110 group-hover:rotate-6 transition-all duration-500"><i class="fas fa-user-plus"></i></div>
+                            <div class="min-w-0">
+                                <div class="text-[0.8rem] font-black text-white uppercase tracking-tight group-hover:text-green-400 transition-colors">Nuevo</div>
+                                <div class="text-[0.6rem] font-bold text-white/40 uppercase truncate">Acceso</div>
+                            </div>
+                        </a>
+                        <a href="rifa_diba.html" class="flex items-center gap-4 p-4 bg-white/[0.02] border border-white/5 rounded-[20px] transition-all duration-500 hover:bg-white/[0.06] hover:border-gold/20 hover:-translate-y-1 group">
+                            <div class="w-12 h-12 flex-shrink-0 rounded-xl flex items-center justify-center text-lg bg-orange-500/10 text-orange-400 group-hover:scale-110 group-hover:rotate-6 transition-all duration-500"><i class="fas fa-ticket-alt"></i></div>
+                            <div class="min-w-0">
+                                <div class="text-[0.8rem] font-black text-white uppercase tracking-tight group-hover:text-orange-400 transition-colors">Rifas</div>
+                                <div class="text-[0.6rem] font-bold text-white/40 uppercase truncate">Boletas</div>
+                            </div>
+                        </a>
+                        <a href="partidos.html" class="flex items-center gap-4 p-4 bg-white/[0.02] border border-white/5 rounded-[20px] transition-all duration-500 hover:bg-white/[0.06] hover:border-gold/20 hover:-translate-y-1 group">
+                            <div class="w-12 h-12 flex-shrink-0 rounded-xl flex items-center justify-center text-lg bg-red-500/10 text-red-400 group-hover:scale-110 group-hover:rotate-6 transition-all duration-500"><i class="fas fa-futbol"></i></div>
+                            <div class="min-w-0">
+                                <div class="text-[0.8rem] font-black text-white uppercase tracking-tight group-hover:text-red-400 transition-colors">Partidos</div>
+                                <div class="text-[0.6rem] font-bold text-white/40 uppercase truncate">Eventos</div>
+                            </div>
+                        </a>
                     </div>
                 </div>
 
                 <!-- Actividad reciente -->
-                <div class="glass-premium animate-fade-up" style="animation-delay: 0.2s">
-                    <div class="premium-p-header">
-                        <h3 class="premium-p-title">Actividad Reciente</h3>
+                <div class="bg-navy-light/40 backdrop-blur-xl border border-white/5 rounded-elite p-8 shadow-premium animate-fade-up" style="animation-delay: 0.2s">
+                    <div class="flex items-center justify-between mb-8">
+                        <h3 class="flex items-center gap-3 text-[0.7rem] font-black italic uppercase tracking-[0.2em] text-white">
+                            <div class="w-1.5 h-6 bg-gold rounded-full shadow-[0_0_15px_rgba(255,215,0,0.4)]"></div>
+                            Actividad Reciente
+                        </h3>
                     </div>
                     
-                    <div class="panel-body">
-                        <div class="premium-timeline" id="activity-list">
-                            <div class="flex justify-center py-10"><i class="fas fa-circle-notch animate-spin text-gold"></i></div>
-                        </div>
+                    <div class="premium-timeline space-y-4" id="activity-list">
+                        <div class="flex justify-center py-10"><i class="fas fa-circle-notch animate-spin text-gold"></i></div>
                     </div>
                 </div>
                 <!-- Espacio para futuros widgets de administración -->
@@ -329,51 +337,48 @@
             </div>
 
             <!-- Row 3: Próximos Partidos -->
-            <div class="glass-premium p-8 rounded-[2.5rem] animate-fade-up mb-8" id="matches-panel" style="animation-delay: 0.3s">
-                <div class="flex items-center justify-between mb-8">
-                    <h3 class="text-xs font-black text-white uppercase italic tracking-[0.3em] flex items-center gap-3">
-                        <span class="w-1.5 h-6 bg-emerald-500 rounded-full"></span>
+            <div class="bg-navy-light/40 backdrop-blur-xl border border-white/5 rounded-elite p-8 mb-8 shadow-premium animate-fade-up" id="matches-panel" style="animation-delay: 0.3s">
+                <div class="flex items-center justify-between mb-10">
+                    <h3 class="flex items-center gap-3 text-[0.75rem] font-black italic uppercase tracking-[0.3em] text-white">
+                        <div class="w-1.5 h-6 bg-emerald-500 rounded-full shadow-[0_0_15px_rgba(16,185,129,0.4)]"></div>
                         Próximos Partidos
                     </h3>
-                    <a href="partidos.html" class="text-[10px] font-black text-gold uppercase tracking-widest hover:text-white transition-colors">Gestionar →</a>
+                    <a href="partidos.html" class="text-[0.65rem] font-black text-gold uppercase tracking-[0.2em] hover:text-white transition-all hover:scale-105">Gestionar →</a>
                 </div>
-                <div class="panel-body">
-                    <div id="matches-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                        <!-- Matches will be rendered here -->
-                        <div class="empty-state">
-                            <i class="fas fa-search"></i>
-                            <p>Buscando encuentros...</p>
-                        </div>
+                <div id="matches-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="flex flex-col items-center justify-center py-10 opacity-30 gap-4">
+                        <i class="fas fa-search-nodes text-3xl animate-pulse"></i>
+                        <p class="text-[10px] font-black uppercase tracking-widest">Buscando encuentros...</p>
                     </div>
                 </div>
             </div>
 
             <!-- Asistencia última sesión -->
-            <div class="panel glass animate-fade-up" id="attendance-panel" style="display:none; animation-delay: 0.4s">
-                <div class="panel-header">
-                    <span class="panel-title"><i class="fas fa-chart-pie"
-                            style="color:var(--gold);margin-right:.5rem"></i>Asistencia Última Sesión</span>
-                    <a href="planilla.html"
-                        style="font-size:.7rem;font-weight:800;color:var(--gold);text-decoration:none;text-transform:uppercase;letter-spacing:.1em">Ver
-                        Planilla →</a>
+            <div class="bg-navy-light/40 backdrop-blur-xl border border-white/5 rounded-elite p-8 mb-10 shadow-premium animate-fade-up" id="attendance-panel" style="display:none; animation-delay: 0.4s">
+                <div class="flex items-center justify-between mb-8">
+                    <h3 class="flex items-center gap-3 text-[0.75rem] font-black italic uppercase tracking-[0.3em] text-white">
+                        <div class="w-1.5 h-6 bg-gold rounded-full shadow-[0_0_15px_rgba(255,215,0,0.4)]"></div>
+                        Asistencia Última Sesión
+                    </h3>
+                    <a href="planilla.html" class="text-[0.65rem] font-black text-gold uppercase tracking-[0.2em] hover:text-white transition-all hover:scale-105">Ver Planilla →</a>
                 </div>
-                <div class="panel-body">
-                    <div class="attendance-labels">
-                        <div class="att-chip">
-                            <div class="att-dot" style="background:#4ade80"></div> <span id="att-p">0 Presentes</span>
-                        </div>
-                        <div class="att-chip">
-                            <div class="att-dot" style="background:#fb7185"></div> <span id="att-a">0 Ausentes</span>
-                        </div>
-                        <div class="att-chip">
-                            <div class="att-dot" style="background:#facc15"></div> <span id="att-e">0 Excusas</span>
-                        </div>
+                
+                <div class="flex flex-wrap gap-4 mb-6">
+                    <div class="flex items-center gap-3 px-4 py-2 bg-green-500/10 border border-green-500/20 rounded-full text-[0.65rem] font-black text-green-400 uppercase tracking-widest">
+                        <div class="w-2 h-2 rounded-full bg-green-400 shadow-[0_0_8px_rgba(74,222,128,0.5)]"></div> <span id="att-p">0 Presentes</span>
                     </div>
-                    <div class="bar-track">
-                        <div class="bar-seg" id="bar-p" style="background:#4ade80;width:0%"></div>
-                        <div class="bar-seg" id="bar-a" style="background:#fb7185;width:0%;margin-left:2px"></div>
-                        <div class="bar-seg" id="bar-e" style="background:#facc15;width:0%;margin-left:2px"></div>
+                    <div class="flex items-center gap-3 px-4 py-2 bg-red-500/10 border border-red-500/20 rounded-full text-[0.65rem] font-black text-red-400 uppercase tracking-widest">
+                        <div class="w-2 h-2 rounded-full bg-red-400 shadow-[0_0_8px_rgba(251,113,133,0.5)]"></div> <span id="att-a">0 Ausentes</span>
                     </div>
+                    <div class="flex items-center gap-3 px-4 py-2 bg-yellow-500/10 border border-yellow-500/20 rounded-full text-[0.65rem] font-black text-yellow-400 uppercase tracking-widest">
+                        <div class="w-2 h-2 rounded-full bg-yellow-400 shadow-[0_0_8px_rgba(250,204,21,0.5)]"></div> <span id="att-e">0 Excusas</span>
+                    </div>
+                </div>
+
+                <div class="h-4 w-full bg-white/5 rounded-full overflow-hidden flex shadow-inner border border-white/5">
+                    <div class="h-full bg-green-500 shadow-[0_0_15px_rgba(74,222,128,0.3)] transition-all duration-1000 ease-out" id="bar-p" style="width:0%"></div>
+                    <div class="h-full bg-red-500 shadow-[0_0_15px_rgba(251,113,133,0.3)] transition-all duration-1000 ease-out border-l border-navy-deep/20" id="bar-a" style="width:0%"></div>
+                    <div class="h-full bg-yellow-500 shadow-[0_0_15px_rgba(250,204,21,0.3)] transition-all duration-1000 ease-out border-l border-navy-deep/20" id="bar-e" style="width:0%"></div>
                 </div>
             </div>
 
@@ -574,24 +579,28 @@
         function renderMatches(matches) {
             const container = document.getElementById('matches-list');
             if (!matches || matches.length === 0) {
-                container.innerHTML = `<div class="empty-state"><i class="fas fa-futbol"></i><p>No hay partidos programados</p></div>`;
+                container.innerHTML = `<div class="col-span-full flex flex-col items-center justify-center py-20 opacity-20"><i class="fas fa-futbol text-4xl mb-4"></i><p class="text-[10px] font-black uppercase tracking-widest">No hay partidos programados</p></div>`;
                 return;
             }
 
             container.innerHTML = matches.map(m => `
-                <div style="background:var(--dark3); border:1px solid var(--border); border-radius:14px; padding:1.2rem; display:flex; flex-direction:column; gap:0.5rem">
-                    <div style="display:flex; justify-content:space-between; align-items:center">
-                        <span style="font-size:0.6rem; font-weight:800; color:var(--gold); text-transform:uppercase">${m.categoria}</span>
-                        <span style="font-size:0.6rem; color:var(--slate)">${new Date(m.fecha).toLocaleDateString()}</span>
+                <div class="bg-white/[0.03] border border-white/5 rounded-[20px] p-6 flex flex-col gap-4 transition-all duration-500 hover:bg-white/[0.06] hover:border-gold/20 hover:-translate-y-1 group">
+                    <div class="flex justify-between items-center">
+                        <span class="text-[0.6rem] font-black text-gold uppercase tracking-[0.2em] px-3 py-1 bg-gold/10 rounded-full border border-gold/10">${m.categoria}</span>
+                        <span class="text-[0.6rem] font-bold text-white/30 uppercase tracking-widest">${new Date(m.fecha).toLocaleDateString()}</span>
                     </div>
-                    <div style="font-size:0.85rem; font-weight:900; font-style:italic; text-transform:uppercase; display:flex; align-items:center; gap:0.5rem">
-                        <span>${m.equipolocal}</span>
-                        <span style="color:var(--gold)">VS</span>
-                        <span>${m.equipovisitante}</span>
+                    <div class="text-[0.9rem] font-black italic text-white uppercase flex items-center gap-3 tracking-tighter">
+                        <span class="group-hover:text-gold transition-colors">${m.equipolocal}</span>
+                        <span class="text-[0.7rem] text-gold/40 not-italic font-black">VS</span>
+                        <span class="group-hover:text-gold transition-colors">${m.equipovisitante}</span>
                     </div>
-                    <div style="font-size:0.65rem; color:var(--slate); display:flex; flex-direction:column; gap:0.2rem">
-                        <span><i class="fas fa-clock" style="margin-right:0.3rem"></i> ${m.hora}</span>
-                        <span><i class="fas fa-map-marker-alt" style="margin-right:0.3rem"></i> ${m.Cancha}</span>
+                    <div class="pt-4 border-t border-white/5 flex flex-col gap-2">
+                        <div class="flex items-center gap-3 text-[0.65rem] font-bold text-white/40 uppercase tracking-widest">
+                            <i class="fas fa-clock text-gold/40"></i> ${m.hora}
+                        </div>
+                        <div class="flex items-center gap-3 text-[0.65rem] font-bold text-white/40 uppercase tracking-widest">
+                            <i class="fas fa-location-dot text-gold/40"></i> ${m.Cancha}
+                        </div>
                     </div>
                 </div>
             `).join('');
@@ -600,20 +609,21 @@
         function renderRecentActivity(activities) {
             const list = document.getElementById('activity-list');
             if (!activities || activities.length === 0) {
-                list.innerHTML = `<div class="text-center py-10 opacity-30"><i class="fas fa-inbox text-2xl mb-2"></i><p class="text-[10px] uppercase font-black tracking-widest">Sin actividad reciente</p></div>`;
+                list.innerHTML = `<div class="text-center py-10 opacity-20 italic text-[10px] uppercase font-black tracking-widest">Sin actividad reciente</div>`;
                 return;
             }
 
             list.innerHTML = activities.map(act => {
                 const timeStr = act.time.toLocaleDateString('es-CO', { day: '2-digit', month: 'short' });
                 return `
-                  <div class="premium-timeline-item">
-                    <div class="premium-timeline-content">
-                      <div class="flex justify-between items-start mb-2">
-                        <div class="text-[11px] font-black text-gold uppercase italic tracking-tight">${act.title}</div>
-                        <div class="text-[9px] font-bold text-slate-500 uppercase">${timeStr}</div>
+                  <div class="relative pl-8 pb-6 border-l border-white/5 last:border-0 last:pb-0">
+                    <div class="absolute left-[-5px] top-0 w-2.5 h-2.5 rounded-full bg-gold shadow-[0_0_10px_rgba(255,215,0,0.4)]"></div>
+                    <div class="bg-white/[0.02] border border-white/5 p-4 rounded-xl transition-all duration-300 hover:bg-white/[0.04] hover:border-gold/10">
+                      <div class="flex justify-between items-start mb-1">
+                        <div class="text-[0.7rem] font-black text-gold uppercase italic tracking-tight">${act.title}</div>
+                        <div class="text-[0.55rem] font-bold text-white/30 uppercase tracking-widest">${timeStr}</div>
                       </div>
-                      <div class="text-[10px] text-slate-300 font-medium leading-relaxed">${act.subtitle}</div>
+                      <div class="text-[0.65rem] text-white/50 font-medium leading-relaxed uppercase tracking-wider">${act.subtitle}</div>
                     </div>
                   </div>`;
             }).join('');

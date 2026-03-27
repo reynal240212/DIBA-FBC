@@ -101,7 +101,7 @@ function getEscudoUrl(url, equipoNombre) {
 // ──────────────────────────────────────────────────────────────────────────────
 function crearTarjetaPartido(p) {
   const div = document.createElement('div');
-  div.className = 'match-card animate__animated animate__fadeInUp';
+  div.className = 'col-12 col-md-6 col-lg-4 animate__animated animate__fadeInUp';
 
   const partes = (p.resultado || '').split(/[-:]/).map(x => x.trim());
   const golesLocal = partes[0] || '—';
@@ -109,76 +109,78 @@ function crearTarjetaPartido(p) {
   const tieneResult = partes.length >= 2 && partes[0] !== '' && partes[1] !== '';
 
   div.innerHTML = `
-    <!-- Cabecera equipos -->
-    <div class="p-5">
-      <div class="flex items-center justify-between mb-3 text-[10px] uppercase font-black tracking-widest text-amber-500/80">
-        <span>${p.descripcion || 'Competición'}</span>
-        <span class="bg-amber-500/10 px-2 py-0.5 rounded-full">CAT. ${p.categoria || 'GENERAL'}</span>
-      </div>
-      
-      <div class="flex items-center justify-between gap-4">
-        <!-- Local -->
-        <div class="flex flex-col items-center w-1/3 text-center">
-          <img src="${getEscudoUrl(p.escudo_local || p.escudo, p.equipolocal)}" alt="${p.equipolocal}" class="w-12 h-12 object-contain mb-2 img-drop-shadow" onerror="this.src='images/ESCUDO.png'">
-          <span class="text-white font-bold text-xs truncate w-full">${p.equipolocal || 'DIBA FBC'}</span>
+    <div class="match-card h-full">
+      <!-- Cabecera equipos -->
+      <div class="p-5">
+        <div class="flex items-center justify-between mb-3 text-[10px] uppercase font-black tracking-widest text-amber-500/80">
+          <span>${p.descripcion || 'Competición'}</span>
+          <span class="bg-amber-500/10 px-2 py-0.5 rounded-full">CAT. ${p.categoria || 'GENERAL'}</span>
         </div>
+        
+        <div class="flex items-center justify-between gap-4">
+          <!-- Local -->
+          <div class="flex flex-col items-center w-1/3 text-center">
+            <img src="${getEscudoUrl(p.escudo_local || p.escudo, p.equipolocal)}" alt="${p.equipolocal}" class="w-12 h-12 object-contain mb-2 img-drop-shadow" onerror="this.src='images/ESCUDO.png'">
+            <span class="text-white font-bold text-xs truncate w-full">${p.equipolocal || 'DIBA FBC'}</span>
+          </div>
 
-        <!-- Score/VS -->
-        <div class="flex flex-col items-center justify-center w-1/3">
-           ${tieneResult 
-             ? `<span class="match-score font-black text-2xl tracking-tight text-white">${golesLocal} – ${golesVisitante}</span>`
-             : `<span class="vs-badge text-amber-500 font-black">VS</span>`
-           }
-            <div class="mt-2 text-center">
-             ${badgeResultado(p)}
-            </div>
+          <!-- Score/VS -->
+          <div class="flex flex-col items-center justify-center w-1/3">
+             ${tieneResult 
+               ? `<span class="match-score font-black text-2xl tracking-tight text-white">${golesLocal} – ${golesVisitante}</span>`
+               : `<span class="vs-badge text-amber-500 font-black">VS</span>`
+             }
+              <div class="mt-2 text-center">
+               ${badgeResultado(p)}
+              </div>
+          </div>
+
+          <!-- Visitante -->
+          <div class="flex flex-col items-center w-1/3 text-center">
+            <img src="${getEscudoUrl(p.escudo_visitante, p.equipovisitante)}" 
+                 alt="${p.equipovisitante}" 
+                 class="w-12 h-12 object-contain mb-2 img-drop-shadow" 
+                 onerror="this.src='${getEscudoUrl(null, p.equipovisitante)}'">
+            <span class="text-white font-bold text-xs truncate w-full">${p.equipovisitante || 'Visitante'}</span>
+          </div>
         </div>
+      </div>
 
-        <!-- Visitante -->
-        <div class="flex flex-col items-center w-1/3 text-center">
-          <img src="${getEscudoUrl(p.escudo_visitante, p.equipovisitante)}" 
-               alt="${p.equipovisitante}" 
-               class="w-12 h-12 object-contain mb-2 img-drop-shadow" 
-               onerror="this.src='${getEscudoUrl(null, p.equipovisitante)}'">
-          <span class="text-white font-bold text-xs truncate w-full">${p.equipovisitante || 'Visitante'}</span>
+      <!-- Detalles -->
+      <div class="border-t border-slate-800 px-5 py-4 grid grid-cols-2 gap-3 text-xs text-slate-400">
+        <div class="flex items-center gap-2">
+          <i class="fas fa-calendar-alt text-amber-400 w-4 text-center"></i>
+          <span>${formatearFecha(p.fecha)}</span>
         </div>
+        <div class="flex items-center gap-2">
+          <i class="fas fa-clock text-amber-400 w-4 text-center"></i>
+          <span>${p.hora || 'Sin hora'}</span>
+        </div>
+        <div class="flex items-center gap-2 col-span-2">
+          <i class="fas fa-map-marker-alt text-red-400 w-4 text-center"></i>
+          <span>${p.Cancha || 'No especificada'}</span>
+        </div>
+        ${p.descripcion ? `
+        <div class="flex items-start gap-2 col-span-2">
+          <i class="fas fa-align-left text-sky-400 w-4 text-center mt-0.5"></i>
+          <span class="text-slate-300">${p.descripcion}</span>
+        </div>` : ''}
+        ${p.uniforme ? `
+        <div class="flex items-center gap-2">
+          <i class="fas fa-tshirt text-purple-400 w-4 text-center"></i>
+          <span>Uniforme: ${p.uniforme}</span>
+        </div>` : ''}
+        ${p.valor ? `
+        <div class="flex items-center gap-2">
+          <i class="fas fa-dollar-sign text-green-400 w-4 text-center"></i>
+          <span>$${p.valor}</span>
+        </div>` : ''}
+        ${p.observaciones ? `
+        <div class="flex items-start gap-2 col-span-2">
+          <i class="fas fa-comment-dots text-indigo-400 w-4 text-center mt-0.5"></i>
+          <span>${p.observaciones}</span>
+        </div>` : ''}
       </div>
-    </div>
-
-    <!-- Detalles -->
-    <div class="border-t border-slate-800 px-5 py-4 grid grid-cols-2 gap-3 text-xs text-slate-400">
-      <div class="flex items-center gap-2">
-        <i class="fas fa-calendar-alt text-amber-400 w-4 text-center"></i>
-        <span>${formatearFecha(p.fecha)}</span>
-      </div>
-      <div class="flex items-center gap-2">
-        <i class="fas fa-clock text-amber-400 w-4 text-center"></i>
-        <span>${p.hora || 'Sin hora'}</span>
-      </div>
-      <div class="flex items-center gap-2 col-span-2">
-        <i class="fas fa-map-marker-alt text-red-400 w-4 text-center"></i>
-        <span>${p.Cancha || 'No especificada'}</span>
-      </div>
-      ${p.descripcion ? `
-      <div class="flex items-start gap-2 col-span-2">
-        <i class="fas fa-align-left text-sky-400 w-4 text-center mt-0.5"></i>
-        <span class="text-slate-300">${p.descripcion}</span>
-      </div>` : ''}
-      ${p.uniforme ? `
-      <div class="flex items-center gap-2">
-        <i class="fas fa-tshirt text-purple-400 w-4 text-center"></i>
-        <span>Uniforme: ${p.uniforme}</span>
-      </div>` : ''}
-      ${p.valor ? `
-      <div class="flex items-center gap-2">
-        <i class="fas fa-dollar-sign text-green-400 w-4 text-center"></i>
-        <span>$${p.valor}</span>
-      </div>` : ''}
-      ${p.observaciones ? `
-      <div class="flex items-start gap-2 col-span-2">
-        <i class="fas fa-comment-dots text-indigo-400 w-4 text-center mt-0.5"></i>
-        <span>${p.observaciones}</span>
-      </div>` : ''}
     </div>
   `;
   return div;
@@ -189,44 +191,46 @@ function crearTarjetaPartido(p) {
 // ──────────────────────────────────────────────────────────────────────────────
 function crearTarjetaEntrenamiento(e) {
   const div = document.createElement('div');
-  div.className = 'match-card animate__animated animate__fadeInUp';
+  div.className = 'col-12 col-md-6 col-lg-4 animate__animated animate__fadeInUp';
   div.style.borderColor = 'rgba(74,222,128,0.15)';
 
   div.innerHTML = `
-    <div class="p-5">
-      <div class="flex items-center gap-3">
-        <div class="w-10 h-10 rounded-full bg-green-500/10 flex items-center justify-center flex-shrink-0">
-          <i class="fas fa-dumbbell text-green-400"></i>
+    <div class="match-card h-full">
+      <div class="p-5">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-full bg-green-500/10 flex items-center justify-center flex-shrink-0">
+            <i class="fas fa-dumbbell text-green-400"></i>
+          </div>
+          <div>
+            <p class="font-black text-white text-sm">${e.titulo || 'Entrenamiento'}</p>
+            <p class="text-xs text-green-400 mt-0.5">Sesión de entrenamiento</p>
+          </div>
         </div>
-        <div>
-          <p class="font-black text-white text-sm">${e.titulo || 'Entrenamiento'}</p>
-          <p class="text-xs text-green-400 mt-0.5">Sesión de entrenamiento</p>
+      </div>
+      <div class="border-t border-slate-800 px-5 py-4 grid grid-cols-2 gap-3 text-xs text-slate-400">
+        <div class="flex items-center gap-2">
+          <i class="fas fa-calendar-alt text-green-400 w-4 text-center"></i>
+          <span>${formatearFecha(e.fecha)}</span>
         </div>
+        <div class="flex items-center gap-2">
+          <i class="fas fa-clock text-green-400 w-4 text-center"></i>
+          <span>${e.hora || 'Sin hora'}</span>
+        </div>
+        <div class="flex items-center gap-2 col-span-2">
+          <i class="fas fa-map-marker-alt text-red-400 w-4 text-center"></i>
+          <span>${e.lugar || 'No especificado'}</span>
+        </div>
+        ${e.descripcion ? `
+        <div class="flex items-start gap-2 col-span-2">
+          <i class="fas fa-align-left text-sky-400 w-4 text-center mt-0.5"></i>
+          <span class="text-slate-300">${e.descripcion}</span>
+        </div>` : ''}
+        ${e.observaciones ? `
+        <div class="flex items-start gap-2 col-span-2">
+          <i class="fas fa-comment-dots text-indigo-400 w-4 text-center mt-0.5"></i>
+          <span>${e.observaciones}</span>
+        </div>` : ''}
       </div>
-    </div>
-    <div class="border-t border-slate-800 px-5 py-4 grid grid-cols-2 gap-3 text-xs text-slate-400">
-      <div class="flex items-center gap-2">
-        <i class="fas fa-calendar-alt text-green-400 w-4 text-center"></i>
-        <span>${formatearFecha(e.fecha)}</span>
-      </div>
-      <div class="flex items-center gap-2">
-        <i class="fas fa-clock text-green-400 w-4 text-center"></i>
-        <span>${e.hora || 'Sin hora'}</span>
-      </div>
-      <div class="flex items-center gap-2 col-span-2">
-        <i class="fas fa-map-marker-alt text-red-400 w-4 text-center"></i>
-        <span>${e.lugar || 'No especificado'}</span>
-      </div>
-      ${e.descripcion ? `
-      <div class="flex items-start gap-2 col-span-2">
-        <i class="fas fa-align-left text-sky-400 w-4 text-center mt-0.5"></i>
-        <span class="text-slate-300">${e.descripcion}</span>
-      </div>` : ''}
-      ${e.observaciones ? `
-      <div class="flex items-start gap-2 col-span-2">
-        <i class="fas fa-comment-dots text-indigo-400 w-4 text-center mt-0.5"></i>
-        <span>${e.observaciones}</span>
-      </div>` : ''}
     </div>
   `;
   return div;
