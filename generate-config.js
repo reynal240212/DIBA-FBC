@@ -8,7 +8,7 @@
  * Así las credenciales NUNCA están en el código fuente, sino en Vercel.
  */
 
-const fs = require('fs');
+const fs = require('fs-extra');
 const path = require('path');
 
 console.log('🔍 Iniciando generación de config.js...');
@@ -46,10 +46,10 @@ window.DIBA_CONFIG = {
 // Ruta de salida
 const outputPath = path.join(__dirname, 'public', 'scripts', 'config.js');
 
-// Crear directorio si no existe
-fs.mkdirSync(path.dirname(outputPath), { recursive: true });
+// Asegurar que el directorio existe con fs-extra
+fs.ensureDirSync(path.dirname(outputPath));
 
-// Escribir el archivo
+// Escribir el archivo con fs-extra
 fs.writeFileSync(outputPath, configContent, 'utf8');
 
 console.log('✅ config.js generado correctamente desde variables de entorno de Vercel.');
