@@ -62,9 +62,12 @@
             .bg-navy-deep { background-color: #05080d; }
             .bg-navy-light { background-color: #162130; }
         }
-        .sidebar.open { @apply translate-x-0; }
+        .sidebar.open { transform: translateX(0) !important; }
         .custom-scrollbar::-webkit-scrollbar { width: 4px; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { @apply bg-white/10 rounded-full; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { 
+            background: rgba(255, 255, 255, 0.1); 
+            border-radius: 9999px; 
+        }
     </style>
     <style>
         /* Partidos specific styles */
