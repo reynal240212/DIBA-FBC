@@ -1,44 +1,67 @@
-<!-- Contenedor dinámico principal del Match Banner -->
 <section id="match-banner"
-    class="relative overflow-hidden border-y border-white/10 bg-[radial-gradient(circle_at_50%_-50%,#1e293b_0%,#0f172a_100%)]">
+    class="relative overflow-hidden border-y border-white/10 bg-[radial-gradient(circle_at_50%_-50%,#1e293b_0%,#0e1420_100%)] min-h-[220px]">
 
-    <!-- Opacidad de escudo de fondo -->
-    <div class="absolute inset-0 opacity-[0.03] flex items-center justify-center pointer-events-none">
-        <img src="images/ESCUDO.png" alt="" class="w-[300px]" />
+    <!-- Efectos de fondo premium -->
+    <div class="absolute inset-0 overflow-hidden pointer-events-none">
+        <div class="absolute top-0 left-1/4 w-96 h-96 bg-amber-500/10 rounded-full blur-[120px] -translate-y-1/2"></div>
+        <div class="absolute bottom-0 right-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-[120px] translate-y-1/2"></div>
+        <div class="absolute inset-0 opacity-[0.05] flex items-center justify-center">
+            <img src="images/ESCUDO.png" alt="" class="w-[450px] animate-pulse-slow" />
+        </div>
     </div>
 
-    <div class="max-w-6xl mx-auto px-4 py-6 relative z-10">
-        <!-- Contenedor flex donde se inyectarán las tarjetas generadas y se desplazarán -->
+    <div class="max-w-6xl mx-auto px-4 py-8 relative z-10">
+        <!-- Título Dinámico (inyectado por banner.js) -->
+        <div id="banner-title-container" class="mb-6"></div>
+
+        <!-- Contenedor flex para las tarjetas -->
         <div id="dynamic-match-banner-container"
-            class="flex gap-6 overflow-x-auto pb-4 pt-2 snap-x snap-mandatory banner-scroll cursor-grab active:cursor-grabbing"
+            class="flex gap-6 overflow-x-auto pb-6 pt-2 snap-x snap-mandatory banner-scroll cursor-grab active:cursor-grabbing no-scrollbar"
             style="scroll-behavior: smooth;">
-            <!-- Las tarjetas se inyectarán aquí por LoadComponents.js -->
+            <!-- Las tarjetas se inyectarán aquí -->
         </div>
 
         <!-- Estado de Carga -->
-        <div id="banner-loading" class="flex items-center justify-center gap-2 text-amber-500 font-bold py-4">
-            <i class="fas fa-circle-notch fa-spin"></i> Cargando partidos...
+        <div id="banner-loading" class="flex items-center justify-center gap-3 text-amber-500/80 font-black py-8 uppercase tracking-widest text-xs">
+            <span class="relative flex h-3 w-3">
+                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+                <span class="relative inline-flex rounded-full h-3 w-3 bg-amber-500"></span>
+            </span>
+            Cargando partidos de hoy...
         </div>
     </div>
 
     <style>
-        /* Custom scrollbar para el banner */
+        @keyframes pulse-slow {
+            0%, 100% { opacity: 0.03; transform: scale(1); }
+            50% { opacity: 0.06; transform: scale(1.05); }
+        }
+        .animate-pulse-slow {
+            animation: pulse-slow 8s ease-in-out infinite;
+        }
+
+        /* Ocultar scrollbar pero permitir scroll */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        /* Custom scrollbar para el banner si se decide mostrar */
         .banner-scroll::-webkit-scrollbar {
-            height: 6px;
+            height: 4px;
         }
 
         .banner-scroll::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 0.02);
             border-radius: 10px;
         }
 
         .banner-scroll::-webkit-scrollbar-thumb {
-            background: rgba(245, 158, 11, 0.5);
+            background: linear-gradient(to right, transparent, rgba(245, 158, 11, 0.3), transparent);
             border-radius: 10px;
-        }
-
-        .banner-scroll::-webkit-scrollbar-thumb:hover {
-            background: rgba(245, 158, 11, 0.8);
         }
     </style>
 </section>
