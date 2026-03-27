@@ -1,384 +1,244 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
-    <title>Elite Dashboard — DIBA FBC Admin</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="icon" href="../images/ESCUDO.ico" type="image/x-icon">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,600;0,700;0,900;1,700;1,900&family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard — DIBA FBC Admin</title>
+    <link rel="icon" href="../images/ESCUDO.ico">
     
-    <!-- Bootstrap 5.3.3 CSS & JS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
-    <!-- UI Core -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
-    <link rel="stylesheet" href="../styles/admin-common.css">
-    <script src="../scripts/theme-switcher.js"></script>
+    <!-- Core & Styles -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;900&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
-
+    <link rel="stylesheet" href="../styles/admin-common.css">
+    
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        gold: {
-                            DEFAULT: '#FFD700',
-                            glow: 'rgba(255, 215, 0, 0.3)',
-                            dark: '#B8860B'
-                        },
-                        blue: {
-                            DEFAULT: '#003366',
-                            light: '#004488',
-                            dark: '#002244'
-                        }
-                    },
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                        montserrat: ['Montserrat', 'sans-serif']
-                    },
-                    borderRadius: {
-                        'elite': '2rem',
-                        'premium': '1.25rem'
-                    },
-                    boxShadow: {
-                        'premium': '0 20px 50px -12px rgba(0, 51, 102, 0.08)',
-                        'gold-shine': '0 10px 40px -10px rgba(255, 215, 0, 0.2)',
-                        'glass': '0 8px 32px 0 rgba(0, 0, 0, 0.05)'
+                        'diba-blue': '#004d98',
+                        'diba-red': '#a50044',
+                        'diba-gold': '#FFD700'
                     }
                 }
             }
         }
     </script>
-    <style>
-        .glass-morph {
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(24px);
-            -webkit-backdrop-filter: blur(24px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-        }
-        .gold-gradient {
-            background: linear-gradient(135deg, #FFD700 0%, #B8860B 100%);
-        }
-        .text-glow-gold {
-            text-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
-        }
-        
-        .sidebar.open { transform: translateX(0) !important; }
-        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.1); border-radius: 99px; }
-        
-        @keyframes fade-up {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .animate-fade-up { animation: fade-up 0.6s cubic-bezier(0.23, 1, 0.32, 1) forwards; }
-        
-        .kpi-card:hover .kpi-icon { transform: scale(1.1) rotate(5deg); }
-        .kpi-icon { transition: all 0.4s ease; }
-    </style>
 </head>
-
-<body class="bg-[#F4F7FA] text-slate-900 font-sans min-h-screen" id="admin-body" style="display: none;">
-
-    <!-- Loader -->
-    <div id="app-loader" class="fixed inset-0 z-[9999] flex items-center justify-center bg-white">
-        <div class="text-center animate-fade-up">
-            <div class="relative w-20 h-20 mx-auto mb-6">
-                <div class="absolute inset-0 border-4 border-gold/10 rounded-full"></div>
-                <div class="absolute inset-0 border-4 border-t-gold rounded-full animate-spin"></div>
-                <img src="/images/ESCUDO.png" class="absolute inset-0 m-auto w-10 h-10 object-contain">
-            </div>
-            <p class="text-[10px] font-black uppercase tracking-[0.5em] text-[#003366] italic">DIBA ELITE SYSTEM</p>
-        </div>
-    </div>
-
-    <!-- ══ NAVIGATION (Sidebar + Header) ══ -->
+<body class="bg-white font-['Inter']">
     <div id="admin-nav"></div>
 
-    <!-- ══ MAIN ══ -->
-    <main class="lg:ml-[280px] min-h-screen transition-all duration-500 pb-12">
-        
-        <div class="px-8 pt-8">
+    <main class="lg:ml-[280px] min-h-screen transition-all duration-300 bg-white">
+        <div class="p-6 lg:p-10 space-y-8 max-w-7xl mx-auto">
             
-            <!-- Welcome Hero -->
-            <section class="mb-10 animate-fade-up">
-                <div class="relative rounded-elite overflow-hidden p-10 border border-blue-900/5 shadow-xl group">
-                    <div class="absolute inset-0 bg-gradient-to-br from-[#003366] to-[#004488] -z-10"></div>
-                    <div class="absolute -right-20 -bottom-20 w-80 h-80 bg-gold/5 rounded-full blur-[100px] group-hover:bg-gold/10 transition-all duration-1000"></div>
-                    
-                    <div class="flex flex-col md:flex-row items-center justify-between gap-8 relative z-10">
-                        <div class="max-w-xl">
-                            <span class="px-4 py-1.5 bg-[#FFD700] text-[#003366] text-[0.65rem] font-black uppercase rounded-full tracking-widest italic mb-6 inline-block">Estado del Club: Óptimo</span>
-                            <h2 class="text-4xl md:text-5xl font-black italic text-white leading-[1.1] mb-4 font-montserrat uppercase tracking-tighter">Bienvenido, <span class="text-[#FFD700] drop-shadow-lg" id="welcome-name">Admin</span></h2>
-                            <p class="text-white/80 text-sm leading-relaxed max-w-md">Monitorea el rendimiento, gestiona jugadores y organiza encuentros desde tu panel centralizado de élite.</p>
-                        </div>
-                        <div class="flex items-center gap-10">
-                            <div class="text-center group-hover:scale-110 transition-all duration-700">
-                                <div class="text-4xl font-black text-white mb-2 italic">44</div>
-                                <div class="text-[0.6rem] font-black text-[#FFD700] uppercase tracking-[0.2em] opacity-80">Jugadores</div>
-                            </div>
-                            <div class="w-[1px] h-12 bg-white/20"></div>
-                            <div class="text-center group-hover:scale-110 transition-all duration-700 delay-100">
-                                <div class="text-4xl font-black text-white mb-2 italic">27</div>
-                                <div class="text-[0.6rem] font-black text-[#FFD700] uppercase tracking-[0.2em] opacity-80">Partidos</div>
-                            </div>
-                        </div>
-                    </div>
+            <!-- Welcome Header -->
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
+                <div>
+                    <h2 class="text-3xl font-black text-diba-blue italic tracking-tighter uppercase">Panel de <span class="text-diba-red">Control</span></h2>
+                    <p class="text-sm text-slate-400 font-bold uppercase tracking-widest mt-1">Gestión integral del club deportivo</p>
                 </div>
-            </section>
-
-            <!-- KPI Row (Bootstrap) -->
-            <section class="row g-4 mb-10 animate-fade-up">
-                <div class="col-12 col-sm-6 col-xl-3">
-                    <div class="bg-white p-8 rounded-premium kpi-card group border border-slate-100 shadow-sm hover:shadow-xl hover:border-[#FFD700]/30 transition-all duration-500 relative overflow-hidden">
-                        <div class="absolute top-0 right-0 p-4 opacity-[0.03] group-hover:opacity-[0.07] transition-opacity text-[#003366]">
-                            <i class="fas fa-users-crown text-6xl"></i>
-                        </div>
-                        <div class="kpi-icon w-14 h-14 rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-center text-[#003366] text-xl mb-6 shadow-sm">
-                            <i class="fas fa-users-crown"></i>
-                        </div>
-                        <div class="text-4xl font-black text-[#003366] italic mb-1 font-montserrat" id="kpi-players">--</div>
-                        <div class="text-[0.65rem] font-black uppercase tracking-[0.2em] text-slate-400">Plantilla Activa</div>
-                        <div class="mt-4 flex items-center gap-2">
-                            <span class="text-emerald-500 text-[0.65rem] font-bold">+2 esta semana</span>
-                            <i class="fas fa-arrow-trend-up text-emerald-500 text-xs"></i>
-                        </div>
-                    </div>
+                <div class="flex items-center gap-3">
+                    <button class="bg-diba-gold text-diba-blue px-6 py-3 rounded-xl font-black italic uppercase text-xs shadow-lg shadow-yellow-500/20 hover:scale-105 transition-all">
+                        <i class="fas fa-plus mr-2"></i> Nuevo Partido
+                    </button>
+                    <button class="bg-white border border-slate-100 text-diba-blue px-6 py-3 rounded-xl font-black italic uppercase text-xs shadow-sm hover:bg-slate-50 transition-all">
+                        <i class="fas fa-download mr-2 text-diba-red"></i> Reportes
+                    </button>
                 </div>
-                <!-- Similar updates for other KPIs -->
-                <div class="col-12 col-sm-6 col-xl-3">
-                    <div class="bg-white p-8 rounded-premium kpi-card group border border-slate-100 shadow-sm hover:shadow-xl hover:border-[#FFD700]/30 transition-all duration-500 relative overflow-hidden">
-                        <div class="absolute top-0 right-0 p-4 opacity-[0.03] group-hover:opacity-[0.07] transition-opacity text-[#003366]">
-                            <i class="fas fa-futbol text-6xl"></i>
-                        </div>
-                        <div class="kpi-icon w-14 h-14 rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-center text-[#003366] text-xl mb-6 shadow-sm">
-                            <i class="fas fa-futbol"></i>
-                        </div>
-                        <div class="text-4xl font-black text-[#003366] italic mb-1 font-montserrat" id="kpi-matches">--</div>
-                        <div class="text-[0.65rem] font-black uppercase tracking-[0.2em] text-slate-400">Encuentros Totales</div>
-                        <div class="mt-4 flex items-center gap-2">
-                            <span class="text-[#FFD700] font-black text-[0.65rem] uppercase">Temporada 2026</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-12 col-sm-6 col-xl-3">
-                    <div class="bg-white p-8 rounded-premium kpi-card group border border-slate-100 shadow-sm hover:shadow-xl hover:border-[#FFD700]/30 transition-all duration-500 relative overflow-hidden">
-                        <div class="absolute top-0 right-0 p-4 opacity-[0.03] group-hover:opacity-[0.07] transition-opacity text-[#003366]">
-                            <i class="fas fa-medal text-6xl"></i>
-                        </div>
-                        <div class="kpi-icon w-14 h-14 rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-center text-[#FFD700] text-xl mb-6 shadow-sm">
-                            <i class="fas fa-medal"></i>
-                        </div>
-                        <div class="text-4xl font-black text-[#003366] italic mb-1 font-montserrat" id="kpi-attendance">--%</div>
-                        <div class="text-[0.65rem] font-black uppercase tracking-[0.2em] text-slate-400">Asistencia Media</div>
-                        <div class="mt-4 flex items-center gap-2">
-                            <div class="flex-1 h-1.5 bg-slate-100 rounded-full overflow-hidden">
-                                <div class="h-full bg-[#FFD700] rounded-full" style="width: 85%"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-12 col-sm-6 col-xl-3">
-                    <div class="bg-white p-8 rounded-premium kpi-card group border border-slate-100 shadow-sm hover:shadow-xl hover:border-[#FFD700]/30 transition-all duration-500 relative overflow-hidden">
-                        <div class="absolute top-0 right-0 p-4 opacity-[0.03] group-hover:opacity-[0.07] transition-opacity text-[#003366]">
-                            <i class="fas fa-wallet text-6xl"></i>
-                        </div>
-                        <div class="kpi-icon w-14 h-14 rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-center text-red-500 text-xl mb-6 shadow-sm">
-                            <i class="fas fa-wallet"></i>
-                        </div>
-                        <div class="text-4xl font-black text-[#003366] italic mb-1 font-montserrat" id="kpi-pending">--</div>
-                        <div class="text-[0.65rem] font-black uppercase tracking-[0.2em] text-slate-400">Gestiones Pendientes</div>
-                        <div class="mt-4 flex items-center gap-2">
-                            <span class="text-red-500 text-[0.65rem] font-bold">Acción requerida</span>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Unified Content Grid -->
-            <div class="row g-5">
-                
-                <!-- Match Center -->
-                <div class="col-12 col-xl-8 animate-fade-up" style="animation-delay: 0.1s">
-                    <div class="bg-white p-8 rounded-elite h-full shadow-sm border border-slate-100">
-                        <div class="flex items-center justify-between mb-10">
-                            <div>
-                                <h3 class="text-xl font-black italic text-[#003366] uppercase font-montserrat tracking-tight">Centro de <span class="text-[#FFD700]">Partidos</span></h3>
-                                <p class="text-[0.6rem] font-bold text-slate-400 uppercase tracking-[0.3em] mt-1">Próximos encuentros oficiales</p>
-                            </div>
-                            <a href="partidos.html" class="px-5 py-2.5 bg-slate-50 border border-slate-100 rounded-xl text-[0.65rem] font-black uppercase tracking-widest text-[#003366] hover:bg-[#003366] hover:text-white transition-all shadow-sm">Ver Calendario</a>
-                        </div>
-                        
-                        <div id="matches-list" class="space-y-4">
-                            <div class="flex justify-center py-20 opacity-20"><i class="fas fa-circle-notch animate-spin text-3xl text-[#003366]"></i></div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Activity & Quick Actions -->
-                <div class="col-12 col-xl-4 animate-fade-up" style="animation-delay: 0.2s">
-                    <div class="space-y-6">
-                        
-                        <!-- Quick Actions -->
-                        <div class="bg-white p-8 rounded-elite shadow-sm border border-slate-100">
-                            <h3 class="text-sm font-black italic text-[#003366] uppercase font-montserrat tracking-widest mb-8">Acciones <span class="text-[#FFD700]">Rápidas</span></h3>
-                            <div class="grid grid-cols-2 gap-3">
-                                <a href="planilla.html" class="flex flex-col items-center justify-center gap-3 p-5 bg-slate-50 border border-slate-100 rounded-2xl hover:border-[#FFD700]/40 hover:-translate-y-1 transition-all group">
-                                    <i class="fas fa-clipboard-check text-xl text-[#FFD700] group-hover:scale-110 transition-transform"></i>
-                                    <span class="text-[0.65rem] font-black uppercase tracking-tighter text-slate-600">Planilla</span>
-                                </a>
-                                <a href="crear-jugador.html" class="flex flex-col items-center justify-center gap-3 p-5 bg-slate-50 border border-slate-100 rounded-2xl hover:border-[#FFD700]/40 hover:-translate-y-1 transition-all group">
-                                    <i class="fas fa-user-plus text-xl text-emerald-500 group-hover:scale-110 transition-transform"></i>
-                                    <span class="text-[0.65rem] font-black uppercase tracking-tighter text-slate-600">Nuevo J.</span>
-                                </a>
-                                <a href="convocatorias.html" class="flex flex-col items-center justify-center gap-3 p-5 bg-slate-50 border border-slate-100 rounded-2xl hover:border-[#FFD700]/40 hover:-translate-y-1 transition-all group">
-                                    <i class="fas fa-bullhorn text-xl text-blue-500 group-hover:scale-110 transition-transform"></i>
-                                    <span class="text-[0.65rem] font-black uppercase tracking-tighter text-slate-600">Convocatoria</span>
-                                </a>
-                                <a href="rifa_diba.html" class="flex flex-col items-center justify-center gap-3 p-5 bg-slate-50 border border-slate-100 rounded-2xl hover:border-[#FFD700]/40 hover:-translate-y-1 transition-all group">
-                                    <i class="fas fa-ticket-alt text-xl text-orange-500 group-hover:scale-110 transition-transform"></i>
-                                    <span class="text-[0.65rem] font-black uppercase tracking-tighter text-slate-600">Rifas</span>
-                                </a>
-                            </div>
-                        </div>
-
-                        <!-- Recent Activity -->
-                        <div class="bg-white p-8 rounded-elite shadow-sm border border-slate-100">
-                            <h3 class="text-sm font-black italic text-[#003366] uppercase font-montserrat tracking-widest mb-8">Actividad <span class="text-[#FFD700]">Reciente</span></h3>
-                            <div id="activity-list" class="space-y-6">
-                                <div class="flex justify-center py-10 opacity-20"><i class="fas fa-circle-notch animate-spin text-[#003366]"></i></div>
-                            </div>
-                            <button class="w-full mt-8 py-3 text-[0.6rem] font-black uppercase tracking-[0.3em] text-slate-400 border-t border-slate-100 hover:text-[#FFD700] transition-colors">Ver Registro Completo</button>
-                        </div>
-
-                    </div>
-                </div>
-
             </div>
 
-        </div><!-- /px-8 -->
+            <!-- KPI Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="bg-white p-6 rounded-[2rem] border border-slate-50 shadow-premium group hover:border-diba-blue/20 transition-all cursor-pointer relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-24 h-24 bg-diba-blue/5 rounded-full -mr-12 -mt-12 transition-transform group-hover:scale-110"></div>
+                    <div class="flex items-center gap-4 mb-4 relative z-10">
+                        <div class="w-12 h-12 bg-diba-blue/10 rounded-2xl flex items-center justify-center text-diba-blue group-hover:bg-diba-blue group-hover:text-white transition-all shadow-inner">
+                            <i class="fas fa-users-viewfinder text-xl"></i>
+                        </div>
+                        <div>
+                            <div class="text-[0.65rem] font-black uppercase tracking-widest text-slate-400">Jugadores</div>
+                            <div class="text-2xl font-black text-diba-blue italic tracking-tighter" id="stat-players">0</div>
+                        </div>
+                    </div>
+                    <div class="text-[0.6rem] font-bold text-slate-400 flex items-center gap-1.5 px-3 py-1 bg-slate-50 rounded-full w-fit">
+                        <i class="fas fa-arrow-up text-emerald-500"></i> <span class="text-emerald-500">+12%</span> este mes
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-[2rem] border border-slate-50 shadow-premium group hover:border-diba-red/20 transition-all cursor-pointer relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-24 h-24 bg-diba-red/5 rounded-full -mr-12 -mt-12"></div>
+                    <div class="flex items-center gap-4 mb-4 relative z-10">
+                        <div class="w-12 h-12 bg-diba-red/10 rounded-2xl flex items-center justify-center text-diba-red group-hover:bg-diba-red group-hover:text-white transition-all shadow-inner">
+                            <i class="fas fa-calendar-check text-xl"></i>
+                        </div>
+                        <div>
+                            <div class="text-[0.65rem] font-black uppercase tracking-widest text-slate-400">Partidos</div>
+                            <div class="text-2xl font-black text-diba-blue italic tracking-tighter" id="stat-matches">0</div>
+                        </div>
+                    </div>
+                    <div class="text-[0.6rem] font-bold text-slate-400 flex items-center gap-1.5 px-3 py-1 bg-slate-50 rounded-full w-fit">
+                        <span class="text-diba-red">3 pendientes</span> hoy
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-[2rem] border border-slate-50 shadow-premium group hover:border-diba-blue/20 transition-all cursor-pointer relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-24 h-24 bg-diba-blue/5 rounded-full -mr-12 -mt-12"></div>
+                    <div class="flex items-center gap-4 mb-4 relative z-10">
+                        <div class="w-12 h-12 bg-diba-blue/10 rounded-2xl flex items-center justify-center text-diba-blue group-hover:bg-diba-blue group-hover:text-white transition-all shadow-inner">
+                            <i class="fas fa-trophy text-xl"></i>
+                        </div>
+                        <div>
+                            <div class="text-[0.65rem] font-black uppercase tracking-widest text-slate-400">Victorias</div>
+                            <div class="text-2xl font-black text-diba-blue italic tracking-tighter" id="stat-wins">0</div>
+                        </div>
+                    </div>
+                    <div class="text-[0.6rem] font-bold text-slate-400 flex items-center gap-1.5 px-3 py-1 bg-slate-50 rounded-full w-fit">
+                        Rango de victoria <span class="text-emerald-500">85%</span>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-[2rem] border border-slate-50 shadow-premium group hover:border-diba-gold/20 transition-all cursor-pointer relative overflow-hidden border-b-4 border-b-diba-gold">
+                    <div class="absolute top-0 right-0 w-24 h-24 bg-diba-gold/5 rounded-full -mr-12 -mt-12"></div>
+                    <div class="flex items-center gap-4 mb-4 relative z-10">
+                        <div class="w-12 h-12 bg-diba-gold/10 rounded-2xl flex items-center justify-center text-diba-gold group-hover:bg-diba-gold group-hover:text-diba-blue transition-all shadow-inner">
+                            <i class="fas fa-shield-halved text-xl"></i>
+                        </div>
+                        <div>
+                            <div class="text-[0.65rem] font-black uppercase tracking-widest text-slate-400">Torneos</div>
+                            <div class="text-2xl font-black text-diba-blue italic tracking-tighter">4</div>
+                        </div>
+                    </div>
+                    <div class="text-[0.6rem] font-bold text-slate-400 flex items-center gap-1.5 px-3 py-1 bg-slate-50 rounded-full w-fit">
+                        En curso: <span class="text-diba-blue font-black">Liga Local</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Recent Matches Card -->
+                <div class="lg:col-span-2 bg-white rounded-[2.5rem] border border-slate-50 shadow-premium overflow-hidden">
+                    <div class="p-8 border-b border-slate-50 bg-slate-50/20 flex items-center justify-between">
+                        <div>
+                            <h3 class="text-lg font-black text-diba-blue italic uppercase tracking-tighter">Próximos <span class="text-diba-red">Partidos</span></h3>
+                            <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-1">Siguientes encuentros en el calendario</p>
+                        </div>
+                        <a href="partidos.html" class="text-[10px] font-black text-diba-blue uppercase tracking-widest hover:text-diba-red transition-colors flex items-center gap-2 group">
+                            Calendario <i class="fas fa-chevron-right text-[8px] group-hover:translate-x-1 transition-transform"></i>
+                        </a>
+                    </div>
+                    <div class="p-4 overflow-x-auto">
+                        <table class="w-full text-left">
+                            <thead>
+                                <tr class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 border-b border-slate-50">
+                                    <th class="px-6 py-4">Evento / Rival</th>
+                                    <th class="px-6 py-4 text-center">Fecha</th>
+                                    <th class="px-6 py-4 text-center">Sede</th>
+                                    <th class="px-6 py-4 text-right">Acción</th>
+                                </tr>
+                            </thead>
+                            <tbody id="match-table-body">
+                                <tr><td colspan="4" class="py-20 text-center"><i class="fas fa-circle-notch fa-spin text-2xl text-slate-200"></i></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Admin News/Alerts -->
+                <div class="space-y-6">
+                    <div class="bg-gradient-to-br from-diba-blue to-diba-red p-8 rounded-[2.5rem] text-white shadow-xl relative overflow-hidden group">
+                        <i class="fas fa-shield absolute -right-4 -bottom-4 text-8xl text-white/10 group-hover:scale-110 transition-transform"></i>
+                        <h4 class="text-xl font-black italic uppercase tracking-tighter mb-2 relative z-10">DIBA <span class="text-diba-gold">Premium</span></h4>
+                        <p class="text-xs text-white/80 font-bold leading-relaxed relative z-10">Optimiza el rendimiento de tu equipo con las nuevas herramientas de análisis avanzado.</p>
+                        <button class="mt-6 bg-white text-diba-blue px-6 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-diba-gold transition-all relative z-10">Explorar ahora</button>
+                    </div>
+
+                    <div class="bg-white rounded-[2.5rem] border border-slate-50 shadow-premium p-8">
+                        <h3 class="text-sm font-black text-diba-blue italic uppercase tracking-tighter mb-6 flex items-center gap-3">
+                            <i class="fas fa-clock-rotate-left text-diba-red"></i> Log de Actividad
+                        </h3>
+                        <div class="space-y-6 relative ml-4 before:content-[''] before:absolute before:left-[-1px] before:top-0 before:bottom-0 before:w-[2px] before:bg-slate-50">
+                            <div class="relative pl-6">
+                                <div class="absolute left-[-5px] top-1.5 w-2.5 h-2.5 bg-diba-blue rounded-full border-2 border-white ring-4 ring-diba-blue/5"></div>
+                                <div class="text-[10px] font-black text-diba-blue italic">Planilla Actualizada</div>
+                                <div class="text-[9px] text-slate-400 font-bold uppercase mt-0.5">Hace 15 minutos • Admin</div>
+                            </div>
+                            <div class="relative pl-6">
+                                <div class="absolute left-[-5px] top-1.5 w-2.5 h-2.5 bg-slate-200 rounded-full border-2 border-white ring-4 ring-slate-100/5"></div>
+                                <div class="text-[10px] font-black text-diba-blue italic">Nuevo Jugador Registrado</div>
+                                <div class="text-[9px] text-slate-400 font-bold uppercase mt-0.5">Hace 2 horas • Técnico</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </main>
 
-    <!-- Core Dependencies -->
-    <script src="/scripts/config.js"></script>
+    <!-- Scripts -->
+    <script src="../scripts/config.js"></script>
     <script type="module">
-        import { supabase, requireAdmin } from '../scripts/supabaseClient.js';
         import { initAdminLayout } from '../src/components/layout/admin-layout.js';
-        import '../src/core/aiWidget.js';
-
+        import { requireAdmin } from '../scripts/supabaseClient.js';
+        
         async function init() {
+            const session = await requireAdmin();
+            if (!session) return;
+            initAdminLayout();
+            loadStats();
+        }
+
+        async function loadStats() {
             try {
-                const session = await requireAdmin();
-                if (!session) return;
-
-                // Inject Layout
-                await initAdminLayout();
-
-                document.getElementById('app-loader')?.classList.add('hidden');
-                document.getElementById('admin-body').style.display = 'block';
-                document.getElementById('admin-body').classList.add('animate-fade-up');
-
-                loadData();
-            } catch (err) {
-                console.error("Dashboard Init Error:", err);
+                const { count: playerCount } = await supabase.from('jugadores').select('*', { count: 'exact', head: true });
+                const { count: matchCount } = await supabase.from('partidos').select('*', { count: 'exact', head: true });
+                
+                document.getElementById('stat-players').textContent = playerCount || 0;
+                document.getElementById('stat-matches').textContent = matchCount || 0;
+                
+                // Load matches
+                const { data: matches } = await supabase
+                    .from('partidos')
+                    .select('*')
+                    .order('fecha', { ascending: true })
+                    .limit(5);
+                
+                const tbody = document.getElementById('match-table-body');
+                if (matches && matches.length > 0) {
+                    tbody.innerHTML = matches.map(m => `
+                        <tr class="group hover:bg-slate-50 transition-all border-b border-slate-50">
+                            <td class="px-6 py-5">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 rounded-xl bg-slate-50 flex items-center justify-center text-diba-blue group-hover:bg-white group-hover:shadow-sm transition-all border border-transparent group-hover:border-slate-100">
+                                        <i class="fas fa-futbol"></i>
+                                    </div>
+                                    <div>
+                                        <div class="text-xs font-black text-diba-blue italic uppercase tracking-tighter">${m.rival || 'Rival Desconocido'}</div>
+                                        <div class="text-[9px] font-bold text-slate-400 uppercase tracking-widest">${m.torneo || 'Amistoso'}</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="px-6 py-5 text-center">
+                                <span class="px-4 py-1.5 rounded-full bg-slate-50 text-slate-500 text-[9px] font-black uppercase tracking-widest border border-slate-100 group-hover:bg-white">${m.fecha}</span>
+                            </td>
+                            <td class="px-6 py-5 text-center">
+                                <div class="text-[10px] font-bold text-slate-500 uppercase tracking-tight italic"><i class="fas fa-location-dot mr-1 text-diba-red/40"></i> ${m.sede || 'Por definir'}</div>
+                            </td>
+                            <td class="px-6 py-5 text-right">
+                                <a href="planilla.html?id=${m.id}" class="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-slate-50 text-diba-blue hover:bg-diba-gold hover:text-diba-blue transition-all border border-slate-100">
+                                    <i class="fas fa-arrow-right-long"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    `).join('');
+                } else {
+                    tbody.innerHTML = '<tr><td colspan="4" class="py-10 text-center text-xs font-bold text-slate-400 italic">No hay partidos programados</td></tr>';
+                }
+            } catch (error) {
+                console.error("Stats/Matches Error:", error);
             }
         }
-
-        // ── LOAD DATA ──
-        async function loadData() {
-            // KPIs
-            const { count: playersCount } = await supabase.from('identificacion').select('*', { count: 'exact', head: true });
-            document.getElementById('kpi-players').textContent = playersCount || 0;
-
-            const { count: matchesCount } = await supabase.from('partidos').select('*', { count: 'exact', head: true });
-            document.getElementById('kpi-matches').textContent = matchesCount || 0;
-
-            const { count: pendingCount } = await supabase.from('planilla_registros').select('*', { count: 'exact', head: true }).or('pago.is.null,pago.eq.0');
-            document.getElementById('kpi-pending').textContent = pendingCount || '✓';
-
-            // RPC for Attendance %
-            const { data: stats } = await supabase.rpc('get_dashboard_stats');
-            if (stats && stats.length > 0) {
-                const s = stats[0];
-                const total = (s.presentes || 0) + (s.ausentes || 0) + (s.excusas || 0);
-                document.getElementById('kpi-attendance').textContent = total > 0 ? Math.round((s.presentes / total) * 100) + '%' : '0%';
-            }
-
-            loadMatches();
-            loadActivity();
-        }
-
-        async function loadMatches() {
-            const now = new Date().toISOString().split('T')[0];
-            const { data: matches } = await supabase.from('partidos').select('*').gte('fecha', now).order('fecha').limit(5);
-            
-            const container = document.getElementById('matches-list');
-            if (!matches?.length) {
-                container.innerHTML = `<div class="py-20 text-center opacity-30 text-xs font-bold uppercase italic tracking-widest text-[#003366]">No hay partidos próximos</div>`;
-                return;
-            }
-
-            container.innerHTML = matches.map(m => `
-                <div class="flex items-center gap-6 p-6 bg-slate-50 border border-slate-100 rounded-2xl hover:bg-white hover:border-[#FFD700]/20 hover:shadow-lg transition-all group">
-                    <div class="w-16 h-16 rounded-xl bg-[#003366] flex flex-col items-center justify-center border border-white/5 flex-shrink-0 group-hover:scale-105 transition-transform">
-                        <div class="text-[0.6rem] font-black text-[#FFD700] uppercase">${new Date(m.fecha).toLocaleDateString('es-CO', { month: 'short' })}</div>
-                        <div class="text-2xl font-black text-white italic leading-none">${new Date(m.fecha).getDate()}</div>
-                    </div>
-                    <div class="flex-grow min-w-0">
-                        <div class="flex items-center gap-3 mb-1">
-                            <span class="text-[0.6rem] font-bold text-[#FFD700] uppercase tracking-[0.2em] px-2 py-0.5 bg-[#003366] rounded border border-[#003366]/10">${m.categoria}</span>
-                            <span class="text-[0.6rem] font-bold text-slate-400 truncate"><i class="fas fa-location-dot mr-1"></i> ${m.Cancha || 'Sede'}</span>
-                        </div>
-                        <h4 class="text-[0.95rem] font-black text-[#003366] italic uppercase tracking-tighter truncate group-hover:text-[#FFD700] transition-colors">
-                            ${m.equipolocal} <span class="text-slate-300 not-italic mx-2">vs</span> ${m.equipovisitante}
-                        </h4>
-                    </div>
-                    <div class="text-right hidden sm:block">
-                        <div class="text-lg font-black text-[#003366] italic">${m.hora || '--:--'}</div>
-                        <div class="text-[0.6rem] font-bold text-slate-400 uppercase tracking-widest">Hora Local</div>
-                    </div>
-                    <div class="w-10 h-10 rounded-full flex items-center justify-center bg-slate-100 text-slate-300 group-hover:text-[#FFD700] group-hover:bg-[#003366] group-hover:scale-110 transition-all">
-                        <i class="fas fa-chevron-right"></i>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        async function loadActivity() {
-            const { data: players } = await supabase.from('jugadores').select('*').order('fecha_registro', { ascending: false }).limit(3);
-            const { data: messages } = await supabase.from('mensajes').select('*').order('created_at', { ascending: false }).limit(2);
-
-            const items = [];
-            if (players) players.forEach(p => items.push({ type: 'player', title: p.nombre, sub: 'Nuevo Jugador', date: p.fecha_registro, icon: 'fa-user-plus' }));
-            if (messages) messages.forEach(m => items.push({ type: 'msg', title: m.full_name || 'Anónimo', sub: m.content, date: m.created_at, icon: 'fa-comment' }));
-            
-            items.sort((a,b) => new Date(b.date) - new Date(a.date));
-
-            const container = document.getElementById('activity-list');
-            if (!items.length) {
-                container.innerHTML = `<div class="text-center opacity-20 text-[10px] uppercase font-bold tracking-widest text-[#003366]">Sin actividad</div>`;
-                return;
-            }
-
-            container.innerHTML = items.slice(0, 5).map(it => `
-                <div class="flex gap-4 group">
-                    <div class="w-10 h-10 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center text-[#FFD700] group-hover:bg-[#003366] group-hover:text-white transition-all flex-shrink-0">
-                        <i class="fas ${it.icon} text-sm"></i>
-                    </div>
-                    <div class="min-w-0 flex-grow">
-                        <div class="flex justify-between items-start">
-                            <h5 class="text-[0.7rem] font-black text-[#003366] uppercase italic tracking-tight truncate">${it.title}</h5>
-                            <span class="text-[0.55rem] font-bold text-slate-300 uppercase">${new Date(it.date).toLocaleDateString('es-CO', { day: '2-digit', month: 'short' })}</span>
-                        </div>
-                        <p class="text-[0.6rem] text-slate-400 font-medium truncate mt-0.5">${it.sub}</p>
-                    </div>
-                </div>
-            `).join('');
-        }
-
+        
         init();
     </script>
 </body>

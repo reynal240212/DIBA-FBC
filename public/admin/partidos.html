@@ -1,311 +1,166 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DIBA FBC — Gestión de Partidos</title>
-    <link rel="icon" href="../images/ESCUDO.ico" type="image/x-icon">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <title>Partidos — DIBA FBC Admin</title>
+    <link rel="icon" href="../images/ESCUDO.ico">
     
-    <!-- Bootstrap 5.3.3 CSS & JS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
-    <link rel="stylesheet" href="../styles/admin-common.css">
-    <script src="../scripts/theme-switcher.js"></script>
+    <!-- Core & Styles -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;900&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="../styles/admin-common.css">
+    
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        gold: {
-                            DEFAULT: '#FFD700',
-                            glow: 'rgba(255, 215, 0, 0.3)',
-                            dark: '#B8860B'
-                        }
-                    },
-                    fontFamily: {
-                        sans: ['Montserrat', 'sans-serif']
-                    },
-                    borderRadius: {
-                        'elite': '24px',
-                        'elite-lg': '36px'
-                    },
-                    boxShadow: {
-                        'premium': '0 10px 40px -10px rgba(0, 51, 102, 0.12)',
-                        'gold-glow': '0 0 20px rgba(255, 215, 0, 0.15)'
+                        'diba-blue': '#004d98',
+                        'diba-red': '#a50044',
+                        'diba-gold': '#FFD700'
                     }
                 }
             }
         }
     </script>
-    <style>
-        .sidebar.open { transform: translateX(0) !important; }
-        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { 
-            background: #003366; 
-            border-radius: 9999px; 
-        }
-    </style>
-    <style>
-        /* Partidos specific styles */
-        .content {
-            padding: 2rem;
-            flex: 1;
-        }
-
-        @media (max-width: 992px) {
-            .sidebar {
-                transform: translateX(-100%);
-            }
-
-            .sidebar.open {
-                transform: translateX(0);
-            }
-        }
-    </style>
-
-            .main {
-                margin-left: 0;
-            }
-
-            .mobile-menu-btn {
-                display: flex;
-            }
-        }
-    </style>
 </head>
-
-<body class="bg-[#F4F7FA] text-slate-900 font-sans min-h-screen" id="admin-body" style="display: none;">
-
-    <!-- ══ NAVIGATION (Sidebar + Header) ══ -->
+<body class="bg-white font-['Inter']">
     <div id="admin-nav"></div>
 
-    <div class="lg:ml-[280px] min-h-screen transition-all duration-500">
-        <!-- Main Content Area -->
-        <div class="content p-8">
-            <div class="max-w-7xl mx-auto w-full">
-                <div id="matches-grid" class="row g-4">
-                    <!-- Skeleton loader -->
-                    <div class="col-12 col-md-6 col-lg-4">
-                        <div class="animate-pulse bg-white rounded-3xl h-64 border border-slate-100 shadow-sm"></div>
+    <main class="lg:ml-[280px] min-h-screen transition-all duration-300 bg-white">
+        <div class="p-6 lg:p-10 space-y-8 max-w-7xl mx-auto">
+            
+            <!-- Header -->
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
+                <div>
+                    <h2 class="text-3xl font-black text-diba-blue italic tracking-tighter uppercase">Calendario de <span class="text-diba-red">Partidos</span></h2>
+                    <p class="text-sm text-slate-400 font-bold uppercase tracking-widest mt-1">Programación y resultados de encuentros</p>
+                </div>
+                <div class="flex items-center gap-3">
+                    <button id="add-match-btn" class="bg-diba-gold text-diba-blue px-6 py-3 rounded-xl font-black italic uppercase text-xs shadow-lg shadow-yellow-500/20 hover:scale-105 transition-all">
+                        <i class="fas fa-plus mr-2"></i> Programar Partido
+                    </button>
+                </div>
+            </div>
+
+            <!-- Match Grid -->
+            <div id="match-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Skeleton Loader -->
+                <div class="bg-slate-50 animate-pulse h-64 rounded-[2rem] border border-slate-100"></div>
+                <div class="bg-slate-50 animate-pulse h-64 rounded-[2rem] border border-slate-100"></div>
+                <div class="bg-slate-50 animate-pulse h-64 rounded-[2rem] border border-slate-100"></div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal Placeholder (Simplified for Redesign Focus) -->
+    <div id="match-modal" class="fixed inset-0 z-[100] flex items-center justify-center bg-[#004d98]/20 backdrop-blur-sm hidden">
+        <div class="bg-white w-full max-w-xl rounded-[2.5rem] shadow-2xl overflow-hidden border border-slate-50 animate-fade-up">
+            <div class="p-8 bg-gradient-to-r from-diba-blue to-diba-red text-white flex items-center justify-between">
+                <h3 class="text-xl font-black italic uppercase tracking-tighter">Programar <span class="text-diba-gold">Partido</span></h3>
+                <button onclick="closeModal()" class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 transition-all"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="p-10 space-y-6">
+                <div class="space-y-2">
+                    <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Rival / Encuentro</label>
+                    <input type="text" id="rival" class="w-full bg-slate-50 border-transparent rounded-2xl p-4 text-xs font-bold text-diba-blue outline-none focus:ring-2 focus:ring-diba-gold/20 shadow-sm">
+                </div>
+                <div class="grid grid-cols-2 gap-6">
+                    <div class="space-y-2">
+                        <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Fecha</label>
+                        <input type="date" id="fecha" class="w-full bg-slate-50 border-transparent rounded-2xl p-4 text-xs font-bold text-diba-blue outline-none focus:ring-2 focus:ring-diba-gold/20 shadow-sm">
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Categoría</label>
+                        <input type="text" id="categoria" placeholder="Sub-17, Libre, etc." class="w-full bg-slate-50 border-transparent rounded-2xl p-4 text-xs font-bold text-diba-blue outline-none focus:ring-2 focus:ring-diba-gold/20 shadow-sm">
                     </div>
                 </div>
+                <button id="save-match" class="w-full bg-diba-gold text-diba-blue py-4 rounded-2xl text-[11px] font-black uppercase tracking-[0.2em] italic hover:bg-yellow-400 transition-all shadow-lg shadow-yellow-500/20">
+                    <i class="fas fa-calendar-check mr-2"></i> Confirmar Programación
+                </button>
             </div>
         </div>
     </div>
 
-    <!-- Bootstrap Modal for Create/Edit -->
-    <div class="modal fade" id="match-modal" tabindex="-1" aria-labelledby="modal-title" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-lg">
-            <div class="modal-content border-0 shadow-2xl bg-white">
-                <div class="modal-header border-bottom border-slate-100 px-8 py-6">
-                    <h5 class="modal-title font-black uppercase italic text-[#003366]" id="modal-title">Registrar Partido</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <form id="match-form">
-                    <div class="modal-body p-8">
-                        <input type="hidden" name="id">
-                        <div class="row g-4">
-                            <div class="col-md-6">
-                                <label class="premium-label text-slate-500 text-[10px] font-black uppercase tracking-widest mb-2 block">Equipo Local</label>
-                                <input type="text" name="equipolocal" required class="form-control bg-slate-50 border-slate-100 rounded-xl p-3 focus:ring-2 focus:ring-[#FFD700] outline-none" placeholder="Ej: DIBA FBC">
-                            </div>
-                            <div class="col-md-6">
-                                <label class="premium-label text-slate-500 text-[10px] font-black uppercase tracking-widest mb-2 block">Equipo Visitante</label>
-                                <input type="text" name="equipovisitante" required class="form-control bg-slate-50 border-slate-100 rounded-xl p-3 focus:ring-2 focus:ring-[#FFD700] outline-none" placeholder="Ej: Keren">
-                            </div>
-                            <div class="col-md-6">
-                                <label class="premium-label text-slate-500 text-[10px] font-black uppercase tracking-widest mb-2 block">Fecha</label>
-                                <input type="date" name="fecha" required class="form-control bg-slate-50 border-slate-100 rounded-xl p-3 focus:ring-2 focus:ring-[#FFD700] outline-none">
-                            </div>
-                            <div class="col-md-6">
-                                <label class="premium-label text-slate-500 text-[10px] font-black uppercase tracking-widest mb-2 block">Hora</label>
-                                <input type="time" name="hora" required class="form-control bg-slate-50 border-slate-100 rounded-xl p-3 focus:ring-2 focus:ring-[#FFD700] outline-none">
-                            </div>
-                            <div class="col-md-6">
-                                <label class="premium-label text-slate-500 text-[10px] font-black uppercase tracking-widest mb-2 block">Cancha / Lugar</label>
-                                <input type="text" name="Cancha" class="form-control bg-slate-50 border-slate-100 rounded-xl p-3 focus:ring-2 focus:ring-[#FFD700] outline-none" placeholder="Ej: Cancha Municipal">
-                            </div>
-                            <div class="col-md-6">
-                                <label class="premium-label text-slate-500 text-[10px] font-black uppercase tracking-widest mb-2 block">Categoría</label>
-                                <input type="text" name="categoria" class="form-control bg-slate-50 border-slate-100 rounded-xl p-3 focus:ring-2 focus:ring-[#FFD700] outline-none" placeholder="Ej: Sub-12">
-                            </div>
-                            <div class="col-12">
-                                <label class="premium-label text-slate-500 text-[10px] font-black uppercase tracking-widest mb-2 block">Descripción / Detalles</label>
-                                <textarea name="descripcion" class="form-control bg-slate-50 border-slate-100 rounded-xl p-3 focus:ring-2 focus:ring-[#FFD700] outline-none" style="min-height: 100px;" placeholder="Detalles del partido..."></textarea>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="premium-label text-slate-500 text-[10px] font-black uppercase tracking-widest mb-2 block">Resultado</label>
-                                <input type="text" name="resultado" class="form-control bg-slate-50 border-slate-100 rounded-xl p-3 focus:ring-2 focus:ring-[#FFD700] outline-none" placeholder="Ej: 2 - 1">
-                            </div>
-                            <div class="col-md-6">
-                                <label class="premium-label text-slate-500 text-[10px] font-black uppercase tracking-widest mb-2 block">Valor / Costo</label>
-                                <input type="number" name="valor" class="form-control bg-slate-50 border-slate-100 rounded-xl p-3 focus:ring-2 focus:ring-[#FFD700] outline-none" placeholder="0">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer border-top border-slate-100 bg-slate-50 p-6">
-                        <button type="button" class="btn btn-secondary bg-slate-200 text-slate-700 border-0 px-6 rounded-xl font-bold uppercase text-[10px] tracking-widest" data-bs-dismiss="modal">Cancelar</button>
-                        <button type="submit" class="btn btn-primary bg-[#FFD700] text-[#003366] border-0 px-8 rounded-xl font-black uppercase text-[10px] tracking-widest shadow-lg">Guardar Cambios</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
-    <script src="/scripts/config.js"></script>
+    <!-- Scripts -->
+    <script src="../scripts/config.js"></script>
     <script type="module">
-        import { supabase, requireAdmin } from '../scripts/supabaseClient.js';
         import { initAdminLayout } from '../src/components/layout/admin-layout.js';
-        import '../src/core/aiWidget.js';
-
-        let allMatches = [];
-
-        // ── AUTENTICACIÓN Y CARGA ──
+        import { requireAdmin } from '../scripts/supabaseClient.js';
+        
         async function init() {
-            try {
-                const session = await requireAdmin();
-                if (!session) return;
-
-                // Inject Layout
-                await initAdminLayout();
-
-                document.getElementById('admin-body').style.display = 'block';
-
-                loadMatches();
-            } catch (error) {
-                console.error("Init error:", error);
-            }
+            const session = await requireAdmin();
+            if (!session) return;
+            initAdminLayout();
+            fetchMatches();
+            
+            document.getElementById('add-match-btn').addEventListener('click', () => document.getElementById('match-modal').classList.remove('hidden'));
         }
 
-        init();
-
-        // 2. Cargar partidos
-        async function loadMatches() {
-            const grid = document.getElementById('matches-grid');
-            const { data, error } = await supabase.from('partidos').select('*').order('fecha', { ascending: false });
-
-            if (error) {
-                console.error(error);
-                grid.innerHTML = `<p class="col-span-full text-center text-red-500 font-bold">Error al cargar datos: ${error.message}</p>`;
-                return;
+        async function fetchMatches() {
+            try {
+                const { data, error } = await supabase.from('partidos').select('*').order('fecha', { ascending: true });
+                if (error) throw error;
+                renderMatches(data || []);
+            } catch (error) {
+                console.error("Fetch Matches Error:", error);
             }
-
-            allMatches = data;
-            renderMatches(data);
         }
 
         function renderMatches(matches) {
-            const grid = document.getElementById('matches-grid');
+            const grid = document.getElementById('match-grid');
             if (matches.length === 0) {
-                grid.innerHTML = `<div class="col-span-full text-center py-24 bg-white rounded-elite border-2 border-dashed border-slate-200">
-                    <i class="fas fa-calendar-times text-5xl text-slate-300 mb-6 block"></i>
-                    <p class="text-slate-400 uppercase font-black italic tracking-widest">No hay partidos registrados</p>
-                </div>`;
+                grid.innerHTML = '<div class="col-span-full py-20 text-center text-xs font-bold text-slate-400 italic bg-slate-50 rounded-[2.5rem] border border-slate-100 border-dashed">No hay partidos programados</div>';
                 return;
             }
 
-            grid.innerHTML = matches.map(m => {
-                const fecha = new Date(m.fecha).toLocaleDateString('es-CO', { day: '2-digit', month: 'short', year: 'numeric' });
-                return `
-                <div class="col-12 col-md-6 col-lg-4">
-                    <div class="bg-white p-8 rounded-elite shadow-sm border border-slate-100 hover:shadow-xl hover:border-[#FFD700]/30 transition-all duration-500 group h-full flex flex-col">
-                        <div class="flex justify-between items-start mb-6">
-                            <span class="px-4 py-1.5 bg-slate-50 text-[#003366] text-[0.6rem] font-black uppercase tracking-widest rounded-full border border-slate-100">${m.categoria || 'GENERAL'}</span>
-                            <div class="flex gap-2">
-                                <button onclick="editMatch('${m.id}')" class="w-10 h-10 rounded-xl bg-slate-50 flex items-center justify-center text-slate-400 hover:text-[#003366] hover:bg-slate-100 hover:scale-105 transition-all border border-slate-100"><i class="fas fa-edit"></i></button>
-                                <button onclick="deleteMatch('${m.id}')" class="w-10 h-10 rounded-xl bg-red-50 flex items-center justify-center text-white hover:bg-red-600 hover:scale-105 transition-all border-0 shadow-sm"><i class="fas fa-trash"></i></button>
+            grid.innerHTML = matches.map(m => `
+                <div class="bg-white rounded-[2.5rem] border border-slate-50 shadow-premium overflow-hidden group hover:border-diba-blue/20 transition-all flex flex-col h-full">
+                    <div class="p-8 flex-1">
+                        <div class="flex items-center justify-between mb-6">
+                            <div class="px-4 py-1.5 rounded-full bg-slate-50 border border-slate-100 text-[10px] font-black uppercase tracking-widest text-slate-400 group-hover:bg-white transition-all">
+                                ${m.torneo || 'Amistoso'}
+                            </div>
+                            <div class="text-xs font-black text-diba-red italic uppercase">${m.fecha}</div>
+                        </div>
+                        
+                        <div class="flex items-center gap-5 mb-8">
+                            <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-diba-blue to-diba-red flex items-center justify-center text-white text-2xl animate-pulse group-hover:animate-none">
+                                <i class="fas fa-futbol"></i>
+                            </div>
+                            <div>
+                                <div class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">vs Rival</div>
+                                <div class="text-xl font-black text-diba-blue italic tracking-tighter uppercase leading-tight">${m.rival || 'Por definir'}</div>
                             </div>
                         </div>
-                        <div class="mb-6 flex-grow">
-                            <p class="text-[10px] text-slate-400 font-black uppercase tracking-[0.2em] mb-3">${fecha} · ${m.hora || '--:--'}</p>
-                            <h3 class="text-xl font-black uppercase italic leading-tight text-[#003366] group-hover:text-[#FFD700] transition-colors tracking-tight">${m.equipolocal} <span class="text-slate-300 not-italic font-medium">vs</span> ${m.equipovisitante}</h3>
-                            ${m.resultado ? `<div class="mt-5 bg-[#003366] text-[#FFD700] px-6 py-3 rounded-2xl inline-block font-black italic text-2xl shadow-lg">${m.resultado}</div>` : ''}
-                        </div>
-                        <div class="flex items-center gap-3 text-slate-400 mt-auto pt-6 border-t border-slate-50">
-                            <div class="w-8 h-8 rounded-lg bg-slate-50 flex items-center justify-center text-[#FFD700] text-xs border border-slate-100">
-                                <i class="fas fa-map-marker-alt"></i>
+
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="bg-slate-50 p-4 rounded-2xl group-hover:bg-white border border-transparent group-hover:border-slate-100 transition-all">
+                                <div class="text-[8px] font-black uppercase text-slate-400 tracking-widest mb-1">Categoría</div>
+                                <div class="text-[10px] font-black text-diba-blue uppercase">${m.categoria || '---'}</div>
                             </div>
-                            <span class="text-[10px] font-black uppercase tracking-wider">${m.Cancha || 'Cancha por definir'}</span>
+                            <div class="bg-slate-50 p-4 rounded-2xl group-hover:bg-white border border-transparent group-hover:border-slate-100 transition-all">
+                                <div class="text-[8px] font-black uppercase text-slate-400 tracking-widest mb-1">Sede</div>
+                                <div class="text-[10px] font-black text-diba-blue uppercase truncate">${m.sede || '---'}</div>
+                            </div>
                         </div>
                     </div>
-                </div>`;
-            }).join('');
+                    
+                    <div class="p-6 bg-slate-50/50 border-t border-slate-50 flex items-center justify-between group-hover:bg-white transition-all">
+                        <button onclick="editMatch('${m.id}')" class="text-[10px] font-black text-diba-blue uppercase tracking-widest hover:text-diba-red transition-colors">Editar</button>
+                        <a href="planilla.html?id=${m.id}" class="bg-diba-gold text-diba-blue px-6 py-2 rounded-lg text-[9px] font-black uppercase tracking-widest italic shadow-sm hover:scale-105 transition-all">
+                            Gestionar Planilla
+                        </a>
+                    </div>
+                </div>
+            `).join('');
         }
 
-        // 3. Modal logic
-        const modalEl = document.getElementById('match-modal');
-        const bsModal = new bootstrap.Modal(modalEl);
-        const form = document.getElementById('match-form');
-
-        window.editMatch = (id) => {
-            const match = allMatches.find(m => m.id === id);
-            if (!match) return;
-
-            document.getElementById('modal-title').textContent = 'Editar Partido';
-            form.id.value = match.id;
-            form.equipolocal.value = match.equipolocal;
-            form.equipovisitante.value = match.equipovisitante;
-            form.fecha.value = match.fecha ? match.fecha.split('T')[0] : '';
-            form.hora.value = match.hora || '';
-            form.Cancha.value = match.Cancha || '';
-            form.categoria.value = match.categoria || '';
-            form.descripcion.value = match.descripcion || '';
-            form.resultado.value = match.resultado || '';
-            form.valor.value = match.valor || '';
-
-            bsModal.show();
-        };
-
-        window.deleteMatch = async (id) => {
-            if (!confirm('¿Seguro que deseas eliminar este partido?')) return;
-            const { error } = await supabase.from('partidos').delete().eq('id', id);
-            if (error) alert('Error: ' + error.message);
-            else loadMatches();
-        };
-
-        // Attach listener for adding new match (via layout integration)
-        document.addEventListener('click', (e) => {
-          if (e.target.closest('#add-match-btn')) {
-            document.getElementById('modal-title').textContent = 'Registrar Partido';
-            form.reset();
-            form.id.value = '';
-            bsModal.show();
-          }
-        });
-
-        form.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const fd = new FormData(form);
-            const id = fd.get('id');
-            const data = Object.fromEntries(fd.entries());
-            delete data.id;
-
-            let result;
-            if (id) {
-                result = await supabase.from('partidos').update(data).eq('id', id);
-            } else {
-                result = await supabase.from('partidos').insert([data]);
-            }
-
-            if (result.error) {
-                alert('Error al guardar: ' + result.error.message);
-            } else {
-                bsModal.hide();
-                loadMatches();
-            }
-        });
-
-        // Make functions global for HTML strings
-        window.editMatch = editMatch;
-        window.deleteMatch = deleteMatch;
-
+        window.closeModal = () => document.getElementById('match-modal').classList.add('hidden');
+        
+        init();
     </script>
 </body>
-
 </html>
-

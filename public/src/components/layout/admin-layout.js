@@ -15,85 +15,96 @@ export async function initAdminLayout() {
     const userRole = profile?.role || 'Club Admin';
     const userInitial = userName[0].toUpperCase();
 
-    // Sidebar Injection (DIBA Blue Background)
+    // Sidebar Injection (Azul Grana Gradient)
     const sidebarHTML = `
-    <aside class="fixed top-0 left-0 bottom-0 w-[280px] bg-[#003366] border-r border-[#002244] z-50 transition-transform duration-500 lg:translate-x-0 -translate-x-full sidebar shadow-2xl" id="sidebar">
-        <div class="p-8 pb-4 flex items-center gap-4">
-            <img src="/images/ESCUDO.png" alt="DIBA FBC" class="w-12 h-12 object-contain drop-shadow-[0_0_10px_rgba(255,215,0,0.5)]">
+    <aside class="fixed top-0 left-0 bottom-0 w-[280px] bg-gradient-to-b from-[#004d98] to-[#a50044] z-50 transition-transform duration-500 lg:translate-x-0 -translate-x-full sidebar shadow-2xl overflow-hidden" id="sidebar">
+        <!-- Visual Decorator -->
+        <div class="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full -mr-16 -mt-16 blur-2xl"></div>
+        
+        <div class="p-8 pb-6 flex items-center gap-4 relative z-10 border-b border-white/10">
+            <img src="/images/ESCUDO.png" alt="DIBA FBC" class="w-12 h-12 object-contain drop-shadow-[0_0_15px_rgba(255,215,0,0.4)]">
             <div class="text-2xl font-black italic tracking-tighter text-white font-montserrat">DIBA <span class="text-[#FFD700]">FBC</span></div>
         </div>
 
-        <nav class="px-5 py-6 space-y-1.5 overflow-y-auto h-[calc(100vh-220px)] custom-scrollbar">
-            <div class="px-6 py-3 text-[0.6rem] font-black uppercase tracking-[0.3em] text-white/30 italic">Principal</div>
-            <a href="dashboard.html" class="nav-link flex items-center gap-4 px-6 py-4 rounded-xl transition-all ${isActive('dashboard') ? 'bg-[#FFD700] text-[#003366] font-black shadow-lg scale-[1.02]' : 'text-white/70 font-bold hover:bg-white/10 hover:text-white group'}">
+        <nav class="px-5 py-8 space-y-1.5 overflow-y-auto h-[calc(100vh-240px)] custom-scrollbar relative z-10">
+            <div class="px-6 py-3 text-[0.65rem] font-black uppercase tracking-[0.3em] text-white/40 italic">Principal</div>
+            <a href="dashboard.html" class="nav-link flex items-center gap-4 px-6 py-4 rounded-xl transition-all ${isActive('dashboard') ? 'bg-[#FFD700] text-[#004d98] font-black shadow-lg scale-[1.02]' : 'text-white/80 font-bold hover:bg-white/10 hover:text-white group'}">
                 <i class="fas fa-chart-line text-lg ${isActive('dashboard') ? '' : 'opacity-40 group-hover:opacity-100 group-hover:text-[#FFD700]'}"></i> Dashboard
             </a>
 
-            <div class="px-6 pt-8 pb-3 text-[0.6rem] font-black uppercase tracking-[0.3em] text-white/30 italic">Gestión Deportiva</div>
-            <a href="planilla.html" class="nav-link flex items-center gap-4 px-6 py-4 rounded-xl transition-all ${isActive('planilla') ? 'bg-[#FFD700] text-[#003366] font-black shadow-lg scale-[1.02]' : 'text-white/70 font-bold hover:bg-white/10 hover:text-white group'}">
+            <div class="px-6 pt-10 pb-3 text-[0.65rem] font-black uppercase tracking-[0.3em] text-white/40 italic">Gestión</div>
+            <a href="planilla.html" class="nav-link flex items-center gap-4 px-6 py-4 rounded-xl transition-all ${isActive('planilla') ? 'bg-[#FFD700] text-[#004d98] font-black shadow-lg scale-[1.02]' : 'text-white/80 font-bold hover:bg-white/10 hover:text-white group'}">
                 <i class="fas fa-list-check text-lg ${isActive('planilla') ? '' : 'opacity-40 group-hover:opacity-100 group-hover:text-[#FFD700]'}"></i> Planilla
             </a>
-            <a href="crear-jugador.html" class="nav-link flex items-center gap-4 px-6 py-4 rounded-xl transition-all ${isActive('crear-jugador') ? 'bg-[#FFD700] text-[#003366] font-black shadow-lg scale-[1.02]' : 'text-white/70 font-bold hover:bg-white/10 hover:text-white group'}">
-                <i class="fas fa-user-plus text-lg ${isActive('crear-jugador') ? '' : 'opacity-40 group-hover:opacity-100 group-hover:text-[#FFD700]'}"></i> Nuevo Jugador
-            </a>
-            <a href="partidos.html" class="nav-link flex items-center gap-4 px-6 py-4 rounded-xl transition-all ${isActive('partidos') ? 'bg-[#FFD700] text-[#003366] font-black shadow-lg scale-[1.02]' : 'text-white/70 font-bold hover:bg-white/10 hover:text-white group'}">
+            <a href="partidos.html" class="nav-link flex items-center gap-4 px-6 py-4 rounded-xl transition-all ${isActive('partidos') ? 'bg-[#FFD700] text-[#004d98] font-black shadow-lg scale-[1.02]' : 'text-white/80 font-bold hover:bg-white/10 hover:text-white group'}">
                 <i class="fas fa-futbol text-lg ${isActive('partidos') ? '' : 'opacity-40 group-hover:opacity-100 group-hover:text-[#FFD700]'}"></i> Partidos
             </a>
-            <a href="convocatorias.html" class="nav-link flex items-center gap-4 px-6 py-4 rounded-xl transition-all ${isActive('convocatorias') ? 'bg-[#FFD700] text-[#003366] font-black shadow-lg scale-[1.02]' : 'text-white/70 font-bold hover:bg-white/10 hover:text-white group'}">
+            <a href="convocatorias.html" class="nav-link flex items-center gap-4 px-6 py-4 rounded-xl transition-all ${isActive('convocatorias') ? 'bg-[#FFD700] text-[#004d98] font-black shadow-lg scale-[1.02]' : 'text-white/80 font-bold hover:bg-white/10 hover:text-white group'}">
                 <i class="fas fa-bullhorn text-lg ${isActive('convocatorias') ? '' : 'opacity-40 group-hover:opacity-100 group-hover:text-[#FFD700]'}"></i> Convocatorias
             </a>
-
-            <div class="px-6 pt-8 pb-3 text-[0.6rem] font-black uppercase tracking-[0.3em] text-white/30 italic">Administración</div>
-            <a href="GestorDocumental.html" class="nav-link flex items-center gap-4 px-6 py-4 rounded-xl transition-all ${isActive('GestorDocumental') ? 'bg-[#FFD700] text-[#003366] font-black shadow-lg scale-[1.02]' : 'text-white/70 font-bold hover:bg-white/10 hover:text-white group'}">
-                <i class="fas fa-file-invoice text-lg ${isActive('GestorDocumental') ? '' : 'opacity-40 group-hover:opacity-100 group-hover:text-[#FFD700]'}"></i> Documentos
-            </a>
-            <a href="usuarios.html" class="nav-link flex items-center gap-4 px-6 py-4 rounded-xl transition-all ${isActive('usuarios') ? 'bg-[#FFD700] text-[#003366] font-black shadow-lg scale-[1.02]' : 'text-white/70 font-bold hover:bg-white/10 hover:text-white group'}">
+            <a href="usuarios.html" class="nav-link flex items-center gap-4 px-6 py-4 rounded-xl transition-all ${isActive('usuarios') ? 'bg-[#FFD700] text-[#004d98] font-black shadow-lg scale-[1.02]' : 'text-white/80 font-bold hover:bg-white/10 hover:text-white group'}">
                 <i class="fas fa-user-shield text-lg ${isActive('usuarios') ? '' : 'opacity-40 group-hover:opacity-100 group-hover:text-[#FFD700]'}"></i> Usuarios
             </a>
-            <a href="rifa_diba.html" class="nav-link flex items-center gap-4 px-6 py-4 rounded-xl transition-all ${isActive('rifa_diba') ? 'bg-[#FFD700] text-[#003366] font-black shadow-lg scale-[1.02]' : 'text-white/70 font-bold hover:bg-white/10 hover:text-white group'}">
-                <i class="fas fa-ticket-alt text-lg ${isActive('rifa_diba') ? '' : 'opacity-40 group-hover:opacity-100 group-hover:text-[#FFD700]'}"></i> Rifas
+            <a href="GestorDocumental.html" class="nav-link flex items-center gap-4 px-6 py-4 rounded-xl transition-all ${isActive('GestorDocumental') ? 'bg-[#FFD700] text-[#004d98] font-black shadow-lg scale-[1.02]' : 'text-white/80 font-bold hover:bg-white/10 hover:text-white group'}">
+                <i class="fas fa-file-invoice text-lg ${isActive('GestorDocumental') ? '' : 'opacity-40 group-hover:opacity-100 group-hover:text-[#FFD700]'}"></i> Documentos
+            </a>
+            <a href="rifa_diba.html" class="nav-link flex items-center gap-4 px-6 py-4 rounded-xl transition-all ${isActive('rifa_diba') ? 'bg-[#FFD700] text-[#004d98] font-black shadow-lg scale-[1.02]' : 'text-white/80 font-bold hover:bg-white/10 hover:text-white group'}">
+                <i class="fas fa-ticket-simple text-lg ${isActive('rifa_diba') ? '' : 'opacity-40 group-hover:opacity-100 group-hover:text-[#FFD700]'}"></i> Rifa
+            </a>
+            <a href="push.html" class="nav-link flex items-center gap-4 px-6 py-4 rounded-xl transition-all ${isActive('push') ? 'bg-[#FFD700] text-[#004d98] font-black shadow-lg scale-[1.02]' : 'text-white/80 font-bold hover:bg-white/10 hover:text-white group'}">
+                <i class="fas fa-paper-plane text-lg ${isActive('push') ? '' : 'opacity-40 group-hover:opacity-100 group-hover:text-[#FFD700]'}"></i> Push
+            </a>
+            <a href="profile.html" class="nav-link flex items-center gap-4 px-6 py-4 rounded-xl transition-all ${isActive('profile') ? 'bg-[#FFD700] text-[#004d98] font-black shadow-lg scale-[1.02]' : 'text-white/80 font-bold hover:bg-white/10 hover:text-white group'}">
+                <i class="fas fa-user-circle text-lg ${isActive('profile') ? '' : 'opacity-40 group-hover:opacity-100 group-hover:text-[#FFD700]'}"></i> Perfil
             </a>
         </nav>
 
-        <div class="absolute bottom-0 left-0 right-0 p-6 bg-[#002a55] border-t border-white/5">
+        <div class="absolute bottom-0 left-0 right-0 p-6 bg-black/20 backdrop-blur-md border-t border-white/5">
             <div class="flex items-center gap-3 p-4 bg-white/5 rounded-2xl mb-4 border border-white/5">
-                <div class="w-10 h-10 rounded-xl bg-gold/20 flex items-center justify-center text-gold font-black italic border border-gold/30">${userInitial}</div>
+                <div class="w-10 h-10 rounded-full bg-[#FFD700] text-[#004d98] flex items-center justify-center font-black italic shadow-inner">${userInitial}</div>
                 <div class="min-w-0">
-                    <div class="text-[0.8rem] font-black text-white truncate italic">${userName}</div>
-                    <div class="text-[0.6rem] font-bold text-gold/60 uppercase tracking-widest">${userRole}</div>
+                    <div class="text-[0.8rem] font-black text-white truncate italic uppercase tracking-tighter">${userName}</div>
+                    <div class="text-[0.6rem] font-bold text-[#FFD700]/70 uppercase tracking-widest">${userRole}</div>
                 </div>
             </div>
-            <button class="w-full py-3.5 rounded-xl bg-red-500/10 text-red-500 text-[0.7rem] font-black uppercase tracking-[0.2em] hover:bg-red-500/20 transition-all border border-red-500/10" id="logout-btn-layout">
-                <i class="fas fa-power-off mr-2"></i> Cerrar Sesión
+            <button class="w-full py-3.5 rounded-xl bg-white/10 text-white text-[0.7rem] font-black uppercase tracking-[0.2em] hover:bg-white/20 transition-all border border-white/10" id="logout-btn-layout">
+                <i class="fas fa-power-off mr-2 text-[#FFD700]"></i> Salir
             </button>
         </div>
     </aside>
-    <div class="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 hidden" id="sidebar-overlay"></div>
+    <div class="fixed inset-0 bg-[#004d98]/40 backdrop-blur-sm z-40 hidden" id="sidebar-overlay"></div>
     `;
 
-    // Header Injection (White Background)
+    // Header Injection (Azul Grana Styled)
     const pageTitle = document.title.split('—')[0].trim();
     const headerHTML = `
-    <header class="sticky top-0 z-40 bg-white px-8 h-20 flex items-center justify-between border-b border-slate-200 shadow-sm">
+    <header class="sticky top-0 z-40 bg-white px-8 h-[70px] flex items-center justify-between border-b border-slate-100 shadow-sm relative overflow-hidden">
+        <!-- Visual Accent -->
+        <div class="absolute top-0 left-0 w-1 h-full bg-[#004d98]"></div>
+        
         <div class="flex items-center gap-6">
-            <button class="lg:hidden w-11 h-11 rounded-xl bg-slate-100 flex items-center justify-center text-[#003366] hover:bg-slate-200 transition-all" id="menu-btn-layout">
+            <button class="lg:hidden w-11 h-11 rounded-xl bg-slate-50 flex items-center justify-center text-[#004d98] hover:bg-slate-100 transition-all border border-slate-100" id="menu-btn-layout">
                 <i class="fas fa-bars-staggered"></i>
             </button>
             <div class="animate-fade-up">
-                <h1 class="text-xl font-black italic text-[#003366] uppercase tracking-tighter font-montserrat">${pageTitle} <span class="text-[#FFD700] opacity-100 font-normal">SISTEMA</span></h1>
-                <p class="text-[0.55rem] font-bold text-slate-400 uppercase tracking-[0.4em] mt-0.5">Gestión Administrativa DIBA FBC</p>
+                <h1 class="text-xl font-black italic text-[#004d98] uppercase tracking-tighter font-montserrat">${pageTitle} <span class="text-[#a50044] font-normal">PANEL</span></h1>
+                <p class="text-[0.55rem] font-bold text-slate-400 uppercase tracking-[0.4em] mt-0.5">Club Deportivo DIBA FBC</p>
             </div>
         </div>
-        <div class="flex items-center gap-4">
+        
+        <div class="flex items-center gap-6">
             <div class="hidden md:flex flex-col items-end">
-                <div class="text-[0.9rem] font-black text-[#003366] italic" id="layout-clock">00:00:00</div>
-                <div class="text-[0.5rem] font-bold text-slate-400 uppercase tracking-widest" id="layout-date">---</div>
+                <div class="text-[1rem] font-black text-[#004d98] italic tracking-tighter" id="layout-clock">00:00:00</div>
+                <div class="text-[0.55rem] font-bold text-slate-400 uppercase tracking-widest" id="layout-date">---</div>
             </div>
-            <div class="w-[1px] h-8 bg-slate-200 hidden md:block"></div>
-            <div class="flex items-center gap-2">
-                <button id="theme-toggle" class="w-11 h-11 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center text-[#003366] hover:bg-slate-100 transition-all shadow-sm">
-                    <i class="fas fa-circle-half-stroke"></i>
+            <div class="w-[1px] h-8 bg-slate-100 hidden md:block"></div>
+            <div class="flex items-center gap-3">
+                <button class="w-10 h-10 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-center text-[#004d98] hover:text-[#a50044] transition-colors shadow-sm">
+                    <i class="fas fa-bell text-sm"></i>
                 </button>
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-[#004d98] to-[#a50044] flex items-center justify-center text-white font-black text-xs shadow-md shadow-blue-900/10 border border-white/20">
+                    ${userInitial}
+                </div>
             </div>
         </div>
     </header>

@@ -1,1127 +1,145 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
-  <meta charset="UTF-8" />
-  <title>Planilla — DIBA FBC Admin</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="icon" href="../images/ESCUDO.ico" type="image/x-icon">
-
-  <!-- Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,600;0,700;0,900;1,700;1,900&family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
-  
-  <!-- Bootstrap 5.3.3 CSS & JS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
-  <link rel="stylesheet" href="../styles/admin-common.css">
-  <link rel="stylesheet" href="../styles/planilla.css">
-
-  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.8.2/dist/jspdf.plugin.autotable.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-
-  <!-- Tailwind Play CDN & Elite Config -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            gold: { DEFAULT: '#FFD700', glow: 'rgba(255, 215, 0, 0.3)', dark: '#B8860B' }
-          },
-          borderWidth: { '1': '1px' },
-          borderRadius: { 'elite': '2rem', 'premium': '1.25rem' },
-          boxShadow: {
-            'premium': '0 10px 40px -10px rgba(0, 51, 102, 0.12)'
-          }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Planilla de Asistencia — DIBA FBC Admin</title>
+    <link rel="icon" href="../images/ESCUDO.ico">
+    
+    <!-- Core & Styles -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;900&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="../styles/admin-common.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'diba-blue': '#004d98',
+                        'diba-red': '#a50044',
+                        'diba-gold': '#FFD700'
+                    }
+                }
+            }
         }
-      }
-    }
-  </script>
+    </script>
 </head>
-
-<body class="bg-[#F4F7FA] text-slate-900 font-sans min-h-screen selection:bg-[#FFD700]/30" id="admin-body" style="display: none;">
-    <!-- Loader -->
-    <div id="app-loader" class="fixed inset-0 z-[9999] flex items-center justify-center bg-[#F4F7FA]">
-        <div class="text-center animate-fade-up">
-            <div class="relative w-16 h-16 mx-auto mb-6">
-                <div class="absolute inset-0 border-4 border-[#003366]/10 rounded-full"></div>
-                <div class="absolute inset-0 border-4 border-t-[#003366] rounded-full animate-spin"></div>
-            </div>
-            <p class="text-[10px] font-black uppercase tracking-[0.3em] text-[#003366] italic">Cargando Planilla Maestro...</p>
-        </div>
-    </div>
-
-    <!-- ══ NAVIGATION (Sidebar + Header) ══ -->
+<body class="bg-white font-['Inter']">
     <div id="admin-nav"></div>
 
-    <!-- ══ MAIN CONTENT ══ -->
-    <main class="lg:ml-[280px] min-h-screen transition-all duration-500 pb-12">
-        <div class="content p-8">
-            <div class="max-w-7xl mx-auto w-full">
-                
-                <!-- Toast -->
-                <div class="toast-container position-fixed top-0 end-0 p-4">
-                    <div id="appToast" class="toast bg-white shadow-premium border-0 rounded-2xl" role="alert" aria-live="assertive" aria-atomic="true">
-                        <div class="toast-header border-0 bg-transparent p-4">
-                            <i class="fas fa-check-circle text-emerald-500 me-2 text-xl"></i>
-                            <strong class="me-auto text-[#003366] font-black uppercase italic text-xs">Notificación</strong>
-                            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-                        </div>
-                        <div class="toast-body p-4 pt-0 text-slate-600 font-bold text-xs"></div>
-                    </div>
-                </div>
-
-                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-10 animate-fade-up">
-                    <div>
-                        <h2 class="text-3xl font-black italic uppercase text-[#003366] flex items-center gap-3">
-                            Planilla de <span class="text-[#FFD700]">Asistencia</span>
-                            <span id="sync-status" class="text-[10px] font-black uppercase tracking-widest text-slate-400 bg-slate-100 px-3 py-1 rounded-full italic">Sincronizado</span>
-                        </h2>
-                    </div>
-                    <div class="flex items-center gap-4 bg-white p-2 rounded-2xl shadow-sm border border-slate-100">
-                        <label for="planillaDate" class="text-[10px] font-black uppercase tracking-widest text-slate-500 ml-3">Fecha:</label>
-                        <input type="date" class="bg-slate-50 border-0 rounded-xl p-3 text-[#003366] font-bold outline-none focus:ring-2 focus:ring-[#FFD700]" id="planillaDate">
-                    </div>
-                </div>
-
-                <!-- Stats Bar -->
-                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-10 animate-fade-up" style="animation-delay: 0.1s">
-                    <div class="bg-white p-6 rounded-elite border border-slate-100 shadow-premium flex items-center gap-4 transition-all hover:scale-[1.02]">
-                        <div class="w-12 h-12 bg-emerald-50 rounded-2xl flex items-center justify-center text-emerald-500 border border-emerald-100">
-                            <i class="fas fa-check-circle"></i>
-                        </div>
-                        <div>
-                            <div class="text-2xl font-black text-[#003366]" id="stat-presentes">0</div>
-                            <div class="text-[9px] font-black uppercase tracking-widest text-slate-400">Presentes</div>
-                        </div>
-                    </div>
-                    <div class="bg-white p-6 rounded-elite border border-slate-100 shadow-premium flex items-center gap-4 transition-all hover:scale-[1.02]">
-                        <div class="w-12 h-12 bg-rose-50 rounded-2xl flex items-center justify-center text-rose-500 border border-rose-100">
-                            <i class="fas fa-times-circle"></i>
-                        </div>
-                        <div>
-                            <div class="text-2xl font-black text-[#003366]" id="stat-ausentes">0</div>
-                            <div class="text-[9px] font-black uppercase tracking-widest text-slate-400">Ausentes</div>
-                        </div>
-                    </div>
-                    <div class="bg-white p-6 rounded-elite border border-slate-100 shadow-premium flex items-center gap-4 transition-all hover:scale-[1.02]">
-                        <div class="w-12 h-12 bg-amber-50 rounded-2xl flex items-center justify-center text-amber-500 border border-amber-100">
-                            <i class="fas fa-clock"></i>
-                        </div>
-                        <div>
-                            <div class="text-2xl font-black text-[#003366]" id="stat-excusas">0</div>
-                            <div class="text-[9px] font-black uppercase tracking-widest text-slate-400">Excusas</div>
-                        </div>
-                    </div>
-                    <div class="bg-white p-6 rounded-elite border border-slate-100 shadow-premium flex items-center gap-4 transition-all hover:scale-[1.02]">
-                        <div class="w-12 h-12 bg-indigo-50 rounded-2xl flex items-center justify-center text-indigo-500 border border-indigo-100">
-                            <i class="fas fa-users"></i>
-                        </div>
-                        <div>
-                            <div class="text-2xl font-black text-[#003366]" id="stat-total">0</div>
-                            <div class="text-[9px] font-black uppercase tracking-widest text-slate-400">Total</div>
-                        </div>
-                    </div>
-                    <div class="bg-white p-6 rounded-elite border border-slate-100 shadow-premium flex items-center gap-4 transition-all hover:scale-[1.02]">
-                        <div class="w-12 h-12 bg-[#FFD700]/10 rounded-2xl flex items-center justify-center text-[#FFD700] border border-[#FFD700]/20">
-                            <i class="fas fa-percent"></i>
-                        </div>
-                        <div>
-                            <div class="text-2xl font-black text-[#003366]" id="stat-pct">0%</div>
-                            <div class="text-[9px] font-black uppercase tracking-widest text-slate-400">Asistencia</div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Barra de progreso -->
-                <div class="h-4 bg-slate-100 rounded-full overflow-hidden mb-10 flex border border-white shadow-inner animate-fade-up" style="animation-delay: 0.15s">
-                    <div class="h-full bg-emerald-500 transition-all duration-1000" id="prog-p" style="width:0%"></div>
-                    <div class="h-full bg-rose-500 transition-all duration-1000" id="prog-a" style="width:0%"></div>
-                    <div class="h-full bg-amber-500 transition-all duration-1000" id="prog-e" style="width:0%"></div>
-                </div>
-
-                <!-- Controles -->
-                <div class="bg-white shadow-premium rounded-elite border border-slate-100 p-8 mb-10 animate-fade-up" style="animation-delay: 0.2s">
-                    <div class="flex flex-col xl:flex-row justify-between items-center gap-6">
-                        <div class="flex gap-3 w-full xl:w-auto">
-                            <a href="../ficha.html" class="flex-1 xl:flex-none px-6 py-4 bg-[#FFD700] text-[#003366] rounded-xl font-black uppercase text-[10px] tracking-widest shadow-lg hover:shadow-xl hover:scale-[1.02] transition-all flex items-center justify-center gap-2">
-                                <i class="fas fa-users-cog"></i> Gestionar Jugadores
-                            </a>
-                        </div>
-                        <div class="flex flex-wrap items-center gap-3 w-full xl:w-auto justify-center xl:justify-end">
-                            <div class="relative flex-grow md:flex-grow-0 md:min-w-[300px]">
-                                <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
-                                <input type="text" id="playerSearch" class="w-full bg-slate-50 border-slate-100 rounded-xl p-4 pl-12 text-[#003366] font-bold outline-none focus:ring-2 focus:ring-[#FFD700] transition-all"
-                                    placeholder="Buscar jugador...">
-                            </div>
-                            
-                            <div class="flex flex-wrap gap-2 justify-center">
-                                <button id="generatePDFPro" class="px-5 py-4 bg-[#003366] text-[#FFD700] rounded-xl font-black uppercase text-[10px] tracking-widest shadow-md hover:shadow-xl hover:scale-[1.05] transition-all flex items-center gap-2">
-                                    <i class="fas fa-print"></i> Pro
-                                </button>
-                                <button id="generateUnifiedPDF" class="px-5 py-4 bg-amber-500 text-white rounded-xl font-black uppercase text-[10px] tracking-widest shadow-md hover:shadow-xl hover:scale-[1.05] transition-all flex items-center gap-2">
-                                    <i class="fas fa-users"></i> Unificada
-                                </button>
-                                <button id="generateOfficialPDF" class="px-5 py-4 bg-emerald-500 text-white rounded-xl font-black uppercase text-[10px] tracking-widest shadow-md hover:shadow-xl hover:scale-[1.05] transition-all flex items-center gap-2">
-                                    <i class="fas fa-id-card"></i> Oficial
-                                </button>
-                                <button id="generateExcel" class="px-5 py-4 bg-white text-emerald-600 rounded-xl font-black uppercase text-[10px] tracking-widest border border-emerald-100 shadow-sm hover:bg-emerald-50 transition-all flex items-center gap-2">
-                                    <i class="fas fa-file-excel"></i> Excel
-                                </button>
-                                <button id="saveAllBtn" class="px-5 py-4 bg-[#003366] text-[#FFD700] rounded-xl font-black uppercase text-[10px] tracking-widest shadow-md hover:shadow-xl hover:scale-[1.05] transition-all flex items-center gap-2">
-                                    <i class="fas fa-cloud-upload-alt"></i> Guardar
-                                </button>
-                                <button onclick="openCreateModal()" class="px-5 py-4 bg-white text-[#003366] rounded-xl font-black uppercase text-[10px] tracking-widest border border-[#003366]/10 shadow-sm hover:bg-slate-50 transition-all flex items-center gap-2">
-                                    <i class="fas fa-plus"></i> Nuevo
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-        <!-- Tabla -->
-        <div class="bg-white shadow-premium rounded-elite border border-slate-100 overflow-hidden animate-fade-up mb-12" style="animation-delay: 0.3s">
-          <div class="overflow-x-auto">
-            <table class="w-full text-left border-collapse" id="mainTable">
-              <thead>
-                <tr class="bg-slate-50 border-b border-slate-100">
-                  <th class="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-slate-400 w-16">#</th>
-                  <th class="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-slate-400 w-20">Foto</th>
-                  <th class="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-slate-400">Jugador</th>
-                  <th class="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-slate-400 w-48">Pago</th>
-                  <th class="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-slate-400 w-40">Asistencia</th>
-                  <th class="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-slate-400">Obs.</th>
-                  <th class="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-slate-400 w-24 text-center">Acciones</th>
-                </tr>
-              </thead>
-              <tbody id="planillaBody" class="divide-y divide-slate-50">
-                <tr>
-                  <td colspan="7" class="px-6 py-12 text-center">
-                    <div class="flex flex-col items-center gap-4">
-                        <i class="fas fa-spinner fa-spin text-2xl text-[#FFD700]"></i>
-                        <p class="text-xs font-bold uppercase tracking-widest text-slate-400">Sincronizando datos...</p>
-                    </div>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        <!-- Modal de Gestión Documental -->
-        <div id="adminDocsModal" class="hidden fixed inset-0 z-[2000] flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-md">
-          <div class="bg-white w-full max-w-xl rounded-[2.5rem] shadow-2xl border border-white overflow-hidden animate-fade-up">
-            <div class="p-8 border-b border-slate-50 flex justify-between items-start">
-              <div>
-                <h3 id="modalPlayerName" class="text-2xl font-black italic uppercase text-[#003366] leading-none mb-1">Cargando...</h3>
-                <p id="modalPlayerDni" class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400"></p>
-              </div>
-              <button onclick="closeAdminDocs()" class="w-10 h-10 bg-slate-50 rounded-full flex items-center justify-center text-slate-400 hover:text-rose-500 transition-colors">
-                <i class="fas fa-times"></i>
-              </button>
-            </div>
-            <div class="p-8 max-h-[450px] overflow-y-auto space-y-3" id="modalDocsList"></div>
-            <div class="p-6 bg-slate-50 text-center">
-              <p class="text-[9px] font-black uppercase tracking-[0.3em] text-slate-400 italic">Gestor Documental — DIBA FBC</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- Modal de Edición -->
-        <div id="editPlayerModal" class="hidden fixed inset-0 z-[2000] flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-md">
-          <div class="bg-white w-full max-w-md rounded-[2.5rem] shadow-2xl border border-white overflow-hidden animate-fade-up">
-            <div class="p-8 border-b border-slate-50 flex justify-between items-center">
-              <h3 class="text-2xl font-black italic uppercase text-[#003366]">Editar <span class="text-[#FFD700]">Jugador</span></h3>
-              <button onclick="closeEditModal()" class="w-10 h-10 bg-slate-50 rounded-full flex items-center justify-center text-slate-400 hover:text-rose-500 transition-colors">
-                <i class="fas fa-times"></i>
-              </button>
-            </div>
-            <div class="p-8">
-              <form id="editPlayerForm" class="space-y-6">
-                <input type="hidden" id="editDni">
-                <input type="hidden" id="oldName">
+    <main class="lg:ml-[280px] min-h-screen transition-all duration-300 bg-white">
+        <div class="p-6 lg:p-10 space-y-8 max-w-7xl mx-auto">
+            
+            <!-- Header -->
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
                 <div>
-                  <label class="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-3 ml-1">Nombre Completo</label>
-                  <input type="text" id="editNombre" class="w-full bg-slate-50 border-slate-100 rounded-xl p-4 text-[#003366] font-bold outline-none focus:ring-2 focus:ring-[#FFD700]">
+                    <h2 class="text-3xl font-black text-diba-blue italic tracking-tighter uppercase">Planilla de <span class="text-diba-red">Asistencia</span></h2>
+                    <p class="text-sm text-slate-400 font-bold uppercase tracking-widest mt-1">Control de presencia y rendimiento</p>
                 </div>
-                <div>
-                  <label class="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-3 ml-1">Categoría</label>
-                  <select id="editCategoria" class="w-full bg-slate-50 border-slate-100 rounded-xl p-4 text-[#003366] font-bold outline-none focus:ring-2 focus:ring-[#FFD700]">
-                    <option value="2014/2015/2016">2014/2015/2016</option>
-                    <option value="2012">2012</option>
-                    <option value="2013">2013</option>
-                    <option value="General">General</option>
-                  </select>
-                </div>
-                <button type="submit" class="w-full py-5 bg-[#003366] text-[#FFD700] rounded-2xl font-black uppercase italic text-sm shadow-lg hover:shadow-xl hover:scale-[1.02] transition-all flex items-center justify-center gap-3 mt-4">
-                    <i class="fas fa-save"></i> Guardar Cambios
-                </button>
-              </form>
-            </div>
-          </div>
-        </div>
-
-        <!-- Modal de Creación -->
-        <div id="createPlayerModal" class="hidden fixed inset-0 z-[2000] flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-md">
-          <div class="bg-white w-full max-w-4xl rounded-[3rem] shadow-2xl border border-white overflow-hidden animate-fade-up">
-            <div class="p-8 lg:p-12 border-b border-slate-50 flex justify-between items-center">
-              <h3 class="text-3xl font-black italic uppercase text-[#003366]">Registro <span class="text-[#FFD700]">Rápido</span></h3>
-              <button onclick="closeCreateModal()" class="w-12 h-12 bg-slate-50 rounded-full flex items-center justify-center text-slate-400 hover:text-rose-500 transition-colors">
-                <i class="fas fa-times text-xl"></i>
-              </button>
-            </div>
-            <div class="p-8 lg:p-12 max-h-[70vh] overflow-y-auto">
-              <form id="quickCreatePlayerForm" class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div>
-                  <label class="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-3 ml-1">Identificación (DNI)</label>
-                  <input type="text" id="newDni" class="w-full bg-slate-50 border-slate-100 rounded-xl p-4 text-[#003366] font-bold outline-none focus:ring-2 focus:ring-[#FFD700]" required>
-                </div>
-                <div>
-                  <label class="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-3 ml-1">Categoría</label>
-                  <select id="newCategoria" class="w-full bg-slate-50 border-slate-100 rounded-xl p-4 text-[#003366] font-bold outline-none focus:ring-2 focus:ring-[#FFD700]" required>
-                    <option value="2014/15/16">2014/15/16</option>
-                    <option value="2012">2012</option>
-                    <option value="2013">2013</option>
-                    <option value="General">General</option>
-                  </select>
-                </div>
-                <div>
-                  <label class="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-3 ml-1">Nombres</label>
-                  <input type="text" id="newNombre" class="w-full bg-slate-50 border-slate-100 rounded-xl p-4 text-[#003366] font-bold outline-none focus:ring-2 focus:ring-[#FFD700]" required>
-                </div>
-                <div>
-                  <label class="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-3 ml-1">Apellidos</label>
-                  <input type="text" id="newApellidos" class="w-full bg-slate-50 border-slate-100 rounded-xl p-4 text-[#003366] font-bold outline-none focus:ring-2 focus:ring-[#FFD700]" required>
-                </div>
-                <div>
-                  <label class="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-3 ml-1">Fecha de Nacimiento</label>
-                  <input type="date" id="newFechaNac" class="w-full bg-slate-50 border-slate-100 rounded-xl p-4 text-[#003366] font-bold outline-none focus:ring-2 focus:ring-[#FFD700]">
-                </div>
-                <div>
-                  <label class="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-3 ml-1">Sexo</label>
-                  <select id="newSexo" class="w-full bg-slate-50 border-slate-100 rounded-xl p-4 text-[#003366] font-bold outline-none focus:ring-2 focus:ring-[#FFD700]">
-                    <option value="M">Masculino</option>
-                    <option value="F">Femenino</option>
-                  </select>
-                </div>
-                <div class="md:col-span-2">
-                    <button type="submit" class="w-full py-5 bg-[#003366] text-[#FFD700] rounded-2xl font-black uppercase italic text-sm shadow-lg hover:shadow-xl hover:scale-[1.02] transition-all flex items-center justify-center gap-3 mt-4">
-                        <i class="fas fa-user-plus"></i> Registrar Jugador Completo
+                <div class="flex items-center gap-3">
+                    <button id="save-attendance-btn" class="bg-diba-gold text-diba-blue px-8 py-3 rounded-xl font-black italic uppercase text-xs shadow-lg shadow-yellow-500/20 hover:scale-105 transition-all">
+                        <i class="fas fa-save mr-2 text-diba-red"></i> Guardar Cambios
                     </button>
                 </div>
-              </form>
             </div>
-          </div>
-        </div>
-      </div>
-    </div>
 
+            <!-- Table Card -->
+            <div class="bg-white rounded-[2.5rem] border border-slate-50 shadow-premium overflow-hidden">
+                <div class="p-8 border-b border-slate-50 bg-slate-50/20 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div class="flex items-center gap-4">
+                        <div class="w-1.5 h-10 bg-diba-blue rounded-full"></div>
+                        <div>
+                            <div class="text-[10px] font-black uppercase text-slate-400 tracking-widest">Partido / Sesión</div>
+                            <div class="text-sm font-black text-diba-blue italic uppercase tracking-tighter" id="session-title">Cargando evento...</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left">
+                        <thead>
+                            <tr class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 border-b border-slate-50">
+                                <th class="px-8 py-5">Jugador</th>
+                                <th class="px-8 py-5 text-center">Asistencia</th>
+                                <th class="px-8 py-5 text-center">Pago</th>
+                                <th class="px-8 py-5 text-center">Observaciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="attendance-table-body">
+                            <tr><td colspan="4" class="py-20 text-center"><i class="fas fa-circle-notch fa-spin text-2xl text-slate-200"></i></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Scripts -->
     <script src="../scripts/config.js"></script>
     <script type="module">
-      import { supabase, requireAdmin } from '../scripts/supabaseClient.js';
-      import { updatePlayer, deletePlayer } from '../src/features/players/admin.js?v=2';
-      import { initAdminLayout } from '../src/components/layout/admin-layout.js';
-
-      // ── AUTENTICACIÓN Y CARGA ──
-      async function init() {
-        try {
-          const session = await requireAdmin();
-          if (!session) return;
-
-          // Inicializar Layout Unificado
-          const user = session.user;
-          let profile = { username: 'Admin', role: 'Administrador' };
-          
-          if (user) {
-            const { data } = await supabase
-              .from('users')
-              .select('username, role')
-              .eq('id', user.id)
-              .single();
-            if (data) profile = data;
-          }
-
-          initAdminLayout({
-            username: profile.username,
-            role: profile.role,
-            avatarText: profile.username[0].toUpperCase()
-          });
-
-          document.getElementById('app-loader')?.classList.add('hidden');
-          document.getElementById('admin-body').classList.remove('hidden');
-          document.getElementById('admin-body').style.display = 'block';
-
-        } catch (error) {
-          console.error("Init error:", error);
-        }
-      }
-
-      init();
-
-      document.addEventListener('DOMContentLoaded', () => {
-        const tableBody = document.getElementById('planillaBody');
-        const dateInput = document.getElementById('planillaDate');
-        const playerSearch = document.getElementById('playerSearch');
-        const syncStatus = document.getElementById('sync-status');
-        const toastElement = document.getElementById('appToast');
-        const bsToast = new bootstrap.Toast(toastElement);
-
-        let appState = {
-          players: [],
-          currentPlanillaId: null,
-          registros: {} // { dni: { id_db, pago, asistencia, observacion } }
-        };
-
-        const showToast = (message, isError = false) => {
-          const toastBody = toastElement.querySelector('.toast-body');
-          const toastIcon = toastElement.querySelector('i');
-          toastBody.textContent = message;
-          toastIcon.className = isError ? 'fas fa-exclamation-circle text-rose-500 me-2 text-xl' : 'fas fa-check-circle text-emerald-500 me-2 text-xl';
-          bsToast.show();
-        };
-
-        const loadData = async () => {
-          try {
-            tableBody.innerHTML = `<tr><td colspan="7" class="px-6 py-12 text-center text-slate-400 font-bold uppercase tracking-widest text-[10px]">
-                <i class="fas fa-spinner fa-spin me-2 text-[#FFD700]"></i> Sincronizando datos...
-            </td></tr>`;
-
-            if (!dateInput.value) dateInput.valueAsDate = new Date();
-            const fechaSeleccionada = dateInput.value;
-
-            // 1. Cargar jugadores
-            const { data: players, error: pErr } = await supabase.from('identificacion').select('numero, nombre, apellidos, categoria, foto_url, fecha_nacimiento').order('apellidos');
-            if (pErr) throw pErr;
-            appState.players = players.map(p => ({
-              id: p.numero,
-              name: `${p.nombre} ${p.apellidos}`.trim(),
-              categoria: p.categoria,
-              foto: p.foto_url,
-              birthDate: p.fecha_nacimiento
-            }));
-
-            // 2. Buscar o Crear planilla para esta fecha
-            const { data: planillas, error: plErr } = await supabase
-              .from('planillas')
-              .select('id')
-              .eq('fecha', fechaSeleccionada);
-
-            if (plErr) throw plErr;
-
-            let planillaId;
-            if (planillas.length === 0) {
-              const { data: newPl, error: createErr } = await supabase
-                .from('planillas')
-                .insert([{ fecha: fechaSeleccionada, categoria: 'General' }])
-                .select('id')
-                .single();
-              if (createErr) throw createErr;
-              planillaId = newPl.id;
-            } else {
-              planillaId = planillas[0].id;
-            }
-            appState.currentPlanillaId = planillaId;
-
-            // 3. Cargar registros existentes
-            const { data: regs, error: rErr } = await supabase
-              .from('planilla_registros')
-              .select('*')
-              .eq('planilla_id', planillaId);
-
-            if (rErr) throw rErr;
-
-            appState.registros = {};
-            regs.forEach(r => {
-              appState.registros[r.jugador_dni] = {
-                db_id: r.id,
-                pago: r.pago || '',
-                asistencia: r.asistencia,
-                obs: r.observacion
-              };
-            });
-
-            render();
-          } catch (e) {
-            console.error(e);
-            showToast('Error de conexión: ' + (e.message || 'Supabase no responde'), true);
-          }
-        };
-
-        const render = () => {
-          const q = playerSearch.value.toLowerCase();
-          tableBody.innerHTML = '';
-          const filtered = appState.players.filter(p => p.name.toLowerCase().includes(q));
-
-          const order = { '2014/2015/2016': 1, '2012': 2, '2013': 3, 'General': 4 };
-          filtered.sort((a, b) => {
-            if (order[a.categoria] !== order[b.categoria]) {
-              return (order[a.categoria] || 99) - (order[b.categoria] || 99);
-            }
-            return a.name.localeCompare(b.name);
-          });
-
-          let currentCategory = null;
-          let categoryEnum = 0;
-
-          filtered.forEach((p) => {
-            if (p.categoria !== currentCategory) {
-              currentCategory = p.categoria;
-              categoryEnum = 0;
-
-              const headerTr = document.createElement('tr');
-              headerTr.className = 'bg-slate-50/50';
-              headerTr.innerHTML = `<td colspan="7" class="px-6 py-4 text-[10px] font-black uppercase tracking-[0.2em] text-[#003366] italic bg-slate-100/30">
-                <i class="fas fa-layer-group me-2 text-[#FFD700]"></i>CATEGORÍA ${currentCategory}
-              </td>`;
-              tableBody.appendChild(headerTr);
-            }
-
-            categoryEnum++;
-            const d = appState.registros[p.id] || { pago: '', asistencia: '', obs: '' };
-            const tr = document.createElement('tr');
-            tr.className = 'group hover:bg-slate-50 transition-colors';
-            tr.dataset.dni = p.id;
-            
-            const avatarUrl = p.foto || '../images/ESCUDO.png';
-            
-            tr.innerHTML = `
-              <td class="px-6 py-4 text-[10px] font-black italic text-slate-400">${categoryEnum}</td>
-              <td class="px-6 py-4">
-                <img src="${avatarUrl}" alt="Foto" class="w-10 h-10 rounded-xl object-cover border-2 border-white shadow-sm ring-1 ring-slate-100">
-              </td>
-              <td class="px-6 py-4">
-                <p class="text-[11px] font-black uppercase italic text-[#003366] leading-none mb-1">${p.name}</p>
-                <p class="text-[9px] font-bold text-slate-400 uppercase tracking-widest">${p.id}</p>
-              </td>
-              <td class="px-6 py-4">
-                <select class="w-full bg-slate-50 border-transparent rounded-lg p-2 text-[10px] font-bold text-[#003366] outline-none focus:ring-1 focus:ring-[#FFD700] in-pago">
-                  <option value="" ${!d.pago ? 'selected' : ''}>---</option>
-                  <option value="Nequi" ${d.pago === 'Nequi' ? 'selected' : ''}>Nequi</option>
-                  <option value="Efectivo" ${d.pago === 'Efectivo' ? 'selected' : ''}>Efectivo</option>
-                  <option value="Daviplata" ${d.pago === 'Daviplata' ? 'selected' : ''}>Daviplata</option>
-                  <option value="Banco Bogotá" ${d.pago === 'Banco Bogotá' ? 'selected' : ''}>Banco Bogotá</option>
-                </select>
-              </td>
-              <td class="px-6 py-4">
-                <select class="w-full bg-slate-50 border-transparent rounded-lg p-2 text-[10px] font-bold text-[#003366] outline-none focus:ring-1 focus:ring-[#FFD700] in-asist">
-                  <option value="" ${!d.asistencia ? 'selected' : ''}>---</option>
-                  <option value="P" ${d.asistencia === 'P' ? 'selected' : ''}>Presente</option>
-                  <option value="A" ${d.asistencia === 'A' ? 'selected' : ''}>Ausente</option>
-                  <option value="E" ${d.asistencia === 'E' ? 'selected' : ''}>Excusa</option>
-                </select>
-              </td>
-              <td class="px-6 py-4">
-                <input type="text" class="w-full bg-slate-50 border-transparent rounded-lg p-2 text-[10px] font-bold text-[#003366] outline-none focus:ring-1 focus:ring-[#FFD700] in-obs" value="${d.obs || ''}" placeholder="...">
-              </td>
-              <td class="px-6 py-4 text-center">
-                <div class="dropdown">
-                  <button class="w-8 h-8 rounded-lg hover:bg-slate-100 text-slate-400 transition-colors" data-bs-toggle="dropdown">
-                    <i class="fas fa-ellipsis-v text-xs"></i>
-                  </button>
-                  <ul class="dropdown-menu dropdown-menu-end border-0 shadow-premium p-2 rounded-xl text-xs">
-                    <li><a class="dropdown-item rounded-lg p-2 font-bold uppercase tracking-widest text-[#003366] hover:bg-slate-50 flex items-center gap-2" href="#" onclick="openAdminDocs('${p.id}', '${p.name}')">
-                        <i class="fas fa-file-medical text-emerald-500"></i> Documentos
-                    </a></li>
-                    <li><a class="dropdown-item rounded-lg p-2 font-bold uppercase tracking-widest text-[#003366] hover:bg-slate-50 flex items-center gap-2" href="#" onclick="openEditModal('${p.id}', '${p.name}', '${p.categoria}')">
-                        <i class="fas fa-edit text-[#FFD700]"></i> Editar
-                    </a></li>
-                    <li><hr class="dropdown-divider opacity-10"></li>
-                    <li><a class="dropdown-item rounded-lg p-2 font-bold uppercase tracking-widest text-rose-500 hover:bg-rose-50 flex items-center gap-2" href="#" onclick="handleDelete('${p.id}', '${p.name}')">
-                        <i class="fas fa-trash-alt"></i> Eliminar
-                    </a></li>
-                  </ul>
-                </div>
-              </td>
-            `;
-            tableBody.appendChild(tr);
-          });
-          updateStats();
-        };
-
-        const updateStats = () => {
-          const total = appState.players.length;
-          let p = 0, a = 0, e = 0;
-          appState.players.forEach(pl => {
-            const d = appState.registros[pl.id] || { asistencia: '' };
-            if (d.asistencia === 'P') p++;
-            else if (d.asistencia === 'A') a++;
-            else if (d.asistencia === 'E') e++;
-          });
-
-          document.getElementById('stat-presentes').textContent = p;
-          document.getElementById('stat-ausentes').textContent = a;
-          document.getElementById('stat-excusas').textContent = e;
-          document.getElementById('stat-total').textContent = total;
-
-          const pct = total > 0 ? Math.round((p / total) * 100) : 0;
-          document.getElementById('stat-pct').textContent = pct + '%';
-          document.getElementById('prog-p').style.width = (total > 0 ? (p / total) * 100 : 0) + '%';
-          document.getElementById('prog-a').style.width = (total > 0 ? (a / total) * 100 : 0) + '%';
-          document.getElementById('prog-e').style.width = (total > 0 ? (e / total) * 100 : 0) + '%';
-        };
-
-        // Guardado automático en Supabase
-        const saveRegistro = async (dni) => {
-          syncStatus.innerHTML = '<i class="fas fa-sync fa-spin me-2"></i>Sincronizando...';
-          syncStatus.className = 'text-[9px] font-black uppercase tracking-widest text-[#FFD700] bg-amber-50 px-3 py-1 rounded-full italic';
-          
-          const d = appState.registros[dni];
-          const payload = {
-            planilla_id: appState.currentPlanillaId,
-            jugador_dni: dni,
-            pago: d.pago || null,
-            asistencia: d.asistencia || null,
-            observacion: (d.obs && d.obs.trim()) ? d.obs : null
-          };
-
-          try {
-            if (d.db_id) {
-              await supabase.from('planilla_registros').update(payload).eq('id', d.db_id);
-            } else {
-              const { data, error } = await supabase.from('planilla_registros').insert([payload]).select('id').single();
-              if (!error) d.db_id = data.id;
-            }
-            syncStatus.innerHTML = 'Sincronizado';
-            syncStatus.className = 'text-[9px] font-black uppercase tracking-widest text-slate-400 bg-slate-100 px-3 py-1 rounded-full italic';
-          } catch (e) {
-            console.error(e);
-            syncStatus.innerHTML = 'Error';
-            syncStatus.className = 'text-[9px] font-black uppercase tracking-widest text-rose-500 bg-rose-50 px-3 py-1 rounded-full italic';
-          }
-        };
-
-        // Handlers
-        tableBody.addEventListener('change', (e) => {
-          const tr = e.target.closest('tr');
-          if (!tr) return;
-          const dni = tr.dataset.dni;
-          if (!appState.registros[dni]) appState.registros[dni] = { pago: '', asistencia: '', obs: '' };
-
-          let changed = false;
-          if (e.target.classList.contains('in-pago')) {
-            appState.registros[dni].pago = e.target.value;
-            changed = true;
-          }
-          if (e.target.classList.contains('in-asist')) {
-            appState.registros[dni].asistencia = e.target.value;
-            changed = true;
-            updateStats();
-          }
-
-          if (changed) saveRegistro(dni);
-        });
-
-        tableBody.addEventListener('input', (e) => {
-          const tr = e.target.closest('tr');
-          if (!tr) return;
-          const dni = tr.dataset.dni;
-          if (!appState.registros[dni]) appState.registros[dni] = { pago: '', asistencia: '', obs: '' };
-
-          if (e.target.classList.contains('in-obs')) {
-            appState.registros[dni].obs = e.target.value;
-            clearTimeout(window.saveTimer);
-            window.saveTimer = setTimeout(() => saveRegistro(dni), 1000);
-          }
-        });
-
-        dateInput.onchange = loadData;        // Export
-        const getExportData = () => {
-          const order = { '2014/2015/2016': 1, '2012': 2, '2013': 3, 'General': 4 };
-          const sorted = [...appState.players].sort((a, b) => {
-            if (order[a.categoria] !== order[b.categoria]) {
-              return (order[a.categoria] || 99) - (order[b.categoria] || 99);
-            }
-            return a.name.localeCompare(b.name);
-          });
-          return sorted;
-        };
-
-        document.getElementById('generateExcel').onclick = () => {
-          const rows = [['Categoría', 'Nombre', 'DNI', 'Pago', 'Asistencia', 'Observación']];
-          getExportData().forEach(p => {
-            const d = appState.registros[p.id] || { asistencia: 'P' };
-            rows.push([p.categoria, p.name, p.id, d.pago || 'Ninguno', d.asistencia, d.obs]);
-          });
-          const ws = XLSX.utils.aoa_to_sheet(rows);
-          const wb = XLSX.utils.book_new();
-          XLSX.utils.book_append_sheet(wb, ws, 'DIBA_Planilla');
-          XLSX.writeFile(wb, `Planilla_${dateInput.value}.xlsx`);
-        };
-
-        const archivePDF = async (pdfBlob, fileName) => {
-          try {
-            await supabase.storage.from('planillas').upload(fileName, pdfBlob, {
-              upsert: true,
-              contentType: 'application/pdf'
-            });
-            showToast('Planilla archivada correctamente');
-          } catch (err) {
-            console.error('Error al archivar PDF:', err);
-          }
-        };
-
-        document.getElementById('generatePDFPro').onclick = async () => {
-          console.log("DIBA: Generando Planilla Pro v1.1...");
-          const { jsPDF } = window.jspdf;
-          const doc = new jsPDF('p', 'mm', 'letter');
-          const categories = [...new Set(appState.players.map(p => p.categoria))].sort();
-          
-          categories.forEach((cat, index) => {
-            if (index > 0) doc.addPage();
-            
-            const playersInCat = appState.players.filter(p => p.categoria === cat).sort((a,b) => a.name.localeCompare(b.name));
-            renderPDFHeader(doc, "PLANILLA DE CONTROL DIARIO", cat);
-            
-            const attendanceBody = playersInCat.map((p, i) => [
-              i + 1,
-              p.name,
-              p.id,
-              '', '', ''
-            ]);
-
-            doc.autoTable({
-              startY: 35,
-              head: [['#', 'Nombre del Jugador', 'DNI', 'Método de Pago', 'Asist.', 'Observaciones']],
-              body: attendanceBody,
-              headStyles: { fillColor: [0, 51, 102], fontSize: 8 },
-              styles: { fontSize: 8, cellPadding: 2, minCellHeight: 10 },
-              columnStyles: {
-                0: { cellWidth: 8 },
-                1: { cellWidth: 50 },
-                2: { cellWidth: 25 },
-                3: { cellWidth: 30 },
-                4: { cellWidth: 15 },
-                5: { cellWidth: 54 }
-              },
-              theme: 'grid'
-            });
-
-            doc.addPage();
-            renderPDFHeader(doc, "ESQUEMA TÁCTICO", cat);
-            drawTacticalGrid(doc, 14, 35, 182, 220);
-            drawSoccerField(doc, 14, 60, 182, 130);
-          });
-
-          const blob = doc.output('blob');
-          const blobURL = URL.createObjectURL(blob);
-          window.open(blobURL, '_blank');
-        };
-
-        document.getElementById('generateUnifiedPDF').onclick = async () => {
-          const { jsPDF } = window.jspdf;
-          const doc = new jsPDF('p', 'mm', 'letter');
-          const sortedPlayers = [...appState.players].sort((a,b) => a.name.localeCompare(b.name));
-          
-          renderPDFHeader(doc, "PLANILLA UNIFICADA DE JUGADORES", "TODAS");
-          
-          const body = sortedPlayers.map((p, i) => [
-            i + 1,
-            p.name,
-            p.id,
-            p.categoria,
-            '', '', ''
-          ]);
-
-          doc.autoTable({
-            startY: 35,
-            head: [['#', 'Nombre del Jugador', 'DNI', 'Cat.', 'Pago', 'Asist.', 'Obs.']],
-            body: body,
-            headStyles: { fillColor: [0, 51, 102], fontSize: 8 },
-            styles: { fontSize: 8, cellPadding: 2, minCellHeight: 8 },
-            columnStyles: {
-              0: { cellWidth: 8 },
-              1: { cellWidth: 50 },
-              2: { cellWidth: 22 },
-              3: { cellWidth: 20 },
-              4: { cellWidth: 20 },
-              5: { cellWidth: 12 },
-              6: { cellWidth: 54 }
-            },
-            theme: 'grid'
-          });
-
-          const blob = doc.output('blob');
-          const blobURL = URL.createObjectURL(blob);
-          window.open(blobURL, '_blank');
-        };
-
-        document.getElementById('generatePDF').onclick = async () => {
-          const { jsPDF } = window.jspdf;
-          const doc = new jsPDF();
-          doc.setFontSize(18);
-          doc.text(`DIBA FBC - Planilla de Control`, 14, 20);
-          doc.setFontSize(10);
-          doc.text(`Fecha: ${dateInput.value}`, 14, 28);
-          const body = [];
-          let currentCat = null;
-          
-          getExportData().forEach(p => {
-            if (p.categoria !== currentCat) {
-              currentCat = p.categoria;
-              // Add a category header row to the PDF table
-              body.push([{ content: `CATEGORÍA: ${currentCat}`, colSpan: 6, styles: { fillColor: [241, 245, 249], textColor: [0, 42, 64], fontStyle: 'bold' } }]);
-            }
-            const d = appState.registros[p.id] || { asistencia: 'P' };
-            const asistText = { P: 'Presente', A: 'Ausente', E: 'Excusa' }[d.asistencia];
-            body.push([p.categoria, p.name, p.id, d.pago || 'Ninguno', asistText, d.obs || '']);
-          });
-
-          doc.autoTable({
-            startY: 35,
-            head: [['Cat', 'Nombre del Jugador', 'DNI', 'Método de Pago', 'Asist', 'Obs']],
-            body,
-            headStyles: { fillColor: [0, 42, 64] },
-            theme: 'striped',
-            didParseCell: function(data) {
-              if (data.row.raw && data.row.raw[0] && data.row.raw[0].content && data.row.raw[0].content.includes('CATEGORÍA')) {
-                // Keep the styling for category rows
-              }
-            }
-          });
-
-          // Previsualizar en el visor de PDF del navegador
-          const blob = doc.output('blob');
-          const blobURL = URL.createObjectURL(blob);
-          window.open(blobURL, '_blank');
-
-          // Archivar en la nube (segundo plano)
-          archivePDF(blob, `Archivo_${dateInput.value}_${Date.now()}.pdf`);
-        };
-
-        document.getElementById('saveAllBtn').onclick = async () => {
-          const btn = document.getElementById('saveAllBtn');
-          const originalHtml = btn.innerHTML;
-          btn.innerHTML = '<i class="fas fa-circle-notch fa-spin me-2"></i>Sincronizando...';
-          btn.disabled = true;
-
-          try {
-            const dnis = Object.keys(appState.registros);
-            const promises = dnis.map(dni => saveRegistro(dni));
-            await Promise.all(promises);
-            showToast('¡Base de datos actualizada correctamente!');
-          } catch (err) {
-            showToast('Error en la sincronización masiva', true);
-          } finally {
-            btn.innerHTML = originalHtml;
-            btn.disabled = false;
-          }
-        };
-
-        loadData();
-
-        // ── LÓGICA DE DOCUMENTOS ADMIN ──
-        window.openAdminDocs = async (dni, name) => {
-          const modal = document.getElementById('adminDocsModal');
-          const nameEl = document.getElementById('modalPlayerName');
-          const dniEl = document.getElementById('modalPlayerDni');
-          const listEl = document.getElementById('modalDocsList');
-
-          nameEl.innerText = name;
-          dniEl.innerText = `ID: ${dni}`;
-          modal.classList.remove('hidden');
-          listEl.innerHTML = '<div class="text-center py-12"><i class="fas fa-circle-notch fa-spin text-3xl text-[#FFD700]"></i></div>';
-
-          const DOC_TYPES = [
-            { id: 'tarjeta_identidad', label: 'T. Identidad' },
-            { id: 'cedula_padre', label: 'Céd. Padre' },
-            { id: 'cedula_madre', label: 'Céd. Madre' },
-            { id: 'registro_civil', label: 'Reg. Civil' },
-            { id: 'consentimiento_padres', label: 'Consentimiento' }
-          ];
-
-          const { data: docs } = await supabase.from('player_documents').select('*').eq('identificacion_numero', dni);
-
-          listEl.innerHTML = '';
-          for (const type of DOC_TYPES) {
-            const doc = docs?.find(d => d.doc_type === type.id);
-            let signedFileUrl = '#';
-            
-            if (doc && doc.file_url) {
-              const pathPart = doc.file_url.split('documents/')[1];
-              if (pathPart) {
-                const { data: sData } = await supabase.storage.from('documents').createSignedUrl(pathPart, 3600);
-                if (sData) signedFileUrl = sData.signedUrl;
-              } else {
-                signedFileUrl = doc.file_url;
-              }
-            }
-
-            const item = document.createElement('div');
-            item.className = "flex items-center justify-between p-4 rounded-2xl bg-slate-50 border border-slate-100 group transition-all hover:bg-white hover:shadow-premium";
-            item.innerHTML = `
-              <div class="flex items-center gap-4">
-                <div class="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-slate-300 group-hover:text-[#FFD700] transition-colors border border-slate-100">
-                    <i class="fas fa-file-alt"></i>
-                </div>
-                <div>
-                  <p class="text-[10px] font-black uppercase italic text-[#003366] leading-none mb-1">${type.label}</p>
-                  <p class="text-[9px] font-bold uppercase tracking-widest ${doc ? (doc.status === 'verificado' ? 'text-emerald-500' : 'text-amber-500') : 'text-slate-400'}">
-                    ${doc ? doc.status : 'Pendiente'}
-                  </p>
-                </div>
-              </div>
-              <div class="flex items-center gap-2">
-                ${doc ? `<a href="${signedFileUrl}" target="_blank" class="w-8 h-8 rounded-lg flex items-center justify-center text-slate-400 hover:text-[#003366] hover:bg-slate-100 transition-all"><i class="fas fa-eye"></i></a>` : ''}
-                <button onclick="document.getElementById('upload-${type.id}').click()" class="w-8 h-8 rounded-lg flex items-center justify-center text-slate-400 hover:text-emerald-500 hover:bg-slate-100 transition-all"><i class="fas fa-upload"></i></button>
-                <input type="file" id="upload-${type.id}" class="hidden" onchange="window.adminUploadDoc('${dni}', '${type.id}', this)">
-              </div>
-            `;
-            listEl.appendChild(item);
-          }
-        };
-
-        window.closeAdminDocs = () => {
-          document.getElementById('adminDocsModal').classList.add('hidden');
-        };
-
-        window.adminUploadDoc = async (dni, docType, input) => {
-          const file = input.files[0];
-          if (!file) return;
-
-          const container = input.closest('div').parentElement;
-          const statusText = container.querySelector('p:last-child');
-          const originalStatus = statusText.innerHTML;
-          statusText.innerHTML = '<i class="fas fa-circle-notch fa-spin me-1"></i> Subiendo...';
-
-          try {
-            const fileName = `${dni}/${docType}_${Date.now()}_${file.name}`;
-            const { error: uploadError } = await supabase.storage.from('documents').upload(fileName, file, { upsert: true });
-            if (uploadError) throw uploadError;
-
-            const { data: { publicUrl } } = supabase.storage.from('documents').getPublicUrl(fileName);
-
-            const { error: dbError } = await supabase.from('player_documents').upsert({
-              identificacion_numero: dni,
-              doc_type: docType,
-              file_url: publicUrl,
-              status: 'verificado',
-              updated_at: new Date()
-            }, { onConflict: ['identificacion_numero', 'doc_type'] });
-
-            if (dbError) throw dbError;
-            showToast('Documento actualizado correctamente');
-            const nameEl = document.getElementById('modalPlayerName').innerText;
-            window.openAdminDocs(dni, nameEl);
-
-          } catch (err) {
-            console.error(err);
-            showToast("Error en la subida: " + err.message, true);
-            statusText.innerHTML = originalStatus;
-          }
-        };
-
-        // ── CRUD HANDLERS ──
-        window.openEditModal = (dni, name, cat) => {
-          document.getElementById('editDni').value = dni;
-          document.getElementById('editNombre').value = name;
-          document.getElementById('oldName').value = name;
-          document.getElementById('editCategoria').value = cat;
-          document.getElementById('editPlayerModal').classList.remove('hidden');
-        };
-
-        window.closeEditModal = () => document.getElementById('editPlayerModal').classList.add('hidden');
-
-        document.getElementById('editPlayerForm').onsubmit = async (e) => {
-          e.preventDefault();
-          const dni = document.getElementById('editDni').value;
-          const oldName = document.getElementById('oldName').value;
-          const payload = {
-            nombre: document.getElementById('editNombre').value,
-            categoria: document.getElementById('editCategoria').value,
-            oldNombre: oldName
-          };
-
-          const btn = e.target.querySelector('button[type="submit"]');
-          const originalText = btn.innerHTML;
-          btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Actualizando...';
-          btn.disabled = true;
-
-          try {
-            await updatePlayer(dni, payload);
-            showToast('Perfil de jugador actualizado');
-            closeEditModal();
-            loadData();
-          } catch (err) {
-            showToast('Error: ' + err.message, true);
-          } finally {
-            btn.innerHTML = originalText;
-            btn.disabled = false;
-          }
-        };
-
-        window.handleDelete = async (dni, name) => {
-          if (!confirm(`¿Confirmas la eliminación definitiva de ${name.toUpperCase()}?\nEsta acción eliminará todos sus registros históricos.`)) return;
-          try {
-            await deletePlayer(dni);
-            showToast('Jugador eliminado del sistema');
-            loadData();
-          } catch (err) {
-            showToast('Error catastrófico: ' + err.message, true);
-          }
-        };
-
-        window.openCreateModal = () => document.getElementById('createPlayerModal').classList.remove('hidden');
-        window.closeCreateModal = () => document.getElementById('createPlayerModal').classList.add('hidden');
-
-        document.getElementById('quickCreatePlayerForm').onsubmit = async (e) => {
-          e.preventDefault();
-          const dni = document.getElementById('newDni').value;
-          const nombre = document.getElementById('newNombre').value;
-          const apellidos = document.getElementById('newApellidos').value;
-          const categoria = document.getElementById('newCategoria').value;
-          
-          const payload = {
-            numero: dni,
-            nombre: nombre,
-            apellidos: apellidos,
-            categoria: categoria,
-            fecha_nacimiento: document.getElementById('newFechaNac').value || null,
-            sexo: document.getElementById('newSexo').value,
-            nacionalidad: 'Colombiano'
-          };
-
-          const btn = e.target.querySelector('button[type="submit"]');
-          const originalText = btn.innerHTML;
-          btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Registrando...';
-          btn.disabled = true;
-
-          try {
-            const { error: pErr } = await supabase.from('jugadores').insert([{
-              nombre: `${nombre} ${apellidos}`.trim(),
-              categoria: categoria,
-              status: 'Activo',
-              fecha_registro: new Date().toISOString()
-            }]);
-            if (pErr) throw pErr;
-
-            const { error: idErr } = await supabase.from('identificacion').insert([payload]);
-            if (idErr) throw idErr;
-
-            showToast('¡Jugador admitido con éxito!');
-            closeCreateModal();
-            loadData();
-            e.target.reset();
-          } catch (err) {
-            showToast('Error en el registro: ' + err.message, true);
-          } finally {
-            btn.innerHTML = originalText;
-            btn.disabled = false;
-          }
-        };
-
-        function renderPDFHeader(pdf, title, subtitle = "") {
-          pdf.setFontSize(16);
-          pdf.setTextColor(0, 51, 102);
-          pdf.setFont(undefined, 'bold');
-          pdf.text("DIBA FBC", 40, 15);
-          pdf.setFontSize(10);
-          pdf.text(title, 40, 22);
-          if (subtitle) {
-              pdf.setFontSize(8);
-              pdf.setTextColor(150);
-              pdf.text(`Categoría: ${subtitle}`, 40, 26);
-          }
-          pdf.setFontSize(8);
-          pdf.setTextColor(150);
-          pdf.setFont(undefined, 'normal');
-          const hoy = new Date().toLocaleDateString('es-CO');
-          pdf.text(`Fecha: ${hoy}`, 160, 15);
-          
-          // Línea decorativa
-          pdf.setDrawColor(0, 51, 102);
-          pdf.setLineWidth(0.5);
-          pdf.line(14, 30, 202, 30);
+        import { initAdminLayout } from '../src/components/layout/admin-layout.js';
+        import { requireAdmin } from '../scripts/supabaseClient.js';
+        
+        async function init() {
+            const session = await requireAdmin();
+            if (!session) return;
+            initAdminLayout();
+            fetchPlayers();
         }
 
-        document.getElementById('generateOfficialPDF').onclick = async () => {
-          const { jsPDF } = window.jspdf;
-          const doc = new jsPDF('p', 'mm', 'letter');
-          const categories = [...new Set(appState.players.map(p => p.categoria))].sort();
-          
-          const tableBody = [];
-          categories.forEach((cat) => {
-            const playersInCat = appState.players.filter(p => p.categoria === cat).sort((a,b) => a.name.localeCompare(b.name));
-            if (playersInCat.length === 0) return;
-
-            tableBody.push([
-              { content: `CATEGORÍA: ${cat.toUpperCase()}`, colSpan: 5, styles: { fillColor: [240, 240, 240], textColor: [0, 51, 102], fontStyle: 'bold' } }
-            ]);
-
-            playersInCat.forEach((p, i) => {
-              tableBody.push([i + 1, p.name.toUpperCase(), p.id, p.birthDate ? new Date(p.birthDate).toLocaleDateString('es-CO') : '---', '']);
-            });
-          });
-
-          doc.autoTable({
-            startY: 35,
-            head: [['#', 'Nombre Completo', 'Identificación', 'F. Nacimiento', 'Firma / Obs.']],
-            body: tableBody,
-            headStyles: { fillColor: [0, 51, 102], fontSize: 9, halign: 'center' },
-            styles: { fontSize: 8, cellPadding: 3, minCellHeight: 10, valign: 'middle', lineWidth: 0.1, lineColor: [200, 200, 200] },
-            theme: 'grid',
-            didDrawPage: (data) => {
-              renderPDFHeader(doc, "PLANILLA OFICIAL DE JUGADORES");
-              const pageHeight = doc.internal.pageSize.height;
-              doc.setFontSize(7);
-              doc.setTextColor(180);
-              doc.text(`DIBA FBC — Formando Talentos, Construyendo Futuro`, 105, pageHeight - 10, { align: 'center' });
+        async function fetchPlayers() {
+            try {
+                const { data: players, error } = await supabase.from('jugadores').select('*').order('nombre', { ascending: true });
+                if (error) throw error;
+                renderAttendance(players || []);
+            } catch (error) {
+                console.error("Fetch Players Error:", error);
             }
-          });
-
-          const blobURL = URL.createObjectURL(doc.output('blob'));
-          window.open(blobURL, '_blank');
-        };
-
-        function drawTacticalGrid(pdf, x, y, w, h) {
-          pdf.setDrawColor(240);
-          pdf.setLineWidth(0.1);
-          const step = 5;
-          for (let i = 0; i <= w; i += step) pdf.line(x + i, y, x + i, y + h);
-          for (let j = 0; j <= h; j += step) pdf.line(x, y + j, x + w, y + j);
         }
 
-        function libDrawArc(pdf, x, y, r, startAngle, endAngle) {
-          const segments = 20;
-          const points = [];
-          for (let i = 0; i <= segments; i++) {
-            const angle = startAngle + (endAngle - startAngle) * (i / segments);
-            const px = r * Math.cos(angle);
-            const py = r * Math.sin(angle);
-            if (i === 0) points.push([px, py]);
-            else {
-              const prevAngle = startAngle + (endAngle - startAngle) * ((i - 1) / segments);
-              const prevX = r * Math.cos(prevAngle);
-              const prevY = r * Math.sin(prevAngle);
-              points.push([px - prevX, py - prevY]);
+        function renderAttendance(players) {
+            const tbody = document.getElementById('attendance-table-body');
+            document.getElementById('session-title').textContent = "Práctica General — " + new Date().toLocaleDateString();
+            
+            if (players.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="4" class="py-20 text-center text-xs font-bold text-slate-400 italic">No hay jugadores registrados</td></tr>';
+                return;
             }
-          }
-          pdf.lines(points, x, y);
-        }
 
-        function drawSoccerField(pdf, x, y, w, h) {
-          pdf.setDrawColor(0, 51, 102);
-          pdf.setLineWidth(0.5);
-          pdf.setFillColor(255, 255, 255);
-          pdf.rect(x, y, w, h, 'F');
-          pdf.rect(x, y, w, h);
-          pdf.line(x + w / 2, y, x + w / 2, y + h);
-          pdf.circle(x + w / 2, y + h / 2, 9);
-          pdf.circle(x + w / 2, y + h / 2, 0.5, 'F');
-          pdf.rect(x, y + h / 4, w / 6, h / 2);
-          pdf.rect(x, y + h * 0.375, w / 15, h / 4);
-          pdf.circle(x + w / 9, y + h / 2, 0.5, 'F');
-          libDrawArc(pdf, x + w / 6, y + h / 2, 9, -Math.PI/4, Math.PI/4);
-          pdf.rect(x + w - w / 6, y + h / 4, w / 6, h / 2);
-          pdf.rect(x + w - w / 15, y + h * 0.375, w / 15, h / 4);
-          pdf.circle(x + w - w / 9, y + h / 2, 0.5, 'F');
-          libDrawArc(pdf, x + w - w / 6, y + h / 2, 9, 3*Math.PI/4, 5*Math.PI/4);
-          pdf.line(x + w, y + h * 0.6, x + w + 2, y + h * 0.6);
+            tbody.innerHTML = players.map(p => `
+                <tr class="group hover:bg-slate-50 transition-all border-b border-slate-50">
+                    <td class="px-8 py-5">
+                        <div class="flex items-center gap-4">
+                            <div class="w-10 h-10 rounded-xl bg-slate-50 flex items-center justify-center text-diba-blue group-hover:bg-white transition-all border border-transparent group-hover:border-slate-100 italic font-black shadow-inner">
+                                ${(p.nombre || 'J')[0]}
+                            </div>
+                            <div>
+                                <div class="text-xs font-black text-diba-blue italic uppercase tracking-tighter">${p.nombre}</div>
+                                <div class="text-[9px] font-bold text-slate-400 uppercase tracking-widest">${p.categoria || 'Sin categoría'}</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="px-8 py-5 text-center">
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" class="sr-only peer" checked>
+                            <div class="w-11 h-6 bg-slate-100 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500"></div>
+                        </label>
+                    </td>
+                    <td class="px-8 py-5 text-center">
+                        <button class="px-4 py-1.5 rounded-lg bg-slate-50 text-slate-400 text-[9px] font-black uppercase tracking-widest border border-slate-100 hover:bg-emerald-50 hover:text-emerald-500 hover:border-emerald-200 transition-all">
+                            Pendiente
+                        </button>
+                    </td>
+                    <td class="px-8 py-5 text-center">
+                        <input type="text" placeholder="Añadir nota..." class="bg-slate-50 border-none rounded-xl px-4 py-2 text-[10px] font-medium text-slate-600 outline-none focus:ring-1 focus:ring-diba-blue/10 w-48 mx-auto block group-hover:bg-white transition-all">
+                    </td>
+                </tr>
+            `).join('');
         }
-      });
+        
+        init();
     </script>
 </body>
-
 </html>

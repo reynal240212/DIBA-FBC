@@ -1,47 +1,38 @@
 :root {
-    /* DIBA FBC - Premium Light Palette */
+    /* DIBA FBC - Azul Grana Design System */
+    --azul-grana-blue: #004d98;
+    --azul-grana-red: #a50044;
     --gold: #FFD700;
     --gold-rgb: 255, 215, 0;
-    --gold-light: rgba(255, 215, 0, 0.15);
-    --gold-dark: #B8860B;
     
-    --blue-diba: #003366;    /* Deep Professional DIBA Blue */
-    --blue-rgb: 0, 51, 102;
-    --blue-light: rgba(0, 51, 102, 0.05);
+    /* Layout Colors */
+    --bg-admin: #FFFFFF;
+    --bg-sidebar: #004d98; /* Default to blue, can be gradient */
+    --text-on-nav: #FFFFFF;
     
-    /* Semantic Light Theme (DEFAULT) */
-    --bg-main: #F4F7FA;      
+    /* Semantic Colors */
+    --bg-main: #FFFFFF;      
     --bg-panel: #FFFFFF;     
-    --bg-surface: rgba(255, 255, 255, 0.9); 
     --bg-input: #F8FAFC;
     
-    /* Text System - Contrast Optimized */
+    /* Text System */
     --text-main: #0F172A;
     --text-muted: #64748B;
     --text-dim: #94A3B8;
     
     /* UI Decorators */
-    --border-color: rgba(0, 51, 102, 0.08);
-    --glass-border: rgba(255, 255, 255, 0.5);
-    --glass-blur: 16px;
+    --border-color: rgba(0, 0, 0, 0.05);
+    --shadow-premium: 0 10px 40px -10px rgba(0, 77, 152, 0.1);
     
     /* Layout Constants */
     --sidebar-w: 280px;      
-    --topbar-h: 80px;
-    --radius-xl: 32px;
-    --radius-lg: 20px;
-    --radius-md: 12px;
+    --topbar-h: 70px;
+    --radius-xl: 24px;
+    --radius-lg: 16px;
+    --radius-md: 10px;
 
-    /* Mesh Gradients - Light & Professional */
-    --mesh-bg: 
-        radial-gradient(at 0% 0%, rgba(var(--gold-rgb), 0.05) 0px, transparent 50%),
-        radial-gradient(at 100% 0%, rgba(var(--blue-rgb), 0.03) 0px, transparent 60%),
-        #F4F7FA;
-    
-    /* Premium Shadows - Soft & Elegant */
-    --shadow-premium: 0 10px 40px -10px rgba(0, 51, 102, 0.12);
-    --shadow-gold: 0 8px 25px rgba(255, 215, 0, 0.2);
-    --gold-shine: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8), transparent);
+    /* Gradients */
+    --nav-gradient: linear-gradient(135deg, var(--azul-grana-blue) 0%, var(--azul-grana-red) 100%);
 }
 
 [data-theme="dark"] {
