@@ -1,3 +1,5 @@
+import { supabase } from '../../../scripts/supabaseClient.js';
+
 export async function initAdminLayout() {
     const navContainer = document.getElementById('admin-nav');
     if (!navContainer) return;
