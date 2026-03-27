@@ -39,6 +39,7 @@
     </style>
 </head>
 
+<body class="bg-white font-['Inter']">
     <!-- Loader Loader -->
     <div id="app-loader" class="fixed inset-0 z-[9999] flex items-center justify-center bg-[#06090e]">
         <div class="text-center animate-fade-up">
@@ -49,13 +50,9 @@
             <p class="text-[10px] font-black uppercase tracking-[0.3em] text-gold italic opacity-80">Gestor Documental — Sistema</p>
         </div>
     </div>
-
-    <body class="bg-white font-['Inter']">
-
-
     <div id="admin-nav"></div>
-
-        <div class="content">
+    <main class="lg:ml-[280px] min-h-screen">
+        <div class="p-8 max-w-[1600px] mx-auto">
             <!-- Título fallback para gestor.js selector si es necesario -->
             <h1 id="main-title" class="hidden">Gestor Documental</h1>
 
@@ -76,17 +73,18 @@
                     <p class="text-[10px] font-black uppercase tracking-widest text-gold opacity-60">Sincronizando base de datos...</p>
                 </div>
             </div>
+            </div>
         </div>
-    </div>
+    </main>
 
     <script src="../scripts/config.js"></script>
     <script src="../scripts/config.js"></script>
     <script type="module">
-        import { initAdminLayout } from '/src/components/layout/admin-layout.js';
+        import { initAdminLayout } from '../src/components/layout/admin-layout.js';
         initAdminLayout();
     </script>
 
-    <script type="module" src="/src/features/gestor/main.js"></script>
+    <script type="module" src="../src/features/gestor/main.js"></script>
 </body>
 
 </html>

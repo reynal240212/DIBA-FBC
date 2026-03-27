@@ -91,9 +91,7 @@
         </div>
 
     <div id="admin-nav"></div>
-
-        <!-- Content -->
-        <main class="flex-1 p-4 md:p-8">
+    <main class="lg:ml-[280px] min-h-screen">
             <div id="alert-bar"
                 class="hidden mb-6 p-4 rounded-2xl bg-red-500/10 border border-red-500/20 text-red-500 text-xs font-bold uppercase tracking-wider items-center gap-3">
             </div>
@@ -143,7 +141,7 @@
 
     <script src="/scripts/config.js"></script>
     <script type="module">
-        import { initAdminLayout } from '/src/components/layout/admin-layout.js';
+        import { initAdminLayout } from '../src/components/layout/admin-layout.js';
         initAdminLayout();
     </script>
     <script type="module" src="/src/features/users/admin.js"></script>
