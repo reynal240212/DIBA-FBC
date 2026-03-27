@@ -1,18 +1,18 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard — DIBA FBC Admin</title>
-    <link rel="icon" href="../images/ESCUDO.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="/images/ESCUDO.ico" type="image/x-icon">
     
-    <!-- Core & Styles -->
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;900&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <!-- Dependencies -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
     <link rel="stylesheet" href="../styles/admin-common.css">
-    
+
     <script>
         tailwind.config = {
             theme: {
@@ -20,279 +20,314 @@
                     colors: {
                         'diba-blue': '#004d98',
                         'diba-red': '#a50044',
-                        'diba-gold': '#FFD700'
+                        'diba-gold': '#FFD700',
                     },
-                    boxShadow: {
-                        'premium': '0 20px 50px rgba(0, 77, 152, 0.1)',
-                        'gold': '0 10px 30px rgba(255, 215, 0, 0.2)'
+                    fontFamily: {
+                        'montserrat': ['Montserrat', 'sans-serif'],
+                        'inter': ['Inter', 'sans-serif'],
                     }
                 }
             }
         }
     </script>
 </head>
+
 <body class="bg-white font-['Inter']">
     <div id="admin-nav"></div>
 
-    <main class="lg:ml-[280px] min-h-screen transition-all duration-300 bg-white">
+    <main class="lg:ml-[280px] min-h-screen transition-all duration-300 bg-white pb-20">
         <div class="p-6 lg:p-10 space-y-8 max-w-7xl mx-auto">
             
             <!-- Header -->
-            <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
-                    <button class="bg-white border border-slate-100 text-diba-blue px-6 py-3 rounded-xl font-black italic uppercase text-xs shadow-sm hover:bg-slate-50 transition-all">
-                        <i class="fas fa-download mr-2 text-diba-red"></i> Reportes
-                    </button>
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 animate-fade-up">
+                <div>
+                    <h2 class="text-3xl font-black text-diba-blue italic tracking-tighter uppercase">Panel de <span class="text-diba-red">Control</span></h2>
+                    <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-1">Dashboard General · DIBA FBC Admin</p>
+                </div>
+                <div class="flex items-center gap-3">
+                    <div class="bg-slate-50 border border-slate-100 px-5 py-2.5 rounded-2xl text-[10px] font-black text-diba-blue italic uppercase shadow-sm" id="clock">--:--</div>
                 </div>
             </div>
 
             <!-- KPI Cards -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <div class="bg-white p-6 rounded-[2rem] border border-slate-50 shadow-premium group hover:border-diba-blue/20 transition-all cursor-pointer relative overflow-hidden">
-                    <div class="absolute top-0 right-0 w-24 h-24 bg-diba-blue/5 rounded-full -mr-12 -mt-12 transition-transform group-hover:scale-110"></div>
-                    <div class="flex items-center gap-4 mb-4 relative z-10">
-                        <div class="w-12 h-12 bg-diba-blue/10 rounded-2xl flex items-center justify-center text-diba-blue group-hover:bg-diba-blue group-hover:text-white transition-all shadow-inner">
-                            <i class="fas fa-users-viewfinder text-xl"></i>
-                        </div>
-                        <div>
-                            <div class="text-[0.65rem] font-black uppercase tracking-widest text-slate-400">Jugadores</div>
-                            <div class="text-2xl font-black text-diba-blue italic tracking-tighter" id="stat-players">0</div>
-                        </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 animate-fade-up" style="animation-delay: 0.1s">
+                <div class="bg-white rounded-[2.5rem] p-8 border border-slate-50 shadow-premium group hover:scale-[1.03] transition-all relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-24 h-24 bg-diba-gold/5 rounded-bl-[4rem] -mr-8 -mt-8 transition-all group-hover:bg-diba-gold/10"></div>
+                    <div class="flex items-center justify-between mb-6 relative z-10">
+                        <div class="w-12 h-12 bg-diba-blue/5 rounded-2xl flex items-center justify-center text-diba-blue text-xl shadow-inner"><i class="fas fa-users"></i></div>
+                        <span class="px-3 py-1 bg-emerald-50 text-emerald-600 text-[8px] font-black uppercase italic rounded-full border border-emerald-100 italic">Activos</span>
                     </div>
-                    <div class="text-[0.6rem] font-bold text-slate-400 flex items-center gap-1.5 px-3 py-1 bg-slate-50 rounded-full w-fit">
-                        <i class="fas fa-arrow-up text-emerald-500"></i> <span class="text-emerald-500">+12%</span> este mes
-                    </div>
+                    <div class="text-4xl font-black text-diba-blue italic tracking-tighter mb-1 uppercase" id="kpi-players">0</div>
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Jugadores Oficiales</p>
                 </div>
 
-                <div class="bg-white p-6 rounded-[2rem] border border-slate-50 shadow-premium group hover:border-diba-red/20 transition-all cursor-pointer relative overflow-hidden">
-                    <div class="absolute top-0 right-0 w-24 h-24 bg-diba-red/5 rounded-full -mr-12 -mt-12"></div>
-                    <div class="flex items-center gap-4 mb-4 relative z-10">
-                        <div class="w-12 h-12 bg-diba-red/10 rounded-2xl flex items-center justify-center text-diba-red group-hover:bg-diba-red group-hover:text-white transition-all shadow-inner">
-                            <i class="fas fa-calendar-check text-xl"></i>
-                        </div>
-                        <div>
-                            <div class="text-[0.65rem] font-black uppercase tracking-widest text-slate-400">Partidos</div>
-                            <div class="text-2xl font-black text-diba-blue italic tracking-tighter" id="stat-matches">0</div>
-                        </div>
+                <div class="bg-white rounded-[2.5rem] p-8 border border-slate-50 shadow-premium group hover:scale-[1.03] transition-all relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-24 h-24 bg-diba-blue/5 rounded-bl-[4rem] -mr-8 -mt-8 transition-all group-hover:bg-diba-blue/10"></div>
+                    <div class="flex items-center justify-between mb-6 relative z-10">
+                        <div class="w-12 h-12 bg-diba-red/5 rounded-2xl flex items-center justify-center text-diba-red text-xl shadow-inner"><i class="fas fa-futbol"></i></div>
+                        <span class="px-3 py-1 bg-diba-blue/5 text-diba-blue text-[8px] font-black uppercase italic rounded-full border border-diba-blue/10 italic">Calendario</span>
                     </div>
-                    <div class="text-[0.6rem] font-bold text-slate-400 flex items-center gap-1.5 px-3 py-1 bg-slate-50 rounded-full w-fit">
-                        <span class="text-diba-red">3 pendientes</span> hoy
-                    </div>
+                    <div class="text-4xl font-black text-diba-blue italic tracking-tighter mb-1 uppercase" id="kpi-matches">0</div>
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Partidos Próximos</p>
                 </div>
 
-                <div class="bg-white p-6 rounded-[2rem] border border-slate-50 shadow-premium group hover:border-diba-blue/20 transition-all cursor-pointer relative overflow-hidden">
-                    <div class="absolute top-0 right-0 w-24 h-24 bg-diba-blue/5 rounded-full -mr-12 -mt-12"></div>
-                    <div class="flex items-center gap-4 mb-4 relative z-10">
-                        <div class="w-12 h-12 bg-diba-blue/10 rounded-2xl flex items-center justify-center text-diba-blue group-hover:bg-diba-blue group-hover:text-white transition-all shadow-inner">
-                            <i class="fas fa-trophy text-xl"></i>
-                        </div>
-                        <div>
-                            <div class="text-[0.65rem] font-black uppercase tracking-widest text-slate-400">Victorias</div>
-                            <div class="text-2xl font-black text-diba-blue italic tracking-tighter" id="stat-wins">0</div>
-                        </div>
+                <div class="bg-white rounded-[2.5rem] p-8 border border-slate-50 shadow-premium group hover:scale-[1.03] transition-all relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-24 h-24 bg-diba-red/5 rounded-bl-[4rem] -mr-8 -mt-8 transition-all group-hover:bg-diba-red/10"></div>
+                    <div class="flex items-center justify-between mb-6 relative z-10">
+                        <div class="w-12 h-12 bg-emerald-50 rounded-2xl flex items-center justify-center text-emerald-500 text-xl shadow-inner"><i class="fas fa-percent"></i></div>
+                        <span class="px-3 py-1 bg-emerald-50 text-emerald-600 text-[8px] font-black uppercase italic rounded-full border border-emerald-100 italic">Asistencia</span>
                     </div>
-                    <div class="text-[0.6rem] font-bold text-slate-400 flex items-center gap-1.5 px-3 py-1 bg-slate-50 rounded-full w-fit">
-                        Rango de victoria <span class="text-emerald-500">85%</span>
-                    </div>
+                    <div class="text-4xl font-black text-diba-blue italic tracking-tighter mb-1 uppercase" id="kpi-attendance">0%</div>
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Promedio General</p>
                 </div>
 
-                <div class="bg-white p-6 rounded-[2rem] border border-slate-50 shadow-premium group hover:border-diba-gold/20 transition-all cursor-pointer relative overflow-hidden border-b-4 border-b-diba-gold">
-                    <div class="absolute top-0 right-0 w-24 h-24 bg-diba-gold/5 rounded-full -mr-12 -mt-12"></div>
-                    <div class="flex items-center gap-4 mb-4 relative z-10">
-                        <div class="w-12 h-12 bg-diba-gold/10 rounded-2xl flex items-center justify-center text-diba-gold group-hover:bg-diba-gold group-hover:text-diba-blue transition-all shadow-inner">
-                            <i class="fas fa-shield-halved text-xl"></i>
-                        </div>
-                        <div>
-                            <div class="text-[0.65rem] font-black uppercase tracking-widest text-slate-400">Torneos</div>
-                            <div class="text-2xl font-black text-diba-blue italic tracking-tighter">4</div>
-                        </div>
+                <div class="bg-white rounded-[2.5rem] p-8 border border-slate-50 shadow-premium group hover:scale-[1.03] transition-all relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-24 h-24 bg-slate-50 rounded-bl-[4rem] -mr-8 -mt-8 transition-all group-hover:bg-slate-100"></div>
+                    <div class="flex items-center justify-between mb-6 relative z-10">
+                        <div class="w-12 h-12 bg-slate-50 rounded-2xl flex items-center justify-center text-slate-400 text-xl shadow-inner"><i class="fas fa-wallet"></i></div>
+                        <span class="px-3 py-1 bg-rose-50 text-rose-600 text-[8px] font-black uppercase italic rounded-full border border-rose-100 italic">Cartera</span>
                     </div>
-                    <div class="text-[0.6rem] font-bold text-slate-400 flex items-center gap-1.5 px-3 py-1 bg-slate-50 rounded-full w-fit">
-                        En curso: <span class="text-diba-blue font-black">Liga Local</span>
-                    </div>
+                    <div class="text-4xl font-black text-diba-blue italic tracking-tighter mb-1 uppercase" id="kpi-pending">0</div>
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Cargos Pendientes</p>
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                <!-- Recent Matches Card -->
-                <div class="lg:col-span-2 bg-white rounded-[2.5rem] border border-slate-50 shadow-premium overflow-hidden">
-                    <div class="p-8 border-b border-slate-50 bg-slate-50/20 flex items-center justify-between">
-                        <div>
-                            <h3 class="text-lg font-black text-diba-blue italic uppercase tracking-tighter">Próximos <span class="text-diba-red">Partidos</span></h3>
-                            <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-1">Siguientes encuentros en el calendario</p>
-                        </div>
-                        <a href="partidos.html" class="text-[10px] font-black text-diba-blue uppercase tracking-widest hover:text-diba-red transition-colors flex items-center gap-2 group">
-                            Calendario <i class="fas fa-chevron-right text-[8px] group-hover:translate-x-1 transition-transform"></i>
+            <!-- Main Grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 animate-fade-up" style="animation-delay: 0.2s">
+                
+                <!-- Quick Access -->
+                <div class="lg:col-span-2 bg-white rounded-[2.5rem] border border-slate-50 shadow-premium p-8 md:p-10">
+                    <div class="flex items-center justify-between mb-10">
+                        <h3 class="text-sm font-black text-diba-blue italic uppercase tracking-tighter flex items-center gap-3">
+                            <i class="fas fa-bolt text-diba-gold"></i> Accesos Directos
+                        </h3>
+                    </div>
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                        <a href="planilla.html" class="flex flex-col items-center justify-center p-6 bg-slate-50 rounded-[2rem] border border-slate-50 hover:border-diba-blue hover:bg-white hover:shadow-xl transition-all group">
+                            <div class="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-diba-blue mb-4 shadow-sm group-hover:bg-diba-blue group-hover:text-white transition-all">
+                                <i class="fas fa-clipboard-list text-xl"></i>
+                            </div>
+                            <span class="text-[9px] font-black text-diba-blue uppercase italic tracking-widest">Planilla</span>
+                        </a>
+                        <a href="GestorDocumental.html" class="flex flex-col items-center justify-center p-6 bg-slate-50 rounded-[2rem] border border-slate-50 hover:border-diba-blue hover:bg-white hover:shadow-xl transition-all group">
+                            <div class="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-diba-blue mb-4 shadow-sm group-hover:bg-diba-blue group-hover:text-white transition-all">
+                                <i class="fas fa-folder-open text-xl"></i>
+                            </div>
+                            <span class="text-[9px] font-black text-diba-blue uppercase italic tracking-widest">Gestor</span>
+                        </a>
+                        <a href="usuarios.html" class="flex flex-col items-center justify-center p-6 bg-slate-50 rounded-[2rem] border border-slate-50 hover:border-diba-blue hover:bg-white hover:shadow-xl transition-all group">
+                            <div class="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-diba-blue mb-4 shadow-sm group-hover:bg-diba-blue group-hover:text-white transition-all">
+                                <i class="fas fa-user-cog text-xl"></i>
+                            </div>
+                            <span class="text-[9px] font-black text-diba-blue uppercase italic tracking-widest">Usuarios</span>
+                        </a>
+                        <a href="convocatorias.html" class="flex flex-col items-center justify-center p-6 bg-slate-50 rounded-[2rem] border border-slate-50 hover:border-diba-blue hover:bg-white hover:shadow-xl transition-all group">
+                            <div class="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-diba-blue mb-4 shadow-sm group-hover:bg-diba-blue group-hover:text-white transition-all">
+                                <i class="fas fa-bullhorn text-xl"></i>
+                            </div>
+                            <span class="text-[9px] font-black text-diba-blue uppercase italic tracking-widest">Citatorio</span>
                         </a>
                     </div>
-                    <div class="p-4 overflow-x-auto">
-                        <table class="w-full text-left">
-                            <thead>
-                                <tr class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 border-b border-slate-50">
-                                    <th class="px-6 py-4">Evento / Rival</th>
-                                    <th class="px-6 py-4 text-center">Fecha</th>
-                                    <th class="px-6 py-4 text-center">Sede</th>
-                                    <th class="px-6 py-4 text-right">Acción</th>
-                                </tr>
-                            </thead>
-                            <tbody id="match-table-body">
-                                <tr><td colspan="4" class="py-20 text-center"><i class="fas fa-circle-notch fa-spin text-2xl text-slate-200"></i></td></tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
 
-                <!-- Admin News/Alerts -->
-                <div class="space-y-6">
-                    <div class="bg-gradient-to-br from-diba-blue to-diba-red p-8 rounded-[2.5rem] text-white shadow-xl relative overflow-hidden group">
-                        <i class="fas fa-shield absolute -right-4 -bottom-4 text-8xl text-white/10 group-hover:scale-110 transition-transform"></i>
-                        <h4 class="text-xl font-black italic uppercase tracking-tighter mb-2 relative z-10">DIBA <span class="text-diba-gold">Premium</span></h4>
-                        <p class="text-xs text-white/80 font-bold leading-relaxed relative z-10">Optimiza el rendimiento de tu equipo con las nuevas herramientas de análisis avanzado.</p>
-                        <button class="mt-6 bg-white text-diba-blue px-6 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-diba-gold transition-all relative z-10">Explorar ahora</button>
-                    </div>
-
-                    <div class="bg-white rounded-[2.5rem] border border-slate-50 shadow-premium p-8">
-                        <h3 class="text-sm font-black text-diba-blue italic uppercase tracking-tighter mb-6 flex items-center gap-3">
-                            <i class="fas fa-clock-rotate-left text-diba-red"></i> Log de Actividad
-                        </h3>
-                        <div class="space-y-6 relative ml-4 before:content-[''] before:absolute before:left-[-1px] before:top-0 before:bottom-0 before:w-[2px] before:bg-slate-50">
-                            <div class="relative pl-6">
-                                <div class="absolute left-[-5px] top-1.5 w-2.5 h-2.5 bg-diba-blue rounded-full border-2 border-white ring-4 ring-diba-blue/5"></div>
-                                <div class="text-[10px] font-black text-diba-blue italic">Planilla Actualizada</div>
-                                <div class="text-[9px] text-slate-400 font-bold uppercase mt-0.5">Hace 15 minutos • Admin</div>
+                    <!-- Attendance Visualization -->
+                    <div class="mt-12 pt-10 border-t border-slate-50" id="attendance-panel" style="display:none">
+                        <div class="flex items-center justify-between mb-8">
+                            <h3 class="text-[11px] font-black text-diba-blue italic uppercase tracking-widest">Asistencia Última Sesión</h3>
+                        </div>
+                        <div class="space-y-6">
+                            <div class="flex items-center gap-3">
+                                <div class="flex-1 h-3 bg-slate-50 rounded-full overflow-hidden flex shadow-inner border border-slate-50">
+                                    <div id="bar-p" class="h-full bg-emerald-500 transition-all duration-1000 shadow-[0_0_15px_rgba(16,185,129,0.3)]"></div>
+                                    <div id="bar-a" class="h-full bg-rose-500 transition-all duration-1000 shadow-[0_0_15px_rgba(244,63,94,0.3)]"></div>
+                                    <div id="bar-e" class="h-full bg-diba-gold transition-all duration-1000 shadow-[0_0_15px_rgba(255,215,0,0.3)]"></div>
+                                </div>
                             </div>
-                            <div class="relative pl-6">
-                                <div class="absolute left-[-5px] top-1.5 w-2.5 h-2.5 bg-slate-200 rounded-full border-2 border-white ring-4 ring-slate-100/5"></div>
-                                <div class="text-[10px] font-black text-diba-blue italic">Nuevo Jugador Registrado</div>
-                                <div class="text-[9px] text-slate-400 font-bold uppercase mt-0.5">Hace 2 horas • Técnico</div>
+                            <div class="grid grid-cols-3 gap-4">
+                                <div class="flex items-center gap-2">
+                                    <div class="w-2 h-2 rounded-full bg-emerald-500"></div>
+                                    <span class="text-[9px] font-black text-slate-400 uppercase italic">Presentes: <span id="att-p" class="text-diba-blue">0</span></span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <div class="w-2 h-2 rounded-full bg-rose-500"></div>
+                                    <span class="text-[9px] font-black text-slate-400 uppercase italic">Ausentes: <span id="att-a" class="text-diba-blue">0</span></span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <div class="w-2 h-2 rounded-full bg-diba-gold"></div>
+                                    <span class="text-[9px] font-black text-slate-400 uppercase italic">Excusas: <span id="att-e" class="text-diba-blue">0</span></span>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
+
+                <!-- Recent Activity -->
+                <div class="bg-white rounded-[2.5rem] border border-slate-50 shadow-premium p-8 md:p-10 flex flex-col">
+                    <div class="flex items-center justify-between mb-10">
+                        <h3 class="text-sm font-black text-diba-blue italic uppercase tracking-tighter flex items-center gap-3">
+                            <i class="fas fa-history text-diba-red"></i> Actividad
+                        </h3>
+                    </div>
+                    <div class="space-y-8 flex-grow" id="activity-list">
+                        <div class="flex flex-col items-center justify-center py-20 opacity-20 text-diba-blue">
+                            <i class="fas fa-circle-notch fa-spin text-3xl mb-4"></i>
+                            <p class="text-[9px] font-black uppercase tracking-widest italic">Actualizando...</p>
+                        </div>
+                    </div>
+                </div>
             </div>
+
+            <!-- Match Grid -->
+            <div class="bg-white rounded-[2.5rem] border border-slate-50 shadow-premium p-8 md:p-10 animate-fade-up" style="animation-delay: 0.3s">
+                <div class="flex items-center justify-between mb-10">
+                    <h3 class="text-sm font-black text-diba-blue italic uppercase tracking-tighter flex items-center gap-3">
+                        <i class="fas fa-calendar-alt text-diba-blue"></i> Próximos Partidos
+                    </h3>
+                    <a href="partidos.html" class="px-5 py-2.5 bg-diba-blue text-white text-[9px] font-black uppercase italic tracking-widest rounded-xl hover:bg-diba-red transition-all shadow-lg shadow-blue-900/10">
+                        Calendario Completo
+                    </a>
+                </div>
+                <div id="matches-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div class="flex flex-col items-center justify-center py-20 opacity-20 text-diba-blue col-span-full">
+                        <i class="fas fa-futbol fa-bounce text-4xl mb-6"></i>
+                        <p class="text-[9px] font-black uppercase tracking-widest italic">Consultando encuentros...</p>
+                    </div>
+                </div>
+            </div>
+            
         </div>
     </main>
 
-    <!-- Scripts -->
     <script src="../scripts/config.js"></script>
     <script type="module">
         import { initAdminLayout } from '../src/components/layout/admin-layout.js';
-        import { requireAdmin } from '../scripts/supabaseClient.js';
+        import { supabase, requireAdmin } from '../scripts/supabaseClient.js';
         
-        window.switchTab = (tabId) => {
-            document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
-            document.getElementById(`content-${tabId}`).classList.remove('hidden');
-            
-            document.querySelectorAll('.tab-btn').forEach(b => {
-                b.classList.remove('active-tab', 'bg-white', 'text-diba-blue', 'shadow-sm');
-                b.classList.add('text-slate-400');
-            });
-            
-            const btn = document.getElementById(`tab-${tabId}`);
-            btn.classList.add('active-tab', 'bg-white', 'text-diba-blue', 'shadow-sm');
-            btn.classList.remove('text-slate-400');
-
-            if (tabId === 'stats') initCharts();
-        };
-
         async function init() {
             const session = await requireAdmin();
             if (!session) return;
             initAdminLayout();
-            loadGeneralStats();
+            loadKPIs();
         }
+        init();
 
-        async function loadGeneralStats() {
+        // Reloj
+        const clockEl = document.getElementById('clock');
+        function updateClock() {
+            const now = new Date();
+            clockEl.textContent = now.toLocaleTimeString('es-CO', { hour: '2-digit', minute: '2-digit' });
+        }
+        updateClock();
+        setInterval(updateClock, 1000);
+
+        // Core logic
+        async function loadKPIs() {
+            // 1. Jugadores
             try {
-                const { count: playerCount } = await supabase.from('jugadores').select('*', { count: 'exact', head: true });
-                const { count: matchCount } = await supabase.from('partidos').select('*', { count: 'exact', head: true });
-                
-                document.getElementById('stat-players').textContent = playerCount || 0;
-                document.getElementById('stat-matches').textContent = matchCount || 0;
-                
-                // Matches Feed
-                const { data: matches } = await supabase.from('partidos').select('*').order('fecha', { ascending: true }).limit(5);
-                const matchGrid = document.getElementById('recent-matches');
-                if (matches?.length) {
-                    matchGrid.innerHTML = matches.map(m => `
-                        <tr class="group hover:bg-slate-50 transition-all border-b border-slate-50">
-                            <td class="px-6 py-5">
-                                <div class="flex items-center gap-3">
-                                    <div class="w-10 h-10 rounded-xl bg-slate-50 flex items-center justify-center text-diba-blue group-hover:bg-white group-hover:shadow-sm transition-all border border-transparent group-hover:border-slate-100 italic font-black text-[10px]">
-                                        ${m.rival?.[0] || 'R'}
-                                    </div>
-                                    <div>
-                                        <div class="text-[10px] font-black text-diba-blue italic uppercase tracking-tighter">${m.rival}</div>
-                                        <div class="text-[8px] font-bold text-slate-400 uppercase tracking-widest">${m.torneo || 'Amistoso'}</div>
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="px-6 py-5 text-center">
-                                <span class="px-3 py-1 rounded-full bg-slate-50 text-slate-500 text-[8px] font-black uppercase tracking-widest border border-slate-100">${m.fecha}</span>
-                            </td>
-                            <td class="px-6 py-5 text-center">
-                                <span class="text-[9px] font-bold text-diba-red uppercase tracking-tight italic">${m.categoria || 'Sub-17'}</span>
-                            </td>
-                        </tr>
-                    `).join('');
-                }
+                const { count } = await supabase.from('identificacion').select('*', { count: 'exact', head: true });
+                document.getElementById('kpi-players').textContent = count || 0;
+            } catch (e) { console.error(e); }
 
-                // Recent Players
-                const { data: players } = await supabase.from('jugadores').select('*').order('created_at', { ascending: false }).limit(4);
-                const playerContainer = document.getElementById('recent-players');
-                if (players?.length) {
-                    playerContainer.innerHTML = players.map(p => `
-                        <div class="flex items-center justify-between p-4 bg-slate-50/50 rounded-2xl border border-slate-50 hover:border-diba-gold/30 transition-all cursor-pointer group">
-                            <div class="flex items-center gap-3">
-                                <div class="w-9 h-9 rounded-xl bg-white flex items-center justify-center text-diba-blue font-black italic text-xs shadow-sm border border-slate-100 group-hover:bg-diba-blue group-hover:text-white transition-all">
-                                    ${p.nombre?.[0] || 'J'}
-                                </div>
-                                <div>
-                                    <p class="text-[10px] font-black text-diba-blue italic uppercase tracking-tighter">${p.nombre}</p>
-                                    <p class="text-[8px] font-bold text-slate-400 uppercase tracking-widest">${p.posicion || 'Juvenil'}</p>
-                                </div>
-                            </div>
-                            <i class="fas fa-chevron-right text-[8px] text-slate-200 group-hover:text-diba-gold transition-all"></i>
-                        </div>
-                    `).join('');
-                }
+            // 2. Partidos
+            try {
+                const { count } = await supabase.from('partidos').select('*', { count: 'exact', head: true });
+                document.getElementById('kpi-matches').textContent = count || 0;
+            } catch (e) { console.error(e); }
 
-            } catch (error) { console.error("Load Error:", error); }
-        }
+            // 3. Stats RPC
+            try {
+                const { data: stats, error: statsError } = await supabase.rpc('get_dashboard_stats');
+                if (!statsError && stats && stats.length > 0) {
+                    const s = stats[0];
+                    if (s.presentes !== undefined) {
+                        const totalAsis = (s.presentes || 0) + (s.ausentes || 0) + (s.excusas || 0);
+                        const attPct = totalAsis > 0 ? Math.round((s.presentes / totalAsis) * 100) : 0;
+                        document.getElementById('kpi-attendance').textContent = `${attPct}%`;
 
-        let categoryChart = null;
-        function initCharts() {
-            if (categoryChart) return;
-            const ctx = document.getElementById('categoryChart').getContext('2d');
-            categoryChart = new Chart(ctx, {
-                type: 'doughnut',
-                data: {
-                    labels: ['Sub-15', 'Sub-17', 'Sub-20', 'Libre'],
-                    datasets: [{
-                        data: [15, 25, 10, 50],
-                        backgroundColor: ['#004d98', '#a50044', '#FFD700', '#f1f5f9'],
-                        borderWidth: 0,
-                        hoverOffset: 15
-                    }]
-                },
-                options: {
-                    cutout: '75%',
-                    plugins: {
-                        legend: {
-                            position: 'bottom',
-                            labels: {
-                                color: '#475569',
-                                font: { weight: 'bold', size: 9, family: 'Inter' },
-                                padding: 20,
-                                usePointStyle: true
-                            }
-                        }
+                        document.getElementById('attendance-panel').style.display = 'block';
+                        document.getElementById('bar-p').style.width = (totalAsis > 0 ? (s.presentes / totalAsis) * 100 : 0) + '%';
+                        document.getElementById('bar-a').style.width = (totalAsis > 0 ? (s.ausentes / totalAsis) * 100 : 0) + '%';
+                        document.getElementById('bar-e').style.width = (totalAsis > 0 ? (s.excusas / totalAsis) * 100 : 0) + '%';
+
+                        document.getElementById('att-p').textContent = s.presentes;
+                        document.getElementById('att-a').textContent = s.ausentes;
+                        document.getElementById('att-e').textContent = s.excusas;
                     }
                 }
-            });
+            } catch (e) { console.error(e); }
+
+            // 4. Cartera
+            try {
+                const { count } = await supabase.from('planilla_registros').select('*', { count: 'exact', head: true }).or('pago.is.null,pago.eq.0');
+                document.getElementById('kpi-pending').textContent = count > 0 ? count : '✓';
+            } catch (e) { console.error(e); }
+
+            loadRecentActivity();
+            loadUpcomingMatches();
         }
-        
-        init();
+
+        async function loadRecentActivity() {
+            try {
+                const { data } = await supabase.from('jugadores').select('nombre, fecha_registro').order('fecha_registro', { ascending: false }).limit(5);
+                const list = document.getElementById('activity-list');
+                if (!data || data.length === 0) {
+                    list.innerHTML = '<div class="text-center py-10 text-[9px] font-black text-slate-300 uppercase italic">Sin actividad reciente</div>';
+                    return;
+                }
+                list.innerHTML = data.map(act => `
+                    <div class="flex items-center gap-5 group cursor-pointer animate-fade-in">
+                        <div class="w-12 h-12 rounded-2xl bg-slate-50 flex items-center justify-center text-diba-blue group-hover:bg-diba-blue group-hover:text-white transition-all border border-slate-100 shadow-sm relative overflow-hidden">
+                            <i class="fas fa-user-plus text-xs relative z-10"></i>
+                            <div class="absolute inset-0 bg-diba-gold/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                        </div>
+                        <div class="flex-1 border-b border-slate-50 pb-4 group-last:border-0">
+                            <div class="text-[11px] font-black text-diba-blue italic uppercase tracking-tighter group-hover:text-diba-red transition-colors">${act.nombre}</div>
+                            <div class="text-[8px] font-bold text-slate-400 uppercase tracking-[0.2em] mt-1">NUEVO JUGADOR REGISTRADO • ${new Date(act.fecha_registro).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
+                        </div>
+                    </div>
+                `).join('');
+            } catch (e) { console.error(e); }
+        }
+
+        async function loadUpcomingMatches() {
+            try {
+                const { data } = await supabase.from('partidos').select('*').gte('fecha', new Date().toISOString().split('T')[0]).order('fecha', { ascending: true }).limit(3);
+                const container = document.getElementById('matches-list');
+                if (!data || data.length === 0) {
+                    container.innerHTML = '<div class="col-span-full py-16 bg-slate-50 rounded-[2.5rem] border border-slate-100 text-center text-[9px] font-black text-slate-400 uppercase tracking-widest italic">No hay encuentros programados</div>';
+                    return;
+                }
+                container.innerHTML = data.map(m => `
+                    <div class="bg-slate-50 border border-slate-50 p-8 rounded-[2.5rem] hover:bg-white hover:shadow-premium hover:border-diba-blue/10 transition-all group animate-fade-in">
+                        <div class="flex justify-between items-center mb-6">
+                            <span class="px-4 py-2 bg-diba-red/5 text-diba-red text-[8px] font-black uppercase italic rounded-xl border border-diba-red/10">${m.categoria}</span>
+                            <span class="text-[9px] font-black text-slate-400 uppercase italic">${new Date(m.fecha).toLocaleDateString('es-CO', { day: '2-digit', month: 'short' }).toUpperCase()}</span>
+                        </div>
+                        <div class="text-sm font-black text-diba-blue uppercase italic tracking-tighter mb-6 flex flex-col gap-2">
+                            <div class="flex items-center gap-3">
+                                <div class="w-1.5 h-1.5 rounded-full bg-diba-gold group-hover:scale-150 transition-transform"></div>
+                                <span>${m.equipolocal}</span>
+                            </div>
+                            <div class="flex items-center gap-3 opacity-30 px-4 text-[9px]">VS</div>
+                            <div class="flex items-center gap-3">
+                                <div class="w-1.5 h-1.5 rounded-full bg-diba-blue group-hover:scale-150 transition-transform"></div>
+                                <span>${m.equipovisitante}</span>
+                            </div>
+                        </div>
+                        <div class="flex flex-col gap-3 pt-6 border-t border-slate-100">
+                             <div class="flex items-center gap-3">
+                                <div class="w-8 h-8 rounded-xl bg-white flex items-center justify-center text-diba-blue shadow-sm border border-slate-50 group-hover:text-diba-red transition-colors"><i class="fas fa-clock text-[10px]"></i></div>
+                                <span class="text-[10px] font-black text-diba-blue uppercase italic">${m.hora}</span>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <div class="w-8 h-8 rounded-xl bg-white flex items-center justify-center text-diba-blue shadow-sm border border-slate-50 group-hover:text-diba-red transition-colors"><i class="fas fa-map-marker-alt text-[10px]"></i></div>
+                                <span class="text-[9px] font-bold text-slate-400 uppercase tracking-tight line-clamp-1">${m.Cancha}</span>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            } catch (e) { console.error(e); }
+        }
     </script>
 </body>
-</html>
 
+</html>

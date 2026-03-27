@@ -10,13 +10,13 @@ export async function loadDocuments(dynamicContent, pageTitle, mainTitle, setAct
     
     dynamicContent.innerHTML = `
         <section id="uploadSection" class="${usuario.role !== 'admin' ? 'hidden' : ''} mb-12 animate__animated animate__fadeInUp">
-            <div id="dropZone" class="group relative overflow-hidden bg-slate-50 border-2 border-dashed border-slate-200 rounded-[2rem] p-12 text-center cursor-pointer hover:border-[#FFD700] hover:bg-white transition-all shadow-inner">
-                <div class="absolute inset-0 bg-[#FFD700]/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+            <div id="dropZone" class="group relative overflow-hidden bg-slate-50 border-2 border-dashed border-slate-200 rounded-[2.5rem] p-12 text-center cursor-pointer hover:border-diba-blue hover:bg-white transition-all shadow-inner">
+                <div class="absolute inset-0 bg-diba-blue/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
                 <div class="relative z-10">
-                    <div class="w-16 h-16 bg-white rounded-2xl shadow-premium flex items-center justify-center text-[#003366] mx-auto mb-6 group-hover:scale-110 transition-transform">
+                    <div class="w-16 h-16 bg-white rounded-2xl shadow-premium flex items-center justify-center text-diba-blue mx-auto mb-6 group-hover:scale-110 transition-transform">
                         <i class="fas fa-cloud-upload-alt text-2xl"></i>
                     </div>
-                    <p class="font-black text-[#003366] uppercase italic text-xs tracking-widest mb-2">Arrastra archivos aquí o haz clic</p>
+                    <p class="font-black text-diba-blue uppercase italic text-xs tracking-widest mb-2">Arrastra archivos aquí o haz clic</p>
                     <p class="text-[9px] text-slate-400 font-bold uppercase tracking-widest">Formatos permitidos: PDF, JPG, PNG (Máx 5MB)</p>
                 </div>
                 <input type="file" id="newDocument" class="hidden" accept=".pdf,.jpg,.png">
@@ -24,7 +24,7 @@ export async function loadDocuments(dynamicContent, pageTitle, mainTitle, setAct
         </section>
         <div id="fileListContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <div class="flex flex-col items-center justify-center py-20 col-span-full opacity-30">
-                <i class="fas fa-circle-notch fa-spin text-3xl text-[#003366] mb-4"></i>
+                <i class="fas fa-circle-notch fa-spin text-3xl text-diba-blue mb-4"></i>
                 <p class="text-[10px] font-black uppercase tracking-widest">Consultando Expedientes...</p>
             </div>
         </div>
@@ -73,20 +73,20 @@ export async function loadDocuments(dynamicContent, pageTitle, mainTitle, setAct
             div.className = `group flex flex-col p-8 bg-white rounded-[2.5rem] border border-slate-100 shadow-premium hover:shadow-2xl transition-all animate-fade-up relative overflow-hidden ${doc.is_signed ? 'border-l-[6px] border-l-emerald-500' : ''}`;
             div.innerHTML = `
                 <div class="flex items-center justify-between mb-6">
-                    <div class="w-14 h-14 bg-slate-50 rounded-2xl flex items-center justify-center text-slate-400 group-hover:bg-[#FFD700]/10 group-hover:text-[#003366] transition-all border border-slate-100 shadow-inner">
+                    <div class="w-14 h-14 bg-slate-50 rounded-2xl flex items-center justify-center text-slate-400 group-hover:bg-diba-gold/10 group-hover:text-diba-blue transition-all border border-slate-100 shadow-inner">
                         <i class="far fa-file-pdf text-2xl"></i>
                     </div>
                     ${doc.is_signed ? '<span class="px-4 py-2 bg-emerald-50 text-emerald-600 text-[9px] font-black uppercase italic rounded-xl tracking-widest border border-emerald-100 shadow-sm"><i class="fas fa-signature mr-2"></i> Firmado</span>' : '<span class="px-4 py-2 bg-slate-50 text-slate-400 text-[9px] font-black uppercase italic rounded-xl tracking-widest border border-slate-100 shadow-sm">Pendiente</span>'}
                 </div>
                 <div class="mb-8">
-                    <h4 class="font-black text-[#003366] text-sm uppercase italic tracking-tight line-clamp-2 mb-2 group-hover:text-[#FFD700] transition-colors">${doc.file_name}</h4>
+                    <h4 class="font-black text-diba-blue text-sm uppercase italic tracking-tight line-clamp-2 mb-2 group-hover:text-diba-red transition-colors">${doc.file_name}</h4>
                     <p class="text-[9px] text-slate-400 font-bold uppercase tracking-widest flex items-center gap-2">
-                        <i class="fas fa-calendar-day text-[#FFD700]"></i> ${date}
+                        <i class="fas fa-calendar-day text-diba-gold"></i> ${date}
                     </p>
                 </div>
                 <div class="pt-6 border-t border-slate-50 flex items-center justify-between mt-auto">
-                    <a href="${fileUrl}" target="_blank" class="px-5 py-2.5 bg-[#003366] text-white text-[9px] font-black uppercase italic tracking-widest rounded-xl hover:bg-[#002244] transition-all flex items-center gap-2 shadow-lg shadow-[#003366]/20">
-                        <i class="fas fa-eye text-[#FFD700]"></i> Abrir Archivo
+                    <a href="${fileUrl}" target="_blank" class="px-5 py-2.5 bg-diba-blue text-white text-[9px] font-black uppercase italic tracking-widest rounded-xl hover:bg-diba-red transition-all flex items-center gap-2 shadow-lg shadow-blue-900/10">
+                        <i class="fas fa-eye text-diba-gold"></i> Abrir Archivo
                     </a>
                 </div>
             `;

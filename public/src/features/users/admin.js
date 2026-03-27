@@ -16,7 +16,7 @@ function renderRows(rows) {
   tbody.innerHTML = '';
 
   // Actualizar contador
-  if (badge) badge.textContent = `${rows.length} usuarios`;
+  if (badge) badge.textContent = `${rows.length} USUARIOS`;
 
   if (rows.length === 0) {
     loading?.classList.add('hidden');
@@ -25,29 +25,32 @@ function renderRows(rows) {
     return;
   }
 
-  rows.forEach(u => {
+  rows.forEach((u, i) => {
     const tr = document.createElement('tr');
-    tr.className = "hover:bg-white/[0.02] transition-all border-b border-white/5";
+    tr.className = "group hover:bg-slate-50 transition-colors border-b border-slate-50";
     tr.innerHTML = `
-      <td class="px-6 py-4 text-[10px] font-mono text-slate-500" title="${u.id}">${u.id.substring(0, 8)}...</td>
+      <td class="px-6 py-4 text-center text-[10px] font-black text-slate-300 italic">${i + 1}</td>
       <td class="px-6 py-4">
-        <div class="flex items-center gap-2">
-            <div class="w-7 h-7 rounded-lg bg-dibaGold/10 text-dibaGold flex items-center justify-center text-[10px] font-black uppercase">
+        <div class="flex items-center gap-4">
+            <div class="w-10 h-10 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center text-[10px] font-black uppercase text-diba-blue shadow-sm">
                 ${(u.username || 'U')[0]}
             </div>
-            <span class="font-bold text-dibaText uppercase italic text-xs tracking-tight">${u.username ?? ''}</span>
+            <div>
+              <div class="text-xs font-black text-diba-blue uppercase italic tracking-tight">${u.username ?? ''}</div>
+              <div class="text-[8px] font-bold text-slate-400 uppercase tracking-widest mt-0.5" title="${u.id}">ID: ${u.id.substring(0, 8)}...</div>
+            </div>
         </div>
       </td>
-      <td class="px-6 py-4"><span class="text-slate-400 font-bold text-[11px] uppercase tracking-wide">${u.full_name ?? ''}</span></td>
+      <td class="px-6 py-4"><span class="text-slate-500 font-bold text-[11px] uppercase tracking-wide">${u.full_name ?? ''}</span></td>
       <td class="px-6 py-4">
-        <span class="px-3 py-1 bg-dibaGold/10 text-dibaGold text-[8px] font-black uppercase italic rounded-full tracking-widest border border-dibaGold/20">
+        <span class="px-3 py-1 bg-diba-blue/5 text-diba-blue text-[8px] font-black uppercase italic rounded-full tracking-widest border border-diba-blue/10">
           ${u.role}
         </span>
       </td>
-      <td class="px-6 py-4 text-[10px] text-slate-500 font-bold uppercase tracking-widest">${new Date(u.created_at).toLocaleDateString('es-CO')}</td>
+      <td class="px-6 py-4 text-[10px] text-slate-400 font-bold uppercase tracking-widest">${new Date(u.created_at).toLocaleDateString('es-CO')}</td>
       <td class="px-6 py-4 text-center">
         <div class="flex items-center justify-center gap-2">
-            <button class="w-8 h-8 rounded-xl bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white transition-all border border-red-500/20" 
+            <button class="w-8 h-8 rounded-lg bg-rose-50 text-rose-500 hover:bg-rose-500 hover:text-white transition-all shadow-sm" 
                     data-action="del" data-id="${u.id}" title="Eliminar Usuario">
               <i class="fas fa-trash text-[10px]"></i>
             </button>
@@ -61,6 +64,7 @@ function renderRows(rows) {
   empty?.classList.add('hidden');
   table?.classList.remove('hidden');
 }
+
 
 async function loadUsers() {
   const loading = qs('#loading-state');

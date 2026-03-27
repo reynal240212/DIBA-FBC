@@ -23,8 +23,8 @@ import { loadDocuments } from './docs.js';
         document.querySelectorAll('#filter-container button').forEach(btn => {
             const isActive = btn.id === btnId;
             btn.className = isActive 
-                ? "px-8 py-3 rounded-xl bg-[#003366] text-[#FFD700] text-[10px] font-black uppercase tracking-widest border border-[#003366] transition-all whitespace-nowrap shadow-lg hover:shadow-xl hover:scale-[1.02]"
-                : "px-8 py-3 rounded-xl bg-white text-slate-500 text-[10px] font-black uppercase tracking-widest border border-slate-100 hover:border-[#FFD700] hover:text-[#003366] transition-all whitespace-nowrap shadow-sm";
+                ? "px-8 py-3 rounded-2xl bg-diba-blue text-diba-gold text-[10px] font-black uppercase tracking-widest border border-diba-blue transition-all whitespace-nowrap shadow-xl shadow-blue-900/10 scale-[1.02]"
+                : "px-8 py-3 rounded-2xl bg-white text-slate-400 text-[10px] font-black uppercase tracking-widest border border-slate-100 hover:border-diba-blue hover:text-diba-blue transition-all whitespace-nowrap shadow-sm";
         });
     }
 

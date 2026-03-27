@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generador de Rifa — DIBA FBC Admin</title>
+    <link rel="icon" href="../images/ESCUDO.ico">
+    
+    <!-- Core & Styles -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;900&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="../styles/admin-common.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'diba-blue': '#004d98',
+                        'diba-red': '#a50044',
+                        'diba-gold': '#FFD700'
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-white font-['Inter']">
+    <div id="admin-nav"></div>
+
+    <main class="lg:ml-[280px] min-h-screen transition-all duration-300 bg-white">
+        <div class="p-6 lg:p-10 space-y-8 max-w-7xl mx-auto">
+            
+            <!-- Header -->
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
+                <div>
+                    <h2 class="text-3xl font-black text-diba-blue italic tracking-tighter uppercase">Gestor de <span class="text-diba-red">Rifas</span></h2>
+                    <p class="text-sm text-slate-400 font-bold uppercase tracking-widest mt-1">Generación y control de boletas pro-fondos</p>
+                </div>
+                <div class="flex items-center gap-3">
+                    <button class="bg-diba-gold text-diba-blue px-6 py-3 rounded-xl font-black italic uppercase text-xs shadow-lg shadow-yellow-500/20 hover:scale-105 transition-all">
+                        <i class="fas fa-magic mr-2"></i> Generar Boletas
+                    </button>
+                    <button class="bg-white border border-slate-100 text-diba-blue px-6 py-3 rounded-xl font-black italic uppercase text-xs shadow-sm hover:bg-slate-50 transition-all">
+                        <i class="fas fa-print mr-2 text-diba-red"></i> Imprimir Todo
+                    </button>
+                </div>
+            </div>
+
+            <!-- Configuration -->
+            <div class="bg-white rounded-[2.5rem] border border-slate-50 shadow-premium p-8 grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="space-y-2">
+                    <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Premio Mayor</label>
+                    <input type="text" placeholder="ej. Smart TV 55'" class="w-full bg-slate-50 border-transparent rounded-2xl p-4 text-xs font-bold text-diba-blue outline-none focus:ring-2 focus:ring-diba-gold/20 shadow-sm">
+                </div>
+                <div class="space-y-2">
+                    <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Valor Boleta</label>
+                    <input type="text" placeholder="$10.000 COP" class="w-full bg-slate-50 border-transparent rounded-2xl p-4 text-xs font-bold text-diba-blue outline-none focus:ring-2 focus:ring-diba-gold/20 shadow-sm">
+                </div>
+                <div class="space-y-2">
+                    <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Fecha Sorteo</label>
+                    <input type="date" class="w-full bg-slate-50 border-transparent rounded-2xl p-4 text-xs font-bold text-diba-blue outline-none focus:ring-2 focus:ring-diba-gold/20 shadow-sm">
+                </div>
+            </div>
+
+            <!-- Boletas Preview -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="tickets-container">
+                <!-- Example Ticket -->
+                <div class="bg-white border-2 border-slate-50 rounded-[2rem] p-6 shadow-premium relative overflow-hidden group hover:border-diba-gold/30 transition-all border-dashed">
+                    <div class="absolute top-0 right-0 py-2 px-6 bg-diba-gold text-diba-blue text-[10px] font-black italic rounded-bl-3xl shadow-sm">N° 001</div>
+                    <div class="flex items-center gap-4 mb-6">
+                        <img src="../images/ESCUDO.png" class="w-12 h-12 object-contain grayscale opacity-30 group-hover:grayscale-0 group-hover:opacity-100 transition-all">
+                        <div>
+                            <div class="text-[8px] font-black uppercase text-slate-300 tracking-[0.3em]">Boleta Pro-Club</div>
+                            <div class="text-sm font-black text-diba-blue italic uppercase tracking-tighter">Gran Rifa DIBA FBC</div>
+                        </div>
+                    </div>
+                    <div class="space-y-3 mb-6 bg-slate-50 p-4 rounded-2xl group-hover:bg-white border border-transparent group-hover:border-slate-100 transition-all">
+                        <div class="flex justify-between items-center text-[10px]">
+                            <span class="font-bold text-slate-400 uppercase">Premio:</span>
+                            <span class="font-black text-diba-blue italic uppercase tracking-tighter">Bicicleta de Montaña</span>
+                        </div>
+                        <div class="flex justify-between items-center text-[10px]">
+                            <span class="font-bold text-slate-400 uppercase">Valor:</span>
+                            <span class="font-black text-diba-red italic tracking-tighter">$5.000</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <input type="text" placeholder="Nombre Comprador" class="flex-1 bg-white border border-slate-100 rounded-xl px-4 py-2 text-[10px] font-bold text-diba-blue italic outline-none focus:ring-1 focus:ring-diba-gold/50 shadow-inner">
+                        <button class="w-10 h-10 rounded-xl bg-diba-blue text-white flex items-center justify-center hover:bg-diba-red transition-all shadow-md"><i class="fas fa-check text-[10px]"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Scripts -->
+    <script src="../scripts/config.js"></script>
+    <script type="module">
+        import { initAdminLayout } from '../src/components/layout/admin-layout.js';
+        import { requireAdmin } from '../scripts/supabaseClient.js';
+        
+        async function init() {
+            const session = await requireAdmin();
+            if (!session) return;
+            initAdminLayout();
+        }
+        init();
+    </script>
+</body>
+</html>

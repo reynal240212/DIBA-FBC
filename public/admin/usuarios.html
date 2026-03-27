@@ -1,17 +1,18 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Usuarios — DIBA FBC Admin</title>
-    <link rel="icon" href="../images/ESCUDO.ico">
+    <link rel="icon" href="/images/ESCUDO.ico" type="image/x-icon">
     
-    <!-- Core & Styles -->
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;900&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <!-- Dependencies -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
     <link rel="stylesheet" href="../styles/admin-common.css">
-    
+
     <script>
         tailwind.config = {
             theme: {
@@ -19,184 +20,128 @@
                     colors: {
                         'diba-blue': '#004d98',
                         'diba-red': '#a50044',
-                        'diba-gold': '#FFD700'
+                        'diba-gold': '#FFD700',
+                    },
+                    fontFamily: {
+                        'montserrat': ['Montserrat', 'sans-serif'],
+                        'inter': ['Inter', 'sans-serif'],
                     }
                 }
             }
         }
     </script>
 </head>
+
 <body class="bg-white font-['Inter']">
     <div id="admin-nav"></div>
 
-    <main class="lg:ml-[280px] min-h-screen transition-all duration-300 bg-white">
+    <main class="lg:ml-[280px] min-h-screen transition-all duration-300 bg-white pb-20">
         <div class="p-6 lg:p-10 space-y-8 max-w-7xl mx-auto">
             
             <!-- Header -->
-            <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 animate-fade-up">
                 <div>
-                    <h2 class="text-3xl font-black text-diba-blue italic tracking-tighter uppercase">Gestión de <span class="text-diba-red">Usuarios</span></h2>
-                    <p class="text-sm text-slate-400 font-bold uppercase tracking-widest mt-1">Control de acceso y roles administrativos</p>
+                    <h2 class="text-3xl font-black text-diba-blue italic tracking-tighter uppercase">Usuarios del <span class="text-diba-red">Sistema</span></h2>
+                    <p class="text-sm text-slate-400 font-bold uppercase tracking-widest mt-1">Control de Accesos y Roles Administrativos · DIBA FBC</p>
                 </div>
                 <div class="flex items-center gap-3">
-                    <a href="crear-usuario.html" class="bg-diba-gold text-diba-blue px-6 py-3 rounded-xl font-black italic uppercase text-xs shadow-lg shadow-yellow-500/20 hover:scale-105 transition-all">
-                        <i class="fas fa-user-plus mr-2"></i> Nuevo Usuario
+                    <span id="count-badge" class="px-5 py-2.5 rounded-2xl bg-slate-50 border border-slate-100 text-[10px] font-black text-diba-blue uppercase tracking-widest shadow-sm">Auditando...</span>
+                    <a href="crear-usuario.html" class="px-6 py-3.5 rounded-2xl bg-diba-blue text-white text-[10px] font-black uppercase italic tracking-widest hover:bg-diba-red transition-all shadow-lg shadow-blue-900/10 flex items-center gap-3">
+                        <i class="fas fa-user-plus text-sm text-diba-gold"></i> Nuevo Usuario
                     </a>
                 </div>
             </div>
 
-            <!-- Content Card -->
-            <div class="bg-white rounded-[2.5rem] border border-slate-50 shadow-premium overflow-hidden">
-                <div class="p-8 border-b border-slate-50 bg-slate-50/20 flex flex-col md:flex-row md:items-center justify-between gap-4">
-                    <div class="relative w-full md:w-96">
-                        <input type="text" id="user-search" placeholder="Buscar por nombre o usuario..." class="w-full bg-white border border-slate-100 rounded-xl px-5 py-3 pl-12 text-xs font-bold text-diba-blue outline-none focus:ring-2 focus:ring-diba-blue/10 transition-all shadow-sm">
-                        <i class="fas fa-search absolute left-5 top-1/2 -translate-y-1/2 text-slate-300"></i>
-                    </div>
-                    <div class="flex items-center gap-3">
-                        <select id="role-filter" class="bg-white border border-slate-100 rounded-xl px-4 py-3 text-xs font-bold text-diba-blue outline-none focus:ring-2 focus:ring-diba-blue/10 shadow-sm cursor-pointer">
-                            <option value="all">Todos los roles</option>
-                            <option value="admin">Administrador</option>
-                            <option value="tecnico">Técnico</option>
-                            <option value="usuario">Usuario</option>
-                        </select>
-                    </div>
-                </div>
-
+            <!-- Content Panel -->
+            <div class="bg-white rounded-[2.5rem] border border-slate-50 shadow-premium overflow-hidden animate-fade-up" style="animation-delay: 0.1s">
                 <div class="overflow-x-auto">
-                    <table class="w-full text-left">
+                    <table id="usersTable" class="w-full text-left">
                         <thead>
-                            <tr class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 border-b border-slate-50">
-                                <th class="px-8 py-5">Usuario / Perfil</th>
-                                <th class="px-8 py-5">Rol / Nivel</th>
-                                <th class="px-8 py-5 text-center">Estado</th>
-                                <th class="px-8 py-5 text-center">Registro</th>
-                                <th class="px-8 py-5 text-right">Acciones</th>
+                            <tr class="bg-slate-50 border-b border-slate-100">
+                                <th class="px-6 py-5 text-[10px] font-black uppercase tracking-widest text-slate-400 text-center w-16">#</th>
+                                <th class="px-6 py-5 text-[10px] font-black uppercase tracking-widest text-slate-400">Usuario / ID</th>
+                                <th class="px-6 py-5 text-[10px] font-black uppercase tracking-widest text-slate-400">Nombre Completo</th>
+                                <th class="px-6 py-5 text-[10px] font-black uppercase tracking-widest text-slate-400">Rol Asignado</th>
+                                <th class="px-6 py-5 text-[10px] font-black uppercase tracking-widest text-slate-400">Fecha Registro</th>
+                                <th class="px-6 py-5 text-[10px] font-black uppercase tracking-widest text-slate-400 text-center w-24">Acciones</th>
                             </tr>
                         </thead>
-                        <tbody id="users-table-body">
-                            <tr><td colspan="5" class="py-20 text-center"><i class="fas fa-circle-notch fa-spin text-2xl text-slate-200"></i></td></tr>
+                        <tbody id="users-tbody" class="divide-y divide-slate-50">
+                            <!-- Populated by JS -->
                         </tbody>
                     </table>
+
+                    <!-- States -->
+                    <div id="loading-state" class="flex flex-col items-center justify-center py-32 gap-6 animate-pulse">
+                        <div class="w-12 h-12 rounded-full border-4 border-slate-100 border-t-diba-blue animate-spin"></div>
+                        <p class="text-[10px] font-black uppercase tracking-[0.3em] text-diba-blue opacity-30 italic">Sincronizando Usuarios...</p>
+                    </div>
+
+                    <div id="empty-state" class="hidden flex-col items-center justify-center py-32 gap-6 opacity-30">
+                        <i class="fas fa-user-slash text-5xl text-slate-300"></i>
+                        <p class="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 italic">No hay usuarios registrados</p>
+                    </div>
                 </div>
             </div>
+
+            <div id="alert-bar" class="hidden p-6 rounded-[1.5rem] bg-rose-50 border border-rose-100 text-rose-500 text-[10px] font-black uppercase tracking-widest items-center gap-4 animate-fade-up">
+                <!-- Errors go here -->
+            </div>
+
         </div>
     </main>
 
-    <!-- Scripts -->
+    <!-- Activation Modal (Styled for Premium) -->
+    <div id="activation-modal" class="hidden fixed inset-0 z-[100] flex items-center justify-center p-4 lg:p-10 pointer-events-none">
+        <div class="absolute inset-0 bg-diba-blue/60 backdrop-blur-xl pointer-events-auto" id="modal-overlay"></div>
+        <div class="bg-white w-full max-w-md rounded-[3rem] shadow-2xl relative z-10 overflow-hidden animate-fade-up pointer-events-auto border border-white/20">
+            <div class="p-10">
+                <div class="flex justify-between items-center mb-8">
+                    <h3 class="text-xl font-black text-diba-blue italic uppercase tracking-tighter">Activar <span id="modal-username" class="text-diba-red">Usuario</span></h3>
+                    <button class="text-slate-300 hover:text-rose-500 transition-colors" id="cancel-activation-top"><i class="fas fa-times"></i></button>
+                </div>
+                <p class="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-8 leading-relaxed">Define la vigencia de acceso para este miembro. Una vez expirado, el usuario perderá acceso al panel.</p>
+                
+                <div class="space-y-6">
+                    <div class="space-y-2">
+                        <label class="text-[9px] font-black text-diba-blue uppercase tracking-widest ml-1">Fecha de Expiración</label>
+                        <input type="date" id="expiration-date" class="w-full px-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl font-bold text-sm text-diba-blue focus:bg-white focus:ring-4 focus:ring-diba-blue/5 outline-none transition-all">
+                    </div>
+                    
+                    <div class="flex gap-3 pt-4">
+                        <button id="cancel-activation" class="flex-1 py-4 text-[10px] font-black uppercase tracking-widest text-slate-400 hover:bg-slate-50 rounded-2xl transition-all">Cancelar</button>
+                        <button id="confirm-activation" class="flex-1 py-4 text-[10px] font-black uppercase tracking-widest bg-diba-blue text-white rounded-2xl hover:bg-diba-red transition-all shadow-xl shadow-blue-900/10">Activar Ahora</button>
+                    </div>
+                </div>
+            </div>
+            <div class="p-6 bg-slate-50 border-t border-slate-100 flex items-center justify-center text-[7px] font-black text-slate-300 uppercase tracking-[.4em]">
+                Control de Vigencia · DIBA FBC
+            </div>
+        </div>
+    </div>
+
     <script src="../scripts/config.js"></script>
     <script type="module">
         import { initAdminLayout } from '../src/components/layout/admin-layout.js';
-        import { requireAdmin } from '../scripts/supabaseClient.js';
+        import { supabase, requireAdmin } from '../scripts/supabaseClient.js';
         
-        let allUsers = [];
-
-        async function init() {
+        async function run() {
             const session = await requireAdmin();
             if (!session) return;
             initAdminLayout();
-            fetchUsers();
-            
-            document.getElementById('user-search').addEventListener('input', filterUsers);
-            document.getElementById('role-filter').addEventListener('change', filterUsers);
         }
+        run();
 
-        async function fetchUsers() {
-            try {
-                const { data, error } = await supabase.from('users').select('*').order('created_at', { ascending: false });
-                if (error) throw error;
-                allUsers = data || [];
-                renderUsers(allUsers);
-            } catch (error) {
-                console.error("Fetch Users Error:", error);
-            }
-        }
-
-        function renderUsers(users) {
-            const tbody = document.getElementById('users-table-body');
-            if (users.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="5" class="py-20 text-center text-xs font-bold text-slate-400 italic">No se encontraron usuarios</td></tr>';
-                return;
-            }
-
-            tbody.innerHTML = users.map(u => `
-                <tr class="group hover:bg-slate-50 transition-all border-b border-slate-50">
-                    <td class="px-8 py-6">
-                        <div class="flex items-center gap-4">
-                            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-diba-blue to-diba-red flex items-center justify-center text-white font-black text-xs shadow-md border border-white/20">
-                                ${(u.username || 'A')[0].toUpperCase()}
-                            </div>
-                            <div>
-                                <div class="text-xs font-black text-diba-blue italic uppercase tracking-tighter">${u.username || 'Sin usuario'}</div>
-                                <div class="text-[9px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">${u.full_name || 'Nombre no registrado'}</div>
-                            </div>
-                        </div>
-                    </td>
-                    <td class="px-8 py-6">
-                        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest ${getRoleStyle(u.role)} transition-colors border">
-                            <i class="fas ${getRoleIcon(u.role)} text-[8px]"></i> ${u.role || 'Usuario'}
-                        </div>
-                    </td>
-                    <td class="px-8 py-6 text-center">
-                        <div class="inline-flex items-center gap-1.5 text-[9px] font-black uppercase tracking-widest text-emerald-500">
-                            <div class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></div> Activo
-                        </div>
-                    </td>
-                    <td class="px-8 py-6 text-center">
-                        <div class="text-[10px] font-bold text-slate-400 uppercase tracking-tight">${u.created_at ? new Date(u.created_at).toLocaleDateString() : '---'}</div>
-                    </td>
-                    <td class="px-8 py-6 text-right">
-                        <div class="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-all">
-                            <a href="editar-usuario.html?id=${u.id}" class="w-8 h-8 rounded-lg bg-white border border-slate-100 flex items-center justify-center text-diba-blue hover:text-diba-red hover:border-diba-red/20 shadow-sm transition-all">
-                                <i class="fas fa-edit text-xs"></i>
-                            </a>
-                            <button onclick="deleteUser('${u.id}')" class="w-8 h-8 rounded-lg bg-rose-50 border border-rose-100 flex items-center justify-center text-rose-500 hover:bg-rose-500 hover:text-white transition-all shadow-sm">
-                                <i class="fas fa-trash-alt text-xs"></i>
-                            </button>
-                        </div>
-                    </td>
-                </tr>
-            `).join('');
-        }
-
-        function getRoleStyle(role) {
-            switch((role || '').toLowerCase()) {
-                case 'admin': return 'bg-diba-gold/10 text-diba-blue border-diba-gold/20';
-                case 'tecnico': return 'bg-diba-blue/10 text-diba-blue border-diba-blue/20';
-                default: return 'bg-slate-50 text-slate-400 border-slate-100';
-            }
-        }
-
-        function getRoleIcon(role) {
-            switch((role || '').toLowerCase()) {
-                case 'admin': return 'fa-shield-halved';
-                case 'tecnico': return 'fa-user-gear';
-                default: return 'fa-user';
-            }
-        }
-
-        function filterUsers() {
-            const search = document.getElementById('user-search').value.toLowerCase();
-            const role = document.getElementById('role-filter').value;
-            
-            const filtered = allUsers.filter(u => {
-                const matchesSearch = (u.username || '').toLowerCase().includes(search) || 
-                                     (u.full_name || '').toLowerCase().includes(search);
-                const matchesRole = role === 'all' || u.role === role;
-                return matchesSearch && matchesRole;
-            });
-            
-            renderUsers(filtered);
-        }
-
-        window.deleteUser = async function(id) {
-            if (confirm('¿Estás seguro de eliminar este usuario?')) {
-                const { error } = await supabase.from('users').delete().eq('id', id);
-                if (error) alert('Error: ' + error.message);
-                else fetchUsers();
-            }
-        }
-        
-        init();
+        // Modal Logic
+        const modal = document.getElementById('activation-modal');
+        const closeBtns = [
+            document.getElementById('cancel-activation'),
+            document.getElementById('cancel-activation-top'),
+            document.getElementById('modal-overlay')
+        ];
+        closeBtns.forEach(btn => btn?.addEventListener('click', () => modal?.classList.add('hidden')));
     </script>
+    <script type="module" src="../src/features/users/admin.js"></script>
 </body>
+
 </html>

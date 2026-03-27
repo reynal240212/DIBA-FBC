@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notificaciones Push — DIBA FBC Admin</title>
+    <link rel="icon" href="../images/ESCUDO.ico">
+    
+    <!-- Core & Styles -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;900&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="../styles/admin-common.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'diba-blue': '#004d98',
+                        'diba-red': '#a50044',
+                        'diba-gold': '#FFD700'
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-white font-['Inter']">
+    <div id="admin-nav"></div>
+
+    <main class="lg:ml-[280px] min-h-screen transition-all duration-300 bg-white">
+        <div class="p-6 lg:p-10 space-y-8 max-w-4xl mx-auto flex items-center justify-center min-h-[80vh]">
+            
+            <div class="w-full bg-white rounded-[2.5rem] border border-slate-50 shadow-premium overflow-hidden animate-fade-up">
+                <!-- Header Secundario -->
+                <div class="p-8 border-b border-slate-50 bg-slate-50/30 flex items-center gap-5">
+                    <div class="w-14 h-14 bg-gradient-to-br from-diba-blue to-diba-red text-white rounded-2xl flex items-center justify-center shadow-lg text-2xl">
+                        <i class="fas fa-paper-plane text-diba-gold"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-xl font-black italic uppercase text-diba-blue leading-tight flex items-center gap-2">
+                            Broadcast <span class="text-diba-red">Push</span>
+                        </h2>
+                        <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-1">Envío masivo de notificaciones al club</p>
+                    </div>
+                </div>
+
+                <div class="p-8 lg:p-10">
+                    <form id="pushForm" class="space-y-6">
+                        <div class="space-y-2">
+                            <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1 italic">Título de la Notificación</label>
+                            <input type="text" name="title" id="title" required placeholder="ej. ¡Nuevo Partido Programado!" class="w-full bg-slate-50 border-transparent rounded-2xl p-4 text-xs font-bold text-diba-blue outline-none focus:ring-2 focus:ring-diba-gold/20 shadow-sm">
+                        </div>
+
+                        <div class="space-y-2">
+                            <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1 italic">Mensaje / Cuerpo</label>
+                            <textarea name="body" id="body" required rows="4" placeholder="Escribe el contenido de la notificación aquí..." class="w-full bg-slate-50 border-transparent rounded-2xl p-4 text-xs font-bold text-diba-blue outline-none focus:ring-2 focus:ring-diba-gold/20 shadow-sm resize-none"></textarea>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="space-y-2">
+                                <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1 italic">Acción (Opcional)</label>
+                                <select name="action" class="w-full bg-slate-50 border-transparent rounded-2xl p-4 text-xs font-bold text-diba-blue outline-none focus:ring-2 focus:ring-diba-gold/20 shadow-sm cursor-pointer appearance-none">
+                                    <option value="none">Sin acción específica</option>
+                                    <option value="partidos">Ir a Partidos</option>
+                                    <option value="planilla">Ir a Planilla</option>
+                                </select>
+                            </div>
+                            <div class="space-y-2">
+                                <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1 italic">Prioridad</label>
+                                <div class="flex items-center gap-4 py-3">
+                                    <label class="flex items-center gap-2 text-xs font-bold text-slate-400"><input type="radio" name="priority" value="normal" checked class="text-diba-blue focus:ring-diba-blue"> Normal</label>
+                                    <label class="flex items-center gap-2 text-xs font-bold text-diba-red"><input type="radio" name="priority" value="high" class="text-diba-red focus:ring-diba-red"> Alta</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center gap-4 pt-6">
+                            <button type="button" class="flex-1 bg-white border border-slate-100 text-slate-400 rounded-2xl py-4 text-[10px] font-black uppercase tracking-[0.2em] italic hover:bg-slate-50 transition-all">
+                                <i class="fas fa-trash-can mr-2"></i> Limpiar
+                            </button>
+                            <button type="submit" id="submit-btn" class="flex-[2] bg-diba-gold text-diba-blue rounded-2xl py-4 px-8 text-[11px] font-black uppercase tracking-[0.2em] italic hover:scale-105 transition-all flex items-center justify-center gap-3 group shadow-lg shadow-yellow-500/20 relative overflow-hidden">
+                                <i class="fas fa-paper-plane group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform text-diba-red"></i>
+                                <span id="btn-text">Enviar Notificación</span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Scripts -->
+    <script src="../scripts/config.js"></script>
+    <script type="module">
+        import { initAdminLayout } from '../src/components/layout/admin-layout.js';
+        import { requireAdmin } from '../scripts/supabaseClient.js';
+        
+        async function init() {
+            const session = await requireAdmin();
+            if (!session) return;
+            initAdminLayout();
+        }
+        init();
+    </script>
+</body>
+</html>

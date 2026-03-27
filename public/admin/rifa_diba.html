@@ -1,17 +1,18 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Generador de Rifa — DIBA FBC Admin</title>
-    <link rel="icon" href="../images/ESCUDO.ico">
+    <title>Generador de Rifas — DIBA FBC Admin</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="/images/ESCUDO.ico" type="image/x-icon">
     
-    <!-- Core & Styles -->
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;900&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <!-- Dependencies -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
     <link rel="stylesheet" href="../styles/admin-common.css">
-    
+
     <script>
         tailwind.config = {
             theme: {
@@ -19,94 +20,432 @@
                     colors: {
                         'diba-blue': '#004d98',
                         'diba-red': '#a50044',
-                        'diba-gold': '#FFD700'
+                        'diba-gold': '#FFD700',
+                    },
+                    fontFamily: {
+                        'montserrat': ['Montserrat', 'sans-serif'],
+                        'inter': ['Inter', 'sans-serif'],
                     }
                 }
             }
         }
     </script>
-</head>
-<body class="bg-white font-['Inter']">
-    <div id="admin-nav"></div>
 
-    <main class="lg:ml-[280px] min-h-screen transition-all duration-300 bg-white">
-        <div class="p-6 lg:p-10 space-y-8 max-w-7xl mx-auto">
+    <style>
+        /* Specialized Rifa Print Styles */
+        .page-rifa {
+            width: 210mm;
+            min-height: 297mm;
+            margin: 2rem auto;
+            padding: 10mm;
+            background: white;
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            page-break-after: always;
+            box-shadow: 0 0 40px rgba(0, 0, 0, 0.05);
+            border-radius: 1rem;
+        }
+
+        .boleta-container {
+            height: 55.4mm;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            position: relative;
+            border-bottom: 1px dashed #e2e8f0;
+        }
+
+        .boleta-container::after {
+            content: '\f0c4';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            position: absolute;
+            bottom: -7px;
+            left: 10px;
+            font-size: 10px;
+            color: #94a3b8;
+            background: white;
+            padding: 0 5px;
+            z-index: 10;
+        }
+
+        .boleta {
+            width: 100%;
+            height: 48mm;
+            background: linear-gradient(135deg, #FFD700 0%, #ffec8b 50%, #e6b800 100%);
+            border: 2px solid #004d98;
+            border-radius: 12px;
+            padding: 10px 15px;
+            color: #004d98;
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .boleta::before { 
+            content: ''; 
+            position: absolute; 
+            top: 0; 
+            left: 65px; 
+            bottom: 0; 
+            width: 1px; 
+            border-right: 2px dotted rgba(0, 77, 152, 0.15); 
+        }
+
+        .boleta-left { 
+            width: 50px; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center; 
+            gap: 8px; 
+            flex-shrink: 0; 
+        }
+
+        .boleta-logo { 
+            width: 45px; 
+            height: 45px; 
+            object-fit: contain; 
+        }
+
+        .boleta-main { 
+            flex: 1; 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: space-between; 
+            height: 100%; 
+        }
+
+        .boleta-header { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: flex-start; 
+        }
+
+        .boleta-titulo { 
+            font-size: 1.1rem; 
+            font-weight: 900; 
+            font-style: italic; 
+            text-transform: uppercase; 
+            color: #004d98; 
+            letter-spacing: -0.02em;
+        }
+
+        .boleta-number-id { 
+            font-size: 0.8rem; 
+            font-weight: 900; 
+            background: #004d98; 
+            color: #FFD700; 
+            padding: 2px 8px; 
+            border-radius: 6px; 
+        }
+
+        .boleta-content { 
+            display: grid; 
+            grid-template-columns: 1fr 180px; 
+            gap: 15px; 
+            align-items: flex-end; 
+        }
+
+        .boleta-info { 
+            font-size: 0.65rem; 
+            font-weight: 800; 
+            line-height: 1.5; 
+            color: #004d98;
+            text-transform: uppercase;
+        }
+
+        .boleta-jugador-box { 
+            margin-top: 5px; 
+            padding: 4px 8px; 
+            background: rgba(255, 255, 255, 0.5); 
+            border: 1px solid #004d98; 
+            border-radius: 8px; 
+        }
+
+        .boleta-jugador-label { 
+            font-size: 0.45rem; 
+            font-weight: 900; 
+            text-transform: uppercase; 
+            color: rgba(0, 77, 152, 0.6); 
+        }
+
+        .boleta-jugador { 
+            font-size: 0.75rem; 
+            font-weight: 900; 
+            color: #004d98; 
+        }
+
+        .boleta-numeros { 
+            display: grid; 
+            grid-template-columns: repeat(3, 1fr); 
+            gap: 5px; 
+        }
+
+        .num-cell { 
+            background: white; 
+            color: #004d98; 
+            height: 32px; 
+            border: 2px solid #004d98; 
+            border-radius: 8px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            font-weight: 900; 
+            font-size: 0.9rem; 
+            box-shadow: 0 2px 0 #004d98; 
+        }
+
+        @media print {
+            .page-rifa {
+                margin: 0 !important;
+                box-shadow: none !important;
+                border-radius: 0 !important;
+                padding: 10mm !important;
+            }
+            #admin-nav, .no-print { display: none !important; }
+            main { margin-left: 0 !important; padding: 0 !important; }
+            body { background: white !important; }
+        }
+    </style>
+</head>
+
+<body class="bg-white font-['Inter']">
+    <div id="admin-nav" class="no-print"></div>
+
+    <main class="lg:ml-[280px] min-h-screen transition-all duration-300 bg-white pb-20">
+        <div class="p-6 lg:p-10 space-y-8 max-w-6xl mx-auto">
             
             <!-- Header -->
-            <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 animate-fade-up no-print">
                 <div>
-                    <h2 class="text-3xl font-black text-diba-blue italic tracking-tighter uppercase">Gestor de <span class="text-diba-red">Rifas</span></h2>
-                    <p class="text-sm text-slate-400 font-bold uppercase tracking-widest mt-1">Generación y control de boletas pro-fondos</p>
+                    <h2 class="text-3xl font-black text-diba-blue italic tracking-tighter uppercase">Generador de <span class="text-diba-red">Rifas</span></h2>
+                    <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-1">Herramienta de Recaudación Oficial · DIBA FBC Admin</p>
                 </div>
                 <div class="flex items-center gap-3">
-                    <button class="bg-diba-gold text-diba-blue px-6 py-3 rounded-xl font-black italic uppercase text-xs shadow-lg shadow-yellow-500/20 hover:scale-105 transition-all">
-                        <i class="fas fa-magic mr-2"></i> Generar Boletas
+                    <button onclick="window.print()" class="px-6 py-3 bg-slate-50 border border-slate-100 rounded-2xl text-[10px] font-black text-diba-blue italic uppercase shadow-sm hover:bg-white hover:shadow-lg transition-all flex items-center gap-2">
+                        <i class="fas fa-print"></i> Exportar PDF
                     </button>
-                    <button class="bg-white border border-slate-100 text-diba-blue px-6 py-3 rounded-xl font-black italic uppercase text-xs shadow-sm hover:bg-slate-50 transition-all">
-                        <i class="fas fa-print mr-2 text-diba-red"></i> Imprimir Todo
-                    </button>
+                    <div class="bg-slate-50 border border-slate-100 px-5 py-3 rounded-2xl text-[10px] font-black text-diba-blue italic uppercase shadow-sm" id="clock">--:--</div>
                 </div>
             </div>
 
-            <!-- Configuration -->
-            <div class="bg-white rounded-[2.5rem] border border-slate-50 shadow-premium p-8 grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div class="space-y-2">
-                    <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Premio Mayor</label>
-                    <input type="text" placeholder="ej. Smart TV 55'" class="w-full bg-slate-50 border-transparent rounded-2xl p-4 text-xs font-bold text-diba-blue outline-none focus:ring-2 focus:ring-diba-gold/20 shadow-sm">
+            <!-- Toolbar / Configuration -->
+            <div class="bg-white rounded-[2.5rem] border border-slate-50 shadow-premium p-8 md:p-10 animate-fade-up no-print" style="animation-delay: 0.1s">
+                <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-6 items-end">
+                    
+                    <div class="space-y-2">
+                        <label class="text-[9px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">Total Boletas</label>
+                        <input type="number" id="cfg-total" min="1" max="1000" step="5" value="45" 
+                               class="w-full px-4 py-3 bg-slate-50 border border-slate-50 rounded-xl text-diba-blue text-[11px] font-black outline-none focus:ring-4 focus:ring-diba-blue/5 focus:bg-white focus:border-diba-blue transition-all italic">
+                    </div>
+
+                    <div class="space-y-2">
+                        <label class="text-[9px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">Números / Boleta</label>
+                        <select id="cfg-numeros" class="w-full px-4 py-3 bg-slate-50 border border-slate-50 rounded-xl text-diba-blue text-[11px] font-black outline-none focus:ring-4 focus:ring-diba-blue/5 focus:bg-white focus:border-diba-blue appearance-none cursor-pointer transition-all italic">
+                            <option value="4">4 NÚMEROS</option>
+                            <option value="5">5 NÚMEROS</option>
+                            <option value="6" selected>6 NÚMEROS</option>
+                            <option value="8">8 NÚMEROS</option>
+                            <option value="10">10 NÚMEROS</option>
+                        </select>
+                    </div>
+
+                    <div class="space-y-2">
+                        <label class="text-[9px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">Fecha Sorteo</label>
+                        <input type="date" id="cfg-fecha-picker" 
+                               class="w-full px-4 py-3 bg-slate-50 border border-slate-50 rounded-xl text-diba-blue text-[11px] font-black outline-none focus:ring-4 focus:ring-diba-blue/5 focus:bg-white focus:border-diba-blue transition-all italic">
+                        <input type="hidden" id="cfg-fecha" value="">
+                    </div>
+
+                    <div class="space-y-2">
+                        <label class="text-[9px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">Lotería / Modalidad</label>
+                        <input type="text" id="cfg-loteria" list="loterias-list" value="Sinuano Noche" 
+                               class="w-full px-4 py-3 bg-slate-50 border border-slate-50 rounded-xl text-diba-blue text-[11px] font-black outline-none focus:ring-4 focus:ring-diba-blue/5 focus:bg-white focus:border-diba-blue transition-all italic">
+                    </div>
+
+                    <div class="space-y-2">
+                        <label class="text-[9px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">Valor Unidad ($)</label>
+                        <input type="number" id="cfg-valor-num" step="100" value="3000" 
+                               class="w-full px-4 py-3 bg-slate-50 border border-slate-50 rounded-xl text-diba-blue text-[11px] font-black outline-none focus:ring-4 focus:ring-diba-blue/5 focus:bg-white focus:border-diba-blue transition-all italic">
+                        <input type="hidden" id="cfg-valor" value="">
+                    </div>
+
+                    <div class="space-y-2">
+                        <button id="btn-generar" class="w-full py-4 bg-diba-blue text-diba-gold text-[10px] font-black uppercase tracking-[0.2em] rounded-xl hover:scale-[1.02] active:scale-[0.98] transition-all shadow-xl shadow-blue-900/10 italic">
+                             Generar Boletas
+                        </button>
+                    </div>
                 </div>
-                <div class="space-y-2">
-                    <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Valor Boleta</label>
-                    <input type="text" placeholder="$10.000 COP" class="w-full bg-slate-50 border-transparent rounded-2xl p-4 text-xs font-bold text-diba-blue outline-none focus:ring-2 focus:ring-diba-gold/20 shadow-sm">
-                </div>
-                <div class="space-y-2">
-                    <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Fecha Sorteo</label>
-                    <input type="date" class="w-full bg-slate-50 border-transparent rounded-2xl p-4 text-xs font-bold text-diba-blue outline-none focus:ring-2 focus:ring-diba-gold/20 shadow-sm">
+
+                <div class="mt-8 pt-6 border-t border-slate-50 flex items-center gap-4">
+                    <label class="text-[9px] font-black uppercase tracking-[0.2em] text-slate-300">Premio:</label>
+                    <input type="text" id="cfg-premio" value="2 Perfumes Premium para Caballero" 
+                           class="flex-1 bg-transparent text-diba-blue text-[12px] font-black outline-none italic placeholder:text-slate-200">
                 </div>
             </div>
 
-            <!-- Boletas Preview -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="tickets-container">
-                <!-- Example Ticket -->
-                <div class="bg-white border-2 border-slate-50 rounded-[2rem] p-6 shadow-premium relative overflow-hidden group hover:border-diba-gold/30 transition-all border-dashed">
-                    <div class="absolute top-0 right-0 py-2 px-6 bg-diba-gold text-diba-blue text-[10px] font-black italic rounded-bl-3xl shadow-sm">N° 001</div>
-                    <div class="flex items-center gap-4 mb-6">
-                        <img src="../images/ESCUDO.png" class="w-12 h-12 object-contain grayscale opacity-30 group-hover:grayscale-0 group-hover:opacity-100 transition-all">
-                        <div>
-                            <div class="text-[8px] font-black uppercase text-slate-300 tracking-[0.3em]">Boleta Pro-Club</div>
-                            <div class="text-sm font-black text-diba-blue italic uppercase tracking-tighter">Gran Rifa DIBA FBC</div>
-                        </div>
-                    </div>
-                    <div class="space-y-3 mb-6 bg-slate-50 p-4 rounded-2xl group-hover:bg-white border border-transparent group-hover:border-slate-100 transition-all">
-                        <div class="flex justify-between items-center text-[10px]">
-                            <span class="font-bold text-slate-400 uppercase">Premio:</span>
-                            <span class="font-black text-diba-blue italic uppercase tracking-tighter">Bicicleta de Montaña</span>
-                        </div>
-                        <div class="flex justify-between items-center text-[10px]">
-                            <span class="font-bold text-slate-400 uppercase">Valor:</span>
-                            <span class="font-black text-diba-red italic tracking-tighter">$5.000</span>
-                        </div>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <input type="text" placeholder="Nombre Comprador" class="flex-1 bg-white border border-slate-100 rounded-xl px-4 py-2 text-[10px] font-bold text-diba-blue italic outline-none focus:ring-1 focus:ring-diba-gold/50 shadow-inner">
-                        <button class="w-10 h-10 rounded-xl bg-diba-blue text-white flex items-center justify-center hover:bg-diba-red transition-all shadow-md"><i class="fas fa-check text-[10px]"></i></button>
-                    </div>
+            <datalist id="loterias-list">
+                <option value="Sinuano Noche / Últimas 2 cifras">
+                <option value="Sinuano Día / Últimas 2 cifras">
+                <option value="Caribeña Noche / Últimas 2 cifras">
+                <option value="Caribeña Día / Últimas 2 cifras">
+                <option value="Lotería de Medellín">
+            </datalist>
+
+            <!-- Status Indicator -->
+            <div id="status-bar" class="hidden animate-fade-in no-print">
+                <div class="p-4 bg-emerald-50 border border-emerald-100 rounded-2xl flex items-center gap-3">
+                    <div class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
+                    <span id="status-text" class="text-[9px] font-black text-emerald-600 uppercase tracking-widest italic"></span>
                 </div>
             </div>
+
+            <!-- Results Output -->
+            <div id="contenedor" class="animate-fade-up" style="animation-delay: 0.2s"></div>
+
         </div>
     </main>
 
-    <!-- Scripts -->
     <script src="../scripts/config.js"></script>
     <script type="module">
         import { initAdminLayout } from '../src/components/layout/admin-layout.js';
-        import { requireAdmin } from '../scripts/supabaseClient.js';
-        
+        import { supabase, requireAdmin } from '../scripts/supabaseClient.js';
+
         async function init() {
             const session = await requireAdmin();
             if (!session) return;
             initAdminLayout();
         }
         init();
+
+        // Reloj
+        setInterval(() => {
+            const clockEl = document.getElementById('clock');
+            if (clockEl) clockEl.textContent = new Date().toLocaleTimeString('es-CO', { hour: '2-digit', minute: '2-digit' });
+        }, 1000);
+
+        // Lógica de Sorteo
+        const fechaPicker = document.getElementById('cfg-fecha-picker');
+        const fechaText = document.getElementById('cfg-fecha');
+        const valorNum = document.getElementById('cfg-valor-num');
+        const valorText = document.getElementById('cfg-valor');
+
+        const defaultDate = new Date();
+        defaultDate.setDate(defaultDate.getDate() + 7);
+        fechaPicker.value = defaultDate.toISOString().split('T')[0];
+
+        function updateFechaText() {
+            const d = new Date(fechaPicker.value + 'T00:00:00');
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            fechaText.value = d.toLocaleDateString('es-CO', options).toUpperCase();
+        }
+        fechaPicker.addEventListener('change', updateFechaText);
+        updateFechaText();
+
+        function updateValorText() {
+            const v = parseFloat(valorNum.value) || 0;
+            valorText.value = '$' + v.toLocaleString('es-CO');
+        }
+        valorNum.addEventListener('input', updateValorText);
+        updateValorText();
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        document.getElementById('btn-generar').addEventListener('click', () => {
+            const contenedor = document.getElementById('contenedor');
+            contenedor.innerHTML = '';
+
+            const totalBoletas = parseInt(document.getElementById('cfg-total').value) || 10;
+            const numPorBoleta = parseInt(document.getElementById('cfg-numeros').value) || 6;
+            const fecha = fechaText.value;
+            const loteria = document.getElementById('cfg-loteria').value.toUpperCase();
+            const premio = document.getElementById('cfg-premio').value.toUpperCase();
+            const valor = valorText.value;
+
+            const totalNumerosDeseados = totalBoletas * numPorBoleta;
+            let masterPool = [];
+            const numCiclos = Math.ceil(totalNumerosDeseados / 100);
+            
+            for (let c = 0; c < numCiclos; c++) {
+                let ciclo = [];
+                for (let i = 0; i < 100; i++) ciclo.push(String(i).padStart(2, '0'));
+                shuffleArray(ciclo);
+                masterPool = masterPool.concat(ciclo);
+            }
+
+            let boletas = [];
+            let pivot = 0;
+
+            for (let b = 0; b < totalBoletas; b++) {
+                let numerosBoleta = [];
+                for (let n = 0; n < numPorBoleta; n++) {
+                    if (pivot >= masterPool.length) break;
+                    let numSugerido = masterPool[pivot];
+                    if (numerosBoleta.includes(numSugerido)) {
+                        let buscaIdx = pivot + 1;
+                        while (buscaIdx < masterPool.length && numerosBoleta.includes(masterPool[buscaIdx])) buscaIdx++;
+                        if (buscaIdx < masterPool.length) [masterPool[pivot], masterPool[buscaIdx]] = [masterPool[buscaIdx], masterPool[pivot]];
+                        numSugerido = masterPool[pivot];
+                    }
+                    numerosBoleta.push(numSugerido);
+                    pivot++;
+                }
+                boletas.push({ jugador: '____________________________', numeros: numerosBoleta.sort((x, y) => parseInt(x) - parseInt(y)) });
+            }
+
+            const statusBar = document.getElementById('status-bar');
+            document.getElementById('status-text').textContent = `${boletas.length} BOLETAS SEGURAS GENERADAS — LISTAS PARA EMISIÓN`;
+            statusBar.classList.remove('hidden');
+
+            const BOLETAS_POR_PAG = 5;
+            for (let p = 0; p < Math.ceil(boletas.length / BOLETAS_POR_PAG); p++) {
+                const page = document.createElement('div');
+                page.className = 'page-rifa';
+                const slice = boletas.slice(p * BOLETAS_POR_PAG, (p + 1) * BOLETAS_POR_PAG);
+                slice.forEach((boleta, idx) => {
+                    const globalIdx = (p * BOLETAS_POR_PAG) + idx + 1;
+                    const el = document.createElement('div');
+                    el.className = 'boleta-container';
+                    el.innerHTML = `
+                        <div class="boleta">
+                            <div class="boleta-left">
+                                <img src="/images/ESCUDO.png" class="boleta-logo" alt="Logo">
+                            </div>
+                            <div class="boleta-main">
+                                <div class="boleta-header">
+                                    <div class="boleta-titulo">RIFA OFICIAL DIBA FBC</div>
+                                    <div class="boleta-number-id">#${String(globalIdx).padStart(3, '0')}</div>
+                                </div>
+                                <div class="boleta-content">
+                                    <div class="boleta-info">
+                                        📅 Juega: <strong>${fecha}</strong><br>
+                                        🎰 Lotería: <strong>${loteria}</strong><br>
+                                        🏆 Premio: <strong>${premio}</strong><br>
+                                        💰 Valor: <strong>${valor}</strong>
+                                    </div>
+                                    <div class="boleta-numeros">${boleta.numeros.map(n => `<div class="num-cell">${n}</div>`).join('')}</div>
+                                </div>
+                                <div class="boleta-jugador-box">
+                                    <div class="boleta-jugador-label">Responsable del Club</div>
+                                    <div class="boleta-jugador">👤 ${boleta.jugador}</div>
+                                </div>
+                            </div>
+                        </div>`;
+                    page.appendChild(el);
+                });
+                contenedor.appendChild(page);
+            }
+        });
     </script>
 </body>
+
 </html>
