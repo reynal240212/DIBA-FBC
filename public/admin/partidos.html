@@ -44,88 +44,12 @@
             }
         }
     </style>
-
-            .main {
-                margin-left: 0;
-            }
-
-            .mobile-menu-btn {
-                display: flex;
-            }
-        }
-    </style>
 </head>
 
-<body style="display: none;" id="admin-body">
+<body class="bg-white font-['Inter']">
 
-    <!-- ══ SIDEBAR ══ -->
-    <aside class="sidebar" id="sidebar">
-        <div class="sidebar-logo">
-            <img src="/images/ESCUDO.png" alt="DIBA FBC">
-            <div>
-                <div class="sidebar-logo-text">DIBA FBC</div>
-                <div class="sidebar-logo-sub">Panel de Control</div>
-            </div>
-        </div>
-
-        <nav class="sidebar-nav">
-            <a href="dashboard.html" class="nav-link"><i class="fas fa-th-large"></i> Dashboard</a>
-
-            <div class="nav-section-label">Equipo</div>
-            <a href="planilla.html" class="nav-link"><i class="fas fa-clipboard-list"></i> Planilla</a>
-            <a href="crear-jugador.html" class="nav-link"><i class="fas fa-user-plus"></i> Crear Jugador</a>
-            <a href="../ficha.html" class="nav-link"><i class="fas fa-users"></i> Jugadores</a>
-            <a href="partidos.html" class="nav-link active"><i class="fas fa-futbol"></i> Partidos</a>
-            <a href="convocatorias.html" class="nav-link"><i class="fas fa-bullhorn"></i> Convocatorias</a>
-
-            <div class="nav-section-label">Comunicación</div>
-            <a href="push.html" class="nav-link"><i class="fas fa-bell"></i> Notificaciones Push</a>
-
-            <div class="nav-section-label">Administración</div>
-            <a href="GestorDocumental.html" class="nav-link"><i class="fas fa-folder-open"></i> Gestor Documental</a>
-            <a href="usuarios.html" class="nav-link"><i class="fas fa-user-cog"></i> Usuarios</a>
-            <a href="crear-usuario.html" class="nav-link"><i class="fas fa-user-plus"></i> Crear Usuario</a>
-            <a href="rifa_diba.html" class="nav-link"><i class="fas fa-ticket-alt"></i> Rifas</a>
-
-            <div class="nav-section-label">Sitio Web</div>
-            <a href="../index.html" class="nav-link"><i class="fas fa-globe"></i> Ver Sitio</a>
-        </nav>
-
-        <div class="sidebar-footer">
-            <div class="user-chip">
-                <div class="user-avatar" id="sb-avatar">A</div>
-                <div>
-                    <div class="user-name" id="sb-name">Administrador</div>
-                    <div class="user-role" id="sb-role">Admin</div>
-                </div>
-            </div>
-            <button class="btn-logout" id="logout-btn">
-                <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
-            </button>
-        </div>
-    </aside>
-
-    <div class="main">
-        <!-- Top Bar -->
-        <header class="topbar">
-            <button class="mobile-menu-btn" id="menu-btn">
-                <i class="fas fa-bars" id="menu-icon"></i>
-            </button>
-            <div>
-                <div class="page-title">Gestión de <span>Partidos</span></div>
-                <div class="page-subtitle">Programación y resultados de encuentros — DIBA FBC</div>
-            </div>
-            <div class="topbar-right">
-                <button id="theme-toggle" class="mobile-menu-btn" style="display: flex; margin-right: 0.5rem;" title="Cambiar Tema">
-                  <i id="theme-icon" class="fas fa-sun"></i>
-                </button>
-                <div class="topbar-time" id="clock">--:--</div>
-                <button id="add-match-btn"
-                    class="bg-dibaGold text-dibaBlue px-6 py-2 rounded-xl font-black uppercase italic text-[10px] flex items-center gap-2 hover:scale-105 transition-all shadow-lg active:scale-95">
-                    <i class="fas fa-plus"></i> Nuevo Partido
-                </button>
-            </div>
-        </header>
+    <div id="admin-nav"></div>
+    <main class="lg:ml-[280px] min-h-screen transition-all duration-300">
 
         <div class="content">
 
@@ -220,6 +144,7 @@
 
     <script src="/scripts/config.js"></script>
     <script type="module">
+        import { initAdminLayout } from '../src/components/layout/admin-layout.js';
         import { supabase, requireAdmin } from '../scripts/supabaseClient.js';
 
         let allMatches = [];
@@ -230,26 +155,7 @@
                 const session = await requireAdmin();
                 if (!session) return;
 
-                document.getElementById('admin-body').style.display = 'flex';
-
-                const user = session.user;
-                if (user) {
-                    const { data: profile } = await supabase
-                        .from('users')
-                        .select('username, role, full_name')
-                        .eq('id', user.id)
-                        .single();
-
-                    if (profile) {
-                        document.getElementById('sb-name').textContent = profile.username;
-                        document.getElementById('sb-role').textContent = profile.role;
-                        document.getElementById('sb-avatar').textContent = profile.username[0].toUpperCase();
-                    } else {
-                        const emailName = user.email.split('@')[0];
-                        document.getElementById('sb-name').textContent = emailName;
-                        document.getElementById('sb-avatar').textContent = emailName[0].toUpperCase();
-                    }
-                }
+                initAdminLayout();
                 loadMatches();
             } catch (error) {
                 console.error("Init error:", error);
@@ -257,32 +163,6 @@
         }
 
         init();
-
-        // Clock
-        const clockEl = document.getElementById('clock');
-        function updateClock() {
-            const now = new Date();
-            if (clockEl) clockEl.textContent = now.toLocaleTimeString('es-CO', { hour: '2-digit', minute: '2-digit' });
-        }
-        updateClock();
-        setInterval(updateClock, 1000);
-
-        // Mobile Menu
-        const menuBtn = document.getElementById('menu-btn');
-        const menuIcon = document.getElementById('menu-icon');
-        const sidebar = document.getElementById('sidebar');
-        menuBtn?.addEventListener('click', () => {
-            sidebar.classList.toggle('open');
-            if (menuIcon) menuIcon.className = sidebar.classList.contains('open') ? 'fas fa-times' : 'fas fa-bars';
-        });
-
-        // Logout
-        document.getElementById('logout-btn')?.addEventListener('click', async () => {
-            if (confirm('¿Cerrar sesión?')) {
-                await supabase.auth.signOut();
-                window.location.href = 'login.html';
-            }
-        });
 
         // 2. Cargar partidos
         async function loadMatches() {

@@ -11,6 +11,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
   <link rel="stylesheet" href="/styles/admin-common.css">
   <script src="/scripts/theme-switcher.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
 
   <style>
     /* ── RIFA SPECIFIC STYLES ── */
@@ -195,7 +196,6 @@
       overflow: hidden;
     }
 
-    /* (Rest of existing specialized boleta styles...) */
     .boleta::before { content: ''; position: absolute; top: 0; left: 65px; bottom: 0; width: 1px; border-right: 2px dotted rgba(0, 42, 64, 0.2); }
     .boleta-left { width: 50px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; flex-shrink: 0; }
     .boleta-logo { width: 45px; height: 45px; object-fit: contain; filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1)); }
@@ -250,7 +250,7 @@
       .page-rifa {
         box-shadow: none !important;
         margin: 0 !important;
-        padding: 10mm !important; /* Keep internal padding for margin safety */
+        padding: 10mm !important;
         page-break-after: always;
         -webkit-print-color-adjust: exact;
         print-color-adjust: exact;
@@ -265,66 +265,11 @@
   </style>
 </head>
 
-<body style="display:none;" id="admin-body">
+<body class="bg-white font-['Inter']">
 
-  <!-- SIDEBAR -->
-  <aside class="sidebar" id="sidebar">
-    <div class="sidebar-logo">
-      <img src="/images/ESCUDO.png" alt="DIBA FBC">
-      <div>
-        <div class="sidebar-logo-text">DIBA FBC</div>
-        <div class="sidebar-logo-sub">Panel de Control</div>
-      </div>
-    </div>
-    <nav class="sidebar-nav">
-      <a href="dashboard.html" class="nav-link"><i class="fas fa-th-large"></i> Dashboard</a>
-      <div class="nav-section-label">Equipo</div>
-      <a href="planilla.html" class="nav-link"><i class="fas fa-clipboard-list"></i> Planilla</a>
-      <a href="crear-jugador.html" class="nav-link"><i class="fas fa-user-plus"></i> Crear Jugador</a>
-      <a href="../ficha.html" class="nav-link"><i class="fas fa-users"></i> Jugadores</a>
-      <a href="../partidos.html" class="nav-link"><i class="fas fa-futbol"></i> Partidos</a>
-      <a href="../analisis.html" class="nav-link"><i class="fas fa-chart-line"></i> Análisis</a>
-      <a href="convocatorias.html" class="nav-link"><i class="fas fa-bullhorn"></i> Convocatorias</a>
+  <div id="admin-nav"></div>
 
-      <div class="nav-section-label">Comunicación</div>
-      <a href="push.html" class="nav-link"><i class="fas fa-bell"></i> Notificaciones Push</a>
-
-      <div class="nav-section-label">Administración</div>
-      <a href="GestorDocumental.html" class="nav-link"><i class="fas fa-folder-open"></i> Gestor Documental</a>
-      <a href="usuarios.html" class="nav-link"><i class="fas fa-user-cog"></i> Usuarios</a>
-      <a href="crear-usuario.html" class="nav-link"><i class="fas fa-user-plus"></i> Crear Usuario</a>
-      <a href="rifa_diba.html" class="nav-link active"><i class="fas fa-ticket-alt"></i> Rifas</a>
-      <div class="nav-section-label">Sitio Web</div>
-      <a href="../index.html" class="nav-link"><i class="fas fa-globe"></i> Ver Sitio</a>
-    </nav>
-    <div class="sidebar-footer">
-      <div class="user-chip">
-        <div class="user-avatar" id="sb-avatar">A</div>
-        <div>
-          <div class="user-name" id="sb-name">Administrador</div>
-          <div class="user-role" id="sb-role">Admin</div>
-        </div>
-      </div>
-      <button class="btn-logout" id="logout-btn"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</button>
-    </div>
-  </aside>
-
-  <!-- MAIN -->
-  <div class="main">
-    <header class="topbar">
-      <button class="mobile-menu-btn" id="menu-btn"><i class="fas fa-bars" id="menu-icon"></i></button>
-      <div>
-        <div class="page-title">Generador de <span>Rifas</span></div>
-        <div class="page-subtitle">Boletas por jugador con exportación PDF</div>
-      </div>
-      <div class="topbar-right">
-        <button id="theme-toggle" class="mobile-menu-btn" style="display: flex; margin-right: 0.5rem;" title="Cambiar Tema">
-          <i id="theme-icon" class="fas fa-sun"></i>
-        </button>
-        <div class="topbar-time" id="clock">--:--</div>
-      </div>
-    </header>
-
+  <main class="lg:ml-[280px] min-h-screen transition-all duration-300">
     <div class="content">
       <!-- TOOLBAR -->
       <div class="toolbar">
@@ -396,43 +341,22 @@
       <!-- BOLETAS OUTPUT -->
       <div id="contenedor"></div>
     </div>
-  </div>
+  </main>
 
   <!-- SCRIPTS -->
   <script src="/scripts/config.js"></script>
   <script type="module">
+    import { initAdminLayout } from '../src/components/layout/admin-layout.js';
     import { supabase, requireAdmin } from '../scripts/supabaseClient.js';
 
     // ── AUTH ───────────────────────────────────────────────────
-    const session = await requireAdmin();
-    if (!session) { /* requireAdmin ya redirige */ }
-    else {
-      document.getElementById('admin-body').style.display = 'flex';
-      const { data: profile } = await supabase.from('users').select('username,role').eq('id', session.user.id).single();
-      if (profile) {
-        document.getElementById('sb-name').textContent = profile.username || session.user.email;
-        document.getElementById('sb-role').textContent = profile.role;
-        document.getElementById('sb-avatar').textContent = (profile.username || 'A')[0].toUpperCase();
-      }
+    async function init() {
+      const session = await requireAdmin();
+      if (!session) return;
+      initAdminLayout();
     }
+    init();
 
-    // ── CLOCK ─────────────────────────────────────────────────
-    const clockEl = document.getElementById('clock');
-    (function tick() { clockEl.textContent = new Date().toLocaleTimeString('es-CO', { hour: '2-digit', minute: '2-digit' }); setTimeout(tick, 1000); })();
-
-    // ── MOBILE MENU ───────────────────────────────────────────
-    document.getElementById('menu-btn').addEventListener('click', () => {
-      const s = document.getElementById('sidebar');
-      s.classList.toggle('open');
-      document.getElementById('menu-icon').className = s.classList.contains('open') ? 'fas fa-times' : 'fas fa-bars';
-    });
-
-    // ── LOGOUT ────────────────────────────────────────────────
-    document.getElementById('logout-btn').addEventListener('click', async () => {
-      if (confirm('¿Cerrar sesión?')) { await supabase.auth.signOut(); location.href = 'login.html'; }
-    });
-
-    // ── LOAD PLAYERS ──────────────────────────────────────────
     // ── SELECTOR HELPERS ──────────────────────────────────────
     const fechaPicker = document.getElementById('cfg-fecha-picker');
     const fechaText = document.getElementById('cfg-fecha');
@@ -442,23 +366,26 @@
     // Inicializar fecha con una semana desde hoy
     const defaultDate = new Date();
     defaultDate.setDate(defaultDate.getDate() + 7);
-    fechaPicker.value = defaultDate.toISOString().split('T')[0];
+    if(fechaPicker) {
+      fechaPicker.value = defaultDate.toISOString().split('T')[0];
+      fechaPicker.addEventListener('change', updateFechaText);
+    }
 
     function updateFechaText() {
       const d = new Date(fechaPicker.value + 'T00:00:00');
       const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
       fechaText.value = d.toLocaleDateString('es-CO', options);
     }
-    fechaPicker.addEventListener('change', updateFechaText);
-    updateFechaText(); // Run once
+    if(fechaPicker) updateFechaText(); 
 
     function updateValorText() {
       const v = parseFloat(valorNum.value) || 0;
       valorText.value = '$' + v.toLocaleString('es-CO');
     }
-    valorNum.addEventListener('input', updateValorText);
-    updateValorText(); // Run once
-
+    if(valorNum) {
+      valorNum.addEventListener('input', updateValorText);
+      updateValorText();
+    }
 
     // ── SHUFFLED CYCLE GENERATOR ──────────────────────────────────
     function shuffleArray(array) {
@@ -475,14 +402,13 @@
       const totalBoletas = parseInt(document.getElementById('cfg-total').value) || 10;
       const numPorBoleta = parseInt(document.getElementById('cfg-numeros').value) || 6;
       const fecha = document.getElementById('cfg-fecha').value.trim();
-      const loteria = document.getElementById('cfg-loteria').value.trim();
+      const loteria = document.getElementById('cfg-loteria.value').trim(); // Check this
+      const loteriaVal = document.getElementById('cfg-loteria').value.trim();
       const premio = document.getElementById('cfg-premio').value.trim();
       const valor = document.getElementById('cfg-valor').value.trim();
 
       const totalNumerosDeseados = totalBoletas * numPorBoleta;
       
-      // 1. Crear Pool de números por ciclos de 100 (00-99)
-      // Cada ciclo se mezcla individualmente para mantener el balance pero con dinamismo
       let masterPool = [];
       const numCiclos = Math.ceil(totalNumerosDeseados / 100);
       
@@ -495,7 +421,6 @@
         masterPool = masterPool.concat(ciclo);
       }
 
-      // 2. Repartir en boletas
       let boletas = [];
       let pivot = 0;
 
@@ -507,14 +432,12 @@
 
           let numSugerido = masterPool[pivot];
 
-          // Evitar duplicados en la misma boleta (posible en la frontera de dos ciclos)
           if (numerosBoleta.includes(numSugerido)) {
             let buscaIdx = pivot + 1;
             while (buscaIdx < masterPool.length && numerosBoleta.includes(masterPool[buscaIdx])) {
               buscaIdx++;
             }
             if (buscaIdx < masterPool.length) {
-              // Intercambiar para no perder el número
               [masterPool[pivot], masterPool[buscaIdx]] = [masterPool[buscaIdx], masterPool[pivot]];
               numSugerido = masterPool[pivot];
             }
@@ -532,11 +455,10 @@
         }
       }
 
-      // 3. Renderizar
       const statusBar = document.getElementById('status-bar');
       const statusText = document.getElementById('status-text');
-      statusBar.style.display = 'flex';
-      statusText.textContent = `${boletas.length} boletas generadas | Dinamismo: Azar por ciclos 00-99.`;
+      if(statusBar) statusBar.style.display = 'flex';
+      if(statusText) statusText.textContent = `${boletas.length} boletas generadas.`;
 
       const BOLETAS_POR_PAG = 5;
       let globalIdx = 0;
@@ -567,7 +489,7 @@
                 <div class="boleta-content">
                   <div class="boleta-info">
                     📅 Juega: <strong>${fecha}</strong><br>
-                    🎰 Lotería: <strong>${loteria}</strong><br>
+                    🎰 Lotería: <strong>${loteriaVal}</strong><br>
                     🏆 Premio: <strong>${premio}</strong><br>
                     💰 Valor: <strong>${valor}</strong>
                   </div>
@@ -586,7 +508,8 @@
       }
     };
 
-    document.getElementById('btn-generar').addEventListener('click', window.generarBoletas);
+    const genBtn = document.getElementById('btn-generar');
+    if(genBtn) genBtn.addEventListener('click', window.generarBoletas);
   </script>
 </body>
 

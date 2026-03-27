@@ -78,7 +78,7 @@
         }
     </style>
 </head>
-    <body class="bg-dark text-dibaText selection:bg-dibaGold/30 overflow-x-hidden font-inter flex min-h-screen" style="display: none;" id="admin-body">
+    <body class="bg-white font-['Inter']">
         <!-- Loader -->
         <div id="app-loader" class="fixed inset-0 z-[9999] flex items-center justify-center bg-[#06090e]">
             <div class="text-center animate-fade-up">
@@ -90,88 +90,7 @@
             </div>
         </div>
 
-    <!-- ══ SIDEBAR ══ -->
-    <aside class="sidebar" id="sidebar">
-        <div class="sidebar-logo">
-            <img src="/images/ESCUDO.png" alt="DIBA FBC" class="w-[38px] h-[38px]">
-            <div>
-                <div class="text-[1.05rem] font-black italic uppercase tracking-wider text-dibaGold leading-none">DIBA
-                    FBC</div>
-                <div class="text-[0.55rem] text-slate-500 uppercase tracking-widest font-bold mt-1">Panel de Control
-                </div>
-            </div>
-        </div>
-
-        <nav class="sidebar-nav">
-            <a href="dashboard.html" class="nav-link"><i class="fas fa-th-large w-5"></i> Dashboard</a>
-
-            <div class="text-[0.55rem] font-black uppercase text-slate-500 tracking-[0.2em] px-4 mt-6 mb-2">Equipo</div>
-            <a href="planilla.html" class="nav-link"><i class="fas fa-clipboard-list w-5"></i> Planilla</a>
-            <a href="crear-jugador.html" class="nav-link"><i class="fas fa-user-plus w-5"></i> Crear Jugador</a>
-            <a href="../ficha.html" class="nav-link"><i class="fas fa-users w-5"></i> Jugadores</a>
-            <a href="partidos.html" class="nav-link"><i class="fas fa-futbol w-5"></i> Partidos</a>
-            <a href="../analisis.html" class="nav-link"><i class="fas fa-chart-line w-5"></i> Análisis</a>
-            <a href="convocatorias.html" class="nav-link"><i class="fas fa-bullhorn w-5"></i> Convocatorias</a>
-
-            <div class="text-[0.55rem] font-black uppercase text-slate-500 tracking-[0.2em] px-4 mt-6 mb-2">Comunicación</div>
-            <a href="push.html" class="nav-link"><i class="fas fa-bell w-5"></i> Notificaciones Push</a>
-
-            <div class="text-[0.55rem] font-black uppercase text-slate-500 tracking-[0.2em] px-4 mt-6 mb-2">Administración</div>
-            <a href="GestorDocumental.html" class="nav-link"><i class="fas fa-folder-open w-5"></i> Gestor
-                Documental</a>
-            <a href="usuarios.html" class="nav-link active"><i class="fas fa-user-cog w-5"></i> Usuarios</a>
-            <a href="crear-usuario.html" class="nav-link"><i class="fas fa-user-plus w-5"></i> Crear Usuario</a>
-            <a href="rifa_diba.html" class="nav-link"><i class="fas fa-ticket-alt w-5"></i> Rifas</a>
-
-            <div class="text-[0.55rem] font-black uppercase text-slate-500 tracking-[0.2em] px-4 mt-6 mb-2">Sitio Web
-            </div>
-            <a href="../index.html" class="nav-link"><i class="fas fa-globe w-5"></i> Ver Sitio</a>
-        </nav>
-
-        <div class="sidebar-footer">
-            <div class="flex items-center gap-3 p-3 bg-white/5 rounded-2xl mb-3">
-                <div class="w-9 h-9 rounded-full bg-dibaGold text-dibaBlue flex items-center justify-center font-black text-sm"
-                    id="sb-avatar">A</div>
-                <div class="overflow-hidden">
-                    <div class="text-xs font-black truncate" id="sb-name">Administrador</div>
-                    <div class="text-[10px] text-slate-500 uppercase font-bold" id="sb-role">Admin</div>
-                </div>
-            </div>
-            <button
-                class="w-full flex items-center justify-center gap-2 p-3 bg-red-500/10 text-red-500 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-red-500 hover:text-white transition-all"
-                id="logout-btn">
-                <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
-            </button>
-        </div>
-    </aside>
-    <div class="sidebar-overlay" onclick="document.getElementById('sidebar').classList.remove('open')"></div>
-
-    <div class="main-content">
-        <!-- Top Bar -->
-        <header class="topbar sticky top-0 z-50">
-            <div class="flex items-center gap-4 animate-fade-up">
-                <button
-                    class="mobile-menu-btn"
-                    id="menu-btn">
-                    <i class="fas fa-bars" id="menu-icon"></i>
-                </button>
-                <div>
-                    <h1 class="page-title text-xl md:text-2xl">Gestión de <span>Usuarios</span></h1>
-                    <p class="page-subtitle text-[10px] uppercase tracking-widest mt-1">Administra los miembros del panel oficial</p>
-                </div>
-            </div>
-            <div class="flex items-center gap-4">
-                <button id="theme-toggle" class="btn btn-outline" style="padding: 0.5rem; width: 40px; height: 40px; justify-content: center;" title="Cambiar Tema">
-                  <i id="theme-icon" class="fas fa-sun"></i>
-                </button>
-                <div class="hidden sm:block topbar-time glass"
-                    id="clock">--:--</div>
-                <a href="crear-usuario.html"
-                    class="btn btn-primary">
-                    <i class="fas fa-user-plus"></i> <span class="hidden sm:inline">Nuevo Usuario</span>
-                </a>
-            </div>
-        </header>
+    <div id="admin-nav"></div>
 
         <!-- Content -->
         <main class="flex-1 p-4 md:p-8">
@@ -199,7 +118,7 @@
                     </div>
 
                     <table id="usersTable" class="hidden w-full text-left">
-                        <thead class="bg-white/5 border-b border-white/5 text-[10px] uppercase font-black tracking-[0.2em] text-dibaMuted">
+                        <thead class="bg-slate-50 border-b border-slate-200 text-[10px] uppercase font-black tracking-[0.2em] text-slate-500">
                             <tr>
                                 <th class="px-6 py-4">Ref ID</th>
                                 <th class="px-6 py-4">Usuario</th>
@@ -209,7 +128,7 @@
                                 <th class="px-6 py-4 text-center">Acciones</th>
                             </tr>
                         </thead>
-                        <tbody id="users-tbody" class="divide-y divide-white/5"></tbody>
+                        <tbody id="users-tbody" class="divide-y divide-slate-100 italic"></tbody>
                     </table>
 
                     <div id="empty-state" class="hidden flex-col items-center justify-center py-20 gap-4 opacity-50">
@@ -224,25 +143,8 @@
 
     <script src="/scripts/config.js"></script>
     <script type="module">
-        import { initTheme } from '/src/core/theme-switcher.js';
         import { initAdminLayout } from '/src/components/layout/admin-layout.js';
-        
-        initTheme();
         initAdminLayout();
-
-        document.getElementById('app-loader')?.classList.add('hidden');
-        document.getElementById('admin-body').classList.remove('hidden');
-        document.getElementById('admin-body').style.display = 'flex';
-        
-        // Clock logic
-        function updateClock() {
-            const el = document.getElementById('clock');
-            if (el) el.textContent = new Date().toLocaleTimeString('es-CO', {
-                hour: '2-digit', minute: '2-digit', second: '2-digit'
-            });
-        }
-        setInterval(updateClock, 1000);
-        updateClock();
     </script>
     <script type="module" src="/src/features/users/admin.js"></script>
 

@@ -452,71 +452,24 @@
             }
         }
     </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'diba-blue': '#004d98',
+                        'diba-red': '#a50044',
+                        'diba-gold': '#FFD700',
+                    }
+                }
+            }
+        }
+    </script>
 </head>
 
-<body style="display:none;" id="admin-body">
+<body class="bg-white font-['Inter']">
 
-    <!-- ══ SIDEBAR ══ -->
-    <aside class="sidebar" id="sidebar">
-        <div class="sidebar-logo">
-            <img src="/images/ESCUDO.png" alt="DIBA FBC">
-            <div>
-                <div class="sidebar-logo-text">DIBA FBC</div>
-                <div class="sidebar-logo-sub">Panel de Control</div>
-            </div>
-        </div>
-
-        <nav class="sidebar-nav">
-            <a href="dashboard.html" class="nav-link"><i class="fas fa-th-large"></i> Dashboard</a>
-
-            <div class="nav-section-label">Equipo</div>
-            <a href="planilla.html" class="nav-link"><i class="fas fa-clipboard-list"></i> Planilla</a>
-            <a href="crear-jugador.html" class="nav-link"><i class="fas fa-user-plus"></i> Crear Jugador</a>
-            <a href="../ficha.html" class="nav-link"><i class="fas fa-users"></i> Jugadores</a>
-            <a href="../partidos.html" class="nav-link"><i class="fas fa-futbol"></i> Partidos</a>
-            <a href="../analisis.html" class="nav-link"><i class="fas fa-chart-line"></i> Análisis</a>
-            <a href="convocatorias.html" class="nav-link active"><i class="fas fa-bullhorn"></i> Convocatorias</a>
-
-            <div class="nav-section-label">Comunicación</div>
-            <a href="push.html" class="nav-link"><i class="fas fa-bell"></i> Notificaciones Push</a>
-
-            <div class="nav-section-label">Administración</div>
-            <a href="GestorDocumental.html" class="nav-link"><i class="fas fa-folder-open"></i> Gestor Documental</a>
-            <a href="usuarios.html" class="nav-link"><i class="fas fa-user-cog"></i> Usuarios</a>
-            <a href="crear-usuario.html" class="nav-link"><i class="fas fa-user-plus"></i> Crear Usuario</a>
-            <a href="rifa_diba.html" class="nav-link"><i class="fas fa-ticket-alt"></i> Rifas</a>
-
-            <div class="nav-section-label">Sitio Web</div>
-            <a href="../index.html" class="nav-link"><i class="fas fa-globe"></i> Ver Sitio</a>
-        </nav>
-
-        <div class="sidebar-footer">
-            <div class="user-chip">
-                <div class="user-avatar" id="sb-avatar">A</div>
-                <div>
-                    <div class="user-name" id="sb-name">Administrador</div>
-                    <div class="user-role" id="sb-role">Admin</div>
-                </div>
-            </div>
-            <button class="btn-logout" id="logout-btn"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</button>
-        </div>
-    </aside>
-
-    <!-- ══ MAIN ══ -->
-    <div class="main">
-        <header class="topbar">
-            <button class="mobile-menu-btn" id="menu-btn"><i class="fas fa-bars" id="menu-icon"></i></button>
-            <div>
-                <div class="page-title">Convocatorias <span>DIBA FBC</span></div>
-                <div class="page-subtitle">Selecciona jugadores y notifícalos al instante</div>
-            </div>
-            <div class="topbar-right">
-                <button id="theme-toggle" class="mobile-menu-btn" style="display: flex; margin-right: 0.5rem;" title="Cambiar Tema">
-                  <i id="theme-icon" class="fas fa-sun"></i>
-                </button>
-                <div class="topbar-time" id="clock">--:--</div>
-            </div>
-        </header>
+    <div id="admin-nav"></div>
 
         <div class="content">
             <div class="conv-grid">
@@ -587,9 +540,9 @@
                             </div>
 
                             <div
-                                style="padding:.9rem 1rem;background:var(--dark3);border-radius:12px;margin-bottom:1.2rem;font-size:.72rem;color:var(--slate);">
-                                <i class="fas fa-bell" style="color:var(--gold);margin-right:.5rem;"></i>
-                                Se enviará una <strong style="color:var(--text);">notificación push</strong> a todos los
+                                style="padding:.9rem 1rem;background:#f1f5f9;border-radius:12px;margin-bottom:1.2rem;font-size:.72rem;color:#475569;">
+                                <i class="fas fa-bell" style="color:#FFD700;margin-right:.5rem;"></i>
+                                Se enviará una <strong style="color:#004d98;">notificación push</strong> a todos los
                                 jugadores convocados que tengan activadas las alertas.
                             </div>
 
@@ -603,7 +556,7 @@
 
             </div>
         </div><!-- /content -->
-    </div><!-- /main -->
+    </main>
 
     <!-- ── TOAST CONTAINER ── -->
     <div class="toast-bar" id="toastBar"></div>
@@ -611,6 +564,7 @@
     <!-- ── SCRIPTS ── -->
     <script src="/scripts/config.js"></script>
     <script type="module">
+        import { initAdminLayout } from '../src/components/layout/admin-layout.js';
         import { supabase, requireAdmin } from '../scripts/supabaseClient.js';
 
         // ── AUTH & LAYOUT ──────────────────────────────────────────
@@ -618,33 +572,12 @@
             const session = await requireAdmin();
             if (!session) return;
 
-            document.getElementById('admin-body').style.display = 'flex';
-            const { data: profile } = await supabase.from('users').select('username,role').eq('id', session.user.id).single();
-            if (profile) {
-                document.getElementById('sb-name').textContent = profile.username || session.user.email;
-                document.getElementById('sb-role').textContent = profile.role;
-                document.getElementById('sb-avatar').textContent = (profile.username || 'A')[0].toUpperCase();
-            }
-
+            initAdminLayout();
             loadJugadores();
             loadHistorial();
         }
 
-        // Reloj
-        const clockEl = document.getElementById('clock');
-        (function tick() { clockEl.textContent = new Date().toLocaleTimeString('es-CO', { hour: '2-digit', minute: '2-digit' }); setTimeout(tick, 1000); })();
-
-        // Menú móvil
-        document.getElementById('menu-btn').addEventListener('click', () => {
-            const s = document.getElementById('sidebar');
-            s.classList.toggle('open');
-            document.getElementById('menu-icon').className = s.classList.contains('open') ? 'fas fa-times' : 'fas fa-bars';
-        });
-
-        // Logout
-        document.getElementById('logout-btn').addEventListener('click', async () => {
-            if (confirm('¿Cerrar sesión?')) { await supabase.auth.signOut(); location.href = 'login.html'; }
-        });
+        init();
 
         // ── TOAST ──────────────────────────────────────────────────
         function showToast(msg, type = 'info') {
