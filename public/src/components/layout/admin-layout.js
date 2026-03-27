@@ -80,7 +80,7 @@ export async function initAdminLayout() {
     // Header Injection (Azul Grana Styled)
     const pageTitle = document.title.split('—')[0].trim();
     const headerHTML = `
-    <header class="sticky top-0 z-40 bg-[#020617] px-8 h-[70px] flex items-center justify-between border-b border-white/5 shadow-sm relative overflow-hidden">
+    <header class="fixed top-0 right-0 left-0 lg:left-[280px] z-40 bg-[#020617]/80 backdrop-blur-md px-8 h-[70px] flex items-center justify-between border-b border-white/5 shadow-sm transition-all duration-300 overflow-hidden">
         <!-- Visual Accent -->
         <div class="absolute top-0 left-0 w-1 h-full bg-[#FFD700]"></div>
         

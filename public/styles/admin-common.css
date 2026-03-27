@@ -6,22 +6,22 @@
     --gold-rgb: 255, 215, 0;
     
     /* Layout Colors */
-    --bg-admin: #FFFFFF;
-    --bg-sidebar: #004d98; /* Default to blue, can be gradient */
+    --bg-admin: #06090e;
+    --bg-sidebar: #020617; 
     --text-on-nav: #FFFFFF;
     
     /* Semantic Colors */
-    --bg-main: #FFFFFF;      
-    --bg-panel: #FFFFFF;     
-    --bg-input: #F8FAFC;
+    --bg-main: #06090e;      
+    --bg-panel: rgba(15, 25, 38, 0.7);     
+    --bg-input: rgba(20, 31, 46, 0.8);
     
     /* Text System */
-    --text-main: #0F172A;
-    --text-muted: #64748B;
-    --text-dim: #94A3B8;
+    --text-main: #fcfcfc;
+    --text-muted: #8b9db7;
+    --text-dim: #64748b;
     
     /* UI Decorators */
-    --border-color: rgba(0, 0, 0, 0.05);
+    --border-color: rgba(255, 255, 255, 0.08);
     --shadow-premium: 0 10px 40px -10px rgba(0, 77, 152, 0.1);
     
     /* Layout Constants */
@@ -62,7 +62,7 @@ body {
     background: var(--bg-main);
     color: var(--text-main);
     min-height: 100vh;
-    display: flex;
+    display: block; /* Fixed layout logic */
     overflow-x: hidden;
     line-height: 1.5;
     -webkit-font-smoothing: antialiased;
