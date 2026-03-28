@@ -58,6 +58,13 @@ export async function initAdminLayout() {
                 <div class="w-8 flex justify-center"><i class="fas fa-calendar-star text-lg ${getIconClass('partidos')}"></i></div>
                 <span class="text-[0.8rem] tracking-tight truncate">Partidos & Eventos</span>
             </a>
+            <a href="https://asistencia-dibafbc.vercel.app/" target="_blank" class="nav-link flex items-center gap-3 px-4 py-3 rounded-2xl transition-all duration-300 text-white/60 font-semibold hover:bg-white/5 hover:text-white group hover:translate-x-1">
+                <div class="w-8 flex justify-center"><i class="fas fa-clipboard-user text-lg opacity-30 group-hover:opacity-100 group-hover:text-[#FFD700]"></i></div>
+                <span class="text-[0.8rem] tracking-tight truncate flex items-center gap-2">
+                    Asistencia 
+                    <span class="px-1.5 py-0.5 rounded bg-gold/10 border border-gold/20 text-gold text-[0.4rem] font-black uppercase">App</span>
+                </span>
+            </a>
             <a href="convocatorias.html" class="nav-link flex items-center gap-3 px-4 py-3 rounded-2xl transition-all duration-300 ${getLinkClass('convocatorias')}">
                 <div class="w-8 flex justify-center"><i class="fas fa-bullhorn text-lg ${getIconClass('convocatorias')}"></i></div>
                 <span class="text-[0.8rem] tracking-tight truncate">Convocatorias</span>
