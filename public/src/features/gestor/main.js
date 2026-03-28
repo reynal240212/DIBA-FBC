@@ -34,6 +34,7 @@ import { loadDocuments } from './docs.js';
     document.getElementById("upload-btn")?.addEventListener("click", () => document.getElementById("newDocument")?.click());
     
     document.getElementById("filter-docs-btn")?.addEventListener("click", () => loadDocuments(dynamicContent, pageTitle, mainTitle, setActiveFilter, usuario));
+    document.getElementById("filter-club-btn")?.addEventListener("click", () => loadStorageBuckets(dynamicContent, pageTitle, mainTitle, setActiveFilter));
     document.getElementById("logout-btn")?.addEventListener("click", cerrarSesion);
 
     searchInput?.addEventListener('input', (e) => {

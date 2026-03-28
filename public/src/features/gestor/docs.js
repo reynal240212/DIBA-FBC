@@ -32,14 +32,16 @@ export async function loadDocuments(dynamicContent, pageTitle, mainTitle, setAct
         if (error) throw error;
 
         if (!documents || documents.length === 0) {
-            fileListContainer.innerHTML = `
-                <div class="p-20 text-center col-span-full">
-                    <div class="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center text-slate-200 mx-auto mb-6 border border-slate-100">
-                        <i class="fas fa-folder-open text-3xl"></i>
+            if (dynamicContent) {
+                dynamicContent.innerHTML = `
+                    <div class="p-20 text-center col-span-full opacity-40">
+                        <div class="w-20 h-20 bg-white/5 rounded-full flex items-center justify-center text-gold mx-auto mb-6 border border-white/5 shadow-inner">
+                            <i class="fas fa-folder-open text-3xl"></i>
+                        </div>
+                        <p class="text-white/40 uppercase text-[0.7rem] font-black italic tracking-widest">Aún no se han registrado documentos oficiales</p>
                     </div>
-                    <p class="text-slate-400 uppercase text-[10px] font-black italic tracking-widest">Todavía no has cargado ningún documento</p>
-                </div>
-            `;
+                `;
+            }
             return;
         }
 

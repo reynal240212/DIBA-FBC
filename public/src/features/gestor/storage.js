@@ -1,90 +1,82 @@
 /**
- * DIBA FBC - Gestor Storage Module (Refactored for Light Mode)
+ * DIBA FBC - Gestor Storage Module (Premium Azul Grana)
  */
 import { supabase } from '../../core/supabase.js';
 
 export async function loadStorageBuckets(dynamicContent, pageTitle, mainTitle, setActiveFilter) {
-    if (pageTitle) pageTitle.innerHTML = 'Storage <span>Cloud</span>';
-    if (mainTitle) mainTitle.innerHTML = 'Explorador de Archivos';
+    if (pageTitle) pageTitle.innerHTML = 'Explorador <span class="text-gold">Cloud</span>';
     setActiveFilter('filter-club-btn');
     
-    dynamicContent.innerHTML = `
-        <div class="p-12 animate-fade-up">
-            <div id="storage-header" class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12">
-                <div>
-                    <h3 class="text-2xl font-black text-diba-blue uppercase italic tracking-tight">Nube de <span class="text-diba-red">Documentos</span></h3>
-                    <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-2">Explora los buckets de almacenamiento de Supabase</p>
+    // Set Loader
+    if (dynamicContent) {
+        dynamicContent.innerHTML = `
+            <div class="col-span-full py-24 flex flex-col items-center opacity-20">
+                <div class="relative w-16 h-16 mb-6">
+                    <div class="absolute inset-0 border-4 border-gold/10 rounded-full"></div>
+                    <div class="absolute inset-0 border-4 border-t-gold rounded-full animate-spin"></div>
                 </div>
-                <div class="flex items-center gap-4 bg-slate-50 p-3 rounded-2xl border border-slate-100">
-                    <div class="flex items-center gap-2 px-4 py-2 bg-white rounded-xl shadow-sm border border-slate-100">
-                        <div class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
-                        <span class="text-[9px] font-black uppercase text-diba-blue tracking-widest">En Línea</span>
-                    </div>
-                </div>
+                <p class="text-[0.7rem] font-black uppercase tracking-[0.3em] text-gold italic">Escaneando Infraestructura...</p>
             </div>
-            <div id="bucketsList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <div class="flex flex-col items-center justify-center py-32 col-span-full opacity-30 text-diba-blue">
-                    <i class="fas fa-circle-notch fa-spin text-3xl mb-4"></i>
-                    <p class="text-[10px] font-black uppercase tracking-widest">Escaneando Infraestructura...</p>
-                </div>
-            </div>
-        </div>
-    `;
+        `;
+    }
 
     try {
         const { data: buckets, error } = await supabase.storage.listBuckets();
         if (error) throw error;
 
-        const bucketsList = document.getElementById("bucketsList");
-        bucketsList.innerHTML = '';
+        if (dynamicContent) dynamicContent.innerHTML = '';
 
         buckets.forEach(bucket => {
             const div = document.createElement('div');
-            div.className = "group flex flex-col items-center justify-center p-10 bg-white border border-slate-100 rounded-[3rem] shadow-premium hover:shadow-2xl hover:border-diba-blue hover:scale-[1.02] transition-all cursor-pointer relative overflow-hidden";
+            div.className = "panel p-8 animate-fade-up group hover:border-gold/30 transition-all flex flex-col items-center text-center cursor-pointer relative overflow-hidden";
             div.innerHTML = `
-                <div class="absolute inset-0 bg-gradient-to-br from-diba-gold/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                <div class="relative z-10 flex flex-col items-center text-center">
-                    <div class="w-20 h-20 bg-slate-50 rounded-3xl flex items-center justify-center text-diba-blue mb-6 group-hover:bg-diba-gold/10 transition-colors border border-slate-100 shadow-inner">
-                        <i class="fas fa-database text-3xl"></i>
-                    </div>
-                    <h4 class="text-lg font-black text-diba-blue uppercase italic tracking-tight mb-2 group-hover:text-diba-red transition-colors">${bucket.name}</h4>
-                    <p class="text-[9px] text-slate-400 font-bold uppercase tracking-[0.2em] mb-6">${bucket.public ? 'Bucket Público' : 'Bucket Privado'}</p>
-                    <div class="px-6 py-2.5 bg-diba-blue text-white text-[9px] font-black uppercase italic tracking-widest rounded-xl shadow-lg shadow-blue-900/10 opacity-0 group-hover:opacity-100 transition-all">
-                        Explorar Bucket
-                    </div>
+                <div class="absolute inset-0 bg-gradient-to-br from-gold/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                
+                <div class="w-20 h-20 rounded-3xl bg-gold/10 flex items-center justify-center text-gold border border-gold/10 group-hover:bg-gold group-hover:text-[#004d98] transition-all mb-6">
+                    <i class="fas fa-database text-3xl"></i>
                 </div>
+                
+                <h4 class="text-lg font-black italic text-white uppercase tracking-tighter mb-2 group-hover:text-gold transition-colors">${bucket.name}</h4>
+                <div class="flex items-center gap-2 mb-6">
+                    <span class="px-3 py-1 bg-white/5 text-white/40 text-[0.6rem] font-black uppercase tracking-widest rounded-lg border border-white/5">
+                        ${bucket.public ? 'Público' : 'Privado'}
+                    </span>
+                </div>
+                
+                <button class="w-full py-3 bg-white/5 text-white/40 group-hover:bg-gold group-hover:text-[#004d98] text-[0.65rem] font-black uppercase tracking-widest rounded-xl transition-all shadow-xl shadow-gold/5">
+                    EXPLORAR CONTENIDO
+                </button>
             `;
             div.onclick = () => loadBucketFiles(bucket.id, dynamicContent, pageTitle, mainTitle);
-            bucketsList.appendChild(div);
+            if (dynamicContent) dynamicContent.appendChild(div);
         });
     } catch (err) {
         console.error(err);
-        document.getElementById("bucketsList").innerHTML = `<div class="p-10 text-center text-rose-500 font-black uppercase text-xs col-span-full">Error: ${err.message}</div>`;
+        if (dynamicContent) dynamicContent.innerHTML = `<div class="p-10 text-center text-red-500 font-black uppercase text-xs col-span-full">Error: ${err.message}</div>`;
     }
 }
 
 async function loadBucketFiles(bucketId, dynamicContent, pageTitle, mainTitle) {
-    if (pageTitle) pageTitle.innerHTML = `Bucket <span>${bucketId}</span>`;
+    if (pageTitle) pageTitle.innerHTML = `Bucket: <span class="text-gold">${bucketId}</span>`;
     
-    dynamicContent.innerHTML = `
-        <div class="p-12 animate-fade-up">
-            <div class="flex items-center gap-4 mb-10">
-                <button onclick="window.loadStorageBucketsGlobal()" class="w-12 h-12 rounded-2xl bg-slate-50 flex items-center justify-center text-diba-blue hover:bg-diba-blue hover:text-white transition-all border border-slate-100 shadow-sm group">
+    if (dynamicContent) {
+        dynamicContent.innerHTML = `
+            <div class="col-span-full flex items-center justify-between mb-8 pb-4 border-b border-white/5">
+                <button id="back-to-buckets" class="flex items-center gap-3 px-6 py-3 bg-white/5 rounded-2xl text-white/40 hover:text-gold hover:bg-white/10 transition-all group">
                     <i class="fas fa-arrow-left group-hover:-translate-x-1 transition-transform"></i>
+                    <span class="text-[0.6rem] font-black uppercase tracking-widest">VOLVER A BUCKETS</span>
                 </button>
-                <div>
-                    <h3 class="text-2xl font-black text-diba-blue uppercase italic tracking-tight">Archivos en <span class="text-diba-red">${bucketId}</span></h3>
-                    <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-2">Explora el contenido de este contenedor</p>
+                <div class="hidden sm:flex items-center gap-2 text-white/20 text-[0.6rem] font-black uppercase tracking-widest">
+                    <i class="fas fa-folder-open"></i> Sincronizando Archivos...
                 </div>
             </div>
-            <div id="filesGrid" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">
-                <div class="flex justify-center py-20 col-span-full text-diba-blue"><i class="fas fa-circle-notch animate-spin text-3xl"></i></div>
-            </div>
-        </div>
-    `;
+            <div id="inner-files-grid" class="contents"></div>
+        `;
 
-    // Global helper for back button
-    window.loadStorageBucketsGlobal = () => loadStorageBuckets(dynamicContent, pageTitle, mainTitle, (id) => {});
+        document.getElementById('back-to-buckets')?.addEventListener('click', () => {
+            loadStorageBuckets(dynamicContent, pageTitle, mainTitle, (id) => {});
+        });
+    }
 
     try {
         const { data: files, error } = await supabase.storage.from(bucketId).list('', {
@@ -95,28 +87,30 @@ async function loadBucketFiles(bucketId, dynamicContent, pageTitle, mainTitle) {
 
         if (error) throw error;
 
-        const filesGrid = document.getElementById("filesGrid");
-        filesGrid.innerHTML = '';
+        const filesGrid = document.getElementById("inner-files-grid");
+        if (!filesGrid) return;
 
         if (files.length === 0) {
-            filesGrid.innerHTML = '<div class="p-20 text-center col-span-full text-slate-400 font-black uppercase text-xs italic">Este bucket está vacío</div>';
+            filesGrid.innerHTML = '<div class="p-20 text-center col-span-full text-white/20 font-black uppercase text-xs italic tracking-[0.3em]">Este bucket está vacío</div>';
             return;
         }
 
         files.forEach(file => {
             const isImage = file.name.match(/\.(jpg|jpeg|png|gif|webp)$/i);
+            const isDoc = file.name.match(/\.(pdf|doc|docx|xls|xlsx)$/i);
+            
             const div = document.createElement('div');
-            div.className = "group flex flex-col items-center bg-white p-6 rounded-3xl border border-slate-100 hover:border-diba-blue hover:shadow-premium transition-all cursor-pointer";
+            div.className = "panel p-5 animate-fade-up group hover:border-gold/30 transition-all flex flex-col items-center text-center cursor-pointer relative overflow-hidden";
             div.innerHTML = `
-                <div class="w-14 h-14 bg-slate-50 rounded-2xl flex items-center justify-center text-slate-400 mb-4 group-hover:text-diba-blue group-hover:bg-diba-gold/10 transition-colors border border-slate-100 shadow-inner">
-                    <i class="fas ${isImage ? 'fa-image' : 'fa-file-alt'} text-xl"></i>
+                <div class="w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center text-white/20 group-hover:bg-gold/10 group-hover:text-gold transition-all mb-4 border border-white/5">
+                    <i class="fas ${isImage ? 'fa-image' : isDoc ? 'fa-file-pdf' : 'fa-file'} text-lg"></i>
                 </div>
-                <p class="text-[10px] font-bold text-diba-blue text-center line-clamp-2 break-all uppercase tracking-tighter group-hover:text-diba-red transition-all">${file.name}</p>
+                <p class="text-[0.6rem] font-bold text-white/40 group-hover:text-white transition-all break-all line-clamp-2 uppercase tracking-tight">${file.name}</p>
             `;
             filesGrid.appendChild(div);
         });
     } catch (err) {
         console.error(err);
-        document.getElementById("filesGrid").innerHTML = `<div class="p-10 text-center text-rose-500 font-black uppercase text-xs col-span-full">Error: ${err.message}</div>`;
+        if (dynamicContent) dynamicContent.innerHTML = `<div class="p-10 text-center text-red-500 font-black uppercase text-xs col-span-full">Error: ${err.message}</div>`;
     }
 }
