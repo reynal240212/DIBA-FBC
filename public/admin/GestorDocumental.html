@@ -32,7 +32,7 @@
                             <span class="w-8 h-1 bg-gold rounded-full"></span>
                             <p class="text-white/40 font-bold uppercase tracking-[0.4em] text-[0.65rem]">Repositorio de Archivos Oficiales</p>
                         </div>
-                        <h2 class="text-4xl lg:text-5xl font-black italic text-white uppercase tracking-tighter">Gestor <span class="text-gold">Documental</span></h2>
+                        <h2 id="main-title" class="text-4xl lg:text-5xl font-black italic text-white uppercase tracking-tighter">Gestor <span class="text-gold">Documental</span></h2>
                     </div>
 
                     <div class="flex items-center gap-4 flex-wrap lg:flex-nowrap w-full lg:w-auto">
@@ -44,6 +44,7 @@
                         <button id="upload-btn" class="px-10 py-4 bg-gold rounded-2xl text-[#004d98] font-black uppercase tracking-widest text-[0.7rem] hover:scale-105 hover:bg-white transition-all shadow-2xl shadow-gold/10 flex items-center justify-center gap-3 w-full lg:w-auto">
                             <i class="fas fa-cloud-arrow-up"></i> SUBIR ARCHIVO
                         </button>
+                        <input type="file" id="newDocument" class="hidden" accept=".pdf,.jpg,.png">
                     </div>
                 </div>
             </div>
@@ -81,7 +82,7 @@
                             <span class="text-[0.65rem] font-black uppercase tracking-widest text-white/40 italic">Filtros de Búsqueda</span>
                         </div>
                         <div class="p-4 space-y-2">
-                            <button class="w-full flex items-center justify-between p-5 rounded-2xl bg-gold text-[#004d98] font-black text-[0.7rem] uppercase tracking-widest group shadow-xl shadow-gold/10">
+                            <button id="filter-docs-btn" class="w-full flex items-center justify-between p-5 rounded-2xl bg-gold text-[#004d98] font-black text-[0.7rem] uppercase tracking-widest group shadow-xl shadow-gold/10">
                                 <div class="flex items-center gap-4">
                                     <i class="fas fa-folder-tree"></i>
                                     <span>Todos los Archivos</span>

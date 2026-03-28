@@ -14,30 +14,32 @@ import { loadDocuments } from './docs.js';
     const usuario = JSON.parse(localStorage.getItem("usuario"));
 
     // DOM Elements
-    const dynamicContent = document.getElementById("dynamic-content");
-    const pageTitle = document.querySelector(".page-title");
+    const dynamicContent = document.getElementById("docs-grid");
+    const pageTitle = document.getElementById("main-title");
     const mainTitle = document.getElementById("main-title");
-    const searchInput = document.getElementById("searchInput");
+    const searchInput = document.getElementById("search-docs");
 
     function setActiveFilter(btnId) {
-        document.querySelectorAll('#filter-container button').forEach(btn => {
+        document.querySelectorAll('.panel button').forEach(btn => {
             const isActive = btn.id === btnId;
-            btn.className = isActive 
-                ? "px-8 py-3 rounded-2xl bg-diba-blue text-diba-gold text-[10px] font-black uppercase tracking-widest border border-diba-blue transition-all whitespace-nowrap shadow-xl shadow-blue-900/10 scale-[1.02]"
-                : "px-8 py-3 rounded-2xl bg-white text-slate-400 text-[10px] font-black uppercase tracking-widest border border-slate-100 hover:border-diba-blue hover:text-diba-blue transition-all whitespace-nowrap shadow-sm";
+            if (isActive) {
+                btn.className = "w-full flex items-center justify-between p-5 rounded-2xl bg-gold text-[#004d98] font-black text-[0.7rem] uppercase tracking-widest group shadow-xl shadow-gold/10";
+            } else {
+                btn.className = "w-full flex items-center justify-between p-5 rounded-2xl bg-white/5 text-white/40 font-black text-[0.7rem] uppercase tracking-widest hover:bg-white/10 hover:text-white transition-all border border-transparent hover:border-white/10";
+            }
         });
     }
 
     // Event Listeners
-    document.getElementById("view-players-btn")?.addEventListener("click", () => loadPlayers(dynamicContent, pageTitle, mainTitle, setActiveFilter));
+    document.getElementById("upload-btn")?.addEventListener("click", () => document.getElementById("newDocument")?.click());
+    
     document.getElementById("filter-docs-btn")?.addEventListener("click", () => loadDocuments(dynamicContent, pageTitle, mainTitle, setActiveFilter, usuario));
-    document.getElementById("filter-club-btn")?.addEventListener("click", () => loadStorageBuckets(dynamicContent, pageTitle, mainTitle, setActiveFilter));
     document.getElementById("logout-btn")?.addEventListener("click", cerrarSesion);
 
     searchInput?.addEventListener('input', (e) => {
         const val = e.target.value.toLowerCase();
-        const rows = dynamicContent.querySelectorAll('.group, tbody tr');
-        rows.forEach(row => row.style.display = row.innerText.toLowerCase().includes(val) ? '' : 'none');
+        const cards = dynamicContent.querySelectorAll('.match-card, .doc-card, .group');
+        cards.forEach(card => card.style.display = card.innerText.toLowerCase().includes(val) ? '' : 'none');
     });
 
     // Default Load

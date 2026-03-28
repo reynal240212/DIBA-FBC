@@ -4,37 +4,22 @@
 import { supabase } from '../../core/supabase.js';
 
 export async function loadDocuments(dynamicContent, pageTitle, mainTitle, setActiveFilter, usuario) {
-    if (pageTitle) pageTitle.innerHTML = 'Gestor <span>Documental</span>';
-    if (mainTitle) mainTitle.innerHTML = 'Gestor Documental';
+    if (pageTitle) pageTitle.innerHTML = 'Gestor <span class="text-gold">Documental</span>';
     setActiveFilter('filter-docs-btn');
     
-    dynamicContent.innerHTML = `
-        <section id="uploadSection" class="${usuario.role !== 'admin' ? 'hidden' : ''} mb-12 animate__animated animate__fadeInUp">
-            <div id="dropZone" class="group relative overflow-hidden bg-slate-50 border-2 border-dashed border-slate-200 rounded-[2.5rem] p-12 text-center cursor-pointer hover:border-diba-blue hover:bg-white transition-all shadow-inner">
-                <div class="absolute inset-0 bg-diba-blue/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                <div class="relative z-10">
-                    <div class="w-16 h-16 bg-white rounded-2xl shadow-premium flex items-center justify-center text-diba-blue mx-auto mb-6 group-hover:scale-110 transition-transform">
-                        <i class="fas fa-cloud-upload-alt text-2xl"></i>
-                    </div>
-                    <p class="font-black text-diba-blue uppercase italic text-xs tracking-widest mb-2">Arrastra archivos aquí o haz clic</p>
-                    <p class="text-[9px] text-slate-400 font-bold uppercase tracking-widest">Formatos permitidos: PDF, JPG, PNG (Máx 5MB)</p>
-                </div>
-                <input type="file" id="newDocument" class="hidden" accept=".pdf,.jpg,.png">
+    // Clear loader/previous content
+    if (dynamicContent) dynamicContent.innerHTML = `
+        <div class="col-span-full py-24 flex flex-col items-center opacity-20">
+            <div class="relative w-16 h-16 mb-6">
+                <div class="absolute inset-0 border-4 border-gold/10 rounded-full"></div>
+                <div class="absolute inset-0 border-4 border-t-gold rounded-full animate-spin"></div>
             </div>
-        </section>
-        <div id="fileListContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <div class="flex flex-col items-center justify-center py-20 col-span-full opacity-30">
-                <i class="fas fa-circle-notch fa-spin text-3xl text-diba-blue mb-4"></i>
-                <p class="text-[10px] font-black uppercase tracking-widest">Consultando Expedientes...</p>
-            </div>
+            <p class="text-[0.7rem] font-black uppercase tracking-[0.3em] text-gold italic">Sincronizando Archivos...</p>
         </div>
     `;
 
-    const fileListContainer = document.getElementById("fileListContainer");
-    const dropZone = document.getElementById("dropZone");
     const fileInput = document.getElementById("newDocument");
 
-    dropZone?.addEventListener('click', () => fileInput?.click());
     fileInput?.addEventListener('change', (e) => { 
         if (e.target.files?.[0]) handleFileUpload(e.target.files[0], dynamicContent, pageTitle, mainTitle, setActiveFilter, usuario); 
     });
@@ -64,38 +49,38 @@ export async function loadDocuments(dynamicContent, pageTitle, mainTitle, setAct
         let urlMap = {};
         if (!sError) signedData.forEach(item => urlMap[item.path] = item.signedUrl);
 
-        fileListContainer.innerHTML = '';
+        if (dynamicContent) dynamicContent.innerHTML = '';
         documents.forEach(doc => {
             const fileUrl = urlMap[doc.storage_path] || '#';
             const date = new Date(doc.created_at).toLocaleDateString('es-CO', { day: '2-digit', month: 'short', year: 'numeric' });
             
             const div = document.createElement('div');
-            div.className = `group flex flex-col p-8 bg-white rounded-[2.5rem] border border-slate-100 shadow-premium hover:shadow-2xl transition-all animate-fade-up relative overflow-hidden ${doc.is_signed ? 'border-l-[6px] border-l-emerald-500' : ''}`;
+            div.className = `panel p-6 animate-fade-up group hover:border-gold/30 transition-all flex flex-col gap-4 relative overflow-hidden`;
             div.innerHTML = `
-                <div class="flex items-center justify-between mb-6">
-                    <div class="w-14 h-14 bg-slate-50 rounded-2xl flex items-center justify-center text-slate-400 group-hover:bg-diba-gold/10 group-hover:text-diba-blue transition-all border border-slate-100 shadow-inner">
-                        <i class="far fa-file-pdf text-2xl"></i>
+                <div class="flex items-center justify-between mb-2">
+                    <div class="w-12 h-12 rounded-2xl bg-gold/10 flex items-center justify-center text-gold border border-gold/10 group-hover:bg-gold group-hover:text-[#004d98] transition-all">
+                        <i class="far fa-file-pdf text-xl"></i>
                     </div>
-                    ${doc.is_signed ? '<span class="px-4 py-2 bg-emerald-50 text-emerald-600 text-[9px] font-black uppercase italic rounded-xl tracking-widest border border-emerald-100 shadow-sm"><i class="fas fa-signature mr-2"></i> Firmado</span>' : '<span class="px-4 py-2 bg-slate-50 text-slate-400 text-[9px] font-black uppercase italic rounded-xl tracking-widest border border-slate-100 shadow-sm">Pendiente</span>'}
+                    ${doc.is_signed ? '<span class="px-2 py-1 bg-green-500/10 text-green-500 text-[0.5rem] font-black uppercase tracking-widest rounded border border-green-500/20">Firmado</span>' : '<span class="px-2 py-1 bg-white/5 text-white/20 text-[0.5rem] font-black uppercase tracking-widest rounded border border-white/5">Pendiente</span>'}
                 </div>
-                <div class="mb-8">
-                    <h4 class="font-black text-diba-blue text-sm uppercase italic tracking-tight line-clamp-2 mb-2 group-hover:text-diba-red transition-colors">${doc.file_name}</h4>
-                    <p class="text-[9px] text-slate-400 font-bold uppercase tracking-widest flex items-center gap-2">
-                        <i class="fas fa-calendar-day text-diba-gold"></i> ${date}
+                <div class="flex-1">
+                    <h4 class="text-sm font-black italic text-white uppercase tracking-tighter truncate mb-1">${doc.file_name}</h4>
+                    <p class="text-[0.6rem] font-bold text-white/20 uppercase tracking-widest flex items-center gap-2">
+                        <i class="fas fa-calendar-alt text-gold/40"></i> ${date}
                     </p>
                 </div>
-                <div class="pt-6 border-t border-slate-50 flex items-center justify-between mt-auto">
-                    <a href="${fileUrl}" target="_blank" class="px-5 py-2.5 bg-diba-blue text-white text-[9px] font-black uppercase italic tracking-widest rounded-xl hover:bg-diba-red transition-all flex items-center gap-2 shadow-lg shadow-blue-900/10">
-                        <i class="fas fa-eye text-diba-gold"></i> Abrir Archivo
+                <div class="pt-4 border-t border-white/5 mt-auto">
+                    <a href="${fileUrl}" target="_blank" class="w-full py-3 bg-white/5 hover:bg-gold hover:text-[#004d98] text-white text-[0.6rem] font-black uppercase tracking-[0.2em] rounded-xl flex items-center justify-center gap-3 transition-all">
+                        <i class="fas fa-eye"></i> Visualizar
                     </a>
                 </div>
             `;
-            fileListContainer.appendChild(div);
+            if (dynamicContent) dynamicContent.appendChild(div);
         });
 
     } catch (err) {
         console.error(err);
-        fileListContainer.innerHTML = `<div class="p-10 text-center col-span-full text-rose-500 font-black uppercase text-xs">Error: ${err.message}</div>`;
+        if (dynamicContent) dynamicContent.innerHTML = `<div class="p-10 text-center col-span-full text-red-500 font-black uppercase text-xs">Error: ${err.message}</div>`;
     }
 }
 
