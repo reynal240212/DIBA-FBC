@@ -2,515 +2,337 @@
 <html lang="es">
 
 <head>
-  <meta charset="UTF-8" />
-  <title>Generador de Rifas — DIBA FBC</title>
-  <link rel="icon" href="/images/ESCUDO.ico" type="image/x-icon">
-  <link
-    href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,600;0,700;0,900;1,700;1,900&display=swap"
-    rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-  <link rel="stylesheet" href="/styles/admin-common.css">
-  <script src="/scripts/theme-switcher.js"></script>
-  <script src="https://cdn.tailwindcss.com"></script>
+    <meta charset="UTF-8">
+    <title>Generador de Rifas — DIBA FBC Admin</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="/images/ESCUDO.ico" type="image/x-icon">
 
-  <style>
-    /* ── RIFA SPECIFIC STYLES ── */
-    .toolbar {
-      background: var(--bg-panel);
-      border: 1px solid var(--border-color);
-      border-radius: 18px;
-      padding: 1.5rem 1.75rem;
-      margin-bottom: 1.5rem;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 1.2rem;
-      align-items: flex-end;
-    }
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
 
-    .field-group {
-      display: flex;
-      flex-direction: column;
-      gap: .35rem;
-    }
+    <!-- Core Styles -->
+    <link rel="stylesheet" href="/styles/admin-common.css">
+    <script src="/scripts/theme-switcher.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
 
-    .field-group label {
-      font-size: .6rem;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: .12em;
-      color: var(--text-muted);
-    }
+    <style>
+        /* workbench style preview */
+        #contenedor {
+            background: rgba(0, 0, 0, 0.4);
+            padding: 3rem;
+            min-height: 400px;
+            display: flex;
+            flex-direction: column;
+            gap: 4rem;
+            border-radius: 32px;
+            border: 1px border-white/5;
+            box-shadow: inset 0 0 100px rgba(0,0,0,0.5);
+            align-items: center;
+        }
 
-    .field-group input,
-    .field-group select {
-      background: var(--bg-input);
-      border: 1px solid var(--border-color);
-      color: var(--text-main);
-      border-radius: 10px;
-      padding: .6rem .85rem;
-      font-family: 'Montserrat', sans-serif;
-      font-size: .75rem;
-      font-weight: 700;
-      outline: none;
-      transition: border-color .2s;
-    }
+        /* Printable Ticket Design (Kept and Refined) */
+        .page-rifa {
+            width: 210mm;
+            min-height: 297mm;
+            padding: 10mm;
+            background: white;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 40px 80px rgba(0,0,0,0.4);
+            transform: scale(0.95);
+            transition: transform 0.3s;
+        }
+        
+        #contenedor .page-rifa:hover {
+            transform: scale(1);
+        }
 
-    .field-group input:focus,
-    .field-group select:focus {
-      border-color: var(--gold);
-    }
+        .boleta-container {
+            height: 55.4mm;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            position: relative;
+            border-bottom: 2px dashed #e2e8f0;
+            color: #1e293b;
+        }
 
-    .field-group input[type=number] {
-      width: 90px;
-    }
+        .boleta {
+            width: 100%;
+            height: 48mm;
+            background: linear-gradient(135deg, #FFD700 0%, #ffec8b 50%, #e6b800 100%);
+            border: 3px solid #004d98;
+            border-radius: 16px;
+            padding: 15px 25px;
+            color: #004d98;
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            box-shadow: inset 0 0 50px rgba(255, 255, 255, 0.4);
+            position: relative;
+        }
 
-    .field-group input[type=text], .field-group select {
-      width: 200px;
-    }
+        .boleta-left { width: 60px; display: flex; flex-direction: column; align-items: center; justify-content: center; flex-shrink: 0; }
+        .boleta-logo { width: 55px; height: 55px; object-fit: contain; }
+        .boleta-main { flex: 1; display: flex; flex-direction: column; justify-content: space-between; height: 100%; }
+        .boleta-titulo { font-size: 1.4rem; font-weight: 900; font-style: italic; text-transform: uppercase; line-height: 1; margin-bottom: 5px; }
+        .boleta-number-id { font-size: 0.9rem; font-weight: 900; background: #004d98; color: #FFD700; padding: 4px 12px; border-radius: 6px; }
+        
+        .boleta-grid { display: grid; grid-template-columns: 1fr 220px; gap: 20px; flex: 1; align-items: center; }
+        .boleta-info-list { font-size: 0.65rem; font-weight: 800; text-transform: uppercase; opacity: 0.8; letter-spacing: 0.05em; }
+        .boleta-info-list strong { color: #000; font-weight: 950; }
+        
+        .boleta-nums-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+        .num-box { background: white; color: #004d98; height: 36px; border: 2px solid #004d98; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: 950; font-size: 1.1rem; box-shadow: 0 3px 0 #004d98; }
 
-    .btn-action {
-      display: inline-flex;
-      align-items: center;
-      gap: .5rem;
-      padding: .7rem 1.4rem;
-      border: none;
-      border-radius: 12px;
-      font-family: 'Montserrat', sans-serif;
-      font-size: .72rem;
-      font-weight: 900;
-      text-transform: uppercase;
-      letter-spacing: .07em;
-      cursor: pointer;
-      transition: all .2s;
-      white-space: nowrap;
-    }
+        .boleta-footer { margin-top: 10px; padding: 6px 12px; background: rgba(255, 255, 255, 0.4); border: 1.5px solid #004d98; border-radius: 8px; font-size: 0.75rem; font-weight: 900; }
 
-    .btn-primary-action {
-      background: var(--gold);
-      color: var(--blue);
-      box-shadow: 0 4px 15px rgba(255, 204, 0, .2);
-    }
+        @media print {
+            body { background: white !important; }
+            #admin-nav, .no-print, header, aside { display: none !important; }
+            main { margin-left: 0 !important; padding: 0 !important; }
+            #contenedor { padding: 0 !important; gap: 0 !important; background: transparent !important; box-shadow: none !important; border: none !important; }
+            .page-rifa { margin: 0 !important; padding: 10mm !important; box-shadow: none !important; transform: none !important; page-break-after: always; }
+        }
 
-    .btn-primary-action:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(255, 204, 0, .35);
-    }
-
-    .btn-secondary-action {
-      background: var(--bg-input);
-      color: var(--gold);
-      border: 1px solid var(--border-color);
-    }
-
-    .btn-secondary-action:hover {
-      background: rgba(255, 204, 0, .08);
-      border-color: rgba(255, 204, 0, .3);
-    }
-
-    #status-bar {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      padding: 1rem 1.5rem;
-      background: var(--bg-panel);
-      border: 1px solid var(--border-color);
-      border-radius: 14px;
-      margin-bottom: 1.5rem;
-      font-size: .75rem;
-    }
-
-    .actions-row {
-      display: flex;
-      gap: .6rem;
-      align-items: flex-end;
-      margin-left: auto;
-      flex-wrap: wrap;
-    }
-
-    /* ── BOLETAS PREVIEW area ── */
-    #contenedor {
-      background: var(--bg-input);
-      padding: 2.5rem 0;
-      display: flex;
-      flex-direction: column;
-      gap: 2.5rem;
-      border-radius: 20px;
-      border: 1px solid var(--border-color);
-    }
-
-    /* Print Logic remains specialized */
-    .page-rifa {
-      width: 210mm;
-      height: 297mm;
-      margin: 0 auto;
-      padding: 10mm;
-      background: white;
-      display: flex;
-      flex-direction: column;
-      gap: 0;
-      page-break-after: always;
-      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-    }
-
-    .boleta-container {
-      height: 55.4mm;
-      width: 100%;
-      display: flex;
-      align-items: center;
-      position: relative;
-      border-bottom: 1px dashed #cbd5e1;
-    }
-
-    .boleta-container:last-child {
-      border-bottom: none;
-    }
-
-    /* Cut line indicator */
-    .boleta-container::after {
-      content: '\f0c4';
-      font-family: 'Font Awesome 6 Free';
-      font-weight: 900;
-      position: absolute;
-      bottom: -7px;
-      left: 10px;
-      font-size: 10px;
-      color: #94a3b8;
-      background: white;
-      padding: 0 5px;
-      z-index: 10;
-    }
-
-    .boleta {
-      width: 100%;
-      height: 48mm;
-      background: linear-gradient(135deg, #FFD700 0%, #ffec8b 50%, #e6b800 100%);
-      border: 2px solid #002a40;
-      border-radius: 12px;
-      padding: 10px 15px;
-      color: #002a40;
-      display: flex;
-      gap: 15px;
-      align-items: center;
-      box-shadow: inset 0 0 40px rgba(255, 255, 255, 0.3);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .boleta::before { content: ''; position: absolute; top: 0; left: 65px; bottom: 0; width: 1px; border-right: 2px dotted rgba(0, 42, 64, 0.2); }
-    .boleta-left { width: 50px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; flex-shrink: 0; }
-    .boleta-logo { width: 45px; height: 45px; object-fit: contain; filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1)); }
-    .boleta-main { flex: 1; display: flex; flex-direction: column; justify-content: space-between; height: 100%; }
-    .boleta-header { display: flex; justify-content: space-between; align-items: flex-start; }
-    .boleta-titulo { font-size: 1.1rem; font-weight: 900; font-style: italic; text-transform: uppercase; color: #002a40; }
-    .boleta-number-id { font-size: 0.8rem; font-weight: 900; background: #002a40; color: #ffcc00; padding: 2px 8px; border-radius: 4px; }
-    .boleta-content { display: grid; grid-template-columns: 1fr 180px; gap: 15px; align-items: flex-end; }
-    .boleta-info { font-size: 0.65rem; font-weight: 700; line-height: 1.4; color: #002a40; }
-    .boleta-jugador-box { margin-top: 5px; padding: 4px 8px; background: rgba(255, 255, 255, 0.6); border: 1px solid #002a40; border-radius: 6px; }
-    .boleta-jugador-label { font-size: 0.45rem; font-weight: 800; text-transform: uppercase; color: rgba(0, 42, 64, 0.6); }
-    .boleta-jugador { font-size: 0.75rem; font-weight: 900; color: #002a40; }
-    .boleta-numeros { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; }
-    .num-cell { background: white; color: #002a40; height: 32px; border: 2px solid #002a40; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 0.9rem; box-shadow: 0 2px 0 #002a40; }
-
-    /* ── PRINT STYLES ── */
-    @media print {
-      @page {
-        size: A4;
-        margin: 0;
-      }
-      
-      /* Hide admin UI */
-      .sidebar, 
-      .topbar, 
-      .toolbar, 
-      #status-bar, 
-      .mobile-menu-btn {
-        display: none !important;
-      }
-
-      /* Adjust main container */
-      .main {
-        margin-left: 0 !important;
-        padding: 0 !important;
-        width: 100% !important;
-      }
-
-      .content {
-        padding: 0 !important;
-        margin: 0 !important;
-      }
-
-      #contenedor {
-        padding: 0 !important;
-        margin: 0 !important;
-        background: none !important;
-        border: none !important;
-        gap: 0 !important;
-      }
-
-      .page-rifa {
-        box-shadow: none !important;
-        margin: 0 !important;
-        padding: 10mm !important;
-        page-break-after: always;
-        -webkit-print-color-adjust: exact;
-        print-color-adjust: exact;
-      }
-
-      .boleta {
-        box-shadow: none !important;
-        -webkit-print-color-adjust: exact;
-        print-color-adjust: exact;
-      }
-    }
-  </style>
+        /* mobile optimization */
+        @media (max-width: 1024px) {
+            #contenedor { padding: 1rem; }
+            .page-rifa { transform: scale(0.4); transform-origin: top center; width: auto; min-height: auto; }
+        }
+    </style>
 </head>
 
-<body class="bg-white font-['Inter']">
-
-  <div id="admin-nav"></div>
-
-  <main class="lg:ml-[280px] min-h-screen transition-all duration-300">
-    <div class="content">
-      <!-- TOOLBAR -->
-      <div class="toolbar">
-
-        <div class="field-group">
-          <label>Total de boletas</label>
-          <input type="number" id="cfg-total" min="1" max="1000" step="5" value="45">
+<body class="bg-[#06090e] text-white font-['Outfit']">
+    <!-- Loader -->
+    <div id="app-loader" class="fixed inset-0 z-[9999] flex items-center justify-center bg-[#06090e]">
+        <div class="text-center animate-fade-up">
+            <div class="relative w-16 h-16 mx-auto mb-6">
+                <div class="absolute inset-0 border-4 border-gold/10 rounded-full"></div>
+                <div class="absolute inset-0 border-4 border-t-gold rounded-full animate-spin"></div>
+            </div>
+            <p class="text-[10px] font-black uppercase tracking-[0.3em] text-gold italic opacity-80">DIBA FBC — Generando Rifas</p>
         </div>
-
-        <div class="field-group">
-          <label>Números por boleta</label>
-          <select id="cfg-numeros">
-            <option value="4">4 números</option>
-            <option value="5">5 números</option>
-            <option value="6" selected>6 números</option>
-            <option value="8">8 números</option>
-            <option value="10">10 números</option>
-          </select>
-        </div>
-
-        <div class="field-group">
-          <label>Fecha del sorteo</label>
-          <input type="date" id="cfg-fecha-picker">
-          <input type="hidden" id="cfg-fecha" value="Sábado 19 de abril de 2025">
-        </div>
-
-        <div class="field-group">
-          <label>Lotería / Modalidad</label>
-          <input type="text" id="cfg-loteria" list="loterias-list" value="Sinuano Noche — Últimas 2 cifras">
-          <datalist id="loterias-list">
-            <option value="Sinuano Noche / Últimas 2 cifras">
-            <option value="Sinuano Día / Últimas 2 cifras">
-            <option value="Caribeña Noche / Últimas 2 cifras">
-            <option value="Caribeña Día / Últimas 2 cifras">
-            <option value="Lotería de Medellín">
-            <option value="Lotería de Bogotá">
-            <option value="Lotería de Barranquilla">
-          </datalist>
-        </div>
-
-        <div class="field-group">
-          <label>Premio</label>
-          <input type="text" id="cfg-premio" placeholder="Ej: Tablet de 10 pulg." value="2 Perfumes para Caballeros">
-        </div>
-
-        <div class="field-group">
-          <label>Valor de Boleta ($)</label>
-          <input type="number" id="cfg-valor-num" step="100" value="3000">
-          <input type="hidden" id="cfg-valor" value="$3.000">
-        </div>
-
-        <div class="actions-row">
-          <button class="btn-action btn-primary-action" id="btn-generar">
-            <i class="fas fa-ticket-alt" id="gen-icon"></i>
-            Generar Boletas
-          </button>
-          <button class="btn-action btn-secondary-action" onclick="window.print()">
-            <i class="fas fa-print"></i> Imprimir / PDF
-          </button>
-        </div>
-      </div>
-
-      <!-- STATUS -->
-      <div id="status-bar" style="display:none;">
-        <div class="dot"></div>
-        <span id="status-text">Generando...</span>
-      </div>
-
-      <!-- BOLETAS OUTPUT -->
-      <div id="contenedor"></div>
     </div>
-  </main>
 
-  <!-- SCRIPTS -->
-  <script src="/scripts/config.js"></script>
-  <script type="module">
-    import { initAdminLayout } from '../src/components/layout/admin-layout.js';
-    import { supabase, requireAdmin } from '../scripts/supabaseClient.js';
+    <div id="admin-nav"></div>
 
-    // ── AUTH ───────────────────────────────────────────────────
-    async function init() {
-      const session = await requireAdmin();
-      if (!session) return;
-      initAdminLayout();
-    }
-    init();
+    <main class="lg:ml-[280px] pt-[80px] min-h-screen transition-all duration-300">
+        <div class="p-6 lg:p-10 max-w-[1600px] mx-auto">
+            
+            <!-- Page Header -->
+            <div class="mb-12 animate-fade-up no-print">
+                <div class="flex items-center justify-between flex-wrap gap-8">
+                    <div>
+                        <div class="flex items-center gap-3 mb-2">
+                            <span class="w-8 h-1 bg-gold rounded-full"></span>
+                            <p class="text-white/40 font-bold uppercase tracking-[0.4em] text-[0.65rem]">Generador de Activos de Marketing</p>
+                        </div>
+                        <h2 class="text-4xl lg:text-5xl font-black italic text-white uppercase tracking-tighter">Gestión de <span class="text-gold">Rifas</span></h2>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <button onclick="window.print()" class="px-8 py-4 bg-white/5 border border-white/10 rounded-2xl text-white font-black uppercase tracking-widest text-[0.7rem] hover:bg-white/10 transition-all flex items-center gap-3">
+                            <i class="fas fa-print text-gold"></i> IMPRIMIR REPORTE
+                        </button>
+                    </div>
+                </div>
+            </div>
 
-    // ── SELECTOR HELPERS ──────────────────────────────────────
-    const fechaPicker = document.getElementById('cfg-fecha-picker');
-    const fechaText = document.getElementById('cfg-fecha');
-    const valorNum = document.getElementById('cfg-valor-num');
-    const valorText = document.getElementById('cfg-valor');
+            <!-- Configuration Toolbar -->
+            <div class="panel p-8 mb-10 animate-fade-up no-print" style="animation-delay: 0.1s">
+                <div class="premium-p-header mb-8">
+                    <span class="premium-p-title"><i class="fas fa-sliders text-gold"></i>Parámetros de Generación</span>
+                </div>
 
-    // Inicializar fecha con una semana desde hoy
-    const defaultDate = new Date();
-    defaultDate.setDate(defaultDate.getDate() + 7);
-    if(fechaPicker) {
-      fechaPicker.value = defaultDate.toISOString().split('T')[0];
-      fechaPicker.addEventListener('change', updateFechaText);
-    }
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-6">
+                    <div class="premium-form-group">
+                        <label class="premium-label">Cant. Boletas</label>
+                        <input type="number" id="cfg-total" min="1" max="1000" step="5" value="45" class="premium-input text-center">
+                    </div>
 
-    function updateFechaText() {
-      const d = new Date(fechaPicker.value + 'T00:00:00');
-      const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-      fechaText.value = d.toLocaleDateString('es-CO', options);
-    }
-    if(fechaPicker) updateFechaText(); 
+                    <div class="premium-form-group">
+                        <label class="premium-label">Números x Boleta</label>
+                        <select id="cfg-numeros" class="premium-input">
+                            <option value="4">4 NÚMEROS</option>
+                            <option value="5">5 NÚMEROS</option>
+                            <option value="6" selected>6 NÚMEROS</option>
+                            <option value="8">8 NÚMEROS</option>
+                            <option value="10">10 NÚMEROS</option>
+                        </select>
+                    </div>
 
-    function updateValorText() {
-      const v = parseFloat(valorNum.value) || 0;
-      valorText.value = '$' + v.toLocaleString('es-CO');
-    }
-    if(valorNum) {
-      valorNum.addEventListener('input', updateValorText);
-      updateValorText();
-    }
+                    <div class="premium-form-group">
+                        <label class="premium-label">Fecha Sorteo</label>
+                        <input type="date" id="cfg-fecha-picker" class="premium-input uppercase tracking-wider">
+                        <input type="hidden" id="cfg-fecha">
+                    </div>
 
-    // ── SHUFFLED CYCLE GENERATOR ──────────────────────────────────
-    function shuffleArray(array) {
-      for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
-      }
-    }
+                    <div class="premium-form-group">
+                        <label class="premium-label">Modalidad / Lotería</label>
+                        <input type="text" id="cfg-loteria" list="loterias-list" value="Sinuano Noche — Últimas 2 cifras" class="premium-input uppercase">
+                        <datalist id="loterias-list">
+                            <option value="Sinuano Noche / Últimas 2 cifras">
+                            <option value="Sinuano Día / Últimas 2 cifras">
+                            <option value="Caribeña Noche / Últimas 2 cifras">
+                            <option value="Caribeña Día / Últimas 2 cifras">
+                            <option value="Lotería de Medellín">
+                            <option value="Lotería de Bogotá">
+                        </datalist>
+                    </div>
 
-    window.generarBoletas = function () {
-      const contenedor = document.getElementById('contenedor');
-      contenedor.innerHTML = '';
+                    <div class="premium-form-group">
+                        <label class="premium-label">Premio Mayor</label>
+                        <input type="text" id="cfg-premio" placeholder="EJ: TABLET 10 PULG." value="Perfume Importado" class="premium-input uppercase">
+                    </div>
 
-      const totalBoletas = parseInt(document.getElementById('cfg-total').value) || 10;
-      const numPorBoleta = parseInt(document.getElementById('cfg-numeros').value) || 6;
-      const fecha = document.getElementById('cfg-fecha').value.trim();
-      const loteria = document.getElementById('cfg-loteria.value').trim(); // Check this
-      const loteriaVal = document.getElementById('cfg-loteria').value.trim();
-      const premio = document.getElementById('cfg-premio').value.trim();
-      const valor = document.getElementById('cfg-valor').value.trim();
+                    <div class="premium-form-group">
+                        <label class="premium-label">Valor Boleta ($)</label>
+                        <input type="number" id="cfg-valor-num" step="500" value="3000" class="premium-input">
+                        <input type="hidden" id="cfg-valor">
+                    </div>
+                </div>
 
-      const totalNumerosDeseados = totalBoletas * numPorBoleta;
-      
-      let masterPool = [];
-      const numCiclos = Math.ceil(totalNumerosDeseados / 100);
-      
-      for (let c = 0; c < numCiclos; c++) {
-        let ciclo = [];
-        for (let i = 0; i < 100; i++) {
-          ciclo.push(String(i).padStart(2, '0'));
+                <div class="mt-10 pt-8 border-t border-white/5 flex flex-wrap gap-4">
+                    <button id="btn-generar" class="px-10 py-5 bg-gold text-[#004d98] rounded-2xl font-black uppercase tracking-widest text-[0.75rem] shadow-xl shadow-gold/10 hover:scale-[1.03] active:scale-95 transition-all flex items-center justify-center gap-3 min-w-[280px]">
+                        <i class="fas fa-ticket-alt"></i> GENERAR BOLETAS AHORA
+                    </button>
+                    
+                    <div id="status-bar" class="hidden flex-1 items-center gap-4 px-6 bg-white/5 rounded-2xl border border-white/5 animate-fade-in">
+                        <div class="w-2 h-2 rounded-full bg-gold animate-pulse"></div>
+                        <span id="status-text" class="text-[0.65rem] font-black uppercase tracking-widest text-white/40 italic">Esperando generación...</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Workbench Preview -->
+            <div id="contenedor" class="animate-fade-up" style="animation-delay: 0.2s">
+                <div class="text-center py-20 opacity-20">
+                    <i class="fas fa-print fa-bounce text-6xl mb-6 text-gold"></i>
+                    <p class="text-[0.8rem] font-black uppercase tracking-[0.4em]">Configure los parámetros y genere la vista previa...</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Scripts -->
+    <script src="/scripts/config.js"></script>
+    <script type="module">
+        import { initAdminLayout } from '../src/components/layout/admin-layout.js';
+        import { requireAdmin } from '../scripts/supabaseClient.js';
+
+        async function init() {
+            const session = await requireAdmin();
+            if (!session) return;
+            initAdminLayout();
         }
-        shuffleArray(ciclo);
-        masterPool = masterPool.concat(ciclo);
-      }
+        init();
 
-      let boletas = [];
-      let pivot = 0;
+        // UI Interactions
+        const fechaPicker = document.getElementById('cfg-fecha-picker');
+        const fechaText = document.getElementById('cfg-fecha');
+        const valorNum = document.getElementById('cfg-valor-num');
+        const valorText = document.getElementById('cfg-valor');
 
-      for (let b = 0; b < totalBoletas; b++) {
-        let numerosBoleta = [];
-        
-        for (let n = 0; n < numPorBoleta; n++) {
-          if (pivot >= totalNumerosDeseados || pivot >= masterPool.length) break;
+        const defaultDate = new Date();
+        defaultDate.setDate(defaultDate.getDate() + 14);
+        if(fechaPicker) {
+            fechaPicker.value = defaultDate.toISOString().split('T')[0];
+            const updateFecha = () => {
+                const d = new Date(fechaPicker.value + 'T00:00:00');
+                fechaText.value = d.toLocaleDateString('es-CO', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+            };
+            fechaPicker.addEventListener('change', updateFecha);
+            updateFecha();
+        }
 
-          let numSugerido = masterPool[pivot];
+        if(valorNum) {
+            const updateVal = () => valorText.value = '$' + (parseFloat(valorNum.value) || 0).toLocaleString('es-CO');
+            valorNum.addEventListener('input', updateVal);
+            updateVal();
+        }
 
-          if (numerosBoleta.includes(numSugerido)) {
-            let buscaIdx = pivot + 1;
-            while (buscaIdx < masterPool.length && numerosBoleta.includes(masterPool[buscaIdx])) {
-              buscaIdx++;
+        // Raffle Logic
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
             }
-            if (buscaIdx < masterPool.length) {
-              [masterPool[pivot], masterPool[buscaIdx]] = [masterPool[buscaIdx], masterPool[pivot]];
-              numSugerido = masterPool[pivot];
+        }
+
+        window.generarBoletas = function () {
+            const contenedor = document.getElementById('contenedor');
+            const totalBoletas = parseInt(document.getElementById('cfg-total').value) || 1;
+            const numPorBoleta = parseInt(document.getElementById('cfg-numeros').value) || 6;
+            const fecha = document.getElementById('cfg-fecha').value;
+            const loteria = document.getElementById('cfg-loteria').value;
+            const premio = document.getElementById('cfg-premio').value;
+            const valor = document.getElementById('cfg-valor').value;
+
+            const totalNums = totalBoletas * numPorBoleta;
+            let masterPool = [];
+            for (let c = 0; c < Math.ceil(totalNums / 100); c++) {
+                let ciclo = Array.from({length: 100}, (_, i) => String(i).padStart(2, '0'));
+                shuffleArray(ciclo);
+                masterPool = [...masterPool, ...ciclo];
             }
-          }
 
-          numerosBoleta.push(numSugerido);
-          pivot++;
-        }
-        
-        if (numerosBoleta.length > 0) {
-          boletas.push({
-            jugador: '____________________________',
-            numeros: numerosBoleta.sort((x, y) => parseInt(x) - parseInt(y))
-          });
-        }
-      }
+            contenedor.innerHTML = '';
+            const BOLETAS_POR_PAG = 5;
+            let currentIdx = 0;
 
-      const statusBar = document.getElementById('status-bar');
-      const statusText = document.getElementById('status-text');
-      if(statusBar) statusBar.style.display = 'flex';
-      if(statusText) statusText.textContent = `${boletas.length} boletas generadas.`;
+            for (let p = 0; p < Math.ceil(totalBoletas / BOLETAS_POR_PAG); p++) {
+                const page = document.createElement('div');
+                page.className = 'page-rifa scale-x-[-1]'; // Fix mirror effect if scale used or just normal
+                page.classList.remove('scale-x-[-1]'); 
+                page.className = 'page-rifa';
 
-      const BOLETAS_POR_PAG = 5;
-      let globalIdx = 0;
+                for (let b = 0; b < BOLETAS_POR_PAG && currentIdx < totalBoletas; b++) {
+                    currentIdx++;
+                    const nums = masterPool.slice((currentIdx - 1) * numPorBoleta, currentIdx * numPorBoleta).sort();
+                    const numsHtml = nums.map(n => `<div class="num-box">${n}</div>`).join('');
 
-      for (let p = 0; p < Math.ceil(boletas.length / BOLETAS_POR_PAG); p++) {
-        const page = document.createElement('div');
-        page.className = 'page-rifa';
+                    const boleta = document.createElement('div');
+                    boleta.className = 'boleta-container';
+                    boleta.innerHTML = `
+                        <div class="boleta">
+                            <div class="boleta-left">
+                                <img src="/images/ESCUDO.png" class="boleta-logo">
+                            </div>
+                            <div class="boleta-main">
+                                <div class="flex justify-between items-start">
+                                    <div class="boleta-titulo font-outfit uppercase">Rifa Oficial <span style="color:#000">DIBA FBC</span></div>
+                                    <div class="boleta-number-id">BOLETA #${String(currentIdx).padStart(3, '0')}</div>
+                                </div>
+                                <div class="boleta-grid">
+                                    <div class="boleta-info-list italic">
+                                        📅 JUEGA: <strong>${fecha}</strong><br>
+                                        🎰 LOTERÍA: <strong>${loteria}</strong><br>
+                                        🏆 PREMIO: <strong>${premio}</strong><br>
+                                        💰 VALOR: <strong>${valor}</strong>
+                                    </div>
+                                    <div class="boleta-nums-grid">${numsHtml}</div>
+                                </div>
+                                <div class="boleta-footer italic uppercase flex justify-between">
+                                    <span>👤 RESPONSABLE: ____________________________</span>
+                                    <span class="opacity-30">DIBA FBC © 2025</span>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    page.appendChild(boleta);
+                }
+                contenedor.appendChild(page);
+            }
 
-        const slice = boletas.slice(p * BOLETAS_POR_PAG, (p + 1) * BOLETAS_POR_PAG);
-        slice.forEach(boleta => {
-          globalIdx++;
-          const numerosHTML = boleta.numeros.map(n =>
-            `<div class="num-cell">${n}</div>`
-          ).join('');
+            const bar = document.getElementById('status-bar');
+            bar.classList.remove('hidden');
+            bar.classList.add('flex');
+            document.getElementById('status-text').textContent = `${totalBoletas} BOLETAS GENERADAS CON ÉXITO`;
+        };
 
-          const el = document.createElement('div');
-          el.className = 'boleta-container';
-          el.innerHTML = `
-            <div class="boleta">
-              <div class="boleta-left">
-                <img src="/images/ESCUDO.png" class="boleta-logo" alt="Logo">
-              </div>
-              <div class="boleta-main">
-                <div class="boleta-header">
-                  <div class="boleta-titulo">RIFA DIBA FBC</div>
-                  <div class="boleta-number-id">#${String(globalIdx).padStart(3, '0')}</div>
-                </div>
-                <div class="boleta-content">
-                  <div class="boleta-info">
-                    📅 Juega: <strong>${fecha}</strong><br>
-                    🎰 Lotería: <strong>${loteriaVal}</strong><br>
-                    🏆 Premio: <strong>${premio}</strong><br>
-                    💰 Valor: <strong>${valor}</strong>
-                  </div>
-                  <div class="boleta-numeros">${numerosHTML}</div>
-                </div>
-                <div class="boleta-jugador-box">
-                  <div class="boleta-jugador-label">Jugador Responsable</div>
-                  <div class="boleta-jugador">👤 ${boleta.jugador}</div>
-                </div>
-              </div>
-            </div>`;
-          page.appendChild(el);
-        });
-
-        contenedor.appendChild(page);
-      }
-    };
-
-    const genBtn = document.getElementById('btn-generar');
-    if(genBtn) genBtn.addEventListener('click', window.generarBoletas);
-  </script>
+        document.getElementById('btn-generar').addEventListener('click', window.generarBoletas);
+    </script>
 </body>
 
 </html>

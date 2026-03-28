@@ -2,490 +2,275 @@
 <html lang="es">
 
 <head>
-  <meta charset="UTF-8">
-  <title>Crear Perfil - DIBA FBC</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8">
+    <title>Perfil de Usuario — DIBA FBC Admin</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="/images/ESCUDO.ico" type="image/x-icon">
 
-  <!-- Bootstrap CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
-  <link rel="icon" href="/images/ESCUDO.ico" type="image/x-icon">
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-  <link rel="stylesheet" href="/styles/admin-common.css">
-  <script src="/scripts/theme-switcher.js"></script>
-  <style>
-    /* Profile specific styles */
-    .content {
-      padding: 2rem;
-      flex: 1;
-    }
-  </style>
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
 
-    .btn-logout {
-      width: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: .5rem;
-      padding: .7rem;
-      border-radius: 12px;
-      border: none;
-      background: rgba(239, 68, 68, .1);
-      color: #ef4444;
-      font-family: 'Montserrat', sans-serif;
-      font-size: .72rem;
-      font-weight: 800;
-      text-transform: uppercase;
-      cursor: pointer;
-      transition: all .2s;
-    }
+    <!-- Core Styles -->
+    <link rel="stylesheet" href="/styles/admin-common.css">
+    <script src="/scripts/theme-switcher.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
 
-    .btn-logout:hover {
-      background: #ef4444;
-      color: #fff;
-    }
+    <style>
+        .avatar-container {
+            position: relative;
+            width: 140px;
+            height: 140px;
+            margin: 0 auto;
+        }
 
-    /* ── MAIN & TOPBAR ── */
-    .main {
-      margin-left: var(--sidebar-w);
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
-    }
+        .avatar-preview {
+            width: 100%;
+            height: 100%;
+            border-radius: 40px;
+            object-fit: cover;
+            border: 4px solid var(--gold);
+            background: rgba(255, 255, 255, 0.05);
+            box-shadow: 0 20px 40px -10px rgba(0,0,0,0.5);
+        }
 
-    .topbar {
-      padding: 1.5rem 2rem;
-      border-bottom: 1px solid var(--border);
-      background: var(--dark2);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 1rem;
-      position: sticky;
-      top: 0;
-      z-index: 50;
-    }
-
-    .page-title {
-      font-size: 1.4rem;
-      font-weight: 900;
-      font-style: italic;
-      text-transform: uppercase;
-      letter-spacing: .03em;
-    }
-
-    .page-title span {
-      color: var(--gold);
-    }
-
-    .page-subtitle {
-      font-size: .7rem;
-      color: var(--slate);
-      font-weight: 600;
-      margin-top: 2px;
-    }
-
-    .topbar-right {
-      display: flex;
-      align-items: center;
-      gap: .8rem;
-    }
-
-    .topbar-time {
-      font-size: .72rem;
-      font-weight: 700;
-      color: var(--slate);
-      background: var(--dark3);
-      padding: .45rem .9rem;
-      border-radius: 8px;
-      border: 1px solid var(--border);
-    }
-
-    .mobile-menu-btn {
-      display: none;
-      background: var(--dark3);
-      border: 1px solid var(--border);
-      color: var(--gold);
-      width: 38px;
-      height: 38px;
-      border-radius: 10px;
-      font-size: 1rem;
-      cursor: pointer;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .content {
-      padding: 2rem;
-      flex: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    /* ── Profile Card Specific ── */
-    .profile-card {
-      max-width: 500px;
-      width: 100%;
-      background: var(--dark2);
-      border: 1px solid var(--border);
-      border-radius: 24px;
-      padding: 2.5rem;
-      position: relative;
-    }
-
-    .avatar-preview-wrapper {
-      text-align: center;
-      margin-bottom: 2rem;
-    }
-
-    .avatar-preview {
-      width: 110px;
-      height: 110px;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 4px solid var(--gold);
-      background: var(--dark3);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 3rem;
-      color: var(--slate);
-      margin: 0 auto;
-      box-shadow: 0 8px 25px rgba(255, 204, 0, 0.2);
-    }
-
-    .form-label {
-      font-size: .7rem;
-      font-weight: 800;
-      color: var(--slate);
-      text-transform: uppercase;
-      letter-spacing: .1em;
-      margin-bottom: .6rem;
-      display: block;
-    }
-
-    .form-control {
-      background: var(--dark3);
-      border: 1px solid var(--border);
-      color: #fff;
-      padding: .8rem 1.2rem;
-      border-radius: 14px;
-      font-size: .85rem;
-      font-weight: 600;
-      transition: all .2s;
-      width: 100%;
-    }
-
-    .form-control:focus {
-      outline: none;
-      border-color: var(--gold);
-      box-shadow: 0 0 0 4px rgba(255, 204, 0, 0.1);
-    }
-
-    .btn-submit {
-      background: var(--gold);
-      color: var(--blue);
-      border: none;
-      padding: 1rem;
-      border-radius: 16px;
-      font-size: .85rem;
-      font-weight: 900;
-      font-style: italic;
-      text-transform: uppercase;
-      cursor: pointer;
-      transition: all .2s;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: .8rem;
-      width: 100%;
-      margin-top: 1rem;
-    }
-
-    .btn-submit:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 25px rgba(255, 204, 0, 0.3);
-    }
-
-    @media (max-width: 992px) {
-      .sidebar {
-        transform: translateX(-100%);
-      }
-
-      .sidebar.open {
-        transform: translateX(0);
-      }
-
-      .main {
-        margin-left: 0;
-      }
-
-      .mobile-menu-btn {
-        display: flex;
-      }
-
-      .profile-card {
-        padding: 1.5rem;
-      }
-    }
-  </style>
+        .avatar-placeholder {
+            width: 100%;
+            height: 100%;
+            border-radius: 40px;
+            background: rgba(255, 215, 0, 0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gold);
+            font-size: 3rem;
+            border: 2px dashed rgba(255, 215, 0, 0.3);
+        }
+    </style>
 </head>
 
-<body style="display: none;" id="admin-body">
-
-  <!-- ══ SIDEBAR ══ -->
-  <aside class="sidebar" id="sidebar">
-    <div class="sidebar-logo">
-      <img src="/images/ESCUDO.png" alt="DIBA FBC">
-      <div>
-        <div class="sidebar-logo-text">DIBA FBC</div>
-        <div class="sidebar-logo-sub">Panel de Control</div>
-      </div>
+<body class="bg-[#06090e] text-white font-['Outfit']">
+    <!-- Loader -->
+    <div id="app-loader" class="fixed inset-0 z-[9999] flex items-center justify-center bg-[#06090e]">
+        <div class="text-center animate-fade-up">
+            <div class="relative w-16 h-16 mx-auto mb-6">
+                <div class="absolute inset-0 border-4 border-gold/10 rounded-full"></div>
+                <div class="absolute inset-0 border-4 border-t-gold rounded-full animate-spin"></div>
+            </div>
+            <p class="text-[10px] font-black uppercase tracking-[0.3em] text-gold italic opacity-80">DIBA FBC — Perfil Personal</p>
+        </div>
     </div>
 
-    <nav class="sidebar-nav">
-      <a href="dashboard.html" class="nav-link"><i class="fas fa-th-large"></i> Dashboard</a>
+    <div id="admin-nav"></div>
 
-      <div class="nav-section-label">Equipo</div>
-      <a href="planilla.html" class="nav-link"><i class="fas fa-clipboard-list"></i> Planilla</a>
-      <a href="../ficha.html" class="nav-link"><i class="fas fa-users"></i> Jugadores</a>
-      <a href="../partidos.html" class="nav-link"><i class="fas fa-futbol"></i> Partidos</a>
-      <a href="../analisis.html" class="nav-link"><i class="fas fa-chart-line"></i> Análisis</a>
-      <a href="convocatorias.html" class="nav-link"><i class="fas fa-bullhorn"></i> Convocatorias</a>
+    <main class="lg:ml-[280px] pt-[80px] min-h-screen transition-all duration-300 flex items-center justify-center p-6">
+        <div class="w-full max-w-2xl animate-fade-up">
+            
+            <!-- Context Header -->
+            <div class="mb-10 text-center">
+                <div class="flex items-center justify-center gap-3 mb-3">
+                    <span class="w-8 h-1 bg-gold rounded-full"></span>
+                    <p class="text-white/40 font-bold uppercase tracking-[0.4em] text-[0.65rem]">Identidad del Administrador</p>
+                    <span class="w-8 h-1 bg-gold rounded-full"></span>
+                </div>
+                <h2 class="text-4xl lg:text-5xl font-black italic text-white uppercase tracking-tighter">Mi <span class="text-gold">Perfil</span></h2>
+            </div>
 
-      <div class="nav-section-label">Comunicación</div>
-      <a href="push.html" class="nav-link"><i class="fas fa-bell"></i> Notificaciones Push</a>
+            <div class="panel p-0 overflow-hidden shadow-[0_30px_100px_rgba(0,0,0,0.5)] border-white/10">
+                <!-- Avatar Section -->
+                <div class="p-10 bg-white/[0.02] border-b border-white/5 text-center">
+                    <div class="avatar-container mb-6 group">
+                        <img id="avatar-preview-img" class="avatar-preview hidden" src="" alt="Avatar">
+                        <div id="avatar-placeholder" class="avatar-placeholder">
+                            <i class="fas fa-user-tie"></i>
+                        </div>
+                        <div class="absolute -bottom-2 -right-2 w-10 h-10 bg-gold rounded-xl flex items-center justify-center shadow-lg transform group-hover:scale-110 transition-transform">
+                            <i class="fas fa-camera text-[#004d98] text-sm"></i>
+                        </div>
+                    </div>
+                    <h3 class="text-xl font-black italic uppercase text-white tracking-widest" id="display-full-name">CARGANDO...</h3>
+                    <p class="text-[0.6rem] text-gold font-bold uppercase tracking-[0.3em] italic mt-1" id="display-username">@IDENTIDAD</p>
+                </div>
 
-      <div class="nav-section-label">Administración</div>
-      <a href="GestorDocumental.html" class="nav-link"><i class="fas fa-folder-open"></i> Gestor Documental</a>
-      <a href="usuarios.html" class="nav-link"><i class="fas fa-user-cog"></i> Usuarios</a>
-      <a href="crear-usuario.html" class="nav-link"><i class="fas fa-user-plus"></i> Crear Usuario</a>
-      <a href="rifa_diba.html" class="nav-link"><i class="fas fa-ticket-alt"></i> Rifas</a>
+                <div class="p-10">
+                    <div id="alert-container" class="mb-8 hidden animate-fade-in"></div>
 
-      <div class="nav-section-label">Sitio Web</div>
-      <a href="../index.html" class="nav-link"><i class="fas fa-globe"></i> Ver Sitio</a>
-    </nav>
+                    <form id="profile-form" class="space-y-8">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            <div class="premium-form-group">
+                                <label class="premium-label">Nombre Completo</label>
+                                <div class="relative group">
+                                    <i class="fas fa-signature absolute left-5 top-1/2 -translate-y-1/2 text-gold/30 group-focus-within:text-gold transition-colors"></i>
+                                    <input type="text" id="full_name" name="full_name" required placeholder="EJ: LIONEL MESSI" 
+                                        class="premium-input pl-14 font-bold uppercase text-[0.8rem]">
+                                </div>
+                            </div>
+                            <div class="premium-form-group">
+                                <label class="premium-label">Nombre de Usuario</label>
+                                <div class="relative group">
+                                    <i class="fas fa-at absolute left-5 top-1/2 -translate-y-1/2 text-gold/30 group-focus-within:text-gold transition-colors"></i>
+                                    <input type="text" id="username" name="username" required placeholder="EJ: LIO_MESSI" 
+                                        class="premium-input pl-14 font-black uppercase tracking-widest text-[0.8rem]">
+                                </div>
+                            </div>
+                        </div>
 
-    <div class="sidebar-footer">
-      <div class="user-chip">
-        <div class="user-avatar" id="sb-avatar">A</div>
-        <div>
-          <div class="user-name" id="sb-name">Administrador</div>
-          <div class="user-role" id="sb-role">Admin</div>
+                        <div class="premium-form-group">
+                            <label class="premium-label">Biografía Profesional</label>
+                            <div class="relative group">
+                                <i class="fas fa-quote-left absolute left-5 top-6 text-gold/30 group-focus-within:text-gold transition-colors"></i>
+                                <textarea id="bio" name="bio" rows="3" placeholder="DESCRIBE TU ROL EN EL CLUB..." 
+                                    class="premium-input pl-14 pt-5 resize-none min-h-[120px] text-[0.8rem]"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="premium-form-group">
+                            <label class="premium-label">URL de Imagen de Perfil</label>
+                            <div class="relative group">
+                                <i class="fas fa-link absolute left-5 top-1/2 -translate-y-1/2 text-gold/30 group-focus-within:text-gold transition-colors"></i>
+                                <input type="url" id="avatar_url" name="avatar_url" placeholder="HTTPS://EJEMPLO.COM/FOTO.JPG" 
+                                    class="premium-input pl-14 font-medium text-[0.7rem] lowercase tracking-normal">
+                            </div>
+                            <p class="mt-2 text-[0.55rem] font-bold text-white/20 uppercase tracking-widest italic pl-2">
+                                * Pegue el enlace directo a su imagen para actualizar el avatar.
+                            </p>
+                        </div>
+
+                        <div class="pt-6">
+                            <button type="submit" id="submit-button" class="w-full py-5 bg-gold text-[#004d98] rounded-2xl font-black uppercase tracking-[0.2em] text-[0.85rem] shadow-xl shadow-gold/10 hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-4">
+                                <span class="button-text">Guardar Cambios</span>
+                                <i class="fas fa-check-circle" id="btn-icon"></i>
+                                <i class="fas fa-circle-notch fa-spin hidden" id="spinner"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <p class="mt-10 text-center text-[0.6rem] font-bold text-white/20 uppercase tracking-[0.4em] italic">
+                DIBA FBC © 2025 — PERFIL DE SEGURIDAD NIVEL 1
+            </p>
         </div>
-      </div>
-      <button class="btn-logout" id="logout-btn">
-        <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
-      </button>
-    </div>
-  </aside>
+    </main>
 
-  <div class="main">
-    <!-- Top Bar -->
-    <header class="topbar">
-      <button class="mobile-menu-btn" id="menu-btn">
-        <i class="fas fa-bars" id="menu-icon"></i>
-      </button>
-      <div>
-        <div class="page-title">Perfil de <span>Usuario</span></div>
-        <div class="page-subtitle">Gestiona tu información personal — DIBA FBC</div>
-      </div>
-      <div class="topbar-right">
-        <button id="theme-toggle" class="mobile-menu-btn" style="display: flex; margin-right: 0.5rem;" title="Cambiar Tema">
-          <i id="theme-icon" class="fas fa-sun"></i>
-        </button>
-        <div class="topbar-time" id="clock">--:--</div>
-      </div>
-    </header>
+    <!-- Scripts -->
+    <script src="/scripts/config.js"></script>
+    <script type="module">
+        import { initAdminLayout } from '../src/components/layout/admin-layout.js';
+        import { supabase, requireAdmin } from '../scripts/supabaseClient.js';
 
-    <div class="content">
-      <div class="profile-card shadow-2xl">
-        <!-- Avatar Preview -->
-        <div class="avatar-preview-wrapper">
-          <img id="avatar-preview-img" class="avatar-preview" src="" alt="">
-        </div>
+        const profileForm = document.getElementById('profile-form');
+        const alertContainer = document.getElementById('alert-container');
+        const submitButton = document.getElementById('submit-button');
+        const spinner = document.getElementById('spinner');
+        const btnIcon = document.getElementById('btn-icon');
+        const btnText = submitButton.querySelector('.button-text');
+        const avatarUrlInput = document.getElementById('avatar_url');
+        const avatarImg = document.getElementById('avatar-preview-img');
+        const placeholder = document.getElementById('avatar-placeholder');
 
-        <h2 class="text-xl font-black text-center mb-8 uppercase italic tracking-tight">Completa tu <span
-            class="text-gold">Perfil</span></h2>
-
-        <div id="alert-container"></div>
-
-        <form id="profile-form" class="space-y-5">
-          <div>
-            <label for="full_name" class="form-label">Nombre Completo</label>
-            <input type="text" class="form-control" id="full_name" name="full_name" placeholder="Ej: Lionel Messi"
-              required />
-          </div>
-          <div>
-            <label for="username" class="form-label">Nombre de Usuario</label>
-            <input type="text" class="form-control" id="username" name="username" placeholder="Ej: lio_messi"
-              required />
-          </div>
-          <div>
-            <label for="bio" class="form-label">Biografía</label>
-            <textarea class="form-control" id="bio" name="bio" rows="3"
-              placeholder="Cuéntanos algo sobre ti..."></textarea>
-          </div>
-          <div>
-            <label for="avatar_url" class="form-label">URL de tu foto (opcional)</label>
-            <input type="url" class="form-control" id="avatar_url" name="avatar_url"
-              placeholder="https://ejemplo.com/tu-foto.jpg" />
-          </div>
-          <button type="submit" id="submit-button" class="btn-submit">
-            <span class="button-text">Guardar Perfil</span>
-            <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
-          </button>
-        </form>
-      </div>
-    </div>
-  </div>
-
-  <!-- Bootstrap JS Bundle -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  <!-- Supabase JS (versión 2.x) -->
-  <script type="module">
-    import { supabase, requireAdmin } from '../scripts/supabaseClient.js';
-    // Protection & Unified UI
-    requireAdmin().then(session => {
-      if (session) {
-        document.getElementById('admin-body').style.display = 'flex';
-        const user = session.user;
-        if (user) {
-          document.getElementById('sb-name').textContent = user.email.split('@')[0];
-          document.getElementById('sb-avatar').textContent = user.email[0].toUpperCase();
-        }
-        loadProfile(user.id);
-      }
-    });
-
-    // Clock
-    const clockEl = document.getElementById('clock');
-    function updateClock() {
-      const now = new Date();
-      if (clockEl) clockEl.textContent = now.toLocaleTimeString('es-CO', { hour: '2-digit', minute: '2-digit' });
-    }
-    updateClock();
-    setInterval(updateClock, 1000);
-
-    // Mobile Menu
-    const menuBtn = document.getElementById('menu-btn');
-    const menuIcon = document.getElementById('menu-icon');
-    const sidebar = document.getElementById('sidebar');
-    menuBtn?.addEventListener('click', () => {
-      sidebar.classList.toggle('open');
-      if (menuIcon) menuIcon.className = sidebar.classList.contains('open') ? 'fas fa-times' : 'fas fa-bars';
-    });
-
-    // Logout
-    document.getElementById('logout-btn')?.addEventListener('click', async () => {
-      if (confirm('¿Cerrar sesión?')) {
-        await supabase.auth.signOut();
-        window.location.href = 'login.html';
-      }
-    });
-
-    // --- 2. FUNCIONES AUXILIARES ---
-
-    function showAlert(message, type = 'danger') {
-      const alertHTML = `
-        <div class="alert alert-${type} alert-dismissible fade show" role="alert" style="background: ${type === 'success' ? 'rgba(34, 197, 94, 0.1)' : 'rgba(239, 68, 68, 0.1)'}; color: ${type === 'success' ? '#22c55e' : '#ef4444'}; border: 1px solid currentColor; border-radius: 12px; font-size: .8rem; font-weight: 700;">
-          ${message}
-          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" style="filter: invert(1);"></button>
-        </div>
-      `;
-      alertContainer.innerHTML = alertHTML;
-    }
-
-    function setLoading(isLoading) {
-      if (isLoading) {
-        submitButton.disabled = true;
-        profileForm.setAttribute('aria-busy', 'true');
-        buttonText.textContent = 'Guardando...';
-        buttonSpinner.classList.remove('d-none');
-      } else {
-        submitButton.disabled = false;
-        profileForm.setAttribute('aria-busy', 'false');
-        buttonText.textContent = 'Guardar Perfil';
-        buttonSpinner.classList.add('d-none');
-      }
-    }
-
-    function updateAvatarPreview(url) {
-      if (url && url.trim() !== '') {
-        avatarPreviewImg.src = url;
-        avatarPreviewImg.innerHTML = '';
-        avatarPreviewImg.onerror = () => {
-          avatarPreviewImg.src = '';
-          avatarPreviewImg.innerHTML = placeholderIcon;
-        };
-      } else {
-        avatarPreviewImg.src = '';
-        avatarPreviewImg.innerHTML = placeholderIcon;
-      }
-    }
-
-    async function loadProfile(userId) {
-      try {
-        const { data: profileData, error } = await supabaseClient
-          .from('profiles')
-          .select('full_name, username, bio, avatar_url')
-          .eq('id', userId)
-          .single();
-
-        if (error && error.code !== 'PGRST116') throw error;
-
-        if (profileData) {
-          document.getElementById('full_name').value = profileData.full_name || '';
-          document.getElementById('username').value = profileData.username || '';
-          document.getElementById('bio').value = profileData.bio || '';
-          avatarUrlInput.value = profileData.avatar_url || '';
-          updateAvatarPreview(profileData.avatar_url);
-        } else {
-          updateAvatarPreview('');
-        }
-      } catch (error) {
-        console.error('Error al cargar el perfil:', error);
-        showAlert('No se pudo cargar tu perfil. Inténtalo de nuevo más tarde.', 'warning');
-      }
-    }
-
-    avatarUrlInput.addEventListener('input', () => updateAvatarPreview(avatarUrlInput.value));
-
-    profileForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      alertContainer.innerHTML = '';
-      setLoading(true);
-
-      try {
-        const { data: { user } } = await supabaseClient.auth.getUser();
-        if (!user) throw new Error('Usuario no autenticado.');
-
-        const profileUpdate = {
-          id: user.id,
-          full_name: document.getElementById('full_name').value,
-          username: document.getElementById('username').value,
-          bio: document.getElementById('bio').value,
-          avatar_url: avatarUrlInput.value,
-          updated_at: new Date().toISOString(),
+        const showAlert = (message, type = 'danger') => {
+            const isSuccess = type === 'success';
+            alertContainer.className = `p-5 mb-8 rounded-2xl flex items-center gap-4 text-[0.7rem] font-black uppercase tracking-widest border ${isSuccess ? 'bg-green-500/10 border-green-500/20 text-green-500' : 'bg-red-500/10 border-red-500/20 text-red-500'} animate-fade-in`;
+            alertContainer.innerHTML = `<i class="fas ${isSuccess ? 'fa-check-circle' : 'fa-exclamation-triangle'}"></i> ${message}`;
+            alertContainer.classList.remove('hidden');
         };
 
-        const { error } = await supabaseClient
-          .from('profiles')
-          .upsert(profileUpdate, { onConflict: 'id' });
+        const updateAvatar = (url) => {
+            if (url && url.trim() !== '') {
+                avatarImg.src = url;
+                avatarImg.classList.remove('hidden');
+                placeholder.classList.add('hidden');
+                avatarImg.onerror = () => {
+                    avatarImg.classList.add('hidden');
+                    placeholder.classList.remove('hidden');
+                };
+            } else {
+                avatarImg.classList.add('hidden');
+                placeholder.classList.remove('hidden');
+            }
+        };
 
-        if (error) throw error;
+        async function loadProfile(userId) {
+            try {
+                const { data: profile, error } = await supabase
+                    .from('profiles')
+                    .select('full_name, username, bio, avatar_url')
+                    .eq('id', userId)
+                    .single();
 
-        showAlert('¡Perfil guardado con éxito!', 'success');
-      } catch (error) {
-        console.error('Error al guardar el perfil:', error);
-        showAlert(`Error al guardar: ${error.message || 'Ocurrió un problema.'}`);
-      } finally {
-        setLoading(false);
-      }
-    });
-  </script>
+                if (error && error.code !== 'PGRST116') throw error;
+
+                if (profile) {
+                    document.getElementById('full_name').value = profile.full_name || '';
+                    document.getElementById('username').value = profile.username || '';
+                    document.getElementById('bio').value = profile.bio || '';
+                    avatarUrlInput.value = profile.avatar_url || '';
+                    
+                    document.getElementById('display-full-name').textContent = profile.full_name?.toUpperCase() || 'MI PERFIL';
+                    document.getElementById('display-username').textContent = `@${profile.username?.toUpperCase() || 'USUARIO'}`;
+                    
+                    updateAvatar(profile.avatar_url);
+                }
+            } catch (err) {
+                console.error('Error load profile:', err);
+                showAlert('ERROR AL CONECTAR CON EL SERVIDOR DE PERFILES.');
+            }
+        }
+
+        async function init() {
+            try {
+                const session = await requireAdmin();
+                if (session) {
+                    await initAdminLayout();
+                    await loadProfile(session.user.id);
+                }
+            } catch (error) {
+                console.error(error);
+            }
+        }
+        init();
+
+        avatarUrlInput.addEventListener('input', (e) => updateAvatar(e.target.value));
+
+        profileForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            alertContainer.classList.add('hidden');
+            submitButton.disabled = true;
+            spinner.classList.remove('hidden');
+            btnIcon.classList.add('hidden');
+            btnText.textContent = 'GUARDANDO...';
+
+            try {
+                const { data: { user } } = await supabase.auth.getUser();
+                if (!user) throw new Error('SESIÓN EXPIRADA.');
+
+                const profileData = {
+                    id: user.id,
+                    full_name: document.getElementById('full_name').value.trim(),
+                    username: document.getElementById('username').value.trim(),
+                    bio: document.getElementById('bio').value.trim(),
+                    avatar_url: avatarUrlInput.value.trim(),
+                    updated_at: new Date().toISOString(),
+                };
+
+                const { error } = await supabase.from('profiles').upsert(profileData, { onConflict: 'id' });
+                if (error) throw error;
+
+                showAlert('¡PERFIL ACTUALIZADO CON ÉXITO!', 'success');
+                loadProfile(user.id);
+
+            } catch (err) {
+                console.error('Save error:', err);
+                showAlert(`ERROR: ${err.message.toUpperCase()}`);
+            } finally {
+                submitButton.disabled = false;
+                spinner.classList.add('hidden');
+                btnIcon.classList.remove('hidden');
+                btnText.textContent = 'GUARDAR CAMBIOS';
+            }
+        });
+    </script>
 </body>
 
 </html>

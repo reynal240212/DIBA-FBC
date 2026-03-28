@@ -6,298 +6,165 @@
     <title>Dashboard — DIBA FBC Admin</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="icon" href="/images/ESCUDO.ico" type="image/x-icon">
-    <link
-        href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,600;0,700;0,900;1,700;1,900&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
     <link rel="stylesheet" href="/styles/admin-common.css">
     <script src="/scripts/theme-switcher.js"></script>
-
-    <style>
-        /* ── DASHBOARD SPECIFIC BLOCKS ── */
-        .kpi-card::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            border-radius: inherit;
-            background: radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.05), transparent);
-            pointer-events: none;
-        }
-
-        .bar-seg {
-            height: 100%;
-            transition: width .5s cubic-bezier(0.4, 0, 0.2, 1);
-            border-radius: 999px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-        }
-
-        .quick-btn {
-            background: #f8fafc;
-            border: 1px solid #e2e8f0;
-            border-radius: 20px;
-            transition: all 0.3s ease;
-        }
-
-        .quick-btn:hover {
-            background: white;
-            border-color: #004d98;
-            transform: translateY(-3px);
-            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
-        }
-
-        /* AI Assistant Widget */
-        .ai-chat-container {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-            height: 100%;
-        }
-
-        .ai-messages {
-            flex-grow: 1;
-            max-height: 200px;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-            padding-right: 0.5rem;
-            font-size: 0.8rem;
-        }
-
-        .ai-message {
-            padding: 0.6rem;
-            border-radius: 10px;
-            max-width: 90%;
-        }
-
-        .ai-message.user {
-            align-self: flex-end;
-            background: rgba(255, 204, 0, 0.1);
-            color: var(--gold);
-            border: 1px solid rgba(255, 204, 0, 0.2);
-        }
-
-        .ai-message.bot {
-            align-self: flex-start;
-            background: #f1f5f9;
-            border: 1px solid #e2e8f0;
-        }
-
-        .ai-input-group {
-            display: flex;
-            gap: 0.5rem;
-        }
-
-        #ai-input {
-            flex-grow: 1;
-            background: #f8fafc;
-            border: 1px solid #e2e8f0;
-            border-radius: 8px;
-            padding: 0.5rem;
-            color: #004d98;
-            font-size: 0.8rem;
-        }
-
-        #ai-input:focus {
-            border-color: var(--gold);
-            outline: none;
-        }
-
-        .ai-status {
-            font-size: 0.6rem;
-            display: flex;
-            align-items: center;
-            gap: 0.3rem;
-            opacity: 0.7;
-        }
-
-        .status-dot {
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
-            background: #666;
-        }
-
-        .status-dot.online {
-            background: #4ade80;
-        }
-
-        .status-dot.offline {
-            background: #fb7185;
-        }
-    </style>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        'diba-blue': '#004d98',
-                        'diba-red': '#a50044',
-                        'diba-gold': '#FFD700',
-                    }
-                }
-            }
-        }
-    </script>
 </head>
 
-<body class="bg-[#06090e] text-fcfcfc font-['Inter']">
-    <!-- Loader Loader -->
+<body class="bg-[#06090e] text-white font-['Outfit']">
+    <!-- Loader -->
     <div id="app-loader" class="fixed inset-0 z-[9999] flex items-center justify-center bg-[#06090e]">
         <div class="text-center animate-fade-up">
             <div class="relative w-16 h-16 mx-auto mb-6">
                 <div class="absolute inset-0 border-4 border-gold/10 rounded-full"></div>
                 <div class="absolute inset-0 border-4 border-t-gold rounded-full animate-spin"></div>
             </div>
-            <p class="text-[10px] font-black uppercase tracking-[0.3em] text-gold italic opacity-80">DIBA FBC — Sistema
-                Admin</p>
+            <p class="text-[10px] font-black uppercase tracking-[0.3em] text-gold italic opacity-80">DIBA FBC — Sistema Admin</p>
         </div>
     </div>
+
     <div id="admin-nav"></div>
+
     <main class="lg:ml-[280px] pt-[80px] min-h-screen transition-all duration-300">
-        <div class="p-10 max-w-[1600px] mx-auto">
+        <div class="p-6 lg:p-10 max-w-[1600px] mx-auto overflow-x-hidden">
             <!-- Header Section -->
             <div class="mb-12 animate-fade-up">
-                <h2 class="text-4xl font-black italic text-white uppercase tracking-tighter mb-2">Resumen <span class="text-gold">General</span></h2>
-                <p class="text-white/40 font-bold uppercase tracking-[0.4em] text-[0.7rem]">Estadísticas y control en tiempo real</p>
+                <div class="flex items-center gap-3 mb-2">
+                    <span class="w-8 h-1 bg-gold rounded-full"></span>
+                    <p class="text-white/40 font-bold uppercase tracking-[0.4em] text-[0.65rem]">Panel de Control Maestro</p>
+                </div>
+                <h2 class="text-4xl lg:text-5xl font-black italic text-white uppercase tracking-tighter">Resumen <span class="text-gold">General</span></h2>
             </div>
 
             <!-- Dashboard Grid -->
-            <div class="diba-grid">
+            <div class="diba-grid gap-6 lg:gap-8">
                 <!-- KPI Section (Row 1) -->
-                <div class="col-3 kpi-card gold animate-fade-up" style="animation-delay: 0.1s">
-                    <div class="kpi-icon"><i class="fas fa-users"></i></div>
-                    <div class="kpi-value" id="kpi-players">0</div>
-                    <div class="kpi-label">Jugadores</div>
-                    <div class="kpi-delta up"><i class="fas fa-shield-check"></i> <span>Base de datos activa</span></div>
+                <div class="col-12 lg:col-3 premium-stat-card animate-fade-up" style="animation-delay: 0.1s">
+                    <div class="premium-stat-icon"><i class="fas fa-users"></i></div>
+                    <div class="premium-stat-value" id="kpi-players">0</div>
+                    <div class="premium-stat-label">Jugadores</div>
                 </div>
 
-                <div class="col-3 kpi-card blue animate-fade-up" style="animation-delay: 0.15s">
-                    <div class="kpi-icon"><i class="fas fa-futbol"></i></div>
-                    <div class="kpi-value" id="kpi-matches">—</div>
-                    <div class="kpi-label">Partidos</div>
-                    <div class="kpi-delta info"><i class="fas fa-calendar-star"></i> <span>Temporada 2026</span></div>
+                <div class="col-12 lg:col-3 premium-stat-card animate-fade-up" style="animation-delay: 0.15s">
+                    <div class="premium-stat-icon"><i class="fas fa-futbol"></i></div>
+                    <div class="premium-stat-value" id="kpi-matches">0</div>
+                    <div class="premium-stat-label">Partidos</div>
                 </div>
 
-                <div class="col-3 kpi-card green animate-fade-up" style="animation-delay: 0.2s">
-                    <div class="kpi-icon"><i class="fas fa-chart-line-up"></i></div>
-                    <div class="kpi-value" id="kpi-attendance">—</div>
-                    <div class="kpi-label">% Asistencia</div>
-                    <div class="kpi-delta up"><i class="fas fa-check-double"></i> <span>Promedio global</span></div>
+                <div class="col-12 lg:col-3 premium-stat-card animate-fade-up" style="animation-delay: 0.2s">
+                    <div class="premium-stat-icon"><i class="fas fa-chart-line"></i></div>
+                    <div class="premium-stat-value" id="kpi-attendance">0%</div>
+                    <div class="premium-stat-label">Asistencia</div>
                 </div>
 
-                <div class="col-3 kpi-card red animate-fade-up" style="animation-delay: 0.25s">
-                    <div class="kpi-icon"><i class="fas fa-wallet"></i></div>
-                    <div class="kpi-value" id="kpi-pending">—</div>
-                    <div class="kpi-label">Pendientes</div>
-                    <div class="kpi-delta info"><i class="fas fa-circle-exclamation"></i> <span>Pagos por verificar</span></div>
+                <div class="col-12 lg:col-3 premium-stat-card animate-fade-up" style="animation-delay: 0.25s">
+                    <div class="premium-stat-icon text-red-500"><i class="fas fa-wallet"></i></div>
+                    <div class="premium-stat-value" id="kpi-pending">0</div>
+                    <div class="premium-stat-label">Pendientes</div>
                 </div>
 
                 <!-- Main Content Row (Row 2) -->
-                <div class="col-8 panel glass animate-fade-up" style="animation-delay: 0.3s">
-                    <div class="panel-header">
-                        <span class="panel-title"><i class="fas fa-bolt text-gold mr-3"></i>Accesos Rápidos</span>
-                        <span class="px-2 py-0.5 rounded bg-gold/10 border border-gold/20 text-gold text-[0.5rem] font-black uppercase tracking-widest">Atajos</span>
+                <div class="col-12 lg:col-8 panel animate-fade-up" style="animation-delay: 0.3s">
+                    <div class="premium-p-header">
+                        <span class="premium-p-title"><i class="fas fa-bolt text-gold"></i>Accesos Rápidos</span>
+                        <span class="premium-p-badge italic">Master</span>
                     </div>
-                    <div class="panel-body">
+                    <div class="p-8">
                         <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
                             <a href="planilla.html" class="flex flex-col items-center p-6 bg-white/5 border border-white/5 rounded-2xl hover:bg-gold transition-all duration-300 group">
-                                <i class="fas fa-clipboard-check text-2xl text-gold group-hover:text-[#004d98] mb-3"></i>
-                                <span class="text-[0.7rem] font-black uppercase tracking-widest text-white/60 group-hover:text-[#004d98]">Planilla</span>
+                                <i class="fas fa-clipboard-check text-2xl text-gold group-hover:text-[#004d98] mb-3 transition-transform group-hover:scale-110"></i>
+                                <span class="text-[0.65rem] font-black uppercase tracking-widest text-white/40 group-hover:text-[#004d98]">Planilla</span>
                             </a>
                             <a href="partidos.html" class="flex flex-col items-center p-6 bg-white/5 border border-white/5 rounded-2xl hover:bg-gold transition-all duration-300 group">
-                                <i class="fas fa-calendar-star text-2xl text-gold group-hover:text-[#004d98] mb-3"></i>
-                                <span class="text-[0.7rem] font-black uppercase tracking-widest text-white/60 group-hover:text-[#004d98]">Eventos</span>
+                                <i class="fas fa-calendar-star text-2xl text-gold group-hover:text-[#004d98] mb-3 transition-transform group-hover:scale-110"></i>
+                                <span class="text-[0.65rem] font-black uppercase tracking-widest text-white/40 group-hover:text-[#004d98]">Partidos</span>
                             </a>
                             <a href="usuarios.html" class="flex flex-col items-center p-6 bg-white/5 border border-white/5 rounded-2xl hover:bg-gold transition-all duration-300 group">
-                                <i class="fas fa-users-gear text-2xl text-gold group-hover:text-[#004d98] mb-3"></i>
-                                <span class="text-[0.7rem] font-black uppercase tracking-widest text-white/60 group-hover:text-[#004d98]">Usuarios</span>
+                                <i class="fas fa-users-gear text-2xl text-gold group-hover:text-[#004d98] mb-3 transition-transform group-hover:scale-110"></i>
+                                <span class="text-[0.65rem] font-black uppercase tracking-widest text-white/40 group-hover:text-[#004d98]">Usuarios</span>
                             </a>
                             <a href="GestorDocumental.html" class="flex flex-col items-center p-6 bg-white/5 border border-white/5 rounded-2xl hover:bg-gold transition-all duration-300 group">
-                                <i class="fas fa-file-invoice text-2xl text-gold group-hover:text-[#004d98] mb-3"></i>
-                                <span class="text-[0.7rem] font-black uppercase tracking-widest text-white/60 group-hover:text-[#004d98]">Archivos</span>
+                                <i class="fas fa-file-invoice text-2xl text-gold group-hover:text-[#004d98] mb-3 transition-transform group-hover:scale-110"></i>
+                                <span class="text-[0.65rem] font-black uppercase tracking-widest text-white/40 group-hover:text-[#004d98]">Archivos</span>
                             </a>
                             <a href="rifa_diba.html" class="flex flex-col items-center p-6 bg-white/5 border border-white/5 rounded-2xl hover:bg-gold transition-all duration-300 group">
-                                <i class="fas fa-ticket text-2xl text-gold group-hover:text-[#004d98] mb-3"></i>
-                                <span class="text-[0.7rem] font-black uppercase tracking-widest text-white/60 group-hover:text-[#004d98]">Rifas</span>
+                                <i class="fas fa-ticket text-2xl text-gold group-hover:text-[#004d98] mb-3 transition-transform group-hover:scale-110"></i>
+                                <span class="text-[0.65rem] font-black uppercase tracking-widest text-white/40 group-hover:text-[#004d98]">Rifas</span>
                             </a>
                             <a href="push.html" class="flex flex-col items-center p-6 bg-white/5 border border-white/5 rounded-2xl hover:bg-gold transition-all duration-300 group">
-                                <i class="fas fa-paper-plane text-2xl text-gold group-hover:text-[#004d98] mb-3"></i>
-                                <span class="text-[0.7rem] font-black uppercase tracking-widest text-white/60 group-hover:text-[#004d98]">Mensajes</span>
+                                <i class="fas fa-paper-plane text-2xl text-gold group-hover:text-[#004d98] mb-3 transition-transform group-hover:scale-110"></i>
+                                <span class="text-[0.65rem] font-black uppercase tracking-widest text-white/40 group-hover:text-[#004d98]">Push</span>
                             </a>
                         </div>
                     </div>
                 </div>
 
-                <div class="col-4 panel glass animate-fade-up" style="animation-delay: 0.35s">
-                    <div class="panel-header">
-                        <span class="panel-title"><i class="fas fa-history text-gold mr-3"></i>Historial</span>
+                <div class="col-12 lg:col-4 panel animate-fade-up" style="animation-delay: 0.35s">
+                    <div class="premium-p-header">
+                        <span class="premium-p-title"><i class="fas fa-history text-gold"></i>Recientes</span>
                     </div>
-                    <div class="panel-body max-h-[350px] overflow-y-auto custom-scrollbar">
+                    <div class="p-6 max-h-[400px] overflow-y-auto custom-scrollbar">
                         <div class="space-y-4" id="activity-list">
-                            <div class="flex flex-col items-center justify-center py-10 opacity-20">
-                                <i class="fas fa-inbox text-4xl mb-3"></i>
-                                <p class="text-[0.6rem] font-black uppercase tracking-widest">Sin actividad</p>
+                            <!-- Skeleton Loader -->
+                            <div class="animate-pulse space-y-4">
+                                <div class="h-12 bg-white/5 rounded-xl"></div>
+                                <div class="h-12 bg-white/5 rounded-xl"></div>
+                                <div class="h-12 bg-white/5 rounded-xl"></div>
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Row 3 -->
-                <div class="col-8 panel glass animate-fade-up" style="animation-delay: 0.4s">
-                    <div class="panel-header">
-                        <span class="panel-title"><i class="fas fa-calendar-alt text-gold mr-3"></i>Calendario Próximo</span>
-                        <a href="partidos.html" class="text-[0.6rem] font-black uppercase tracking-widest text-gold hover:underline">Gestionar Todos →</a>
+                <div class="col-12 lg:col-8 panel animate-fade-up" style="animation-delay: 0.4s">
+                    <div class="premium-p-header">
+                        <span class="premium-p-title"><i class="fas fa-calendar-alt text-gold"></i>Próximos Encuentros</span>
+                        <a href="partidos.html" class="text-[0.6rem] font-black uppercase tracking-[0.2em] text-gold hover:underline">Ver Todos →</a>
                     </div>
-                    <div class="panel-body">
-                        <div id="matches-list" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div class="flex flex-col items-center justify-center py-10 opacity-20">
-                                <i class="fas fa-search text-4xl mb-3"></i>
-                                <p class="text-[0.6rem] font-black uppercase tracking-widest">Buscando encuentros...</p>
-                            </div>
+                    <div class="p-8">
+                        <div id="matches-list" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <!-- Skeleton -->
+                            <div class="h-32 bg-white/5 rounded-2xl animate-pulse"></div>
+                            <div class="h-32 bg-white/5 rounded-2xl animate-pulse"></div>
                         </div>
                     </div>
                 </div>
 
-                <div class="col-4 panel glass animate-fade-up" id="attendance-panel" style="animation-delay: 0.45s">
-                    <div class="panel-header">
-                        <span class="panel-title"><i class="fas fa-chart-pie text-gold mr-3"></i>Status Asistencia</span>
+                <div class="col-12 lg:col-4 panel animate-fade-up" id="attendance-panel" style="animation-delay: 0.45s">
+                    <div class="premium-p-header">
+                        <span class="premium-p-title"><i class="fas fa-chart-pie text-gold"></i>Asistencia</span>
                     </div>
-                    <div class="panel-body">
+                    <div class="p-8">
                         <div class="space-y-6">
-                            <div class="flex items-center justify-between">
+                            <div class="flex items-center justify-between text-[0.65rem] font-black uppercase tracking-widest text-white/40">
                                 <div class="flex items-center gap-2">
-                                    <div class="w-2 h-2 rounded-full bg-green-500"></div>
-                                    <span class="text-[0.7rem] font-black uppercase tracking-widest text-white/60" id="att-p">0 Presentes</span>
+                                    <div class="w-1.5 h-1.5 rounded-full bg-green-500"></div>
+                                    <span id="att-p">0 Presentes</span>
                                 </div>
                                 <div class="flex items-center gap-2">
-                                    <div class="w-2 h-2 rounded-full bg-red-500"></div>
-                                    <span class="text-[0.7rem] font-black uppercase tracking-widest text-white/60" id="att-a">0 Ausentes</span>
+                                    <div class="w-1.5 h-1.5 rounded-full bg-red-500"></div>
+                                    <span id="att-a">0 Ausentes</span>
                                 </div>
                             </div>
-                            <div class="h-4 w-full bg-white/5 rounded-full overflow-hidden flex shadow-inner border border-white/5">
-                                <div class="h-full bg-green-500 shadow-[0_0_15px_rgba(34,197,94,0.3)] transition-all duration-1000" id="bar-p" style="width:0%"></div>
-                                <div class="h-full bg-red-500 shadow-[0_0_15px_rgba(239,68,68,0.3)] transition-all duration-1000" id="bar-a" style="width:0%"></div>
-                                <div class="h-full bg-yellow-500 shadow-[0_0_15px_rgba(234,179,8,0.3)] transition-all duration-1000" id="bar-e" style="width:0%"></div>
+                            <div class="h-3 w-full bg-white/5 rounded-full overflow-hidden flex border border-white/5 shadow-inner">
+                                <div class="h-full bg-gradient-to-r from-green-500 to-green-400 transition-all duration-1000" id="bar-p" style="width:0%"></div>
+                                <div class="h-full bg-gradient-to-r from-red-500 to-red-400 transition-all duration-1000" id="bar-a" style="width:0%"></div>
+                                <div class="h-full bg-gradient-to-r from-yellow-500 to-yellow-400 transition-all duration-1000" id="bar-e" style="width:0%"></div>
                             </div>
-                            <p class="text-[0.6rem] font-bold text-center text-white/30 uppercase tracking-[0.3em]">Resumen de la última sesión</p>
+                            <p class="text-[0.6rem] font-bold text-center text-white/20 uppercase tracking-[0.3em]">Resumen de la última sesión</p>
                         </div>
                     </div>
                 </div>
             </div> <!-- /diba-grid -->
-        </div><!-- /p-10 -->
-    </main><!-- /main -->
+        </div>
+    </main>
 
     <script src="/scripts/config.js"></script>
     <script type="module">
         import { initAdminLayout } from '../src/components/layout/admin-layout.js';
         import { supabase, requireAdmin } from '../scripts/supabaseClient.js';
-        import { chatWithAI, checkAIStatus } from '../src/core/aiClient.js';
-        import '../src/core/aiWidget.js'; 
-
-        // La lógica de IA ahora es manejada globalmente por el Widget flotante
-        // accesible en todo el sitio a través de public/src/core/aiWidget.js
 
         // ── AUTENTICACIÓN Y CARGA ──
         async function init() {
@@ -305,176 +172,104 @@
                 const session = await requireAdmin();
                 if (!session) return;
                 
-                initAdminLayout();
-                loadKPIs();
+                await initAdminLayout();
+                await loadKPIs();
             } catch (error) {
                 console.error("Init error:", error);
             }
         }
-
         init();
 
-        async function getMatchCount() {
-            const { count } = await supabase.from('partidos').select('*', { count: 'exact', head: true });
-            return count || 0;
-        }
-
-        // ── KPIs desde Supabase ──
-        // ── KPIs desde Supabase ──
         async function loadKPIs() {
-            // 1. Cargar Jugadores (Prioritario)
             try {
-                const { count } = await supabase.from('identificacion').select('*', { count: 'exact', head: true });
-                document.getElementById('kpi-players').textContent = count || 0;
-            } catch (e) { console.error('Error Jugadores:', e); }
+                // 1. Jugadores
+                const { count: playerCount } = await supabase.from('identificacion').select('*', { count: 'exact', head: true });
+                document.getElementById('kpi-players').textContent = playerCount || 0;
 
-            // 2. Cargar Partidos
-            try {
-                const count = await getMatchCount();
-                document.getElementById('kpi-matches').textContent = count || 0;
-            } catch (e) { console.error('Error Partidos:', e); }
+                // 2. Partidos
+                const { count: matchCount } = await supabase.from('partidos').select('*', { count: 'exact', head: true });
+                document.getElementById('kpi-matches').textContent = matchCount || 0;
 
-            // 3. Cargar Estadísticas (RPC)
-            try {
-                const { data: stats, error: statsError } = await supabase.rpc('get_dashboard_stats');
-                if (!statsError && stats && stats.length > 0) {
+                // 3. Asistencia (RPC)
+                const { data: stats } = await supabase.rpc('get_dashboard_stats');
+                if (stats && stats.length > 0) {
                     const s = stats[0];
-                    if (s.presentes !== undefined) {
-                        const totalAsis = (s.presentes || 0) + (s.ausentes || 0) + (s.excusas || 0);
-                        const attPct = totalAsis > 0 ? Math.round((s.presentes / totalAsis) * 100) : 0;
-                        document.getElementById('kpi-attendance').textContent = `${attPct}%`;
-
-                        document.getElementById('attendance-panel').style.display = '';
-                        document.getElementById('bar-p').style.width = (totalAsis > 0 ? (s.presentes / totalAsis) * 100 : 0) + '%';
-                        document.getElementById('bar-a').style.width = (totalAsis > 0 ? (s.ausentes / totalAsis) * 100 : 0) + '%';
-                        document.getElementById('bar-e').style.width = (totalAsis > 0 ? (s.excusas / totalAsis) * 100 : 0) + '%';
-
-                        document.getElementById('att-p').textContent = `${s.presentes} Presentes`;
-                        document.getElementById('att-a').textContent = `${s.ausentes} Ausentes`;
-                        document.getElementById('att-e').textContent = `${s.excusas} Excusas`;
-                    }
+                    const total = (s.presentes || 0) + (s.ausentes || 0) + (s.excusas || 0);
+                    const attPct = total > 0 ? Math.round((s.presentes / total) * 100) : 0;
+                    document.getElementById('kpi-attendance').textContent = `${attPct}%`;
+                    
+                    document.getElementById('bar-p').style.width = (total > 0 ? (s.presentes / total) * 100 : 0) + '%';
+                    document.getElementById('bar-a').style.width = (total > 0 ? (s.ausentes / total) * 100 : 0) + '%';
+                    document.getElementById('bar-e').style.width = (total > 0 ? (s.excusas / total) * 100 : 0) + '%';
+                    
+                    document.getElementById('att-p').textContent = `${s.presentes} Presentes`;
+                    document.getElementById('att-a').textContent = `${s.ausentes} Ausentes`;
                 }
-            } catch (e) { console.error('Error RPC Stats:', e); }
 
-            // 4. Pagos Pendientes
-            try {
-                const { count: pendingCount } = await supabase
-                    .from('planilla_registros')
-                    .select('*', { count: 'exact', head: true })
-                    .or('pago.is.null,pago.eq.0');
-                document.getElementById('kpi-pending').textContent = pendingCount > 0 ? pendingCount : '✓';
-            } catch (e) { console.error('Error Pagos:', e); }
+                // 4. Pendientes
+                const { count: pendingCount } = await supabase.from('planilla_registros').select('*', { count: 'exact', head: true }).or('pago.is.null,pago.eq.0');
+                document.getElementById('kpi-pending').textContent = pendingCount || 0;
 
-            // 5. Actividad y Partidos Próximos
-            loadRecentActivity();
-            loadUpcomingMatches();
+                // 5. Listas
+                loadRecentActivity();
+                loadUpcomingMatches();
+            } catch (e) {
+                console.error('KPI error:', e);
+            }
         }
 
         async function loadRecentActivity() {
-            try {
-                const { data: recentPlayers } = await supabase
-                    .from('jugadores')
-                    .select('nombre, fecha_registro')
-                    .order('fecha_registro', { ascending: false })
-                    .limit(3);
-
-                const { data: recentMessages } = await supabase
-                    .from('mensajes')
-                    .select('full_name, content, created_at')
-                    .order('created_at', { ascending: false })
-                    .limit(3);
-
-                const activities = [];
-                if (recentPlayers) {
-                    recentPlayers.forEach(p => activities.push({
-                        type: 'player',
-                        title: p.nombre,
-                        subtitle: 'Nuevo jugador registrado',
-                        time: new Date(p.fecha_registro)
-                    }));
-                }
-                if (recentMessages) {
-                    recentMessages.forEach(m => activities.push({
-                        type: 'message',
-                        title: m.full_name || 'Usuario Anónimo',
-                        subtitle: `Mensaje: "${m.content.substring(0, 30)}..."`,
-                        time: new Date(m.created_at)
-                    }));
-                }
-
-                activities.sort((a, b) => b.time - a.time);
-                renderRecentActivity(activities.slice(0, 5));
-            } catch (e) { console.error('Error Actividad:', e); }
-        }
-
-        async function loadUpcomingMatches() {
-            try {
-                const { data: upcomingMatches } = await supabase
-                    .from('partidos')
-                    .select('*')
-                    .gte('fecha', new Date().toISOString().split('T')[0])
-                    .order('fecha', { ascending: true })
-                    .limit(3);
-
-                renderMatches(upcomingMatches);
-            } catch (e) { console.error('Error Upcoming Matches:', e); }
-        }
-
-        function renderMatches(matches) {
-            const container = document.getElementById('matches-list');
-            if (!matches || matches.length === 0) {
-                container.innerHTML = `<div class="empty-state"><i class="fas fa-futbol"></i><p>No hay partidos programados</p></div>`;
+            const { data: players } = await supabase.from('jugadores').select('nombre, fecha_registro').order('fecha_registro', { ascending: false }).limit(5);
+            const list = document.getElementById('activity-list');
+            
+            if (!players || players.length === 0) {
+                list.innerHTML = `<div class="p-10 text-center opacity-20"><i class="fas fa-inbox text-4xl mb-2"></i><p class="text-[0.6rem] font-black uppercase">Sin actividad</p></div>`;
                 return;
             }
 
-            container.innerHTML = matches.map(m => `
-                <div style="background:var(--dark3); border:1px solid var(--border); border-radius:14px; padding:1.2rem; display:flex; flex-direction:column; gap:0.5rem">
-                    <div style="display:flex; justify-content:space-between; align-items:center">
-                        <span style="font-size:0.6rem; font-weight:800; color:var(--gold); text-transform:uppercase">${m.categoria}</span>
-                        <span style="font-size:0.6rem; color:var(--slate)">${new Date(m.fecha).toLocaleDateString()}</span>
+            list.innerHTML = players.map(p => `
+                <div class="flex items-center gap-4 p-4 bg-white/5 rounded-2xl border border-white/5 hover:bg-white/10 transition-all group">
+                    <div class="w-10 h-10 rounded-xl bg-gold/10 text-gold flex items-center justify-center text-sm font-black">${p.nombre[0]}</div>
+                    <div class="min-w-0">
+                        <div class="text-[0.85rem] font-bold text-white truncate">${p.nombre}</div>
+                        <div class="text-[0.6rem] font-black text-white/30 uppercase tracking-widest mt-0.5">Nuevo Registro · ${new Date(p.fecha_registro).toLocaleDateString()}</div>
                     </div>
-                    <div style="font-size:0.85rem; font-weight:900; font-style:italic; text-transform:uppercase; display:flex; align-items:center; gap:0.5rem">
-                        <span>${m.equipolocal}</span>
-                        <span style="color:var(--gold)">VS</span>
-                        <span>${m.equipovisitante}</span>
-                    </div>
-                    <div style="font-size:0.65rem; color:var(--slate); display:flex; flex-direction:column; gap:0.2rem">
-                        <span><i class="fas fa-clock" style="margin-right:0.3rem"></i> ${m.hora}</span>
-                        <span><i class="fas fa-map-marker-alt" style="margin-right:0.3rem"></i> ${m.Cancha}</span>
-                    </div>
+                    <i class="fas fa-arrow-right text-[0.6rem] text-gold/20 ml-auto group-hover:translate-x-1 group-hover:text-gold transition-all"></i>
                 </div>
             `).join('');
         }
 
-        function renderRecentActivity(activities) {
-            const list = document.getElementById('activity-list');
-            const icons = {
-                player: { bg: 'rgba(255,204,0,.12)', color: 'var(--gold)', icon: 'fa-user-plus' },
-                message: { bg: 'rgba(59,130,246,.12)', color: '#60a5fa', icon: 'fa-envelope' }
-            };
+        async function loadUpcomingMatches() {
+            const { data: matches } = await supabase.from('partidos').select('*').gte('fecha', new Date().toISOString().split('T')[0]).order('fecha', { ascending: true }).limit(2);
+            const container = document.getElementById('matches-list');
 
-            const items = activities.map(act => {
-                const conf = icons[act.type];
-                const timeStr = act.time.toLocaleDateString() + ' ' + act.time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-                return `
-                  <div class="activity-item">
-                    <div class="activity-dot" style="background:${conf.bg};color:${conf.color}">
-                      <i class="fas ${conf.icon}"></i>
-                    </div>
-                    <div>
-                      <div class="activity-text">${act.title}</div>
-                      <div class="activity-time">${act.subtitle} · ${timeStr}</div>
-                    </div>
-                  </div>`;
-            }).join('');
+            if (!matches || matches.length === 0) {
+                container.innerHTML = `<div class="col-span-2 p-10 text-center opacity-20"><i class="fas fa-futbol text-4xl mb-2"></i><p class="text-[0.6rem] font-black uppercase">No hay partidos programados</p></div>`;
+                return;
+            }
 
-            list.innerHTML = items || `<div class="empty-state"><i class="fas fa-inbox"></i><p>Sin actividad</p></div>`;
+            container.innerHTML = matches.map(m => `
+                <div class="p-6 bg-[#020617] border border-white/5 rounded-3xl relative overflow-hidden group hover:border-gold/30 transition-all">
+                    <div class="absolute top-0 right-0 p-4">
+                        <span class="px-2 py-1 rounded bg-gold/10 text-gold text-[0.5rem] font-black uppercase tracking-widest">${m.categoria}</span>
+                    </div>
+                    <div class="mb-6 flex flex-col gap-1">
+                        <span class="text-[0.6rem] font-black text-white/30 uppercase tracking-widest">${new Date(m.fecha).toLocaleDateString('es-CO', { weekday: 'long', day: 'numeric', month: 'long' })}</span>
+                        <div class="flex items-center gap-3 text-lg font-black italic tracking-tighter uppercase">
+                            <span class="text-white">${m.equipolocal}</span>
+                            <span class="text-gold text-xs">VS</span>
+                            <span class="text-white">${m.equipovisitante}</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between mt-auto pt-4 border-t border-white/5">
+                        <div class="flex items-center gap-4 text-[0.65rem] font-black uppercase tracking-widest text-white/40">
+                            <span><i class="fas fa-clock text-gold mr-2"></i>${m.hora}</span>
+                            <span><i class="fas fa-map-marker-alt text-gold mr-2"></i>${m.Cancha}</span>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
         }
-
-        // Inicializar
-        loadKPIs();
     </script>
-
 </body>
-
 </html>

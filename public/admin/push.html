@@ -1,136 +1,230 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
-  <meta charset="UTF-8">
-  <title>Notificaciones Push — Admin DIBA FBC</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="icon" href="/images/ESCUDO.ico" type="image/x-icon">
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;900&display=swap" rel="stylesheet">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: { sans: ['Montserrat', 'sans-serif'] },
-          colors: {
-            dibaGold: 'var(--gold)',
-            dibaBlue: 'var(--blue)',
-            dibaDark: 'var(--bg-main)',
-            dibaText: 'var(--text-main)',
-            dibaMuted: 'var(--text-muted)'
-          }
-        },
-      },
-    }
-  </script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
-  <link rel="stylesheet" href="/styles/admin-common.css">
-  <script src="/scripts/theme-switcher.js"></script>
+    <meta charset="UTF-8">
+    <title>Notificaciones Push — DIBA FBC Admin</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="/images/ESCUDO.ico" type="image/x-icon">
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
+
+    <!-- Core Styles -->
+    <link rel="stylesheet" href="/styles/admin-common.css">
+    <script src="/scripts/theme-switcher.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        .mobile-mock {
+            width: 320px;
+            height: 600px;
+            background: #000;
+            border: 12px solid #1a1a1a;
+            border-radius: 40px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 50px 100px -20px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.05);
+        }
+
+        .mobile-screen {
+            height: 100%;
+            background: linear-gradient(to bottom, #004d98, #000);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .push-notification-mock {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 20px;
+            padding: 18px;
+            width: 100%;
+            animation: slide-down 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .iphone-notch {
+            width: 120px;
+            height: 25px;
+            background: #1a1a1a;
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            border-bottom-left-radius: 12px;
+            border-bottom-right-radius: 12px;
+            z-index: 10;
+        }
+
+        @keyframes slide-down {
+            from { transform: translateY(-30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .sticky-preview {
+            position: sticky;
+            top: 100px;
+        }
+    </style>
 </head>
-<body class="bg-white font-['Inter']">
 
-  <div id="admin-nav"></div>
-
-    <div class="content">
-      <div class="max-w-4xl mx-auto">
-        
-        <div class="panel animate-fade-up">
-          <div class="panel-header">
-            <h2 class="panel-title"><i class="fas fa-paper-plane"></i> Redactar Notificación</h2>
-            <span class="panel-badge">Oficial</span>
-          </div>
-          <div class="panel-body">
-            <form id="push-form" class="space-y-6">
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <!-- Título -->
-                <div class="space-y-2">
-                  <label class="form-label">Título del Mensaje</label>
-                  <input type="text" id="push-title" required placeholder="Ej: ¡Nuevo Partido Programado!" 
-                         class="form-control w-full">
-                </div>
-                <!-- Categoría Target -->
-                <div class="space-y-2">
-                  <label class="form-label">Dirigido a:</label>
-                  <select id="push-target" class="form-select w-full">
-                    <option value="all">Todos los Suscriptores</option>
-                    <option value="2012">Categoría 2012</option>
-                    <option value="2013">Categoría 2013</option>
-                    <option value="2014/2015/2016">Categoría 2014/15/16</option>
-                  </select>
-                </div>
-              </div>
-
-              <!-- Cuerpo -->
-              <div class="space-y-2">
-                <label class="form-label">Contenido de la Notificación</label>
-                <textarea id="push-body" rows="4" required placeholder="Escribe el cuerpo del mensaje aquí..." 
-                          class="form-control w-full resize-none"></textarea>
-              </div>
-
-              <!-- URL de Destino -->
-              <div class="space-y-2">
-                <label class="form-label">URL de Redirección (Opcional)</label>
-                <div class="relative group">
-                  <span class="absolute inset-y-0 left-4 flex items-center text-slate">
-                    <i class="fas fa-link text-xs"></i>
-                  </span>
-                  <input type="text" id="push-url" placeholder="Ej: /partidos.html" 
-                         class="form-control w-full pl-10">
-                </div>
-                <p class="text-[10px] text-dibaMuted italic">Cuando el usuario haga clic, será llevado a esta página.</p>
-              </div>
-
-              <div id="status-container" class="hidden"></div>
-
-              <div class="flex justify-end pt-4">
-                <button type="submit" id="send-btn" class="btn btn-primary px-10 py-4 text-xs tracking-[0.2em]">
-                  <i class="fas fa-bolt"></i> <span id="btn-text">Lanzar Notificación</span>
-                  <i class="fas fa-circle-notch fa-spin hidden" id="btn-loader"></i>
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-
-        <!-- Preview Section -->
-        <div class="panel animate-fade-up" style="animation-delay: 0.1s;">
-          <div class="panel-header">
-            <h2 class="panel-title"><i class="fas fa-mobile-alt"></i> Vista Previa (Simulada)</h2>
-          </div>
-          <div class="panel-body flex justify-center py-10">
-            <div class="w-72 bg-[#1c1c1e] rounded-[40px] p-4 shadow-2xl border border-white/10">
-               <div class="flex justify-between items-center mb-4 px-2">
-                  <span class="text-[10px] font-bold text-white">DIBA FBC</span>
-                  <span class="text-[10px] text-white/60">ahora</span>
-               </div>
-               <div class="bg-white/5 rounded-2xl p-4">
-                  <h3 id="preview-title" class="text-sm font-black text-dibaGold truncate">Título de prueba</h3>
-                  <p id="preview-body" class="text-xs text-white/80 mt-1 line-clamp-3">El contenido que escribas arriba aparecerá aquí para los usuarios en sus dispositivos.</p>
-               </div>
+<body class="bg-[#06090e] text-white font-['Outfit']">
+    <!-- Loader -->
+    <div id="app-loader" class="fixed inset-0 z-[9999] flex items-center justify-center bg-[#06090e]">
+        <div class="text-center animate-fade-up">
+            <div class="relative w-16 h-16 mx-auto mb-6">
+                <div class="absolute inset-0 border-4 border-gold/10 rounded-full"></div>
+                <div class="absolute inset-0 border-4 border-t-gold rounded-full animate-spin"></div>
             </div>
-          </div>
+            <p class="text-[10px] font-black uppercase tracking-[0.3em] text-gold italic opacity-80">DIBA FBC — Centro de Mensajería</p>
         </div>
-
-      </div>
     </div>
-  </main>
 
-  <script src="/scripts/config.js"></script>
-  <script type="module">
-    import { initAdminLayout } from '/src/components/layout/admin-layout.js';
-    initAdminLayout();
-  </script>
-  <script type="module" src="/src/features/push/admin.js"></script>
-  <script>
-    // Live Preview
-    const titleIn = document.getElementById('push-title');
-    const bodyIn = document.getElementById('push-body');
-    const titleOut = document.getElementById('preview-title');
-    const bodyOut = document.getElementById('preview-body');
+    <div id="admin-nav"></div>
 
-    titleIn.addEventListener('input', (e) => titleOut.textContent = e.target.value || 'Título de prueba');
-    bodyIn.addEventListener('input', (e) => bodyOut.textContent = e.target.value || 'El contenido que escribas arriba aparecerá aquí...');
-  </script>
+    <main class="lg:ml-[280px] pt-[80px] min-h-screen transition-all duration-300">
+        <div class="p-6 lg:p-10 max-w-[1600px] mx-auto overflow-x-hidden">
+            
+            <!-- Page Header -->
+            <div class="mb-12 animate-fade-up">
+                <div class="flex items-center justify-between flex-wrap gap-8">
+                    <div>
+                        <div class="flex items-center gap-3 mb-2">
+                            <span class="w-8 h-1 bg-gold rounded-full"></span>
+                            <p class="text-white/40 font-bold uppercase tracking-[0.4em] text-[0.65rem]">Comunicación Masiva en Tiempo Real</p>
+                        </div>
+                        <h2 class="text-4xl lg:text-5xl font-black italic text-white uppercase tracking-tighter">Notificaciones <span class="text-gold">Push</span></h2>
+                    </div>
+                </div>
+            </div>
+
+            <div class="diba-grid">
+                <!-- Left Column: Composer -->
+                <div class="col-12 lg:col-8">
+                    <div class="panel p-8 animate-fade-up">
+                        <div class="premium-p-header mb-10">
+                            <span class="premium-p-title"><i class="fas fa-paper-plane text-gold"></i>Redactar Mensaje Oficial</span>
+                            <span class="premium-p-badge italic">ALTA PRIORIDAD</span>
+                        </div>
+
+                        <form id="push-form" class="space-y-8">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                <div class="premium-form-group">
+                                    <label class="premium-label">Título del Mensaje</label>
+                                    <input type="text" id="push-title" required placeholder="¡NUEVO PARTIDO PROGRAMADO!" 
+                                        class="premium-input pl-6 uppercase font-bold text-[0.8rem] tracking-tight">
+                                </div>
+                                
+                                <div class="premium-form-group">
+                                    <label class="premium-label">Segmento de Audiencia</label>
+                                    <select id="push-target" class="premium-input pl-6 font-bold uppercase text-[0.7rem] tracking-widest cursor-pointer">
+                                        <option value="all">TODOS LOS SUSCRIPTORES</option>
+                                        <option value="2012">CATEGORÍA 2012</option>
+                                        <option value="2013">CATEGORÍA 2013</option>
+                                        <option value="2014/2015/2016">CATEGORÍA 2014/15/16</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="premium-form-group">
+                                <label class="premium-label">Cuerpo de la Notificación (Máx. 160 caract.)</label>
+                                <textarea id="push-body" rows="4" required placeholder="ESCRIBA LAS INDICACIONES CLARAS PARA LOS JUGADORES..." 
+                                    class="premium-input p-6 resize-none min-h-[140px]"></textarea>
+                            </div>
+
+                            <div class="premium-form-group">
+                                <label class="premium-label">Ruta de Destino (Enlace)</label>
+                                <div class="relative group">
+                                    <i class="fas fa-link absolute left-5 top-1/2 -translate-y-1/2 text-gold/30 group-focus-within:text-gold transition-colors"></i>
+                                    <input type="text" id="push-url" placeholder="EJ: /partidos.html" 
+                                        class="premium-input pl-14 font-black uppercase tracking-widest text-[0.7rem]">
+                                </div>
+                                <p class="mt-2 text-[0.6rem] font-bold text-white/30 uppercase tracking-widest pl-1 italic">
+                                    Página que se abrirá al tocar la notificación en el móvil.
+                                </p>
+                            </div>
+
+                            <div id="status-container" class="hidden animate-fade-in p-5 rounded-2xl bg-white/5 border border-white/5 text-[0.7rem] font-black uppercase tracking-widest text-gold text-center italic">
+                                <!-- Dynamic status goes here -->
+                            </div>
+
+                            <div class="flex justify-end pt-6">
+                                <button type="submit" id="send-btn" class="w-full lg:w-auto px-12 py-5 bg-gold text-[#004d98] rounded-2xl font-black uppercase text-[0.8rem] tracking-[0.2em] shadow-xl shadow-gold/20 hover:scale-[1.03] active:scale-95 transition-all flex items-center justify-center gap-4">
+                                    <i class="fas fa-bolt" id="btn-icon"></i>
+                                    <span id="btn-text">Lanzar Notificación</span>
+                                    <i class="fas fa-circle-notch fa-spin hidden" id="btn-loader"></i>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Right Column: Live Preview -->
+                <div class="col-12 lg:col-4">
+                    <div class="sticky-preview flex flex-col items-center gap-8">
+                        <div class="text-center mb-4">
+                            <span class="text-[0.6rem] font-black text-white/30 uppercase tracking-[0.4em] italic mb-2 block">Vista Previa Mobile</span>
+                            <div class="w-12 h-1 bg-gold/30 mx-auto rounded-full"></div>
+                        </div>
+
+                        <div class="mobile-mock">
+                            <div class="iphone-notch"></div>
+                            <div class="mobile-screen">
+                                <div class="flex justify-between items-center text-[10px] font-black text-white/40 tracking-widest">
+                                    <span>DIBA FBC</span>
+                                    <span>AHORA</span>
+                                </div>
+                                
+                                <div class="push-notification-mock">
+                                    <div class="flex items-center gap-3 mb-3">
+                                        <div class="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center border border-white/10 shadow-lg">
+                                            <img src="/images/ESCUDO.png" class="w-5 h-5 object-contain">
+                                        </div>
+                                        <div>
+                                            <h4 id="preview-title" class="text-[0.7rem] font-black text-gold uppercase tracking-tight truncate w-[180px]">Título de Mensaje</h4>
+                                            <p class="text-[0.5rem] font-bold text-white/40 uppercase tracking-widest">DIBA OFFICIAL APP</p>
+                                        </div>
+                                    </div>
+                                    <p id="preview-body" class="text-[0.7rem] font-medium text-white/70 leading-relaxed pr-2">
+                                        El contenido que redactes aparecerá aquí para todos los jugadores sincronizados en tiempo real.
+                                    </p>
+                                </div>
+                                
+                                <!-- Wallpaper decoration -->
+                                <div class="mt-auto opacity-10 flex flex-col items-center">
+                                    <img src="/images/ESCUDO.png" class="w-24 h-24 object-contain grayscale invert">
+                                    <div class="text-[0.5rem] mt-4 font-black tracking-[0.5em] text-white">SISTEMA DIBA</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Scripts -->
+    <script src="/scripts/config.js"></script>
+    <script type="module">
+        import { initAdminLayout } from '/src/components/layout/admin-layout.js';
+        initAdminLayout();
+    </script>
+    <script type="module" src="/src/features/push/admin.js"></script>
+    <script>
+        // Live Preview Sync
+        const titleIn = document.getElementById('push-title');
+        const bodyIn = document.getElementById('push-body');
+        const titleOut = document.getElementById('preview-title');
+        const bodyOut = document.getElementById('preview-body');
+
+        titleIn.addEventListener('input', (e) => titleOut.textContent = e.target.value.toUpperCase() || 'TÍTULO DE MENSAJE');
+        bodyIn.addEventListener('input', (e) => bodyOut.textContent = e.target.value || 'El contenido que redactes aparecerá aquí para todos los jugadores sincronizados en tiempo real.');
+    </script>
 </body>
+
 </html>

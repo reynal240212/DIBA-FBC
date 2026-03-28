@@ -6,79 +6,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestión de Usuarios — DIBA FBC Admin</title>
     <link rel="icon" href="/images/ESCUDO.ico" type="image/x-icon">
-    <link
-        href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,600;0,700;0,900;1,700;1,900&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <link rel="stylesheet" href="/styles/admin-common.css">
+    <script src="/scripts/theme-switcher.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: { sans: ['Montserrat', 'sans-serif'] },
-                    colors: {
-                        dibaGold: 'var(--gold)',
-                        dibaBlue: 'var(--blue)',
-                        dibaDark: 'var(--bg-main)',
-                        dibaDark2: 'var(--bg-panel)',
-                        dibaDark3: 'var(--bg-input)',
-                        dibaText: 'var(--text-main)',
-                        dibaMuted: 'var(--text-muted)'
-                    }
-                },
-            },
-        }
-    </script>
-    <style>
-        /* DASHBOARD SPECIFIC OR OVERRIDES */
-        .sidebar.open {
-            transform: translateX(0);
-        }
-        
-        #admin-body {
-            background: var(--bg-main);
-            color: var(--text-main);
-        }
-        
-        .main-content {
-            margin-left: var(--sidebar-w);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-
-        @media (max-width: 768px) {
-            .main-content {
-                margin-left: 0;
-            }
-        }
-
-        /* Modal Styles */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 2000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.8);
-            backdrop-filter: blur(4px);
-        }
-        .modal-content {
-            background-color: var(--bg-panel);
-            margin: 10% auto;
-            padding: 2rem;
-            border: 1px solid var(--border-color);
-            border-radius: 1.5rem;
-            width: 90%;
-            max-width: 400px;
-            color: var(--text-main);
-        }
-    </style>
 </head>
-<body class="bg-[#06090e] text-fcfcfc font-['Inter']">
+
+<body class="bg-[#06090e] text-white font-['Outfit']">
     <!-- Loader -->
     <div id="app-loader" class="fixed inset-0 z-[9999] flex items-center justify-center bg-[#06090e]">
         <div class="text-center animate-fade-up">
@@ -91,96 +26,137 @@
     </div>
 
     <div id="admin-nav"></div>
+
     <main class="lg:ml-[280px] pt-[80px] min-h-screen transition-all duration-300">
-        <div class="p-10 max-w-[1600px] mx-auto">
-            <div id="alert-bar"
-                class="hidden mb-10 p-5 rounded-2xl bg-red-500/10 border border-red-500/20 text-red-500 text-[0.65rem] font-black uppercase tracking-widest items-center gap-4 animate-fade-in">
+        <div class="p-6 lg:p-10 max-w-[1600px] mx-auto overflow-x-hidden">
+            
+            <div id="alert-bar" class="hidden mb-10 p-5 rounded-3xl bg-red-500/10 border border-red-500/20 text-red-500 text-[0.65rem] font-black uppercase tracking-widest items-center gap-4 animate-fade-in shadow-2xl">
                 <i class="fas fa-triangle-exclamation"></i>
                 <span id="alert-text"></span>
             </div>
 
+            <!-- Page Header -->
             <div class="mb-12 animate-fade-up">
-                <div class="flex items-center justify-between flex-wrap gap-6">
-                    <div>
-                        <h2 class="text-4xl font-black italic text-white uppercase tracking-tighter mb-2">Gestión de <span class="text-gold">Usuarios</span></h2>
-                        <p class="text-white/40 font-bold uppercase tracking-[0.4em] text-[0.7rem]">Control de accesos y permisos del sistema</p>
+                <div class="flex items-center justify-between flex-wrap gap-8">
+                    <div class="min-w-[300px]">
+                        <div class="flex items-center gap-3 mb-2">
+                            <span class="w-8 h-1 bg-gold rounded-full"></span>
+                            <p class="text-white/40 font-bold uppercase tracking-[0.4em] text-[0.65rem]">Administración de Sistema</p>
+                        </div>
+                        <h2 class="text-4xl lg:text-5xl font-black italic text-white uppercase tracking-tighter">Gestión de <span class="text-gold">Usuarios</span></h2>
                     </div>
-                    <div class="flex items-center gap-4">
-                        <div class="relative group">
-                            <i class="fas fa-search absolute left-5 top-1/2 -translate-y-1/2 text-white/30 text-xs"></i>
+
+                    <div class="flex items-center gap-4 flex-wrap lg:flex-nowrap w-full lg:w-auto">
+                        <div class="relative group flex-1 lg:flex-none">
+                            <i class="fas fa-search absolute left-5 top-1/2 -translate-y-1/2 text-white/30 text-xs group-focus-within:text-gold transition-colors"></i>
                             <input type="text" id="search-user" 
                                 placeholder="BUSCAR USUARIO..." 
-                                class="bg-white/5 border border-white/5 rounded-2xl py-4 pl-12 pr-6 text-white text-[0.7rem] font-bold tracking-widest uppercase focus:bg-white/10 focus:border-gold/30 transition-all w-[300px] shadow-inner outline-none">
+                                class="bg-white/5 border border-white/10 rounded-2xl py-4 pl-12 pr-6 text-white text-[0.7rem] font-bold tracking-widest uppercase focus:bg-white/10 focus:border-gold/30 transition-all w-full lg:w-[320px] shadow-inner outline-none">
                         </div>
-                        <a href="crear-usuario.html" class="px-8 py-4 bg-gold rounded-2xl text-[#004d98] font-black uppercase tracking-widest text-[0.7rem] hover:scale-105 transition-all shadow-xl shadow-gold/10 flex items-center gap-3">
+                        <a href="crear-usuario.html" class="px-10 py-4 bg-gold rounded-2xl text-[#004d98] font-black uppercase tracking-widest text-[0.7rem] hover:scale-105 hover:bg-white transition-all shadow-2xl shadow-gold/10 flex items-center justify-center gap-3 w-full lg:w-auto">
                             <i class="fas fa-user-plus"></i> NUEVO USUARIO
                         </a>
                     </div>
                 </div>
             </div>
 
-            <div class="panel glass animate-fade-up" style="animation-delay: 0.1s">
-                <div class="panel-header border-b border-white/5">
-                    <span class="panel-title text-[0.8rem] font-black uppercase tracking-[0.2em]"><i class="fas fa-list text-gold mr-3"></i>Lista de Usuarios</span>
-                    <span id="user-count" class="px-3 py-1 rounded-full bg-white/5 text-white/40 text-[0.6rem] font-black uppercase">0 Usuarios</span>
+            <!-- Main Panel -->
+            <div class="panel animate-fade-up" style="animation-delay: 0.1s">
+                <div class="premium-p-header flex-col sm:flex-row gap-4 items-start sm:items-center">
+                    <span class="premium-p-title"><i class="fas fa-list-ul text-gold"></i>Directorio de Accesos</span>
+                    <div class="flex items-center gap-3">
+                        <span id="user-count" class="premium-p-badge italic">0 Usuarios Registrados</span>
+                    </div>
                 </div>
-                <div class="panel-body p-0 overflow-x-auto">
-                    <table class="w-full text-left font-outfit">
+                
+                <div class="p-0 overflow-x-auto custom-scrollbar">
+                    <table class="w-full text-left font-['Outfit'] border-collapse">
                         <thead>
-                            <tr class="border-b border-white/5">
-                                <th class="px-8 py-6 text-[0.65rem] font-black text-white/40 uppercase tracking-[0.2em]">Usuario</th>
-                                <th class="px-8 py-6 text-[0.65rem] font-black text-white/40 uppercase tracking-[0.2em]">Nombre Real</th>
-                                <th class="px-8 py-6 text-[0.65rem] font-black text-white/40 uppercase tracking-[0.2em]">Rol / Permiso</th>
-                                <th class="px-8 py-6 text-[0.65rem] font-black text-white/40 uppercase tracking-[0.2em]">Status</th>
-                                <th class="px-8 py-6 text-[0.65rem] font-black text-white/40 uppercase tracking-[0.2em] text-right">Acciones</th>
+                            <tr class="bg-white/5">
+                                <th class="px-8 py-6 text-[0.6rem] font-black text-white/40 uppercase tracking-[0.25em]">Usuario</th>
+                                <th class="px-8 py-6 text-[0.6rem] font-black text-white/40 uppercase tracking-[0.25em]">Nombre Real</th>
+                                <th class="px-8 py-6 text-[0.6rem] font-black text-white/40 uppercase tracking-[0.25em]">Rol / Permiso</th>
+                                <th class="px-8 py-6 text-[0.6rem] font-black text-white/40 uppercase tracking-[0.25em]">Status</th>
+                                <th class="px-8 py-6 text-[0.6rem] font-black text-white/40 uppercase tracking-[0.25em] text-right">Acciones</th>
                             </tr>
                         </thead>
                         <tbody id="users-tbody" class="divide-y divide-white/5">
-                            <!-- Los usuarios se cargarán aquí -->
+                            <!-- Skeleton Loader -->
                             <tr>
-                                <td colspan="5" class="px-8 py-20 text-center animate-pulse">
-                                    <div class="flex flex-col items-center opacity-30">
-                                        <i class="fas fa-circle-notch fa-spin text-3xl mb-4"></i>
+                                <td colspan="5" class="px-8 py-24 text-center">
+                                    <div class="flex flex-col items-center opacity-30 animate-pulse">
+                                        <div class="w-12 h-12 border-4 border-gold/20 border-t-gold rounded-full animate-spin mb-4"></div>
                                         <p class="text-[0.7rem] font-black uppercase tracking-widest">Sincronizando base de datos...</p>
                                     </div>
                                 </td>
                             </tr>
                         </tbody>
                     </table>
-                        <i class="fas fa-user-slash text-4xl"></i>
-                        <span class="text-[10px] font-black uppercase tracking-widest">No se encontraron
-                            registros</span>
-                    </div>
                 </div>
             </div>
-        </main>
+        </div>
+    </main>
+
+    <!-- Modal de Activación Modernizado -->
+    <div id="activation-modal" class="fixed inset-0 z-[2000] hidden items-center justify-center p-6 lg:p-0">
+        <div class="absolute inset-0 bg-black/80 backdrop-blur-md" id="modal-backdrop"></div>
+        <div class="relative bg-[#020617] border border-white/10 rounded-[32px] p-10 w-full max-w-[480px] shadow-[0_40px_100px_rgba(0,0,0,0.8)] animate-fade-up">
+            <div class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 bg-[#020617] border border-white/10 rounded-2xl flex items-center justify-center text-gold text-2xl shadow-2xl">
+                <i class="fas fa-user-check"></i>
+            </div>
+
+            <div class="text-center mb-10 mt-4">
+                <h3 class="text-2xl font-black italic uppercase text-white mb-2">Activar <span id="modal-username" class="text-gold">Usuario</span></h3>
+                <p class="text-[0.65rem] font-bold text-white/40 uppercase tracking-[0.3em]">Configure la vigencia del acceso</p>
+            </div>
+            
+            <div class="space-y-6">
+                <div class="premium-form-group">
+                    <label class="premium-label">Fecha de Vencimiento</label>
+                    <div class="relative">
+                        <i class="fas fa-calendar absolute left-5 top-1/2 -translate-y-1/2 text-gold/50"></i>
+                        <input type="date" id="expiration-date" class="premium-input pl-14">
+                    </div>
+                    <p class="text-[0.55rem] font-medium text-white/20 mt-3 px-2 italic uppercase tracking-widest">El acceso será revocado automáticamente al finalizar este día.</p>
+                </div>
+                
+                <div class="flex gap-4 pt-4">
+                    <button id="cancel-activation" class="flex-1 py-4 text-[0.65rem] font-black uppercase tracking-widest text-white/40 hover:bg-white/5 rounded-2xl border border-white/5 transition-all">
+                        Cancelar
+                    </button>
+                    <button id="confirm-activation" class="flex-1 py-4 text-[0.65rem] font-black uppercase tracking-widest bg-gold text-[#004d98] rounded-2xl hover:scale-[1.05] hover:bg-white transition-all shadow-xl shadow-gold/20">
+                        Confirmar
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script src="/scripts/config.js"></script>
     <script type="module">
         import { initAdminLayout } from '../src/components/layout/admin-layout.js';
         initAdminLayout();
+
+        // Control básico del modal (el resto lo maneja admin.js)
+        const modal = document.getElementById('activation-modal');
+        const cancelBtn = document.getElementById('cancel-activation');
+        const backdrop = document.getElementById('modal-backdrop');
+
+        const closeModal = () => {
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        };
+
+        cancelBtn?.addEventListener('click', closeModal);
+        backdrop?.addEventListener('click', closeModal);
+        
+        // Exponer función de apertura globalmente para admin.js
+        window.openActivationModal = () => {
+             modal.classList.remove('hidden');
+             modal.classList.add('flex');
+        };
     </script>
     <script type="module" src="/src/features/users/admin.js"></script>
-
-    <!-- Modal de Activación -->
-    <div id="activation-modal" class="modal">
-        <div class="modal-content animate__animated animate__zoomIn animate__faster">
-            <h3 class="text-xl font-black italic uppercase text-dibaGold mb-4">Activar <span id="modal-username" class="text-dibaText"></span></h3>
-            <p class="text-xs font-bold text-dibaMuted uppercase tracking-widest mb-6">Selecciona hasta cuándo estará activo este usuario:</p>
-            
-            <div class="space-y-4">
-                <div>
-                    <label class="text-[10px] font-black uppercase tracking-widest text-dibaMuted mb-2 block">Fecha de Vencimiento</label>
-                    <input type="date" id="expiration-date" class="form-control w-full bg-slate-100/10 border-white/10 text-dibaText p-3 rounded-xl outline-none focus:ring-2 focus:ring-dibaGold">
-                </div>
-                
-                <div class="flex gap-3 pt-4">
-                    <button id="cancel-activation" class="flex-1 py-3 text-[10px] font-black uppercase tracking-widest text-dibaMuted hover:bg-white/5 rounded-xl transition-all">Cancelar</button>
-                    <button id="confirm-activation" class="flex-1 py-3 text-[10px] font-black uppercase tracking-widest bg-dibaGold text-dibaBlue rounded-xl hover:scale-[1.02] transition-all">Activar Usuario</button>
-                </div>
-            </div>
-        </div>
 </body>
 
 </html>

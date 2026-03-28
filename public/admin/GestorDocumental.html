@@ -3,45 +3,21 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Panel Administrativo | DIBA FBC</title>
+    <title>Gestor Documental — DIBA FBC Admin</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="/images/ESCUDO.ico">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="icon" href="/images/ESCUDO.ico" type="image/x-icon">
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
+
+    <!-- Core Styles -->
+    <link rel="stylesheet" href="/styles/admin-common.css">
+    <script src="/scripts/theme-switcher.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: { sans: ['Montserrat', 'sans-serif'] },
-                    colors: { 
-                        dibaGold: 'var(--gold)', 
-                        dibaBlue: 'var(--blue)', 
-                        dibaDark: 'var(--bg-main)',
-                        dibaDark2: 'var(--bg-panel)',
-                        dibaDark3: 'var(--bg-input)',
-                        dibaText: 'var(--text-main)',
-                        dibaMuted: 'var(--text-muted)'
-                    }
-                },
-            },
-        }
-    </script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
-    <link rel="stylesheet" href="../styles/admin-common.css">
-    <script src="../scripts/theme-switcher.js"></script>
-    <style>
-        /* Gestor Documental specific styles */
-        .content {
-            padding: 2rem;
-            flex: 1;
-        }
-        .diba-grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 2rem; }
-        .col-4 { grid-column: span 4; }
-        .col-8 { grid-column: span 8; }
-    </style>
 </head>
-<body class="bg-[#06090e] text-fcfcfc font-['Outfit']">
+
+<body class="bg-[#06090e] text-white font-['Outfit']">
     <!-- Loader -->
     <div id="app-loader" class="fixed inset-0 z-[9999] flex items-center justify-center bg-[#06090e]">
         <div class="text-center animate-fade-up">
@@ -49,26 +25,33 @@
                 <div class="absolute inset-0 border-4 border-gold/10 rounded-full"></div>
                 <div class="absolute inset-0 border-4 border-t-gold rounded-full animate-spin"></div>
             </div>
-            <p class="text-[10px] font-black uppercase tracking-[0.3em] text-gold italic opacity-80">Gestor Documental — Sistema</p>
+            <p class="text-[10px] font-black uppercase tracking-[0.3em] text-gold italic opacity-80">DIBA FBC — Gestor Documental</p>
         </div>
     </div>
+
     <div id="admin-nav"></div>
+
     <main class="lg:ml-[280px] pt-[80px] min-h-screen transition-all duration-300">
-        <div class="p-10 max-w-[1600px] mx-auto">
+        <div class="p-6 lg:p-10 max-w-[1600px] mx-auto overflow-x-hidden">
+            
+            <!-- Page Header -->
             <div class="mb-12 animate-fade-up">
-                <div class="flex items-center justify-between flex-wrap gap-6">
+                <div class="flex items-center justify-between flex-wrap gap-8">
                     <div>
-                        <h2 class="text-4xl font-black italic text-white uppercase tracking-tighter mb-2">Gestor <span class="text-gold">Documental</span></h2>
-                        <p class="text-white/40 font-bold uppercase tracking-[0.4em] text-[0.7rem]">Almacenamiento y control de archivos oficiales</p>
-                    </div>
-                    <div class="flex items-center gap-4">
-                        <div class="relative group">
-                            <i class="fas fa-search absolute left-5 top-1/2 -translate-y-1/2 text-white/30 text-xs"></i>
-                            <input type="text" id="search-docs" 
-                                placeholder="BUSCAR DOCUMENTO..." 
-                                class="bg-white/5 border border-white/5 rounded-2xl py-4 pl-12 pr-6 text-white text-[0.7rem] font-bold tracking-widest uppercase focus:bg-white/10 focus:border-gold/30 transition-all w-[300px] shadow-inner outline-none">
+                        <div class="flex items-center gap-3 mb-2">
+                            <span class="w-8 h-1 bg-gold rounded-full"></span>
+                            <p class="text-white/40 font-bold uppercase tracking-[0.4em] text-[0.65rem]">Repositorio de Archivos Oficiales</p>
                         </div>
-                        <button id="upload-btn" class="px-8 py-4 bg-gold rounded-2xl text-[#004d98] font-black uppercase tracking-widest text-[0.7rem] hover:scale-105 transition-all shadow-xl shadow-gold/10 flex items-center gap-3">
+                        <h2 class="text-4xl lg:text-5xl font-black italic text-white uppercase tracking-tighter">Gestor <span class="text-gold">Documental</span></h2>
+                    </div>
+
+                    <div class="flex items-center gap-4 flex-wrap lg:flex-nowrap w-full lg:w-auto">
+                        <div class="relative group flex-1 lg:flex-none">
+                            <i class="fas fa-search absolute left-5 top-1/2 -translate-y-1/2 text-white/20 group-focus-within:text-gold transition-colors"></i>
+                            <input type="text" id="search-docs" placeholder="BUSCAR DOCUMENTO..." 
+                                class="premium-input pl-14 uppercase tracking-widest text-[0.7rem] font-black w-full lg:w-[320px]">
+                        </div>
+                        <button id="upload-btn" class="px-10 py-4 bg-gold rounded-2xl text-[#004d98] font-black uppercase tracking-widest text-[0.7rem] hover:scale-105 hover:bg-white transition-all shadow-2xl shadow-gold/10 flex items-center justify-center gap-3 w-full lg:w-auto">
                             <i class="fas fa-cloud-arrow-up"></i> SUBIR ARCHIVO
                         </button>
                     </div>
@@ -76,54 +59,86 @@
             </div>
 
             <div class="diba-grid">
-                <!-- Estadísticas de Almacenamiento -->
-                <div class="col-4 space-y-6">
-                    <div class="panel glass p-8 animate-fade-up">
+                <!-- Left Column: Storage & Filters -->
+                <div class="col-12 lg:col-4 space-y-8">
+                    
+                    <!-- Storage Card -->
+                    <div class="panel p-8 animate-fade-up">
                         <div class="flex items-center justify-between mb-8">
-                            <span class="text-[0.65rem] font-black uppercase tracking-[0.3em] text-white/30 italic">Estado de Almacenamiento</span>
-                            <i class="fas fa-database text-gold"></i>
-                        </div>
-                        <div class="space-y-4">
-                            <div class="flex justify-between items-end">
-                                <span class="text-3xl font-black italic tracking-tighter" id="storage-used">0 MB</span>
-                                <span class="text-[0.6rem] font-black text-white/40 uppercase tracking-widest">de 1024 MB</span>
+                            <div class="flex flex-col">
+                                <span class="text-[0.6rem] font-black uppercase tracking-[0.3em] text-white/20 italic mb-1">Capacidad Utilizada</span>
+                                <h3 class="text-3xl font-black italic tracking-tighter text-white" id="storage-used">0 MB</h3>
                             </div>
-                            <div class="h-2 w-full bg-white/5 rounded-full overflow-hidden flex">
-                                <div class="h-full bg-gold shadow-[0_0_15px_rgba(255,215,0,0.3)]" id="storage-bar" style="width:0%"></div>
+                            <div class="w-12 h-12 rounded-2xl bg-gold/10 flex items-center justify-center text-gold border border-gold/10">
+                                <i class="fas fa-database"></i>
+                            </div>
+                        </div>
+                        
+                        <div class="space-y-3">
+                            <div class="h-2 w-full bg-white/5 rounded-full overflow-hidden flex shadow-inner">
+                                <div id="storage-bar" class="h-full bg-gold shadow-[0_0_20px_rgba(255,215,0,0.5)] transition-all duration-1000" style="width:0%"></div>
+                            </div>
+                            <div class="flex justify-between text-[0.6rem] font-black uppercase tracking-widest text-white/20 italic">
+                                <span>0 MB</span>
+                                <span>LÍMITE: 1024 MB</span>
                             </div>
                         </div>
                     </div>
 
-                    <div class="panel glass p-0 overflow-hidden animate-fade-up" style="animation-delay: 0.1s">
-                        <div class="p-6 border-b border-white/5 font-black uppercase tracking-widest text-[0.65rem] text-white/40 italic bg-white/[0.02]">Filtros Rápidos</div>
-                        <div class="p-4 space-y-1">
-                            <button class="w-full flex items-center justify-between p-4 rounded-xl bg-gold/10 text-gold border border-gold/10 font-bold text-[0.7rem] uppercase tracking-widest group">
-                                <div class="flex items-center gap-3">
-                                    <i class="fas fa-folder-open"></i>
-                                    <span>Todos</span>
+                    <!-- Filter Menu -->
+                    <div class="panel p-0 overflow-hidden animate-fade-up" style="animation-delay: 0.1s">
+                        <div class="p-6 border-b border-white/5 bg-white/[0.02]">
+                            <span class="text-[0.65rem] font-black uppercase tracking-widest text-white/40 italic">Filtros de Búsqueda</span>
+                        </div>
+                        <div class="p-4 space-y-2">
+                            <button class="w-full flex items-center justify-between p-5 rounded-2xl bg-gold text-[#004d98] font-black text-[0.7rem] uppercase tracking-widest group shadow-xl shadow-gold/10">
+                                <div class="flex items-center gap-4">
+                                    <i class="fas fa-folder-tree"></i>
+                                    <span>Todos los Archivos</span>
                                 </div>
-                                <span class="px-2 py-0.5 rounded bg-gold text-[#004d98] text-[0.5rem] font-black" id="count-all">0</span>
+                                <span class="px-3 py-1 rounded-lg bg-[#004d98] text-gold text-[0.6rem]" id="count-all">0</span>
                             </button>
-                            <!-- More filters -->
+
+                            <button class="w-full flex items-center justify-between p-5 rounded-2xl bg-white/5 text-white/40 font-black text-[0.7rem] uppercase tracking-widest hover:bg-white/10 hover:text-white transition-all border border-transparent hover:border-white/10">
+                                <div class="flex items-center gap-4">
+                                    <i class="fas fa-id-card opacity-30"></i>
+                                    <span>Identificaciones</span>
+                                </div>
+                                <span class="text-[0.6rem] opacity-30">0</span>
+                            </button>
+
+                            <button class="w-full flex items-center justify-between p-5 rounded-2xl bg-white/5 text-white/40 font-black text-[0.7rem] uppercase tracking-widest hover:bg-white/10 hover:text-white transition-all border border-transparent hover:border-white/10">
+                                <div class="flex items-center gap-4">
+                                    <i class="fas fa-file-medical opacity-30"></i>
+                                    <span>Registros Civiles</span>
+                                </div>
+                                <span class="text-[0.6rem] opacity-30">0</span>
+                            </button>
                         </div>
                     </div>
                 </div>
 
-                <!-- Lista de Archivos -->
-                <div class="col-8 panel glass animate-fade-up" style="animation-delay: 0.2s">
-                    <div class="panel-header border-b border-white/5">
-                        <span class="panel-title text-[0.8rem] font-black uppercase tracking-[0.2em]"><i class="fas fa-file-invoice text-gold mr-3"></i>Repositorio Central</span>
-                        <div class="flex items-center gap-4">
-                            <button class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center text-gold"><i class="fas fa-grid-2"></i></button>
-                            <button class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center text-white/30"><i class="fas fa-list"></i></button>
+                <!-- Right Column: Document Grid -->
+                <div class="col-12 lg:col-8">
+                    <div class="panel p-0 animate-fade-up" style="animation-delay: 0.2s">
+                        <div class="premium-p-header border-b border-white/5">
+                            <span class="premium-p-title"><i class="fas fa-layer-group text-gold"></i>Repositorio Central</span>
+                            <div class="flex items-center gap-3">
+                                <button class="w-10 h-10 rounded-xl bg-gold text-[#004d98] flex items-center justify-center shadow-lg"><i class="fas fa-grid-2 text-sm"></i></button>
+                                <button class="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-white/30 hover:text-gold hover:bg-white/10 transition-all"><i class="fas fa-list-ul text-sm"></i></button>
+                            </div>
                         </div>
-                    </div>
-                    <div class="panel-body p-8">
-                        <div id="docs-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                            <!-- Los archivos se cargarán aquí -->
-                            <div class="col-span-full py-20 flex flex-col items-center opacity-20">
-                                <i class="fas fa-cloud-arrow-down fa-bounce text-4xl mb-4 text-gold"></i>
-                                <p class="text-[0.7rem] font-black uppercase tracking-widest">Sincronizando Archivos...</p>
+                        
+                        <div class="p-8">
+                            <div id="docs-grid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                                <!-- Docs will load here -->
+                                <div class="col-span-full py-24 flex flex-col items-center opacity-20">
+                                    <div class="relative w-16 h-16 mb-6">
+                                        <div class="absolute inset-0 border-4 border-gold/10 rounded-full"></div>
+                                        <div class="absolute inset-0 border-4 border-t-gold rounded-full animate-spin"></div>
+                                    </div>
+                                    <p class="text-[0.7rem] font-black uppercase tracking-[0.3em] text-gold italic">Sincronizando Archivos...</p>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -132,13 +147,13 @@
         </div>
     </main>
 
-    <script src="../scripts/config.js"></script>
+    <!-- Scripts -->
+    <script src="/scripts/config.js"></script>
     <script type="module">
         import { initAdminLayout } from '../src/components/layout/admin-layout.js';
         initAdminLayout();
     </script>
-
-    <script type="module" src="../src/features/gestor/main.js"></script>
+    <script type="module" src="/src/features/gestor/main.js"></script>
 </body>
 
 </html>
