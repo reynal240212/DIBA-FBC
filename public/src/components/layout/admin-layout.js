@@ -28,10 +28,11 @@ export async function initAdminLayout() {
 
     // Sidebar Injection
     const sidebarHTML = `
-    <aside class="fixed top-0 left-0 bottom-0 w-[280px] bg-[#020617] z-[200] transition-transform duration-500 lg:translate-x-0 -translate-x-full sidebar shadow-2xl overflow-hidden border-r border-white/5" id="sidebar">
+    <aside class="fixed top-0 left-0 bottom-0 w-[280px] bg-[#020617] z-[200] transition-transform duration-500 lg:translate-x-0 -translate-x-full sidebar shadow-2xl flex flex-col border-r border-white/5" id="sidebar">
         <div class="absolute inset-0 opacity-10 pointer-events-none" style="background-image: radial-gradient(at 0% 0%, #004d98 0, transparent 50%), radial-gradient(at 100% 100%, #a50044 0, transparent 50%);"></div>
         
-        <div class="p-8 pb-6 flex items-center gap-4 relative z-10">
+        <!-- Logo Header -->
+        <div class="p-8 pb-6 flex items-center gap-4 relative z-10 flex-none">
             <div class="relative group">
                 <div class="absolute inset-0 bg-gold/20 rounded-full blur-xl group-hover:blur-2xl transition-all duration-500"></div>
                 <img src="/images/ESCUDO.png" alt="DIBA FBC" class="w-14 h-14 object-contain relative drop-shadow-[0_0_10px_rgba(255,215,0,0.3)]">
@@ -42,7 +43,8 @@ export async function initAdminLayout() {
             </div>
         </div>
 
-        <nav class="px-5 py-6 space-y-1 overflow-y-auto h-[calc(100vh-240px)] custom-scrollbar relative z-10">
+        <!-- Scrollable Navigation -->
+        <nav class="px-5 py-6 space-y-1 overflow-y-auto flex-1 custom-scrollbar relative z-10">
             <div class="px-6 py-4 text-[0.6rem] font-black uppercase tracking-[0.4em] text-white/30 italic">Panel Central</div>
             <a href="dashboard.html" class="nav-link flex items-center gap-3 px-4 py-3 rounded-2xl transition-all duration-300 ${getLinkClass('dashboard')}">
                 <div class="w-8 flex justify-center"><i class="fas fa-grid-2 text-lg ${getIconClass('dashboard')}"></i></div>
@@ -89,7 +91,8 @@ export async function initAdminLayout() {
             </a>
         </nav>
 
-        <div class="absolute bottom-0 left-0 right-0 p-6 bg-[#01040a]/80 backdrop-blur-xl border-t border-white/5">
+        <!-- User Profile (Fixed Bottom) -->
+        <div class="p-6 bg-[#01040a]/80 backdrop-blur-xl border-t border-white/5 flex-none">
             <div class="flex items-center gap-4 p-4 bg-white/5 rounded-2xl mb-4 border border-white/5 hover:bg-white/10 transition-all cursor-pointer group">
                 <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-[#FFD700] to-yellow-600 text-[#004d98] flex items-center justify-center font-black italic shadow-lg group-hover:scale-105 transition-transform">${userInitial}</div>
                 <div class="min-w-0">
