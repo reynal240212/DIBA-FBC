@@ -170,8 +170,9 @@ a {
 
 @media (max-width: 768px) {
     .diba-grid { gap: 1rem; }
-    .md\:col-12 { grid-column: span 12 / span 12; }
-    .col-6, .col-4, .col-3 { grid-column: span 12 / span 12; }
+    .col-12, .col-10, .col-8, .col-6, .col-4, .col-3 { 
+        grid-column: span 12 / span 12 !important; 
+    }
 }
 
 /* ── UTILITIES ── */
@@ -554,6 +555,13 @@ a {
     transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
 }
 
+@media (max-width: 1024px) {
+    .main, .main-content {
+        margin-left: 0 !important;
+        width: 100% !important;
+    }
+}
+
 .main::after {
     content: '';
     position: fixed;
@@ -695,14 +703,14 @@ a {
     background: var(--bg-panel);
     border: 1px solid var(--glass-border);
     border-radius: var(--radius-xl);
-    padding: 2.5rem;
+    padding: 1.5rem 2rem;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: center;
     position: relative;
     overflow: hidden;
     transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-    min-height: 200px;
+    min-height: 140px;
 }
 
 .premium-stat-card::after {
@@ -723,28 +731,28 @@ a {
 }
 
 .premium-stat-icon {
-    width: 56px;
-    height: 56px;
-    border-radius: 18px;
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
     background: rgba(255, 255, 255, 0.03);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.4rem;
+    font-size: 1.2rem;
     color: var(--gold);
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
     border: 1px solid rgba(255, 255, 255, 0.05);
     box-shadow: inset 0 0 10px rgba(var(--gold-rgb), 0.05);
 }
 
 .premium-stat-value {
-    font-size: 3rem;
+    font-size: 2.2rem;
     font-weight: 900;
     font-style: italic;
     color: #fff;
     line-height: 1;
     letter-spacing: -0.05em;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.25rem;
     text-shadow: 0 10px 20px rgba(0,0,0,0.5);
 }
 
@@ -1994,3 +2002,142 @@ tbody td {
     border-radius: 99px;
 }
 
+/* UI Stability Fixes */
+header .flex:last-child {
+    flex-shrink: 0;
+}
+
+.nav-link {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    min-height: 48px;
+}
+
+.nav-link div {
+    flex-shrink: 0;
+}
+
+@media (max-width: 640px) {
+    header h1 {
+        max-width: 120px;
+    }
+}
+
+/* ── PROFESSIONAL MATCH CARDS ── */
+.match-card {
+    background: linear-gradient(145deg, #020617 0%, #06090e 100%);
+    border: 1px solid rgba(255, 255, 255, 0.03);
+    border-radius: 24px;
+    padding: 1.5rem;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.match-card:hover {
+    transform: translateY(-8px);
+    border-color: rgba(var(--gold-rgb), 0.2);
+    box-shadow: 0 40px 80px -20px rgba(0,0,0,0.8), 0 0 20px rgba(var(--gold-rgb), 0.05);
+}
+
+.match-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 60%;
+    height: 100%;
+    background: linear-gradient(to right, rgba(var(--gold-rgb), 0.03), transparent);
+    pointer-events: none;
+}
+
+.match-date-badge {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 16px;
+    padding: 0.75rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-width: 65px;
+    height: 65px;
+    flex-shrink: 0;
+}
+
+.match-date-day {
+    font-size: 1.5rem;
+    font-weight: 900;
+    color: var(--gold);
+    line-height: 1;
+}
+
+.match-date-month {
+    font-size: 0.55rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: rgba(255, 255, 255, 0.4);
+    margin-top: 2px;
+}
+
+.match-team {
+    font-size: 1.1rem;
+    font-weight: 900;
+    letter-spacing: -0.02em;
+    font-style: italic;
+    text-transform: uppercase;
+    color: #fff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.match-vs-badge {
+    padding: 0.25rem 0.75rem;
+    background: var(--gold);
+    color: #000;
+    font-size: 0.6rem;
+    font-weight: 900;
+    border-radius: 99px;
+    font-style: italic;
+    box-shadow: 0 0 15px rgba(var(--gold-rgb), 0.3);
+}
+
+.match-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.match-info-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.65rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: rgba(255, 255, 255, 0.3);
+}
+
+.match-category-pill {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    padding: 0.35rem 0.75rem;
+    background: rgba(var(--gold-rgb), 0.1);
+    border: 1px solid rgba(var(--gold-rgb), 0.2);
+    color: var(--gold);
+    font-size: 0.5rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    border-radius: 8px;
+}

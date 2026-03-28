@@ -24,11 +24,11 @@ export async function initAdminLayout() {
         ? 'bg-[#FFD700] text-[#004d98] font-extrabold shadow-[0_8px_20px_rgba(255,215,0,0.15)] translate-x-1' 
         : 'text-white/60 font-semibold hover:bg-white/5 hover:text-white group hover:translate-x-1';
 
-    const getIconClass = (path) => isAct(path) ? '' : 'opacity-30 group-hover:opacity-100 group-hover:text-[#FFD700]';
+    const getIconClass = (path) => isAct(path) ? 'text-[#004d98]' : 'opacity-30 group-hover:opacity-100 group-hover:text-[#FFD700]';
 
     // Sidebar Injection
     const sidebarHTML = `
-    <aside class="fixed top-0 left-0 bottom-0 w-[280px] bg-[#020617] z-50 transition-transform duration-500 lg:translate-x-0 -translate-x-full sidebar shadow-2xl overflow-hidden border-r border-white/5" id="sidebar">
+    <aside class="fixed top-0 left-0 bottom-0 w-[280px] bg-[#020617] z-[200] transition-transform duration-500 lg:translate-x-0 -translate-x-full sidebar shadow-2xl overflow-hidden border-r border-white/5" id="sidebar">
         <div class="absolute inset-0 opacity-10 pointer-events-none" style="background-image: radial-gradient(at 0% 0%, #004d98 0, transparent 50%), radial-gradient(at 100% 100%, #a50044 0, transparent 50%);"></div>
         
         <div class="p-8 pb-6 flex items-center gap-4 relative z-10">
@@ -42,43 +42,43 @@ export async function initAdminLayout() {
             </div>
         </div>
 
-        <nav class="px-5 py-6 space-y-1 overflow-y-auto h-[calc(100vh-220px)] custom-scrollbar relative z-10">
+        <nav class="px-5 py-6 space-y-1 overflow-y-auto h-[calc(100vh-240px)] custom-scrollbar relative z-10">
             <div class="px-6 py-4 text-[0.6rem] font-black uppercase tracking-[0.4em] text-white/30 italic">Panel Central</div>
-            <a href="dashboard.html" class="nav-link flex items-center gap-4 px-6 py-3.5 rounded-2xl transition-all duration-300 ${getLinkClass('dashboard')}">
-                <i class="fas fa-grid-2 text-lg ${getIconClass('dashboard')}"></i> 
-                <span class="text-[0.85rem] tracking-tight">Dashboard</span>
+            <a href="dashboard.html" class="nav-link flex items-center gap-3 px-4 py-3 rounded-2xl transition-all duration-300 ${getLinkClass('dashboard')}">
+                <div class="w-8 flex justify-center"><i class="fas fa-grid-2 text-lg ${getIconClass('dashboard')}"></i></div>
+                <span class="text-[0.8rem] tracking-tight truncate">Dashboard</span>
             </a>
 
             <div class="px-6 pt-8 pb-4 text-[0.6rem] font-black uppercase tracking-[0.4em] text-white/30 italic">Operaciones</div>
-            <a href="planilla.html" class="nav-link flex items-center gap-4 px-6 py-3.5 rounded-2xl transition-all duration-300 ${getLinkClass('planilla')}">
-                <i class="fas fa-clipboard-check text-lg ${getIconClass('planilla')}"></i>
-                <span class="text-[0.85rem] tracking-tight">Planilla Diaria</span>
+            <a href="planilla.html" class="nav-link flex items-center gap-3 px-4 py-3 rounded-2xl transition-all duration-300 ${getLinkClass('planilla')}">
+                <div class="w-8 flex justify-center"><i class="fas fa-clipboard-check text-lg ${getIconClass('planilla')}"></i></div>
+                <span class="text-[0.8rem] tracking-tight truncate">Planilla Diaria</span>
             </a>
-            <a href="partidos.html" class="nav-link flex items-center gap-4 px-6 py-3.5 rounded-2xl transition-all duration-300 ${getLinkClass('partidos')}">
-                <i class="fas fa-calendar-star text-lg ${getIconClass('partidos')}"></i>
-                <span class="text-[0.85rem] tracking-tight">Partidos & Eventos</span>
+            <a href="partidos.html" class="nav-link flex items-center gap-3 px-4 py-3 rounded-2xl transition-all duration-300 ${getLinkClass('partidos')}">
+                <div class="w-8 flex justify-center"><i class="fas fa-calendar-star text-lg ${getIconClass('partidos')}"></i></div>
+                <span class="text-[0.8rem] tracking-tight truncate">Partidos & Eventos</span>
             </a>
-            <a href="convocatorias.html" class="nav-link flex items-center gap-4 px-6 py-3.5 rounded-2xl transition-all duration-300 ${getLinkClass('convocatorias')}">
-                <i class="fas fa-bullhorn text-lg ${getIconClass('convocatorias')}"></i>
-                <span class="text-[0.85rem] tracking-tight">Convocatorias</span>
+            <a href="convocatorias.html" class="nav-link flex items-center gap-3 px-4 py-3 rounded-2xl transition-all duration-300 ${getLinkClass('convocatorias')}">
+                <div class="w-8 flex justify-center"><i class="fas fa-bullhorn text-lg ${getIconClass('convocatorias')}"></i></div>
+                <span class="text-[0.8rem] tracking-tight truncate">Convocatorias</span>
             </a>
-            <a href="usuarios.html" class="nav-link flex items-center gap-4 px-6 py-3.5 rounded-2xl transition-all duration-300 ${getLinkClass('usuarios')}">
-                <i class="fas fa-users-gear text-lg ${getIconClass('usuarios')}"></i>
-                <span class="text-[0.85rem] tracking-tight">Gestión Usuarios</span>
+            <a href="usuarios.html" class="nav-link flex items-center gap-3 px-4 py-3 rounded-2xl transition-all duration-300 ${getLinkClass('usuarios')}">
+                <div class="w-8 flex justify-center"><i class="fas fa-users-gear text-lg ${getIconClass('usuarios')}"></i></div>
+                <span class="text-[0.8rem] tracking-tight truncate">Gestión Usuarios</span>
             </a>
-            <a href="GestorDocumental.html" class="nav-link flex items-center gap-4 px-6 py-3.5 rounded-2xl transition-all duration-300 ${getLinkClass('GestorDocumental')}">
-                <i class="fas fa-file-invoice text-lg ${getIconClass('GestorDocumental')}"></i>
-                <span class="text-[0.85rem] tracking-tight">Archivos & Docs</span>
+            <a href="GestorDocumental.html" class="nav-link flex items-center gap-3 px-4 py-3 rounded-2xl transition-all duration-300 ${getLinkClass('GestorDocumental')}">
+                <div class="w-8 flex justify-center"><i class="fas fa-file-invoice text-lg ${getIconClass('GestorDocumental')}"></i></div>
+                <span class="text-[0.8rem] tracking-tight truncate">Archivos & Docs</span>
             </a>
             
             <div class="px-6 pt-8 pb-4 text-[0.6rem] font-black uppercase tracking-[0.4em] text-white/30 italic">Marketing</div>
-            <a href="rifa_diba.html" class="nav-link flex items-center gap-4 px-6 py-3.5 rounded-2xl transition-all duration-300 ${getLinkClass('rifa_diba')}">
-                <i class="fas fa-ticket text-lg ${getIconClass('rifa_diba')}"></i>
-                <span class="text-[0.85rem] tracking-tight">Gestión Rifas</span>
+            <a href="rifa_diba.html" class="nav-link flex items-center gap-3 px-4 py-3 rounded-2xl transition-all duration-300 ${getLinkClass('rifa_diba')}">
+                <div class="w-8 flex justify-center"><i class="fas fa-ticket text-lg ${getIconClass('rifa_diba')}"></i></div>
+                <span class="text-[0.8rem] tracking-tight truncate">Gestión Rifas</span>
             </a>
-            <a href="push.html" class="nav-link flex items-center gap-4 px-6 py-3.5 rounded-2xl transition-all duration-300 ${getLinkClass('push')}">
-                <i class="fas fa-paper-plane text-lg ${getIconClass('push')}"></i>
-                <span class="text-[0.85rem] tracking-tight">Notificaciones Push</span>
+            <a href="push.html" class="nav-link flex items-center gap-3 px-4 py-3 rounded-2xl transition-all duration-300 ${getLinkClass('push')}">
+                <div class="w-8 flex justify-center"><i class="fas fa-paper-plane text-lg ${getIconClass('push')}"></i></div>
+                <span class="text-[0.8rem] tracking-tight truncate">Notificaciones</span>
             </a>
         </nav>
 
@@ -95,25 +95,25 @@ export async function initAdminLayout() {
             </button>
         </div>
     </aside>
-    <div class="fixed inset-0 bg-[#000]/60 backdrop-blur-md z-40 hidden transition-opacity duration-500" id="sidebar-overlay"></div>
+    <div class="fixed inset-0 bg-[#000]/60 backdrop-blur-md z-[150] hidden transition-opacity duration-500" id="sidebar-overlay"></div>
     `;
 
     // Header Injection
     const pageTitle = document.title.split('—')[0].trim();
     const headerHTML = `
-    <header class="fixed top-0 right-0 left-0 lg:left-[280px] z-40 bg-[#06090e]/80 backdrop-blur-xl px-10 h-[80px] flex items-center justify-between border-b border-white/5 shadow-2xl transition-all duration-300 overflow-hidden">
+    <header class="fixed top-0 right-0 left-0 lg:left-[280px] z-[100] bg-[#06090e]/90 backdrop-blur-xl px-4 lg:px-10 h-[70px] lg:h-[80px] flex items-center justify-between border-b border-white/5 shadow-2xl transition-all duration-300 overflow-hidden">
         <div class="absolute top-0 left-0 w-2 h-full bg-gradient-to-b from-[#FFD700] to-transparent opacity-50"></div>
         
-        <div class="flex items-center gap-8">
-            <button class="lg:hidden w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center text-white hover:bg-white/10 transition-all border border-white/10 shadow-lg" id="menu-btn-layout">
-                <i class="fas fa-bars-staggered text-lg"></i>
+        <div class="flex items-center gap-2 lg:gap-8">
+            <button class="lg:hidden w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-white hover:bg-white/10 transition-all border border-white/10 shadow-lg" id="menu-btn-layout">
+                <i class="fas fa-bars-staggered text-base"></i>
             </button>
-            <div class="animate-fade-up">
-                <div class="flex items-center gap-3">
-                    <h1 class="text-2xl font-black italic text-white uppercase tracking-tighter">${pageTitle}</h1>
-                    <span class="px-2 py-0.5 rounded bg-gold/10 border border-gold/20 text-gold text-[0.5rem] font-black uppercase tracking-widest">Admin</span>
+            <div class="animate-fade-up max-w-[140px] xs:max-w-none">
+                <div class="flex items-center gap-2">
+                    <h1 class="text-xs sm:text-sm lg:text-xl font-black italic text-white uppercase tracking-tighter truncate">${pageTitle}</h1>
+                    <span class="hidden sm:inline-block px-1.5 py-0.5 rounded bg-gold/10 border border-gold/20 text-gold text-[0.45rem] font-black uppercase tracking-widest">Admin</span>
                 </div>
-                <p class="text-[0.6rem] font-bold text-white/40 uppercase tracking-[0.4em] mt-1">Club Deportivo DIBA FBC <span class="mx-2 text-white/10">•</span> Panel de Control</p>
+                <p class="hidden lg:block text-[0.6rem] font-bold text-white/40 uppercase tracking-[0.4em] mt-1">Club Deportivo DIBA FBC <span class="mx-2 text-white/10">•</span> Panel</p>
             </div>
         </div>
         
