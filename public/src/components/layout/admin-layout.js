@@ -15,13 +15,21 @@ export async function initAdminLayout() {
     const { data: profile } = user ? await supabase.from('users').select('*').eq('id', user.id).single() : { data: null };
     const userName = profile?.username || profile?.full_name || 'Admin';
     const userRole = profile?.role || 'Club Admin';
-    const userInitial = userName[0].toUpperCase();
+    const userInitial = userName ? userName[0].toUpperCase() : 'A';
 
-    // Sidebar Injection (Azul Grana Gradient)
+    const currentPath = window.location.pathname;
+    const isAct = (path) => currentPath.includes(path);
+
+    const getLinkClass = (path) => isAct(path) 
+        ? 'bg-[#FFD700] text-[#004d98] font-extrabold shadow-[0_8px_20px_rgba(255,215,0,0.15)] translate-x-1' 
+        : 'text-white/60 font-semibold hover:bg-white/5 hover:text-white group hover:translate-x-1';
+
+    const getIconClass = (path) => isAct(path) ? '' : 'opacity-30 group-hover:opacity-100 group-hover:text-[#FFD700]';
+
+    // Sidebar Injection
     const sidebarHTML = `
     <aside class="fixed top-0 left-0 bottom-0 w-[280px] bg-[#020617] z-50 transition-transform duration-500 lg:translate-x-0 -translate-x-full sidebar shadow-2xl overflow-hidden border-r border-white/5" id="sidebar">
-        <!-- Premium Mesh Background -->
-        <div class="absolute inset-0 opacity-10 pointer-events-none" style="background-image: radial-gradient(at 0% 0%, var(--azul-grana-blue) 0, transparent 50%), radial-gradient(at 100% 100%, var(--azul-grana-red) 0, transparent 50%);"></div>
+        <div class="absolute inset-0 opacity-10 pointer-events-none" style="background-image: radial-gradient(at 0% 0%, #004d98 0, transparent 50%), radial-gradient(at 100% 100%, #a50044 0, transparent 50%);"></div>
         
         <div class="p-8 pb-6 flex items-center gap-4 relative z-10">
             <div class="relative group">
@@ -36,47 +44,47 @@ export async function initAdminLayout() {
 
         <nav class="px-5 py-6 space-y-1 overflow-y-auto h-[calc(100vh-220px)] custom-scrollbar relative z-10">
             <div class="px-6 py-4 text-[0.6rem] font-black uppercase tracking-[0.4em] text-white/30 italic">Panel Central</div>
-            <a href="dashboard.html" class="nav-link flex items-center gap-4 px-6 py-3.5 rounded-2xl transition-all duration-300 ${isActive('dashboard') ? 'bg-[#FFD700] text-[#004d98] font-extrabold shadow-[0_8px_20px_rgba(255,215,0,0.15)] translate-x-1' : 'text-white/60 font-semibold hover:bg-white/5 hover:text-white group hover:translate-x-1'}">
-                <i class="fas fa-grid-2 text-lg ${isActive('dashboard') ? '' : 'opacity-30 group-hover:opacity-100 group-hover:text-[#FFD700]'}"></i> 
+            <a href="dashboard.html" class="nav-link flex items-center gap-4 px-6 py-3.5 rounded-2xl transition-all duration-300 ${getLinkClass('dashboard')}">
+                <i class="fas fa-grid-2 text-lg ${getIconClass('dashboard')}"></i> 
                 <span class="text-[0.85rem] tracking-tight">Dashboard</span>
             </a>
 
             <div class="px-6 pt-8 pb-4 text-[0.6rem] font-black uppercase tracking-[0.4em] text-white/30 italic">Operaciones</div>
-            <a href="planilla.html" class="nav-link flex items-center gap-4 px-6 py-3.5 rounded-2xl transition-all duration-300 ${isActive('planilla') ? 'bg-[#FFD700] text-[#004d98] font-extrabold shadow-[0_8px_20px_rgba(255,215,0,0.15)] translate-x-1' : 'text-white/60 font-semibold hover:bg-white/5 hover:text-white group hover:translate-x-1'}">
-                <i class="fas fa-clipboard-check text-lg ${isActive('planilla') ? '' : 'opacity-30 group-hover:opacity-100 group-hover:text-[#FFD700]'}"></i>
+            <a href="planilla.html" class="nav-link flex items-center gap-4 px-6 py-3.5 rounded-2xl transition-all duration-300 ${getLinkClass('planilla')}">
+                <i class="fas fa-clipboard-check text-lg ${getIconClass('planilla')}"></i>
                 <span class="text-[0.85rem] tracking-tight">Planilla Diaria</span>
             </a>
-            <a href="partidos.html" class="nav-link flex items-center gap-4 px-6 py-3.5 rounded-2xl transition-all duration-300 ${isActive('partidos') ? 'bg-[#FFD700] text-[#004d98] font-extrabold shadow-[0_8px_20px_rgba(255,215,0,0.15)] translate-x-1' : 'text-white/60 font-semibold hover:bg-white/5 hover:text-white group hover:translate-x-1'}">
-                <i class="fas fa-calendar-star text-lg ${isActive('partidos') ? '' : 'opacity-30 group-hover:opacity-100 group-hover:text-[#FFD700]'}"></i>
+            <a href="partidos.html" class="nav-link flex items-center gap-4 px-6 py-3.5 rounded-2xl transition-all duration-300 ${getLinkClass('partidos')}">
+                <i class="fas fa-calendar-star text-lg ${getIconClass('partidos')}"></i>
                 <span class="text-[0.85rem] tracking-tight">Partidos & Eventos</span>
             </a>
-            <a href="convocatorias.html" class="nav-link flex items-center gap-4 px-6 py-3.5 rounded-2xl transition-all duration-300 ${isActive('convocatorias') ? 'bg-[#FFD700] text-[#004d98] font-extrabold shadow-[0_8px_20px_rgba(255,215,0,0.15)] translate-x-1' : 'text-white/60 font-semibold hover:bg-white/5 hover:text-white group hover:translate-x-1'}">
-                <i class="fas fa-bullhorn text-lg ${isActive('convocatorias') ? '' : 'opacity-30 group-hover:opacity-100 group-hover:text-[#FFD700]'}"></i>
+            <a href="convocatorias.html" class="nav-link flex items-center gap-4 px-6 py-3.5 rounded-2xl transition-all duration-300 ${getLinkClass('convocatorias')}">
+                <i class="fas fa-bullhorn text-lg ${getIconClass('convocatorias')}"></i>
                 <span class="text-[0.85rem] tracking-tight">Convocatorias</span>
             </a>
-            <a href="usuarios.html" class="nav-link flex items-center gap-4 px-6 py-3.5 rounded-2xl transition-all duration-300 ${isActive('usuarios') ? 'bg-[#FFD700] text-[#004d98] font-extrabold shadow-[0_8px_20px_rgba(255,215,0,0.15)] translate-x-1' : 'text-white/60 font-semibold hover:bg-white/5 hover:text-white group hover:translate-x-1'}">
-                <i class="fas fa-users-gear text-lg ${isActive('usuarios') ? '' : 'opacity-30 group-hover:opacity-100 group-hover:text-[#FFD700]'}"></i>
+            <a href="usuarios.html" class="nav-link flex items-center gap-4 px-6 py-3.5 rounded-2xl transition-all duration-300 ${getLinkClass('usuarios')}">
+                <i class="fas fa-users-gear text-lg ${getIconClass('usuarios')}"></i>
                 <span class="text-[0.85rem] tracking-tight">Gestión Usuarios</span>
             </a>
-            <a href="GestorDocumental.html" class="nav-link flex items-center gap-4 px-6 py-3.5 rounded-2xl transition-all duration-300 ${isActive('GestorDocumental') ? 'bg-[#FFD700] text-[#004d98] font-extrabold shadow-[0_8px_20px_rgba(255,215,0,0.15)] translate-x-1' : 'text-white/60 font-semibold hover:bg-white/5 hover:text-white group hover:translate-x-1'}">
-                <i class="fas fa-file-invoice text-lg ${isActive('GestorDocumental') ? '' : 'opacity-30 group-hover:opacity-100 group-hover:text-[#FFD700]'}"></i>
+            <a href="GestorDocumental.html" class="nav-link flex items-center gap-4 px-6 py-3.5 rounded-2xl transition-all duration-300 ${getLinkClass('GestorDocumental')}">
+                <i class="fas fa-file-invoice text-lg ${getIconClass('GestorDocumental')}"></i>
                 <span class="text-[0.85rem] tracking-tight">Archivos & Docs</span>
             </a>
             
             <div class="px-6 pt-8 pb-4 text-[0.6rem] font-black uppercase tracking-[0.4em] text-white/30 italic">Marketing</div>
-            <a href="rifa_diba.html" class="nav-link flex items-center gap-4 px-6 py-3.5 rounded-2xl transition-all duration-300 ${isActive('rifa_diba') ? 'bg-[#FFD700] text-[#004d98] font-extrabold shadow-[0_8px_20px_rgba(255,215,0,0.15)] translate-x-1' : 'text-white/60 font-semibold hover:bg-white/5 hover:text-white group hover:translate-x-1'}">
-                <i class="fas fa-ticket text-lg ${isActive('rifa_diba') ? '' : 'opacity-30 group-hover:opacity-100 group-hover:text-[#FFD700]'}"></i>
+            <a href="rifa_diba.html" class="nav-link flex items-center gap-4 px-6 py-3.5 rounded-2xl transition-all duration-300 ${getLinkClass('rifa_diba')}">
+                <i class="fas fa-ticket text-lg ${getIconClass('rifa_diba')}"></i>
                 <span class="text-[0.85rem] tracking-tight">Gestión Rifas</span>
             </a>
-            <a href="push.html" class="nav-link flex items-center gap-4 px-6 py-3.5 rounded-2xl transition-all duration-300 ${isActive('push') ? 'bg-[#FFD700] text-[#004d98] font-extrabold shadow-[0_8px_20_rgba(255,215,0,0.15)] translate-x-1' : 'text-white/60 font-semibold hover:bg-white/5 hover:text-white group hover:translate-x-1'}">
-                <i class="fas fa-paper-plane text-lg ${isActive('push') ? '' : 'opacity-30 group-hover:opacity-100 group-hover:text-[#FFD700]'}"></i>
+            <a href="push.html" class="nav-link flex items-center gap-4 px-6 py-3.5 rounded-2xl transition-all duration-300 ${getLinkClass('push')}">
+                <i class="fas fa-paper-plane text-lg ${getIconClass('push')}"></i>
                 <span class="text-[0.85rem] tracking-tight">Notificaciones Push</span>
             </a>
         </nav>
 
         <div class="absolute bottom-0 left-0 right-0 p-6 bg-[#01040a]/80 backdrop-blur-xl border-t border-white/5">
             <div class="flex items-center gap-4 p-4 bg-white/5 rounded-2xl mb-4 border border-white/5 hover:bg-white/10 transition-all cursor-pointer group">
-                <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-gold to-yellow-600 text-[#004d98] flex items-center justify-center font-black italic shadow-lg group-hover:scale-105 transition-transform">${userInitial}</div>
+                <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-[#FFD700] to-yellow-600 text-[#004d98] flex items-center justify-center font-black italic shadow-lg group-hover:scale-105 transition-transform">${userInitial}</div>
                 <div class="min-w-0">
                     <div class="text-[0.85rem] font-bold text-white truncate tracking-tight">${userName}</div>
                     <div class="text-[0.6rem] font-black text-[#FFD700]/60 uppercase tracking-widest mt-0.5">${userRole}</div>
@@ -90,12 +98,11 @@ export async function initAdminLayout() {
     <div class="fixed inset-0 bg-[#000]/60 backdrop-blur-md z-40 hidden transition-opacity duration-500" id="sidebar-overlay"></div>
     `;
 
-    // Header Injection (Azul Grana Premium)
+    // Header Injection
     const pageTitle = document.title.split('—')[0].trim();
     const headerHTML = `
     <header class="fixed top-0 right-0 left-0 lg:left-[280px] z-40 bg-[#06090e]/80 backdrop-blur-xl px-10 h-[80px] flex items-center justify-between border-b border-white/5 shadow-2xl transition-all duration-300 overflow-hidden">
-        <!-- Modern Visual Accent -->
-        <div class="absolute top-0 left-0 w-2 h-full bg-gradient-to-b from-gold to-transparent opacity-50"></div>
+        <div class="absolute top-0 left-0 w-2 h-full bg-gradient-to-b from-[#FFD700] to-transparent opacity-50"></div>
         
         <div class="flex items-center gap-8">
             <button class="lg:hidden w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center text-white hover:bg-white/10 transition-all border border-white/10 shadow-lg" id="menu-btn-layout">
@@ -123,28 +130,32 @@ export async function initAdminLayout() {
                     <i class="fas fa-bell text-sm group-hover:animate-bounce"></i>
                 </button>
                 <div class="relative group cursor-pointer ml-2">
-                    <div class="absolute -inset-1 bg-gradient-to-r from-gold to-yellow-600 rounded-2xl blur opacity-20 group-hover:opacity-40 transition duration-1000 group-hover:duration-200"></div>
-                    <div class="relative w-12 h-12 rounded-2xl bg-[#020617] border border-white/10 flex items-center justify-center text-gold font-black text-sm shadow-xl">
+                    <div class="absolute -inset-1 bg-gradient-to-r from-[#FFD700] to-yellow-600 rounded-2xl blur opacity-20 group-hover:opacity-40 transition duration-1000 group-hover:duration-200"></div>
+                    <div class="relative w-12 h-12 rounded-2xl bg-[#020617] border border-white/10 flex items-center justify-center text-[#FFD700] font-black text-sm shadow-xl">
                         ${userInitial}
                     </div>
                 </div>
             </div>
         </div>
     </header>
+    `;
+
     navContainer.innerHTML = sidebarHTML + headerHTML;
 
     // Sidebar Logic
+    const menuBtn = document.getElementById('menu-btn-layout');
     const sidebar = document.getElementById('sidebar');
     const overlay = document.getElementById('sidebar-overlay');
-    const menuBtn = document.getElementById('menu-btn-layout');
 
     menuBtn?.addEventListener('click', () => {
-        sidebar?.classList.add('open');
+        sidebar?.classList.add('translate-x-0');
+        sidebar?.classList.remove('-translate-x-full');
         overlay?.classList.remove('hidden');
     });
 
     overlay?.addEventListener('click', () => {
-        sidebar?.classList.remove('open');
+        sidebar?.classList.remove('translate-x-0');
+        sidebar?.classList.add('-translate-x-full');
         overlay?.classList.add('hidden');
     });
 
@@ -167,11 +178,6 @@ export async function initAdminLayout() {
     setInterval(tick, 1000); tick();
     
     // Hide Loader
-    document.getElementById('app-loader')?.remove();
+    const loader = document.getElementById('app-loader');
+    if (loader) loader.remove();
 }
-
-function isActive(path) {
-    return window.location.pathname.includes(path);
-}
-
-
