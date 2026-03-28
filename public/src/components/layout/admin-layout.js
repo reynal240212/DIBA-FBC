@@ -177,7 +177,4 @@ export async function initAdminLayout() {
     }
     setInterval(tick, 1000); tick();
     
-    // Hide Loader
-    const loader = document.getElementById('app-loader');
-    if (loader) loader.remove();
 }
