@@ -91,45 +91,62 @@
     </div>
 
     <div id="admin-nav"></div>
-    <main class="lg:ml-[280px] pt-[70px] min-h-screen transition-all duration-300">
+    <main class="lg:ml-[280px] pt-[80px] min-h-screen transition-all duration-300">
+        <div class="p-10 max-w-[1600px] mx-auto">
             <div id="alert-bar"
-                class="hidden mb-6 p-4 rounded-2xl bg-red-500/10 border border-red-500/20 text-red-500 text-xs font-bold uppercase tracking-wider items-center gap-3">
+                class="hidden mb-10 p-5 rounded-2xl bg-red-500/10 border border-red-500/20 text-red-500 text-[0.65rem] font-black uppercase tracking-widest items-center gap-4 animate-fade-in">
+                <i class="fas fa-triangle-exclamation"></i>
+                <span id="alert-text"></span>
             </div>
 
-            <div class="panel glass animate-fade-up" style="border-radius: 32px; overflow: hidden;">
-                <div class="px-6 py-5 border-b border-white/5 flex items-center justify-between bg-white/[0.02]">
-                    <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-xl bg-dibaGold/10 text-dibaGold flex items-center justify-center">
-                            <i class="fas fa-users-cog"></i>
+            <div class="mb-12 animate-fade-up">
+                <div class="flex items-center justify-between flex-wrap gap-6">
+                    <div>
+                        <h2 class="text-4xl font-black italic text-white uppercase tracking-tighter mb-2">Gestión de <span class="text-gold">Usuarios</span></h2>
+                        <p class="text-white/40 font-bold uppercase tracking-[0.4em] text-[0.7rem]">Control de accesos y permisos del sistema</p>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <div class="relative group">
+                            <i class="fas fa-search absolute left-5 top-1/2 -translate-y-1/2 text-white/30 text-xs"></i>
+                            <input type="text" id="search-user" 
+                                placeholder="BUSCAR USUARIO..." 
+                                class="bg-white/5 border border-white/5 rounded-2xl py-4 pl-12 pr-6 text-white text-[0.7rem] font-bold tracking-widest uppercase focus:bg-white/10 focus:border-gold/30 transition-all w-[300px] shadow-inner outline-none">
                         </div>
-                        <span class="text-xs font-black uppercase tracking-widest">Lista de Usuarios</span>
+                        <a href="crear-usuario.html" class="px-8 py-4 bg-gold rounded-2xl text-[#004d98] font-black uppercase tracking-widest text-[0.7rem] hover:scale-105 transition-all shadow-xl shadow-gold/10 flex items-center gap-3">
+                            <i class="fas fa-user-plus"></i> NUEVO USUARIO
+                        </a>
                     </div>
-                    <span
-                        class="px-4 py-1.5 rounded-full bg-dibaGold/10 text-dibaGold text-[10px] font-black uppercase tracking-widest"
-                        id="count-badge">cargando...</span>
                 </div>
+            </div>
 
-                <div class="overflow-x-auto">
-                    <div id="loading-state" class="flex flex-col items-center justify-center py-20 gap-4 opacity-50">
-                        <i class="fas fa-circle-notch fa-spin text-3xl text-dibaGold"></i>
-                        <span class="text-[10px] font-black uppercase tracking-widest">Sincronizando base de datos...</span>
-                    </div>
-
-                    <table id="usersTable" class="hidden w-full text-left">
-                        <thead class="bg-slate-50 border-b border-slate-200 text-[10px] uppercase font-black tracking-[0.2em] text-slate-500">
-                            <tr>
-                                <th class="px-6 py-4">Ref ID</th>
-                                <th class="px-6 py-4">Usuario</th>
-                                <th class="px-6 py-4">Nombre Completo</th>
-                                <th class="px-6 py-4">Rol</th>
-                                <th class="px-6 py-4">Registro</th>
-                                <th class="px-6 py-4 text-center">Acciones</th>
+            <div class="panel glass animate-fade-up" style="animation-delay: 0.1s">
+                <div class="panel-header border-b border-white/5">
+                    <span class="panel-title text-[0.8rem] font-black uppercase tracking-[0.2em]"><i class="fas fa-list text-gold mr-3"></i>Lista de Usuarios</span>
+                    <span id="user-count" class="px-3 py-1 rounded-full bg-white/5 text-white/40 text-[0.6rem] font-black uppercase">0 Usuarios</span>
+                </div>
+                <div class="panel-body p-0 overflow-x-auto">
+                    <table class="w-full text-left font-outfit">
+                        <thead>
+                            <tr class="border-b border-white/5">
+                                <th class="px-8 py-6 text-[0.65rem] font-black text-white/40 uppercase tracking-[0.2em]">Usuario</th>
+                                <th class="px-8 py-6 text-[0.65rem] font-black text-white/40 uppercase tracking-[0.2em]">Nombre Real</th>
+                                <th class="px-8 py-6 text-[0.65rem] font-black text-white/40 uppercase tracking-[0.2em]">Rol / Permiso</th>
+                                <th class="px-8 py-6 text-[0.65rem] font-black text-white/40 uppercase tracking-[0.2em]">Status</th>
+                                <th class="px-8 py-6 text-[0.65rem] font-black text-white/40 uppercase tracking-[0.2em] text-right">Acciones</th>
                             </tr>
                         </thead>
-                        <tbody id="users-tbody" class="divide-y divide-slate-100 italic"></tbody>
+                        <tbody id="users-tbody" class="divide-y divide-white/5">
+                            <!-- Los usuarios se cargarán aquí -->
+                            <tr>
+                                <td colspan="5" class="px-8 py-20 text-center animate-pulse">
+                                    <div class="flex flex-col items-center opacity-30">
+                                        <i class="fas fa-circle-notch fa-spin text-3xl mb-4"></i>
+                                        <p class="text-[0.7rem] font-black uppercase tracking-widest">Sincronizando base de datos...</p>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
                     </table>
-
-                    <div id="empty-state" class="hidden flex-col items-center justify-center py-20 gap-4 opacity-50">
                         <i class="fas fa-user-slash text-4xl"></i>
                         <span class="text-[10px] font-black uppercase tracking-widest">No se encontraron
                             registros</span>

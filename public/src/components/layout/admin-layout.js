@@ -19,99 +19,118 @@ export async function initAdminLayout() {
 
     // Sidebar Injection (Azul Grana Gradient)
     const sidebarHTML = `
-    <aside class="fixed top-0 left-0 bottom-0 w-[280px] bg-[#020617] z-50 transition-transform duration-500 lg:translate-x-0 -translate-x-full sidebar shadow-2xl overflow-hidden" id="sidebar">
-        <!-- Visual Decorator -->
-        <div class="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full -mr-16 -mt-16 blur-2xl"></div>
+    <aside class="fixed top-0 left-0 bottom-0 w-[280px] bg-[#020617] z-50 transition-transform duration-500 lg:translate-x-0 -translate-x-full sidebar shadow-2xl overflow-hidden border-r border-white/5" id="sidebar">
+        <!-- Premium Mesh Background -->
+        <div class="absolute inset-0 opacity-10 pointer-events-none" style="background-image: radial-gradient(at 0% 0%, var(--azul-grana-blue) 0, transparent 50%), radial-gradient(at 100% 100%, var(--azul-grana-red) 0, transparent 50%);"></div>
         
-        <div class="p-8 pb-6 flex items-center gap-4 relative z-10 border-b border-white/10">
-            <img src="/images/ESCUDO.png" alt="DIBA FBC" class="w-12 h-12 object-contain drop-shadow-[0_0_15px_rgba(255,215,0,0.4)]">
-            <div class="text-2xl font-black italic tracking-tighter text-white font-montserrat">DIBA <span class="text-[#FFD700]">FBC</span></div>
+        <div class="p-8 pb-6 flex items-center gap-4 relative z-10">
+            <div class="relative group">
+                <div class="absolute inset-0 bg-gold/20 rounded-full blur-xl group-hover:blur-2xl transition-all duration-500"></div>
+                <img src="/images/ESCUDO.png" alt="DIBA FBC" class="w-14 h-14 object-contain relative drop-shadow-[0_0_10px_rgba(255,215,0,0.3)]">
+            </div>
+            <div class="flex flex-col">
+                <div class="text-2xl font-black italic tracking-tighter text-white leading-none">DIBA <span class="text-[#FFD700]">FBC</span></div>
+                <div class="text-[0.55rem] font-bold text-white/40 uppercase tracking-[0.4em] mt-1.5">Administración</div>
+            </div>
         </div>
 
-        <nav class="px-5 py-8 space-y-1.5 overflow-y-auto h-[calc(100vh-240px)] custom-scrollbar relative z-10">
-            <div class="px-6 py-3 text-[0.65rem] font-black uppercase tracking-[0.3em] text-white/40 italic">Principal</div>
-            <a href="dashboard.html" class="nav-link flex items-center gap-4 px-6 py-4 rounded-xl transition-all ${isActive('dashboard') ? 'bg-[#FFD700] text-[#004d98] font-black shadow-lg scale-[1.02]' : 'text-white/80 font-bold hover:bg-white/10 hover:text-white group'}">
-                <i class="fas fa-chart-line text-lg ${isActive('dashboard') ? '' : 'opacity-40 group-hover:opacity-100 group-hover:text-[#FFD700]'}"></i> Dashboard
+        <nav class="px-5 py-6 space-y-1 overflow-y-auto h-[calc(100vh-220px)] custom-scrollbar relative z-10">
+            <div class="px-6 py-4 text-[0.6rem] font-black uppercase tracking-[0.4em] text-white/30 italic">Panel Central</div>
+            <a href="dashboard.html" class="nav-link flex items-center gap-4 px-6 py-3.5 rounded-2xl transition-all duration-300 ${isActive('dashboard') ? 'bg-[#FFD700] text-[#004d98] font-extrabold shadow-[0_8px_20px_rgba(255,215,0,0.15)] translate-x-1' : 'text-white/60 font-semibold hover:bg-white/5 hover:text-white group hover:translate-x-1'}">
+                <i class="fas fa-grid-2 text-lg ${isActive('dashboard') ? '' : 'opacity-30 group-hover:opacity-100 group-hover:text-[#FFD700]'}"></i> 
+                <span class="text-[0.85rem] tracking-tight">Dashboard</span>
             </a>
 
-            <div class="px-6 pt-10 pb-3 text-[0.65rem] font-black uppercase tracking-[0.3em] text-white/40 italic">Gestión</div>
-            <a href="planilla.html" class="nav-link flex items-center gap-4 px-6 py-4 rounded-xl transition-all ${isActive('planilla') ? 'bg-[#FFD700] text-[#004d98] font-black shadow-lg scale-[1.02]' : 'text-white/80 font-bold hover:bg-white/10 hover:text-white group'}">
-                <i class="fas fa-list-check text-lg ${isActive('planilla') ? '' : 'opacity-40 group-hover:opacity-100 group-hover:text-[#FFD700]'}"></i> Planilla
+            <div class="px-6 pt-8 pb-4 text-[0.6rem] font-black uppercase tracking-[0.4em] text-white/30 italic">Operaciones</div>
+            <a href="planilla.html" class="nav-link flex items-center gap-4 px-6 py-3.5 rounded-2xl transition-all duration-300 ${isActive('planilla') ? 'bg-[#FFD700] text-[#004d98] font-extrabold shadow-[0_8px_20px_rgba(255,215,0,0.15)] translate-x-1' : 'text-white/60 font-semibold hover:bg-white/5 hover:text-white group hover:translate-x-1'}">
+                <i class="fas fa-clipboard-check text-lg ${isActive('planilla') ? '' : 'opacity-30 group-hover:opacity-100 group-hover:text-[#FFD700]'}"></i>
+                <span class="text-[0.85rem] tracking-tight">Planilla Diaria</span>
             </a>
-            <a href="partidos.html" class="nav-link flex items-center gap-4 px-6 py-4 rounded-xl transition-all ${isActive('partidos') ? 'bg-[#FFD700] text-[#004d98] font-black shadow-lg scale-[1.02]' : 'text-white/80 font-bold hover:bg-white/10 hover:text-white group'}">
-                <i class="fas fa-futbol text-lg ${isActive('partidos') ? '' : 'opacity-40 group-hover:opacity-100 group-hover:text-[#FFD700]'}"></i> Partidos
+            <a href="partidos.html" class="nav-link flex items-center gap-4 px-6 py-3.5 rounded-2xl transition-all duration-300 ${isActive('partidos') ? 'bg-[#FFD700] text-[#004d98] font-extrabold shadow-[0_8px_20px_rgba(255,215,0,0.15)] translate-x-1' : 'text-white/60 font-semibold hover:bg-white/5 hover:text-white group hover:translate-x-1'}">
+                <i class="fas fa-calendar-star text-lg ${isActive('partidos') ? '' : 'opacity-30 group-hover:opacity-100 group-hover:text-[#FFD700]'}"></i>
+                <span class="text-[0.85rem] tracking-tight">Partidos & Eventos</span>
             </a>
-            <a href="convocatorias.html" class="nav-link flex items-center gap-4 px-6 py-4 rounded-xl transition-all ${isActive('convocatorias') ? 'bg-[#FFD700] text-[#004d98] font-black shadow-lg scale-[1.02]' : 'text-white/80 font-bold hover:bg-white/10 hover:text-white group'}">
-                <i class="fas fa-bullhorn text-lg ${isActive('convocatorias') ? '' : 'opacity-40 group-hover:opacity-100 group-hover:text-[#FFD700]'}"></i> Convocatorias
+            <a href="convocatorias.html" class="nav-link flex items-center gap-4 px-6 py-3.5 rounded-2xl transition-all duration-300 ${isActive('convocatorias') ? 'bg-[#FFD700] text-[#004d98] font-extrabold shadow-[0_8px_20px_rgba(255,215,0,0.15)] translate-x-1' : 'text-white/60 font-semibold hover:bg-white/5 hover:text-white group hover:translate-x-1'}">
+                <i class="fas fa-bullhorn text-lg ${isActive('convocatorias') ? '' : 'opacity-30 group-hover:opacity-100 group-hover:text-[#FFD700]'}"></i>
+                <span class="text-[0.85rem] tracking-tight">Convocatorias</span>
             </a>
-            <a href="usuarios.html" class="nav-link flex items-center gap-4 px-6 py-4 rounded-xl transition-all ${isActive('usuarios') ? 'bg-[#FFD700] text-[#004d98] font-black shadow-lg scale-[1.02]' : 'text-white/80 font-bold hover:bg-white/10 hover:text-white group'}">
-                <i class="fas fa-user-shield text-lg ${isActive('usuarios') ? '' : 'opacity-40 group-hover:opacity-100 group-hover:text-[#FFD700]'}"></i> Usuarios
+            <a href="usuarios.html" class="nav-link flex items-center gap-4 px-6 py-3.5 rounded-2xl transition-all duration-300 ${isActive('usuarios') ? 'bg-[#FFD700] text-[#004d98] font-extrabold shadow-[0_8px_20px_rgba(255,215,0,0.15)] translate-x-1' : 'text-white/60 font-semibold hover:bg-white/5 hover:text-white group hover:translate-x-1'}">
+                <i class="fas fa-users-gear text-lg ${isActive('usuarios') ? '' : 'opacity-30 group-hover:opacity-100 group-hover:text-[#FFD700]'}"></i>
+                <span class="text-[0.85rem] tracking-tight">Gestión Usuarios</span>
             </a>
-            <a href="GestorDocumental.html" class="nav-link flex items-center gap-4 px-6 py-4 rounded-xl transition-all ${isActive('GestorDocumental') ? 'bg-[#FFD700] text-[#004d98] font-black shadow-lg scale-[1.02]' : 'text-white/80 font-bold hover:bg-white/10 hover:text-white group'}">
-                <i class="fas fa-file-invoice text-lg ${isActive('GestorDocumental') ? '' : 'opacity-40 group-hover:opacity-100 group-hover:text-[#FFD700]'}"></i> Documentos
+            <a href="GestorDocumental.html" class="nav-link flex items-center gap-4 px-6 py-3.5 rounded-2xl transition-all duration-300 ${isActive('GestorDocumental') ? 'bg-[#FFD700] text-[#004d98] font-extrabold shadow-[0_8px_20px_rgba(255,215,0,0.15)] translate-x-1' : 'text-white/60 font-semibold hover:bg-white/5 hover:text-white group hover:translate-x-1'}">
+                <i class="fas fa-file-invoice text-lg ${isActive('GestorDocumental') ? '' : 'opacity-30 group-hover:opacity-100 group-hover:text-[#FFD700]'}"></i>
+                <span class="text-[0.85rem] tracking-tight">Archivos & Docs</span>
             </a>
-            <a href="rifa_diba.html" class="nav-link flex items-center gap-4 px-6 py-4 rounded-xl transition-all ${isActive('rifa_diba') ? 'bg-[#FFD700] text-[#004d98] font-black shadow-lg scale-[1.02]' : 'text-white/80 font-bold hover:bg-white/10 hover:text-white group'}">
-                <i class="fas fa-ticket-simple text-lg ${isActive('rifa_diba') ? '' : 'opacity-40 group-hover:opacity-100 group-hover:text-[#FFD700]'}"></i> Rifa
+            
+            <div class="px-6 pt-8 pb-4 text-[0.6rem] font-black uppercase tracking-[0.4em] text-white/30 italic">Marketing</div>
+            <a href="rifa_diba.html" class="nav-link flex items-center gap-4 px-6 py-3.5 rounded-2xl transition-all duration-300 ${isActive('rifa_diba') ? 'bg-[#FFD700] text-[#004d98] font-extrabold shadow-[0_8px_20px_rgba(255,215,0,0.15)] translate-x-1' : 'text-white/60 font-semibold hover:bg-white/5 hover:text-white group hover:translate-x-1'}">
+                <i class="fas fa-ticket text-lg ${isActive('rifa_diba') ? '' : 'opacity-30 group-hover:opacity-100 group-hover:text-[#FFD700]'}"></i>
+                <span class="text-[0.85rem] tracking-tight">Gestión Rifas</span>
             </a>
-            <a href="push.html" class="nav-link flex items-center gap-4 px-6 py-4 rounded-xl transition-all ${isActive('push') ? 'bg-[#FFD700] text-[#004d98] font-black shadow-lg scale-[1.02]' : 'text-white/80 font-bold hover:bg-white/10 hover:text-white group'}">
-                <i class="fas fa-paper-plane text-lg ${isActive('push') ? '' : 'opacity-40 group-hover:opacity-100 group-hover:text-[#FFD700]'}"></i> Push
-            </a>
-            <a href="profile.html" class="nav-link flex items-center gap-4 px-6 py-4 rounded-xl transition-all ${isActive('profile') ? 'bg-[#FFD700] text-[#004d98] font-black shadow-lg scale-[1.02]' : 'text-white/80 font-bold hover:bg-white/10 hover:text-white group'}">
-                <i class="fas fa-user-circle text-lg ${isActive('profile') ? '' : 'opacity-40 group-hover:opacity-100 group-hover:text-[#FFD700]'}"></i> Perfil
+            <a href="push.html" class="nav-link flex items-center gap-4 px-6 py-3.5 rounded-2xl transition-all duration-300 ${isActive('push') ? 'bg-[#FFD700] text-[#004d98] font-extrabold shadow-[0_8px_20_rgba(255,215,0,0.15)] translate-x-1' : 'text-white/60 font-semibold hover:bg-white/5 hover:text-white group hover:translate-x-1'}">
+                <i class="fas fa-paper-plane text-lg ${isActive('push') ? '' : 'opacity-30 group-hover:opacity-100 group-hover:text-[#FFD700]'}"></i>
+                <span class="text-[0.85rem] tracking-tight">Notificaciones Push</span>
             </a>
         </nav>
 
-        <div class="absolute bottom-0 left-0 right-0 p-6 bg-black/20 backdrop-blur-md border-t border-white/5">
-            <div class="flex items-center gap-3 p-4 bg-white/5 rounded-2xl mb-4 border border-white/5">
-                <div class="w-10 h-10 rounded-full bg-[#FFD700] text-[#004d98] flex items-center justify-center font-black italic shadow-inner">${userInitial}</div>
+        <div class="absolute bottom-0 left-0 right-0 p-6 bg-[#01040a]/80 backdrop-blur-xl border-t border-white/5">
+            <div class="flex items-center gap-4 p-4 bg-white/5 rounded-2xl mb-4 border border-white/5 hover:bg-white/10 transition-all cursor-pointer group">
+                <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-gold to-yellow-600 text-[#004d98] flex items-center justify-center font-black italic shadow-lg group-hover:scale-105 transition-transform">${userInitial}</div>
                 <div class="min-w-0">
-                    <div class="text-[0.8rem] font-black text-white truncate italic uppercase tracking-tighter">${userName}</div>
-                    <div class="text-[0.6rem] font-bold text-[#FFD700]/70 uppercase tracking-widest">${userRole}</div>
+                    <div class="text-[0.85rem] font-bold text-white truncate tracking-tight">${userName}</div>
+                    <div class="text-[0.6rem] font-black text-[#FFD700]/60 uppercase tracking-widest mt-0.5">${userRole}</div>
                 </div>
             </div>
-            <button class="w-full py-3.5 rounded-xl bg-white/10 text-white text-[0.7rem] font-black uppercase tracking-[0.2em] hover:bg-white/20 transition-all border border-white/10" id="logout-btn-layout">
-                <i class="fas fa-power-off mr-2 text-[#FFD700]"></i> Salir
+            <button class="w-full py-4 rounded-xl bg-red-500/10 text-red-500 text-[0.65rem] font-black uppercase tracking-[0.2em] hover:bg-red-500 hover:text-white transition-all border border-red-500/20" id="logout-btn-layout">
+                <i class="fas fa-power-off mr-2"></i> Cerrar Sesión
             </button>
         </div>
     </aside>
-    <div class="fixed inset-0 bg-[#004d98]/40 backdrop-blur-sm z-40 hidden" id="sidebar-overlay"></div>
+    <div class="fixed inset-0 bg-[#000]/60 backdrop-blur-md z-40 hidden transition-opacity duration-500" id="sidebar-overlay"></div>
     `;
 
-    // Header Injection (Azul Grana Styled)
+    // Header Injection (Azul Grana Premium)
     const pageTitle = document.title.split('—')[0].trim();
     const headerHTML = `
-    <header class="fixed top-0 right-0 left-0 lg:left-[280px] z-40 bg-[#020617]/80 backdrop-blur-md px-8 h-[70px] flex items-center justify-between border-b border-white/5 shadow-sm transition-all duration-300 overflow-hidden">
-        <!-- Visual Accent -->
-        <div class="absolute top-0 left-0 w-1 h-full bg-[#FFD700]"></div>
+    <header class="fixed top-0 right-0 left-0 lg:left-[280px] z-40 bg-[#06090e]/80 backdrop-blur-xl px-10 h-[80px] flex items-center justify-between border-b border-white/5 shadow-2xl transition-all duration-300 overflow-hidden">
+        <!-- Modern Visual Accent -->
+        <div class="absolute top-0 left-0 w-2 h-full bg-gradient-to-b from-gold to-transparent opacity-50"></div>
         
-        <div class="flex items-center gap-6">
-            <button class="lg:hidden w-11 h-11 rounded-xl bg-white/5 flex items-center justify-center text-white hover:bg-white/10 transition-all border border-white/10" id="menu-btn-layout">
-                <i class="fas fa-bars-staggered"></i>
+        <div class="flex items-center gap-8">
+            <button class="lg:hidden w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center text-white hover:bg-white/10 transition-all border border-white/10 shadow-lg" id="menu-btn-layout">
+                <i class="fas fa-bars-staggered text-lg"></i>
             </button>
             <div class="animate-fade-up">
-                <h1 class="text-xl font-black italic text-white uppercase tracking-tighter font-montserrat">${pageTitle} <span class="text-[#FFD700] font-normal">PANEL</span></h1>
-                <p class="text-[0.55rem] font-bold text-slate-400 uppercase tracking-[0.4em] mt-0.5">Club Deportivo DIBA FBC</p>
+                <div class="flex items-center gap-3">
+                    <h1 class="text-2xl font-black italic text-white uppercase tracking-tighter">${pageTitle}</h1>
+                    <span class="px-2 py-0.5 rounded bg-gold/10 border border-gold/20 text-gold text-[0.5rem] font-black uppercase tracking-widest">Admin</span>
+                </div>
+                <p class="text-[0.6rem] font-bold text-white/40 uppercase tracking-[0.4em] mt-1">Club Deportivo DIBA FBC <span class="mx-2 text-white/10">•</span> Panel de Control</p>
             </div>
         </div>
         
-        <div class="flex items-center gap-6">
-            <div class="hidden md:flex flex-col items-end">
-                <div class="text-[1rem] font-black text-white italic tracking-tighter" id="layout-clock">00:00:00</div>
-                <div class="text-[0.55rem] font-bold text-slate-400 uppercase tracking-widest" id="layout-date">---</div>
+        <div class="flex items-center gap-8">
+            <div class="hidden xl:flex flex-col items-end">
+                <div class="text-[1.1rem] font-black text-white italic tracking-tighter font-outfit" id="layout-clock">00:00:00</div>
+                <div class="text-[0.6rem] font-black text-[#FFD700]/70 uppercase tracking-[0.2em] mt-0.5" id="layout-date">---</div>
             </div>
-            <div class="w-[1px] h-8 bg-white/10 hidden md:block"></div>
-            <div class="flex items-center gap-3">
-                <button class="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-white hover:text-[#FFD700] transition-colors shadow-sm">
-                    <i class="fas fa-bell text-sm"></i>
+            
+            <div class="w-[1px] h-10 bg-white/5 hidden xl:block"></div>
+            
+            <div class="flex items-center gap-4">
+                <button class="w-12 h-12 rounded-2xl bg-white/5 border border-white/5 flex items-center justify-center text-white/50 hover:text-gold hover:bg-white/10 transition-all shadow-inner group">
+                    <i class="fas fa-bell text-sm group-hover:animate-bounce"></i>
                 </button>
-                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-[#004d98] to-[#a50044] flex items-center justify-center text-white font-black text-xs shadow-md shadow-blue-900/10 border border-white/20">
-                    ${userInitial}
+                <div class="relative group cursor-pointer ml-2">
+                    <div class="absolute -inset-1 bg-gradient-to-r from-gold to-yellow-600 rounded-2xl blur opacity-20 group-hover:opacity-40 transition duration-1000 group-hover:duration-200"></div>
+                    <div class="relative w-12 h-12 rounded-2xl bg-[#020617] border border-white/10 flex items-center justify-center text-gold font-black text-sm shadow-xl">
+                        ${userInitial}
+                    </div>
                 </div>
             </div>
         </div>
     </header>
-    `;
-
     navContainer.innerHTML = sidebarHTML + headerHTML;
 
     // Sidebar Logic

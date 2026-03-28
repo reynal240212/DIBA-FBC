@@ -155,192 +155,138 @@
         </div>
     </div>
     <div id="admin-nav"></div>
-    <main class="lg:ml-[280px] pt-[70px] min-h-screen transition-all duration-300">
-        <div class="p-8 max-w-[1600px] mx-auto">
-            <!-- KPI Cards -->
-                <div class="kpi-card gold">
+    <main class="lg:ml-[280px] pt-[80px] min-h-screen transition-all duration-300">
+        <div class="p-10 max-w-[1600px] mx-auto">
+            <!-- Header Section -->
+            <div class="mb-12 animate-fade-up">
+                <h2 class="text-4xl font-black italic text-white uppercase tracking-tighter mb-2">Resumen <span class="text-gold">General</span></h2>
+                <p class="text-white/40 font-bold uppercase tracking-[0.4em] text-[0.7rem]">Estadísticas y control en tiempo real</p>
+            </div>
+
+            <!-- Dashboard Grid -->
+            <div class="diba-grid">
+                <!-- KPI Section (Row 1) -->
+                <div class="col-3 kpi-card gold animate-fade-up" style="animation-delay: 0.1s">
                     <div class="kpi-icon"><i class="fas fa-users"></i></div>
                     <div class="kpi-value" id="kpi-players">0</div>
                     <div class="kpi-label">Jugadores</div>
-                    <div class="kpi-delta up"><i class="fas fa-arrow-trend-up"></i> <span>En planilla activa</span>
-                    </div>
+                    <div class="kpi-delta up"><i class="fas fa-shield-check"></i> <span>Base de datos activa</span></div>
                 </div>
 
-                <div class="kpi-card blue">
+                <div class="col-3 kpi-card blue animate-fade-up" style="animation-delay: 0.15s">
                     <div class="kpi-icon"><i class="fas fa-futbol"></i></div>
                     <div class="kpi-value" id="kpi-matches">—</div>
                     <div class="kpi-label">Partidos</div>
-                    <div class="kpi-delta info"><i class="fas fa-calendar"></i> <span>Temporada actual</span></div>
+                    <div class="kpi-delta info"><i class="fas fa-calendar-star"></i> <span>Temporada 2026</span></div>
                 </div>
 
-                <div class="kpi-card green">
-                    <div class="kpi-icon"><i class="fas fa-percent"></i></div>
+                <div class="col-3 kpi-card green animate-fade-up" style="animation-delay: 0.2s">
+                    <div class="kpi-icon"><i class="fas fa-chart-line-up"></i></div>
                     <div class="kpi-value" id="kpi-attendance">—</div>
                     <div class="kpi-label">% Asistencia</div>
-                    <div class="kpi-delta up"><i class="fas fa-arrow-trend-up"></i> <span>Última sesión</span></div>
+                    <div class="kpi-delta up"><i class="fas fa-check-double"></i> <span>Promedio global</span></div>
                 </div>
 
-                <div class="kpi-card red">
-                    <div class="kpi-icon"><i class="fas fa-money-bill-wave"></i></div>
+                <div class="col-3 kpi-card red animate-fade-up" style="animation-delay: 0.25s">
+                    <div class="kpi-icon"><i class="fas fa-wallet"></i></div>
                     <div class="kpi-value" id="kpi-pending">—</div>
-                    <div class="kpi-label">Pagos Pendientes</div>
-                    <div class="kpi-delta info"><i class="fas fa-info-circle"></i> <span>Sin pago registrado</span>
-                    </div>
+                    <div class="kpi-label">Pendientes</div>
+                    <div class="kpi-delta info"><i class="fas fa-circle-exclamation"></i> <span>Pagos por verificar</span></div>
                 </div>
-            </div>
 
-            <!-- Row 2 -->
-            <div class="row-2">
-
-                <!-- Accesos rápidos -->
-                <div class="panel glass animate-fade-up" style="animation-delay: 0.1s">
+                <!-- Main Content Row (Row 2) -->
+                <div class="col-8 panel glass animate-fade-up" style="animation-delay: 0.3s">
                     <div class="panel-header">
-                        <span class="panel-title"><i class="fas fa-bolt"
-                                style="color:var(--gold);margin-right:.5rem"></i>Accesos Rápidos</span>
-                        <span class="panel-badge">Admin</span>
+                        <span class="panel-title"><i class="fas fa-bolt text-gold mr-3"></i>Accesos Rápidos</span>
+                        <span class="px-2 py-0.5 rounded bg-gold/10 border border-gold/20 text-gold text-[0.5rem] font-black uppercase tracking-widest">Atajos</span>
                     </div>
                     <div class="panel-body">
-                        <div class="quick-grid">
-                            <a href="planilla.html" class="quick-btn">
-                                <div class="quick-btn-icon" style="background:rgba(255,204,0,.12);color:var(--gold)"><i
-                                        class="fas fa-clipboard-list"></i></div>
-                                <div>
-                                    <div class="quick-btn-label">Planilla</div>
-                                    <div class="quick-btn-sub">Control asistencia</div>
-                                </div>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                            <a href="planilla.html" class="flex flex-col items-center p-6 bg-white/5 border border-white/5 rounded-2xl hover:bg-gold transition-all duration-300 group">
+                                <i class="fas fa-clipboard-check text-2xl text-gold group-hover:text-[#004d98] mb-3"></i>
+                                <span class="text-[0.7rem] font-black uppercase tracking-widest text-white/60 group-hover:text-[#004d98]">Planilla</span>
                             </a>
-                            <a href="GestorDocumental.html" class="quick-btn">
-                                <div class="quick-btn-icon" style="background:rgba(59,130,246,.12);color:#60a5fa"><i
-                                        class="fas fa-folder-open"></i></div>
-                                <div>
-                                    <div class="quick-btn-label">Gestor</div>
-                                    <div class="quick-btn-sub">Documentos</div>
-                                </div>
+                            <a href="partidos.html" class="flex flex-col items-center p-6 bg-white/5 border border-white/5 rounded-2xl hover:bg-gold transition-all duration-300 group">
+                                <i class="fas fa-calendar-star text-2xl text-gold group-hover:text-[#004d98] mb-3"></i>
+                                <span class="text-[0.7rem] font-black uppercase tracking-widest text-white/60 group-hover:text-[#004d98]">Eventos</span>
                             </a>
-                            <a href="usuarios.html" class="quick-btn">
-                                <div class="quick-btn-icon" style="background:rgba(168,85,247,.12);color:#c084fc"><i
-                                        class="fas fa-user-cog"></i></div>
-                                <div>
-                                    <div class="quick-btn-label">Usuarios</div>
-                                    <div class="quick-btn-sub">Gestión accesos</div>
-                                </div>
+                            <a href="usuarios.html" class="flex flex-col items-center p-6 bg-white/5 border border-white/5 rounded-2xl hover:bg-gold transition-all duration-300 group">
+                                <i class="fas fa-users-gear text-2xl text-gold group-hover:text-[#004d98] mb-3"></i>
+                                <span class="text-[0.7rem] font-black uppercase tracking-widest text-white/60 group-hover:text-[#004d98]">Usuarios</span>
                             </a>
-                            <a href="crear-usuario.html" class="quick-btn">
-                                <div class="quick-btn-icon" style="background:rgba(34,197,94,.12);color:#4ade80"><i
-                                        class="fas fa-user-plus"></i></div>
-                                <div>
-                                    <div class="quick-btn-label">Nuevo Usuario</div>
-                                    <div class="quick-btn-sub">Crear acceso</div>
-                                </div>
+                            <a href="GestorDocumental.html" class="flex flex-col items-center p-6 bg-white/5 border border-white/5 rounded-2xl hover:bg-gold transition-all duration-300 group">
+                                <i class="fas fa-file-invoice text-2xl text-gold group-hover:text-[#004d98] mb-3"></i>
+                                <span class="text-[0.7rem] font-black uppercase tracking-widest text-white/60 group-hover:text-[#004d98]">Archivos</span>
                             </a>
-                            <a href="rifa_diba.html" class="quick-btn">
-                                <div class="quick-btn-icon" style="background:rgba(251,146,60,.12);color:#fb923c"><i
-                                        class="fas fa-ticket-alt"></i></div>
-                                <div>
-                                    <div class="quick-btn-label">Rifas</div>
-                                    <div class="quick-btn-sub">Control boletas</div>
-                                </div>
+                            <a href="rifa_diba.html" class="flex flex-col items-center p-6 bg-white/5 border border-white/5 rounded-2xl hover:bg-gold transition-all duration-300 group">
+                                <i class="fas fa-ticket text-2xl text-gold group-hover:text-[#004d98] mb-3"></i>
+                                <span class="text-[0.7rem] font-black uppercase tracking-widest text-white/60 group-hover:text-[#004d98]">Rifas</span>
                             </a>
-                            <a href="partidos.html" class="quick-btn">
-                                <div class="quick-btn-icon" style="background:rgba(239,68,68,.12);color:#fb7185"><i
-                                        class="fas fa-futbol"></i></div>
-                                <div>
-                                    <div class="quick-btn-label">Partidos</div>
-                                    <div class="quick-btn-sub">Gestionar eventos</div>
-                                </div>
-                            </a>
-                            <a href="../analisis.html" class="quick-btn">
-                                <div class="quick-btn-icon" style="background:rgba(20,184,166,.12);color:#2dd4bf"><i
-                                        class="fas fa-chart-line"></i></div>
-                                <div>
-                                    <div class="quick-btn-label">Análisis</div>
-                                    <div class="quick-btn-sub">Stats equipo</div>
-                                </div>
+                            <a href="push.html" class="flex flex-col items-center p-6 bg-white/5 border border-white/5 rounded-2xl hover:bg-gold transition-all duration-300 group">
+                                <i class="fas fa-paper-plane text-2xl text-gold group-hover:text-[#004d98] mb-3"></i>
+                                <span class="text-[0.7rem] font-black uppercase tracking-widest text-white/60 group-hover:text-[#004d98]">Mensajes</span>
                             </a>
                         </div>
                     </div>
                 </div>
 
-                <!-- Actividad reciente -->
-                <div class="panel glass animate-fade-up" style="animation-delay: 0.2s">
+                <div class="col-4 panel glass animate-fade-up" style="animation-delay: 0.35s">
                     <div class="panel-header">
-                        <span class="panel-title"><i class="fas fa-history"
-                                style="color:var(--gold);margin-right:.5rem"></i>Actividad Reciente</span>
+                        <span class="panel-title"><i class="fas fa-history text-gold mr-3"></i>Historial</span>
                     </div>
-                    <div class="panel-body">
-                        <div class="activity-list" id="activity-list">
-                            <div class="empty-state">
-                                <i class="fas fa-inbox"></i>
-                                <p>Sin actividad registrada</p>
+                    <div class="panel-body max-h-[350px] overflow-y-auto custom-scrollbar">
+                        <div class="space-y-4" id="activity-list">
+                            <div class="flex flex-col items-center justify-center py-10 opacity-20">
+                                <i class="fas fa-inbox text-4xl mb-3"></i>
+                                <p class="text-[0.6rem] font-black uppercase tracking-widest">Sin actividad</p>
                             </div>
                         </div>
                     </div>
                 </div>
-                <!-- Espacio para futuros widgets de administración -->
-                <div class="panel glass animate-fade-up"
-                    style="animation-delay: 0.25s; display: flex; align-items: center; justify-content: center; min-height: 200px;">
-                    <div style="text-align: center; opacity: 0.5;">
-                        <i class="fas fa-chart-pie"
-                            style="font-size: 2rem; color: var(--gold); margin-bottom: 1rem;"></i>
-                        <p style="font-size: 0.7rem; font-weight: 800; text-transform: uppercase;">Módulo de Análisis
-                            Próximamente</p>
+
+                <!-- Row 3 -->
+                <div class="col-8 panel glass animate-fade-up" style="animation-delay: 0.4s">
+                    <div class="panel-header">
+                        <span class="panel-title"><i class="fas fa-calendar-alt text-gold mr-3"></i>Calendario Próximo</span>
+                        <a href="partidos.html" class="text-[0.6rem] font-black uppercase tracking-widest text-gold hover:underline">Gestionar Todos →</a>
                     </div>
-                </div>
-
-            </div>
-
-            <!-- Row 3: Próximos Partidos -->
-            <div class="panel glass animate-fade-up" id="matches-panel"
-                style="margin-bottom: 2rem; animation-delay: 0.3s">
-                <div class="panel-header">
-                    <span class="panel-title"><i class="fas fa-calendar-alt"
-                            style="color:var(--gold);margin-right:.5rem"></i>Próximos Partidos</span>
-                    <a href="partidos.html"
-                        style="font-size:.7rem;font-weight:800;color:var(--gold);text-decoration:none;text-transform:uppercase;letter-spacing:.1em">Gestionar
-                        →</a>
-                </div>
-                <div class="panel-body">
-                    <div id="matches-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                        <!-- Matches will be rendered here -->
-                        <div class="empty-state">
-                            <i class="fas fa-search"></i>
-                            <p>Buscando encuentros...</p>
+                    <div class="panel-body">
+                        <div id="matches-list" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="flex flex-col items-center justify-center py-10 opacity-20">
+                                <i class="fas fa-search text-4xl mb-3"></i>
+                                <p class="text-[0.6rem] font-black uppercase tracking-widest">Buscando encuentros...</p>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Asistencia última sesión -->
-            <div class="panel glass animate-fade-up" id="attendance-panel" style="display:none; animation-delay: 0.4s">
-                <div class="panel-header">
-                    <span class="panel-title"><i class="fas fa-chart-pie"
-                            style="color:var(--gold);margin-right:.5rem"></i>Asistencia Última Sesión</span>
-                    <a href="planilla.html"
-                        style="font-size:.7rem;font-weight:800;color:var(--gold);text-decoration:none;text-transform:uppercase;letter-spacing:.1em">Ver
-                        Planilla →</a>
-                </div>
-                <div class="panel-body">
-                    <div class="attendance-labels">
-                        <div class="att-chip">
-                            <div class="att-dot" style="background:#4ade80"></div> <span id="att-p">0 Presentes</span>
-                        </div>
-                        <div class="att-chip">
-                            <div class="att-dot" style="background:#fb7185"></div> <span id="att-a">0 Ausentes</span>
-                        </div>
-                        <div class="att-chip">
-                            <div class="att-dot" style="background:#facc15"></div> <span id="att-e">0 Excusas</span>
+                <div class="col-4 panel glass animate-fade-up" id="attendance-panel" style="animation-delay: 0.45s">
+                    <div class="panel-header">
+                        <span class="panel-title"><i class="fas fa-chart-pie text-gold mr-3"></i>Status Asistencia</span>
+                    </div>
+                    <div class="panel-body">
+                        <div class="space-y-6">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-2">
+                                    <div class="w-2 h-2 rounded-full bg-green-500"></div>
+                                    <span class="text-[0.7rem] font-black uppercase tracking-widest text-white/60" id="att-p">0 Presentes</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <div class="w-2 h-2 rounded-full bg-red-500"></div>
+                                    <span class="text-[0.7rem] font-black uppercase tracking-widest text-white/60" id="att-a">0 Ausentes</span>
+                                </div>
+                            </div>
+                            <div class="h-4 w-full bg-white/5 rounded-full overflow-hidden flex shadow-inner border border-white/5">
+                                <div class="h-full bg-green-500 shadow-[0_0_15px_rgba(34,197,94,0.3)] transition-all duration-1000" id="bar-p" style="width:0%"></div>
+                                <div class="h-full bg-red-500 shadow-[0_0_15px_rgba(239,68,68,0.3)] transition-all duration-1000" id="bar-a" style="width:0%"></div>
+                                <div class="h-full bg-yellow-500 shadow-[0_0_15px_rgba(234,179,8,0.3)] transition-all duration-1000" id="bar-e" style="width:0%"></div>
+                            </div>
+                            <p class="text-[0.6rem] font-bold text-center text-white/30 uppercase tracking-[0.3em]">Resumen de la última sesión</p>
                         </div>
                     </div>
-                    <div class="bar-track">
-                        <div class="bar-seg" id="bar-p" style="background:#4ade80;width:0%"></div>
-                        <div class="bar-seg" id="bar-a" style="background:#fb7185;width:0%;margin-left:2px"></div>
-                        <div class="bar-seg" id="bar-e" style="background:#facc15;width:0%;margin-left:2px"></div>
-                    </div>
                 </div>
-            </div>
-
-            </div>
-        </div><!-- /p-8 -->
+            </div> <!-- /diba-grid -->
+        </div><!-- /p-10 -->
     </main><!-- /main -->
 
     <script src="/scripts/config.js"></script>

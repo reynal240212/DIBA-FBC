@@ -58,20 +58,30 @@
         </div>
     </div>
     <div id="admin-nav"></div>
-    <main class="lg:ml-[280px] pt-[70px] min-h-screen transition-all duration-300">
-
-        <div class="content">
-
-            <div class="p-6 md:p-10 max-w-7xl mx-auto w-full">
-                <div id="matches-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <!-- Skeleton loader -->
-                    <div class="animate-pulse bg-white/5 rounded-3xl h-64 border border-white/10"></div>
-                    <div class="animate-pulse bg-white/5 rounded-3xl h-64 border border-white/10"></div>
-                    <div class="animate-pulse bg-white/5 rounded-3xl h-64 border border-white/10"></div>
+    <main class="lg:ml-[280px] pt-[80px] min-h-screen transition-all duration-300">
+        <div class="p-10 max-w-[1600px] mx-auto">
+            <div class="mb-12 animate-fade-up">
+                <div class="flex items-center justify-between flex-wrap gap-6">
+                    <div>
+                        <h2 class="text-4xl font-black italic text-white uppercase tracking-tighter mb-2">Gestión de <span class="text-gold">Partidos</span></h2>
+                        <p class="text-white/40 font-bold uppercase tracking-[0.4em] text-[0.7rem]">Calendario oficial y resultados de encuentros</p>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <button id="add-match-btn" class="px-8 py-4 bg-gold rounded-2xl text-[#004d98] font-black uppercase tracking-widest text-[0.7rem] hover:scale-105 transition-all shadow-xl shadow-gold/10 flex items-center gap-3">
+                            <i class="fas fa-plus"></i> AGREGAR PARTIDO
+                        </button>
+                    </div>
                 </div>
             </div>
+
+            <div class="diba-grid" id="matches-grid">
+                <!-- Skeleton loader -->
+                <div class="col-4 animate-pulse bg-white/5 rounded-[2.5rem] h-64 border border-white/10"></div>
+                <div class="col-4 animate-pulse bg-white/5 rounded-[2.5rem] h-64 border border-white/10"></div>
+                <div class="col-4 animate-pulse bg-white/5 rounded-[2.5rem] h-64 border border-white/10"></div>
+            </div>
         </div>
-    </div>
+    </main>
 
     <!-- Modal para crear/editar -->
     <div id="match-modal" class="fixed inset-0 z-[100] hidden flex items-center justify-center p-4">
@@ -199,24 +209,51 @@
             }
 
             grid.innerHTML = matches.map(m => {
-                const fecha = new Date(m.fecha).toLocaleDateString('es-CO', { day: '2-digit', month: 'short', year: 'numeric' });
+                // Parse date safely to avoid UTC shifts
+                const dateParts = m.fecha ? m.fecha.split('T')[0].split('-') : null;
+                const dateObj = dateParts ? new Date(dateParts[0], dateParts[1] - 1, dateParts[2]) : null;
+                const fechaStr = dateObj ? dateObj.toLocaleDateString('es-CO', { day: '2-digit', month: 'long', year: 'numeric' }) : 'Fecha pendiente';
+                
                 return `
-                <div class="bg-white/5 border border-white/10 rounded-[2.5rem] p-8 hover:bg-white/[0.08] transition-all group overflow-hidden relative">
-                    <div class="flex justify-between items-start mb-6">
-                        <span class="bg-dibaGold/10 text-dibaGold px-4 py-1.5 rounded-full text-[9px] font-black uppercase italic tracking-widest border border-dibaGold/20">${m.categoria || 'GENERAL'}</span>
+                <div class="col-4 panel glass p-8 group relative overflow-hidden flex flex-col h-full hover:border-gold/30 transition-all duration-500">
+                    <div class="flex justify-between items-start mb-8">
+                        <span class="px-3 py-1 rounded-full bg-gold/10 border border-gold/20 text-gold text-[0.55rem] font-black uppercase tracking-widest">${m.categoria || 'GENERAL'}</span>
                         <div class="flex gap-2">
-                            <button onclick="editMatch('${m.id}')" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-slate-400 hover:text-white hover:bg-white/10 transition-all"><i class="fas fa-edit"></i></button>
-                            <button onclick="deleteMatch('${m.id}')" class="w-10 h-10 rounded-full bg-red-500/10 flex items-center justify-center text-red-500 hover:bg-red-500 hover:text-white transition-all"><i class="fas fa-trash"></i></button>
+                             <button onclick="editMatch('${m.id}')" class="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-white/40 hover:text-gold hover:bg-white/10 transition-all border border-white/5"><i class="fas fa-edit text-xs"></i></button>
+                             <button onclick="deleteMatch('${m.id}')" class="w-10 h-10 rounded-xl bg-red-500/10 flex items-center justify-center text-red-500 hover:bg-red-500 hover:text-white transition-all border border-red-500/10"><i class="fas fa-trash text-xs"></i></button>
                         </div>
                     </div>
-                    <div class="mb-6">
-                        <p class="text-[10px] text-slate-500 font-black uppercase tracking-widest mb-2">${fecha} · ${m.hora || '--:--'}</p>
-                        <h3 class="text-xl font-black uppercase italic leading-tight text-white group-hover:text-dibaGold transition-colors">${m.equipolocal} <span class="text-slate-500">vs</span> ${m.equipovisitante}</h3>
-                        ${m.resultado ? `<div class="mt-4 bg-black/40 px-4 py-2 rounded-xl inline-block font-black text-dibaGold italic text-lg">${m.resultado}</div>` : ''}
+
+                    <div class="mb-auto">
+                        <div class="flex items-center gap-3 text-white/30 text-[0.6rem] font-bold uppercase tracking-[0.2em] mb-4">
+                            <i class="fas fa-calendar-star text-gold"></i>
+                            <span>${fechaStr}</span>
+                        </div>
+                        
+                        <div class="flex flex-col gap-4 mb-6">
+                            <div class="flex items-center justify-between">
+                                <span class="text-lg font-black italic uppercase tracking-tighter text-white">${m.equipolocal}</span>
+                                ${m.resultado ? `<span class="bg-black/40 px-3 py-1 rounded-lg text-gold font-black italic border border-gold/20 shadow-lg">${m.resultado.split('-')[0].trim()}</span>` : ''}
+                            </div>
+                            <div class="w-full h-[1px] bg-gradient-to-r from-white/0 via-white/10 to-white/0 my-1 flex items-center justify-center">
+                                <span class="bg-[#0b101b] px-3 py-1 text-[0.5rem] font-black text-white/20 italic uppercase">VS</span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-lg font-black italic uppercase tracking-tighter text-white">${m.equipovisitante}</span>
+                                ${m.resultado ? `<span class="bg-black/40 px-3 py-1 rounded-lg text-gold font-black italic border border-gold/20 shadow-lg">${m.resultado.split('-')[1]?.trim() || '0'}</span>` : ''}
+                            </div>
+                        </div>
                     </div>
-                    <div class="flex items-center gap-3 text-slate-400">
-                        <i class="fas fa-map-marker-alt text-xs text-dibaGold"></i>
-                        <span class="text-[10px] font-bold uppercase">${m.Cancha || 'Cancha por definir'}</span>
+
+                    <div class="mt-8 pt-6 border-t border-white/5 space-y-3">
+                        <div class="flex items-center gap-3 text-white/40">
+                            <i class="fas fa-clock text-gold text-[0.6rem]"></i>
+                            <span class="text-[0.65rem] font-black uppercase tracking-widest">${m.hora || 'POR DEFINIR'}</span>
+                        </div>
+                        <div class="flex items-center gap-3 text-white/40">
+                            <i class="fas fa-map-marker-alt text-gold text-[0.6rem]"></i>
+                            <span class="text-[0.65rem] font-black uppercase tracking-widest truncate">${m.Cancha || 'SIN CANCHA ASIGNADA'}</span>
+                        </div>
                     </div>
                 </div>`;
             }).join('');

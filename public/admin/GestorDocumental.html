@@ -36,9 +36,12 @@
             padding: 2rem;
             flex: 1;
         }
+        .diba-grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 2rem; }
+        .col-4 { grid-column: span 4; }
+        .col-8 { grid-column: span 8; }
     </style>
 </head>
-<body class="bg-[#06090e] text-fcfcfc font-['Inter']">
+<body class="bg-[#06090e] text-fcfcfc font-['Outfit']">
     <!-- Loader -->
     <div id="app-loader" class="fixed inset-0 z-[9999] flex items-center justify-center bg-[#06090e]">
         <div class="text-center animate-fade-up">
@@ -50,33 +53,85 @@
         </div>
     </div>
     <div id="admin-nav"></div>
-    <main class="lg:ml-[280px] pt-[70px] min-h-screen transition-all duration-300">
-        <div class="p-8 max-w-[1600px] mx-auto">
-            <!-- Título fallback para gestor.js selector si es necesario -->
-            <h1 id="main-title" class="hidden">Gestor Documental</h1>
-
-            <div id="filter-container" class="flex items-center gap-3 mb-8 overflow-x-auto pb-2 no-scrollbar">
-                <button id="filter-docs-btn"
-                    class="px-6 py-2 rounded-full bg-dibaGold text-blue-900 text-[10px] font-black uppercase italic border border-dibaGold transition-all whitespace-nowrap">Documentos</button>
-                <button id="filter-club-btn"
-                    class="px-6 py-2 rounded-full bg-white/5 text-slate-400 text-[10px] font-black uppercase italic border border-white/10 hover:border-dibaGold transition-all whitespace-nowrap">Explorador de Storage</button>
-                <button id="filter-asistencias-btn"
-                    class="px-6 py-2 rounded-full bg-white/5 text-slate-400 text-[10px] font-black uppercase italic border border-white/10 hover:border-dibaGold transition-all whitespace-nowrap">Asistencias</button>
-                <button id="view-players-btn"
-                    class="px-6 py-2 rounded-full bg-white/5 text-slate-400 text-[10px] font-black uppercase italic border border-white/10 hover:border-dibaGold transition-all whitespace-nowrap">Jugadores</button>
-            </div>
-
-            <div id="dynamic-content" class="animate__animated animate__fadeIn panel glass" style="border-radius: 24px; min-height: 400px;">
-                <div class="flex flex-col items-center justify-center py-20 text-slate-500">
-                    <i class="fas fa-circle-notch animate-spin text-4xl mb-4 text-gold"></i>
-                    <p class="text-[10px] font-black uppercase tracking-widest text-gold opacity-60">Sincronizando base de datos...</p>
+    <main class="lg:ml-[280px] pt-[80px] min-h-screen transition-all duration-300">
+        <div class="p-10 max-w-[1600px] mx-auto">
+            <div class="mb-12 animate-fade-up">
+                <div class="flex items-center justify-between flex-wrap gap-6">
+                    <div>
+                        <h2 class="text-4xl font-black italic text-white uppercase tracking-tighter mb-2">Gestor <span class="text-gold">Documental</span></h2>
+                        <p class="text-white/40 font-bold uppercase tracking-[0.4em] text-[0.7rem]">Almacenamiento y control de archivos oficiales</p>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <div class="relative group">
+                            <i class="fas fa-search absolute left-5 top-1/2 -translate-y-1/2 text-white/30 text-xs"></i>
+                            <input type="text" id="search-docs" 
+                                placeholder="BUSCAR DOCUMENTO..." 
+                                class="bg-white/5 border border-white/5 rounded-2xl py-4 pl-12 pr-6 text-white text-[0.7rem] font-bold tracking-widest uppercase focus:bg-white/10 focus:border-gold/30 transition-all w-[300px] shadow-inner outline-none">
+                        </div>
+                        <button id="upload-btn" class="px-8 py-4 bg-gold rounded-2xl text-[#004d98] font-black uppercase tracking-widest text-[0.7rem] hover:scale-105 transition-all shadow-xl shadow-gold/10 flex items-center gap-3">
+                            <i class="fas fa-cloud-arrow-up"></i> SUBIR ARCHIVO
+                        </button>
+                    </div>
                 </div>
             </div>
+
+            <div class="diba-grid">
+                <!-- Estadísticas de Almacenamiento -->
+                <div class="col-4 space-y-6">
+                    <div class="panel glass p-8 animate-fade-up">
+                        <div class="flex items-center justify-between mb-8">
+                            <span class="text-[0.65rem] font-black uppercase tracking-[0.3em] text-white/30 italic">Estado de Almacenamiento</span>
+                            <i class="fas fa-database text-gold"></i>
+                        </div>
+                        <div class="space-y-4">
+                            <div class="flex justify-between items-end">
+                                <span class="text-3xl font-black italic tracking-tighter" id="storage-used">0 MB</span>
+                                <span class="text-[0.6rem] font-black text-white/40 uppercase tracking-widest">de 1024 MB</span>
+                            </div>
+                            <div class="h-2 w-full bg-white/5 rounded-full overflow-hidden flex">
+                                <div class="h-full bg-gold shadow-[0_0_15px_rgba(255,215,0,0.3)]" id="storage-bar" style="width:0%"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="panel glass p-0 overflow-hidden animate-fade-up" style="animation-delay: 0.1s">
+                        <div class="p-6 border-b border-white/5 font-black uppercase tracking-widest text-[0.65rem] text-white/40 italic bg-white/[0.02]">Filtros Rápidos</div>
+                        <div class="p-4 space-y-1">
+                            <button class="w-full flex items-center justify-between p-4 rounded-xl bg-gold/10 text-gold border border-gold/10 font-bold text-[0.7rem] uppercase tracking-widest group">
+                                <div class="flex items-center gap-3">
+                                    <i class="fas fa-folder-open"></i>
+                                    <span>Todos</span>
+                                </div>
+                                <span class="px-2 py-0.5 rounded bg-gold text-[#004d98] text-[0.5rem] font-black" id="count-all">0</span>
+                            </button>
+                            <!-- More filters -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Lista de Archivos -->
+                <div class="col-8 panel glass animate-fade-up" style="animation-delay: 0.2s">
+                    <div class="panel-header border-b border-white/5">
+                        <span class="panel-title text-[0.8rem] font-black uppercase tracking-[0.2em]"><i class="fas fa-file-invoice text-gold mr-3"></i>Repositorio Central</span>
+                        <div class="flex items-center gap-4">
+                            <button class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center text-gold"><i class="fas fa-grid-2"></i></button>
+                            <button class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center text-white/30"><i class="fas fa-list"></i></button>
+                        </div>
+                    </div>
+                    <div class="panel-body p-8">
+                        <div id="docs-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            <!-- Los archivos se cargarán aquí -->
+                            <div class="col-span-full py-20 flex flex-col items-center opacity-20">
+                                <i class="fas fa-cloud-arrow-down fa-bounce text-4xl mb-4 text-gold"></i>
+                                <p class="text-[0.7rem] font-black uppercase tracking-widest">Sincronizando Archivos...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </main>
 
-    <script src="../scripts/config.js"></script>
     <script src="../scripts/config.js"></script>
     <script type="module">
         import { initAdminLayout } from '../src/components/layout/admin-layout.js';
@@ -87,4 +142,3 @@
 </body>
 
 </html>
-

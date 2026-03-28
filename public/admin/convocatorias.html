@@ -480,8 +480,32 @@
     </div>
 
     <div id="admin-nav"></div>
-    <main class="lg:ml-[280px] pt-[70px] min-h-screen transition-all duration-300">
-        <div class="content">
+    <main class="lg:ml-[280px] pt-[80px] min-h-screen transition-all duration-300">
+        <div class="p-10 max-w-[1600px] mx-auto">
+            <div class="mb-12 animate-fade-up">
+                <div class="flex items-center justify-between flex-wrap gap-6">
+                    <div>
+                        <h2 class="text-4xl font-black italic text-white uppercase tracking-tighter mb-2">Gestión de <span class="text-gold">Convocatorias</span></h2>
+                        <p class="text-white/40 font-bold uppercase tracking-[0.4em] text-[0.7rem]">Comunicación oficial y llamado a jugadores</p>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <button id="new-conv-btn" class="px-8 py-4 bg-gold rounded-2xl text-[#004d98] font-black uppercase tracking-widest text-[0.7rem] hover:scale-105 transition-all shadow-xl shadow-gold/10 flex items-center gap-3">
+                            <i class="fas fa-bullhorn text-lg"></i> NUEVA CONVOCATORIA
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="diba-grid" id="conv-container">
+                <!-- Convocatorias will be loaded here -->
+                <div class="col-span-full py-40 flex flex-col items-center opacity-20">
+                    <i class="fas fa-bullhorn fa-bounce text-6xl mb-6 text-gold"></i>
+                    <p class="text-[0.8rem] font-black uppercase tracking-[0.4em]">Sincronizando Convocatorias Oficiales...</p>
+                </div>
+            </div>
+        </div>
+    </main>
+    <div class="content">
             <div class="conv-grid">
 
                 <!-- ── IZQUIERDA: Selección de jugadores ── -->
