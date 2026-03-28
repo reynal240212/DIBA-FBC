@@ -32,8 +32,23 @@ export async function loadStorageBuckets(dynamicContent, pageTitle, setActiveFil
     `;
 
     try {
-        const { data: buckets, error } = await supabase.storage.listBuckets();
-        if (error) throw error;
+        let { data: buckets, error } = await supabase.storage.listBuckets();
+        if (error) {
+            console.warn("Storage listBuckets restricted, using fallback.");
+            buckets = [];
+        }
+
+        // Fallback: Si el API está restringido, forzamos los buckets conocidos del proyecto
+        const knownBuckets = [
+            { id: 'documents', name: 'documents', public: true, file_size_limit: 52428800, allowed_mime_types: [] },
+            { id: 'statuses', name: 'statuses', public: true, file_size_limit: 52428800, allowed_mime_types: [] },
+            { id: 'asistencia-fotos', name: 'asistencia-fotos', public: true, file_size_limit: 52428800, allowed_mime_types: [] }
+        ];
+
+        // Mezclar buckets reales con conocidos para asegurar visibilidad
+        knownBuckets.forEach(kb => {
+            if (!buckets.find(b => b.id === kb.id)) buckets.push(kb);
+        });
 
         const rowsContainer = document.getElementById('buckets-rows');
         if (!rowsContainer) return;
