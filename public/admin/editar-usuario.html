@@ -17,7 +17,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
-<body class="bg-[#06090e] text-white font-['Outfit']">
+<body class="bg-gray-100 text-slate-800 font-['Outfit']">
 
     <div id="admin-nav"></div>
 
@@ -28,10 +28,10 @@
             <div class="mb-10 text-center">
                 <div class="flex items-center justify-center gap-3 mb-3">
                     <span class="w-8 h-1 bg-gold rounded-full"></span>
-                    <p class="text-white/40 font-bold uppercase tracking-[0.4em] text-[0.65rem]">Gestión de Permisos Oficial</p>
+                    <p class="text-slate-500 font-bold uppercase tracking-[0.4em] text-[0.65rem]">Gestión de Permisos Oficial</p>
                     <span class="w-8 h-1 bg-gold rounded-full"></span>
                 </div>
-                <h2 class="text-4xl lg:text-5xl font-black italic text-white uppercase tracking-tighter">Editar <span class="text-gold" id="user-display-name">Perfil</span></h2>
+                <h2 class="text-4xl lg:text-5xl font-black italic text-slate-800 uppercase tracking-tighter">Editar <span class="text-gold" id="user-display-name">Perfil</span></h2>
             </div>
 
             <div class="panel p-0 overflow-hidden shadow-[0_30px_100px_rgba(0,0,0,0.5)] border-white/10">
@@ -40,8 +40,8 @@
                         <i class="fas fa-user-edit text-2xl"></i>
                     </div>
                     <div>
-                        <h3 class="text-lg font-black italic uppercase text-white tracking-tight">Actualizar Información</h3>
-                        <p class="text-[0.6rem] text-white/30 font-bold uppercase tracking-[0.2em]" id="user-display-subtitle">Sincronizando datos del servidor...</p>
+                        <h3 class="text-lg font-black italic uppercase text-slate-800 tracking-tight">Actualizar Información</h3>
+                        <p class="text-[0.6rem] text-slate-400 font-bold uppercase tracking-[0.2em]" id="user-display-subtitle">Sincronizando datos del servidor...</p>
                     </div>
                 </div>
 
@@ -52,7 +52,7 @@
                         <div class="premium-form-group opacity-40">
                             <label class="premium-label">ID de Registro (Solo Lectura)</label>
                             <div class="relative">
-                                <i class="fas fa-fingerprint absolute left-5 top-1/2 -translate-y-1/2 text-white/20"></i>
+                                <i class="fas fa-fingerprint absolute left-5 top-1/2 -translate-y-1/2 text-slate-300"></i>
                                 <input type="text" id="user-id-display" readonly 
                                     class="premium-input pl-14 font-mono text-[0.7rem] cursor-not-allowed">
                             </div>
@@ -85,12 +85,12 @@
                                     <option value="tecnico">TÉCNICO / COORDINADOR (OPERATIVO)</option>
                                     <option value="admin">ADMINISTRADOR (CONTROL TOTAL)</option>
                                 </select>
-                                <i class="fas fa-chevron-down absolute right-5 top-1/2 -translate-y-1/2 text-white/20 pointer-events-none"></i>
+                                <i class="fas fa-chevron-down absolute right-5 top-1/2 -translate-y-1/2 text-slate-300 pointer-events-none"></i>
                             </div>
                         </div>
 
                         <div class="pt-6 flex flex-col md:flex-row gap-4">
-                            <a href="usuarios.html" class="flex-1 px-8 py-5 bg-white/5 text-white/40 border border-white/5 rounded-2xl font-black uppercase tracking-widest text-[0.7rem] hover:bg-white/10 hover:text-white transition-all text-center flex items-center justify-center gap-3">
+                            <a href="usuarios.html" class="flex-1 px-8 py-5 bg-white/5 text-slate-500 border border-white/5 rounded-2xl font-black uppercase tracking-widest text-[0.7rem] hover:bg-white/10 hover:text-slate-800 transition-all text-center flex items-center justify-center gap-3">
                                 <i class="fas fa-times"></i> CANCELAR
                             </a>
                             <button type="submit" id="submit-btn" class="flex-[2] px-8 py-5 bg-gold text-[#004d98] rounded-2xl font-black uppercase tracking-widest text-[0.75rem] shadow-xl shadow-gold/10 hover:scale-[1.03] active:scale-95 transition-all flex items-center justify-center gap-3">
@@ -101,7 +101,7 @@
                 </div>
             </div>
 
-            <p class="mt-8 text-center text-[0.6rem] font-bold text-white/20 uppercase tracking-[0.4em] italic">
+            <p class="mt-8 text-center text-[0.6rem] font-bold text-slate-300 uppercase tracking-[0.4em] italic">
                 DIBA FBC SECURITY — MODIFICACIÓN DE PERFIL
             </p>
         </div>
