@@ -89,6 +89,24 @@ export async function initAdminLayout() {
                 <div class="w-8 flex justify-center"><i class="fas fa-paper-plane text-lg ${getIconClass('push')}"></i></div>
                 <span class="text-[0.8rem] tracking-tight truncate">Notificaciones</span>
             </a>
+
+            <div class="px-6 pt-8 pb-4 text-[0.6rem] font-black uppercase tracking-[0.4em] text-white/30 italic">Club & Social</div>
+            <a href="../analisis.html" class="nav-link flex items-center gap-3 px-4 py-3 rounded-2xl transition-all duration-300 ${getLinkClass('analisis')}">
+                <div class="w-8 flex justify-center"><i class="fas fa-chart-line text-lg ${getIconClass('analisis')}"></i></div>
+                <span class="text-[0.8rem] tracking-tight truncate">Análisis de Datos</span>
+            </a>
+            <a href="../chat.html" class="nav-link flex items-center gap-3 px-4 py-3 rounded-2xl transition-all duration-300 ${getLinkClass('chat')}">
+                <div class="w-8 flex justify-center"><i class="fas fa-comments text-lg ${getIconClass('chat')}"></i></div>
+                <span class="text-[0.8rem] tracking-tight truncate">Chat Comunitario</span>
+            </a>
+            <a href="../galeria.html" class="nav-link flex items-center gap-3 px-4 py-3 rounded-2xl transition-all duration-300 ${getLinkClass('galeria')}">
+                <div class="w-8 flex justify-center"><i class="fas fa-images text-lg ${getIconClass('galeria')}"></i></div>
+                <span class="text-[0.8rem] tracking-tight truncate">Galería Multimedia</span>
+            </a>
+            <a href="../socialDIBA.html" class="nav-link flex items-center gap-3 px-4 py-3 rounded-2xl transition-all duration-300 ${getLinkClass('socialDIBA')}">
+                <div class="w-8 flex justify-center"><i class="fas fa-share-nodes text-lg ${getIconClass('socialDIBA')}"></i></div>
+                <span class="text-[0.8rem] tracking-tight truncate">Social Hub</span>
+            </a>
         </nav>
 
         <!-- User Profile (Fixed Bottom) -->
