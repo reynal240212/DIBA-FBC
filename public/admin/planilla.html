@@ -70,7 +70,7 @@
     </style>
 </head>
 
-<body class="bg-[#06090e] text-white font-['Outfit']">
+<body class="bg-gray-100 text-slate-800 font-['Outfit']">
 
     <div id="admin-nav"></div>
 
@@ -88,14 +88,14 @@
                     <div>
                         <div class="flex items-center gap-3 mb-2">
                             <span class="w-8 h-1 bg-gold rounded-full"></span>
-                            <p class="text-white/40 font-bold uppercase tracking-[0.4em] text-[0.65rem]">Registro de Asistencia Diaria</p>
+                            <p class="text-slate-500 font-bold uppercase tracking-[0.4em] text-[0.65rem]">Registro de Asistencia Diaria</p>
                         </div>
-                        <h2 class="text-4xl lg:text-5xl font-black italic text-white uppercase tracking-tighter">Planilla <span class="text-gold">Maestra</span></h2>
+                        <h2 class="text-4xl lg:text-5xl font-black italic text-slate-800 uppercase tracking-tighter">Planilla <span class="text-gold">Maestra</span></h2>
                     </div>
 
                     <div class="flex items-center gap-4 flex-wrap lg:flex-nowrap w-full lg:w-auto">
                         <div class="flex bg-white/5 p-2 rounded-2xl border border-white/5">
-                            <button id="saveAllBtn" class="px-6 py-3 bg-white/5 hover:bg-white/10 rounded-xl text-white text-[0.65rem] font-black uppercase tracking-widest transition-all flex items-center gap-2">
+                            <button id="saveAllBtn" class="px-6 py-3 bg-white/5 hover:bg-white/10 rounded-xl text-slate-800 text-[0.65rem] font-black uppercase tracking-widest transition-all flex items-center gap-2">
                                 <i class="fas fa-floppy-disk text-gold"></i> Guardar Todo
                             </button>
                             <button onclick="openCreateModal()" class="px-6 py-3 bg-gold text-[#004d98] rounded-xl text-[0.65rem] font-black uppercase tracking-widest transition-all hover:scale-105 flex items-center gap-2 ml-2">
@@ -117,11 +117,11 @@
                     <div class="premium-form-group mb-0 flex-[2] min-w-[300px]">
                         <label class="premium-label">Buscar Jugador</label>
                         <div class="relative">
-                            <i class="fas fa-search absolute left-5 top-1/2 -translate-y-1/2 text-white/20"></i>
+                            <i class="fas fa-search absolute left-5 top-1/2 -translate-y-1/2 text-slate-300"></i>
                             <input type="text" id="playerSearch" placeholder="ESCRIBE UN NOMBRE..." class="premium-input pl-14 uppercase">
                         </div>
                     </div>
-                    <div id="sync-status" class="text-[0.6rem] font-black uppercase tracking-widest text-white/30 italic mt-auto pb-4">
+                    <div id="sync-status" class="text-[0.6rem] font-black uppercase tracking-widest text-slate-400 italic mt-auto pb-4">
                         <i class="fas fa-check-circle text-success mr-2"></i> Sincronizado
                     </div>
                 </div>
@@ -129,7 +129,7 @@
                 <!-- Stats Summary -->
                 <div class="col-12 lg:col-4 panel p-8 flex flex-col justify-between">
                     <div class="flex items-center justify-between mb-4">
-                        <span class="text-[0.65rem] font-black uppercase tracking-widest text-white/40 italic">Balance de Sesión</span>
+                        <span class="text-[0.65rem] font-black uppercase tracking-widest text-slate-500 italic">Balance de Sesión</span>
                         <span class="text-2xl font-black italic text-gold" id="stat-pct">0%</span>
                     </div>
                     <div class="grid grid-cols-4 gap-4 mb-6">
@@ -147,7 +147,7 @@
                         </div>
                         <div class="text-center">
                             <div class="text-xl font-black" id="stat-total">0</div>
-                            <div class="text-[0.55rem] font-bold text-white/30 uppercase tracking-widest">Total</div>
+                            <div class="text-[0.55rem] font-bold text-slate-400 uppercase tracking-widest">Total</div>
                         </div>
                     </div>
                     <div class="h-1.5 w-full bg-white/5 rounded-full overflow-hidden flex">
@@ -177,13 +177,13 @@
                     <table class="w-full text-left font-['Outfit'] border-collapse" id="mainTable">
                         <thead>
                             <tr class="bg-white/5">
-                                <th class="px-8 py-6 text-[0.6rem] font-black text-white/40 uppercase tracking-[0.25em] w-[50px]">#</th>
-                                <th class="px-8 py-6 text-[0.6rem] font-black text-white/40 uppercase tracking-[0.25em] w-[60px]">Foto</th>
-                                <th class="px-8 py-6 text-[0.6rem] font-black text-white/40 uppercase tracking-[0.25em]">Jugador</th>
-                                <th class="px-8 py-6 text-[0.6rem] font-black text-white/40 uppercase tracking-[0.25em] w-[180px]">Pago</th>
-                                <th class="px-8 py-6 text-[0.6rem] font-black text-white/40 uppercase tracking-[0.25em] w-[160px]">Asistencia</th>
-                                <th class="px-8 py-6 text-[0.6rem] font-black text-white/40 uppercase tracking-[0.25em]">Observaciones</th>
-                                <th class="px-8 py-6 text-[0.6rem] font-black text-white/40 uppercase tracking-[0.25em] text-right">Acciones</th>
+                                <th class="px-8 py-6 text-[0.6rem] font-black text-slate-500 uppercase tracking-[0.25em] w-[50px]">#</th>
+                                <th class="px-8 py-6 text-[0.6rem] font-black text-slate-500 uppercase tracking-[0.25em] w-[60px]">Foto</th>
+                                <th class="px-8 py-6 text-[0.6rem] font-black text-slate-500 uppercase tracking-[0.25em]">Jugador</th>
+                                <th class="px-8 py-6 text-[0.6rem] font-black text-slate-500 uppercase tracking-[0.25em] w-[180px]">Pago</th>
+                                <th class="px-8 py-6 text-[0.6rem] font-black text-slate-500 uppercase tracking-[0.25em] w-[160px]">Asistencia</th>
+                                <th class="px-8 py-6 text-[0.6rem] font-black text-slate-500 uppercase tracking-[0.25em]">Observaciones</th>
+                                <th class="px-8 py-6 text-[0.6rem] font-black text-slate-500 uppercase tracking-[0.25em] text-right">Acciones</th>
                             </tr>
                         </thead>
                         <tbody id="planillaBody" class="divide-y divide-white/5">
@@ -210,10 +210,10 @@
         <div class="relative bg-[#020617] border border-white/10 rounded-[32px] p-8 w-full max-w-[650px] shadow-2xl animate-fade-up">
             <div class="flex justify-between items-start mb-8">
                 <div>
-                    <h3 id="modalPlayerName" class="text-2xl font-black italic uppercase text-white mb-2">Cargando...</h3>
-                    <p id="modalPlayerDni" class="text-[0.65rem] font-black text-white/30 uppercase tracking-widest"></p>
+                    <h3 id="modalPlayerName" class="text-2xl font-black italic uppercase text-slate-800 mb-2">Cargando...</h3>
+                    <p id="modalPlayerDni" class="text-[0.65rem] font-black text-slate-400 uppercase tracking-widest"></p>
                 </div>
-                <button onclick="closeAdminDocs()" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-white/40 hover:bg-white/10 transition-all">
+                <button onclick="closeAdminDocs()" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-slate-500 hover:bg-white/10 transition-all">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
@@ -221,7 +221,7 @@
                 <!-- Docs list -->
             </div>
             <div class="mt-8 pt-6 border-t border-white/5 text-center">
-                <p class="text-[0.55rem] font-black text-white/20 uppercase tracking-[0.3em]">Gestión Documental — DIBA FBC</p>
+                <p class="text-[0.55rem] font-black text-slate-300 uppercase tracking-[0.3em]">Gestión Documental — DIBA FBC</p>
             </div>
         </div>
     </div>
@@ -230,7 +230,7 @@
     <div id="editPlayerModal" class="fixed inset-0 z-[2000] hidden items-center justify-center p-6">
         <div class="absolute inset-0 bg-black/80 backdrop-blur-md" onclick="closeEditModal()"></div>
         <div class="relative bg-[#020617] border border-white/10 rounded-[32px] p-10 w-full max-w-[500px] shadow-2xl animate-fade-up">
-            <h3 class="text-2xl font-black italic uppercase text-white mb-8">Editar <span class="text-gold">Jugador</span></h3>
+            <h3 class="text-2xl font-black italic uppercase text-slate-800 mb-8">Editar <span class="text-gold">Jugador</span></h3>
             <form id="editPlayerForm" class="space-y-6">
                 <input type="hidden" id="editDni">
                 <input type="hidden" id="oldName">
@@ -258,7 +258,7 @@
     <div id="createPlayerModal" class="fixed inset-0 z-[2000] hidden items-center justify-center p-6">
         <div class="absolute inset-0 bg-black/80 backdrop-blur-md" onclick="closeCreateModal()"></div>
         <div class="relative bg-[#020617] border border-white/10 rounded-[32px] p-10 w-full max-w-[850px] shadow-2xl animate-fade-up max-h-[90vh] overflow-y-auto custom-scrollbar">
-            <h3 class="text-2xl font-black italic uppercase text-white mb-8">Registro <span class="text-gold">Rápido</span></h3>
+            <h3 class="text-2xl font-black italic uppercase text-slate-800 mb-8">Registro <span class="text-gold">Rápido</span></h3>
             <form id="quickCreatePlayerForm">
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     <div class="premium-form-group">
@@ -434,13 +434,13 @@
                 tr.className = "hover:bg-white/[0.02] transition-colors";
                 
                 tr.innerHTML = `
-                    <td class="px-8 py-4 text-[0.7rem] font-black text-white/20">${counter}</td>
+                    <td class="px-8 py-4 text-[0.7rem] font-black text-slate-300">${counter}</td>
                     <td class="px-8 py-4">
                         <img src="${p.foto || '/images/ESCUDO.png'}" class="w-10 h-10 rounded-full border border-white/10 object-cover shadow-lg">
                     </td>
                     <td class="px-8 py-4">
-                        <div class="text-[0.82rem] font-bold text-white uppercase">${p.name}</div>
-                        <div class="text-[0.6rem] font-black text-white/20 uppercase tracking-widest mt-0.5">DNI: ${p.id}</div>
+                        <div class="text-[0.82rem] font-bold text-slate-800 uppercase">${p.name}</div>
+                        <div class="text-[0.6rem] font-black text-slate-300 uppercase tracking-widest mt-0.5">DNI: ${p.id}</div>
                     </td>
                     <td class="px-8 py-4">
                         <select class="premium-select in-pago w-full">
@@ -464,7 +464,7 @@
                     </td>
                     <td class="px-8 py-4 text-right">
                         <div class="relative group inline-block">
-                            <button class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center text-white/20 hover:text-gold hover:bg-white/10 transition-all">
+                            <button class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center text-slate-300 hover:text-gold hover:bg-white/10 transition-all">
                                 <i class="fas fa-ellipsis-v"></i>
                             </button>
                             <div class="absolute right-0 top-full mt-2 w-48 bg-sidebar border border-white/10 rounded-2xl shadow-2xl hidden group-hover:block z-50 overflow-hidden">
@@ -631,7 +631,7 @@
             dniEl.innerText = `DNI: ${dni}`;
             modal.classList.remove('hidden');
             modal.classList.add('flex');
-            listEl.innerHTML = '<div class="text-center py-10"><div class="w-8 h-8 border-2 border-gold/20 border-t-gold rounded-full animate-spin mx-auto mb-2"></div><p class="text-[0.6rem] font-black uppercase text-white/30 tracking-widest">Consultando boveda...</p></div>';
+            listEl.innerHTML = '<div class="text-center py-10"><div class="w-8 h-8 border-2 border-gold/20 border-t-gold rounded-full animate-spin mx-auto mb-2"></div><p class="text-[0.6rem] font-black uppercase text-slate-400 tracking-widest">Consultando boveda...</p></div>';
 
             const DOC_TYPES = [
                 { id: 'tarjeta_identidad', label: 'T. Identidad' },
@@ -650,13 +650,13 @@
                 item.className = "flex items-center justify-between p-4 bg-white/5 border border-white/5 rounded-2xl hover:bg-white/10 transition-all";
                 item.innerHTML = `
                     <div class="flex items-center gap-4">
-                        <div class="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-white/20"><i class="fas fa-file-alt"></i></div>
+                        <div class="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-slate-300"><i class="fas fa-file-alt"></i></div>
                         <div>
-                            <div class="text-white">${type.label}</div>
-                            <div class="${doc ? 'text-green-500' : 'text-white/20'} mt-0.5">${doc ? 'CARGADO' : 'PENDIENTE'}</div>
+                            <div class="text-slate-800">${type.label}</div>
+                            <div class="${doc ? 'text-green-500' : 'text-slate-300'} mt-0.5">${doc ? 'CARGADO' : 'PENDIENTE'}</div>
                         </div>
                     </div>
-                    ${doc ? `<a href="${doc.file_url}" target="_blank" class="w-10 h-10 rounded-xl bg-gold/10 text-gold flex items-center justify-center hover:bg-gold hover:text-[#004d98] transition-all"><i class="fas fa-eye"></i></a>` : '<div class="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-white/10"><i class="fas fa-times"></i></div>'}
+                    ${doc ? `<a href="${doc.file_url}" target="_blank" class="w-10 h-10 rounded-xl bg-gold/10 text-gold flex items-center justify-center hover:bg-gold hover:text-[#004d98] transition-all"><i class="fas fa-eye"></i></a>` : '<div class="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-slate-800/10"><i class="fas fa-times"></i></div>'}
                 `;
                 listEl.appendChild(item);
             }

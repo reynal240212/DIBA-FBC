@@ -94,7 +94,7 @@
     </style>
 </head>
 
-<body class="bg-[#06090e] text-white font-['Outfit']">
+<body class="bg-gray-100 text-slate-800 font-['Outfit']">
     <div id="admin-nav"></div>
 
     <main class="lg:ml-[280px] pt-[80px] min-h-screen transition-all duration-300">
@@ -111,9 +111,9 @@
                     <div>
                         <div class="flex items-center gap-3 mb-2">
                             <span class="w-8 h-1 bg-gold rounded-full"></span>
-                            <p class="text-white/40 font-bold uppercase tracking-[0.4em] text-[0.65rem]">Comunicación Oficial Club</p>
+                            <p class="text-slate-500 font-bold uppercase tracking-[0.4em] text-[0.65rem]">Comunicación Oficial Club</p>
                         </div>
-                        <h2 class="text-4xl lg:text-5xl font-black italic text-white uppercase tracking-tighter">Gestión de <span class="text-gold">Convocatorias</span></h2>
+                        <h2 class="text-4xl lg:text-5xl font-black italic text-slate-800 uppercase tracking-tighter">Gestión de <span class="text-gold">Convocatorias</span></h2>
                     </div>
                 </div>
             </div>
@@ -131,7 +131,7 @@
 
                         <div class="mb-8">
                             <div class="relative group">
-                                <i class="fas fa-search absolute left-5 top-1/2 -translate-y-1/2 text-white/20"></i>
+                                <i class="fas fa-search absolute left-5 top-1/2 -translate-y-1/2 text-slate-300"></i>
                                 <input type="text" id="searchPlayers" placeholder="FILTRAR POR NOMBRE O CATEGORÍA..." 
                                     class="premium-input pl-14 uppercase tracking-widest text-[0.7rem] font-black">
                             </div>
@@ -195,7 +195,7 @@
                                     <div class="w-10 h-10 rounded-xl bg-gold/10 flex items-center justify-center text-gold flex-none">
                                         <i class="fas fa-bell animate-bounce"></i>
                                     </div>
-                                    <p class="text-[0.6rem] font-bold text-white/40 uppercase leading-relaxed tracking-wider">
+                                    <p class="text-[0.6rem] font-bold text-slate-500 uppercase leading-relaxed tracking-wider">
                                         Se enviará una <span class="text-gold">Notificación Push</span> automática a los dispositivos vinculados de los jugadores seleccionados.
                                     </p>
                                 </div>
@@ -258,7 +258,7 @@
         function renderJugadores(jugadores) {
             const list = document.getElementById('playersList');
             if (jugadores.length === 0) {
-                list.innerHTML = '<div class="text-center py-10 text-white/20 font-black text-[0.7rem] uppercase tracking-widest">No hay jugadores disponibles</div>';
+                list.innerHTML = '<div class="text-center py-10 text-slate-300 font-black text-[0.7rem] uppercase tracking-widest">No hay jugadores disponibles</div>';
                 return;
             }
             list.innerHTML = '';
@@ -282,8 +282,8 @@
                         <span class="text-[0.65rem] font-black uppercase tracking-[0.2em] text-gold italic">${cat}</span>
                     </div>
                     <div class="flex items-center gap-3">
-                        <span class="cat-sel-count text-[0.6rem] font-black text-white/20 uppercase">0 / ${groupCount}</span>
-                        <i class="fas fa-chevron-down text-[0.6rem] text-white/20 transition-transform duration-300"></i>
+                        <span class="cat-sel-count text-[0.6rem] font-black text-slate-300 uppercase">0 / ${groupCount}</span>
+                        <i class="fas fa-chevron-down text-[0.6rem] text-slate-300 transition-transform duration-300"></i>
                     </div>
                 `;
 
@@ -297,8 +297,8 @@
                     item.innerHTML = `
                         <input type="checkbox" ${selectedDNIs.has(j.numero) ? 'checked' : ''} class="pointer-events-none">
                         <div class="flex-1">
-                            <div class="text-[0.75rem] font-bold text-white uppercase">${j.nombre} ${j.apellidos}</div>
-                            <div class="text-[0.55rem] font-black text-white/20 uppercase tracking-widest mt-1">DNI: ${j.numero}</div>
+                            <div class="text-[0.75rem] font-bold text-slate-800 uppercase">${j.nombre} ${j.apellidos}</div>
+                            <div class="text-[0.55rem] font-black text-slate-300 uppercase tracking-widest mt-1">DNI: ${j.numero}</div>
                         </div>
                     `;
                     item.addEventListener('click', (e) => {
@@ -339,7 +339,7 @@
             const mCheck = headerEl.querySelector('.cat-master-check');
             
             badge.textContent = `${countInCat} / ${players.length}`;
-            badge.className = `text-[0.6rem] font-black uppercase ${countInCat > 0 ? 'text-gold' : 'text-white/20'}`;
+            badge.className = `text-[0.6rem] font-black uppercase ${countInCat > 0 ? 'text-gold' : 'text-slate-300'}`;
             
             mCheck.checked = countInCat === players.length;
             mCheck.indeterminate = countInCat > 0 && countInCat < players.length;
@@ -363,7 +363,7 @@
                     return `
                         <div class="conv-history-card">
                             <div class="flex justify-between items-start mb-4">
-                                <div class="text-[0.8rem] font-black italic uppercase tracking-tighter text-white truncate max-w-[70%]">${c.titulo}</div>
+                                <div class="text-[0.8rem] font-black italic uppercase tracking-tighter text-slate-800 truncate max-w-[70%]">${c.titulo}</div>
                                 <span class="text-[0.5rem] font-black text-gold border border-gold/20 px-2 py-1 rounded bg-gold/5 italic uppercase">${pCount} JUGS</span>
                             </div>
                             <div class="flex flex-col gap-2 opacity-30">

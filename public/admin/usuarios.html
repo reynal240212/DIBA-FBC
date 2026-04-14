@@ -13,7 +13,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
-<body class="bg-[#06090e] text-white font-['Outfit']">
+<body class="bg-gray-100 text-slate-800 font-['Outfit']">
 
     <div id="admin-nav"></div>
 
@@ -31,17 +31,17 @@
                     <div class="min-w-[300px]">
                         <div class="flex items-center gap-3 mb-2">
                             <span class="w-8 h-1 bg-gold rounded-full"></span>
-                            <p class="text-white/40 font-bold uppercase tracking-[0.4em] text-[0.65rem]">Administración de Sistema</p>
+                            <p class="text-slate-500 font-bold uppercase tracking-[0.4em] text-[0.65rem]">Administración de Sistema</p>
                         </div>
-                        <h2 class="text-4xl lg:text-5xl font-black italic text-white uppercase tracking-tighter">Gestión de <span class="text-gold">Usuarios</span></h2>
+                        <h2 class="text-4xl lg:text-5xl font-black italic text-slate-800 uppercase tracking-tighter">Gestión de <span class="text-gold">Usuarios</span></h2>
                     </div>
 
                     <div class="flex items-center gap-4 flex-wrap lg:flex-nowrap w-full lg:w-auto">
                         <div class="relative group flex-1 lg:flex-none">
-                            <i class="fas fa-search absolute left-5 top-1/2 -translate-y-1/2 text-white/30 text-xs group-focus-within:text-gold transition-colors"></i>
+                            <i class="fas fa-search absolute left-5 top-1/2 -translate-y-1/2 text-slate-400 text-xs group-focus-within:text-gold transition-colors"></i>
                             <input type="text" id="search-user" 
                                 placeholder="BUSCAR USUARIO..." 
-                                class="bg-white/5 border border-white/10 rounded-2xl py-4 pl-12 pr-6 text-white text-[0.7rem] font-bold tracking-widest uppercase focus:bg-white/10 focus:border-gold/30 transition-all w-full lg:w-[320px] shadow-inner outline-none">
+                                class="bg-slate-100 border border-slate-200 rounded-2xl py-4 pl-12 pr-6 text-slate-800 text-[0.7rem] font-bold tracking-widest uppercase focus:bg-slate-200 focus:border-gold/30 transition-all w-full lg:w-[320px] shadow-inner outline-none">
                         </div>
                         <a href="crear-usuario.html" class="px-10 py-4 bg-gold rounded-2xl text-[#004d98] font-black uppercase tracking-widest text-[0.7rem] hover:scale-105 hover:bg-white transition-all shadow-2xl shadow-gold/10 flex items-center justify-center gap-3 w-full lg:w-auto">
                             <i class="fas fa-user-plus"></i> NUEVO USUARIO
@@ -62,12 +62,12 @@
                 <div class="p-0 overflow-x-auto custom-scrollbar">
                     <table class="w-full text-left font-['Outfit'] border-collapse">
                         <thead>
-                            <tr class="bg-white/5">
-                                <th class="px-8 py-6 text-[0.6rem] font-black text-white/40 uppercase tracking-[0.25em]">Usuario</th>
-                                <th class="px-8 py-6 text-[0.6rem] font-black text-white/40 uppercase tracking-[0.25em]">Nombre Real</th>
-                                <th class="px-8 py-6 text-[0.6rem] font-black text-white/40 uppercase tracking-[0.25em]">Rol / Permiso</th>
-                                <th class="px-8 py-6 text-[0.6rem] font-black text-white/40 uppercase tracking-[0.25em]">Status</th>
-                                <th class="px-8 py-6 text-[0.6rem] font-black text-white/40 uppercase tracking-[0.25em] text-right">Acciones</th>
+                            <tr class="bg-slate-100">
+                                <th class="px-8 py-6 text-[0.6rem] font-black text-slate-500 uppercase tracking-[0.25em]">Usuario</th>
+                                <th class="px-8 py-6 text-[0.6rem] font-black text-slate-500 uppercase tracking-[0.25em]">Nombre Real</th>
+                                <th class="px-8 py-6 text-[0.6rem] font-black text-slate-500 uppercase tracking-[0.25em]">Rol / Permiso</th>
+                                <th class="px-8 py-6 text-[0.6rem] font-black text-slate-500 uppercase tracking-[0.25em]">Status</th>
+                                <th class="px-8 py-6 text-[0.6rem] font-black text-slate-500 uppercase tracking-[0.25em] text-right">Acciones</th>
                             </tr>
                         </thead>
                         <tbody id="users-tbody" class="divide-y divide-white/5">
@@ -96,8 +96,8 @@
             </div>
 
             <div class="text-center mb-10 mt-4">
-                <h3 class="text-2xl font-black italic uppercase text-white mb-2">Activar <span id="modal-username" class="text-gold">Usuario</span></h3>
-                <p class="text-[0.65rem] font-bold text-white/40 uppercase tracking-[0.3em]">Configure la vigencia del acceso</p>
+                <h3 class="text-2xl font-black italic uppercase text-slate-800 mb-2">Activar <span id="modal-username" class="text-gold">Usuario</span></h3>
+                <p class="text-[0.65rem] font-bold text-slate-500 uppercase tracking-[0.3em]">Configure la vigencia del acceso</p>
             </div>
             
             <div class="space-y-6">
@@ -107,11 +107,11 @@
                         <i class="fas fa-calendar absolute left-5 top-1/2 -translate-y-1/2 text-gold/50"></i>
                         <input type="date" id="expiration-date" class="premium-input pl-14">
                     </div>
-                    <p class="text-[0.55rem] font-medium text-white/20 mt-3 px-2 italic uppercase tracking-widest">El acceso será revocado automáticamente al finalizar este día.</p>
+                    <p class="text-[0.55rem] font-medium text-slate-300 mt-3 px-2 italic uppercase tracking-widest">El acceso será revocado automáticamente al finalizar este día.</p>
                 </div>
                 
                 <div class="flex gap-4 pt-4">
-                    <button id="cancel-activation" class="flex-1 py-4 text-[0.65rem] font-black uppercase tracking-widest text-white/40 hover:bg-white/5 rounded-2xl border border-white/5 transition-all">
+                    <button id="cancel-activation" class="flex-1 py-4 text-[0.65rem] font-black uppercase tracking-widest text-slate-500 hover:bg-slate-100 rounded-2xl border border-white/5 transition-all">
                         Cancelar
                     </button>
                     <button id="confirm-activation" class="flex-1 py-4 text-[0.65rem] font-black uppercase tracking-widest bg-gold text-[#004d98] rounded-2xl hover:scale-[1.05] hover:bg-white transition-all shadow-xl shadow-gold/20">
