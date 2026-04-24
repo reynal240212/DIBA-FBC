@@ -13,7 +13,8 @@
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
-<body class="bg-gray-100 text-slate-800 font-['Outfit']">
+<body class="bg-[#020617] text-white font-['Outfit'] selection:bg-yellow-500/30">
+    <div class="fixed inset-0 pointer-events-none z-0" style="background: var(--mesh-bg)"></div>
 
     <div id="admin-nav"></div>
 
@@ -33,7 +34,7 @@
                             <span class="w-8 h-1 bg-gold rounded-full"></span>
                             <p class="text-slate-500 font-bold uppercase tracking-[0.4em] text-[0.65rem]">Administración de Sistema</p>
                         </div>
-                        <h2 class="text-4xl lg:text-5xl font-black italic text-slate-800 uppercase tracking-tighter">Gestión de <span class="text-gold">Usuarios</span></h2>
+                        <h2 class="text-4xl lg:text-5xl font-black italic text-white uppercase tracking-tighter">Gestión de <span class="text-gold">Usuarios</span></h2>
                     </div>
 
                     <div class="flex items-center gap-4 flex-wrap lg:flex-nowrap w-full lg:w-auto">
@@ -41,7 +42,7 @@
                             <i class="fas fa-search absolute left-5 top-1/2 -translate-y-1/2 text-slate-400 text-xs group-focus-within:text-gold transition-colors"></i>
                             <input type="text" id="search-user" 
                                 placeholder="BUSCAR USUARIO..." 
-                                class="bg-slate-100 border border-slate-200 rounded-2xl py-4 pl-12 pr-6 text-slate-800 text-[0.7rem] font-bold tracking-widest uppercase focus:bg-slate-200 focus:border-gold/30 transition-all w-full lg:w-[320px] shadow-inner outline-none">
+                                class="bg-white/5 border border-white/10 rounded-2xl py-4 pl-12 pr-6 text-white text-[0.7rem] font-bold tracking-widest uppercase focus:bg-white/10 focus:border-gold/30 transition-all w-full lg:w-[320px] shadow-inner outline-none">
                         </div>
                         <a href="crear-usuario.html" class="px-10 py-4 bg-gold rounded-2xl text-[#004d98] font-black uppercase tracking-widest text-[0.7rem] hover:scale-105 hover:bg-white transition-all shadow-2xl shadow-gold/10 flex items-center justify-center gap-3 w-full lg:w-auto">
                             <i class="fas fa-user-plus"></i> NUEVO USUARIO
@@ -96,7 +97,7 @@
             </div>
 
             <div class="text-center mb-10 mt-4">
-                <h3 class="text-2xl font-black italic uppercase text-slate-800 mb-2">Activar <span id="modal-username" class="text-gold">Usuario</span></h3>
+                <h3 class="text-2xl font-black italic uppercase text-white mb-2">Activar <span id="modal-username" class="text-gold">Usuario</span></h3>
                 <p class="text-[0.65rem] font-bold text-slate-500 uppercase tracking-[0.3em]">Configure la vigencia del acceso</p>
             </div>
             

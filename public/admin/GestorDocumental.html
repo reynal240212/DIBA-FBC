@@ -17,7 +17,8 @@
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
-<body class="bg-gray-100 text-slate-800 font-['Outfit']">
+<body class="bg-[#020617] text-white font-['Outfit'] selection:bg-yellow-500/30">
+    <div class="fixed inset-0 pointer-events-none z-0" style="background: var(--mesh-bg)"></div>
 
     <div id="admin-nav"></div>
 
@@ -32,7 +33,7 @@
                             <span class="w-8 h-1 bg-gold rounded-full"></span>
                             <p class="text-slate-500 font-bold uppercase tracking-[0.4em] text-[0.65rem]">Repositorio de Archivos Oficiales</p>
                         </div>
-                        <h2 id="main-title" class="text-4xl lg:text-5xl font-black italic text-slate-800 uppercase tracking-tighter">Gestor <span class="text-gold">Documental</span></h2>
+                        <h2 id="main-title" class="text-4xl lg:text-5xl font-black italic text-white uppercase tracking-tighter">Gestor <span class="text-gold">Documental</span></h2>
                     </div>
 
                     <div class="flex items-center gap-4 flex-wrap lg:flex-nowrap w-full lg:w-auto">
@@ -58,7 +59,7 @@
                         <div class="flex items-center justify-between mb-8">
                             <div class="flex flex-col">
                                 <span class="text-[0.6rem] font-black uppercase tracking-[0.3em] text-slate-300 italic mb-1">Capacidad Utilizada</span>
-                                <h3 class="text-3xl font-black italic tracking-tighter text-slate-800" id="storage-used">0 MB</h3>
+                                <h3 class="text-3xl font-black italic tracking-tighter text-white" id="storage-used">0 MB</h3>
                             </div>
                             <div class="w-12 h-12 rounded-2xl bg-gold/10 flex items-center justify-center text-gold border border-gold/10">
                                 <i class="fas fa-database"></i>
@@ -66,7 +67,7 @@
                         </div>
                         
                         <div class="space-y-3">
-                            <div class="h-2 w-full bg-slate-200 rounded-full overflow-hidden flex shadow-inner">
+                            <div class="h-2 w-full bg-white/5 rounded-full overflow-hidden flex shadow-inner">
                                 <div id="storage-bar" class="h-full bg-gold shadow-[0_0_20px_rgba(255,215,0,0.5)] transition-all duration-1000" style="width:0%"></div>
                             </div>
                             <div class="flex justify-between text-[0.6rem] font-black uppercase tracking-widest text-slate-300 italic">
@@ -78,7 +79,7 @@
 
                     <!-- Filter Menu -->
                     <div class="panel p-0 overflow-hidden animate-fade-up" style="animation-delay: 0.1s">
-                        <div class="p-6 border-b border-slate-200 bg-slate-100">
+                        <div class="p-6 border-b border-white/5 bg-white/5">
                             <span class="text-[0.65rem] font-black uppercase tracking-widest text-slate-500 italic">Filtros de Búsqueda</span>
                         </div>
                         <div class="p-4 space-y-2">
@@ -90,7 +91,7 @@
                                 <span class="px-3 py-1 rounded-lg bg-[#004d98] text-gold text-[0.6rem]" id="count-all">0</span>
                             </button>
 
-                            <button id="filter-club-btn" class="w-full flex items-center justify-between p-5 rounded-2xl bg-slate-200 text-slate-500 font-black text-[0.7rem] uppercase tracking-widest hover:bg-slate-300 hover:text-slate-800 transition-all border border-transparent hover:border-white/10">
+                            <button id="filter-club-btn" class="w-full flex items-center justify-between p-5 rounded-2xl bg-white/5 text-slate-400 font-black text-[0.7rem] uppercase tracking-widest hover:bg-white/10 hover:text-white transition-all border border-transparent hover:border-white/10">
                                 <div class="flex items-center gap-4">
                                     <i class="fas fa-cloud opacity-30"></i>
                                     <span>Explorador de Cloud</span>
@@ -104,11 +105,11 @@
                 <!-- Right Column: Document Grid -->
                 <div class="col-12 lg:col-8">
                     <div class="panel p-0 animate-fade-up" style="animation-delay: 0.2s">
-                        <div class="premium-p-header border-b border-slate-200">
+                        <div class="premium-p-header border-b border-white/5">
                             <span class="premium-p-title"><i class="fas fa-layer-group text-gold"></i>Repositorio Central</span>
                             <div class="flex items-center gap-3">
                                 <button class="w-10 h-10 rounded-xl bg-gold text-[#004d98] flex items-center justify-center shadow-lg"><i class="fas fa-grid-2 text-sm"></i></button>
-                                <button class="w-10 h-10 rounded-xl bg-slate-200 flex items-center justify-center text-slate-400 hover:text-gold hover:bg-white/10 transition-all"><i class="fas fa-list-ul text-sm"></i></button>
+                                <button class="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-slate-400 hover:text-gold hover:bg-white/10 transition-all"><i class="fas fa-list-ul text-sm"></i></button>
                             </div>
                         </div>
                         

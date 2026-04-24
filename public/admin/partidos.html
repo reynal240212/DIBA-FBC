@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Partidos & Eventos — DIBA FBC Admin</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="/images/ESCUDO.ico" type="image/x-icon">
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
+
+    <!-- Core Styles -->
+    <link rel="stylesheet" href="/styles/admin-common.css">
+    <script src="/scripts/theme-switcher.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        .match-status-badge {
+            padding: 0.35rem 0.75rem;
+            border-radius: 8px;
+            font-size: 0.6rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .status-upcoming { background: rgba(59, 130, 246, 0.1); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.2); }
+        .status-live { background: rgba(239, 68, 68, 0.1); color: #fb7185; border: 1px solid rgba(239, 68, 68, 0.2); }
+        .status-finished { background: rgba(34, 197, 94, 0.1); color: #4ade80; border: 1px solid rgba(34, 197, 94, 0.2); }
+
+        .team-shield-mini {
+            width: 24px;
+            height: 24px;
+            object-contain: contain;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+        }
+    </style>
+</head>
+
+<body class="bg-[#020617] text-white font-['Outfit'] selection:bg-yellow-500/30">
+    <div class="fixed inset-0 pointer-events-none z-0" style="background: var(--mesh-bg)"></div>
+
+    <div id="admin-nav"></div>
+
+    <main class="lg:ml-[280px] pt-[80px] min-h-screen transition-all duration-300 relative z-10">
+        <div class="p-6 lg:p-10 max-w-[1600px] mx-auto overflow-x-hidden">
+            
+            <div id="alert-bar" class="hidden mb-10 p-5 rounded-3xl bg-red-500/10 border border-red-500/20 text-red-500 text-[0.65rem] font-black uppercase tracking-widest items-center gap-4 animate-fade-in shadow-2xl">
+                <i class="fas fa-triangle-exclamation"></i>
+                <span id="alert-text"></span>
+            </div>
+
+            <!-- Page Header -->
+            <div class="mb-12 animate-fade-up">
+                <div class="flex items-center justify-between flex-wrap gap-8">
+                    <div>
+                        <div class="flex items-center gap-3 mb-2">
+                            <span class="w-8 h-1 bg-gold rounded-full"></span>
+                            <p class="text-slate-500 font-bold uppercase tracking-[0.4em] text-[0.65rem]">Gestión de Calendario</p>
+                        </div>
+                        <h2 class="text-4xl lg:text-5xl font-black italic text-white uppercase tracking-tighter">Partidos & <span class="text-gold">Eventos</span></h2>
+                    </div>
+
+                    <div class="flex items-center gap-4">
+                        <button onclick="openCreateModal()" class="px-8 py-4 bg-gold text-[#004d98] rounded-2xl text-[0.7rem] font-black uppercase tracking-widest transition-all hover:scale-105 flex items-center gap-2 shadow-xl shadow-gold/20">
+                            <i class="fas fa-plus-circle"></i> Nuevo Encuentro
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filters -->
+            <div class="panel p-8 mb-8 animate-fade-up" style="animation-delay: 0.1s">
+                <div class="flex flex-wrap gap-6 items-center">
+                    <div class="premium-form-group mb-0 flex-1 min-w-[250px]">
+                        <label class="premium-label">Filtrar por Categoría</label>
+                        <select id="filter-category" class="premium-input bg-[#020617]">
+                            <option value="ALL">TODAS LAS CATEGORÍAS</option>
+                            <option value="2012">2012</option>
+                            <option value="2013">2013</option>
+                            <option value="2014/2015/2016">2014/2015/2016</option>
+                            <option value="General">General</option>
+                        </select>
+                    </div>
+                    <div class="premium-form-group mb-0 flex-1 min-w-[250px]">
+                        <label class="premium-label">Búsqueda Rápida</label>
+                        <div class="relative">
+                            <i class="fas fa-search absolute left-5 top-1/2 -translate-y-1/2 text-slate-500"></i>
+                            <input type="text" id="match-search" placeholder="EQUIPO, CANCHA..." class="premium-input pl-14 uppercase">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Matches Table -->
+            <div class="panel animate-fade-up overflow-hidden" style="animation-delay: 0.2s">
+                <div class="overflow-x-auto custom-scrollbar">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr>
+                                <th class="px-8 py-6 text-[0.6rem] font-black text-gold uppercase tracking-[0.25em]">Fecha & Hora</th>
+                                <th class="px-8 py-6 text-[0.6rem] font-black text-gold uppercase tracking-[0.25em]">Encuentro</th>
+                                <th class="px-8 py-6 text-[0.6rem] font-black text-gold uppercase tracking-[0.25em]">Categoría</th>
+                                <th class="px-8 py-6 text-[0.6rem] font-black text-gold uppercase tracking-[0.25em]">Cancha</th>
+                                <th class="px-8 py-6 text-[0.6rem] font-black text-gold uppercase tracking-[0.25em]">Resultado</th>
+                                <th class="px-8 py-6 text-[0.6rem] font-black text-gold uppercase tracking-[0.25em] text-right">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="matches-body" class="divide-y divide-white/5">
+                            <!-- Skeleton -->
+                            <tr>
+                                <td colspan="6" class="px-8 py-24 text-center">
+                                    <div class="flex flex-col items-center opacity-30 animate-pulse">
+                                        <div class="w-12 h-12 border-4 border-gold/20 border-t-gold rounded-full animate-spin mb-4"></div>
+                                        <p class="text-[0.70rem] font-black uppercase tracking-widest">Sincronizando Calendario...</p>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal: Nuevo Partido -->
+    <div id="createMatchModal" class="fixed inset-0 z-[2000] hidden items-center justify-center p-6">
+        <div class="absolute inset-0 bg-black/80 backdrop-blur-md" onclick="closeCreateModal()"></div>
+        <div class="relative bg-[#020617] border border-white/10 rounded-[32px] p-10 w-full max-w-[700px] shadow-2xl animate-fade-up max-h-[90vh] overflow-y-auto custom-scrollbar">
+            <h3 class="text-2xl font-black italic uppercase text-white mb-8">Programar <span class="text-gold">Encuentro</span></h3>
+            <form id="createMatchForm" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="premium-form-group">
+                    <label class="premium-label">Equipo Local</label>
+                    <input type="text" id="localTeam" value="DIBA FBC" class="premium-input uppercase" required>
+                </div>
+                <div class="premium-form-group">
+                    <label class="premium-label">Equipo Visitante</label>
+                    <input type="text" id="visitTeam" placeholder="RIVAL..." class="premium-input uppercase" required>
+                </div>
+                <div class="premium-form-group">
+                    <label class="premium-label">Fecha</label>
+                    <input type="date" id="matchDate" class="premium-input" required>
+                </div>
+                <div class="premium-form-group">
+                    <label class="premium-label">Hora</label>
+                    <input type="time" id="matchTime" class="premium-input" required>
+                </div>
+                <div class="premium-form-group">
+                    <label class="premium-label">Categoría</label>
+                    <select id="matchCat" class="premium-input bg-[#020617]">
+                        <option value="2012">2012</option>
+                        <option value="2013">2013</option>
+                        <option value="2014/2015/2016">2014/2015/2016</option>
+                        <option value="General">General</option>
+                    </select>
+                </div>
+                <div class="premium-form-group">
+                    <label class="premium-label">Cancha / Sede</label>
+                    <input type="text" id="matchVenue" placeholder="EJ: LA ENSEÑANZA" class="premium-input uppercase" required>
+                </div>
+                <div class="premium-form-group md:col-span-2">
+                    <label class="premium-label">Descripción / Torneo</label>
+                    <input type="text" id="matchDesc" placeholder="EJ: TORNEO DE LIGA - FECHA 5" class="premium-input uppercase">
+                </div>
+                <button type="submit" class="md:col-span-2 py-5 bg-gold text-[#004d98] rounded-2xl font-black uppercase text-[0.75rem] tracking-widest shadow-xl shadow-gold/20 hover:scale-[1.02] transition-all mt-4">
+                    Publicar Encuentro
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal: Editar Resultado -->
+    <div id="editScoreModal" class="fixed inset-0 z-[2000] hidden items-center justify-center p-6">
+        <div class="absolute inset-0 bg-black/80 backdrop-blur-md" onclick="closeScoreModal()"></div>
+        <div class="relative bg-[#020617] border border-white/10 rounded-[32px] p-10 w-full max-w-[450px] shadow-2xl animate-fade-up">
+            <h3 class="text-2xl font-black italic uppercase text-white mb-2 text-center">Actualizar <span class="text-gold">Marcador</span></h3>
+            <p id="scoreTeams" class="text-[0.65rem] font-black text-slate-400 uppercase tracking-widest text-center mb-8"></p>
+            <form id="editScoreForm" class="space-y-6">
+                <input type="hidden" id="scoreId">
+                <div class="premium-form-group">
+                    <label class="premium-label">Resultado Final</label>
+                    <input type="text" id="scoreValue" placeholder="EJ: 3 - 1" class="premium-input text-center text-2xl font-black italic tracking-widest" required>
+                </div>
+                <button type="submit" class="w-full py-5 bg-gold text-[#004d98] rounded-2xl font-black uppercase text-[0.75rem] tracking-widest shadow-xl shadow-gold/20 hover:scale-105 transition-all">
+                    Guardar Resultado
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="/scripts/config.js"></script>
+    <script type="module">
+        import { initAdminLayout } from '../src/components/layout/admin-layout.js';
+        import { supabase, requireAdmin } from '../scripts/supabaseClient.js';
+
+        let matches = [];
+
+        async function init() {
+            try {
+                const session = await requireAdmin();
+                if (!session) return;
+                await initAdminLayout();
+                await loadMatches();
+                setupHandlers();
+            } catch (error) {
+                console.error("Init error:", error);
+            }
+        }
+        init();
+
+        async function loadMatches() {
+            const tableBody = document.getElementById('matches-body');
+            try {
+                const { data, error } = await supabase.from('partidos').select('*').order('fecha', { ascending: false });
+                if (error) throw error;
+                matches = data || [];
+                renderMatches();
+            } catch (e) {
+                console.error(e);
+                tableBody.innerHTML = '<tr><td colspan="6" class="px-8 py-20 text-center text-red-500 font-black uppercase tracking-widest">Error al cargar datos</td></tr>';
+            }
+        }
+
+        function renderMatches() {
+            const tableBody = document.getElementById('matches-body');
+            const search = document.getElementById('match-search').value.toLowerCase();
+            const catFilter = document.getElementById('filter-category').value;
+
+            const filtered = matches.filter(m => {
+                const matchesSearch = (m.equipolocal + m.equipovisitante + m.Cancha).toLowerCase().includes(search);
+                const matchesCat = catFilter === 'ALL' || m.categoria === catFilter;
+                return matchesSearch && matchesCat;
+            });
+
+            if (filtered.length === 0) {
+                tableBody.innerHTML = '<tr><td colspan="6" class="px-8 py-20 text-center text-slate-500 font-black uppercase tracking-widest">No se encontraron encuentros</td></tr>';
+                return;
+            }
+
+            tableBody.innerHTML = filtered.map(m => {
+                const date = new Date(m.fecha + 'T12:00:00');
+                const dateStr = date.toLocaleDateString('es-CO', { day: '2-digit', month: 'short', year: 'numeric' }).toUpperCase();
+                const isFinished = m.resultado && m.resultado !== '' && m.resultado !== 'Pendiente';
+                const statusClass = isFinished ? 'status-finished' : 'status-upcoming';
+                const statusText = isFinished ? 'Finalizado' : 'Programado';
+
+                return `
+                    <tr class="hover:bg-white/[0.02] transition-colors group">
+                        <td class="px-8 py-6">
+                            <div class="text-[0.75rem] font-bold text-white uppercase">${dateStr}</div>
+                            <div class="text-[0.6rem] font-black text-slate-500 uppercase tracking-widest mt-1"><i class="fas fa-clock text-gold/50 mr-1"></i> ${m.hora}</div>
+                        </td>
+                        <td class="px-8 py-6">
+                            <div class="flex items-center gap-4">
+                                <div class="flex flex-col items-center">
+                                    <img src="/images/ESCUDO.png" class="team-shield-mini mb-1">
+                                    <span class="text-[0.65rem] font-bold text-white uppercase">${m.equipolocal}</span>
+                                </div>
+                                <span class="text-gold font-black italic text-xs">VS</span>
+                                <div class="flex flex-col items-center">
+                                    <div class="w-6 h-6 rounded-full bg-white/5 flex items-center justify-center text-[0.5rem] font-black text-gold mb-1 border border-white/10">${m.equipovisitante[0]}</div>
+                                    <span class="text-[0.65rem] font-bold text-white uppercase">${m.equipovisitante}</span>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-8 py-6">
+                            <span class="px-3 py-1 rounded-lg bg-gold/5 border border-gold/10 text-gold text-[0.6rem] font-black uppercase tracking-widest">CAT. ${m.categoria}</span>
+                        </td>
+                        <td class="px-8 py-6">
+                            <div class="text-[0.7rem] font-bold text-slate-300 uppercase">${m.Cancha}</div>
+                            <div class="text-[0.55rem] font-black text-slate-500 uppercase tracking-[0.2em] mt-1 truncate max-w-[150px]">${m.descripcion || '---'}</div>
+                        </td>
+                        <td class="px-8 py-6">
+                            <div class="flex flex-col gap-2">
+                                <div class="match-status-badge ${statusClass}">
+                                    <span class="w-1.5 h-1.5 rounded-full ${isFinished ? 'bg-emerald-400' : 'bg-blue-400'}"></span>
+                                    ${statusText}
+                                </div>
+                                ${isFinished ? `<div class="text-xl font-black italic text-white tracking-widest ml-1">${m.resultado}</div>` : ''}
+                            </div>
+                        </td>
+                        <td class="px-8 py-6 text-right">
+                            <div class="flex items-center justify-end gap-2">
+                                <button onclick="openScoreModal('${m.id}', '${m.equipolocal} vs ${m.equipovisitante}', '${m.resultado || ''}')" class="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-gold hover:bg-gold hover:text-[#004d98] transition-all" title="Actualizar Marcador">
+                                    <i class="fas fa-trophy text-sm"></i>
+                                </button>
+                                <button onclick="handleDelete('${m.id}')" class="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-red-500 hover:bg-red-500 hover:text-white transition-all" title="Eliminar">
+                                    <i class="fas fa-trash text-sm"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function setupHandlers() {
+            document.getElementById('match-search').oninput = renderMatches;
+            document.getElementById('filter-category').onchange = renderMatches;
+
+            document.getElementById('createMatchForm').onsubmit = async (e) => {
+                e.preventDefault();
+                const payload = {
+                    equipolocal: document.getElementById('localTeam').value,
+                    equipovisitante: document.getElementById('visitTeam').value,
+                    fecha: document.getElementById('matchDate').value,
+                    hora: document.getElementById('matchTime').value,
+                    categoria: document.getElementById('matchCat').value,
+                    Cancha: document.getElementById('matchVenue').value,
+                    descripcion: document.getElementById('matchDesc').value || null,
+                    resultado: 'Pendiente'
+                };
+
+                const { error } = await supabase.from('partidos').insert([payload]);
+                if (error) alert("Error: " + error.message);
+                else {
+                    closeCreateModal();
+                    loadMatches();
+                }
+            };
+
+            document.getElementById('editScoreForm').onsubmit = async (e) => {
+                e.preventDefault();
+                const id = document.getElementById('scoreId').value;
+                const result = document.getElementById('scoreValue').value;
+
+                const { error } = await supabase.from('partidos').update({ resultado: result }).eq('id', id);
+                if (error) alert("Error: " + error.message);
+                else {
+                    closeScoreModal();
+                    loadMatches();
+                }
+            };
+
+            window.openCreateModal = () => document.getElementById('createMatchModal').classList.remove('hidden'), document.getElementById('createMatchModal').classList.add('flex');
+            window.closeCreateModal = () => document.getElementById('createMatchModal').classList.add('hidden');
+            
+            window.openScoreModal = (id, teams, current) => {
+                document.getElementById('scoreId').value = id;
+                document.getElementById('scoreTeams').innerText = teams;
+                document.getElementById('scoreValue').value = current === 'Pendiente' ? '' : current;
+                document.getElementById('editScoreModal').classList.remove('hidden');
+                document.getElementById('editScoreModal').classList.add('flex');
+            };
+            window.closeScoreModal = () => document.getElementById('editScoreModal').classList.add('hidden');
+
+            window.handleDelete = async (id) => {
+                if (confirm('¿Eliminar este encuentro definitivamente?')) {
+                    const { error } = await supabase.from('partidos').delete().eq('id', id);
+                    if (error) alert(error.message);
+                    else loadMatches();
+                }
+            };
+        }
+    </script>
+</body>
+
+</html>
