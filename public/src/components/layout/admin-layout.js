@@ -38,8 +38,8 @@ export async function initAdminLayout() {
                 <img src="/images/ESCUDO.png" alt="DIBA FBC" class="w-12 h-12 object-contain relative drop-shadow-[0_0_10px_rgba(255,215,0,0.3)] group-hover:scale-110 transition-transform">
             </div>
             <div class="flex flex-col">
-                <div class="text-xl font-black italic tracking-tighter text-white leading-none">DIBA <span class="text-[#FFD700]">GOLD</span></div>
-                <div class="text-[0.5rem] font-bold text-white/30 uppercase tracking-[0.4em] mt-1.5">SISTEMA ADMIN</div>
+                <div class="text-xl font-black italic tracking-tighter text-white leading-none">DIBA <span class="text-[#FFD700]">FBC</span></div>
+                <div class="text-[0.5rem] font-bold text-white/30 uppercase tracking-[0.4em] mt-1.5">SISTEMA PRINCIPAL</div>
             </div>
         </div>
 
@@ -138,7 +138,7 @@ export async function initAdminLayout() {
                 <div class="flex items-center gap-3">
                     <h1 class="text-[0.85rem] sm:text-base lg:text-2xl font-black italic text-white uppercase tracking-tighter leading-none">${pageTitle}</h1>
                     <div class="hidden xs:flex items-center px-2 py-1 rounded-lg bg-gold/10 border border-gold/20">
-                        <span class="text-gold text-[0.45rem] font-black uppercase tracking-[0.2em]">Gold Admin</span>
+                        <span class="text-gold text-[0.45rem] font-black uppercase tracking-[0.2em]">Admin Principal</span>
                     </div>
                 </div>
                 <p class="hidden md:block text-[0.55rem] lg:text-[0.6rem] font-bold text-white/20 uppercase tracking-[0.4em] mt-1.5 italic">Ecosistema Administrativo DIBA FBC <span class="mx-2 opacity-50">|</span> 2026</p>
