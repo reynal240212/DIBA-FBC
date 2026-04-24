@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>DIBA FBC - Auto Importador</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;900&display=swap" rel="stylesheet">
+</head>
+<body class="bg-[#020617] text-white font-['Outfit'] min-h-screen flex items-center justify-center p-6">
+    <div class="max-w-md w-full bg-white/5 border border-white/10 p-10 rounded-[32px] text-center">
+        <img src="/images/ESCUDO.png" class="w-20 h-20 mx-auto mb-6">
+        <h1 class="text-3xl font-black italic uppercase text-white mb-4">Auto <span class="text-yellow-500">Importador</span></h1>
+        <p class="text-slate-400 text-sm mb-8">Haga clic en el botón para subir automáticamente los partidos y la convocatoria del 25 de Abril.</p>
+        
+        <button id="importBtn" class="w-full py-5 bg-yellow-500 text-[#004d98] rounded-2xl font-black uppercase text-[0.8rem] tracking-widest shadow-xl shadow-yellow-500/20 hover:scale-105 transition-all">
+            Subir a Supabase Ahora
+        </button>
+        
+        <div id="status" class="mt-8 text-[0.7rem] font-bold uppercase tracking-widest hidden">
+            <!-- Status here -->
+        </div>
+    </div>
+
+    <script src="/scripts/config.js"></script>
+    <script type="module">
+        import { supabase, requireAdmin } from '/scripts/supabaseClient.js';
+
+        const btn = document.getElementById('importBtn');
+        const status = document.getElementById('status');
+
+        const matches = [
+            {
+                fecha: '2026-04-25',
+                hora: '01:00 PM',
+                categoria: '2013',
+                equipolocal: 'ESC DIBA',
+                equipovisitante: 'SOCER KIDS',
+                Cancha: 'CALANCALA',
+                descripcion: 'Generación Victoriosa - 2° Fecha',
+                resultado: 'Pendiente'
+            },
+            {
+                fecha: '2026-04-25',
+                hora: '02:00 PM',
+                categoria: '2014-2015',
+                equipolocal: 'ESC DIBA',
+                equipovisitante: 'ESC PUMA FC',
+                Cancha: 'CALANCALA',
+                descripcion: 'Generación Victoriosa - 2° Fecha',
+                resultado: 'Pendiente'
+            },
+            {
+                fecha: '2026-04-25',
+                hora: '02:50 PM',
+                categoria: '2011-2012',
+                equipolocal: 'ESC DIBA',
+                equipovisitante: 'ESC CRISTO REY',
+                Cancha: 'CALANCALA',
+                descripcion: 'Generación Victoriosa - 2° Fecha',
+                resultado: 'Pendiente'
+            }
+        ];
+
+        const convocatoria = {
+            titulo: 'PARTIDOS CALANCALA - GENERACIÓN VICTORIOSA',
+            fecha: '2026-04-25T11:45:00',
+            lugar: 'CASA DEL PROFESOR',
+            descripcion: 'UNIFORME: NUEVO HOMENAJE AL BARRANQUILLA. COSTO: $14.000 (ARBITRAJE Y TRANSPORTE). NEQUI: 3246656083.'
+        };
+
+        btn.onclick = async () => {
+            status.classList.remove('hidden');
+            status.innerHTML = '<span class="text-yellow-500 animate-pulse">Sincronizando...</span>';
+            btn.disabled = true;
+            btn.style.opacity = '0.5';
+
+            try {
+                const session = await requireAdmin();
+                if (!session) {
+                    status.innerHTML = '<span class="text-red-500">Error: No estás autenticado</span>';
+                    return;
+                }
+
+                // 1. Partidos
+                const { error: mErr } = await supabase.from('partidos').insert(matches);
+                if (mErr) throw mErr;
+
+                // 2. Convocatoria
+                const { error: cErr } = await supabase.from('convocatorias').insert([convocatoria]);
+                if (cErr) throw cErr;
+
+                status.innerHTML = '<span class="text-green-500">¡ÉXITO! TODO SUBIDO CORRECTAMENTE</span>';
+                setTimeout(() => { window.location.href = 'partidos.html'; }, 2000);
+            } catch (err) {
+                console.error(err);
+                status.innerHTML = `<span class="text-red-500">Error: ${err.message}</span>`;
+                btn.disabled = false;
+                btn.style.opacity = '1';
+            }
+        };
+    </script>
+</body>
+</html>
