@@ -13,7 +13,7 @@ export async function loadStorageBuckets(dynamicContent, pageTitle, setActiveFil
     dynamicContent.className = "flex flex-col gap-4 w-full";
     dynamicContent.innerHTML = `
         <div class="col-span-full mb-6">
-            <div class="flex items-center justify-between px-6 py-4 bg-white/[0.02] border-b border-white/5 text-[0.6rem] font-black uppercase tracking-[0.2em] text-white/20">
+            <div class="flex items-center justify-between px-6 py-4 bg-white/[0.02] border-b border-white/5 text-[0.6rem] font-black uppercase tracking-[0.2em] text-white/60">
                 <div class="flex-1 w-1/4">Nombre</div>
                 <div class="hidden md:block w-1/6 text-center">Políticas</div>
                 <div class="hidden lg:block w-1/4 text-center">Límite de Tamaño</div>
@@ -75,16 +75,16 @@ export async function loadStorageBuckets(dynamicContent, pageTitle, setActiveFil
                     </div>
                     <div class="flex flex-col">
                         <span class="text-sm font-black italic text-white uppercase tracking-tighter group-hover:text-gold transition-colors">${bucket.name}</span>
-                        <span class="text-[0.55rem] font-bold text-white/20 uppercase tracking-widest">${bucket.public ? 'PÚBLICO' : 'PRIVADO'}</span>
+                        <span class="text-[0.55rem] font-bold text-white/60 uppercase tracking-widest">${bucket.public ? 'PÚBLICO' : 'PRIVADO'}</span>
                     </div>
                 </div>
 
                 <div class="hidden md:block w-1/6 text-center">
-                    <span class="px-3 py-1 rounded bg-white/5 text-white/40 text-[0.6rem] font-black">ACTIVA</span>
+                    <span class="px-3 py-1 rounded bg-white/5 text-white/60 text-[0.6rem] font-black">ACTIVA</span>
                 </div>
 
                 <div class="hidden lg:block w-1/4 text-center">
-                    <span class="text-[0.6rem] font-black uppercase tracking-widest text-white/30 italic">${sizeLimit}</span>
+                    <span class="text-[0.6rem] font-black uppercase tracking-widest text-white/60 italic">${sizeLimit}</span>
                 </div>
 
                 <div class="hidden lg:block w-1/4 text-center">

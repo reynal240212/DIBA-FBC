@@ -70,7 +70,7 @@ export async function loadDocuments(dynamicContent, pageTitle, setActiveFilter, 
                 </div>
                 <div class="flex-1">
                     <h4 class="text-sm font-black italic text-white uppercase tracking-tighter truncate mb-1">${doc.file_name}</h4>
-                    <p class="text-[0.6rem] font-bold text-white/20 uppercase tracking-widest flex items-center gap-2">
+                    <p class="text-[0.6rem] font-bold text-white/60 uppercase tracking-widest flex items-center gap-2">
                         <i class="fas fa-calendar-alt text-gold/40"></i> ${date}
                     </p>
                 </div>
