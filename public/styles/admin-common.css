@@ -253,6 +253,13 @@ a {
     font-weight: 500;
 }
 
+/* Fix for Select Options in Dark Mode */
+.premium-input option {
+    background-color: #0f172a;
+    color: #ffffff;
+    padding: 10px;
+}
+
 .animate-fade-up {
     animation: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
