@@ -65,7 +65,7 @@ export async function initAdminLayout() {
                 <span class="text-[0.75rem] font-bold tracking-tight truncate">Planilla Diaria</span>
             </a>
             <a href="partidos.html" class="nav-link flex items-center gap-3 px-4 py-3.5 rounded-2xl transition-all duration-300 ${getLinkClass('partidos')}">
-                <div class="w-8 flex justify-center"><i class="fas fa-calendar-star text-lg ${getIconClass('partidos')}"></i></div>
+                <div class="w-8 flex justify-center"><i class="fas fa-calendar-day text-lg ${getIconClass('partidos')}"></i></div>
                 <span class="text-[0.75rem] font-bold tracking-tight truncate">Partidos & Eventos</span>
             </a>
             <a href="convocatorias.html" class="nav-link flex items-center gap-3 px-4 py-3.5 rounded-2xl transition-all duration-300 ${getLinkClass('convocatorias')}">
