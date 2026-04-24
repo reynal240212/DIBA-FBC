@@ -44,7 +44,7 @@ export async function initAdminLayout() {
         </div>
 
         <!-- Scrollable Navigation -->
-        <nav class="px-5 py-2 space-y-1 overflow-y-auto flex-1 custom-scrollbar relative z-10">
+        <nav class="px-5 py-2 space-y-1 overflow-y-auto flex-1 no-scrollbar relative z-10">
             <!-- GRUPO: CENTRAL -->
             <div class="px-5 mb-2 flex items-center gap-2">
                 <span class="w-1 h-3 bg-gold/50 rounded-full"></span>

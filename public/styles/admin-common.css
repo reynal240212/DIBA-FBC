@@ -131,6 +131,15 @@ a {
     background: rgba(255, 215, 0, 0.4);
 }
 
+/* Ocultar barra de desplazamiento manteniendo funcionalidad */
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+.no-scrollbar {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+
 /* ── DIBA GRID SYSTEM (12-Columns) ── */
 .diba-grid {
     display: grid;
