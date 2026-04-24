@@ -136,12 +136,14 @@ export async function initAdminLayout() {
             <button class="lg:hidden w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-white hover:bg-white/10 transition-all border border-white/10 shadow-lg" id="menu-btn-layout">
                 <i class="fas fa-bars-staggered text-base"></i>
             </button>
-            <div class="animate-fade-up max-w-[200px] xs:max-w-none">
-                <div class="flex items-center gap-2">
-                    <h1 class="text-sm sm:text-base lg:text-xl font-black italic text-white uppercase tracking-tighter truncate">${pageTitle}</h1>
-                    <span class="hidden xs:inline-block px-1.5 py-0.5 rounded bg-gold/10 border border-gold/20 text-gold text-[0.45rem] font-black uppercase tracking-widest">Admin</span>
+            <div class="animate-fade-up flex-1 min-w-0 px-2 lg:px-0">
+                <div class="flex items-center gap-2 sm:gap-4">
+                    <h1 class="text-[0.75rem] sm:text-base lg:text-2xl font-black italic text-white uppercase tracking-tighter leading-none">${pageTitle}</h1>
+                    <div class="hidden xs:flex items-center px-2 py-1 rounded-lg bg-gold/10 border border-gold/20">
+                        <span class="text-gold text-[0.45rem] font-black uppercase tracking-[0.2em]">Admin</span>
+                    </div>
                 </div>
-                <p class="hidden lg:block text-[0.6rem] font-bold text-white/40 uppercase tracking-[0.4em] mt-1">Club Deportivo DIBA FBC <span class="mx-2 text-white/10">•</span> Panel</p>
+                <p class="hidden md:block text-[0.55rem] lg:text-[0.6rem] font-bold text-white/30 uppercase tracking-[0.4em] mt-1.5 italic">Gestión Oficial <span class="mx-2 text-white/10">|</span> DIBA FBC Dashboard</p>
             </div>
         </div>
         
