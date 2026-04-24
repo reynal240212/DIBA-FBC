@@ -21,10 +21,10 @@ export async function initAdminLayout() {
     const isAct = (path) => currentPath.includes(path);
 
     const getLinkClass = (path) => isAct(path) 
-        ? 'bg-[#FFD700] text-[#004d98] font-extrabold shadow-[0_8px_20px_rgba(255,215,0,0.15)] translate-x-1' 
+        ? 'bg-gold !text-slate-950 font-black shadow-[0_10px_25px_rgba(255,215,0,0.3)] translate-x-1' 
         : 'text-white/60 font-semibold hover:bg-white/5 hover:text-white group hover:translate-x-1';
 
-    const getIconClass = (path) => isAct(path) ? 'text-[#004d98]' : 'opacity-30 group-hover:opacity-100 group-hover:text-[#FFD700]';
+    const getIconClass = (path) => isAct(path) ? '!text-slate-900' : 'opacity-30 group-hover:opacity-100 group-hover:text-gold';
 
     // Sidebar Injection
     const sidebarHTML = `
