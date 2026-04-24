@@ -70,11 +70,12 @@
     </style>
 </head>
 
-<body class="bg-gray-100 text-slate-800 font-['Outfit']">
+<body class="bg-[#020617] text-white font-['Outfit'] selection:bg-yellow-500/30">
+    <div class="fixed inset-0 pointer-events-none z-0" style="background: var(--mesh-bg)"></div>
 
     <div id="admin-nav"></div>
 
-    <main class="lg:ml-[280px] pt-[80px] min-h-screen transition-all duration-300">
+    <main class="lg:ml-[280px] pt-[80px] min-h-screen transition-all duration-300 relative z-10">
         <div class="p-6 lg:p-10 max-w-[1600px] mx-auto overflow-x-hidden">
             
             <div id="alert-bar" class="hidden mb-10 p-5 rounded-3xl bg-red-500/10 border border-red-500/20 text-red-500 text-[0.65rem] font-black uppercase tracking-widest items-center gap-4 animate-fade-in shadow-2xl">
@@ -90,12 +91,12 @@
                             <span class="w-8 h-1 bg-gold rounded-full"></span>
                             <p class="text-slate-500 font-bold uppercase tracking-[0.4em] text-[0.65rem]">Registro de Asistencia Diaria</p>
                         </div>
-                        <h2 class="text-4xl lg:text-5xl font-black italic text-slate-800 uppercase tracking-tighter">Planilla <span class="text-gold">Maestra</span></h2>
+                        <h2 class="text-4xl lg:text-5xl font-black italic text-white uppercase tracking-tighter">Planilla <span class="text-gold">Maestra</span></h2>
                     </div>
 
                     <div class="flex items-center gap-4 flex-wrap lg:flex-nowrap w-full lg:w-auto">
                         <div class="flex bg-white/5 p-2 rounded-2xl border border-white/5">
-                            <button id="saveAllBtn" class="px-6 py-3 bg-white/5 hover:bg-white/10 rounded-xl text-slate-800 text-[0.65rem] font-black uppercase tracking-widest transition-all flex items-center gap-2">
+                            <button id="saveAllBtn" class="px-6 py-3 bg-white/5 hover:bg-white/10 rounded-xl text-white text-[0.65rem] font-black uppercase tracking-widest transition-all flex items-center gap-2">
                                 <i class="fas fa-floppy-disk text-gold"></i> Guardar Todo
                             </button>
                             <button onclick="openCreateModal()" class="px-6 py-3 bg-gold text-[#004d98] rounded-xl text-[0.65rem] font-black uppercase tracking-widest transition-all hover:scale-105 flex items-center gap-2 ml-2">
@@ -210,7 +211,7 @@
         <div class="relative bg-[#020617] border border-white/10 rounded-[32px] p-8 w-full max-w-[650px] shadow-2xl animate-fade-up">
             <div class="flex justify-between items-start mb-8">
                 <div>
-                    <h3 id="modalPlayerName" class="text-2xl font-black italic uppercase text-slate-800 mb-2">Cargando...</h3>
+                    <h3 id="modalPlayerName" class="text-2xl font-black italic uppercase text-white mb-2">Cargando...</h3>
                     <p id="modalPlayerDni" class="text-[0.65rem] font-black text-slate-400 uppercase tracking-widest"></p>
                 </div>
                 <button onclick="closeAdminDocs()" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-slate-500 hover:bg-white/10 transition-all">
@@ -230,7 +231,7 @@
     <div id="editPlayerModal" class="fixed inset-0 z-[2000] hidden items-center justify-center p-6">
         <div class="absolute inset-0 bg-black/80 backdrop-blur-md" onclick="closeEditModal()"></div>
         <div class="relative bg-[#020617] border border-white/10 rounded-[32px] p-10 w-full max-w-[500px] shadow-2xl animate-fade-up">
-            <h3 class="text-2xl font-black italic uppercase text-slate-800 mb-8">Editar <span class="text-gold">Jugador</span></h3>
+            <h3 class="text-2xl font-black italic uppercase text-white mb-8">Editar <span class="text-gold">Jugador</span></h3>
             <form id="editPlayerForm" class="space-y-6">
                 <input type="hidden" id="editDni">
                 <input type="hidden" id="oldName">
@@ -258,7 +259,7 @@
     <div id="createPlayerModal" class="fixed inset-0 z-[2000] hidden items-center justify-center p-6">
         <div class="absolute inset-0 bg-black/80 backdrop-blur-md" onclick="closeCreateModal()"></div>
         <div class="relative bg-[#020617] border border-white/10 rounded-[32px] p-10 w-full max-w-[850px] shadow-2xl animate-fade-up max-h-[90vh] overflow-y-auto custom-scrollbar">
-            <h3 class="text-2xl font-black italic uppercase text-slate-800 mb-8">Registro <span class="text-gold">Rápido</span></h3>
+            <h3 class="text-2xl font-black italic uppercase text-white mb-8">Registro <span class="text-gold">Rápido</span></h3>
             <form id="quickCreatePlayerForm">
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     <div class="premium-form-group">
@@ -439,8 +440,8 @@
                         <img src="${p.foto || '/images/ESCUDO.png'}" class="w-10 h-10 rounded-full border border-white/10 object-cover shadow-lg">
                     </td>
                     <td class="px-8 py-4">
-                        <div class="text-[0.82rem] font-bold text-slate-800 uppercase">${p.name}</div>
-                        <div class="text-[0.6rem] font-black text-slate-300 uppercase tracking-widest mt-0.5">DNI: ${p.id}</div>
+                        <div class="text-[0.82rem] font-bold text-white uppercase">${p.name}</div>
+                        <div class="text-[0.6rem] font-black text-slate-400 uppercase tracking-widest mt-0.5">DNI: ${p.id}</div>
                     </td>
                     <td class="px-8 py-4">
                         <select class="premium-select in-pago w-full">
@@ -652,8 +653,8 @@
                     <div class="flex items-center gap-4">
                         <div class="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-slate-300"><i class="fas fa-file-alt"></i></div>
                         <div>
-                            <div class="text-slate-800">${type.label}</div>
-                            <div class="${doc ? 'text-green-500' : 'text-slate-300'} mt-0.5">${doc ? 'CARGADO' : 'PENDIENTE'}</div>
+                            <div class="text-white">${type.label}</div>
+                            <div class="${doc ? 'text-green-500' : 'text-slate-500'} mt-0.5">${doc ? 'CARGADO' : 'PENDIENTE'}</div>
                         </div>
                     </div>
                     ${doc ? `<a href="${doc.file_url}" target="_blank" class="w-10 h-10 rounded-xl bg-gold/10 text-gold flex items-center justify-center hover:bg-gold hover:text-[#004d98] transition-all"><i class="fas fa-eye"></i></a>` : '<div class="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-slate-800/10"><i class="fas fa-times"></i></div>'}
