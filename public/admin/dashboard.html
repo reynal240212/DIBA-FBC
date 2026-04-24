@@ -13,140 +13,146 @@
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
-<body class="bg-gray-100 text-slate-800 font-['Outfit']">
+<body class="bg-[#020617] text-white font-['Outfit'] selection:bg-yellow-500/30">
+    <div class="fixed inset-0 pointer-events-none z-0" style="background: var(--mesh-bg)"></div>
 
     <div id="admin-nav"></div>
 
-    <main class="lg:ml-[280px] pt-[80px] min-h-screen transition-all duration-300">
+    <main class="lg:ml-[280px] pt-[80px] min-h-screen transition-all duration-300 relative z-10">
         <div class="p-6 lg:p-10 max-w-[1600px] mx-auto overflow-x-hidden">
             <!-- Header Section -->
             <div class="mb-12 animate-fade-up">
-                <div class="flex items-center gap-3 mb-2">
-                    <span class="w-8 h-1 bg-yellow-500 rounded-full"></span>
-                    <p class="text-slate-500 font-bold uppercase tracking-[0.4em] text-[0.65rem]">Panel de Control Maestro</p>
+                <div class="flex items-center gap-3 mb-4">
+                    <span class="w-12 h-1.5 bg-yellow-500 rounded-full"></span>
+                    <p class="text-slate-500 font-black uppercase tracking-[0.4em] text-[0.65rem]">Panel de Control Maestro</p>
                 </div>
-                <h2 class="text-4xl lg:text-5xl font-black italic text-slate-800 uppercase tracking-tighter">Resumen <span class="text-yellow-600">General</span></h2>
+                <h1 class="text-5xl lg:text-7xl font-black italic text-white uppercase tracking-tighter leading-none mb-2">Resumen <span class="text-yellow-500">General</span></h1>
+                <p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest ml-1">Ecosistema Administrativo DIBA GOLD</p>
             </div>
 
             <!-- Dashboard Grid -->
             <div class="diba-grid gap-6 lg:gap-8">
                 <!-- Row 1: KPIs (2x2) + Quick Access -->
                 <div class="col-12 lg:col-4" style="animation-delay: 0.1s">
-                    <div class="grid grid-cols-2 gap-4 h-full">
-                        <div class="premium-stat-card p-4 lg:p-6 flex flex-col justify-center">
-                            <div class="premium-stat-icon mb-2 text-yellow-600"><i class="fas fa-users text-sm lg:text-base"></i></div>
-                            <div class="premium-stat-value text-xl lg:text-2xl text-slate-800" id="kpi-players">0</div>
-                            <div class="premium-stat-label text-[0.55rem] lg:text-[0.65rem] text-slate-500">Jugadores</div>
+                    <div class="grid grid-cols-2 gap-6 h-full">
+                        <div class="premium-stat-card p-8 flex flex-col justify-center bg-slate-900/40 border border-white/5 rounded-[32px] hover:border-yellow-500/30 transition-all group overflow-hidden relative">
+                            <div class="absolute inset-0 bg-gradient-to-br from-yellow-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                            <div class="premium-stat-icon mb-4 w-12 h-12 bg-blue-500/10 rounded-xl flex items-center justify-center text-blue-500 group-hover:scale-110 transition-transform"><i class="fas fa-users text-lg"></i></div>
+                            <div class="premium-stat-value text-4xl font-black italic text-white tracking-tighter leading-none mb-1" id="kpi-players">0</div>
+                            <div class="premium-stat-label text-[0.6rem] font-black uppercase tracking-widest text-slate-500">Jugadores</div>
                         </div>
 
-                        <div class="premium-stat-card p-4 lg:p-6 flex flex-col justify-center">
-                            <div class="premium-stat-icon mb-2 text-yellow-600"><i class="fas fa-futbol text-sm lg:text-base"></i></div>
-                            <div class="premium-stat-value text-xl lg:text-2xl text-slate-800" id="kpi-matches">0</div>
-                            <div class="premium-stat-label text-[0.55rem] lg:text-[0.65rem] text-slate-500">Partidos</div>
+                        <div class="premium-stat-card p-8 flex flex-col justify-center bg-slate-900/40 border border-white/5 rounded-[32px] hover:border-yellow-500/30 transition-all group overflow-hidden relative">
+                            <div class="absolute inset-0 bg-gradient-to-br from-yellow-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                            <div class="premium-stat-icon mb-4 w-12 h-12 bg-yellow-500/10 rounded-xl flex items-center justify-center text-yellow-500 group-hover:scale-110 transition-transform"><i class="fas fa-futbol text-lg"></i></div>
+                            <div class="premium-stat-value text-4xl font-black italic text-white tracking-tighter leading-none mb-1" id="kpi-matches">0</div>
+                            <div class="premium-stat-label text-[0.6rem] font-black uppercase tracking-widest text-slate-500">Partidos</div>
                         </div>
 
-                        <div class="premium-stat-card p-4 lg:p-6 flex flex-col justify-center">
-                            <div class="premium-stat-icon mb-2 text-yellow-600"><i class="fas fa-chart-line text-sm lg:text-base"></i></div>
-                            <div class="premium-stat-value text-xl lg:text-2xl text-slate-800" id="kpi-attendance">0%</div>
-                            <div class="premium-stat-label text-[0.55rem] lg:text-[0.65rem] text-slate-500">Asistencia</div>
+                        <div class="premium-stat-card p-8 flex flex-col justify-center bg-slate-900/40 border border-white/5 rounded-[32px] hover:border-yellow-500/30 transition-all group overflow-hidden relative">
+                            <div class="absolute inset-0 bg-gradient-to-br from-yellow-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                            <div class="premium-stat-icon mb-4 w-12 h-12 bg-emerald-500/10 rounded-xl flex items-center justify-center text-emerald-500 group-hover:scale-110 transition-transform"><i class="fas fa-chart-line text-lg"></i></div>
+                            <div class="premium-stat-value text-4xl font-black italic text-white tracking-tighter leading-none mb-1" id="kpi-attendance">0%</div>
+                            <div class="premium-stat-label text-[0.6rem] font-black uppercase tracking-widest text-slate-500">Asistencia</div>
                         </div>
 
-                        <div class="premium-stat-card p-4 lg:p-6 flex flex-col justify-center">
-                            <div class="premium-stat-icon mb-2 text-red-500"><i class="fas fa-wallet text-sm lg:text-base"></i></div>
-                            <div class="premium-stat-value text-xl lg:text-2xl text-slate-800" id="kpi-pending">0</div>
-                            <div class="premium-stat-label text-[0.55rem] lg:text-[0.65rem] text-slate-500">Pendientes</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-12 lg:col-8 panel" style="animation-delay: 0.2s">
-                    <div class="premium-p-header">
-                        <span class="premium-p-title"><i class="fas fa-bolt text-yellow-600"></i>Accesos Rápidos</span>
-                        <span class="premium-p-badge italic">Master</span>
-                    </div>
-                    <div class="p-6 lg:p-8">
-                        <div class="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-3 lg:gap-4">
-                            <a href="planilla.html" class="flex flex-col items-center p-4 lg:p-6 bg-slate-50 border border-slate-200 rounded-2xl hover:bg-yellow-400 transition-all duration-300 group">
-                                <i class="fas fa-clipboard-check text-xl lg:text-2xl text-yellow-600 group-hover:text-slate-800 mb-3 transition-transform group-hover:scale-110"></i>
-                                <span class="text-[0.6rem] lg:text-[0.65rem] font-black uppercase tracking-widest text-slate-500 group-hover:text-slate-800">Planilla</span>
-                            </a>
-                            <a href="partidos.html" class="flex flex-col items-center p-4 lg:p-6 bg-slate-50 border border-slate-200 rounded-2xl hover:bg-yellow-400 transition-all duration-300 group">
-                                <i class="fas fa-calendar-star text-xl lg:text-2xl text-yellow-600 group-hover:text-slate-800 mb-3 transition-transform group-hover:scale-110"></i>
-                                <span class="text-[0.6rem] lg:text-[0.65rem] font-black uppercase tracking-widest text-slate-500 group-hover:text-slate-800">Partidos</span>
-                            </a>
-                            <a href="usuarios.html" class="flex flex-col items-center p-4 lg:p-6 bg-slate-50 border border-slate-200 rounded-2xl hover:bg-yellow-400 transition-all duration-300 group">
-                                <i class="fas fa-users-gear text-xl lg:text-2xl text-yellow-600 group-hover:text-slate-800 mb-3 transition-transform group-hover:scale-110"></i>
-                                <span class="text-[0.6rem] lg:text-[0.65rem] font-black uppercase tracking-widest text-slate-500 group-hover:text-slate-800">Usuarios</span>
-                            </a>
-                            <a href="GestorDocumental.html" class="flex flex-col items-center p-4 lg:p-6 bg-slate-50 border border-slate-200 rounded-2xl hover:bg-yellow-400 transition-all duration-300 group">
-                                <i class="fas fa-file-invoice text-xl lg:text-2xl text-yellow-600 group-hover:text-slate-800 mb-3 transition-transform group-hover:scale-110"></i>
-                                <span class="text-[0.6rem] lg:text-[0.65rem] font-black uppercase tracking-widest text-slate-500 group-hover:text-slate-800">Archivos</span>
-                            </a>
-                            <a href="rifa_diba.html" class="flex flex-col items-center p-4 lg:p-6 bg-slate-50 border border-slate-200 rounded-2xl hover:bg-yellow-400 transition-all duration-300 group">
-                                <i class="fas fa-ticket text-xl lg:text-2xl text-yellow-600 group-hover:text-slate-800 mb-3 transition-transform group-hover:scale-110"></i>
-                                <span class="text-[0.6rem] lg:text-[0.65rem] font-black uppercase tracking-widest text-slate-500 group-hover:text-slate-800">Rifas</span>
-                            </a>
-                            <a href="push.html" class="flex flex-col items-center p-4 lg:p-6 bg-slate-50 border border-slate-200 rounded-2xl hover:bg-yellow-400 transition-all duration-300 group">
-                                <i class="fas fa-paper-plane text-xl lg:text-2xl text-yellow-600 group-hover:text-slate-800 mb-3 transition-transform group-hover:scale-110"></i>
-                                <span class="text-[0.6rem] lg:text-[0.65rem] font-black uppercase tracking-widest text-slate-500 group-hover:text-slate-800">Push</span>
-                            </a>
+                        <div class="premium-stat-card p-8 flex flex-col justify-center bg-slate-900/40 border border-white/5 rounded-[32px] hover:border-yellow-500/30 transition-all group overflow-hidden relative">
+                            <div class="absolute inset-0 bg-gradient-to-br from-yellow-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                            <div class="premium-stat-icon mb-4 w-12 h-12 bg-rose-500/10 rounded-xl flex items-center justify-center text-rose-500 group-hover:scale-110 transition-transform"><i class="fas fa-wallet text-lg"></i></div>
+                            <div class="premium-stat-value text-4xl font-black italic text-white tracking-tighter leading-none mb-1" id="kpi-pending">0</div>
+                            <div class="premium-stat-label text-[0.6rem] font-black uppercase tracking-widest text-slate-500">Pendientes</div>
                         </div>
                     </div>
                 </div>
 
-                <div class="col-12 lg:col-4 panel" style="animation-delay: 0.35s">
-                    <div class="premium-p-header">
-                        <span class="premium-p-title"><i class="fas fa-history text-yellow-600"></i>Recientes</span>
+                <div class="col-12 lg:col-8 panel bg-slate-900/40 border border-white/5 rounded-[40px] overflow-hidden" style="animation-delay: 0.2s">
+                    <div class="premium-p-header bg-white/[0.02] border-b border-white/5 p-8 flex items-center justify-between">
+                        <span class="premium-p-title text-white font-black italic uppercase tracking-tighter flex items-center gap-4"><i class="fas fa-bolt text-yellow-500"></i>Accesos Rápidos</span>
+                        <span class="premium-p-badge bg-yellow-500 text-black font-black uppercase text-[0.6rem] px-4 py-1.5 rounded-full shadow-lg shadow-yellow-500/20">Master Control</span>
                     </div>
-                    <div class="p-6 max-h-[400px] overflow-y-auto custom-scrollbar">
-                        <div class="space-y-3" id="activity-list">
+                    <div class="p-8 lg:p-12">
+                        <div class="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-6">
+                            <a href="planilla.html" class="flex flex-col items-center p-8 bg-white/5 border border-white/10 rounded-[32px] hover:bg-yellow-500 hover:text-black transition-all duration-500 group">
+                                <i class="fas fa-clipboard-check text-3xl text-yellow-500 group-hover:text-black mb-4 transition-transform group-hover:scale-110"></i>
+                                <span class="text-[0.65rem] font-black uppercase tracking-widest text-slate-400 group-hover:text-black">Planilla</span>
+                            </a>
+                            <a href="partidos.html" class="flex flex-col items-center p-8 bg-white/5 border border-white/10 rounded-[32px] hover:bg-yellow-500 hover:text-black transition-all duration-500 group">
+                                <i class="fas fa-calendar-star text-3xl text-yellow-500 group-hover:text-black mb-4 transition-transform group-hover:scale-110"></i>
+                                <span class="text-[0.65rem] font-black uppercase tracking-widest text-slate-400 group-hover:text-black">Partidos</span>
+                            </a>
+                            <a href="usuarios.html" class="flex flex-col items-center p-8 bg-white/5 border border-white/10 rounded-[32px] hover:bg-yellow-500 hover:text-black transition-all duration-500 group">
+                                <i class="fas fa-users-gear text-3xl text-yellow-500 group-hover:text-black mb-4 transition-transform group-hover:scale-110"></i>
+                                <span class="text-[0.65rem] font-black uppercase tracking-widest text-slate-400 group-hover:text-black">Usuarios</span>
+                            </a>
+                            <a href="GestorDocumental.html" class="flex flex-col items-center p-8 bg-white/5 border border-white/10 rounded-[32px] hover:bg-yellow-500 hover:text-black transition-all duration-500 group">
+                                <i class="fas fa-file-invoice text-3xl text-yellow-500 group-hover:text-black mb-4 transition-transform group-hover:scale-110"></i>
+                                <span class="text-[0.65rem] font-black uppercase tracking-widest text-slate-400 group-hover:text-black">Archivos</span>
+                            </a>
+                            <a href="rifa_diba.html" class="flex flex-col items-center p-8 bg-white/5 border border-white/10 rounded-[32px] hover:bg-yellow-500 hover:text-black transition-all duration-500 group">
+                                <i class="fas fa-ticket text-3xl text-yellow-500 group-hover:text-black mb-4 transition-transform group-hover:scale-110"></i>
+                                <span class="text-[0.65rem] font-black uppercase tracking-widest text-slate-400 group-hover:text-black">Rifas</span>
+                            </a>
+                            <a href="push.html" class="flex flex-col items-center p-8 bg-white/5 border border-white/10 rounded-[32px] hover:bg-yellow-500 hover:text-black transition-all duration-500 group">
+                                <i class="fas fa-paper-plane text-3xl text-yellow-500 group-hover:text-black mb-4 transition-transform group-hover:scale-110"></i>
+                                <span class="text-[0.65rem] font-black uppercase tracking-widest text-slate-400 group-hover:text-black">Push</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 lg:col-4 panel bg-slate-900/40 border border-white/5 rounded-[40px] overflow-hidden" style="animation-delay: 0.35s">
+                    <div class="premium-p-header bg-white/[0.02] border-b border-white/5 p-8">
+                        <span class="premium-p-title text-white font-black italic uppercase tracking-tighter flex items-center gap-4"><i class="fas fa-history text-yellow-500"></i>Recientes</span>
+                    </div>
+                    <div class="p-8 max-h-[400px] overflow-y-auto custom-scrollbar">
+                        <div class="space-y-4" id="activity-list">
                             <!-- Skeleton Loader -->
-                            <div class="animate-pulse space-y-3">
-                                <div class="h-12 bg-slate-100 rounded-xl"></div>
-                                <div class="h-12 bg-slate-100 rounded-xl"></div>
-                                <div class="h-12 bg-slate-100 rounded-xl"></div>
+                            <div class="animate-pulse space-y-4">
+                                <div class="h-16 bg-white/5 rounded-2xl"></div>
+                                <div class="h-16 bg-white/5 rounded-2xl"></div>
+                                <div class="h-16 bg-white/5 rounded-2xl"></div>
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Row 3 -->
-                <div class="col-12 lg:col-8 panel" style="animation-delay: 0.4s">
-                    <div class="premium-p-header">
-                        <span class="premium-p-title"><i class="fas fa-calendar-alt text-yellow-600"></i>Próximos Encuentros</span>
-                        <a href="partidos.html" class="text-[0.6rem] font-black uppercase tracking-[0.2em] text-yellow-600 hover:underline">Ver Todos →</a>
+                <div class="col-12 lg:col-8 panel bg-slate-900/40 border border-white/5 rounded-[40px] overflow-hidden" style="animation-delay: 0.4s">
+                    <div class="premium-p-header bg-white/[0.02] border-b border-white/5 p-8 flex items-center justify-between">
+                        <span class="premium-p-title text-white font-black italic uppercase tracking-tighter flex items-center gap-4"><i class="fas fa-calendar-alt text-yellow-500"></i>Próximos Encuentros</span>
+                        <a href="partidos.html" class="text-[0.65rem] font-black uppercase tracking-widest text-yellow-500 hover:text-white transition-colors">Ver Calendario Full →</a>
                     </div>
-                    <div class="p-8">
-                        <div id="matches-list" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="p-10">
+                        <div id="matches-list" class="grid grid-cols-1 md:grid-cols-2 gap-8">
                             <!-- Skeleton -->
-                            <div class="h-32 bg-slate-100 rounded-2xl animate-pulse"></div>
-                            <div class="h-32 bg-slate-100 rounded-2xl animate-pulse"></div>
+                            <div class="h-40 bg-white/5 rounded-3xl animate-pulse"></div>
+                            <div class="h-40 bg-white/5 rounded-3xl animate-pulse"></div>
                         </div>
                     </div>
                 </div>
 
-                <div class="col-12 lg:col-4 panel" id="attendance-panel" style="animation-delay: 0.45s">
-                    <div class="premium-p-header">
-                        <span class="premium-p-title"><i class="fas fa-chart-pie text-yellow-600"></i>Asistencia</span>
+                <div class="col-12 lg:col-4 panel bg-slate-900/40 border border-white/5 rounded-[40px] overflow-hidden" id="attendance-panel" style="animation-delay: 0.45s">
+                    <div class="premium-p-header bg-white/[0.02] border-b border-white/5 p-8">
+                        <span class="premium-p-title text-white font-black italic uppercase tracking-tighter flex items-center gap-4"><i class="fas fa-chart-pie text-yellow-500"></i>Asistencia</span>
                     </div>
-                    <div class="p-8">
-                        <div class="space-y-6">
-                            <div class="flex items-center justify-between text-[0.65rem] font-black uppercase tracking-widest text-slate-500">
-                                <div class="flex items-center gap-2">
-                                    <div class="w-1.5 h-1.5 rounded-full bg-green-500"></div>
-                                    <span id="att-p">0 Presentes</span>
+                    <div class="p-10">
+                        <div class="space-y-8">
+                            <div class="flex items-center justify-between text-[0.7rem] font-black uppercase tracking-widest text-slate-500">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-2 h-2 rounded-full bg-emerald-500 shadow-lg shadow-emerald-500/20"></div>
+                                    <span id="att-p" class="text-white">0 Presentes</span>
                                 </div>
-                                <div class="flex items-center gap-2">
-                                    <div class="w-1.5 h-1.5 rounded-full bg-red-500"></div>
-                                    <span id="att-a">0 Ausentes</span>
+                                <div class="flex items-center gap-3">
+                                    <div class="w-2 h-2 rounded-full bg-rose-500 shadow-lg shadow-rose-500/20"></div>
+                                    <span id="att-a" class="text-white">0 Ausentes</span>
                                 </div>
                             </div>
-                            <div class="h-3 w-full bg-slate-200 rounded-full overflow-hidden flex">
-                                <div class="h-full bg-green-500 transition-all duration-1000" id="bar-p" style="width:0%"></div>
-                                <div class="h-full bg-red-500 transition-all duration-1000" id="bar-a" style="width:0%"></div>
-                                <div class="h-full bg-yellow-500 transition-all duration-1000" id="bar-e" style="width:0%"></div>
+                            <div class="h-4 w-full bg-white/5 rounded-full overflow-hidden flex shadow-inner">
+                                <div class="h-full bg-emerald-500 transition-all duration-1000 shadow-[0_0_10px_rgba(16,185,129,0.5)]" id="bar-p" style="width:0%"></div>
+                                <div class="h-full bg-rose-500 transition-all duration-1000 shadow-[0_0_10px_rgba(244,63,94,0.5)]" id="bar-a" style="width:0%"></div>
+                                <div class="h-full bg-yellow-500 transition-all duration-1000 shadow-[0_0_10px_rgba(234,179,8,0.5)]" id="bar-e" style="width:0%"></div>
                             </div>
-                            <p class="text-[0.6rem] font-bold text-center text-slate-400 uppercase tracking-[0.3em]">Resumen de la última sesión</p>
+                            <p class="text-[0.65rem] font-bold text-center text-slate-500 uppercase tracking-widest leading-relaxed">Resumen de la última sesión sincronizada</p>
                         </div>
                     </div>
                 </div>

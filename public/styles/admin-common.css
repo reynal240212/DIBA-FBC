@@ -2,35 +2,30 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&display=swap');
 
 :root {
-    /* DIBA FBC - Theme más claro y organizado */
+    /* DIBA FBC - Gold Premium Dark Theme */
     --azul-grana-blue: #004d98;
     --azul-grana-red: #a50044;
     --gold: #FFD700;
     --gold-rgb: 255, 215, 0;
     
-    /* Layout Colors - Más claros */
-    --bg-admin: #f0f2f5;
-    --bg-sidebar: #1e293b;
-    --text-on-nav: #FFFFFF;
-    
-    /* Semantic Colors - Fondos más claros */
-    --bg-main: #f8fafc;
-    --bg-panel: #ffffff;
-    --bg-input: #f1f5f9;
-    --bg-surface: #ffffff;
-    
-    /* Text System - Texto más oscuro para contraste */
-    --text-main: #1e293b;
-    --text-muted: #64748b;
-    --text-dim: #94a3b8;
+    /* Layout Colors - Dark */
+    --bg-main: #020617;
+    --bg-panel: rgba(15, 23, 42, 0.4);
+    --bg-surface: rgba(30, 41, 59, 0.4);
+    --bg-input: rgba(15, 23, 42, 0.8);
+    --text-main: #f8fafc;
+    --text-muted: #94a3b8;
+    --text-dim: #64748b;
     
     /* UI Decorators */
-    --border-color: #e2e8f0;
-    --shadow-premium: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-    --glass-border: #e2e8f0;
-    --glass-blur: 10;
+    --border-color: rgba(255, 255, 255, 0.05);
+    --shadow-premium: 0 20px 40px -15px rgba(0, 0, 0, 0.5);
+    --glass-border: rgba(255, 255, 255, 0.08);
+    --glass-blur: 20px;
+    --mesh-bg: radial-gradient(at 0% 0%, rgba(0, 77, 152, 0.1) 0, transparent 50%), 
+               radial-gradient(at 100% 100%, rgba(255, 215, 0, 0.05) 0, transparent 50%);
+    
     --glass-inner-glow: inset 0 1px 0 rgba(255,255,255,0.1);
-    --mesh-bg: #f8fafc;
     
     /* Layout Constants */
     --sidebar-w: 280px;      
