@@ -244,8 +244,18 @@
             }
 
             tableBody.innerHTML = filtered.map(m => {
-                const date = new Date(m.fecha + 'T12:00:00');
-                const dateStr = date.toLocaleDateString('es-CO', { day: '2-digit', month: 'short', year: 'numeric' }).toUpperCase();
+                let dateStr = 'FECHA TBD';
+                try {
+                    if (m.fecha) {
+                        const pureDate = m.fecha.includes('T') ? m.fecha.split('T')[0] : m.fecha;
+                        const [y, mon, d] = pureDate.split('-').map(Number);
+                        const date = new Date(y, mon - 1, d);
+                        if (!isNaN(date.getTime())) {
+                            dateStr = date.toLocaleDateString('es-CO', { day: '2-digit', month: 'short', year: 'numeric' }).toUpperCase();
+                        }
+                    }
+                } catch (e) { console.error("Date error:", e); }
+
                 const isFinished = m.resultado && m.resultado !== '' && m.resultado !== 'Pendiente';
                 const statusClass = isFinished ? 'status-finished' : 'status-upcoming';
                 const statusText = isFinished ? 'Finalizado' : 'Programado';
