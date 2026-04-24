@@ -73,11 +73,12 @@
     </style>
 </head>
 
-<body class="bg-gray-100 text-slate-800 font-['Outfit']">
+<body class="bg-[#020617] text-white font-['Outfit'] selection:bg-gold/30">
+    <div class="fixed inset-0 pointer-events-none z-0" style="background: var(--mesh-bg)"></div>
 
     <div id="admin-nav"></div>
 
-    <main class="lg:ml-[280px] pt-[80px] min-h-screen transition-all duration-300">
+    <main class="lg:ml-[280px] pt-[80px] min-h-screen transition-all duration-300 relative z-10">
         <div class="p-6 lg:p-10 max-w-[1600px] mx-auto overflow-x-hidden">
             
             <!-- Page Header -->
@@ -86,9 +87,9 @@
                     <div>
                         <div class="flex items-center gap-3 mb-2">
                             <span class="w-8 h-1 bg-gold rounded-full"></span>
-                            <p class="text-slate-500 font-bold uppercase tracking-[0.4em] text-[0.65rem]">Comunicación Masiva en Tiempo Real</p>
+                            <p class="text-white/60 font-bold uppercase tracking-[0.4em] text-[0.65rem]">Comunicación Masiva en Tiempo Real</p>
                         </div>
-                        <h2 class="text-4xl lg:text-5xl font-black italic text-slate-800 uppercase tracking-tighter">Notificaciones <span class="text-gold">Push</span></h2>
+                        <h2 class="text-4xl lg:text-5xl font-black italic text-white uppercase tracking-tighter">Notificaciones <span class="text-gold">Push</span></h2>
                     </div>
                 </div>
             </div>
@@ -97,8 +98,8 @@
                 <!-- Left Column: Composer -->
                 <div class="col-12 lg:col-8">
                     <div class="panel p-8 animate-fade-up">
-                        <div class="premium-p-header mb-10">
-                            <span class="premium-p-title"><i class="fas fa-paper-plane text-gold"></i>Redactar Mensaje Oficial</span>
+                        <div class="premium-p-header mb-10 bg-white/5 border-b border-white/5 -mx-8 -mt-8 rounded-t-3xl px-8 py-5">
+                            <span class="premium-p-title !text-white"><i class="fas fa-paper-plane text-gold"></i>Redactar Mensaje Oficial</span>
                             <span class="premium-p-badge italic">ALTA PRIORIDAD</span>
                         </div>
 
@@ -107,12 +108,12 @@
                                 <div class="premium-form-group">
                                     <label class="premium-label">Título del Mensaje</label>
                                     <input type="text" id="push-title" required placeholder="¡NUEVO PARTIDO PROGRAMADO!" 
-                                        class="premium-input pl-6 uppercase font-bold text-[0.8rem] tracking-tight">
+                                        class="premium-input pl-6 uppercase font-bold text-[0.8rem] tracking-tight !bg-white/5">
                                 </div>
                                 
                                 <div class="premium-form-group">
                                     <label class="premium-label">Segmento de Audiencia</label>
-                                    <select id="push-target" class="premium-input pl-6 font-bold uppercase text-[0.7rem] tracking-widest cursor-pointer">
+                                    <select id="push-target" class="premium-input pl-6 font-bold uppercase text-[0.7rem] tracking-widest cursor-pointer !bg-white/5">
                                         <option value="all">TODOS LOS SUSCRIPTORES</option>
                                         <option value="2012">CATEGORÍA 2012</option>
                                         <option value="2013">CATEGORÍA 2013</option>
@@ -124,7 +125,7 @@
                             <div class="premium-form-group">
                                 <label class="premium-label">Cuerpo de la Notificación (Máx. 160 caract.)</label>
                                 <textarea id="push-body" rows="4" required placeholder="ESCRIBA LAS INDICACIONES CLARAS PARA LOS JUGADORES..." 
-                                    class="premium-input p-6 resize-none min-h-[140px]"></textarea>
+                                    class="premium-input p-6 resize-none min-h-[140px] !bg-white/5"></textarea>
                             </div>
 
                             <div class="premium-form-group">
@@ -132,15 +133,15 @@
                                 <div class="relative group">
                                     <i class="fas fa-link absolute left-5 top-1/2 -translate-y-1/2 text-gold/30 group-focus-within:text-gold transition-colors"></i>
                                     <input type="text" id="push-url" placeholder="EJ: /partidos.html" 
-                                        class="premium-input pl-14 font-black uppercase tracking-widest text-[0.7rem]">
+                                        class="premium-input pl-14 font-black uppercase tracking-widest text-[0.7rem] !bg-white/5">
                                 </div>
-                                <p class="mt-2 text-[0.6rem] font-bold text-slate-400 uppercase tracking-widest pl-1 italic">
+                                <p class="mt-2 text-[0.6rem] font-bold text-white/40 uppercase tracking-widest pl-1 italic">
                                     Página que se abrirá al tocar la notificación en el móvil.
                                 </p>
                             </div>
 
-                            <div id="status-container" class="hidden animate-fade-in p-5 rounded-2xl bg-white/5 border border-white/5 text-[0.7rem] font-black uppercase tracking-widest text-gold text-center italic">
-                                <!-- Dynamic status goes here -->
+                            <div id="status-container" class="hidden animate-fade-in">
+                                <!-- Dynamic status goes here from admin.js -->
                             </div>
 
                             <div class="flex justify-end pt-6">
@@ -158,14 +159,14 @@
                 <div class="col-12 lg:col-4">
                     <div class="sticky-preview flex flex-col items-center gap-8">
                         <div class="text-center mb-4">
-                            <span class="text-[0.6rem] font-black text-slate-400 uppercase tracking-[0.4em] italic mb-2 block">Vista Previa Mobile</span>
+                            <span class="text-[0.6rem] font-black text-white/40 uppercase tracking-[0.4em] italic mb-2 block">Vista Previa Mobile</span>
                             <div class="w-12 h-1 bg-gold/30 mx-auto rounded-full"></div>
                         </div>
 
                         <div class="mobile-mock">
                             <div class="iphone-notch"></div>
                             <div class="mobile-screen">
-                                <div class="flex justify-between items-center text-[10px] font-black text-slate-500 tracking-widest">
+                                <div class="flex justify-between items-center text-[10px] font-black text-white/20 tracking-widest">
                                     <span>DIBA FBC</span>
                                     <span>AHORA</span>
                                 </div>
@@ -175,12 +176,12 @@
                                         <div class="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center border border-white/10 shadow-lg">
                                             <img src="/images/ESCUDO.png" class="w-5 h-5 object-contain">
                                         </div>
-                                        <div>
-                                            <h4 id="preview-title" class="text-[0.7rem] font-black text-gold uppercase tracking-tight truncate w-[180px]">Título de Mensaje</h4>
-                                            <p class="text-[0.5rem] font-bold text-slate-500 uppercase tracking-widest">DIBA OFFICIAL APP</p>
+                                        <div class="min-w-0 flex-1">
+                                            <h4 id="preview-title" class="text-[0.7rem] font-black text-gold uppercase tracking-tight truncate">Título de Mensaje</h4>
+                                            <p class="text-[0.5rem] font-bold text-white/40 uppercase tracking-widest">DIBA OFFICIAL APP</p>
                                         </div>
                                     </div>
-                                    <p id="preview-body" class="text-[0.7rem] font-medium text-slate-700 leading-relaxed pr-2">
+                                    <p id="preview-body" class="text-[0.7rem] font-medium text-white/80 leading-relaxed pr-2">
                                         El contenido que redactes aparecerá aquí para todos los jugadores sincronizados en tiempo real.
                                     </p>
                                 </div>
@@ -188,7 +189,7 @@
                                 <!-- Wallpaper decoration -->
                                 <div class="mt-auto opacity-10 flex flex-col items-center">
                                     <img src="/images/ESCUDO.png" class="w-24 h-24 object-contain grayscale invert">
-                                    <div class="text-[0.5rem] mt-4 font-black tracking-[0.5em] text-slate-800">SISTEMA DIBA</div>
+                                    <div class="text-[0.5rem] mt-4 font-black tracking-[0.5em] text-white">SISTEMA DIBA</div>
                                 </div>
                             </div>
                         </div>
