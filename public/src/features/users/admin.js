@@ -7,69 +7,81 @@ function qs(sel, root = document) { return root.querySelector(sel); }
 
 function renderRows(rows) {
   const tbody = qs('#users-tbody');
-  const table = qs('#usersTable');
-  const loading = qs('#loading-state');
-  const empty = qs('#empty-state');
-  const badge = qs('#count-badge');
+  const badge = qs('#user-count');
 
   if (!tbody) return;
   tbody.innerHTML = '';
 
   // Actualizar contador
-  if (badge) badge.textContent = `${rows.length} USUARIOS`;
+  if (badge) badge.textContent = `${rows.length} USUARIOS REGISTRADOS`;
 
   if (rows.length === 0) {
-    loading?.classList.add('hidden');
-    table?.classList.add('hidden');
-    empty?.classList.remove('hidden');
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="5" class="px-8 py-20 text-center">
+            <div class="flex flex-col items-center opacity-30">
+                <i class="fas fa-users-slash text-4xl mb-4"></i>
+                <p class="text-[0.7rem] font-black uppercase tracking-widest">No se encontraron usuarios</p>
+            </div>
+        </td>
+      </tr>
+    `;
     return;
   }
 
   rows.forEach((u, i) => {
     const tr = document.createElement('tr');
-    tr.className = "group hover:bg-slate-50 transition-colors border-b border-slate-50";
+    tr.className = "group hover:bg-white/[0.02] transition-colors border-b border-white/5";
+    
+    const isDeletable = u.role !== 'admin'; // Ejemplo: no dejar borrar admins principales fácilmente
+
     tr.innerHTML = `
-      <td class="px-6 py-4 text-center text-[10px] font-black text-slate-300 italic">${i + 1}</td>
-      <td class="px-6 py-4">
+      <td class="px-8 py-6">
         <div class="flex items-center gap-4">
-            <div class="w-10 h-10 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center text-[10px] font-black uppercase text-diba-blue shadow-sm">
+            <div class="w-10 h-10 rounded-xl bg-gold/10 border border-gold/20 flex items-center justify-center text-xs font-black uppercase text-gold shadow-lg shadow-gold/5">
                 ${(u.username || 'U')[0]}
             </div>
-            <div>
-              <div class="text-xs font-black text-diba-blue uppercase italic tracking-tight">${u.username ?? ''}</div>
-              <div class="text-[8px] font-bold text-slate-400 uppercase tracking-widest mt-0.5" title="${u.id}">ID: ${u.id.substring(0, 8)}...</div>
+            <div class="min-w-0">
+              <div class="text-[0.85rem] font-black text-white uppercase italic tracking-tight truncate">${u.username ?? ''}</div>
+              <div class="text-[0.6rem] font-bold text-slate-500 uppercase tracking-widest mt-0.5" title="${u.id}">ID: ${u.id.substring(0, 8)}...</div>
             </div>
         </div>
       </td>
-      <td class="px-6 py-4"><span class="text-slate-500 font-bold text-[11px] uppercase tracking-wide">${u.full_name ?? ''}</span></td>
-      <td class="px-6 py-4">
-        <span class="px-3 py-1 bg-diba-blue/5 text-diba-blue text-[8px] font-black uppercase italic rounded-full tracking-widest border border-diba-blue/10">
+      <td class="px-8 py-6">
+        <span class="text-white font-bold text-[0.8rem] uppercase tracking-wide truncate max-w-[200px] block">${u.full_name ?? '---'}</span>
+      </td>
+      <td class="px-8 py-6">
+        <span class="px-3 py-1 bg-gold/10 text-gold text-[0.6rem] font-black uppercase italic rounded-lg tracking-widest border border-gold/20">
           ${u.role}
         </span>
       </td>
-      <td class="px-6 py-4 text-[10px] text-slate-400 font-bold uppercase tracking-widest">${new Date(u.created_at).toLocaleDateString('es-CO')}</td>
-      <td class="px-6 py-4 text-center">
-        <div class="flex items-center justify-center gap-2">
-            <button class="w-8 h-8 rounded-lg bg-rose-50 text-rose-500 hover:bg-rose-500 hover:text-white transition-all shadow-sm" 
+      <td class="px-8 py-6">
+         <div class="flex items-center gap-2">
+            <div class="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-lg shadow-emerald-500/50"></div>
+            <span class="text-[0.65rem] font-black text-emerald-500 uppercase tracking-widest italic">Activo</span>
+         </div>
+      </td>
+      <td class="px-8 py-6 text-right">
+        <div class="flex items-center justify-end gap-3">
+            <button class="w-10 h-10 rounded-xl bg-white/5 text-white/40 hover:bg-white/10 hover:text-white transition-all border border-white/5" 
+                    title="Editar Perfil">
+              <i class="fas fa-edit text-xs"></i>
+            </button>
+            <button class="w-10 h-10 rounded-xl bg-rose-500/10 text-rose-500 hover:bg-rose-500 hover:text-white transition-all border border-rose-500/20" 
                     data-action="del" data-id="${u.id}" title="Eliminar Usuario">
-              <i class="fas fa-trash text-[10px]"></i>
+              <i class="fas fa-trash text-xs"></i>
             </button>
         </div>
       </td>`;
     tbody.appendChild(tr);
   });
-
-  // Mostrar tabla, ocultar otros
-  loading?.classList.add('hidden');
-  empty?.classList.add('hidden');
-  table?.classList.remove('hidden');
 }
 
 
 async function loadUsers() {
-  const loading = qs('#loading-state');
   const alertBar = qs('#alert-bar');
-  const badge = qs('#count-badge');
+  const alertText = qs('#alert-text');
+  const badge = qs('#user-count');
 
   try {
     const { data, error } = await supabase
@@ -81,11 +93,10 @@ async function loadUsers() {
     renderRows(data || []);
   } catch (err) {
     console.error('Error fetching users:', err);
-    if (loading) loading.classList.add('hidden');
     if (badge) badge.textContent = 'Error';
     
-    if (alertBar) {
-        alertBar.textContent = '⚠️ Error de sincronización: ' + (err.message || 'Error desconocido');
+    if (alertBar && alertText) {
+        alertText.textContent = 'Error de sincronización: ' + (err.message || 'Error desconocido');
         alertBar.classList.remove('hidden');
         alertBar.classList.add('flex');
     }
