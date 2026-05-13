@@ -114,9 +114,20 @@
   scroll-behavior: smooth;
 }
 
+
 /* Responsive Utilities for custom components */
 @media (max-width: 640px) {
   .modal-content-wrapper {
     max-width: 90%;
   }
+}
+
+/* --- ANIMACIONES CINEMÁTICAS --- */
+@keyframes slowZoom {
+  0% { transform: scale(1.0); }
+  100% { transform: scale(1.15); }
+}
+
+.animate-slow-zoom {
+  animation: slowZoom 20s infinite alternate ease-in-out;
 }
