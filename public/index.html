@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" class="scroll-smooth">
 
 <head>
   <meta charset="UTF-8" />
@@ -15,14 +15,13 @@
   <meta property="og:type" content="website" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="DIBA FBC | Inicio, Historia y Patrocinadores" />
-  <meta name="twitter:description"
-    content="Club de fútbol amateur en Barranquilla. Conoce nuestro equipo y patrocinadores." />
+  <meta name="twitter:description" content="Club de fútbol amateur en Barranquilla. Conoce nuestro equipo y patrocinadores." />
   <meta name="twitter:image" content="https://diba-fbc.vercel.app/images/ESCUDO.png" />
 
   <!-- Fonts y librerías extra -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;700;900&family=Montserrat:ital,wght@0,400;0,700;1,900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" />
@@ -32,30 +31,54 @@
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- Tailwind Configuration to replace custom CSS -->
+  <!-- Tailwind Configuration to replace custom CSS with Premium Look -->
   <script>
     tailwind.config = {
       theme: {
         extend: {
           fontFamily: {
-            sans: ['Montserrat', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'sans-serif'],
+            sans: ['Outfit', 'Montserrat', 'system-ui', '-apple-system', 'sans-serif'],
+            display: ['Montserrat', 'sans-serif'],
           },
           keyframes: {
             fadeInUpSoft: {
-              from: { opacity: '0', transform: 'translateY(16px)' },
+              from: { opacity: '0', transform: 'translateY(24px)' },
               to: { opacity: '1', transform: 'translateY(0)' },
+            },
+            slowZoom: {
+              from: { transform: 'scale(1.02) rotate(0deg)' },
+              to: { transform: 'scale(1.08) rotate(0.5deg)' },
             }
           },
           animation: {
-            'fade-in-soft': 'fadeInUpSoft 0.9s ease-out forwards',
+            'fade-in-soft': 'fadeInUpSoft 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+            'slow-zoom': 'slowZoom 20s ease-in-out infinite alternate',
           }
         }
       }
     }
   </script>
+  
+  <style>
+    /* Custom Scrollbar for Premium Look */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #020617;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #1e293b;
+      border-radius: 9999px;
+      border: 2px solid #020617;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #eab308;
+    }
+  </style>
 </head>
 
-<body class="bg-slate-50 text-slate-900">
+<body class="bg-[#020617] text-white font-sans overflow-x-hidden selection:bg-yellow-500/30">
   <!-- Service Worker -->
   <script>
     if ('serviceWorker' in navigator) {
@@ -65,44 +88,51 @@
     }
   </script>
 
+  <!-- Navbar Injection Container -->
   <div id="navbar-container">
-    <div class="h-20 bg-slate-900 border-b border-slate-800 animate-pulse"></div>
+    <div class="h-20 bg-slate-900 border-b border-white/5 animate-pulse"></div>
   </div>
 
   <div id="match-banner-container"></div>
 
   <!-- HERO PREMIUM CON VIDEO -->
-  <section id="hero" class="relative min-h-[90vh] flex items-center justify-center overflow-hidden bg-slate-900">
-    <!-- Video Background -->
-    <div class="absolute inset-0 z-0">
-      <video autoplay muted loop playsinline class="w-full h-full object-cover opacity-40 scale-105 animate-[slowZoom_20s_infinite_alternate]">
+  <section id="hero" class="relative min-h-screen flex items-center justify-center overflow-hidden bg-[#020617]">
+    <!-- Video Background with Slow Zoom Animation -->
+    <div class="absolute inset-0 z-0 pointer-events-none">
+      <video autoplay muted loop playsinline class="w-full h-full object-cover opacity-35 scale-105 animate-slow-zoom">
         <source src="video/posiciones-2014.mp4" type="video/mp4">
       </video>
-      <div class="absolute inset-0 bg-gradient-to-b from-slate-900/80 via-slate-900/40 to-slate-900 shadow-[inset_0_0_100px_rgba(0,0,0,0.5)]"></div>
+      <!-- Gradient Mesh Overlay -->
+      <div class="absolute inset-0 bg-gradient-to-b from-[#020617]/90 via-[#020617]/50 to-[#020617]"></div>
+      <div class="absolute -top-[20%] -left-[20%] w-[60%] h-[60%] bg-blue-600/10 rounded-full blur-[140px]" />
+      <div class="absolute -bottom-[20%] -right-[20%] w-[60%] h-[60%] bg-yellow-500/10 rounded-full blur-[140px]" />
     </div>
 
-    <div class="container mx-auto px-4 relative z-10 text-center">
-      <div class="inline-block mb-6 px-4 py-1.5 border border-blue-500/30 bg-blue-500/10 rounded-full backdrop-blur-md animate__animated animate__fadeInDown">
-        <span class="text-blue-400 text-xs font-black tracking-[0.3em] uppercase">Club Deportivo Barranquillero</span>
+    <div class="container mx-auto px-6 relative z-10 text-center space-y-10">
+      <div class="inline-block px-6 py-2.5 border border-yellow-500/20 bg-yellow-500/10 rounded-full backdrop-blur-md animate__animated animate__fadeInDown">
+        <span class="text-yellow-500 text-xs font-black tracking-[0.4em] uppercase">Orgullo Barranquillero • Desde 2012</span>
       </div>
-      <h1 class="text-6xl md:text-8xl lg:text-9xl font-black text-white italic uppercase leading-none tracking-tighter mb-8 animate__animated animate__zoomIn">
-        DIBA <span class="text-blue-600 drop-shadow-[0_0_20px_rgba(37,99,235,0.5)]">FBC</span>
+      
+      <h1 class="text-7xl md:text-9xl font-black italic uppercase leading-none tracking-tighter font-display text-white animate__animated animate__zoomIn">
+        DIBA <span class="text-yellow-500 drop-shadow-[0_0_30px_rgba(234,179,8,0.4)]">FBC</span>
       </h1>
-      <p class="text-lg md:text-2xl text-slate-300 max-w-3xl mx-auto mb-12 font-medium leading-relaxed animate__animated animate__fadeInUp animate__delay-1s">
-        Formando leyendas, forjando carácter. La academia de fútbol líder en Barranquilla donde la pasión se encuentra con la disciplina.
+      
+      <p class="text-lg md:text-2xl text-slate-300 max-w-3xl mx-auto font-medium leading-relaxed animate__animated animate__fadeInUp animate__delay-1s">
+        Formando leyendas, forjando carácter. La academia de fútbol líder en Barranquilla donde la pasión se encuentra con la disciplina y el alto rendimiento.
       </p>
-      <div class="flex flex-wrap justify-center gap-6 animate__animated animate__fadeInUp animate__delay-1s">
-        <a href="#posiciones" class="px-10 py-5 bg-blue-600 hover:bg-blue-700 text-white font-black uppercase text-sm tracking-widest rounded-xl transition-all hover:scale-105 hover:shadow-[0_0_30px_rgba(37,99,235,0.4)] active:scale-95">
+      
+      <div class="flex flex-wrap justify-center gap-6 animate__animated animate__fadeInUp animate__delay-1s pt-6">
+        <a href="#posiciones" class="px-12 py-6 bg-yellow-500 hover:bg-yellow-400 text-black font-black uppercase text-xs tracking-widest rounded-2xl transition-all hover:scale-105 hover:shadow-[0_20px_40px_rgba(234,179,8,0.3)] active:scale-95">
           Ver Clasificaciones
         </a>
-        <a href="https://wa.me/573046566784" target="_blank" class="px-10 py-5 bg-white/10 hover:bg-white/20 text-white font-black uppercase text-sm tracking-widest rounded-xl backdrop-blur-md border border-white/20 transition-all active:scale-95">
+        <a href="https://wa.me/573246656083" target="_blank" class="px-12 py-6 bg-white/5 hover:bg-white/10 text-white font-black uppercase text-xs tracking-widest rounded-2xl backdrop-blur-md border border-white/10 transition-all hover:scale-105 active:scale-95">
           Unirse al Club
         </a>
       </div>
     </div>
 
     <!-- Scroll Indicator -->
-    <div class="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce opacity-50">
+    <div class="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce opacity-30">
       <div class="w-6 h-10 border-2 border-white rounded-full flex justify-center pt-2">
         <div class="w-1 h-2 bg-white rounded-full"></div>
       </div>
@@ -110,41 +140,41 @@
   </section>
 
   <!-- SECCIÓN DE POSICIONES - BENTO GRID PREMIUM -->
-  <section id="posiciones" class="py-24 bg-slate-950 relative overflow-hidden">
+  <section id="posiciones" class="py-32 bg-slate-950 relative overflow-hidden">
     <!-- Ornamentos de fondo -->
-    <div class="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none">
-      <div class="absolute top-1/4 -left-20 w-96 h-96 bg-blue-600 rounded-full blur-[150px]"></div>
-      <div class="absolute bottom-1/4 -right-20 w-96 h-96 bg-amber-600 rounded-full blur-[150px]"></div>
+    <div class="absolute inset-0 opacity-10 pointer-events-none">
+      <div class="absolute top-1/4 -left-20 w-[500px] h-[500px] bg-blue-600/10 rounded-full blur-[150px]"></div>
+      <div class="absolute bottom-1/4 -right-20 w-[500px] h-[500px] bg-yellow-500/10 rounded-full blur-[150px]"></div>
     </div>
 
-    <div class="max-w-7xl mx-auto px-4 relative z-10">
-      <div class="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-8">
+    <div class="max-w-7xl mx-auto px-6 relative z-10 space-y-24">
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-8">
         <div>
-          <p class="text-blue-500 font-black tracking-[0.4em] uppercase text-xs mb-4">Temporada 2026</p>
-          <h2 class="text-5xl md:text-7xl font-black text-white italic uppercase tracking-tighter">
-            Cuadro de <span class="text-blue-600">Honor</span>
+          <p class="text-yellow-500 font-black tracking-[0.4em] uppercase text-xs mb-4">Temporada Oficial</p>
+          <h2 class="text-5xl md:text-7xl font-black text-white italic uppercase tracking-tighter font-display leading-none">
+            CUADRO DE <span class="text-yellow-500">HONOR</span>
           </h2>
         </div>
         <p class="text-slate-400 max-w-md text-sm md:text-base leading-relaxed">
-          Resultados oficiales del torneo actual. Nuestros equipos liderando con orgullo y disciplina en cada categoría.
+          Resultados oficiales del torneo actual. Nuestros equipos liderando con orgullo y disciplina en cada categoría competitiva.
         </p>
       </div>
 
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <!-- Tarjeta Categoría 2014 (Destacada) -->
-        <div class="lg:col-span-2 group relative bg-slate-900 rounded-[2.5rem] overflow-hidden border border-slate-800 hover:border-blue-500/50 transition-all duration-500 shadow-2xl" data-aos="fade-right">
+        <div class="lg:col-span-2 group relative bg-slate-900/40 rounded-[3rem] overflow-hidden border border-white/5 hover:border-yellow-500/30 transition-all duration-500 shadow-2xl backdrop-blur-xl" data-aos="fade-right">
           <div class="aspect-video relative overflow-hidden">
-            <video controls class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+            <video controls class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-102">
               <source src="video/posiciones-2014.mp4" type="video/mp4">
             </video>
-            <div class="absolute top-6 left-6 bg-blue-600 text-white px-6 py-2 rounded-full font-black italic text-sm tracking-widest shadow-xl">
-              LÍDERES 2014
+            <div class="absolute top-6 left-6 bg-yellow-500 text-black px-6 py-2 rounded-full font-black italic text-xs tracking-widest shadow-xl">
+              LÍDERES 2014 - 15
             </div>
           </div>
-          <div class="p-10">
-            <h3 class="text-3xl font-black text-white italic uppercase mb-4 tracking-tighter">Categoría 2014 - Elite</h3>
-            <p class="text-slate-400 text-lg leading-relaxed">
-              Diba FBC se consolida en la cima de la tabla con un rendimiento impecable. La disciplina táctica y el esfuerzo colectivo nos mantienen como referentes del torneo.
+          <div class="p-10 md:p-12 space-y-4">
+            <h3 class="text-3xl font-black text-white italic uppercase tracking-tighter">Categoría 2014/15 - Elite</h3>
+            <p class="text-slate-400 text-sm md:text-base leading-relaxed font-medium">
+              DIBA FBC se consolida firmemente en la cima de la clasificación general con un rendimiento táctico intachable. La consistencia colectiva y la disciplina de juego nos colocan como los grandes referentes del fútbol formativo en la región.
             </p>
           </div>
         </div>
@@ -152,34 +182,34 @@
         <!-- Columna de otras categorías -->
         <div class="space-y-8">
           <!-- Tarjeta 2012 -->
-          <div class="group bg-slate-900 rounded-[2rem] overflow-hidden border border-slate-800 hover:border-amber-500/50 transition-all duration-500 shadow-xl" data-aos="fade-left">
-            <div class="aspect-video relative">
+          <div class="group bg-slate-900/40 rounded-[2.5rem] overflow-hidden border border-white/5 hover:border-yellow-500/20 transition-all duration-500 shadow-xl backdrop-blur-xl" data-aos="fade-left">
+            <div class="aspect-video relative overflow-hidden">
               <video controls class="w-full h-full object-cover">
                 <source src="video/posiciones-2012.mp4" type="video/mp4">
               </video>
-              <div class="absolute top-4 left-4 bg-amber-500 text-slate-950 px-4 py-1.5 rounded-full font-black italic text-xs tracking-widest shadow-lg">
+              <div class="absolute top-4 left-4 bg-white/10 backdrop-blur-md text-white border border-white/10 px-4 py-1.5 rounded-full font-black italic text-[10px] tracking-widest shadow-lg">
                 TABLA 2012
               </div>
             </div>
             <div class="p-8">
-              <h4 class="text-xl font-black text-white italic uppercase tracking-tight">Categoría 2012</h4>
-              <p class="text-slate-500 text-sm mt-2 leading-relaxed">Sigue el avance de nuestros guerreros en la categoría 2012.</p>
+              <h4 class="text-xl font-black text-white italic uppercase tracking-tight">Categoría 2012 - Formación</h4>
+              <p class="text-slate-400 text-xs mt-2 leading-relaxed font-medium">Visualiza el avance y estadísticas de nuestros representantes en la categoría 2012.</p>
             </div>
           </div>
 
           <!-- Tarjeta 2013 -->
-          <div class="group bg-slate-900 rounded-[2rem] overflow-hidden border border-slate-800 hover:border-blue-500/50 transition-all duration-500 shadow-xl" data-aos="fade-left" data-aos-delay="200">
-            <div class="aspect-video relative">
+          <div class="group bg-slate-900/40 rounded-[2.5rem] overflow-hidden border border-white/5 hover:border-yellow-500/20 transition-all duration-500 shadow-xl backdrop-blur-xl" data-aos="fade-left" data-aos-delay="200">
+            <div class="aspect-video relative overflow-hidden">
               <video controls class="w-full h-full object-cover">
                 <source src="video/posiciones-2013.mp4" type="video/mp4">
               </video>
-              <div class="absolute top-4 left-4 bg-blue-600 text-white px-4 py-1.5 rounded-full font-black italic text-xs tracking-widest shadow-lg">
+              <div class="absolute top-4 left-4 bg-white/10 backdrop-blur-md text-white border border-white/10 px-4 py-1.5 rounded-full font-black italic text-[10px] tracking-widest shadow-lg">
                 TABLA 2013
               </div>
             </div>
             <div class="p-8">
-              <h4 class="text-xl font-black text-white italic uppercase tracking-tight">Categoría 2013</h4>
-              <p class="text-slate-500 text-sm mt-2 leading-relaxed">Resultados y posiciones de la categoría 2013.</p>
+              <h4 class="text-xl font-black text-white italic uppercase tracking-tight">Categoría 2013 - Pre-Elite</h4>
+              <p class="text-slate-400 text-xs mt-2 leading-relaxed font-medium">Resultados, rendimiento e historial de juego de la categoría 2013 competitiva.</p>
             </div>
           </div>
         </div>
@@ -188,213 +218,223 @@
   </section>
 
   <!-- Sección Actualidad (Instagram) -->
-  <section id="actualidad" class="py-24 bg-white relative overflow-hidden">
+  <section id="actualidad" class="py-32 bg-[#020617] relative overflow-hidden">
     <!-- Ornamentos de Fondo -->
-    <div class="absolute top-0 right-0 w-[600px] h-[600px] bg-blue-500/5 rounded-full blur-[120px] -z-0"></div>
-    <div class="absolute bottom-0 left-0 w-[400px] h-[400px] bg-amber-500/5 rounded-full blur-[100px] -z-0"></div>
+    <div class="absolute inset-0 pointer-events-none opacity-5">
+      <div class="absolute top-0 right-0 w-[600px] h-[600px] bg-blue-500 rounded-full blur-[140px]"></div>
+      <div class="absolute bottom-0 left-0 w-[500px] h-[500px] bg-yellow-500 rounded-full blur-[140px]"></div>
+    </div>
 
-    <div class="max-w-6xl mx-auto px-4 relative z-10">
-      <header class="text-center mb-16">
-        <p class="text-xs font-black tracking-[0.3em] text-blue-600 uppercase mb-3 animate__animated animate__fadeIn">
+    <div class="max-w-7xl mx-auto px-6 relative z-10 space-y-20">
+      <header class="text-center space-y-6">
+        <p class="text-xs font-black tracking-[0.3em] text-yellow-500 uppercase animate__animated animate__fadeIn">
           Síguenos en @DIBA_FBC
         </p>
-        <h2 class="text-4xl md:text-6xl font-black italic uppercase tracking-tighter text-slate-900 mb-6">
-          Últimas <span class="text-blue-600">Noticias</span>
+        <h2 class="text-5xl md:text-7xl font-black italic uppercase tracking-tighter text-white font-display leading-none">
+          ÚLTIMAS <span class="text-yellow-500">NOTICIAS</span>
         </h2>
-        <div class="w-24 h-2 bg-blue-600 mx-auto rounded-full mb-8"></div>
-        <p class="mt-4 text-slate-500 max-w-2xl mx-auto text-sm md:text-lg leading-relaxed">
-          Mantente al día con el día a día de nuestra academia. Resultados, entrenamientos y la pasión de la familia DIBA FBC directamente desde nuestro Instagram.
+        <div class="w-24 h-1.5 bg-yellow-500 mx-auto rounded-full"></div>
+        <p class="text-slate-300 max-w-2xl mx-auto text-sm md:text-lg leading-relaxed font-medium pt-2">
+          Mantente al día con el día a día de nuestra academia. Resultados de partidos, fotos de entrenamientos y momentos destacados en tiempo real.
         </p>
       </header>
 
       <!-- Contenedor del Feed Dinámico -->
       <div id="instagram-feed" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-        <!-- El JS inyectará las publicaciones o esqueletos de carga aquí -->
+        <!-- El JS inyectará las publicaciones aquí -->
       </div>
 
-      <div class="mt-16 flex flex-col items-center gap-6">
-        <a href="https://www.instagram.com/diba_fbc/" target="_blank" class="group flex items-center gap-4 px-10 py-5 bg-slate-900 text-white rounded-[2rem] font-black uppercase text-sm tracking-[0.2em] hover:bg-blue-600 transition-all shadow-2xl active:scale-95">
+      <div class="flex flex-col items-center gap-6 pt-10">
+        <a href="https://www.instagram.com/diba_fbc/" target="_blank" class="group flex items-center gap-4 px-12 py-6 bg-slate-900 text-white border border-white/10 rounded-[2rem] font-black uppercase text-xs tracking-[0.2em] hover:bg-yellow-500 hover:text-black hover:border-yellow-500 transition-all shadow-2xl active:scale-95">
           <i class="fab fa-instagram text-xl group-hover:rotate-12 transition-transform"></i>
           Ir al Perfil Oficial
         </a>
-        <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">
-          Actualizado cada 24 horas vía Behold.so
+        <p class="text-[9px] text-slate-500 font-black uppercase tracking-[0.3em]">
+          Actualizado en vivo vía Behold.so
         </p>
       </div>
     </div>
   </section>
 
-  <!-- Sección Servicios -->
-  <section id="servicios" class="py-14 bg-white">
-    <div class="max-w-6xl mx-auto px-4">
-      <header class="text-center mb-10">
-        <p class="text-xs font-semibold tracking-[0.2em] text-blue-600 uppercase mb-2">
-          Lo que ofrecemos
+  <!-- Sección Servicios - MODERNIZADA A GLASSMORPHISM -->
+  <section id="servicios" class="py-32 bg-slate-950 relative overflow-hidden">
+    <div class="max-w-7xl mx-auto px-6 space-y-20 relative z-10">
+      <header class="text-center space-y-6">
+        <p class="text-xs font-black tracking-[0.2em] text-yellow-500 uppercase">
+          LO QUE OFRECEMOS
         </p>
-        <h2 class="text-3xl md:text-4xl font-bold text-slate-900">
-          Nuestros Servicios
+        <h2 class="text-5xl md:text-7xl font-black italic uppercase tracking-tighter text-white font-display leading-none">
+          NUESTROS <span class="text-yellow-500">SERVICIOS</span>
         </h2>
-        <p class="mt-3 text-sm md:text-base text-slate-600 max-w-xl mx-auto">
-          Formación integral para jugadores, con enfoque en rendimiento deportivo y valores humanos.
+        <div class="w-24 h-1.5 bg-yellow-500 mx-auto rounded-full"></div>
+        <p class="text-slate-400 max-w-xl mx-auto text-sm md:text-base leading-relaxed font-medium">
+          Formación deportiva estructurada basada en el desarrollo físico integral, táctica moderna y valores cívicos.
         </p>
       </header>
 
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-4">
-        <div
-          class="bg-slate-900 text-slate-50 rounded-2xl shadow-md shadow-slate-900/30 p-8 flex flex-col items-center text-center">
-          <span class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-slate-800 mb-4">
-            <i class="fas fa-dumbbell text-xl"></i>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 pt-6">
+        <div class="bg-slate-900/40 rounded-[2.5rem] border border-white/5 p-10 flex flex-col items-center text-center space-y-6 hover:border-yellow-500/30 hover:scale-[1.02] transition-all duration-500 backdrop-blur-xl group">
+          <span class="inline-flex items-center justify-center w-16 h-16 rounded-[20px] bg-yellow-500/10 border border-yellow-500/20 text-yellow-500 group-hover:bg-yellow-500 group-hover:text-black transition-all duration-500 shadow-2xl shadow-yellow-500/5">
+            <i class="fas fa-dumbbell text-2xl"></i>
           </span>
-          <h3 class="text-lg font-semibold mb-2">Entrenamiento Profesional</h3>
-          <p class="text-sm text-slate-200">
-            Programas de preparación física y técnica diseñados para potenciar el rendimiento de cada jugador.
+          <h3 class="text-xl font-black uppercase tracking-tight text-white italic">Entrenamiento Profesional</h3>
+          <p class="text-slate-400 text-xs md:text-sm leading-relaxed font-medium">
+            Programas integrales de acondicionamiento físico, destreza técnica y velocidad mental adaptados al perfil del jugador.
           </p>
         </div>
 
-        <div class="bg-white rounded-2xl shadow-md p-8 flex flex-col items-center text-center border border-slate-100">
-          <span class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-amber-100 mb-4">
-            <i class="fas fa-trophy text-xl text-amber-500"></i>
+        <div class="bg-slate-900/40 rounded-[2.5rem] border border-white/5 p-10 flex flex-col items-center text-center space-y-6 hover:border-blue-500/30 hover:scale-[1.02] transition-all duration-500 backdrop-blur-xl group">
+          <span class="inline-flex items-center justify-center w-16 h-16 rounded-[20px] bg-blue-500/10 border border-blue-500/20 text-blue-400 group-hover:bg-blue-600 group-hover:text-white transition-all duration-500 shadow-2xl shadow-blue-500/5">
+            <i class="fas fa-trophy text-2xl"></i>
           </span>
-          <h3 class="text-lg font-semibold mb-2">Participación en Torneos</h3>
-          <p class="text-sm text-slate-600">
-            Representamos a nuestra comunidad en torneos locales con disciplina, respeto y espíritu deportivo.
+          <h3 class="text-xl font-black uppercase tracking-tight text-white italic">Competencia y Torneos</h3>
+          <p class="text-slate-400 text-xs md:text-sm leading-relaxed font-medium">
+            Inscripción y participación en ligas locales de gran nivel organizativo, fomentando el carácter competitivo sano.
           </p>
         </div>
 
-        <div class="bg-white rounded-2xl shadow-md p-8 flex flex-col items-center text-center border border-slate-100">
-          <span class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-emerald-100 mb-4">
-            <i class="fas fa-users text-xl text-emerald-500"></i>
+        <div class="bg-slate-900/40 rounded-[2.5rem] border border-white/5 p-10 flex flex-col items-center text-center space-y-6 hover:border-emerald-500/30 hover:scale-[1.02] transition-all duration-500 backdrop-blur-xl group">
+          <span class="inline-flex items-center justify-center w-16 h-16 rounded-[20px] bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 group-hover:bg-emerald-500 group-hover:text-black transition-all duration-500 shadow-2xl shadow-emerald-500/5">
+            <i class="fas fa-users text-2xl"></i>
           </span>
-          <h3 class="text-lg font-semibold mb-2">Desarrollo Integral</h3>
-          <p class="text-sm text-slate-600">
-            Fomentamos valores, compañerismo y liderazgo dentro y fuera de la cancha.
+          <h3 class="text-xl font-black uppercase tracking-tight text-white italic">Formación en Valores</h3>
+          <p class="text-slate-400 text-xs md:text-sm leading-relaxed font-medium">
+            El fútbol es nuestro vehículo para forjar ciudadanos íntegros, enseñando disciplina, compañerismo y respeto mutuo.
           </p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Sección Valores -->
-  <section id="valores" class="py-16 bg-slate-50 overflow-hidden relative">
-    <div class="max-w-6xl mx-auto px-4 relative z-10">
-      <div class="text-center mb-12">
-        <h2 class="text-3xl md:text-5xl font-black italic uppercase tracking-tighter text-slate-900 mb-4">
-          Nuestros <span class="text-blue-600">Pilares</span>
+  <!-- Sección Pilares (Valores) -->
+  <section id="valores" class="py-32 bg-[#020617] overflow-hidden relative">
+    <div class="absolute inset-0 pointer-events-none opacity-5">
+      <div class="absolute top-1/2 left-1/4 w-[500px] h-[500px] bg-yellow-500 rounded-full blur-[160px]"></div>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-6 relative z-10 space-y-20">
+      <div class="text-center space-y-6">
+        <h2 class="text-5xl md:text-7xl font-black italic uppercase tracking-tighter text-white font-display leading-none">
+          NUESTROS <span class="text-yellow-500">PILARES</span>
         </h2>
-        <div class="w-24 h-1.5 bg-blue-600 mx-auto rounded-full"></div>
+        <div class="w-24 h-1.5 bg-yellow-500 mx-auto rounded-full"></div>
       </div>
       
       <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-        <div class="bg-white p-8 rounded-3xl shadow-xl shadow-slate-200/50 border border-slate-100 group hover:-translate-y-2 transition-all duration-500">
-          <div class="w-16 h-16 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center mb-6 text-2xl group-hover:bg-blue-600 group-hover:text-white transition-colors duration-500">
+        <div class="bg-slate-900/30 p-10 rounded-[32px] border border-white/5 group hover:-translate-y-2 transition-all duration-500 backdrop-blur-md hover:border-yellow-500/20">
+          <div class="w-16 h-16 bg-white/5 border border-white/10 text-yellow-500 rounded-2xl flex items-center justify-center mb-6 text-2xl group-hover:bg-yellow-500 group-hover:text-black transition-colors duration-500 shadow-2xl">
             <i class="fas fa-handshake"></i>
           </div>
-          <h3 class="text-xl font-bold mb-4 italic uppercase tracking-tight">Respeto</h3>
-          <p class="text-slate-600 text-sm leading-relaxed">Fomentamos la valoración del compañero, el rival y las reglas del juego como base de todo deportista.</p>
+          <h3 class="text-2xl font-black italic uppercase tracking-tight mb-4 text-white">Respeto</h3>
+          <p class="text-slate-400 text-xs md:text-sm leading-relaxed font-medium">Valoración del compañero, aceptación técnica del rival y acatamiento de las reglas como pilares inamovibles del deportista DIBA.</p>
         </div>
 
-        <div class="bg-slate-900 p-8 rounded-3xl shadow-xl shadow-slate-900/20 border border-slate-800 group hover:-translate-y-2 transition-all duration-500">
-          <div class="w-16 h-16 bg-blue-600 text-white rounded-2xl flex items-center justify-center mb-6 text-2xl">
+        <div class="bg-slate-900/50 p-10 rounded-[32px] border border-yellow-500/10 group hover:-translate-y-2 transition-all duration-500 backdrop-blur-md shadow-2xl shadow-yellow-500/5">
+          <div class="w-16 h-16 bg-yellow-500 text-black rounded-2xl flex items-center justify-center mb-6 text-2xl">
             <i class="fas fa-shield-halved"></i>
           </div>
-          <h3 class="text-xl font-bold mb-4 italic uppercase tracking-tight text-white">Disciplina</h3>
-          <p class="text-slate-300 text-sm leading-relaxed">El compromiso con el entrenamiento y la constancia son el motor de nuestro crecimiento.</p>
+          <h3 class="text-2xl font-black italic uppercase tracking-tight mb-4 text-white">Disciplina</h3>
+          <p class="text-slate-300 text-xs md:text-sm leading-relaxed font-medium">La puntualidad en cada práctica, el cuidado físico constante y la constancia táctica son la llave de todo nuestro crecimiento.</p>
         </div>
 
-        <div class="bg-white p-8 rounded-3xl shadow-xl shadow-slate-200/50 border border-slate-100 group hover:-translate-y-2 transition-all duration-500">
-          <div class="w-16 h-16 bg-rose-50 text-rose-600 rounded-2xl flex items-center justify-center mb-6 text-2xl group-hover:bg-rose-600 group-hover:text-white transition-colors duration-500">
+        <div class="bg-slate-900/30 p-10 rounded-[32px] border border-white/5 group hover:-translate-y-2 transition-all duration-500 backdrop-blur-md hover:border-rose-500/20">
+          <div class="w-16 h-16 bg-white/5 border border-white/10 text-rose-500 rounded-2xl flex items-center justify-center mb-6 text-2xl group-hover:bg-rose-600 group-hover:text-white transition-colors duration-500 shadow-2xl">
             <i class="fas fa-heart"></i>
           </div>
-          <h3 class="text-xl font-bold mb-4 italic uppercase tracking-tight">Pasión</h3>
-          <p class="text-slate-600 text-sm leading-relaxed">Vivimos cada partido y cada entrenamiento con la alegría y el orgullo de representar a DIBA FBC.</p>
+          <h3 class="text-2xl font-black italic uppercase tracking-tight mb-4 text-white">Pasión</h3>
+          <p class="text-slate-400 text-xs md:text-sm leading-relaxed font-medium">Sentir y vivir con orgullo la indumentaria del club, entregando la mejor versión en cada jugada dentro de la cancha.</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Sección Equipo -->
-  <section id="equipo" class="py-14 bg-slate-100">
-    <div class="max-w-4xl mx-auto px-4">
-      <header class="text-center mb-10">
-        <p class="text-xs font-semibold tracking-[0.2em] text-blue-600 uppercase mb-2">
-          Staff
+  <!-- Sección Cuerpo Técnico - CON EL DISEÑO DE ROTACIÓN DORADA -->
+  <section id="equipo" class="py-32 bg-slate-950 relative overflow-hidden">
+    <div class="max-w-7xl mx-auto px-6 relative z-10 space-y-24">
+      <header class="text-center space-y-6">
+        <p class="text-xs font-black tracking-[0.2em] text-yellow-500 uppercase">
+          LÍDERES DE LA ACADEMIA
         </p>
-        <h2 class="text-3xl md:text-4xl font-bold text-slate-900">
-          Cuerpo Técnico
+        <h2 class="text-5xl md:text-7xl font-black italic uppercase tracking-tighter text-white font-display leading-none">
+          CUERPO <span class="text-yellow-500">TÉCNICO</span>
         </h2>
-        <p class="mt-3 text-sm md:text-base text-slate-600 max-w-lg mx-auto">
-          Profesionales que lideran el proyecto deportivo y formativo de DIBA FBC.
-        </p>
+        <div class="w-24 h-1.5 bg-yellow-500 mx-auto rounded-full"></div>
       </header>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 justify-items-center">
-        <article class="bg-white rounded-2xl shadow-md p-6 w-full max-w-sm text-center border border-slate-100">
-          <img src="images/profesor.jpg" alt="Director Técnico de DIBA FBC"
-            class="w-28 h-28 rounded-full object-cover mx-auto mt-2 mb-4 ring-2 ring-blue-500/60" />
-          <h3 class="text-lg font-semibold">Reinaldo Perez</h3>
-          <p class="text-sm text-slate-600 mt-1">Director Técnico y Deportivo</p>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-16 max-w-4xl mx-auto justify-items-center">
+        <!-- Reinaldo Perez -->
+        <article class="text-center group w-full max-w-sm">
+          <div class="relative w-56 h-56 mx-auto mb-8">
+            <!-- Slanted gold background behind image -->
+            <div class="absolute inset-0 bg-yellow-500 rounded-[50px] rotate-6 opacity-20 group-hover:rotate-12 transition-transform duration-500" />
+            <img src="images/profesor.jpg" alt="Reinaldo Perez - DT"
+              class="relative z-10 w-full h-full object-cover rounded-[50px] shadow-2xl border border-white/10 group-hover:scale-102 transition-all duration-500" />
+          </div>
+          <h3 class="text-2xl md:text-3xl font-black italic uppercase tracking-tighter text-white">Reinaldo Perez</h3>
+          <p class="text-yellow-500 font-bold uppercase tracking-widest text-[10px] mt-2">Director Técnico y Deportivo</p>
         </article>
 
-        <article class="bg-white rounded-2xl shadow-md p-6 w-full max-w-sm text-center border border-slate-100">
-          <img src="images/reinaldoNavas.png" alt="Asistente Técnico de DIBA FBC"
-            class="w-28 h-28 rounded-full object-cover mx-auto mt-2 mb-4 ring-2 ring-blue-500/60" />
-          <h3 class="text-lg font-semibold">Reinaldo Perez Navas</h3>
-          <p class="text-sm text-slate-600 mt-1">Asistente Técnico / Desarrollador de software</p>
+        <!-- Reinaldo Perez Navas -->
+        <article class="text-center group w-full max-w-sm">
+          <div class="relative w-56 h-56 mx-auto mb-8">
+            <!-- Slanted gold background behind image -->
+            <div class="absolute inset-0 bg-yellow-500 rounded-[50px] rotate-6 opacity-20 group-hover:rotate-12 transition-transform duration-500" />
+            <img src="images/reinaldoNavas.png" alt="Reinaldo Perez Navas - Asistente"
+              class="relative z-10 w-full h-full object-cover rounded-[50px] shadow-2xl border border-white/10 group-hover:scale-102 transition-all duration-500" />
+          </div>
+          <h3 class="text-2xl md:text-3xl font-black italic uppercase tracking-tighter text-white">Reinaldo Perez Navas</h3>
+          <p class="text-yellow-500 font-bold uppercase tracking-widest text-[10px] mt-2">Asistente Técnico / Desarrollador</p>
         </article>
       </div>
     </div>
   </section>
-
 
   <!-- Sección Indumentaria -->
-  <section class="py-14 bg-white">
-    <div class="max-w-6xl mx-auto px-4">
-      <div class="text-center mb-10">
-        <p class="text-xs font-semibold tracking-[0.2em] text-blue-600 uppercase mb-2">
-          Uniforme oficial
+  <section class="py-32 bg-[#020617] relative overflow-hidden">
+    <div class="absolute inset-0 pointer-events-none opacity-5">
+      <div class="absolute top-1/4 left-1/2 w-[600px] h-[600px] bg-blue-600 rounded-full blur-[150px]"></div>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-6 relative z-10 space-y-20">
+      <div class="text-center space-y-6">
+        <p class="text-xs font-black tracking-[0.2em] text-yellow-500 uppercase">
+          PIEL DE CAMPEONES
         </p>
-        <h2 class="text-3xl md:text-4xl font-bold uppercase tracking-wide text-slate-900">
-          Nuestra Indumentaria
+        <h2 class="text-5xl md:text-7xl font-black italic uppercase tracking-tighter text-white font-display leading-none">
+          NUESTRA <span class="text-yellow-500">INDUMENTARIA</span>
         </h2>
-        <p class="mt-4 text-base md:text-lg text-slate-600 max-w-2xl mx-auto">
-          Conoce las camisetas oficiales que visten a nuestros jugadores en cada compromiso.
-        </p>
+        <div class="w-24 h-1.5 bg-yellow-500 mx-auto rounded-full"></div>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-        <div class="flex justify-center">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center max-w-5xl mx-auto">
+        <div class="flex justify-center group relative rounded-[40px] overflow-hidden border border-white/5 shadow-2xl p-2 bg-slate-900/30 backdrop-blur-md">
           <img src="images/DIBA_UNIFORMEHOMENAJE A BARRANQUILLA.jpg"
-            class="max-w-md w-full rounded-2xl shadow-lg shadow-slate-900/20"
-            alt="Indumentaria oficial de local de DIBA FBC" />
+            class="rounded-[32px] w-full max-w-md h-[450px] object-cover group-hover:scale-105 transition-transform duration-700"
+            alt="Indumentaria oficial local de DIBA FBC" />
         </div>
 
-        <div class="text-center md:text-left">
-          <h3 class="text-2xl md:text-3xl font-bold mb-3 text-slate-900">
-            La Piel de los Campeones
+        <div class="space-y-6 bg-slate-900/30 border border-white/5 rounded-[40px] p-8 md:p-12 backdrop-blur-xl shadow-2xl">
+          <h3 class="text-3xl font-black italic uppercase text-white tracking-tighter">
+            La Armadura de los Guerreros
           </h3>
-          <p class="text-slate-600 mb-4 text-sm md:text-base leading-relaxed">
-            La indumentaria de DIBA FBC es más que una camiseta: es un símbolo de identidad y pasión.
-            El diseño, en tonos azules, representa la disciplina y la seriedad con la que afrontamos
-            cada desafío. Confeccionada con tecnología de última generación, garantiza comodidad y
-            rendimiento en la cancha, mientras que el escudo y los patrocinadores reflejan nuestro
-            compromiso con la comunidad.
+          <p class="text-slate-400 text-sm leading-relaxed font-medium">
+            La indumentaria de DIBA FBC representa más que una simple indumentaria: es el estandarte que unifica nuestro esfuerzo y resiliencia en Barranquilla. Diseñada con tonos profundos que evocan disciplina e inteligencia estratégica sobre el terreno de juego.
           </p>
-          <p class="text-slate-600 text-sm md:text-base leading-relaxed">
-            Cada costura cuenta una historia de esfuerzo y dedicación, desde los barrios de Barranquilla
-            hasta las victorias más importantes del club.
+          <p class="text-slate-400 text-sm leading-relaxed font-medium">
+            Confeccionada con tecnología textil de vanguardia para brindar máxima ventilación y ligereza táctica a nuestros jóvenes jugadores en competiciones de alto nivel. Cada costura del escudo carga la pasión de nuestra gente y las victorias cosechadas con esfuerzo e integración social.
           </p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Sección Testimonios -->
+  <!-- Sección Testimonios (Injected dynamically) -->
   <div id="testimonials-container"></div>
 
-  <!-- Footer -->
+  <!-- Footer (Injected dynamically) -->
   <div id="footer-container"></div>
 
-  <!-- Botón Flotante de Acción (FAB) -->
+  <!-- Botón Flotante de Acción (FAB) (Injected dynamically) -->
   <div id="fab-container"></div>
 
   <!-- Local Config -->
