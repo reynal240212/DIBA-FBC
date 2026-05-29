@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 import { 
   Users, Calendar, Shield, Activity, 
   ArrowUpRight, ArrowDownRight, TrendingUp, Clock,
-  Zap, Globe, MousePointer2, CreditCard
+  Zap, Globe, MousePointer2, CreditCard, FileText
 } from 'lucide-react';
 
 export default function AdminDashboard() {
@@ -148,4 +148,4 @@ export default function AdminDashboard() {
   );
 }
 
-import { FileText } from 'lucide-react';
+
