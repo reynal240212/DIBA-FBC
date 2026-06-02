@@ -93,8 +93,14 @@ document.addEventListener("DOMContentLoaded", async function () {
 
       if (!displayMatches || displayMatches.length === 0) {
         dynamicContainer.innerHTML = `
-           <div class="w-full text-center text-slate-400 text-sm py-4 italic">
-              No hay partidos programados próximamente.
+           <div class="w-full py-8 flex flex-col items-center justify-center text-center space-y-4 animate__animated animate__fadeIn">
+               <div class="w-12 h-12 bg-white/5 rounded-2xl flex items-center justify-center border border-white/10 text-yellow-500 animate-pulse">
+                   <i class="fas fa-calendar-day text-lg"></i>
+               </div>
+               <div>
+                   <p class="text-xs font-black uppercase tracking-[0.2em] text-white">Sin Encuentros Programados</p>
+                   <p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest mt-1">No hay partidos agendados para esta semana.</p>
+               </div>
            </div>
          `;
         return;
