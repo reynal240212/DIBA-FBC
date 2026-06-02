@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" data-bs-theme="dark">
 
 <head>
   <meta charset="UTF-8" />
@@ -12,7 +12,8 @@
   <style>
     body {
       font-family: 'Montserrat', sans-serif;
-      background-color: #f4f4f4;
+      background-color: #020617;
+      color: #ffffff;
     }
 
     .navbar {
@@ -103,16 +104,17 @@
     .ficha-container {
       max-width: 900px;
       margin: auto;
-      background-color: #fff;
+      background-color: rgba(15, 23, 42, 0.4);
       border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
       padding: 20px;
     }
 
     .encabezado {
       text-align: center;
-      background-color: #007bff;
-      color: white;
+      background-color: #ffd700;
+      color: #020617;
       padding: 15px;
       border-radius: 10px;
       margin-bottom: 20px;
@@ -122,12 +124,12 @@
       width: 180px;
       height: 240px;
       object-fit: cover;
-      border: 3px solid #dee2e6;
+      border: 3px solid rgba(255, 255, 255, 0.1);
       border-radius: 6px;
     }
 
     .barra {
-      background-color: #e9ecef;
+      background-color: rgba(255, 255, 255, 0.1);
       border-radius: 5px;
       overflow: hidden;
       height: 10px;
@@ -161,6 +163,43 @@
       width: 100%;
       background-color: #6610f2;
     }
+
+    .player-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .btn-player {
+      border-radius: 9999px !important;
+      font-weight: 600 !important;
+      transition: all 0.3s ease !important;
+    }
+
+    /* Categoría 2012/13 outline warning/gold buttons */
+    .player-list .btn-outline-primary {
+      border-color: rgba(255, 215, 0, 0.3) !important;
+      color: #ffd700 !important;
+      background: rgba(255, 215, 0, 0.02) !important;
+    }
+    .player-list .btn-outline-primary:hover {
+      background: #ffd700 !important;
+      color: #020617 !important;
+      box-shadow: 0 0 15px rgba(255, 215, 0, 0.3) !important;
+    }
+
+    /* Categoría 2014/15/16 outline emerald/green buttons */
+    .player-list .btn-outline-success {
+      border-color: rgba(16, 185, 129, 0.3) !important;
+      color: #10b981 !important;
+      background: rgba(16, 185, 129, 0.02) !important;
+    }
+    .player-list .btn-outline-success:hover {
+      background: #10b981 !important;
+      color: #020617 !important;
+      box-shadow: 0 0 15px rgba(16, 185, 129, 0.3) !important;
+    }
   </style>
 </head>
 
@@ -169,16 +208,16 @@
   <div id="hero-container"></div>
   <div id="patrocinadores-container"></div>
 
-  <main class="container my-5">
-    <h1 class="text-center mb-4">Plantilla de Jugadores</h1>
+  <main class="container my-5 pt-5">
+    <h1 class="text-center mb-4 text-white font-extrabold uppercase tracking-tight">Plantilla de Jugadores</h1>
 
   </main>
   <div class="container">
-    <h1 class="text-center text-primary mb-5">Selecciona un Jugador para ver su Ficha Técnica</h1>
+    <h1 class="text-center text-warning fw-bold mb-5 uppercase tracking-wide">Selecciona un Jugador para ver su Ficha Técnica</h1>
 
     <div class="row">
       <div class="col-md-6">
-        <h4 class="text-success">Categoría 2012/13</h4>
+        <h4 class="text-warning mb-3 uppercase tracking-wider font-semibold">Categoría 2012/13</h4>
         <div class="player-list">
           <a href="fichas/dilan-sanchez.html" class="btn btn-outline-primary btn-player">Dilan Sanchez</a>
           <a href="fichas/dinkol.html" class="btn btn-outline-primary btn-player">Dinkol Noguera</a>
@@ -200,7 +239,7 @@
       </div>
 
       <div class="col-md-6">
-        <h4 class="text-success">Categoría 2014/15/16</h4>
+        <h4 class="text-success mb-3 uppercase tracking-wider font-semibold">Categoría 2014/15/16</h4>
         <div class="player-list">
           <a href="fichas/mario.html" class="btn btn-outline-success btn-player">Mario Perez</a>
           <a href="fichas/juan-andres.html" class="btn btn-outline-success btn-player">Juan Andrés</a>

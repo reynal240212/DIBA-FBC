@@ -47,8 +47,8 @@ function renderPlayers(container, list) {
         section.className = "mb-24 w-full animate__animated animate__fadeIn";
         section.innerHTML = `
             <div class="flex items-center mb-12 px-4 group">
-                <h2 class="text-3xl font-black text-slate-900 uppercase italic mr-8">Categoría ${cat}</h2>
-                <div class="flex-grow h-[1px] bg-slate-200"></div>
+                <h2 class="text-3xl font-black text-white uppercase italic mr-8">Categoría ${cat}</h2>
+                <div class="flex-grow h-[1px] bg-white/10"></div>
             </div>`;
         
         const grid = document.createElement("div");
@@ -62,15 +62,15 @@ function renderPlayers(container, list) {
 
 function createPlayerCard(j, i) {
     const card = document.createElement("article");
-    card.className = "group bg-white rounded-[2rem] overflow-hidden shadow-2xl hover:shadow-amber-500/30 transition-all cursor-pointer animate__animated animate__fadeInUp";
+    card.className = "group bg-slate-900/30 backdrop-blur-xl border border-white/5 rounded-[2rem] overflow-hidden shadow-2xl hover:shadow-amber-500/10 hover:border-yellow-500/30 transition-all cursor-pointer animate__animated animate__fadeInUp";
     card.style.animationDelay = `${i * 0.05}s`;
     
     const name = `${j.nombre} ${j.apellidos}`;
     const img = j.foto_url || "images/ESCUDO.png";
 
     card.innerHTML = `
-        <div class="aspect-[4/5] overflow-hidden bg-slate-100 relative">
-            <div class="absolute inset-0 bg-gradient-to-t from-slate-900 opacity-40 z-10"></div>
+        <div class="aspect-[4/5] overflow-hidden bg-slate-950/40 relative">
+            <div class="absolute inset-0 bg-gradient-to-t from-slate-950 opacity-60 z-10"></div>
             <img src="${img}" class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" loading="lazy">
             <div class="absolute top-4 right-4 z-20">
                 <div class="bg-white/10 backdrop-blur-xl rounded-full w-10 h-10 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all translate-x-4 group-hover:translate-x-0">
@@ -78,8 +78,8 @@ function createPlayerCard(j, i) {
                 </div>
             </div>
         </div>
-        <div class="p-5 text-center bg-white">
-            <h3 class="text-sm font-black text-slate-900 uppercase leading-snug group-hover:text-amber-600 transition-colors">${name}</h3>
+        <div class="p-5 text-center bg-transparent">
+            <h3 class="text-sm font-black text-white uppercase leading-snug group-hover:text-amber-500 transition-colors">${name}</h3>
         </div>
     `;
 
@@ -105,16 +105,16 @@ export async function initScorers() {
         container.innerHTML = "";
         data.forEach(g => {
             const item = document.createElement("div");
-            item.className = "flex items-center justify-between p-4 border-b hover:bg-slate-50 transition-all";
+            item.className = "flex items-center justify-between p-4 border-b border-white/5 hover:bg-white/5 transition-all";
             item.innerHTML = `
                 <div class="flex items-center gap-3">
                     <img src="${g.escudo_url || 'images/ESCUDO.png'}" class="w-8 h-8 object-contain">
                     <div>
-                        <div class="text-sm font-bold">${g.nombre_jugador}</div>
+                        <div class="text-sm font-bold text-white">${g.nombre_jugador}</div>
                         <div class="text-[10px] text-slate-400 uppercase">${g.equipo}</div>
                     </div>
                 </div>
-                <div class="bg-slate-900 text-amber-500 font-black py-1 px-3 rounded-lg text-xs">${g.goles}</div>
+                <div class="bg-slate-800 text-amber-500 font-black py-1 px-3 rounded-lg text-xs">${g.goles}</div>
             `;
             container.appendChild(item);
         });

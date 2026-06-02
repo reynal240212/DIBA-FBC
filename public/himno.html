@@ -17,6 +17,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles/styles.css" />
 
     <style>
         body {
@@ -24,9 +25,9 @@
         }
 
         .glass-card {
-            background: rgba(255, 255, 255, 0.9);
+            background: rgba(15, 23, 42, 0.6);
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.08);
         }
 
         .lyric-stanza {
@@ -40,29 +41,29 @@
 
         .chorus {
             font-weight: 700;
-            color: #1d4ed8;
-            border-left: 4px solid #f59e0b;
+            color: #ffd700;
+            border-left: 4px solid #ffd700;
             padding-left: 1.5rem;
             font-style: italic;
         }
     </style>
 </head>
 
-<body class="bg-slate-50 text-slate-900">
+<body class="bg-[#020617] text-white selection:bg-yellow-500/30">
     <div id="navbar-container"></div>
 
     <!-- HERO SECTION -->
-    <section class="relative pt-32 pb-20 bg-slate-900 overflow-hidden">
+    <section class="relative pt-32 pb-20 bg-[#020617] overflow-hidden">
         <div class="absolute inset-0 opacity-10 flex items-center justify-center pointer-events-none">
             <img src="images/ESCUDO.png" alt="" class="w-[500px] animate-pulse">
         </div>
 
         <div class="max-w-4xl mx-auto px-4 text-center relative z-10">
             <h1 class="text-5xl md:text-7xl font-black text-white mb-6 animate__animated animate__fadeInDown">
-                NUESTRO <span class="text-blue-500">HIMNO</span>
+                NUESTRO <span class="text-yellow-500">HIMNO</span>
             </h1>
             <p
-                class="text-slate-400 text-lg md:text-xl font-medium max-w-2xl mx-auto animate__animated animate__fadeInUp">
+                class="text-slate-300 text-lg md:text-xl font-medium max-w-2xl mx-auto animate__animated animate__fadeInUp">
                 El canto que une a la familia DIBA en cada victoria y cada desafío. Un símbolo de nuestra identidad
                 barranquillera.
             </p>
@@ -73,24 +74,23 @@
     <section class="py-12 -mt-10 relative z-20">
         <div class="max-w-3xl mx-auto px-4">
             <div
-                class="glass-card rounded-3xl shadow-2xl p-8 flex flex-col md:flex-row items-center gap-8 border-t-4 border-amber-500">
+                class="glass-card rounded-3xl shadow-2xl p-8 flex flex-col md:flex-row items-center gap-8 border-t-4 border-yellow-500">
                 <div
-                    class="w-32 h-32 bg-blue-700 rounded-2xl flex items-center justify-center shadow-lg transform -rotate-3">
-                    <i class="fas fa-play text-white text-5xl"></i>
+                    class="w-32 h-32 bg-yellow-500/10 border border-yellow-500/20 rounded-2xl flex items-center justify-center shadow-lg transform -rotate-3">
+                    <i class="fas fa-play text-yellow-500 text-5xl"></i>
                 </div>
                 <div class="flex-grow text-center md:text-left">
-                    <h2 class="text-2xl font-black text-slate-800 uppercase tracking-tighter mb-2">Escuchar Himno
+                    <h2 class="text-2xl font-black text-white uppercase tracking-tighter mb-2">Escuchar Himno
                         Oficial</h2>
-                    <p class="text-slate-500 text-sm mb-6">Reproduce el himno de los campeones y siente la pasión azul.
-                    </p>
+                    <p class="text-slate-400 text-sm mb-6">Reproduce el himno de los campeones y siente la pasión.</p>
 
                     <!-- Placeholder para reproductor real -->
-                    <div class="w-full bg-slate-200 h-2 rounded-full overflow-hidden mb-2">
-                        <div class="bg-blue-600 h-full w-1/3"></div>
+                    <div class="w-full bg-white/5 h-2 rounded-full overflow-hidden mb-2">
+                        <div class="bg-yellow-500 h-full w-1/3"></div>
                     </div>
-                    <div class="flex justify-between text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                    <div class="flex justify-between text-[10px] font-bold text-slate-500 uppercase tracking-widest">
                         <span>0:00</span>
-                        <span>DIBA FBC ANTEMA</span>
+                        <span>DIBA FBC ANTHEM</span>
                         <span>3:45</span>
                     </div>
                 </div>
@@ -99,14 +99,14 @@
     </section>
 
     <!-- LETRA DEL HIMNO -->
-    <section class="py-16 bg-white">
+    <section class="py-16 bg-[#020617]">
         <div class="max-w-3xl mx-auto px-4">
             <div class="text-center mb-16">
-                <span class="text-blue-600 font-black uppercase tracking-[0.3em] text-xs">Letra Oficial</span>
-                <h2 class="text-3xl font-black text-slate-900 mt-2">CANTO DE GLORIA</h2>
+                <span class="text-yellow-500 font-black uppercase tracking-[0.3em] text-xs">Letra Oficial</span>
+                <h2 class="text-3xl font-black text-white mt-2">CANTO DE GLORIA</h2>
             </div>
 
-            <div class="lyric-container text-center text-lg md:text-xl text-slate-700 leading-relaxed md:leading-loose">
+            <div class="lyric-container text-center text-lg md:text-xl text-slate-200 leading-relaxed md:leading-loose">
                 <div class="lyric-stanza">
                     <span class="lyric-line italic text-slate-400 text-sm mb-4 uppercase tracking-widest">[Coro]</span>
                     <div class="chorus">

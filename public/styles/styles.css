@@ -1,0 +1,202 @@
+/* DIBA FBC - Hojas de Estilo Globales y Overrides */
+
+:root {
+  --bg-dark: #020617;
+  --bg-card: rgba(15, 23, 42, 0.4);
+  --text-light: #f8fafc;
+  --text-muted: #cbd5e1;
+  --gold: #ffd700;
+  --gold-hover: #facc15;
+  --glass-border: rgba(255, 255, 255, 0.08);
+}
+
+/* 1. Reset Global */
+body {
+  background-color: var(--bg-dark) !important;
+  color: var(--text-light) !important;
+  font-family: 'Outfit', 'Montserrat', -apple-system, BlinkMacSystemFont, sans-serif !important;
+}
+
+/* Scrollbar Premium */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-dark);
+}
+::-webkit-scrollbar-thumb {
+  background: #1e293b;
+  border-radius: 9999px;
+  border: 2px solid var(--bg-dark);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--gold);
+}
+
+/* 2. Textos y Títulos */
+h1, h2, h3, h4, h5, h6,
+.h1, .h2, .h3, .h4, .h5, .h6 {
+  color: #ffffff !important;
+}
+
+.text-slate-900, .text-slate-800, .text-slate-700, .text-slate-600, .text-slate-500, .text-muted {
+  color: var(--text-muted) !important;
+}
+
+.text-primary {
+  color: var(--gold) !important;
+}
+
+.text-success {
+  color: #34d399 !important;
+}
+
+/* 3. Formularios y Entradas */
+input, textarea, select, .input-field {
+  background-color: rgba(15, 23, 42, 0.6) !important;
+  color: #ffffff !important;
+  border: 1px solid var(--glass-border) !important;
+  transition: all 0.3s ease !important;
+}
+
+input:focus, textarea:focus, select:focus, .input-field:focus {
+  border-color: var(--gold) !important;
+  box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.15) !important;
+  background-color: rgba(15, 23, 42, 0.8) !important;
+}
+
+/* 4. Overrides de Bootstrap */
+.card, .content-section, .carta-container, .pdf-viewer, .pdf-placeholder, .photo-card {
+  background: var(--bg-card) !important;
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border) !important;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3) !important;
+  color: var(--text-light) !important;
+}
+
+.list-group-item, .fixture-item, .stat-item {
+  background: rgba(255, 255, 255, 0.02) !important;
+  border: 1px solid rgba(255, 255, 255, 0.05) !important;
+  color: var(--text-light) !important;
+  transition: all 0.25s ease !important;
+}
+
+.list-group-item:hover, .fixture-item:hover {
+  background: rgba(255, 255, 255, 0.05) !important;
+  color: #ffffff !important;
+}
+
+.month-header {
+  background-color: rgba(15, 23, 42, 0.8) !important;
+  border-color: var(--glass-border) !important;
+  color: var(--gold) !important;
+  font-weight: 800 !important;
+}
+
+.table {
+  color: var(--text-light) !important;
+}
+
+.table td, .table th {
+  border-color: rgba(255, 255, 255, 0.05) !important;
+  background: transparent !important;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+  background-color: rgba(255, 255, 255, 0.01) !important;
+}
+
+.table-hover tbody tr:hover td {
+  background-color: rgba(255, 255, 255, 0.03) !important;
+  color: #ffffff !important;
+}
+
+.bg-light, .bg-white, .nav-container {
+  background-color: var(--bg-dark) !important;
+  border-color: rgba(255, 255, 255, 0.05) !important;
+}
+
+/* Botones de Bootstrap */
+.btn-primary {
+  background-color: var(--gold) !important;
+  border-color: var(--gold) !important;
+  color: #020617 !important;
+  font-weight: bold !important;
+  border-radius: 9999px !important;
+  transition: all 0.3s ease !important;
+}
+
+.btn-primary:hover {
+  background-color: var(--gold-hover) !important;
+  border-color: var(--gold-hover) !important;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(255, 215, 0, 0.2) !important;
+}
+
+.btn-outline-primary {
+  color: var(--gold) !important;
+  border-color: rgba(255, 215, 0, 0.4) !important;
+  border-radius: 9999px !important;
+  transition: all 0.3s ease !important;
+}
+
+.btn-outline-primary:hover {
+  background-color: var(--gold) !important;
+  color: #020617 !important;
+  border-color: var(--gold) !important;
+  transform: translateY(-2px);
+}
+
+.btn-outline-success {
+  color: #34d399 !important;
+  border-color: rgba(52, 211, 153, 0.4) !important;
+  border-radius: 9999px !important;
+}
+
+.btn-outline-success:hover {
+  background-color: #34d399 !important;
+  color: #020617 !important;
+  border-color: #34d399 !important;
+}
+
+.tab-btn {
+  background: rgba(255, 255, 255, 0.03) !important;
+  color: var(--text-light) !important;
+  border: 1px solid var(--glass-border) !important;
+}
+
+.tab-btn.active {
+  background: var(--gold) !important;
+  color: #020617 !important;
+  border-color: var(--gold) !important;
+  font-weight: 800 !important;
+}
+
+.modal-content {
+  background-color: #0f172a !important;
+  border: 1px solid var(--glass-border) !important;
+  color: var(--text-light) !important;
+}
+
+/* 5. Ajustes Específicos */
+.header {
+  background: rgba(15, 23, 42, 0.8) !important;
+  border-bottom: 1px solid var(--glass-border) !important;
+}
+
+.header-text h1 {
+  color: #ffffff !important;
+}
+
+.carta-container {
+  border-left: 6px solid var(--gold) !important;
+}
+
+.scorers-info {
+  background: rgba(255, 255, 255, 0.01) !important;
+}
+
+.score {
+  color: var(--gold) !important;
+}

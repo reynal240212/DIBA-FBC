@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" data-bs-theme="light">
+<html lang="es" data-bs-theme="dark">
 
 <head>
     <!-- Metadatos básicos -->
@@ -59,38 +59,43 @@
 
         /* Tarjetas con efecto */
         .team-card {
+            background: rgba(15, 23, 42, 0.4) !important;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.05) !important;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
-            border-top: 5px solid var(--accent, #FFD700);
+            border-top: 5px solid var(--accent, #FFD700) !important;
         }
-
+ 
         .team-card:hover {
             transform: translateY(-8px);
-            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.4);
+            border-color: rgba(255, 255, 255, 0.1) !important;
+            border-top: 5px solid #FFD700 !important;
         }
-
+ 
         .team-card img {
             border: 4px solid var(--accent, #FFD700);
         }
-
+ 
         .bio {
             font-size: 0.9rem;
-            color: #555;
+            color: #cbd5e1;
             margin-top: 0.5rem;
             text-align: justify;
         }
     </style>
 </head>
 
-<body>
+<body class="bg-[#020617] text-white selection:bg-yellow-500/30">
     <div id="navbar-container"></div>
     <div id="hero-container"></div>
     <div id="patrocinadores-container"></div>
 
     <!-- Encabezado -->
-    <header class="hero text-center text-white">
+    <header class="hero text-center text-white bg-[#020617]">
         <div class="container">
             <h1 class="fw-bold display-4">Cuerpo Técnico</h1>
-            <p class="lead">Profesionales comprometidos con la excelencia deportiva</p>
+            <p class="lead text-slate-300">Profesionales comprometidos con la excelencia deportiva</p>
         </div>
     </header>
 
@@ -105,15 +110,15 @@
                         alt="Reinaldo Perez, Director Técnico" style="width: 160px; height: 160px; object-fit: cover;"
                         loading="lazy" />
                     <div class="card-body">
-                        <h5 class="card-title fw-bold">Reinaldo Perez</h5>
-                        <p class="text-muted">Director Técnico y Deportivo</p>
+                        <h5 class="card-title fw-bold text-white">Reinaldo Perez</h5>
+                        <p class="text-amber-500 font-semibold mb-2">Director Técnico y Deportivo</p>
                         <p class="bio">
                             Con más de 15 años de experiencia en la dirección técnica, ha liderado múltiples proyectos
                             deportivos,
                             enfocándose en el desarrollo integral de jugadores y estrategias ganadoras.
                             Apasionado por el fútbol formativo y el liderazgo en cancha.
                         </p>
-                        <a href="mailto:reinaldo@dibafbc.com" class="btn btn-warning btn-sm">Contactar</a>
+                        <a href="mailto:reinaldo@dibafbc.com" class="btn btn-warning btn-sm fw-bold">Contactar</a>
                     </div>
                 </div>
             </div>
@@ -125,15 +130,15 @@
                         alt="Reinaldo Perez Navas, Técnico" style="width: 160px; height: 160px; object-fit: cover;"
                         loading="lazy" />
                     <div class="card-body">
-                        <h5 class="card-title fw-bold">Reinaldo Perez Navas</h5>
-                        <p class="text-muted">Asistente Técnico / Desarrollador de Software</p>
+                        <h5 class="card-title fw-bold text-white">Reinaldo Perez Navas</h5>
+                        <p class="text-amber-500 font-semibold mb-2">Asistente Técnico / Desarrollador de Software</p>
                         <p class="bio">
                             Joven estratega y desarrollador, combina la tecnología con el deporte para optimizar
                             entrenamientos
                             y análisis de rendimiento. Especialista en planificación táctica y gestión digital del
                             equipo.
                         </p>
-                        <a href="mailto:reinaldonavas@dibafbc.com" class="btn btn-warning btn-sm">Contactar</a>
+                        <a href="mailto:reinaldonavas@dibafbc.com" class="btn btn-warning btn-sm fw-bold">Contactar</a>
                     </div>
                 </div>
             </div>
@@ -145,14 +150,14 @@
                         alt="Carlos Daniel Arias Montiel, Preparador Físico"
                         style="width: 160px; height: 160px; object-fit: cover;" loading="lazy" />
                     <div class="card-body">
-                        <h5 class="card-title fw-bold">Carlos Daniel Arias Montiel</h5>
-                        <p class="text-muted">Estudiante Deporte y Cultura / Preparador Físico</p>
+                        <h5 class="card-title fw-bold text-white">Carlos Daniel Arias Montiel</h5>
+                        <p class="text-amber-500 font-semibold mb-2">Estudiante Deporte y Cultura / Preparador Físico</p>
                         <p class="bio">
                             Especialista en acondicionamiento físico y prevención de lesiones. Su enfoque en la fuerza,
                             resistencia
                             y recuperación ha mejorado el rendimiento de los jugadores temporada tras temporada.
                         </p>
-                        <a href="mailto:carlosarias@dibafbc.com" class="btn btn-warning btn-sm">Contactar</a>
+                        <a href="mailto:carlosarias@dibafbc.com" class="btn btn-warning btn-sm fw-bold">Contactar</a>
                     </div>
                 </div>
             </div>

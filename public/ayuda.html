@@ -17,6 +17,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;900&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
+  <link rel="stylesheet" href="styles/styles.css" />
   <script src="https://cdn.tailwindcss.com"></script>
 
   <style>
@@ -83,11 +84,11 @@
   </style>
 </head>
 
-<body class="bg-slate-50 text-slate-900">
+<body class="bg-[#020617] text-white selection:bg-yellow-500/30">
   <div id="navbar-container"></div>
 
   <!-- ══════════════ HERO ══════════════ -->
-  <section class="bg-slate-900 pt-36 pb-20 relative overflow-hidden">
+  <section class="bg-[#020617] pt-36 pb-20 relative overflow-hidden">
     <div class="absolute inset-0 flex items-center justify-center opacity-[0.05] pointer-events-none">
       <img src="images/ESCUDO.png" alt="" class="w-[420px]" />
     </div>
@@ -113,17 +114,17 @@
 
   <!-- ══════════════ STATS ══════════════ -->
   <div class="bg-amber-500 py-8">
-    <div class="max-w-4xl mx-auto px-4 flex flex-wrap justify-center gap-8 text-slate-900 text-center">
+    <div class="max-w-4xl mx-auto px-4 flex flex-wrap justify-center gap-8 text-slate-950 text-center">
       <div>
         <p class="text-3xl font-black">8</p>
         <p class="text-xs font-bold uppercase tracking-widest">Preguntas</p>
       </div>
-      <div class="hidden sm:block w-px bg-slate-900/20"></div>
+      <div class="hidden sm:block w-px bg-slate-950/20"></div>
       <div>
         <p class="text-3xl font-black">5</p>
         <p class="text-xs font-bold uppercase tracking-widest">Categorías</p>
       </div>
-      <div class="hidden sm:block w-px bg-slate-900/20"></div>
+      <div class="hidden sm:block w-px bg-slate-950/20"></div>
       <div>
         <p class="text-3xl font-black">&lt;24h</p>
         <p class="text-xs font-bold uppercase tracking-widest">Respuesta</p>
@@ -132,7 +133,7 @@
   </div>
 
   <!-- ══════════════ FAQ ══════════════ -->
-  <main class="py-20 bg-white">
+  <main class="py-20 bg-[#020617]">
     <div class="max-w-3xl mx-auto px-4">
 
       <p id="no-results" class="hidden text-center text-slate-400 py-12 text-sm">
@@ -143,49 +144,49 @@
       <!-- Categoría: Inscripción -->
       <div class="mb-8" data-category="inscripcion">
         <div class="flex items-center gap-3 mb-4">
-          <div class="w-8 h-8 bg-amber-100 rounded-lg flex items-center justify-center flex-shrink-0">
-            <i class="fas fa-user-plus text-amber-500 text-sm"></i>
+          <div class="w-8 h-8 bg-amber-500/10 rounded-lg flex items-center justify-center flex-shrink-0 text-amber-500">
+            <i class="fas fa-user-plus text-sm"></i>
           </div>
-          <h2 class="text-xs font-black uppercase tracking-[0.15em] text-amber-600">Inscripción</h2>
+          <h2 class="text-xs font-black uppercase tracking-[0.15em] text-amber-500">Inscripción</h2>
         </div>
         <div class="space-y-2" id="faqGroup">
 
           <article
-            class="faq-item bg-white rounded-2xl border border-slate-200 overflow-hidden hover:border-amber-300 transition-colors">
+            class="faq-item bg-slate-900/30 border border-white/5 backdrop-blur-xl rounded-2xl overflow-hidden hover:border-amber-500/30 transition-colors">
             <button class="faq-btn w-full flex justify-between items-center px-6 py-4 text-left"
               onclick="toggleFaq(this)">
-              <span class="font-bold text-slate-800 text-sm pr-4 faq-question">¿Cómo puedo inscribirme al club?</span>
+              <span class="font-bold text-slate-100 text-sm pr-4 faq-question">¿Cómo puedo inscribirme al club?</span>
               <i class="fas fa-chevron-down text-slate-400 flex-shrink-0 faq-icon text-sm"></i>
             </button>
             <div class="faq-content">
-              <div class="px-6 pb-5 text-sm text-slate-600 leading-relaxed border-t border-slate-100 pt-4">
-                Puedes inscribirte acercándote al <strong class="text-slate-800">Parque La Pradera</strong> durante los
+              <div class="px-6 pb-5 text-sm text-slate-300 leading-relaxed border-t border-white/5 pt-4">
+                Puedes inscribirte acercándote al <strong class="text-white">Parque La Pradera</strong> durante los
                 horarios de entrenamiento,
                 o comunicándote con nosotros a través del formulario de
-                <a href="contacto.html" class="text-amber-600 font-bold hover:underline">Contacto</a> o por
+                <a href="contacto.html" class="text-amber-400 font-bold hover:underline">Contacto</a> o por
                 <a href="https://wa.me/573046566784" target="_blank"
-                  class="text-green-600 font-bold hover:underline">WhatsApp</a>.
+                  class="text-green-400 font-bold hover:underline">WhatsApp</a>.
               </div>
             </div>
           </article>
 
           <article
-            class="faq-item bg-white rounded-2xl border border-slate-200 overflow-hidden hover:border-amber-300 transition-colors">
+            class="faq-item bg-slate-900/30 border border-white/5 backdrop-blur-xl rounded-2xl overflow-hidden hover:border-amber-500/30 transition-colors">
             <button class="faq-btn w-full flex justify-between items-center px-6 py-4 text-left"
               onclick="toggleFaq(this)">
-              <span class="font-bold text-slate-800 text-sm pr-4 faq-question">¿Qué documentos necesito para
+              <span class="font-bold text-slate-100 text-sm pr-4 faq-question">¿Qué documentos necesito para
                 unirme?</span>
               <i class="fas fa-chevron-down text-slate-400 flex-shrink-0 faq-icon text-sm"></i>
             </button>
             <div class="faq-content">
-              <div class="px-6 pb-5 text-sm text-slate-600 leading-relaxed border-t border-slate-100 pt-4">
+              <div class="px-6 pb-5 text-sm text-slate-300 leading-relaxed border-t border-white/5 pt-4">
                 <ul class="space-y-2">
                   <li class="flex items-start gap-2"><i class="fas fa-check text-amber-500 mt-0.5 text-xs"></i> Copia
-                    del <strong class="text-slate-800">registro de nacimiento</strong></li>
+                    del <strong class="text-white">registro de nacimiento</strong></li>
                   <li class="flex items-start gap-2"><i class="fas fa-check text-amber-500 mt-0.5 text-xs"></i> <strong
-                      class="text-slate-800">Uniforme oficial DIBA FBC</strong> (o consultar disponibilidad)</li>
+                      class="text-white">Uniforme oficial DIBA FBC</strong> (o consultar disponibilidad)</li>
                   <li class="flex items-start gap-2"><i class="fas fa-check text-amber-500 mt-0.5 text-xs"></i> Pago de
-                    la <strong class="text-slate-800">inscripción inicial</strong></li>
+                    la <strong class="text-white">inscripción inicial</strong></li>
                 </ul>
               </div>
             </div>
@@ -197,29 +198,29 @@
       <!-- Categoría: Entrenamientos -->
       <div class="mb-8" data-category="entrenamientos">
         <div class="flex items-center gap-3 mb-4">
-          <div class="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
-            <i class="fas fa-running text-blue-500 text-sm"></i>
+          <div class="w-8 h-8 bg-blue-500/10 rounded-lg flex items-center justify-center flex-shrink-0 text-blue-400">
+            <i class="fas fa-running text-sm"></i>
           </div>
-          <h2 class="text-xs font-black uppercase tracking-[0.15em] text-blue-600">Entrenamientos</h2>
+          <h2 class="text-xs font-black uppercase tracking-[0.15em] text-blue-400">Entrenamientos</h2>
         </div>
         <div class="space-y-2">
 
           <article
-            class="faq-item bg-white rounded-2xl border border-slate-200 overflow-hidden hover:border-amber-300 transition-colors">
+            class="faq-item bg-slate-900/30 border border-white/5 backdrop-blur-xl rounded-2xl overflow-hidden hover:border-amber-500/30 transition-colors">
             <button class="faq-btn w-full flex justify-between items-center px-6 py-4 text-left"
               onclick="toggleFaq(this)">
-              <span class="font-bold text-slate-800 text-sm pr-4 faq-question">¿Cuáles son los horarios de
+              <span class="font-bold text-slate-100 text-sm pr-4 faq-question">¿Cuáles son los horarios de
                 entrenamiento?</span>
               <i class="fas fa-chevron-down text-slate-400 flex-shrink-0 faq-icon text-sm"></i>
             </button>
             <div class="faq-content">
-              <div class="px-6 pb-5 text-sm text-slate-600 leading-relaxed border-t border-slate-100 pt-4">
+              <div class="px-6 pb-5 text-sm text-slate-300 leading-relaxed border-t border-white/5 pt-4">
                 <p class="mb-3">Los entrenamientos se realizan en diferentes días y horarios según la categoría.
                   Consulta la sección
-                  <a href="partidos.html" class="text-amber-600 font-bold hover:underline">Partidos / Entrenamientos</a>
+                  <a href="partidos.html" class="text-amber-400 font-bold hover:underline">Partidos / Entrenamientos</a>
                   para el calendario actualizado.
                 </p>
-                <div class="rounded-xl overflow-hidden border border-slate-200">
+                <div class="rounded-xl overflow-hidden border border-white/5">
                   <iframe
                     src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3916.801711935751!2d-74.84118122607062!3d10.978334455439269!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8ef42cdd367c2453%3A0x401e8f23384cd2a6!2sParque%20La%20Pradera!5e0!3m2!1ses-419!2sco!4v1750282065919!5m2!1ses-419!2sco"
                     width="100%" height="260" style="border:0;" allowfullscreen="" loading="lazy"
@@ -230,16 +231,16 @@
           </article>
 
           <article
-            class="faq-item bg-white rounded-2xl border border-slate-200 overflow-hidden hover:border-amber-300 transition-colors">
+            class="faq-item bg-slate-900/30 border border-white/5 backdrop-blur-xl rounded-2xl overflow-hidden hover:border-amber-500/30 transition-colors">
             <button class="faq-btn w-full flex justify-between items-center px-6 py-4 text-left"
               onclick="toggleFaq(this)">
-              <span class="font-bold text-slate-800 text-sm pr-4 faq-question">¿Dónde se realizan los
+              <span class="font-bold text-slate-100 text-sm pr-4 faq-question">¿Dónde se realizan los
                 entrenamientos?</span>
               <i class="fas fa-chevron-down text-slate-400 flex-shrink-0 faq-icon text-sm"></i>
             </button>
             <div class="faq-content">
-              <div class="px-6 pb-5 text-sm text-slate-600 leading-relaxed border-t border-slate-100 pt-4">
-                Los entrenamientos se llevan a cabo en el <strong class="text-slate-800">Parque La Pradera</strong>,
+              <div class="px-6 pb-5 text-sm text-slate-300 leading-relaxed border-t border-white/5 pt-4">
+                Los entrenamientos se llevan a cabo en el <strong class="text-white">Parque La Pradera</strong>,
                 ubicado en la
                 Calle 117b #26 - 114, Barranquilla. Es un espacio amplio y adecuado para el desarrollo del fútbol base.
               </div>
@@ -252,28 +253,28 @@
       <!-- Categoría: Pagos -->
       <div class="mb-8" data-category="pagos">
         <div class="flex items-center gap-3 mb-4">
-          <div class="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0">
-            <i class="fas fa-credit-card text-green-500 text-sm"></i>
+          <div class="w-8 h-8 bg-emerald-500/10 rounded-lg flex items-center justify-center flex-shrink-0 text-emerald-400">
+            <i class="fas fa-credit-card text-sm"></i>
           </div>
-          <h2 class="text-xs font-black uppercase tracking-[0.15em] text-green-600">Pagos</h2>
+          <h2 class="text-xs font-black uppercase tracking-[0.15em] text-emerald-400">Pagos</h2>
         </div>
         <div class="space-y-2">
 
           <article
-            class="faq-item bg-white rounded-2xl border border-slate-200 overflow-hidden hover:border-amber-300 transition-colors">
+            class="faq-item bg-slate-900/30 border border-white/5 backdrop-blur-xl rounded-2xl overflow-hidden hover:border-amber-500/30 transition-colors">
             <button class="faq-btn w-full flex justify-between items-center px-6 py-4 text-left"
               onclick="toggleFaq(this)">
-              <span class="font-bold text-slate-800 text-sm pr-4 faq-question">¿Cómo puedo realizar el pago de
+              <span class="font-bold text-slate-100 text-sm pr-4 faq-question">¿Cómo puedo realizar el pago de
                 inscripción?</span>
               <i class="fas fa-chevron-down text-slate-400 flex-shrink-0 faq-icon text-sm"></i>
             </button>
             <div class="faq-content">
-              <div class="px-6 pb-5 text-sm text-slate-600 leading-relaxed border-t border-slate-100 pt-4">
-                El pago puede realizarse en <strong class="text-slate-800">efectivo</strong> directamente con los
+              <div class="px-6 pb-5 text-sm text-slate-300 leading-relaxed border-t border-white/5 pt-4">
+                El pago puede realizarse en <strong class="text-white">efectivo</strong> directamente con los
                 responsables del club
                 en el lugar de entrenamiento. Para más información sobre montos y fechas, comunícate por
                 <a href="https://wa.me/573046566784" target="_blank"
-                  class="text-green-600 font-bold hover:underline">WhatsApp</a>.
+                  class="text-green-400 font-bold hover:underline">WhatsApp</a>.
               </div>
             </div>
           </article>
@@ -284,44 +285,44 @@
       <!-- Categoría: Sitio Web -->
       <div class="mb-8" data-category="sitio">
         <div class="flex items-center gap-3 mb-4">
-          <div class="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center flex-shrink-0">
-            <i class="fas fa-globe text-purple-500 text-sm"></i>
+          <div class="w-8 h-8 bg-purple-500/10 rounded-lg flex items-center justify-center flex-shrink-0 text-purple-400">
+            <i class="fas fa-globe text-sm"></i>
           </div>
-          <h2 class="text-xs font-black uppercase tracking-[0.15em] text-purple-600">Sitio Web</h2>
+          <h2 class="text-xs font-black uppercase tracking-[0.15em] text-purple-400">Sitio Web</h2>
         </div>
         <div class="space-y-2">
 
           <article
-            class="faq-item bg-white rounded-2xl border border-slate-200 overflow-hidden hover:border-amber-300 transition-colors">
+            class="faq-item bg-slate-900/30 border border-white/5 backdrop-blur-xl rounded-2xl overflow-hidden hover:border-amber-500/30 transition-colors">
             <button class="faq-btn w-full flex justify-between items-center px-6 py-4 text-left"
               onclick="toggleFaq(this)">
-              <span class="font-bold text-slate-800 text-sm pr-4 faq-question">¿Cómo uso el buscador del sitio?</span>
+              <span class="font-bold text-slate-100 text-sm pr-4 faq-question">¿Cómo uso el buscador del sitio?</span>
               <i class="fas fa-chevron-down text-slate-400 flex-shrink-0 faq-icon text-sm"></i>
             </button>
             <div class="faq-content">
-              <div class="px-6 pb-5 text-sm text-slate-600 leading-relaxed border-t border-slate-100 pt-4">
+              <div class="px-6 pb-5 text-sm text-slate-300 leading-relaxed border-t border-white/5 pt-4">
                 Haz clic en el ícono 🔍 de la barra de navegación o usa el atajo de teclado
-                <kbd class="bg-slate-100 border border-slate-300 px-1.5 py-0.5 rounded text-xs font-mono">Ctrl + K</kbd>
+                <kbd class="bg-white/5 border border-white/10 text-slate-300 px-1.5 py-0.5 rounded text-xs font-mono">Ctrl + K</kbd>
                 para abrir el buscador. Escribe cualquier término y navega con las flechas del teclado, presiona
-                <kbd class="bg-slate-100 border border-slate-300 px-1.5 py-0.5 rounded text-xs font-mono">Enter</kbd>
+                <kbd class="bg-white/5 border border-white/10 text-slate-300 px-1.5 py-0.5 rounded text-xs font-mono">Enter</kbd>
                 para ir a la página
-                y <kbd class="bg-slate-100 border border-slate-300 px-1.5 py-0.5 rounded text-xs font-mono">Esc</kbd>
+                y <kbd class="bg-white/5 border border-white/10 text-slate-300 px-1.5 py-0.5 rounded text-xs font-mono">Esc</kbd>
                 para cerrar.
               </div>
             </div>
           </article>
 
           <article
-            class="faq-item bg-white rounded-2xl border border-slate-200 overflow-hidden hover:border-amber-300 transition-colors">
+            class="faq-item bg-slate-900/30 border border-white/5 backdrop-blur-xl rounded-2xl overflow-hidden hover:border-amber-500/30 transition-colors">
             <button class="faq-btn w-full flex justify-between items-center px-6 py-4 text-left"
               onclick="toggleFaq(this)">
-              <span class="font-bold text-slate-800 text-sm pr-4 faq-question">¿Cómo puedo ver la galería de fotos y
+              <span class="font-bold text-slate-100 text-sm pr-4 faq-question">¿Cómo puedo ver la galería de fotos y
                 videos?</span>
               <i class="fas fa-chevron-down text-slate-400 flex-shrink-0 faq-icon text-sm"></i>
             </button>
             <div class="faq-content">
-              <div class="px-6 pb-5 text-sm text-slate-600 leading-relaxed border-t border-slate-100 pt-4">
-                Ve a la sección <a href="galeria.html" class="text-amber-600 font-bold hover:underline">Galería</a>
+              <div class="px-6 pb-5 text-sm text-slate-300 leading-relaxed border-t border-white/5 pt-4">
+                Ve a la sección <a href="galeria.html" class="text-amber-400 font-bold hover:underline">Galería</a>
                 desde el menú superior.
                 Allí encontrarás más de 55 fotos organizadas por categorías (Partidos, Campeonatos, Celebraciones…)
                 y 2 videos del club. Puedes filtrar y hacer clic en cualquier imagen para verla ampliada.
@@ -330,17 +331,17 @@
           </article>
 
           <article
-            class="faq-item bg-white rounded-2xl border border-slate-200 overflow-hidden hover:border-amber-300 transition-colors">
+            class="faq-item bg-slate-900/30 border border-white/5 backdrop-blur-xl rounded-2xl overflow-hidden hover:border-amber-500/30 transition-colors">
             <button class="faq-btn w-full flex justify-between items-center px-6 py-4 text-left"
               onclick="toggleFaq(this)">
-              <span class="font-bold text-slate-800 text-sm pr-4 faq-question">¿Encontré un error en el sitio. ¿Qué
+              <span class="font-bold text-slate-100 text-sm pr-4 faq-question">¿Encontré un error en el sitio. ¿Qué
                 hago?</span>
               <i class="fas fa-chevron-down text-slate-400 flex-shrink-0 faq-icon text-sm"></i>
             </button>
             <div class="faq-content">
-              <div class="px-6 pb-5 text-sm text-slate-600 leading-relaxed border-t border-slate-100 pt-4">
+              <div class="px-6 pb-5 text-sm text-slate-300 leading-relaxed border-t border-white/5 pt-4">
                 Por favor repórtalo en la sección de <a href="contacto.html"
-                  class="text-amber-600 font-bold hover:underline">Contacto</a>
+                  class="text-amber-400 font-bold hover:underline">Contacto</a>
                 indicando la página donde ocurrió el error y qué estabas intentando hacer. ¡Agradecemos tu ayuda!
               </div>
             </div>
@@ -353,17 +354,17 @@
   </main>
 
   <!-- ══════════════ CTA ══════════════ -->
-  <section class="py-16 bg-slate-900 relative overflow-hidden">
+  <section class="py-16 bg-[#020617] relative overflow-hidden">
     <div class="absolute inset-0 opacity-[0.04] flex items-center justify-center pointer-events-none">
       <img src="images/ESCUDO.png" alt="" class="w-[400px]" />
     </div>
     <div class="max-w-2xl mx-auto px-4 text-center relative z-10">
       <p class="text-amber-400 font-black text-xs tracking-[0.2em] uppercase mb-3">¿No encontraste lo que buscabas?</p>
       <h2 class="text-3xl font-black text-white mb-4">Contáctanos directamente</h2>
-      <p class="text-slate-400 text-sm mb-8">Nuestro equipo responde en menos de 24 horas.</p>
+      <p class="text-slate-300 text-sm mb-8">Nuestro equipo responde en menos de 24 horas.</p>
       <div class="flex flex-wrap justify-center gap-4">
         <a href="contacto.html"
-          class="inline-flex items-center gap-2 px-7 py-3.5 rounded-full bg-amber-500 text-slate-900 font-black text-sm hover:bg-amber-400 transition-colors shadow-lg shadow-amber-500/30">
+          class="inline-flex items-center gap-2 px-7 py-3.5 rounded-full bg-amber-500 text-slate-950 font-black text-sm hover:bg-amber-400 transition-colors shadow-lg shadow-amber-500/30">
           <i class="fas fa-envelope"></i> Formulario de Contacto
         </a>
         <a href="https://wa.me/573046566784?text=Hola%20DIBA%20FBC%2C%20tengo%20una%20pregunta." target="_blank"

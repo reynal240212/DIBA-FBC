@@ -12,31 +12,32 @@
         }
 
         :root {
-            --primary-blue: #1e3a8a;
-            --secondary-blue: #3b82f6;
-            --light-blue: #dbeafe;
-            --dark-blue: #0f172a;
-            --gold: #fbbf24;
-            --white: #ffffff;
-            --gray-100: #f3f4f6;
-            --gray-800: #1f2937;
+            --primary-blue: #ffd700;
+            --secondary-blue: #fbbf24;
+            --light-blue: rgba(255, 255, 255, 0.05);
+            --dark-blue: #020617;
+            --gold: #ffd700;
+            --white: rgba(15, 23, 42, 0.6);
+            --gray-100: rgba(255, 255, 255, 0.03);
+            --gray-800: #cbd5e1;
         }
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, var(--dark-blue) 0%, var(--primary-blue) 100%);
+            background: linear-gradient(135deg, var(--dark-blue) 0%, #080c14 100%);
             min-height: 100vh;
             color: var(--gray-800);
         }
 
         .header {
-            background: rgba(255, 255, 255, 0.95);
+            background: rgba(15, 23, 42, 0.4);
             backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
             padding: 20px 0;
             position: sticky;
             top: 0;
             z-index: 1000;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
         }
 
         .header-content {
@@ -78,13 +79,14 @@
             opacity: 0.8;
             font-size: 0.9rem;
         }
-
         .nav-container {
             background: var(--white);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
             padding: 15px 0;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
         }
-
+ 
         .nav-tabs {
             max-width: 1200px;
             margin: 0 auto;
@@ -94,7 +96,7 @@
             padding: 0 20px;
             flex-wrap: wrap;
         }
-
+ 
         .tab-btn {
             background: var(--gray-100);
             border: 2px solid transparent;
@@ -108,32 +110,35 @@
             align-items: center;
             gap: 8px;
         }
-
+ 
         .tab-btn:hover {
             background: var(--light-blue);
             border-color: var(--secondary-blue);
             transform: translateY(-2px);
         }
-
+ 
         .tab-btn.active {
             background: var(--primary-blue);
-            color: white;
+            color: #020617;
             border-color: var(--primary-blue);
-            box-shadow: 0 4px 15px rgba(30, 58, 138, 0.3);
+            box-shadow: 0 4px 15px rgba(251, 191, 36, 0.3);
+            font-weight: bold;
         }
-
+ 
         .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 40px 20px;
         }
-
+ 
         .content-section {
             display: none;
             background: var(--white);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
             border-radius: 20px;
             padding: 40px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
             margin-bottom: 30px;
         }
 
@@ -172,18 +177,18 @@
             opacity: 0.7;
             font-size: 1.1rem;
         }
-
         .recognition-card {
             background: linear-gradient(135deg, var(--gold) 0%, #f59e0b 100%);
-            color: white;
+            color: #020617;
             padding: 40px;
             border-radius: 20px;
             text-align: center;
             margin-bottom: 30px;
             position: relative;
             overflow: hidden;
+            font-weight: bold;
         }
-
+ 
         .recognition-card::before {
             content: '';
             position: absolute;
@@ -200,68 +205,70 @@
             );
             animation: shimmer 3s linear infinite;
         }
-
+ 
         @keyframes shimmer {
             0% { transform: translateX(-100%) translateY(-100%); }
             100% { transform: translateX(100%) translateY(100%); }
         }
-
+ 
         .recognition-card h3 {
             font-size: 2.5rem;
             margin-bottom: 15px;
             position: relative;
             z-index: 1;
+            font-weight: 800;
         }
-
+ 
         .recognition-card p {
             font-size: 1.2rem;
             position: relative;
             z-index: 1;
         }
-
+ 
         .pdf-viewer {
-            background: var(--gray-100);
+            background: rgba(0, 0, 0, 0.2);
             border-radius: 15px;
             padding: 30px;
             text-align: center;
             margin: 20px 0;
-            border: 2px dashed var(--secondary-blue);
+            border: 2px dashed rgba(255, 215, 0, 0.2);
         }
-
+ 
         .pdf-placeholder {
             width: 100%;
             height: 400px;
-            background: var(--white);
+            background: rgba(0, 0, 0, 0.3);
             border-radius: 10px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            border: 1px solid #e5e7eb;
+            border: 1px solid rgba(255, 255, 255, 0.05);
             margin-bottom: 20px;
         }
-
+ 
         .pdf-icon {
             font-size: 4rem;
             color: var(--secondary-blue);
             margin-bottom: 15px;
         }
-
+ 
         .upload-btn {
             background: var(--secondary-blue);
-            color: white;
+            color: #020617;
             padding: 12px 30px;
             border: none;
             border-radius: 25px;
             cursor: pointer;
-            font-weight: 500;
+            font-weight: bold;
             transition: all 0.3s ease;
         }
-
+ 
         .upload-btn:hover {
             background: var(--primary-blue);
+            color: #020617;
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(59, 130, 246, 0.3);
+            box-shadow: 0 5px 15px rgba(251, 191, 36, 0.3);
         }
 
         .photo-gallery {
@@ -270,21 +277,21 @@
             gap: 25px;
             margin: 30px 0;
         }
-
         .photo-card {
             background: var(--white);
             border-radius: 15px;
             overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
             transition: all 0.4s ease;
             position: relative;
         }
-
+ 
         .photo-card:hover {
             transform: translateY(-10px) scale(1.02);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7);
         }
-
+ 
         .photo-placeholder {
             width: 100%;
             height: 220px;
@@ -292,11 +299,11 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
+            color: #020617;
             font-size: 3rem;
             position: relative;
         }
-
+ 
         .photo-overlay {
             position: absolute;
             top: 0;
@@ -310,29 +317,29 @@
             opacity: 0;
             transition: opacity 0.3s ease;
         }
-
+ 
         .photo-card:hover .photo-overlay {
             opacity: 1;
         }
-
+ 
         .photo-info {
             padding: 25px;
             text-align: center;
         }
-
+ 
         .photo-info h3 {
             color: var(--primary-blue);
             margin-bottom: 10px;
             font-size: 1.3rem;
             font-weight: 600;
         }
-
+ 
         .photo-info p {
             color: var(--gray-800);
             opacity: 0.8;
             line-height: 1.5;
         }
-
+ 
         .add-photo-card {
             border: 2px dashed var(--secondary-blue);
             background: var(--light-blue);
@@ -342,26 +349,29 @@
             cursor: pointer;
             transition: all 0.3s ease;
         }
-
+ 
         .add-photo-card:hover {
             background: var(--secondary-blue);
-            color: white;
+            color: #020617;
         }
-
+ 
         .carta-container {
-            background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.6) 0%, rgba(30, 41, 59, 0.6) 100%);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-left: 6px solid var(--gold);
             border-radius: 20px;
             padding: 40px;
             margin: 20px 0;
             position: relative;
-            border-left: 6px solid var(--gold);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
         }
-
+ 
         .carta-header {
             text-align: center;
             margin-bottom: 30px;
         }
-
+ 
         .carta-header h3 {
             color: var(--primary-blue);
             font-size: 2.2rem;
@@ -503,7 +513,9 @@
         }
 
         .modal-content {
-            background: white;
+            background: #0b0f19;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            color: #ffffff;
             margin: 5% auto;
             padding: 20px;
             border-radius: 15px;

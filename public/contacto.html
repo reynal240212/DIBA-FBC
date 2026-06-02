@@ -19,6 +19,7 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- EmailJS SDK -->
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <link rel="stylesheet" href="styles/styles.css" />
 
   <style>
     * {
@@ -55,18 +56,19 @@
       width: 100%;
       padding: 0.85rem 1rem;
       border-radius: 0.75rem;
-      border: 2px solid #e2e8f0;
+      border: 2px solid rgba(255, 255, 255, 0.08);
       font-size: 0.875rem;
       font-weight: 500;
-      background: #f8fafc;
+      background: rgba(15, 23, 42, 0.6);
+      color: #fff;
       transition: border-color 0.2s, box-shadow 0.2s;
       outline: none;
     }
 
     .input-field:focus {
-      border-color: #f59e0b;
-      box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.15);
-      background: #fff;
+      border-color: #ffd700;
+      box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.15);
+      background: rgba(15, 23, 42, 0.8);
     }
 
     /* Toast */
@@ -89,7 +91,7 @@
   </style>
 </head>
 
-<body class="bg-slate-50 text-slate-900">
+<body class="bg-[#020617] text-white selection:bg-yellow-500/30">
   <div id="navbar-container"></div>
 
   <!-- ══════════════ HERO ══════════════ -->
@@ -112,15 +114,15 @@
   </section>
 
   <!-- ══════════════ CONTENIDO ══════════════ -->
-  <section class="py-20 bg-white">
+  <section class="py-20 bg-[#020617]">
     <div class="max-w-6xl mx-auto px-4">
       <div class="grid lg:grid-cols-2 gap-14 items-start">
 
         <!-- Info de contacto -->
         <div>
-          <p class="text-xs font-bold tracking-[0.2em] uppercase text-blue-600 mb-2">Información directa</p>
-          <h2 class="text-3xl font-black text-slate-900 mb-4">Estamos aquí <br />para ayudarte</h2>
-          <p class="text-slate-500 text-sm leading-relaxed mb-10">
+          <p class="text-xs font-bold tracking-[0.2em] uppercase text-yellow-500 mb-2">Información directa</p>
+          <h2 class="text-3xl font-black text-white mb-4">Estamos aquí <br />para ayudarte</h2>
+          <p class="text-slate-400 text-sm leading-relaxed mb-10">
             Si tienes preguntas, inquietudes o sugerencias, no dudes en comunicarte con nosotros.
             Estaremos encantados de brindarte la información que necesitas.
           </p>
@@ -128,28 +130,28 @@
           <div class="space-y-5">
             <!-- Dirección -->
             <div
-              class="flex items-center gap-4 bg-slate-50 rounded-2xl p-5 border border-slate-100 hover:border-amber-300 hover:shadow-sm transition-all">
-              <div class="flex-shrink-0 w-12 h-12 bg-amber-100 rounded-xl flex items-center justify-center">
-                <i class="fas fa-map-marker-alt text-amber-500 text-lg"></i>
+              class="flex items-center gap-4 bg-slate-900/30 backdrop-blur-xl rounded-2xl p-5 border border-white/5 hover:border-yellow-500/30 hover:shadow-2xl transition-all">
+              <div class="flex-shrink-0 w-12 h-12 bg-yellow-500/10 rounded-xl flex items-center justify-center">
+                <i class="fas fa-map-marker-alt text-yellow-500 text-lg"></i>
               </div>
               <div>
                 <p class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-0.5">Dirección</p>
-                <p class="font-bold text-slate-800 text-sm">Calle 117b #26 - 114, Barranquilla</p>
+                <p class="font-bold text-white text-sm">Calle 117b #26 - 114, Barranquilla</p>
                 <a href="https://maps.google.com/?q=Parque+La+Pradera+Barranquilla" target="_blank"
-                  class="text-xs text-amber-600 hover:underline mt-0.5 inline-block">Ver en Google Maps →</a>
+                  class="text-xs text-yellow-500 hover:underline mt-0.5 inline-block">Ver en Google Maps →</a>
               </div>
             </div>
 
             <!-- Email -->
             <div
-              class="flex items-center gap-4 bg-slate-50 rounded-2xl p-5 border border-slate-100 hover:border-amber-300 hover:shadow-sm transition-all">
-              <div class="flex-shrink-0 w-12 h-12 bg-amber-100 rounded-xl flex items-center justify-center">
-                <i class="fas fa-envelope text-amber-500 text-lg"></i>
+              class="flex items-center gap-4 bg-slate-900/30 backdrop-blur-xl rounded-2xl p-5 border border-white/5 hover:border-yellow-500/30 hover:shadow-2xl transition-all">
+              <div class="flex-shrink-0 w-12 h-12 bg-yellow-500/10 rounded-xl flex items-center justify-center">
+                <i class="fas fa-envelope text-yellow-500 text-lg"></i>
               </div>
               <div>
                 <p class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-0.5">Correo electrónico</p>
                 <a href="mailto:fbcdiba@gmail.com"
-                  class="font-bold text-slate-800 text-sm hover:text-amber-600 transition-colors">
+                  class="font-bold text-white text-sm hover:text-yellow-500 transition-colors">
                   fbcdiba@gmail.com
                 </a>
               </div>
@@ -157,60 +159,59 @@
 
             <!-- WhatsApp -->
             <div
-              class="flex items-center gap-4 bg-slate-50 rounded-2xl p-5 border border-slate-100 hover:border-green-300 hover:shadow-sm transition-all">
-              <div class="flex-shrink-0 w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center">
-                <i class="fab fa-whatsapp text-green-600 text-xl"></i>
+              class="flex items-center gap-4 bg-slate-900/30 backdrop-blur-xl rounded-2xl p-5 border border-white/5 hover:border-green-500/30 hover:shadow-2xl transition-all">
+              <div class="flex-shrink-0 w-12 h-12 bg-green-500/10 rounded-xl flex items-center justify-center">
+                <i class="fab fa-whatsapp text-green-500 text-xl"></i>
               </div>
               <div>
                 <p class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-0.5">WhatsApp Directo</p>
                 <a href="https://wa.me/573046566784?text=Hola%20DIBA%20FBC%2C%20me%20interesa%20m%C3%A1s%20informaci%C3%B3n."
                   target="_blank"
-                  class="font-bold text-green-700 text-sm hover:text-green-500 transition-colors flex items-center gap-2">
+                  class="font-bold text-green-400 text-sm hover:text-green-300 transition-colors flex items-center gap-2">
                   +57 304 656 6784
-                  <span class="bg-green-100 text-green-700 text-[10px] font-black px-2 py-0.5 rounded-full">EN
-                    LÍNEA</span>
+                  <span class="bg-green-500/20 text-green-400 text-[10px] font-black px-2 py-0.5 rounded-full border border-green-500/10">EN LÍNEA</span>
                 </a>
               </div>
             </div>
 
             <!-- Horario -->
             <div
-              class="flex items-center gap-4 bg-slate-50 rounded-2xl p-5 border border-slate-100 hover:border-amber-300 hover:shadow-sm transition-all">
-              <div class="flex-shrink-0 w-12 h-12 bg-amber-100 rounded-xl flex items-center justify-center">
-                <i class="fas fa-clock text-amber-500 text-lg"></i>
+              class="flex items-center gap-4 bg-slate-900/30 backdrop-blur-xl rounded-2xl p-5 border border-white/5 hover:border-yellow-500/30 hover:shadow-2xl transition-all">
+              <div class="flex-shrink-0 w-12 h-12 bg-yellow-500/10 rounded-xl flex items-center justify-center">
+                <i class="fas fa-clock text-yellow-500 text-lg"></i>
               </div>
               <div>
                 <p class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-0.5">Horario de atención</p>
-                <p class="font-bold text-slate-800 text-sm">Lun – Vie: 8:00 am – 6:00 pm</p>
-                <p class="text-xs text-slate-500">Sábados: 8:00 am – 12:00 pm</p>
+                <p class="font-bold text-white text-sm">Lun – Vie: 8:00 am – 6:00 pm</p>
+                <p class="text-xs text-slate-400">Sábados: 8:00 am – 12:00 pm</p>
               </div>
             </div>
           </div>
         </div>
 
         <!-- Formulario -->
-        <div class="bg-white rounded-3xl shadow-xl border border-slate-100 p-8">
-          <h2 class="text-2xl font-black text-slate-900 mb-1">Envíanos un Mensaje</h2>
+        <div class="bg-slate-900/30 backdrop-blur-xl rounded-3xl border border-white/5 p-8 shadow-2xl">
+          <h2 class="text-2xl font-black text-white mb-1">Envíanos un Mensaje</h2>
           <p class="text-slate-400 text-sm mb-7">Te responderemos en menos de 24 horas.</p>
 
           <form id="contactForm" class="space-y-5" novalidate>
             <div class="grid sm:grid-cols-2 gap-4">
               <div>
-                <label for="nombre" class="block text-xs font-black uppercase text-slate-500 mb-1.5 tracking-widest">Tu
+                <label for="nombre" class="block text-xs font-black uppercase text-slate-400 mb-1.5 tracking-widest">Tu
                   Nombre *</label>
                 <input type="text" id="nombre" placeholder="Ej: Carlos Pérez" required class="input-field"
                   autocomplete="name" />
               </div>
               <div>
                 <label for="telefono"
-                  class="block text-xs font-black uppercase text-slate-500 mb-1.5 tracking-widest">Teléfono</label>
+                  class="block text-xs font-black uppercase text-slate-400 mb-1.5 tracking-widest">Teléfono</label>
                 <input type="tel" id="telefono" placeholder="+57 300 000 0000" class="input-field" autocomplete="tel" />
               </div>
             </div>
 
             <div>
               <label for="correo"
-                class="block text-xs font-black uppercase text-slate-500 mb-1.5 tracking-widest">Correo Electrónico
+                class="block text-xs font-black uppercase text-slate-400 mb-1.5 tracking-widest">Correo Electrónico
                 *</label>
               <input type="email" id="correo" placeholder="tucorreo@ejemplo.com" required class="input-field"
                 autocomplete="email" />
@@ -218,7 +219,7 @@
 
             <div>
               <label for="asunto"
-                class="block text-xs font-black uppercase text-slate-500 mb-1.5 tracking-widest">Asunto *</label>
+                class="block text-xs font-black uppercase text-slate-400 mb-1.5 tracking-widest">Asunto *</label>
               <select id="asunto" required class="input-field">
                 <option value="" disabled selected>Selecciona un tema…</option>
                 <option value="inscripcion">Inscripción al club</option>
@@ -232,14 +233,14 @@
 
             <div>
               <label for="mensaje"
-                class="block text-xs font-black uppercase text-slate-500 mb-1.5 tracking-widest">Mensaje *</label>
+                class="block text-xs font-black uppercase text-slate-400 mb-1.5 tracking-widest">Mensaje *</label>
               <textarea id="mensaje" rows="4" placeholder="¿En qué podemos ayudarte?" required
                 class="input-field resize-none"></textarea>
               <p id="char-count" class="text-right text-xs text-slate-400 mt-1">0 / 500</p>
             </div>
 
             <button type="submit" id="submitBtn"
-              class="w-full bg-slate-900 text-amber-400 font-black py-4 rounded-xl uppercase tracking-[0.15em] shadow-lg hover:bg-amber-500 hover:text-slate-900 transition-all duration-300 flex items-center justify-center gap-3 group">
+              class="w-full bg-yellow-500 hover:bg-yellow-400 text-slate-950 font-black py-4 rounded-xl uppercase tracking-[0.15em] shadow-lg hover:shadow-yellow-500/20 hover:scale-[1.01] transition-all duration-300 flex items-center justify-center gap-3 group">
               <span id="btnText">Enviar Mensaje</span>
               <i id="btnIcon" class="fas fa-paper-plane group-hover:translate-x-1 transition-transform"></i>
             </button>

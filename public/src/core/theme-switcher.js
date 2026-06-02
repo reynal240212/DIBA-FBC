@@ -3,8 +3,7 @@
  */
 
 export function initTheme() {
-    const savedTheme = localStorage.getItem('diba-theme') || 'dark';
-    applyTheme(savedTheme);
+    applyTheme('dark');
 
     // Initial setup for existing toggle in DOM
     setupToggle();
@@ -15,10 +14,10 @@ export function initTheme() {
 }
 
 function applyTheme(theme) {
-    document.documentElement.setAttribute('data-theme', theme);
-    document.documentElement.setAttribute('data-bs-theme', theme);
-    localStorage.setItem('diba-theme', theme);
-    updateIcon(theme);
+    document.documentElement.setAttribute('data-theme', 'dark');
+    document.documentElement.setAttribute('data-bs-theme', 'dark');
+    localStorage.setItem('diba-theme', 'dark');
+    updateIcon('dark');
 }
 
 function setupToggle() {
@@ -26,11 +25,9 @@ function setupToggle() {
     if (themeToggle && !themeToggle.dataset.hooked) {
         themeToggle.dataset.hooked = "true";
         themeToggle.addEventListener('click', () => {
-            const currentTheme = document.documentElement.getAttribute('data-theme');
-            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-            applyTheme(newTheme);
+            applyTheme('dark');
         });
-        updateIcon(localStorage.getItem('diba-theme') || 'dark');
+        updateIcon('dark');
     }
 }
 
@@ -39,13 +36,8 @@ function updateIcon(theme) {
     const themeToggle = document.getElementById('theme-toggle');
     if (!themeIcon) return;
     
-    if (theme === 'light') {
-        themeIcon.className = 'fas fa-moon';
-        if (themeToggle) themeToggle.title = 'Cambiar a Modo Oscuro';
-    } else {
-        themeIcon.className = 'fas fa-sun';
-        if (themeToggle) themeToggle.title = 'Cambiar a Modo Claro';
-    }
+    themeIcon.className = 'fas fa-sun';
+    if (themeToggle) themeToggle.title = 'Modo Oscuro Activo';
 }
 
 // Auto-init on script load
