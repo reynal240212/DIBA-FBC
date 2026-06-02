@@ -1,32 +1,32 @@
 {
   "cat_2014_15": [
-    { "posicion": 1, "equipo": "AMIGOS DEL FUTURO", "puntos": 13, "jugados": 6, "ganados": 4, "empatados": 1, "perdidos": 1, "goles_favor": 27, "goles_contra": 6, "diferencia": 21 },
-    { "posicion": 2, "equipo": "ESC. B/QUILLERA LIPAYA", "puntos": 12, "jugados": 4, "ganados": 4, "empatados": 0, "perdidos": 0, "goles_favor": 22, "goles_contra": 5, "diferencia": 17 },
-    { "posicion": 3, "equipo": "SPORT PRADERA", "puntos": 12, "jugados": 4, "ganados": 4, "empatados": 0, "perdidos": 0, "goles_favor": 17, "goles_contra": 2, "diferencia": 15 },
-    { "posicion": 4, "equipo": "RINGO AMAYA BRAYAN", "puntos": 10, "jugados": 6, "ganados": 3, "empatados": 1, "perdidos": 2, "goles_favor": 13, "goles_contra": 13, "diferencia": 0 },
-    { "posicion": 5, "equipo": "DIBA FBC", "puntos": 10, "jugados": 6, "ganados": 3, "empatados": 1, "perdidos": 2, "goles_favor": 11, "goles_contra": 18, "diferencia": -7 },
-    { "posicion": 6, "equipo": "QUIROZ FC", "puntos": 7, "jugados": 4, "ganados": 2, "empatados": 1, "perdidos": 1, "goles_favor": 18, "goles_contra": 7, "diferencia": 11 },
-    { "posicion": 7, "equipo": "AMIGOS KIDS", "puntos": 6, "jugados": 5, "ganados": 2, "empatados": 0, "perdidos": 3, "goles_favor": 8, "goles_contra": 8, "diferencia": 0 },
-    { "posicion": 8, "equipo": "JOLPARR FC", "puntos": 6, "jugados": 5, "ganados": 2, "empatados": 0, "perdidos": 3, "goles_favor": 11, "goles_contra": 13, "diferencia": -2 },
-    { "posicion": 9, "equipo": "COLINA REAL", "puntos": 6, "jugados": 4, "ganados": 2, "empatados": 0, "perdidos": 2, "goles_favor": 9, "goles_contra": 14, "diferencia": -5 },
-    { "posicion": 10, "equipo": "LA MASIAS", "puntos": 6, "jugados": 6, "ganados": 2, "empatados": 0, "perdidos": 4, "goles_favor": 8, "goles_contra": 17, "diferencia": -9 },
-    { "posicion": 11, "equipo": "NUEVO HORIZONTE", "puntos": 6, "jugados": 6, "ganados": 2, "empatados": 0, "perdidos": 4, "goles_favor": 16, "goles_contra": 28, "diferencia": -12 },
-    { "posicion": 12, "equipo": "ATLÉTICO VSP", "puntos": 3, "jugados": 4, "ganados": 1, "empatados": 0, "perdidos": 3, "goles_favor": 7, "goles_contra": 9, "diferencia": -2 },
-    { "posicion": 13, "equipo": "CARIBE SOCCER", "puntos": 3, "jugados": 5, "ganados": 1, "empatados": 0, "perdidos": 4, "goles_favor": 7, "goles_contra": 15, "diferencia": -8 },
-    { "posicion": 14, "equipo": "FUND. LA CAYENA FCC", "puntos": 3, "jugados": 5, "ganados": 1, "empatados": 0, "perdidos": 4, "goles_favor": 7, "goles_contra": 26, "diferencia": -19 }
+    { "posicion": 1, "equipo": "DIBA F.C.", "puntos": 9, "jugados": 4, "ganados": 3, "empatados": 0, "perdidos": 1, "goles_favor": 12, "goles_contra": 5, "diferencia": 7 },
+    { "posicion": 2, "equipo": "T. DE MI BARRIO", "puntos": 9, "jugados": 4, "ganados": 3, "empatados": 0, "perdidos": 1, "goles_favor": 11, "goles_contra": 4, "diferencia": 7 },
+    { "posicion": 3, "equipo": "J.J. CARBONEL", "puntos": 7, "jugados": 4, "ganados": 2, "empatados": 1, "perdidos": 1, "goles_favor": 9, "goles_contra": 4, "diferencia": 5 },
+    { "posicion": 4, "equipo": "ACADEMIA SAN LUIS", "puntos": 7, "jugados": 4, "ganados": 2, "empatados": 1, "perdidos": 1, "goles_favor": 8, "goles_contra": 5, "diferencia": 3 },
+    { "posicion": 5, "equipo": "POWER KIDS", "puntos": 7, "jugados": 3, "ganados": 2, "empatados": 1, "perdidos": 0, "goles_favor": 12, "goles_contra": 3, "diferencia": 9 },
+    { "posicion": 6, "equipo": "ACOSTA HNOS", "puntos": 6, "jugados": 4, "ganados": 2, "empatados": 0, "perdidos": 2, "goles_favor": 8, "goles_contra": 3, "diferencia": 5 },
+    { "posicion": 7, "equipo": "ARIEL VALENCIANO", "puntos": 6, "jugados": 4, "ganados": 2, "empatados": 0, "perdidos": 2, "goles_favor": 7, "goles_contra": 4, "diferencia": 3 },
+    { "posicion": 8, "equipo": "ACADEMIA J.D.", "puntos": 3, "jugados": 1, "ganados": 1, "empatados": 0, "perdidos": 0, "goles_favor": 4, "goles_contra": 1, "diferencia": 3 }
   ],
   "cat_2012": [
-    { "posicion": 1, "equipo": "DIBA FBC", "puntos": 15, "jugados": 5, "ganados": 5, "empatados": 0, "perdidos": 0, "goles_favor": 18, "goles_contra": 3, "diferencia": 15 },
-    { "posicion": 2, "equipo": "SPORT PRADERA", "puntos": 12, "jugados": 5, "ganados": 4, "empatados": 0, "perdidos": 1, "goles_favor": 14, "goles_contra": 6, "diferencia": 8 },
-    { "posicion": 3, "equipo": "RINGO AMAYA BRAYAN", "puntos": 9, "jugados": 5, "ganados": 3, "empatados": 0, "perdidos": 2, "goles_favor": 10, "goles_contra": 8, "diferencia": 2 },
-    { "posicion": 4, "equipo": "JOLPARR FC", "puntos": 6, "jugados": 5, "ganados": 2, "empatados": 0, "perdidos": 3, "goles_favor": 8, "goles_contra": 11, "diferencia": -3 },
-    { "posicion": 5, "equipo": "AMIGOS DEL FUTURO", "puntos": 3, "jugados": 5, "ganados": 1, "empatados": 0, "perdidos": 4, "goles_favor": 5, "goles_contra": 12, "diferencia": -7 }
+    { "posicion": 1, "equipo": "DIBA F.C.", "puntos": 12, "jugados": 4, "ganados": 4, "empatados": 0, "perdidos": 0, "goles_favor": 10, "goles_contra": 3, "diferencia": 7 },
+    { "posicion": 2, "equipo": "T. DE MI BARRIO", "puntos": 9, "jugados": 3, "ganados": 3, "empatados": 0, "perdidos": 0, "goles_favor": 9, "goles_contra": 3, "diferencia": 6 },
+    { "posicion": 3, "equipo": "J.J. CARBONEL", "puntos": 6, "jugados": 4, "ganados": 2, "empatados": 0, "perdidos": 2, "goles_favor": 6, "goles_contra": 4, "diferencia": 2 },
+    { "posicion": 4, "equipo": "DAGO SPORT", "puntos": 6, "jugados": 4, "ganados": 2, "empatados": 0, "perdidos": 2, "goles_favor": 7, "goles_contra": 5, "diferencia": 2 },
+    { "posicion": 5, "equipo": "COMPAÑEROS", "puntos": 6, "jugados": 4, "ganados": 2, "empatados": 0, "perdidos": 2, "goles_favor": 6, "goles_contra": 4, "diferencia": 2 },
+    { "posicion": 6, "equipo": "CARVAS", "puntos": 4, "jugados": 3, "ganados": 1, "empatados": 1, "perdidos": 1, "goles_favor": 4, "goles_contra": 6, "diferencia": -2 },
+    { "posicion": 7, "equipo": "FORMAN TALENTO", "puntos": 4, "jugados": 3, "ganados": 1, "empatados": 1, "perdidos": 1, "goles_favor": 3, "goles_contra": 5, "diferencia": -2 },
+    { "posicion": 8, "equipo": "ACOSTA HNOS", "puntos": 3, "jugados": 3, "ganados": 1, "empatados": 0, "perdidos": 2, "goles_favor": 2, "goles_contra": 6, "diferencia": -4 }
   ],
   "cat_2013": [
-    { "posicion": 1, "equipo": "SPORT PRADERA", "puntos": 13, "jugados": 5, "ganados": 4, "empatados": 1, "perdidos": 0, "goles_favor": 15, "goles_contra": 4, "diferencia": 11 },
-    { "posicion": 2, "equipo": "DIBA FBC", "puntos": 11, "jugados": 5, "ganados": 3, "empatados": 2, "perdidos": 0, "goles_favor": 12, "goles_contra": 6, "diferencia": 6 },
-    { "posicion": 3, "equipo": "AMIGOS DEL FUTURO", "puntos": 7, "jugados": 5, "ganados": 2, "empatados": 1, "perdidos": 2, "goles_favor": 9, "goles_contra": 9, "diferencia": 0 },
-    { "posicion": 4, "equipo": "RINGO AMAYA BRAYAN", "puntos": 4, "jugados": 5, "ganados": 1, "empatados": 1, "perdidos": 3, "goles_favor": 7, "goles_contra": 11, "diferencia": -4 },
-    { "posicion": 5, "equipo": "JOLPARR FC", "puntos": 1, "jugados": 5, "ganados": 0, "empatados": 1, "perdidos": 4, "goles_favor": 3, "goles_contra": 16, "diferencia": -13 }
+    { "posicion": 1, "equipo": "DIBA F.C.", "puntos": 9, "jugados": 4, "ganados": 3, "empatados": 0, "perdidos": 1, "goles_favor": 11, "goles_contra": 3, "diferencia": 8 },
+    { "posicion": 2, "equipo": "T. DE MI BARRIO", "puntos": 9, "jugados": 4, "ganados": 3, "empatados": 0, "perdidos": 1, "goles_favor": 9, "goles_contra": 4, "diferencia": 5 },
+    { "posicion": 3, "equipo": "J.J. CARBONEL", "puntos": 6, "jugados": 4, "ganados": 2, "empatados": 0, "perdidos": 2, "goles_favor": 7, "goles_contra": 4, "diferencia": 3 },
+    { "posicion": 4, "equipo": "HIJOS DE DIOS", "puntos": 6, "jugados": 3, "ganados": 2, "empatados": 0, "perdidos": 1, "goles_favor": 6, "goles_contra": 3, "diferencia": 3 },
+    { "posicion": 5, "equipo": "ACOSTA HNOS", "puntos": 6, "jugados": 3, "ganados": 2, "empatados": 0, "perdidos": 1, "goles_favor": 5, "goles_contra": 3, "diferencia": 2 },
+    { "posicion": 6, "equipo": "ESCUELA KEREN", "puntos": 6, "jugados": 3, "ganados": 2, "empatados": 0, "perdidos": 1, "goles_favor": 4, "goles_contra": 3, "diferencia": 1 },
+    { "posicion": 7, "equipo": "ACADEMIA J.D.", "puntos": 3, "jugados": 1, "ganados": 1, "empatados": 0, "perdidos": 0, "goles_favor": 4, "goles_contra": 1, "diferencia": 3 },
+    { "posicion": 8, "equipo": "DAGO F.C.", "puntos": 3, "jugados": 3, "ganados": 1, "empatados": 0, "perdidos": 2, "goles_favor": 3, "goles_contra": 3, "diferencia": 0 }
   ]
 }
