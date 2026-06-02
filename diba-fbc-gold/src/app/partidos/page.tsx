@@ -41,7 +41,10 @@ export default function PartidosPage() {
     if (!url) {
       return `https://ui-avatars.com/api/?name=${encodeURIComponent(equipoNombre || 'R')}&background=1e293b&color=cbd5e1`;
     }
-    return `https://wsrv.nl/?url=${encodeURIComponent(url)}&default=https://ui-avatars.com/api/?name=R&background=1e293b&color=cbd5e1`;
+    if (url.startsWith('http://') || url.startsWith('https://')) {
+      return `https://wsrv.nl/?url=${encodeURIComponent(url)}&default=https://ui-avatars.com/api/?name=R&background=1e293b&color=cbd5e1`;
+    }
+    return url.startsWith('/') ? url : `/${url}`;
   };
 
   return (
