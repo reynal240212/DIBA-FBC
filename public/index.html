@@ -80,33 +80,66 @@
     }
 
     /* Tabla clasificación Premium */
+    .tabla-clas {
+      border-collapse: separate;
+      border-spacing: 0 4px;
+      width: 100%;
+    }
+
     .tabla-clas th {
-      background: rgba(255, 255, 255, 0.02);
       color: #94a3b8;
       font-size: 0.65rem;
-      font-weight: 800;
-      letter-spacing: 0.15em;
+      font-weight: 850;
+      letter-spacing: 0.12em;
       text-transform: uppercase;
-      padding: 1rem 1.25rem;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      padding: 0.75rem 0.6rem;
+      border: none;
     }
 
     .tabla-clas td {
-      padding: 0.85rem 1.25rem;
-      border-top: 1px solid rgba(255, 255, 255, 0.03);
+      padding: 0.65rem 0.6rem;
+      border: none;
       font-size: 0.75rem;
       font-weight: 600;
       color: #cbd5e1;
     }
 
-    .tabla-clas tr.diba-row td {
-      background: rgba(234, 179, 8, 0.08);
-      color: #eab308;
-      font-weight: 800;
+    .tabla-clas tbody tr {
+      background: rgba(255, 255, 255, 0.015);
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
-    .tabla-clas tr:hover td {
-      background: rgba(255, 255, 255, 0.02);
+    .tabla-clas tbody tr td:first-child {
+      border-top-left-radius: 12px;
+      border-bottom-left-radius: 12px;
+      padding-left: 0.9rem;
+    }
+
+    .tabla-clas tbody tr td:last-child {
+      border-top-right-radius: 12px;
+      border-bottom-right-radius: 12px;
+      padding-right: 0.9rem;
+    }
+
+    .tabla-clas tbody tr:hover td {
+      background: rgba(255, 255, 255, 0.04);
+      color: #fff;
+    }
+
+    .tabla-clas tr.diba-row td {
+      background: rgba(234, 179, 8, 0.08);
+      color: #ffd700;
+      font-weight: 800;
+      border-top: 1px solid rgba(234, 179, 8, 0.25);
+      border-bottom: 1px solid rgba(234, 179, 8, 0.25);
+    }
+
+    .tabla-clas tr.diba-row td:first-child {
+      border-left: 1px solid rgba(234, 179, 8, 0.25);
+    }
+
+    .tabla-clas tr.diba-row td:last-child {
+      border-right: 1px solid rgba(234, 179, 8, 0.25);
     }
   </style>
 </head>
@@ -195,68 +228,69 @@
 
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <!-- Tarjeta Categoría 2014 (Destacada) -->
-        <div class="lg:col-span-2 group relative bg-slate-900/40 rounded-[3rem] overflow-hidden border border-white/5 hover:border-yellow-500/30 transition-all duration-500 shadow-2xl backdrop-blur-xl" data-aos="fade-right">
-          <div class="aspect-video relative overflow-hidden">
-            <video controls class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-102">
-              <source src="video/posiciones-2014.mp4" type="video/mp4">
-            </video>
-            <div class="absolute top-6 left-6 bg-yellow-500 text-black px-6 py-2 rounded-full font-black italic text-xs tracking-widest shadow-xl">
-              LÍDERES 2014 - 15
+        <div class="lg:col-span-2 group relative bg-slate-900/40 rounded-[3.5rem] overflow-hidden border border-white/5 hover:border-yellow-500/20 transition-all duration-500 shadow-2xl backdrop-blur-xl p-8 md:p-10 flex flex-col justify-between" data-aos="fade-right">
+          <div class="space-y-6">
+            <div class="flex items-center justify-between border-b border-white/5 pb-6">
+              <div>
+                <span class="text-yellow-500 font-black tracking-widest text-[10px] uppercase">CATEGORÍA 2014/15 - ELITE</span>
+                <h3 class="text-3xl font-black text-white italic uppercase tracking-tighter mt-1">Líderes de la Clasificación</h3>
+              </div>
+              <span class="text-[9px] font-black text-yellow-500 bg-yellow-500/10 border border-yellow-500/20 px-3 py-1 rounded-full uppercase tracking-wider">EN VIVO</span>
+            </div>
+            
+            <div class="overflow-x-auto">
+              <div id="tabla-bento-2014" class="w-full">
+                <!-- Injected via JavaScript -->
+              </div>
             </div>
           </div>
-          <div class="p-10 md:p-12 space-y-4">
-            <h3 class="text-3xl font-black text-white italic uppercase tracking-tighter">Categoría 2014/15 - Elite</h3>
-            <p class="text-slate-400 text-sm md:text-base leading-relaxed font-medium">
-              DIBA FBC se consolida firmemente en la cima de la clasificación general con un rendimiento táctico intachable. La consistencia colectiva y la disciplina de juego nos colocan como los grandes referentes del fútbol formativo en la región.
-            </p>
+          <div class="border-t border-white/5 pt-6 mt-6 flex items-center justify-between text-xs text-slate-400 font-medium">
+            <span>Última actualización: En tiempo real</span>
+            <a href="partidos.html" class="text-yellow-500 hover:text-yellow-400 font-bold flex items-center gap-1.5 transition-colors">
+              Ver estadísticas completas <i class="fas fa-arrow-right text-[10px]"></i>
+            </a>
           </div>
         </div>
 
         <!-- Columna de otras categorías -->
-        <div class="space-y-8">
+        <div class="space-y-8 flex flex-col justify-between">
           <!-- Tarjeta 2012 -->
-          <div class="group bg-slate-900/40 rounded-[2.5rem] overflow-hidden border border-white/5 hover:border-yellow-500/20 transition-all duration-500 shadow-xl backdrop-blur-xl" data-aos="fade-left">
-            <div class="aspect-video relative overflow-hidden">
-              <video controls class="w-full h-full object-cover">
-                <source src="video/posiciones-2012.mp4" type="video/mp4">
-              </video>
-              <div class="absolute top-4 left-4 bg-white/10 backdrop-blur-md text-white border border-white/10 px-4 py-1.5 rounded-full font-black italic text-[10px] tracking-widest shadow-lg">
-                TABLA 2012
+          <div class="group bg-slate-900/40 rounded-[2.5rem] overflow-hidden border border-white/5 hover:border-yellow-500/20 transition-all duration-500 shadow-xl backdrop-blur-xl p-6 flex flex-col justify-between flex-1" data-aos="fade-left">
+            <div class="space-y-4">
+              <div class="flex items-center justify-between border-b border-white/5 pb-4">
+                <div>
+                  <span class="text-slate-400 font-bold tracking-widest text-[9px] uppercase">CATEGORÍA 2012</span>
+                  <h4 class="text-xl font-black text-white italic uppercase tracking-tight mt-0.5">Formación - Grupo A</h4>
+                </div>
+                <span class="text-[8px] font-black text-slate-400 bg-white/5 border border-white/10 px-2 py-0.5 rounded-full uppercase tracking-wider">OFICIAL</span>
               </div>
-            </div>
-            <div class="p-8">
-              <h4 class="text-xl font-black text-white italic uppercase tracking-tight">Categoría 2012 - Formación</h4>
-              <p class="text-slate-400 text-xs mt-2 leading-relaxed font-medium">Visualiza el avance y estadísticas de nuestros representantes en la categoría 2012.</p>
+              
+              <div class="overflow-x-auto">
+                <div id="tabla-bento-2012" class="w-full">
+                  <!-- Injected via JavaScript -->
+                </div>
+              </div>
             </div>
           </div>
 
           <!-- Tarjeta 2013 -->
-          <div class="group bg-slate-900/40 rounded-[2.5rem] overflow-hidden border border-white/5 hover:border-yellow-500/20 transition-all duration-500 shadow-xl backdrop-blur-xl" data-aos="fade-left" data-aos-delay="200">
-            <div class="aspect-video relative overflow-hidden">
-              <video controls class="w-full h-full object-cover">
-                <source src="video/posiciones-2013.mp4" type="video/mp4">
-              </video>
-              <div class="absolute top-4 left-4 bg-white/10 backdrop-blur-md text-white border border-white/10 px-4 py-1.5 rounded-full font-black italic text-[10px] tracking-widest shadow-lg">
-                TABLA 2013
+          <div class="group bg-slate-900/40 rounded-[2.5rem] overflow-hidden border border-white/5 hover:border-yellow-500/20 transition-all duration-500 shadow-xl backdrop-blur-xl p-6 flex flex-col justify-between flex-1" data-aos="fade-left" data-aos-delay="200">
+            <div class="space-y-4">
+              <div class="flex items-center justify-between border-b border-white/5 pb-4">
+                <div>
+                  <span class="text-slate-400 font-bold tracking-widest text-[9px] uppercase">CATEGORÍA 2013</span>
+                  <h4 class="text-xl font-black text-white italic uppercase tracking-tight mt-0.5">Pre-Elite - Grupo B</h4>
+                </div>
+                <span class="text-[8px] font-black text-slate-400 bg-white/5 border border-white/10 px-2 py-0.5 rounded-full uppercase tracking-wider">OFICIAL</span>
+              </div>
+              
+              <div class="overflow-x-auto">
+                <div id="tabla-bento-2013" class="w-full">
+                  <!-- Injected via JavaScript -->
+                </div>
               </div>
             </div>
-            <div class="p-8">
-              <h4 class="text-xl font-black text-white italic uppercase tracking-tight">Categoría 2013 - Pre-Elite</h4>
-              <p class="text-slate-400 text-xs mt-2 leading-relaxed font-medium">Resultados, rendimiento e historial de juego de la categoría 2013 competitiva.</p>
-            </div>
           </div>
-        </div>
-      </div>
-
-      <!-- Live Standings Full Width -->
-      <div class="w-full pt-4">
-        <!-- Live Table -->
-        <div class="w-full bg-slate-900/40 border border-white/5 rounded-[2.5rem] p-8 md:p-10 backdrop-blur-xl shadow-2xl" data-aos="fade-up">
-          <div class="flex items-center justify-between mb-8">
-            <h3 class="text-2xl font-black italic uppercase tracking-tight text-white font-display">Tabla de <span class="text-yellow-500">Posiciones</span></h3>
-            <span class="text-[9px] font-black text-slate-400 bg-white/5 border border-white/10 px-3 py-1 rounded-full uppercase tracking-wider">Cat. 2014 - 15</span>
-          </div>
-          <div id="clasificacion-container" class="overflow-x-auto rounded-2xl border border-white/5"></div>
         </div>
       </div>
     </div>
@@ -494,6 +528,7 @@
   <script type="module" src="src/main.js"></script>
   <script src="scripts/instagram-feed.js"></script>
   <script src="scripts/partidos.js"></script>
+  <script src="scripts/bento-tables.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
   <script>
     AOS.init({ once: true, duration: 800 });

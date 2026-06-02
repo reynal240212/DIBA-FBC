@@ -362,58 +362,94 @@ async function mostrarClasificacion() {
 
   if (spinner) spinner.style.display = 'flex';
 
-  const { data, error } = await sb
-    .from('clasificacion_categoria_2014_15')
-    .select('*')
-    .order('posicion', { ascending: true });
+  try {
+    const response = await fetch('data/clasificaciones.json');
+    if (!response.ok) throw new Error('No se pudo cargar el archivo de clasificaciones');
+    const data = await response.json();
+    
+    if (spinner) spinner.style.display = 'none';
 
-  if (spinner) spinner.style.display = 'none';
+    if (!data?.cat_2014_15?.length) {
+      container.innerHTML = `<p class="text-center text-slate-500 py-8">No hay datos de clasificación disponibles.</p>`;
+      return;
+    }
 
-  if (error || !data?.length) {
-    container.innerHTML = `<p class="text-center text-slate-500 py-8">No hay datos de clasificación disponibles.</p>`;
-    return;
+    // Sort dataset by points DESC, then difference DESC, then goals favor DESC
+    const sorted = [...data.cat_2014_15].sort((a, b) => {
+      if (b.puntos !== a.puntos) return b.puntos - a.puntos;
+      if (b.diferencia !== a.diferencia) return b.diferencia - a.diferencia;
+      return b.goles_favor - a.goles_favor;
+    });
+
+    const tabla = document.createElement('table');
+    tabla.className = 'tabla-clas w-full text-left text-white';
+    tabla.innerHTML = `
+      <thead>
+        <tr>
+          <th class="text-center w-12">#</th>
+          <th>Equipo</th>
+          <th class="text-center w-12">Pts</th>
+          <th class="text-center w-10">PJ</th>
+          <th class="text-center w-10">PG</th>
+          <th class="text-center w-10">PE</th>
+          <th class="text-center w-10">PP</th>
+          <th class="text-center w-12">GF</th>
+          <th class="text-center w-12">GC</th>
+          <th class="text-center w-12">DIF</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${sorted.map((e, index) => {
+          const position = index + 1;
+          const isDiba = e.equipo?.toUpperCase().includes('DIBA');
+          
+          let posBadge = '';
+          if (position === 1) {
+            posBadge = `<span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-gradient-to-r from-yellow-400 to-amber-500 text-black text-[10px] font-black shadow-md shadow-yellow-500/20"><i class="fas fa-crown text-[7px] mr-0.5"></i>1</span>`;
+          } else if (position === 2) {
+            posBadge = `<span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-gradient-to-r from-slate-300 to-slate-400 text-black text-[10px] font-black shadow-md shadow-slate-400/20">2</span>`;
+          } else if (position === 3) {
+            posBadge = `<span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-gradient-to-r from-amber-600 to-amber-700 text-white text-[10px] font-black shadow-md shadow-amber-700/20">3</span>`;
+          } else {
+            posBadge = `<span class="text-slate-500 text-[11px] font-bold">${position}</span>`;
+          }
+
+          let teamNameHTML = '';
+          if (isDiba) {
+            teamNameHTML = `
+              <span class="flex items-center gap-1.5 text-yellow-400 font-extrabold tracking-wide drop-shadow-[0_0_8px_rgba(234,179,8,0.2)]">
+                <i class="fas fa-shield-halved text-[10px] animate-pulse"></i>
+                ${e.equipo}
+                <span class="text-[7px] bg-yellow-500/20 text-yellow-400 px-1.5 py-0.5 rounded-full border border-yellow-500/30 uppercase tracking-widest font-black">Nosotros</span>
+              </span>
+            `;
+          } else {
+            teamNameHTML = `<span class="text-slate-300 font-medium">${e.equipo}</span>`;
+          }
+
+          return `
+            <tr class="${isDiba ? 'diba-row' : ''}">
+              <td class="text-center font-bold">${posBadge}</td>
+              <td class="font-semibold py-3">${teamNameHTML}</td>
+              <td class="text-center font-bold text-[13px] ${isDiba ? 'text-yellow-400' : 'text-white'}">${e.puntos}</td>
+              <td class="text-center text-slate-400">${e.jugados}</td>
+              <td class="text-center text-green-400">${e.ganados}</td>
+              <td class="text-center text-slate-400">${e.empatados}</td>
+              <td class="text-center text-red-400">${e.perdidos}</td>
+              <td class="text-center text-slate-500 text-[10px]">${e.goles_favor}</td>
+              <td class="text-center text-slate-500 text-[10px]">${e.goles_contra}</td>
+              <td class="text-center font-bold ${e.diferencia > 0 ? 'text-green-400' : e.diferencia < 0 ? 'text-red-400' : 'text-slate-400'}">${e.diferencia > 0 ? '+' : ''}${e.diferencia}</td>
+            </tr>`;
+        }).join('')}
+      </tbody>
+    `;
+    container.innerHTML = '';
+    container.appendChild(tabla);
+  } catch (err) {
+    console.error('Error loading standings in partidos.js:', err);
+    if (spinner) spinner.style.display = 'none';
+    container.innerHTML = `<p class="text-center text-slate-500 py-8"><i class="fas fa-exclamation-triangle mr-2"></i>Error al cargar datos de clasificación.</p>`;
   }
-
-  const tabla = document.createElement('table');
-  tabla.className = 'tabla-clas w-full text-left text-white';
-  tabla.innerHTML = `
-    <thead>
-      <tr>
-        <th class="text-center">#</th>
-        <th>Equipo</th>
-        <th class="text-center">Pts</th>
-        <th class="text-center">PJ</th>
-        <th class="text-center">PG</th>
-        <th class="text-center">PE</th>
-        <th class="text-center">PP</th>
-        <th class="text-center">GF</th>
-        <th class="text-center">GC</th>
-        <th class="text-center">DIF</th>
-      </tr>
-    </thead>
-    <tbody>
-      ${data.map(e => {
-    const isDiba = e.equipo?.toLowerCase().includes('diba');
-    return `
-        <tr class="${isDiba ? 'diba-row' : ''}">
-          <td class="text-center font-bold">${e.posicion}</td>
-          <td class="font-semibold flex items-center gap-2">
-            ${isDiba ? '<i class="fas fa-star text-amber-400 text-xs"></i>' : ''}
-            ${e.equipo}
-          </td>
-          <td class="text-center font-bold ${isDiba ? '' : 'text-white'}">${e.puntos}</td>
-          <td class="text-center">${e.jugados}</td>
-          <td class="text-center text-green-400">${e.ganados}</td>
-          <td class="text-center">${e.empatados}</td>
-          <td class="text-center text-red-400">${e.perdidos}</td>
-          <td class="text-center">${e.goles_favor}</td>
-          <td class="text-center">${e.goles_contra}</td>
-          <td class="text-center ${e.diferencia > 0 ? 'text-green-400' : e.diferencia < 0 ? 'text-red-400' : ''}">${e.diferencia > 0 ? '+' : ''}${e.diferencia}</td>
-        </tr>`;
-  }).join('')}
-    </tbody>
-  `;
-  container.appendChild(tabla);
 }
 
 // ──────────────────────────────────────────────────────────────────────────────
