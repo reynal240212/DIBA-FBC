@@ -186,6 +186,16 @@
         return;
       }
 
+      const celular = document.getElementById("celular").value;
+      if (!celular) {
+        alert("❌ Por favor, ingresa tu número de celular.");
+        return;
+      }
+      if (!/^\+?\d{10,15}$/.test(celular)) {
+        alert("❌ Por favor, ingresa un número de celular válido.");
+        return;
+      }
+
       const correo = document.getElementById("correo").value;
       if (!correo) {
         alert("❌ Por favor, ingresa un correo electrónico.");
@@ -237,6 +247,7 @@
           data: {
             nombre: Nombre, // Agregamos el nombre y apellido como metadata del usuario
             apellido: apellido,
+            celular: celular,
           },
         },
       });
@@ -294,6 +305,10 @@
         <div>
           <label for="apellido">Apellido:</label>
           <input type="text" id="apellido" name="apellido" required />
+        </div>
+        <div>
+          <label for="celular">Teléfono Celular:</label>
+          <input type="tel" id="celular" name="celular" placeholder="+57..." required />
         </div>
         <div>
           <label for="correo">Correo:</label>

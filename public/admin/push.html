@@ -123,6 +123,15 @@
                             </div>
 
                             <div class="premium-form-group">
+                                <label class="premium-label">Canal de Envío</label>
+                                <select id="push-channel" class="premium-input pl-6 font-bold uppercase text-[0.7rem] tracking-widest cursor-pointer !bg-white/5">
+                                    <option value="both">Web Push + WhatsApp (OpenWA)</option>
+                                    <option value="web">Solo Web Push (App)</option>
+                                    <option value="wa">Solo WhatsApp (OpenWA)</option>
+                                </select>
+                            </div>
+
+                            <div class="premium-form-group">
                                 <label class="premium-label">Cuerpo de la Notificación (Máx. 160 caract.)</label>
                                 <textarea id="push-body" rows="4" required placeholder="ESCRIBA LAS INDICACIONES CLARAS PARA LOS JUGADORES..." 
                                     class="premium-input p-6 resize-none min-h-[140px] !bg-white/5"></textarea>

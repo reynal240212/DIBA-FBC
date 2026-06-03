@@ -306,6 +306,10 @@
                         <label class="premium-label">Grupo Sanguíneo</label>
                         <input type="text" id="newGrupoSangre" placeholder="O+" class="premium-input">
                     </div>
+                    <div class="premium-form-group">
+                        <label class="premium-label">Teléfono Celular</label>
+                        <input type="tel" id="newCelular" placeholder="+57..." class="premium-input" required>
+                    </div>
                 </div>
                 <button type="submit" class="w-full py-5 bg-gold text-[#004d98] rounded-2xl font-black uppercase text-[0.75rem] tracking-widest shadow-xl shadow-gold/20 hover:scale-105 transition-all mt-10">
                     Sincronizar Jugador en Cloud
@@ -657,7 +661,7 @@
                             <div class="${doc ? 'text-green-500' : 'text-slate-500'} mt-0.5">${doc ? 'CARGADO' : 'PENDIENTE'}</div>
                         </div>
                     </div>
-                    ${doc ? `<a href="${doc.file_url}" target="_blank" class="w-10 h-10 rounded-xl bg-gold/10 text-gold flex items-center justify-center hover:bg-gold hover:text-[#004d98] transition-all"><i class="fas fa-eye"></i></a>` : '<div class="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-slate-800/10"><i class="fas fa-times"></i></div>'}
+                    ${doc ? `<a href="${doc.file_url}" target="_blank" class="w-10 h-10 rounded-xl bg-gold/10 text-gold flex items-center justify-center hover:bg-gold hover:text-[#004d98] transition-all"><i class="fas fa-eye"></i></a>` : '<div class="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-white/20"><i class="fas fa-times"></i></div>'}
                 `;
                 listEl.appendChild(item);
             }
@@ -707,7 +711,8 @@
                 sexo: document.getElementById('newSexo').value,
                 nacionalidad: document.getElementById('newNacionalidad').value,
                 lugar_nacimiento: document.getElementById('newLugarNac').value,
-                grupo_sanguineo: document.getElementById('newGrupoSangre').value
+                grupo_sanguineo: document.getElementById('newGrupoSangre').value,
+                celular: document.getElementById('newCelular').value
             };
             await supabase.from('jugadores').insert([{ nombre: `${payload.nombre} ${payload.apellidos}`, categoria: payload.categoria, status: 'Activo', fecha_registro: new Date() }]);
             await supabase.from('identificacion').insert([payload]);

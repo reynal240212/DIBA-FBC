@@ -22,7 +22,7 @@ export async function initAdminLayout() {
 
     const getLinkClass = (path) => isAct(path) 
         ? 'bg-gold !text-slate-950 font-black shadow-[0_10px_25px_rgba(255,215,0,0.3)] translate-x-1' 
-        : 'text-white/60 font-semibold hover:bg-white/5 hover:text-white group hover:translate-x-1';
+        : 'text-white/80 font-semibold hover:bg-white/10 hover:text-white group hover:translate-x-1';
 
     const getIconClass = (path) => isAct(path) ? '!text-slate-900' : 'opacity-30 group-hover:opacity-100 group-hover:text-gold';
 

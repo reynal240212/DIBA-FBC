@@ -13,7 +13,7 @@ export async function loadStorageBuckets(dynamicContent, pageTitle, setActiveFil
     dynamicContent.className = "flex flex-col gap-4 w-full";
     dynamicContent.innerHTML = `
         <div class="col-span-full mb-6">
-            <div class="flex items-center justify-between px-6 py-4 bg-white/[0.02] border-b border-white/5 text-[0.6rem] font-black uppercase tracking-[0.2em] text-white/60">
+            <div class="flex items-center justify-between px-6 py-4 bg-white/[0.02] border-b border-white/5 text-[0.6rem] font-black uppercase tracking-[0.2em] text-white/90">
                 <div class="flex-1 w-1/4">Nombre</div>
                 <div class="hidden md:block w-1/6 text-center">Políticas</div>
                 <div class="hidden lg:block w-1/4 text-center">Límite de Tamaño</div>
@@ -56,7 +56,7 @@ export async function loadStorageBuckets(dynamicContent, pageTitle, setActiveFil
         rowsContainer.innerHTML = '';
 
         if (!buckets || buckets.length === 0) {
-            rowsContainer.innerHTML = '<div class="p-10 text-center text-white/20 font-black uppercase text-xs italic">No hay buckets disponibles</div>';
+            rowsContainer.innerHTML = '<div class="p-10 text-center text-white/60 font-black uppercase text-xs italic">No hay buckets disponibles</div>';
             return;
         }
 
@@ -75,16 +75,16 @@ export async function loadStorageBuckets(dynamicContent, pageTitle, setActiveFil
                     </div>
                     <div class="flex flex-col">
                         <span class="text-sm font-black italic text-white uppercase tracking-tighter group-hover:text-gold transition-colors">${bucket.name}</span>
-                        <span class="text-[0.55rem] font-bold text-white/60 uppercase tracking-widest">${bucket.public ? 'PÚBLICO' : 'PRIVADO'}</span>
+                        <span class="text-[0.55rem] font-bold text-white/90 uppercase tracking-widest">${bucket.public ? 'PÚBLICO' : 'PRIVADO'}</span>
                     </div>
                 </div>
 
                 <div class="hidden md:block w-1/6 text-center">
-                    <span class="px-3 py-1 rounded bg-white/5 text-white/60 text-[0.6rem] font-black">ACTIVA</span>
+                    <span class="px-3 py-1 rounded bg-white/5 text-white/90 text-[0.6rem] font-black">ACTIVA</span>
                 </div>
 
                 <div class="hidden lg:block w-1/4 text-center">
-                    <span class="text-[0.6rem] font-black uppercase tracking-widest text-white/60 italic">${sizeLimit}</span>
+                    <span class="text-[0.6rem] font-black uppercase tracking-widest text-white/90 italic">${sizeLimit}</span>
                 </div>
 
                 <div class="hidden lg:block w-1/4 text-center">
@@ -112,16 +112,16 @@ async function loadBucketFiles(bucketId, dynamicContent, pageTitle) {
     dynamicContent.innerHTML = `
         <div class="col-span-full border border-white/5 rounded-[2rem] overflow-hidden bg-white/[0.01]">
             <div class="p-6 border-b border-white/5 flex items-center justify-between flex-wrap gap-4">
-                <button id="back-to-buckets" class="flex items-center gap-3 px-6 py-3 bg-white/5 rounded-2xl text-white/40 hover:text-gold hover:bg-white/10 transition-all group">
+                <button id="back-to-buckets" class="flex items-center gap-3 px-6 py-3 bg-white/5 rounded-2xl text-white/80 hover:text-gold hover:bg-white/10 transition-all group">
                     <i class="fas fa-arrow-left group-hover:-translate-x-1 transition-transform text-xs"></i>
                     <span class="text-[0.6rem] font-black uppercase tracking-widest">VOLVER</span>
                 </button>
                 
                 <div class="flex items-center gap-4">
-                    <span class="text-[0.6rem] font-black uppercase tracking-widest text-white/20 italic">Visualización por Grilla</span>
+                    <span class="text-[0.6rem] font-black uppercase tracking-widest text-white/60 italic">Visualización por Grilla</span>
                     <div class="flex bg-white/5 p-1 rounded-xl">
                         <button class="w-8 h-8 rounded-lg bg-gold text-[#004d98] flex items-center justify-center shadow-lg"><i class="fas fa-grid-2 text-xs"></i></button>
-                        <button class="w-8 h-8 rounded-lg text-white/20 flex items-center justify-center"><i class="fas fa-list-ul text-xs"></i></button>
+                        <button class="w-8 h-8 rounded-lg text-white/60 flex items-center justify-center"><i class="fas fa-list-ul text-xs"></i></button>
                     </div>
                 </div>
             </div>
@@ -174,12 +174,40 @@ async function loadBucketFiles(bucketId, dynamicContent, pageTitle) {
             const div = document.createElement('div');
             div.className = "panel p-5 animate-fade-up group hover:border-gold/30 transition-all flex flex-col items-center text-center cursor-pointer relative overflow-hidden bg-white/[0.01]";
             div.innerHTML = `
-                <div class="w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center text-white/20 group-hover:bg-gold/10 group-hover:text-gold transition-all mb-4 border border-white/5">
+                <div class="w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center text-white/60 group-hover:bg-gold/10 group-hover:text-gold transition-all mb-4 border border-white/5">
                     <i class="fas ${isImage ? 'fa-image' : isDoc ? 'fa-file-pdf' : 'fa-file'} text-lg"></i>
                 </div>
-                <p class="text-[0.6rem] font-bold text-white/40 group-hover:text-white transition-all break-all line-clamp-2 uppercase tracking-tight">${file.name}</p>
+                <p class="text-[0.6rem] font-bold text-white/80 group-hover:text-white transition-all break-all line-clamp-2 uppercase tracking-tight">${file.name}</p>
                 <div class="absolute bottom-0 left-0 w-full h-1 bg-gold scale-x-0 group-hover:scale-x-100 transition-transform origin-left"></div>
             `;
+            div.addEventListener('click', async () => {
+                try {
+                    // Start visual loading indication
+                    div.style.opacity = '0.5';
+                    div.style.pointerEvents = 'none';
+
+                    // Try public URL first (fastest)
+                    const { data: publicData } = supabase.storage.from(bucketId).getPublicUrl(file.name);
+                    
+                    // If we can't be sure it's public, or just fallback to signed URL to be safe for private buckets
+                    const { data: signedData, error } = await supabase.storage.from(bucketId).createSignedUrl(file.name, 3600);
+                    
+                    const urlToOpen = (signedData && signedData.signedUrl) ? signedData.signedUrl : (publicData && publicData.publicUrl);
+                    
+                    if (urlToOpen) {
+                        window.open(urlToOpen, '_blank');
+                    } else {
+                        alert("No se pudo obtener el enlace del archivo.");
+                    }
+                } catch (e) {
+                    console.error("Error opening file:", e);
+                    alert("Error al abrir archivo.");
+                } finally {
+                    div.style.opacity = '1';
+                    div.style.pointerEvents = 'auto';
+                }
+            });
+
             filesGrid.appendChild(div);
         });
     } catch (err) {

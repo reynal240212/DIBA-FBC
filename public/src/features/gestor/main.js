@@ -30,7 +30,7 @@ async function init() {
             if (isActive) {
                 btn.className = "w-full flex items-center justify-between p-5 rounded-2xl bg-gold text-[#004d98] font-black text-[0.7rem] uppercase tracking-widest group shadow-xl shadow-gold/10";
             } else {
-                btn.className = "w-full flex items-center justify-between p-5 rounded-2xl bg-white/5 text-white/40 font-black text-[0.7rem] uppercase tracking-widest hover:bg-white/10 hover:text-white transition-all border border-transparent hover:border-white/10";
+                btn.className = "w-full flex items-center justify-between p-5 rounded-2xl bg-white/5 text-white/80 font-black text-[0.7rem] uppercase tracking-widest hover:bg-white/10 hover:text-white transition-all border border-transparent hover:border-white/10";
             }
         });
     };
