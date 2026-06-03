@@ -4,7 +4,7 @@
 //  + Soporte completo de Web Push Notifications
 // ============================================================
 
-const CACHE_VERSION = 'diba-v3';
+const CACHE_VERSION = 'diba-v4';
 const CACHE_STATIC = `${CACHE_VERSION}-static`;
 const CACHE_PAGES = `${CACHE_VERSION}-pages`;
 
