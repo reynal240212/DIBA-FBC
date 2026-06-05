@@ -89,97 +89,62 @@
         }
 
         /* ======================================
-           INTRO OVERLAY
+           INTRO OVERLAY — VIDEO FULLSCREEN
         ====================================== */
         #intro-overlay {
             position: fixed;
             inset: 0;
             z-index: 9999;
+            background: #000;
             display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
-            perspective: 1100px;
         }
         #intro-overlay.exit {
-            animation: introExit 1.4s cubic-bezier(0.77,0,0.175,1) forwards;
+            animation: introExit 1.2s cubic-bezier(0.77,0,0.175,1) forwards;
         }
         @keyframes introExit {
-            0%   { opacity:1; transform: scale(1); }
-            50%  { opacity:1; transform: scale(1.05); }
-            100% { opacity:0; transform: scale(0.88); pointer-events:none; }
+            0%   { opacity:1; }
+            100% { opacity:0; pointer-events:none; }
         }
 
-        /* HUD elements */
-        #hud-top, #hud-bottom { 
-            font-family: var(--mono);
-            color: rgba(255,215,0,0.65);
-            font-size: 0.55rem;
-            letter-spacing: 0.35em;
-            text-transform: uppercase;
-            position: relative;
-            z-index: 2;
-        }
-        #hud-top    { margin-bottom: 1.4rem; opacity: 0; }
-        #hud-bottom { margin-top: 1.4rem; opacity: 0; color: rgba(255,183,0,0.5); }
-
-        #hud-progress-outer {
-            width: 320px;
-            margin-top: 0.7rem;
-            opacity: 0;
-            position: relative;
-            z-index: 2;
-        }
-        #hud-progress-track {
+        #intro-video {
             width: 100%;
-            height: 2px;
-            background: rgba(255,215,0,0.12);
-            border-radius: 9999px;
-            overflow: hidden;
-        }
-        #hud-progress-fill {
             height: 100%;
-            width: 0%;
-            border-radius: 9999px;
-            background: linear-gradient(90deg, #f59e0b, #ffd700, #fb923c);
-            box-shadow: 0 0 10px rgba(255,215,0,0.7);
-            transition: width 0.08s linear;
-        }
-        #hud-pct {
-            font-family: var(--mono);
-            font-size: 0.48rem;
-            color: rgba(255,215,0,0.5);
-            text-align: right;
-            margin-top: 0.3rem;
-            letter-spacing: 0.1em;
+            object-fit: cover;   /* fills the screen, no black bars */
+            display: block;
         }
 
-        /* ======================================
-           3D CUBE STAGE
-        ====================================== */
-        #cube-stage {
-            position: relative;
-            transform-style: preserve-3d;
+        /* Skip button — bottom-right corner */
+        #skip-btn {
+            position: absolute;
+            bottom: 2rem;
+            right: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1.2rem;
+            background: rgba(0,0,0,0.55);
+            border: 1px solid rgba(255,215,0,0.35);
+            border-radius: 9999px;
+            color: rgba(255,215,0,0.85);
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            cursor: pointer;
+            backdrop-filter: blur(8px);
+            transition: all 0.25s ease;
             z-index: 2;
         }
+        #skip-btn:hover {
+            background: rgba(255,215,0,0.15);
+            border-color: rgba(255,215,0,0.7);
+            color: #ffd700;
+            transform: scale(1.05);
+        }
 
-        /* Each cube wrapper */
-        .cube-wrap {
-            position: absolute;
-            transform-style: preserve-3d;
-            will-change: transform, opacity;
-        }
-        /* Cube faces */
-        .cube-face {
-            position: absolute;
-            backface-visibility: hidden;
-        }
-        /* Front face = full W×H */
-        .cf-front  { width: 100%; height: 100%; }
-        /* Right face = DEPTH × H, at right edge rotated */
-        .cf-right  { top: 0; height: 100%; }
-        /* Top face = W × DEPTH, at top edge rotated */
-        .cf-top    { left: 0; width: 100%; }
 
         /* ======================================
            LOGIN WRAPPER
@@ -263,17 +228,21 @@
         <div class="aurora-band"></div>
     </div>
 
-    <!-- ========== INTRO ========== -->
+    <!-- ========== INTRO VIDEO ========== -->
     <div id="intro-overlay">
-        <div id="hud-top">◈ DIBA FBC — SISTEMA DE GESTIÓN DEPORTIVA ◈</div>
-        <div id="cube-stage"></div>
-        <div id="hud-bottom">▸ INICIANDO PROTOCOLO DE ACCESO SEGURO ◂</div>
-        <div id="hud-progress-outer">
-            <div id="hud-progress-track">
-                <div id="hud-progress-fill"></div>
-            </div>
-            <div id="hud-pct">0%</div>
-        </div>
+        <video
+            id="intro-video"
+            src="/videos/intro.mp4"
+            autoplay
+            muted
+            playsinline
+            preload="auto"
+        ></video>
+
+        <!-- Skip button -->
+        <button id="skip-btn">
+            <i class="fas fa-forward-step"></i> Saltar
+        </button>
     </div>
 
     <!-- ========== LOGIN ========== -->
@@ -360,229 +329,28 @@
         import anime from 'https://cdn.jsdelivr.net/npm/animejs@3.2.2/lib/anime.es.js';
 
         /* =====================================================
-           CUBE CONSTANTS
+           VIDEO INTRO
         ===================================================== */
-        const GRID      = 32;       // 32×32 = 1024 cubes
-        const CELL      = 11;       // face size in px
-        const DEPTH     = 7;        // cube depth/thickness in px
-        const STAGE_PX  = GRID * CELL;
-
-        const stage     = document.getElementById('cube-stage');
-        const fillBar   = document.getElementById('hud-progress-fill');
-        const pctLabel  = document.getElementById('hud-pct');
         const overlay   = document.getElementById('intro-overlay');
         const loginWrap = document.getElementById('login-wrapper');
+        const introVid  = document.getElementById('intro-video');
+        const skipBtn   = document.getElementById('skip-btn');
 
-        stage.style.width  = STAGE_PX + 'px';
-        stage.style.height = STAGE_PX + 'px';
-
-        /* =====================================================
-           SAMPLE SHIELD → ALPHA MASK ONLY (no pixel colors)
-           Cubes get stylized gold colors by position,
-           keeping the real shield image perfectly sharp.
-        ===================================================== */
-        function sampleShield() {
-            return new Promise(resolve => {
-                const img = new Image();
-                img.crossOrigin = 'anonymous';
-                img.onload = () => {
-                    const c = document.createElement('canvas');
-                    c.width = GRID; c.height = GRID;
-                    const ctx = c.getContext('2d');
-                    ctx.drawImage(img, 0, 0, GRID, GRID);
-                    const out = [];
-                    for (let y = 0; y < GRID; y++)
-                        for (let x = 0; x < GRID; x++) {
-                            // Only read alpha — ignore RGB entirely
-                            const alpha = ctx.getImageData(x, y, 1, 1).data[3];
-                            out.push({ x, y, a: alpha });
-                        }
-                    resolve(out);
-                };
-                img.onerror = () => {
-                    // Fallback: full grid of gold cubes
-                    const out = [];
-                    for (let y = 0; y < GRID; y++)
-                        for (let x = 0; x < GRID; x++)
-                            out.push({ x, y, a: 255 });
-                    resolve(out);
-                };
-                img.src = '/images/ESCUDO.png';
-            });
+        function exitIntro() {
+            overlay.classList.add('exit');
+            overlay.addEventListener('animationend', () => {
+                overlay.style.display = 'none';
+                loginWrap.classList.add('visible');
+                bootLogin();
+            }, { once: true });
         }
 
-        /* =====================================================
-           BUILD CSS 3D CUBES — GOLD PALETTE BY POSITION
-           No pixel colors used. Each cube gets a gold/amber
-           tone based on its grid row, so the shield silhouette
-           glows without pixelating the actual image.
-        ===================================================== */
-        function buildCubes(pixels) {
-            const wraps = [];
+        introVid.addEventListener('ended', exitIntro);
+        skipBtn.addEventListener('click', exitIntro);
 
-            // Gold color stops from top to bottom of the shield
-            const goldStops = [
-                [255, 215,  0],  // pure gold       (top)
-                [251, 191, 36],  // amber gold
-                [245, 158, 11],  // deep amber      (mid)
-                [252, 211, 77],  // light gold
-                [255, 200,  0],  // golden          (bottom)
-            ];
+        // Fallback: if video fails to load, skip straight to login
+        introVid.addEventListener('error', exitIntro);
 
-            function lerpColor(t) {
-                // t in [0,1] → interpolate through goldStops
-                const segments = goldStops.length - 1;
-                const seg = Math.min(Math.floor(t * segments), segments - 1);
-                const local = (t * segments) - seg;
-                const a = goldStops[seg], b = goldStops[seg + 1];
-                return [
-                    Math.round(a[0] + (b[0] - a[0]) * local),
-                    Math.round(a[1] + (b[1] - a[1]) * local),
-                    Math.round(a[2] + (b[2] - a[2]) * local),
-                ];
-            }
-
-            pixels.forEach((p) => {
-                if (p.a < 20) { wraps.push(null); return; }
-
-                const px = p.x * CELL;
-                const py = p.y * CELL;
-
-                // Positional gradient: top of shield = brighter gold, bottom = deeper amber
-                const t = p.y / (GRID - 1);
-                const [fr, fg, fb] = lerpColor(t);
-
-                // Side faces are darker shades of the same gold
-                const [dr, dg, db] = [Math.round(fr*0.5), Math.round(fg*0.5), Math.round(fb*0.5)];
-                const [tr_, tg_, tb_] = [Math.round(fr*0.75), Math.round(fg*0.75), Math.round(fb*0.75)];
-
-                const frontColor = `rgb(${fr},${fg},${fb})`;
-                const rightColor = `rgb(${dr},${dg},${db})`;
-                const topColor   = `rgb(${tr_},${tg_},${tb_})`;
-                const glowColor  = `rgba(${fr},${fg},${fb},0.55)`;
-
-                // Cube wrapper
-                const wrap = document.createElement('div');
-                wrap.className = 'cube-wrap';
-                wrap.style.cssText = `
-                    width:${CELL}px; height:${CELL}px;
-                    left:${px}px; top:${py}px;
-                    opacity:0;
-                `;
-
-                // Front face
-                const front = document.createElement('div');
-                front.className = 'cube-face cf-front';
-                front.style.cssText = `
-                    background:${frontColor};
-                    box-shadow: 0 0 6px ${glowColor};
-                    transform: translateZ(${DEPTH / 2}px);
-                `;
-                wrap.appendChild(front);
-
-                // Right face (darker)
-                const right = document.createElement('div');
-                right.className = 'cube-face cf-right';
-                right.style.cssText = `
-                    width:${DEPTH}px;
-                    background:${rightColor};
-                    right:0;
-                    transform-origin: right center;
-                    transform: translateX(${DEPTH / 2}px) rotateY(90deg);
-                `;
-                wrap.appendChild(right);
-
-                // Top face (mid-dark)
-                const top = document.createElement('div');
-                top.className = 'cube-face cf-top';
-                top.style.cssText = `
-                    height:${DEPTH}px;
-                    background:${topColor};
-                    top:0;
-                    transform-origin: top center;
-                    transform: translateY(-${DEPTH / 2}px) rotateX(-90deg);
-                `;
-                wrap.appendChild(top);
-
-                stage.appendChild(wrap);
-                wraps.push(wrap);
-            });
-
-            return wraps;
-        }
-
-        /* =====================================================
-           ANIMATE 3D CUBES IN
-        ===================================================== */
-        function animateCubesIn(wraps) {
-            // Show HUD
-            anime({ targets: '#hud-top',             opacity: [0,1], translateY:[-12,0], duration:700, easing:'easeOutExpo' });
-            anime({ targets: ['#hud-bottom','#hud-progress-outer'], opacity:[0,1], translateY:[12,0], duration:700, delay:200, easing:'easeOutExpo' });
-
-            const valid = wraps.filter(Boolean);
-
-            anime({
-                targets: valid,
-                opacity:  [0, 1],
-                scale:    [0, 1],
-                rotateX:  [() => anime.random(-200, 200), 0],
-                rotateY:  [() => anime.random(-200, 200), 0],
-                rotateZ:  [() => anime.random(-90, 90),   0],
-                translateZ:[() => -(300 + Math.random() * 500), 0],
-                duration: 1700,
-                delay: anime.stagger(4, {
-                    grid: [GRID, GRID],
-                    from: 'center',
-                    easing: 'easeOutQuad'
-                }),
-                easing: 'easeOutElastic(1, 0.55)',
-                update(a) {
-                    const pct = Math.round(a.progress);
-                    fillBar.style.width = pct + '%';
-                    pctLabel.textContent = pct + '%';
-                },
-                complete() {
-                    pctLabel.textContent = '100%';
-                    fillBar.style.width = '100%';
-                    setTimeout(scatterAndExit, 700);
-                }
-            });
-        }
-
-        /* =====================================================
-           SCATTER CUBES → EXIT OVERLAY
-        ===================================================== */
-        function scatterAndExit() {
-            const cubes = stage.querySelectorAll('.cube-wrap');
-
-            anime({
-                targets: cubes,
-                opacity:   [1, 0],
-                scale:     [1, 0.2],
-                rotateX:   () => anime.random(-180, 180),
-                rotateY:   () => anime.random(-180, 180),
-                translateZ:() => 200 + Math.random() * 500,
-                duration:  1000,
-                delay: anime.stagger(3, { from: 'center', easing: 'easeInQuad' }),
-                easing: 'easeInExpo',
-                complete() {
-                    overlay.classList.add('exit');
-                    setTimeout(() => {
-                        overlay.style.display = 'none';
-                        loginWrap.classList.add('visible');
-                        bootLogin();
-                    }, 1400);
-                }
-            });
-        }
-
-        /* =====================================================
-           BOOT SEQUENCE
-        ===================================================== */
-        sampleShield().then(pixels => {
-            const wraps = buildCubes(pixels);
-            setTimeout(() => animateCubesIn(wraps), 250);
-        });
 
         /* =====================================================
            LOGIN 3D PARALLAX + SPIN-IN
