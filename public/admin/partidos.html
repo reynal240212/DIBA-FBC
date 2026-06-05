@@ -297,10 +297,18 @@
                         </td>
                         <td class="px-8 py-6 text-right">
                             <div class="flex items-center justify-end gap-2">
-                                <button onclick="openScoreModal('${m.id}', '${m.equipolocal} vs ${m.equipovisitante}', '${m.resultado || ''}')" class="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-gold hover:bg-gold hover:text-[#004d98] transition-all" title="Actualizar Marcador">
+                                <button
+                                    class="btn-score w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-gold hover:bg-gold hover:text-[#004d98] transition-all"
+                                    data-id="${m.id}"
+                                    data-teams="${m.equipolocal} vs ${m.equipovisitante}"
+                                    data-resultado="${m.resultado || ''}"
+                                    title="Actualizar Marcador">
                                     <i class="fas fa-trophy text-sm"></i>
                                 </button>
-                                <button onclick="handleDelete('${m.id}')" class="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-red-500 hover:bg-red-500 hover:text-white transition-all" title="Eliminar">
+                                <button
+                                    class="btn-delete w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-red-500 hover:bg-red-500 hover:text-white transition-all"
+                                    data-id="${m.id}"
+                                    title="Eliminar">
                                     <i class="fas fa-trash text-sm"></i>
                                 </button>
                             </div>
@@ -314,60 +322,82 @@
             document.getElementById('match-search').oninput = renderMatches;
             document.getElementById('filter-category').onchange = renderMatches;
 
+            // Use event delegation for score + delete buttons (avoids inline onclick string escaping bugs)
+            document.getElementById('matches-body').addEventListener('click', (e) => {
+                const scoreBtn  = e.target.closest('.btn-score');
+                const deleteBtn = e.target.closest('.btn-delete');
+
+                if (scoreBtn) {
+                    const id       = scoreBtn.dataset.id;
+                    const teams    = scoreBtn.dataset.teams;
+                    const current  = scoreBtn.dataset.resultado;
+                    document.getElementById('scoreId').value      = id;
+                    document.getElementById('scoreTeams').innerText = teams;
+                    document.getElementById('scoreValue').value   = (current === 'Pendiente' || current === '') ? '' : current;
+                    document.getElementById('editScoreModal').classList.remove('hidden');
+                    document.getElementById('editScoreModal').classList.add('flex');
+                }
+
+                if (deleteBtn) {
+                    const id = deleteBtn.dataset.id;
+                    if (confirm('¿Eliminar este encuentro definitivamente?')) {
+                        supabase.from('partidos').delete().eq('id', id)
+                            .then(({ error }) => {
+                                if (error) alert('Error al eliminar: ' + error.message);
+                                else loadMatches();
+                            });
+                    }
+                }
+            });
+
             document.getElementById('createMatchForm').onsubmit = async (e) => {
                 e.preventDefault();
                 const payload = {
-                    equipolocal: document.getElementById('localTeam').value,
-                    equipovisitante: document.getElementById('visitTeam').value,
-                    fecha: document.getElementById('matchDate').value,
-                    hora: document.getElementById('matchTime').value,
-                    categoria: document.getElementById('matchCat').value,
-                    Cancha: document.getElementById('matchVenue').value,
-                    descripcion: document.getElementById('matchDesc').value || null,
-                    resultado: 'Pendiente'
+                    equipolocal:    document.getElementById('localTeam').value,
+                    equipovisitante:document.getElementById('visitTeam').value,
+                    fecha:          document.getElementById('matchDate').value,
+                    hora:           document.getElementById('matchTime').value,
+                    categoria:      document.getElementById('matchCat').value,
+                    Cancha:         document.getElementById('matchVenue').value,
+                    descripcion:    document.getElementById('matchDesc').value || null,
+                    resultado:      'Pendiente'
                 };
-
                 const { error } = await supabase.from('partidos').insert([payload]);
-                if (error) alert("Error: " + error.message);
-                else {
-                    closeCreateModal();
-                    loadMatches();
-                }
+                if (error) alert('Error al crear partido: ' + error.message);
+                else { closeCreateModal(); loadMatches(); }
             };
 
             document.getElementById('editScoreForm').onsubmit = async (e) => {
                 e.preventDefault();
-                const id = document.getElementById('scoreId').value;
-                const result = document.getElementById('scoreValue').value;
+                const id     = document.getElementById('scoreId').value;
+                const result = document.getElementById('scoreValue').value.trim();
 
-                const { error } = await supabase.from('partidos').update({ resultado: result }).eq('id', id);
-                if (error) alert("Error: " + error.message);
-                else {
+                console.log('Guardando resultado:', { id, result });
+
+                const { data, error } = await supabase
+                    .from('partidos')
+                    .update({ resultado: result })
+                    .eq('id', id)
+                    .select();
+
+                if (error) {
+                    console.error('Error Supabase:', error);
+                    alert('Error al guardar: ' + error.message);
+                } else {
+                    console.log('Guardado OK:', data);
                     closeScoreModal();
-                    loadMatches();
+                    await loadMatches();
                 }
             };
 
-            window.openCreateModal = () => document.getElementById('createMatchModal').classList.remove('hidden'), document.getElementById('createMatchModal').classList.add('flex');
+            window.openCreateModal = () => {
+                document.getElementById('createMatchModal').classList.remove('hidden');
+                document.getElementById('createMatchModal').classList.add('flex');
+            };
             window.closeCreateModal = () => document.getElementById('createMatchModal').classList.add('hidden');
-            
-            window.openScoreModal = (id, teams, current) => {
-                document.getElementById('scoreId').value = id;
-                document.getElementById('scoreTeams').innerText = teams;
-                document.getElementById('scoreValue').value = current === 'Pendiente' ? '' : current;
-                document.getElementById('editScoreModal').classList.remove('hidden');
-                document.getElementById('editScoreModal').classList.add('flex');
-            };
-            window.closeScoreModal = () => document.getElementById('editScoreModal').classList.add('hidden');
-
-            window.handleDelete = async (id) => {
-                if (confirm('¿Eliminar este encuentro definitivamente?')) {
-                    const { error } = await supabase.from('partidos').delete().eq('id', id);
-                    if (error) alert(error.message);
-                    else loadMatches();
-                }
-            };
+            window.closeScoreModal  = () => document.getElementById('editScoreModal').classList.add('hidden');
         }
+
     </script>
 </body>
 

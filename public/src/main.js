@@ -9,6 +9,7 @@ import { initNavbar } from './features/navigation/navbar.js';
 import { initMatchBanner } from './features/matches/banner.js';
 import { initStatsCounter } from './features/stats/counter.js';
 import { initPublicPlayers, initScorers } from './features/players/public.js';
+import { initPrimaryHeroAnimations, initSharedHeroAnimations } from './features/animations/hero.js';
 
 document.addEventListener('DOMContentLoaded', () => {
     // 1. Base UI
@@ -18,7 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // 2. Load Components
     loadComponent("navbar-container", "layout/navbar.html", initNavbar);
     loadComponent("match-banner-container", "layout/match_banner.html", initMatchBanner);
-    loadComponent("hero-container", "layout/hero.html");
+    loadComponent("hero-container", "layout/hero.html", initSharedHeroAnimations);
     loadComponent("stats-container", "layout/stats_counter.html", initStatsCounter);
     loadComponent("patrocinadores-container", "layout/patrocinadores.html");
     loadComponent("testimonials-container", "layout/testimonials.html");
@@ -26,6 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
     loadComponent("fab-container", "layout/fab.html");
 
     // 3. Dynamic Features
+    initPrimaryHeroAnimations();
     initPublicPlayers();
     initScorers();
 
