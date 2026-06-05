@@ -19,6 +19,8 @@
         body {
             background: #020617;
             overflow: hidden;
+            perspective: 1200px;
+            transform-style: preserve-3d;
         }
 
         .login-bg {
@@ -35,6 +37,24 @@
             backdrop-filter: blur(30px) saturate(180%);
             border: 1px solid rgba(255, 255, 255, 0.08);
             box-shadow: 0 50px 100px -20px rgba(0,0,0,0.5);
+            transform-style: preserve-3d;
+            will-change: transform;
+            transition: transform 0.1s ease-out;
+        }
+
+        .perspective-1000 {
+            perspective: 1000px;
+            transform-style: preserve-3d;
+        }
+
+        .preserve-3d {
+            transform-style: preserve-3d;
+        }
+
+        #shield-3d-container {
+            will-change: transform;
+            transition: transform 0.1s ease-out;
+            transform-style: preserve-3d;
         }
 
         .floating-orb {
@@ -98,9 +118,17 @@
             
             <!-- Logo & Title -->
             <div class="text-center mb-12">
-                <div class="inline-flex relative mb-8 group">
-                    <div class="absolute -inset-4 bg-gold/20 rounded-full blur-2xl group-hover:blur-3xl transition-all duration-700"></div>
-                    <img src="/images/ESCUDO.png" alt="DIBA FBC" class="w-24 h-24 object-contain relative drop-shadow-[0_0_20px_rgba(255,215,0,0.3)]">
+                <div class="w-full flex justify-center mb-8 perspective-1000">
+                    <div id="shield-3d-container" class="relative w-28 h-28 preserve-3d cursor-pointer opacity-0">
+                        <!-- Outer Golden Ring Layer -->
+                        <div id="shield-ring" class="absolute inset-0 border-2 border-yellow-500/30 rounded-full blur-[0.5px]" style="transform: translateZ(15px); transition: transform 0.1s ease-out;"></div>
+                        <!-- Deep Glow behind Shield -->
+                        <div id="shield-glow" class="absolute -inset-4 bg-gradient-to-tr from-yellow-500/20 to-blue-500/20 rounded-full blur-2xl" style="transform: translateZ(-20px);"></div>
+                        <!-- The Shield Image itself -->
+                        <img id="shield-image" src="/images/ESCUDO.png" alt="DIBA FBC" class="w-full h-full object-contain relative drop-shadow-[0_15px_30px_rgba(0,0,0,0.6)]" style="transform: translateZ(35px); transition: transform 0.1s ease-out;">
+                        <!-- Shiny Glare Overlay -->
+                        <div id="shield-glare" class="absolute inset-0 rounded-full bg-gradient-to-tr from-transparent via-white/20 to-transparent opacity-0 pointer-events-none" style="transform: translateZ(45px); transition: opacity 0.15s ease-out;"></div>
+                    </div>
                 </div>
                 
                 <div class="flex flex-col items-center">
@@ -169,6 +197,118 @@
     <script src="/scripts/config.js"></script>
     <script type="module">
         import { iniciarSesion, enviarCorreoRecuperacion } from "/scripts/auth.js";
+        import anime from 'https://cdn.jsdelivr.net/npm/animejs@3.2.2/lib/anime.es.js';
+
+        // 3D Parallax Elements
+        const loginCard = document.querySelector('.login-glass');
+        const shieldContainer = document.getElementById('shield-3d-container');
+        const shieldRing = document.getElementById('shield-ring');
+        const shieldImg = document.getElementById('shield-image');
+        const shieldGlare = document.getElementById('shield-glare');
+
+        // 1. Entrance 3D Animation (Elastic fly-in and spin)
+        window.addEventListener('DOMContentLoaded', () => {
+            anime({
+                targets: '#shield-3d-container',
+                scale: [0.1, 1],
+                rotateY: [720, 0],
+                rotateX: [360, 0],
+                opacity: [0, 1],
+                duration: 2200,
+                easing: 'easeOutElastic(1, 0.7)'
+            });
+        });
+
+        // 2. Cursor 3D Tilting Parallax
+        document.addEventListener('mousemove', (e) => {
+            if (!shieldContainer) return;
+
+            const rect = shieldContainer.getBoundingClientRect();
+            const shieldX = rect.left + rect.width / 2;
+            const shieldY = rect.top + rect.height / 2;
+
+            const dx = (e.clientX - shieldX) / (window.innerWidth / 2);
+            const dy = (e.clientY - shieldY) / (window.innerHeight / 2);
+
+            const maxRotation = 22;
+            const tiltX = -dy * maxRotation;
+            const tiltY = dx * maxRotation;
+
+            // Tilting the shield container
+            shieldContainer.style.transform = `rotateX(${tiltX}deg) rotateY(${tiltY}deg)`;
+
+            // Dynamic depth layering
+            if (shieldRing) {
+                shieldRing.style.transform = `translateZ(15px) translate(${-dx * 8}px, ${-dy * 8}px)`;
+            }
+            if (shieldImg) {
+                shieldImg.style.transform = `translateZ(35px) translate(${dx * 6}px, ${dy * 6}px)`;
+            }
+
+            // Light glare gradient reflection
+            if (shieldGlare) {
+                shieldGlare.style.opacity = '0.65';
+                const angle = Math.atan2(dy, dx) * (180 / Math.PI);
+                shieldGlare.style.background = `linear-gradient(${angle + 180}deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.2) 50%, rgba(255,255,255,0) 100%)`;
+            }
+
+            // Card tilt depth
+            if (loginCard) {
+                const cardTiltX = -dy * 5;
+                const cardTiltY = dx * 5;
+                loginCard.style.transform = `rotateX(${cardTiltX}deg) rotateY(${cardTiltY}deg)`;
+            }
+        });
+
+        // 3. Elastic Restoring Logic
+        document.addEventListener('mouseleave', () => {
+            if (shieldContainer) {
+                anime({
+                    targets: shieldContainer,
+                    rotateX: 0,
+                    rotateY: 0,
+                    duration: 1200,
+                    easing: 'easeOutElastic(1, 0.75)'
+                });
+            }
+            if (shieldRing) {
+                anime({
+                    targets: shieldRing,
+                    translateX: 0,
+                    translateY: 0,
+                    translateZ: 15,
+                    duration: 1200,
+                    easing: 'easeOutElastic(1, 0.75)'
+                });
+            }
+            if (shieldImg) {
+                anime({
+                    targets: shieldImg,
+                    translateX: 0,
+                    translateY: 0,
+                    translateZ: 35,
+                    duration: 1200,
+                    easing: 'easeOutElastic(1, 0.75)'
+                });
+            }
+            if (shieldGlare) {
+                anime({
+                    targets: shieldGlare,
+                    opacity: 0,
+                    duration: 600,
+                    easing: 'easeOutQuad'
+                });
+            }
+            if (loginCard) {
+                anime({
+                    targets: loginCard,
+                    rotateX: 0,
+                    rotateY: 0,
+                    duration: 1200,
+                    easing: 'easeOutElastic(1, 0.75)'
+                });
+            }
+        });
 
         const loginForm = document.getElementById('login-form');
         const loginBtn = document.getElementById('login-button');
