@@ -297,16 +297,17 @@
         }
         .access-badge span {
             font-family: var(--mono);
-            font-size: 0.52rem;
-            color: rgba(255,255,255,0.3);
-            letter-spacing: 0.35em;
+            font-size: 0.58rem;
+            font-weight: 700;
+            color: rgba(255,215,0,0.85);
+            letter-spacing: 0.3em;
             text-transform: uppercase;
         }
         .badge-dot {
-            width: 5px; height: 5px;
+            width: 6px; height: 6px;
             border-radius: 50%;
             background: var(--gold);
-            box-shadow: 0 0 8px var(--gold);
+            box-shadow: 0 0 10px var(--gold), 0 0 20px rgba(255,215,0,0.4);
             animation: blink 2s ease-in-out infinite;
         }
         @keyframes blink {
@@ -429,12 +430,13 @@
             text-align: center; margin-top: 1.25rem;
             display: flex; align-items: center; justify-content: center; gap: 1rem;
         }
-        .meta-line { flex: 1; max-width: 60px; height: 1px; background: rgba(255,255,255,0.07); }
+        .meta-line { flex: 1; max-width: 60px; height: 1px; background: rgba(255,215,0,0.2); }
         .meta-text {
             font-family: var(--mono);
-            font-size: 0.48rem;
-            color: rgba(255,255,255,0.15);
-            letter-spacing: 0.3em; text-transform: uppercase;
+            font-size: 0.55rem;
+            font-weight: 700;
+            color: rgba(255,215,0,0.6);
+            letter-spacing: 0.25em; text-transform: uppercase;
         }
 
         /* Alert */
