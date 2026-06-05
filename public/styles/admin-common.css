@@ -564,7 +564,7 @@ a {
     content: '';
     position: fixed;
     inset: 0;
-    background: url("https://www.transparenttextures.com/patterns/carbon-fibre.png");
+    background: url("https://www.transparenttextures.com/patterns/carbon-fibre.webp");
     opacity: 0.03;
     pointer-events: none;
     z-index: 10;
@@ -931,7 +931,7 @@ a {
     content: '';
     position: absolute;
     inset: 0;
-    background: url('https://www.transparenttextures.com/patterns/carbon-fibre.png');
+    background: url('https://www.transparenttextures.com/patterns/carbon-fibre.webp');
     opacity: 0.05;
 }
 

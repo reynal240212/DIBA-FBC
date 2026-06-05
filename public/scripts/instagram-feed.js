@@ -78,7 +78,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 
                 <div class="p-6 flex-1 flex flex-col">
                     <div class="flex items-center gap-2 mb-3">
-                        <img src="images/ESCUDO.png" class="w-6 h-6 object-contain" alt="DIBA">
+                        <img src="images/ESCUDO.webp" class="w-6 h-6 object-contain" alt="DIBA">
                         <span class="text-[10px] font-black text-amber-500 uppercase tracking-widest">DIBA FBC</span>
                         <span class="text-[10px] text-slate-400 font-bold ml-auto">${formatDate(post.timestamp)}</span>
                     </div>

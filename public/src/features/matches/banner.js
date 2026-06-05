@@ -121,7 +121,7 @@ function renderMatchCard(p) {
     }
 
     const escudoImg = (url, name) => {
-        if (name?.toUpperCase().includes('DIBA')) return "images/ESCUDO.png";
+        if (name?.toUpperCase().includes('DIBA')) return "images/ESCUDO.webp";
         if (!url) return `https://ui-avatars.com/api/?name=${encodeURIComponent(name || 'R')}&background=0f172a&color=f59e0b&bold=true&font-size=0.55`;
         return `https://wsrv.nl/?url=${encodeURIComponent(url)}&w=100&h=100&fit=contain&default=https://ui-avatars.com/api/?name=${encodeURIComponent(name || 'R')}&background=0f172a&color=f59e0b`;
     };
@@ -145,7 +145,7 @@ function renderMatchCard(p) {
                     <div class="absolute inset-0 bg-white/5 rounded-full blur-2xl group-hover/card:scale-125 transition-all duration-700"></div>
                     <img src="${escudoImg(p.escudo_local || p.escudo, p.equipolocal)}" 
                          class="w-full h-full object-contain relative z-10 drop-shadow-[0_8px_15px_rgba(0,0,0,0.5)] group-hover/card:scale-110 transition-transform duration-500" 
-                         onerror="this.src='images/ESCUDO.png'">
+                         onerror="this.src='images/ESCUDO.webp'">
                 </div>
                 <span class="text-white font-black text-xs sm:text-sm uppercase text-center line-clamp-2 leading-tight tracking-tight group-hover/team:text-amber-400 transition-colors">${p.equipolocal || 'DIBA FBC'}</span>
             </div>

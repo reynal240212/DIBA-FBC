@@ -168,7 +168,7 @@
                                 ${doc ? 'bg-white/5 text-slate-400 hover:bg-white/10' : 'bg-dibaGold text-blue-900 hover:scale-105 shadow-lg shadow-dibaGold/10'}">
                             ${doc ? 'Actualizar' : 'Subir Documento'}
                         </button>
-                        <input type="file" id="file-${type.id}" class="hidden" accept=".pdf,.jpg,.jpeg,.png" onchange="window.uploadDocument('${type.id}', this)">
+                        <input type="file" id="file-${type.id}" class="hidden" accept=".pdf,.jpg,.jpeg,.webp" onchange="window.uploadDocument('${type.id}', this)">
                     </div>
                 `;
                 listEl.appendChild(card);

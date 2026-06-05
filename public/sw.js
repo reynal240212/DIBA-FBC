@@ -7,8 +7,8 @@ self.addEventListener('push', function (event) {
 
     const options = {
         body: data.body,
-        icon: '/images/ESCUDO.png',
-        badge: '/images/ESCUDO.png',
+        icon: '/images/ESCUDO.webp',
+        badge: '/images/ESCUDO.webp',
         vibrate: [100, 50, 100],
         data: {
             url: '/chat.html'

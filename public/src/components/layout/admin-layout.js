@@ -35,7 +35,7 @@ export async function initAdminLayout() {
         <div class="p-8 pb-10 flex items-center gap-4 relative z-10 flex-none">
             <div class="relative group cursor-pointer" onclick="window.location.href='dashboard.html'">
                 <div class="absolute -inset-2 bg-gold/20 rounded-full blur-xl group-hover:blur-2xl transition-all duration-500"></div>
-                <img src="/images/ESCUDO.png" alt="DIBA FBC" class="w-12 h-12 object-contain relative drop-shadow-[0_0_10px_rgba(255,215,0,0.3)] group-hover:scale-110 transition-transform">
+                <img src="/images/ESCUDO.webp" alt="DIBA FBC" class="w-12 h-12 object-contain relative drop-shadow-[0_0_10px_rgba(255,215,0,0.3)] group-hover:scale-110 transition-transform">
             </div>
             <div class="flex flex-col">
                 <div class="text-xl font-black italic tracking-tighter text-white leading-none">DIBA <span class="text-[#FFD700]">FBC</span></div>

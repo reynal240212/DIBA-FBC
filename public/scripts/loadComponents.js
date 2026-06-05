@@ -127,7 +127,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         }
 
         const escudoImg = (url, equipoNombre) => {
-          if (equipoNombre && equipoNombre.toUpperCase().includes('DIBA')) return "images/ESCUDO.png";
+          if (equipoNombre && equipoNombre.toUpperCase().includes('DIBA')) return "images/ESCUDO.webp";
           if (!url) return `https://ui-avatars.com/api/?name=${encodeURIComponent(equipoNombre || 'Rival')}&background=1e293b&color=cbd5e1&bold=true`;
           return `https://wsrv.nl/?url=${encodeURIComponent(url)}&default=https://ui-avatars.com/api/?name=${encodeURIComponent(equipoNombre || 'R')}&background=1e293b&color=cbd5e1`;
         };
@@ -511,7 +511,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         item.className = "flex items-center justify-between p-4 border-b border-slate-50 hover:bg-slate-50 transition-colors";
         item.innerHTML = `
           <div class="flex items-center gap-3" >
-            <img src="${g.escudo_url || 'images/ESCUDO.png'}" class="w-8 h-8 object-contain">
+            <img src="${g.escudo_url || 'images/ESCUDO.webp'}" class="w-8 h-8 object-contain">
             <div>
               <div class="text-sm font-bold text-slate-900">${g.nombre_jugador}</div>
               <div class="text-[10px] text-slate-400 uppercase">${g.equipo}</div>

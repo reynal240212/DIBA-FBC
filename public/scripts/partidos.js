@@ -88,7 +88,7 @@ function mostrarInicialPanel(id, v) {
 /** Helper para escudos con proxy anti-bloqueo */
 function getEscudoUrl(url, equipoNombre) {
   if (equipoNombre && equipoNombre.toUpperCase().includes('DIBA')) {
-    return 'images/ESCUDO.png';
+    return 'images/ESCUDO.webp';
   }
   if (!url) {
     return `https://ui-avatars.com/api/?name=${encodeURIComponent(equipoNombre || 'R')}&background=1e293b&color=cbd5e1`;
@@ -123,7 +123,7 @@ function crearTarjetaPartido(p) {
         <div class="flex items-center justify-between gap-4">
           <!-- Local -->
           <div class="flex flex-col items-center w-1/3 text-center">
-            <img src="${getEscudoUrl(p.escudo_local || p.escudo, p.equipolocal)}" alt="${p.equipolocal}" class="w-12 h-12 object-contain mb-2 img-drop-shadow" onerror="this.src='images/ESCUDO.png'">
+            <img src="${getEscudoUrl(p.escudo_local || p.escudo, p.equipolocal)}" alt="${p.equipolocal}" class="w-12 h-12 object-contain mb-2 img-drop-shadow" onerror="this.src='images/ESCUDO.webp'">
             <span class="text-white font-bold text-xs truncate w-full">${p.equipolocal || 'DIBA FBC'}</span>
           </div>
 

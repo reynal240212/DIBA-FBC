@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         <nav class="bg-[#001f3f] text-white shadow-lg">
             <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
                 <div class="flex items-center gap-4">
-                    <img src="/images/ESCUDO.png" alt="DIBA FBC" class="h-10 w-auto">
+                    <img src="/images/ESCUDO.webp" alt="DIBA FBC" class="h-10 w-auto">
                     <span class="font-black uppercase italic tracking-tighter text-lg">GESTOR DIBA</span>
                 </div>
 

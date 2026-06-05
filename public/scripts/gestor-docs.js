@@ -14,7 +14,7 @@ export async function loadDocuments(dynamicContent, pageTitle, mainTitle, setAct
             <div id="dropZone" class="bg-white border-2 border-dashed border-slate-200 rounded-[2.5rem] p-12 flex flex-col items-center justify-center hover:bg-yellow-50/50 hover:border-dibaGold transition-all cursor-pointer">
                 <i class="fas fa-cloud-upload-alt text-3xl text-slate-300 mb-4"></i>
                 <p class="font-bold text-slate-800 uppercase italic text-sm">Arrastra archivos aquí o haz clic</p>
-                <input type="file" id="newDocument" class="hidden" accept=".pdf,.jpg,.png">
+                <input type="file" id="newDocument" class="hidden" accept=".pdf,.jpg,.webp">
             </div>
         </section>
         <div id="fileListContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">

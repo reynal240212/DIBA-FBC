@@ -11,7 +11,7 @@ const CACHE_PAGES = `${CACHE_VERSION}-pages`;
 // Assets estáticos que se pre-cachean en la instalación
 const PRECACHE_ASSETS = [
   'offline.html',
-  'images/ESCUDO.png',
+  'images/ESCUDO.webp',
   'images/ESCUDO.ico',
   'manifest.json',
   'scripts/config.js',
@@ -142,8 +142,8 @@ self.addEventListener('push', (event) => {
 
   const options = {
     body: data.body,
-    icon: '/images/ESCUDO.png',
-    badge: '/images/ESCUDO.png',
+    icon: '/images/ESCUDO.webp',
+    badge: '/images/ESCUDO.webp',
     vibrate: [200, 100, 200],
     data: { url: data.url || '/' },
     actions: [
