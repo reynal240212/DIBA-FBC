@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
     loadComponent("fab-container", "layout/fab.html");
 
     // 3. Dynamic Features
-    initPrimaryHeroAnimations();
+    // initPrimaryHeroAnimations(); // Disabled to prevent text disappearing, using animate.css instead
     initPublicPlayers();
     initScorers();
 
