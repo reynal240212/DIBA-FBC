@@ -8,7 +8,7 @@
     <link rel="icon" href="/images/ESCUDO.ico" type="image/x-icon">
 
     <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
 
     <!-- Core Styles -->
@@ -16,11 +16,153 @@
     <script src="https://cdn.tailwindcss.com"></script>
 
     <style>
+        :root { --gold: #ffd700; --mono: 'Share Tech Mono', monospace; }
+
+        * { box-sizing: border-box; }
+
         body {
             background: #020617;
             overflow: hidden;
-            perspective: 1200px;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        /* ===== INTRO OVERLAY ===== */
+        #intro-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            background: #000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            perspective: 900px;
+        }
+
+        #intro-overlay.hide {
+            animation: overlayOut 1.2s cubic-bezier(0.77,0,0.175,1) forwards;
+        }
+
+        @keyframes overlayOut {
+            0%   { opacity: 1; transform: scale(1); }
+            60%  { opacity: 1; transform: scale(1.04); }
+            100% { opacity: 0; transform: scale(0.92); pointer-events: none; }
+        }
+
+        /* HUD scan lines */
+        #intro-overlay::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 2px,
+                rgba(0,255,170,0.015) 2px,
+                rgba(0,255,170,0.015) 4px
+            );
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* Sweep scan line */
+        #scan-line {
+            position: absolute;
+            left: 0; right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, rgba(0,255,170,0.6), rgba(255,215,0,0.4), transparent);
+            box-shadow: 0 0 12px rgba(0,255,170,0.5);
+            z-index: 2;
+            top: 0;
+            animation: scanMove 2.8s linear infinite;
+        }
+
+        @keyframes scanMove {
+            0%   { top: -2px; opacity: 0; }
+            5%   { opacity: 1; }
+            95%  { opacity: 1; }
+            100% { top: 100%; opacity: 0; }
+        }
+
+        /* Pixel Grid Container */
+        #pixel-stage {
+            position: relative;
             transform-style: preserve-3d;
+        }
+
+        .px-cell {
+            position: absolute;
+            border-radius: 1px;
+            transform-style: preserve-3d;
+            backface-visibility: hidden;
+            will-change: transform, opacity;
+        }
+
+        /* HUD text elements */
+        #hud-title {
+            font-family: var(--mono);
+            color: rgba(0,255,170,0.7);
+            font-size: 0.6rem;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+            opacity: 0;
+        }
+
+        #hud-label {
+            font-family: var(--mono);
+            color: rgba(255,215,0,0.5);
+            font-size: 0.55rem;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            margin-top: 1.2rem;
+            opacity: 0;
+        }
+
+        #hud-progress-wrap {
+            width: 100%;
+            max-width: 300px;
+            margin-top: 0.8rem;
+            opacity: 0;
+        }
+
+        #hud-progress-bar {
+            height: 2px;
+            background: linear-gradient(90deg, #00ffaa, #ffd700);
+            width: 0%;
+            border-radius: 9999px;
+            box-shadow: 0 0 8px rgba(0,255,170,0.6);
+            transition: width 0.1s linear;
+        }
+
+        #hud-pct {
+            font-family: var(--mono);
+            color: rgba(0,255,170,0.7);
+            font-size: 0.5rem;
+            margin-top: 0.4rem;
+            text-align: right;
+            letter-spacing: 0.15em;
+        }
+
+        /* Glitch text animation */
+        @keyframes glitch1 {
+            0%,100% { clip-path: inset(0 0 95% 0); transform: translate(-2px,0); }
+            20% { clip-path: inset(30% 0 50% 0); transform: translate(2px,0); }
+            40% { clip-path: inset(60% 0 20% 0); transform: translate(-1px,0); }
+            60% { clip-path: inset(80% 0 5% 0); transform: translate(1px,0); }
+            80% { clip-path: inset(10% 0 75% 0); transform: translate(-2px,0); }
+        }
+
+        /* ===== LOGIN FORM ===== */
+        #login-wrapper {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        #login-wrapper.visible {
+            opacity: 1;
+            pointer-events: auto;
+            transition: opacity 0.8s ease;
         }
 
         .login-bg {
@@ -47,9 +189,7 @@
             transform-style: preserve-3d;
         }
 
-        .preserve-3d {
-            transform-style: preserve-3d;
-        }
+        .preserve-3d { transform-style: preserve-3d; }
 
         #shield-3d-container {
             will-change: transform;
@@ -59,8 +199,7 @@
 
         .floating-orb {
             position: absolute;
-            width: 400px;
-            height: 400px;
+            width: 400px; height: 400px;
             background: radial-gradient(circle, rgba(255,215,0,0.05) 0%, transparent 70%);
             border-radius: 50%;
             pointer-events: none;
@@ -71,13 +210,12 @@
 
         @keyframes float {
             from { transform: translate(-10%, -10%); }
-            to { transform: translate(10%, 10%); }
+            to   { transform: translate(10%, 10%); }
         }
 
         .particle {
             position: absolute;
-            width: 2px;
-            height: 2px;
+            width: 2px; height: 2px;
             background: rgba(255, 215, 0, 0.2);
             border-radius: 50%;
             pointer-events: none;
@@ -86,111 +224,123 @@
 
         @keyframes rise {
             from { transform: translateY(100vh) scale(1); opacity: 0; }
-            50% { opacity: 0.5; }
-            to { transform: translateY(-10vh) scale(0.5); opacity: 0; }
+            50%  { opacity: 0.5; }
+            to   { transform: translateY(-10vh) scale(0.5); opacity: 0; }
         }
 
         .pw-toggle-btn {
-            position: absolute;
-            right: 20px;
-            top: 50%;
+            position: absolute; right: 20px; top: 50%;
             transform: translateY(-50%);
-            color: rgba(255, 255, 255, 0.2);
+            color: rgba(255,255,255,0.2);
             transition: all 0.3s;
         }
 
-        .pw-toggle-btn:hover {
-            color: var(--gold);
-        }
+        .pw-toggle-btn:hover { color: var(--gold); }
     </style>
 </head>
 
-<body class="min-h-screen flex items-center justify-center p-6 font-['Outfit']">
-    <div class="login-bg"></div>
-    <div class="floating-orb" style="top: 10%; left: 20%"></div>
-    <div class="floating-orb" style="bottom: 10%; right: 20%; animation-delay: -10s"></div>
-    
-    <!-- Particles -->
-    <div id="particles-container" class="fixed inset-0 pointer-events-none z-0"></div>
+<body class="min-h-screen flex items-center justify-center p-6">
 
-    <div class="w-full max-w-[480px] z-10 animate-fade-up">
-        <div class="login-glass rounded-[48px] p-10 lg:p-14 relative overflow-hidden">
-            
-            <!-- Logo & Title -->
-            <div class="text-center mb-12">
-                <div class="w-full flex justify-center mb-8 perspective-1000">
-                    <div id="shield-3d-container" class="relative w-28 h-28 preserve-3d cursor-pointer opacity-0">
-                        <!-- Outer Golden Ring Layer -->
-                        <div id="shield-ring" class="absolute inset-0 border-2 border-yellow-500/30 rounded-full blur-[0.5px]" style="transform: translateZ(15px); transition: transform 0.1s ease-out;"></div>
-                        <!-- Deep Glow behind Shield -->
-                        <div id="shield-glow" class="absolute -inset-4 bg-gradient-to-tr from-yellow-500/20 to-blue-500/20 rounded-full blur-2xl" style="transform: translateZ(-20px);"></div>
-                        <!-- The Shield Image itself -->
-                        <img id="shield-image" src="/images/ESCUDO.png" alt="DIBA FBC" class="w-full h-full object-contain relative drop-shadow-[0_15px_30px_rgba(0,0,0,0.6)]" style="transform: translateZ(35px); transition: transform 0.1s ease-out;">
-                        <!-- Shiny Glare Overlay -->
-                        <div id="shield-glare" class="absolute inset-0 rounded-full bg-gradient-to-tr from-transparent via-white/20 to-transparent opacity-0 pointer-events-none" style="transform: translateZ(45px); transition: opacity 0.15s ease-out;"></div>
-                    </div>
-                </div>
-                
-                <div class="flex flex-col items-center">
-                    <h1 class="text-4xl font-black italic text-white uppercase tracking-tighter leading-none mb-3">
-                        DIBA <span class="text-gold">ADMIN</span>
-                    </h1>
-                    <div class="flex items-center gap-3">
-                        <span class="w-4 h-[1px] bg-white/20"></span>
-                        <p class="text-[0.65rem] font-black text-white/40 uppercase tracking-[0.4em] italic">Panel de Gestión Deportiva</p>
-                        <span class="w-4 h-[1px] bg-white/20"></span>
-                    </div>
-                </div>
-            </div>
+    <!-- ===================== INTRO OVERLAY ===================== -->
+    <div id="intro-overlay">
+        <div id="scan-line"></div>
 
-            <div id="alert-container" class="mb-8"></div>
+        <!-- HUD top label -->
+        <div id="hud-title">◈ DIBA FBC — SISTEMA DE GESTIÓN DEPORTIVA v2.0 ◈</div>
 
-            <form id="login-form" class="space-y-8">
-                <!-- User Field -->
-                <div class="premium-form-group">
-                    <label class="premium-label ml-2">Usuario / Correo Oficial</label>
-                    <div class="relative group">
-                        <i class="fas fa-user-shield absolute left-6 top-1/2 -translate-y-1/2 text-gold/30 group-focus-within:text-gold transition-colors"></i>
-                        <input type="text" id="login-username" required placeholder="ADMIN_DIBA" 
-                            class="premium-input pl-16 font-bold uppercase tracking-tight text-[0.85rem]">
-                    </div>
-                </div>
+        <!-- Pixel Stage (canvas-driven grid inserted here) -->
+        <div id="pixel-stage"></div>
 
-                <!-- Password Field -->
-                <div class="premium-form-group">
-                    <div class="flex justify-between items-center px-2 mb-2">
-                        <label class="premium-label !mb-0">Contraseña</label>
-                        <button type="button" id="forgot-link" class="text-[0.6rem] font-bold text-white/30 uppercase tracking-widest hover:text-gold transition-colors italic">¿Recuperar Acceso?</button>
-                    </div>
-                    <div class="relative group">
-                        <i class="fas fa-key absolute left-6 top-1/2 -translate-y-1/2 text-gold/30 group-focus-within:text-gold transition-colors"></i>
-                        <input type="password" id="login-password" required placeholder="••••••••" 
-                            class="premium-input pl-16 pr-16 font-black text-[0.85rem]">
-                        <button type="button" class="pw-toggle-btn" id="pw-toggle">
-                            <i class="fas fa-eye-slash" id="pw-icon"></i>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Submit -->
-                <button type="submit" id="login-button" 
-                    class="w-full py-5 bg-gold text-[#004d98] rounded-2xl font-black uppercase text-[0.85rem] tracking-[0.2em] shadow-2xl shadow-gold/20 hover:scale-[1.03] active:scale-95 transition-all flex items-center justify-center gap-4 group">
-                    <span class="button-text">Iniciar Sesión</span>
-                    <i class="fas fa-bolt group-hover:animate-bounce"></i>
-                    <i class="fas fa-circle-notch fa-spin hidden" id="spinner"></i>
-                </button>
-            </form>
-
-            <div class="mt-12 text-center">
-                <a href="/" class="text-[0.6rem] font-black text-white/20 uppercase tracking-[0.4em] hover:text-gold transition-all flex items-center justify-center gap-3 italic">
-                    <i class="fas fa-arrow-left text-[0.5rem]"></i> Volver al Portal Público
-                </a>
-            </div>
+        <!-- HUD bottom info -->
+        <div id="hud-label">◤ RECONSTRUYENDO IDENTIDAD INSTITUCIONAL ◢</div>
+        <div id="hud-progress-wrap">
+            <div id="hud-progress-bar"></div>
+            <div id="hud-pct">0%</div>
         </div>
+    </div>
 
-        <p class="mt-8 text-center text-[0.6rem] font-bold text-white/20 uppercase tracking-[0.5em] italic">
-            DIBA FBC — SYSTEMS CORE v2.0
-        </p>
+    <!-- ===================== LOGIN FORM ===================== -->
+    <div id="login-wrapper" class="w-full">
+        <div class="login-bg"></div>
+        <div class="floating-orb" style="top:10%;left:20%"></div>
+        <div class="floating-orb" style="bottom:10%;right:20%;animation-delay:-10s"></div>
+        <div id="particles-container" class="fixed inset-0 pointer-events-none z-0"></div>
+
+        <div class="w-full max-w-[480px] mx-auto z-10">
+            <div class="login-glass rounded-[48px] p-10 lg:p-14 relative overflow-hidden">
+
+                <!-- 3D Shield -->
+                <div class="text-center mb-12">
+                    <div class="w-full flex justify-center mb-8 perspective-1000">
+                        <div id="shield-3d-container" class="relative w-28 h-28 preserve-3d cursor-pointer opacity-0">
+                            <div id="shield-ring"  class="absolute inset-0 border-2 border-yellow-500/30 rounded-full" style="transform:translateZ(15px);transition:transform 0.1s ease-out;"></div>
+                            <div id="shield-glow"  class="absolute -inset-4 bg-gradient-to-tr from-yellow-500/20 to-blue-500/20 rounded-full blur-2xl" style="transform:translateZ(-20px);"></div>
+                            <img id="shield-image" src="/images/ESCUDO.png" alt="DIBA FBC" class="w-full h-full object-contain relative drop-shadow-[0_15px_30px_rgba(0,0,0,0.6)]" style="transform:translateZ(35px);transition:transform 0.1s ease-out;">
+                            <div id="shield-glare" class="absolute inset-0 rounded-full opacity-0 pointer-events-none" style="transform:translateZ(45px);transition:opacity 0.15s ease-out;"></div>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col items-center">
+                        <h1 class="text-4xl font-black italic text-white uppercase tracking-tighter leading-none mb-3">
+                            DIBA <span class="text-yellow-400">ADMIN</span>
+                        </h1>
+                        <div class="flex items-center gap-3">
+                            <span class="w-4 h-[1px] bg-white/20"></span>
+                            <p class="text-[0.65rem] font-black text-white/40 uppercase tracking-[0.4em] italic">Panel de Gestión Deportiva</p>
+                            <span class="w-4 h-[1px] bg-white/20"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="alert-container" class="mb-8"></div>
+
+                <form id="login-form" class="space-y-8">
+                    <!-- User -->
+                    <div class="premium-form-group">
+                        <label class="premium-label ml-2">Usuario / Correo Oficial</label>
+                        <div class="relative group">
+                            <i class="fas fa-user-shield absolute left-6 top-1/2 -translate-y-1/2 text-yellow-500/30 group-focus-within:text-yellow-500 transition-colors"></i>
+                            <input type="text" id="login-username" required placeholder="ADMIN_DIBA"
+                                class="premium-input pl-16 font-bold uppercase tracking-tight text-[0.85rem]">
+                        </div>
+                    </div>
+
+                    <!-- Password -->
+                    <div class="premium-form-group">
+                        <div class="flex justify-between items-center px-2 mb-2">
+                            <label class="premium-label !mb-0">Contraseña</label>
+                            <button type="button" id="forgot-link" class="text-[0.6rem] font-bold text-white/30 uppercase tracking-widest hover:text-yellow-400 transition-colors italic">¿Recuperar Acceso?</button>
+                        </div>
+                        <div class="relative group">
+                            <i class="fas fa-key absolute left-6 top-1/2 -translate-y-1/2 text-yellow-500/30 group-focus-within:text-yellow-500 transition-colors"></i>
+                            <input type="password" id="login-password" required placeholder="••••••••"
+                                class="premium-input pl-16 pr-16 font-black text-[0.85rem]">
+                            <button type="button" class="pw-toggle-btn" id="pw-toggle">
+                                <i class="fas fa-eye-slash" id="pw-icon"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Submit -->
+                    <button type="submit" id="login-button"
+                        class="w-full py-5 bg-yellow-500 text-[#004d98] rounded-2xl font-black uppercase text-[0.85rem] tracking-[0.2em] shadow-2xl shadow-yellow-500/20 hover:scale-[1.03] active:scale-95 transition-all flex items-center justify-center gap-4 group">
+                        <span class="button-text">Iniciar Sesión</span>
+                        <i class="fas fa-bolt group-hover:animate-bounce"></i>
+                        <i class="fas fa-circle-notch fa-spin hidden" id="spinner"></i>
+                    </button>
+                </form>
+
+                <div class="mt-12 text-center">
+                    <a href="/" class="text-[0.6rem] font-black text-white/20 uppercase tracking-[0.4em] hover:text-yellow-400 transition-all flex items-center justify-center gap-3 italic">
+                        <i class="fas fa-arrow-left text-[0.5rem]"></i> Volver al Portal Público
+                    </a>
+                </div>
+            </div>
+
+            <p class="mt-8 text-center text-[0.6rem] font-bold text-white/20 uppercase tracking-[0.5em] italic">
+                DIBA FBC — SYSTEMS CORE v2.0
+            </p>
+        </div>
     </div>
 
     <!-- Scripts -->
@@ -199,127 +349,235 @@
         import { iniciarSesion, enviarCorreoRecuperacion } from "/scripts/auth.js";
         import anime from 'https://cdn.jsdelivr.net/npm/animejs@3.2.2/lib/anime.es.js';
 
-        // 3D Parallax Elements
-        const loginCard = document.querySelector('.login-glass');
-        const shieldContainer = document.getElementById('shield-3d-container');
-        const shieldRing = document.getElementById('shield-ring');
-        const shieldImg = document.getElementById('shield-image');
-        const shieldGlare = document.getElementById('shield-glare');
+        /* ============================================================
+           PIXEL RECONSTRUCTION INTRO
+        ============================================================ */
+        const GRID = 36;           // pixels per side (36x36 = 1296 cubes)
+        const CELL_SIZE = 9;       // px per pixel cell
+        const STAGE_SIZE = GRID * CELL_SIZE;
 
-        // 1. Entrance 3D Animation (Elastic fly-in and spin)
-        window.addEventListener('DOMContentLoaded', () => {
+        const stage      = document.getElementById('pixel-stage');
+        const hudTitle   = document.getElementById('hud-title');
+        const hudLabel   = document.getElementById('hud-label');
+        const hudWrap    = document.getElementById('hud-progress-wrap');
+        const hudBar     = document.getElementById('hud-progress-bar');
+        const hudPct     = document.getElementById('hud-pct');
+        const overlay    = document.getElementById('intro-overlay');
+        const loginWrap  = document.getElementById('login-wrapper');
+
+        stage.style.width  = STAGE_SIZE + 'px';
+        stage.style.height = STAGE_SIZE + 'px';
+
+        // 1. Sample the shield image via offscreen canvas
+        function sampleShield() {
+            return new Promise(resolve => {
+                const img = new Image();
+                img.crossOrigin = 'anonymous';
+                img.onload = () => {
+                    const c = document.createElement('canvas');
+                    c.width = GRID; c.height = GRID;
+                    const ctx = c.getContext('2d');
+                    ctx.drawImage(img, 0, 0, GRID, GRID);
+                    const pixels = [];
+                    for (let y = 0; y < GRID; y++) {
+                        for (let x = 0; x < GRID; x++) {
+                            const d = ctx.getImageData(x, y, 1, 1).data;
+                            pixels.push({ r: d[0], g: d[1], b: d[2], a: d[3] });
+                        }
+                    }
+                    resolve(pixels);
+                };
+                img.onerror = () => {
+                    // fallback: gold shield silhouette
+                    const pixels = [];
+                    for (let i = 0; i < GRID * GRID; i++)
+                        pixels.push({ r: 255, g: 215, b: 0, a: 180 });
+                    resolve(pixels);
+                };
+                img.src = '/images/ESCUDO.png';
+            });
+        }
+
+        // 2. Build the pixel cell divs
+        function buildCells(pixels) {
+            const cells = [];
+            for (let i = 0; i < pixels.length; i++) {
+                const p = pixels[i];
+                if (p.a < 15) { cells.push(null); continue; }
+
+                const x = (i % GRID) * CELL_SIZE;
+                const y = Math.floor(i / GRID) * CELL_SIZE;
+
+                const div = document.createElement('div');
+                div.className = 'px-cell';
+                div.style.width  = (CELL_SIZE - 1) + 'px';
+                div.style.height = (CELL_SIZE - 1) + 'px';
+                div.style.left   = x + 'px';
+                div.style.top    = y + 'px';
+
+                // Neon-enhanced color with slight brightness boost
+                const boost = 1.15;
+                const r = Math.min(255, Math.round(p.r * boost));
+                const g = Math.min(255, Math.round(p.g * boost));
+                const b = Math.min(255, Math.round(p.b * boost));
+                const glow = `rgba(${r},${g},${b},0.5)`;
+                div.style.background = `rgb(${r},${g},${b})`;
+                div.style.boxShadow  = `0 0 4px ${glow}, inset 0 0 2px rgba(255,255,255,0.15)`;
+                div.style.opacity    = '0';
+                div.style.transform  = `translateZ(${-200 - Math.random()*400}px) scale(0) rotateX(${Math.random()*360}deg) rotateY(${Math.random()*360}deg)`;
+
+                stage.appendChild(div);
+                cells.push(div);
+            }
+            return cells;
+        }
+
+        // 3. Animate pixels in + run HUD
+        function animateIn(cells) {
+            // Show HUD elements
+            anime({ targets: hudTitle, opacity: [0,1], translateY: [-10,0], duration: 600, easing: 'easeOutExpo' });
+            anime({ targets: [hudLabel, hudWrap], opacity: [0,1], translateY: [10,0], duration: 600, delay: 200, easing: 'easeOutExpo' });
+
+            const validCells = cells.filter(Boolean);
+            let done = 0;
+
+            // Stagger 3D fly-in wave
+            const anim = anime({
+                targets: validCells,
+                opacity: [0, 1],
+                scale: [0, 1],
+                rotateX: [() => anime.random(-180, 180), 0],
+                rotateY: [() => anime.random(-180, 180), 0],
+                translateZ: [() => -300 - Math.random() * 400, 0],
+                duration: 1800,
+                delay: anime.stagger(3, { grid: [GRID, GRID], from: 'center', easing: 'easeOutQuad' }),
+                easing: 'easeOutElastic(1, 0.5)',
+                update: (a) => {
+                    const pct = Math.round(a.progress);
+                    hudBar.style.width = pct + '%';
+                    hudPct.textContent = pct + '%';
+                },
+                complete: () => {
+                    setTimeout(finishIntro, 800);
+                }
+            });
+        }
+
+        // 4. Finish: dissolve pixels → real shield → collapse overlay
+        function finishIntro() {
+            hudPct.textContent = '100%';
+            hudBar.style.width = '100%';
+
+            // Quick white flash on stage
+            const flash = document.createElement('div');
+            flash.style.cssText = `position:absolute;inset:0;background:#fff;opacity:0;border-radius:50%;z-index:3;`;
+            stage.appendChild(flash);
+
+            anime({ targets: flash, opacity: [0, 0.7, 0], duration: 600, easing: 'easeInOutQuad' });
+
+            // Scatter pixels away with 3D explosion
+            anime({
+                targets: stage.querySelectorAll('.px-cell'),
+                opacity: 0,
+                scale: [1, 0.3],
+                translateZ: [0, () => 200 + Math.random() * 300],
+                rotateX: () => anime.random(-90, 90),
+                rotateY: () => anime.random(-90, 90),
+                duration: 900,
+                delay: anime.stagger(2, { from: 'center', easing: 'easeInQuad' }),
+                easing: 'easeInExpo',
+                complete: () => {
+                    // Collapse overlay
+                    overlay.classList.add('hide');
+                    setTimeout(() => {
+                        overlay.style.display = 'none';
+                        loginWrap.classList.add('visible');
+                        runLoginAnimations();
+                    }, 1200);
+                }
+            });
+        }
+
+        // Bootstrap intro
+        sampleShield().then(pixels => {
+            const cells = buildCells(pixels);
+            // Small delay so fonts load
+            setTimeout(() => animateIn(cells), 300);
+        });
+
+        /* ============================================================
+           LOGIN 3D PARALLAX (runs after intro finishes)
+        ============================================================ */
+        function runLoginAnimations() {
+            const loginCard     = document.querySelector('.login-glass');
+            const shieldContainer = document.getElementById('shield-3d-container');
+            const shieldRing    = document.getElementById('shield-ring');
+            const shieldImg     = document.getElementById('shield-image');
+            const shieldGlare   = document.getElementById('shield-glare');
+
+            // Spin-in entrance
             anime({
                 targets: '#shield-3d-container',
                 scale: [0.1, 1],
-                rotateY: [720, 0],
-                rotateX: [360, 0],
+                rotateY: [540, 0],
+                rotateX: [270, 0],
                 opacity: [0, 1],
-                duration: 2200,
-                easing: 'easeOutElastic(1, 0.7)'
+                duration: 2000,
+                easing: 'easeOutElastic(1, 0.65)'
             });
-        });
 
-        // 2. Cursor 3D Tilting Parallax
-        document.addEventListener('mousemove', (e) => {
-            if (!shieldContainer) return;
-
-            const rect = shieldContainer.getBoundingClientRect();
-            const shieldX = rect.left + rect.width / 2;
-            const shieldY = rect.top + rect.height / 2;
-
-            const dx = (e.clientX - shieldX) / (window.innerWidth / 2);
-            const dy = (e.clientY - shieldY) / (window.innerHeight / 2);
-
-            const maxRotation = 22;
-            const tiltX = -dy * maxRotation;
-            const tiltY = dx * maxRotation;
-
-            // Tilting the shield container
-            shieldContainer.style.transform = `rotateX(${tiltX}deg) rotateY(${tiltY}deg)`;
-
-            // Dynamic depth layering
-            if (shieldRing) {
-                shieldRing.style.transform = `translateZ(15px) translate(${-dx * 8}px, ${-dy * 8}px)`;
-            }
-            if (shieldImg) {
-                shieldImg.style.transform = `translateZ(35px) translate(${dx * 6}px, ${dy * 6}px)`;
+            // Particle generation
+            const pc = document.getElementById('particles-container');
+            for (let i = 0; i < 30; i++) {
+                const p = document.createElement('div');
+                p.className = 'particle';
+                p.style.left = Math.random() * 100 + 'vw';
+                p.style.animationDuration = (5 + Math.random() * 10) + 's';
+                p.style.animationDelay    = (Math.random() * 5) + 's';
+                p.style.opacity = Math.random() * 0.3;
+                pc.appendChild(p);
             }
 
-            // Light glare gradient reflection
-            if (shieldGlare) {
-                shieldGlare.style.opacity = '0.65';
-                const angle = Math.atan2(dy, dx) * (180 / Math.PI);
-                shieldGlare.style.background = `linear-gradient(${angle + 180}deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.2) 50%, rgba(255,255,255,0) 100%)`;
-            }
+            // Mouse 3D tilt
+            document.addEventListener('mousemove', (e) => {
+                if (!shieldContainer) return;
+                const rect = shieldContainer.getBoundingClientRect();
+                const cx = rect.left + rect.width  / 2;
+                const cy = rect.top  + rect.height / 2;
+                const dx = (e.clientX - cx) / (window.innerWidth  / 2);
+                const dy = (e.clientY - cy) / (window.innerHeight / 2);
+                const MAX = 22;
+                shieldContainer.style.transform = `rotateX(${-dy * MAX}deg) rotateY(${dx * MAX}deg)`;
+                if (shieldRing) shieldRing.style.transform = `translateZ(15px) translate(${-dx * 8}px,${-dy * 8}px)`;
+                if (shieldImg)  shieldImg.style.transform  = `translateZ(35px) translate(${dx * 6}px,${dy * 6}px)`;
+                if (shieldGlare) {
+                    shieldGlare.style.opacity = '0.65';
+                    const angle = Math.atan2(dy, dx) * (180 / Math.PI);
+                    shieldGlare.style.background = `linear-gradient(${angle+180}deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.22) 50%, rgba(255,255,255,0) 100%)`;
+                }
+                if (loginCard) loginCard.style.transform = `rotateX(${-dy * 5}deg) rotateY(${dx * 5}deg)`;
+            });
 
-            // Card tilt depth
-            if (loginCard) {
-                const cardTiltX = -dy * 5;
-                const cardTiltY = dx * 5;
-                loginCard.style.transform = `rotateX(${cardTiltX}deg) rotateY(${cardTiltY}deg)`;
-            }
-        });
+            document.addEventListener('mouseleave', () => {
+                anime({ targets: shieldContainer, rotateX: 0, rotateY: 0, duration: 1200, easing: 'easeOutElastic(1,0.75)' });
+                if (loginCard) anime({ targets: loginCard, rotateX: 0, rotateY: 0, duration: 1200, easing: 'easeOutElastic(1,0.75)' });
+                if (shieldGlare) anime({ targets: shieldGlare, opacity: 0, duration: 600, easing: 'easeOutQuad' });
+            });
+        }
 
-        // 3. Elastic Restoring Logic
-        document.addEventListener('mouseleave', () => {
-            if (shieldContainer) {
-                anime({
-                    targets: shieldContainer,
-                    rotateX: 0,
-                    rotateY: 0,
-                    duration: 1200,
-                    easing: 'easeOutElastic(1, 0.75)'
-                });
-            }
-            if (shieldRing) {
-                anime({
-                    targets: shieldRing,
-                    translateX: 0,
-                    translateY: 0,
-                    translateZ: 15,
-                    duration: 1200,
-                    easing: 'easeOutElastic(1, 0.75)'
-                });
-            }
-            if (shieldImg) {
-                anime({
-                    targets: shieldImg,
-                    translateX: 0,
-                    translateY: 0,
-                    translateZ: 35,
-                    duration: 1200,
-                    easing: 'easeOutElastic(1, 0.75)'
-                });
-            }
-            if (shieldGlare) {
-                anime({
-                    targets: shieldGlare,
-                    opacity: 0,
-                    duration: 600,
-                    easing: 'easeOutQuad'
-                });
-            }
-            if (loginCard) {
-                anime({
-                    targets: loginCard,
-                    rotateX: 0,
-                    rotateY: 0,
-                    duration: 1200,
-                    easing: 'easeOutElastic(1, 0.75)'
-                });
-            }
-        });
-
-        const loginForm = document.getElementById('login-form');
-        const loginBtn = document.getElementById('login-button');
+        /* ============================================================
+           AUTH LOGIC
+        ============================================================ */
+        const loginForm      = document.getElementById('login-form');
+        const loginBtn       = document.getElementById('login-button');
         const alertContainer = document.getElementById('alert-container');
-        const spinner = document.getElementById('spinner');
-        const btnText = loginBtn.querySelector('.button-text');
+        const spinner        = document.getElementById('spinner');
+        const btnText        = loginBtn.querySelector('.button-text');
 
         const showAlert = (message, type = 'error') => {
             const isError = type === 'error';
             alertContainer.innerHTML = `
-                <div class="flex items-center gap-4 p-5 rounded-2xl border ${isError ? 'bg-red-500/10 border-red-500/20 text-red-500' : 'bg-green-500/10 border-green-500/20 text-green-500'} animate-fade-in shadow-xl">
+                <div class="flex items-center gap-4 p-5 rounded-2xl border ${isError ? 'bg-red-500/10 border-red-500/20 text-red-500' : 'bg-green-500/10 border-green-500/20 text-green-500'} shadow-xl">
                     <i class="fas ${isError ? 'fa-triangle-exclamation' : 'fa-circle-check'}"></i>
                     <p class="text-[0.65rem] font-black uppercase tracking-widest leading-relaxed">${message}</p>
                 </div>
@@ -330,12 +588,10 @@
             e.preventDefault();
             const username = document.getElementById('login-username').value.trim();
             const password = document.getElementById('login-password').value;
-
             loginBtn.disabled = true;
             spinner.classList.remove('hidden');
             btnText.textContent = 'Verificando...';
             alertContainer.innerHTML = '';
-
             try {
                 await iniciarSesion(username, password);
                 btnText.textContent = 'Acceso Exitoso';
@@ -350,44 +606,24 @@
             }
         });
 
-        // Forgot password
         document.getElementById('forgot-link').addEventListener('click', async (e) => {
             e.preventDefault();
             const email = document.getElementById('login-username').value.trim();
-            if (!email) {
-                showAlert('Ingrese su usuario/correo para recuperar acceso.', 'error');
-                return;
-            }
+            if (!email) { showAlert('Ingrese su usuario/correo para recuperar acceso.'); return; }
             try {
                 await enviarCorreoRecuperacion(email);
                 showAlert('Enlace de recuperación enviado al correo oficial.', 'success');
-            } catch (error) {
-                showAlert('Error: ' + error.message, 'error');
-            }
+            } catch (error) { showAlert('Error: ' + error.message); }
         });
 
-        // Password matching
         const pwToggle = document.getElementById('pw-toggle');
-        const pwInput = document.getElementById('login-password');
-        const pwIcon = document.getElementById('pw-icon');
+        const pwInput  = document.getElementById('login-password');
+        const pwIcon   = document.getElementById('pw-icon');
         pwToggle.addEventListener('click', () => {
-            const isShown = pwInput.type === 'text';
-            pwInput.type = isShown ? 'password' : 'text';
-            pwIcon.className = isShown ? 'fas fa-eye-slash' : 'fas fa-eye';
+            const shown = pwInput.type === 'text';
+            pwInput.type   = shown ? 'password' : 'text';
+            pwIcon.className = shown ? 'fas fa-eye-slash' : 'fas fa-eye';
         });
-
-        // Particles Generation
-        const container = document.getElementById('particles-container');
-        for (let i = 0; i < 30; i++) {
-            const p = document.createElement('div');
-            p.className = 'particle';
-            p.style.left = Math.random() * 100 + 'vw';
-            p.style.animationDuration = (5 + Math.random() * 10) + 's';
-            p.style.animationDelay = (Math.random() * 5) + 's';
-            p.style.opacity = Math.random() * 0.3;
-            container.appendChild(p);
-        }
     </script>
 </body>
-
 </html>
