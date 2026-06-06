@@ -1,12 +1,10 @@
 /**
- * Cliente para interactuar con el Asistente de IA Global (Groq via Supabase)
+ * Cliente para interactuar con el Asistente de IA Global
  * DIBA FBC - Gestión Deportiva Inteligente
  */
 
-import { supabase } from '../../scripts/supabaseClient.js';
-
 /**
- * Envía una petición de chat al asistente global en Supabase
+ * Envía una petición de chat al asistente global en Vercel
  * @param {string} prompt - El mensaje para la IA
  * @param {Array} history - Historial de la conversación (opcional)
  * @param {Object} clubContext - Datos en tiempo real del dashboard (opcional)
@@ -14,14 +12,21 @@ import { supabase } from '../../scripts/supabaseClient.js';
  */
 export async function chatWithAI(prompt, history = [], clubContext = null) {
     try {
-        const { data, error } = await supabase.functions.invoke('ai-assistant', {
-            body: { prompt, history, clubContext },
+        const response = await fetch('/api/chat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ prompt, history, clubContext })
         });
 
-        if (error) throw error;
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.error || 'Error desconocido del servidor de IA');
+        }
+
         if (!data || !data.content) {
-            console.warn('AI: Respuesta vacía de Supabase Function');
-            return "Lo siento, no he podido generar una respuesta en este momento.";
+            console.warn('AI: Respuesta vacía del servidor');
+            return "Lo siento, mi cerebro neuronal no pudo generar una respuesta en este momento.";
         }
         return data.content;
     } catch (error) {
@@ -35,10 +40,13 @@ export async function chatWithAI(prompt, history = [], clubContext = null) {
  */
 export async function checkAIStatus() {
     try {
-        const { data, error } = await supabase.functions.invoke('ai-assistant', {
-            body: { ping: true }
+        const response = await fetch('/api/chat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ ping: true })
         });
-        return !error && data?.status === 'ok';
+        const data = await response.json();
+        return response.ok && data?.status === 'ok';
     } catch (e) {
         console.error('Ping AI Error:', e);
         return false;
