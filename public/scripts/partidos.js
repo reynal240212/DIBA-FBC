@@ -110,9 +110,20 @@ function crearTarjetaPartido(p) {
   const golesLocal = partes[0] || '—';
   const golesVisitante = partes[1] || '—';
   const tieneResult = partes.length >= 2 && partes[0] !== '' && partes[1] !== '';
+  
+  // Resaltar si es un partido pendiente (Próximo partido)
+  const isPending = !p.resultado || p.resultado === 'Pendiente' || p.resultado === '-' || p.resultado === '—';
+  const cardBorder = isPending 
+    ? 'border-2 border-amber-400 shadow-[0_0_20px_rgba(251,191,36,0.3)] relative overflow-hidden' 
+    : 'border border-[rgba(255,204,0,0.12)]';
+
+  const glowEffect = isPending 
+    ? '<div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full animate-[shine_2s_infinite]"></div>' 
+    : '';
 
   div.innerHTML = `
-    <div class="match-card h-full">
+    <div class="match-card h-full ${cardBorder}">
+      ${glowEffect}
       <!-- Cabecera equipos -->
       <div class="p-5">
         <div class="flex items-center justify-between mb-3 text-[10px] uppercase font-black tracking-widest text-amber-500/80">
@@ -243,6 +254,7 @@ function crearTarjetaEntrenamiento(e) {
 //  PARTIDOS — FILTRO POR FECHA
 // ──────────────────────────────────────────────────────────────────────────────
 const inputFecha = document.getElementById('fecha');
+const inputCategoria = document.getElementById('filtro-categoria');
 const resultsPartidos = document.getElementById('partidos-results');
 
 async function filtrarPartidos() {
@@ -250,7 +262,10 @@ async function filtrarPartidos() {
   mostrarInicialPanel('partidos-estado-inicial', false);
   resultsPartidos.innerHTML = '';
 
-  if (!fecha) {
+  const fecha = inputFecha?.value;
+  const categoria = inputCategoria?.value;
+
+  if (!fecha && !categoria) {
     mostrarInicialPanel('partidos-estado-inicial', true);
     if (sectionDiba) sectionDiba.style.display = 'block';
     return;
@@ -260,10 +275,11 @@ async function filtrarPartidos() {
 
   mostrarSpinner('partidos-spinner', true);
 
-  const { data: filtrados, error } = await sb
-    .from('partidos')
-    .select('*')
-    .eq('fecha', fecha);
+  let query = sb.from('partidos').select('*');
+  if (fecha) query = query.eq('fecha', fecha);
+  if (categoria) query = query.eq('categoria', categoria);
+
+  const { data: filtrados, error } = await query.order('fecha', { ascending: false });
 
   mostrarSpinner('partidos-spinner', false);
 
@@ -278,7 +294,7 @@ async function filtrarPartidos() {
         <div class="w-14 h-14 rounded-full bg-slate-800 flex items-center justify-center mx-auto mb-3">
           <i class="fas fa-futbol text-slate-600 text-xl"></i>
         </div>
-        <p class="text-slate-500 text-sm">No hay partidos registrados para esta fecha</p>
+        <p class="text-slate-500 text-sm">No hay partidos registrados para estos filtros</p>
       </div>`;
     return;
   }
@@ -287,6 +303,7 @@ async function filtrarPartidos() {
 }
 
 if (inputFecha) inputFecha.addEventListener('change', filtrarPartidos);
+if (inputCategoria) inputCategoria.addEventListener('change', filtrarPartidos);
 
 // ──────────────────────────────────────────────────────────────────────────────
 //  ENTRENAMIENTOS — FILTRO POR FECHA
@@ -529,4 +546,19 @@ document.addEventListener('DOMContentLoaded', () => {
   mostrarClasificacion();
   mostrarPartidosDIBA();
   cargarEstadisticasRapidas();
+
+  // Supabase Real-time para recargar en vivo si el admin actualiza un partido
+  try {
+    sb.channel('public:partidos')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'partidos' }, payload => {
+        console.log('¡Cambio detectado en Supabase! Recargando datos en vivo...', payload);
+        mostrarPartidosDIBA();
+        cargarEstadisticasRapidas();
+        const f = document.getElementById('fecha');
+        if (f && f.value) filtrarPartidos();
+      })
+      .subscribe();
+  } catch (err) {
+    console.error("Error suscribiendo a Realtime:", err);
+  }
 });
