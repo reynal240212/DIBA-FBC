@@ -90,11 +90,13 @@ function getEscudoUrl(url, equipoNombre) {
   if (equipoNombre && equipoNombre.toUpperCase().includes('DIBA')) {
     return 'images/ESCUDO.webp';
   }
+  // Generar initials (ej. NH para Nuevo Horizonte) usando ui-avatars, con estilo dark y amber text
+  const avatarParams = `background=0f172a&color=f59e0b&size=256&bold=true&font-size=0.45&rounded=false`;
   if (!url) {
-    return `https://ui-avatars.com/api/?name=${encodeURIComponent(equipoNombre || 'R')}&background=1e293b&color=cbd5e1`;
+    return `https://ui-avatars.com/api/?name=${encodeURIComponent(equipoNombre || 'R')}&${avatarParams}`;
   }
   if (url.startsWith('http://') || url.startsWith('https://')) {
-    return `https://wsrv.nl/?url=${encodeURIComponent(url)}&default=https://ui-avatars.com/api/?name=R&background=1e293b&color=cbd5e1`;
+    return `https://wsrv.nl/?url=${encodeURIComponent(url)}&default=https://ui-avatars.com/api/?name=R&${avatarParams}`;
   }
   return url;
 }
@@ -111,94 +113,133 @@ function crearTarjetaPartido(p) {
   const golesVisitante = partes[1] || '—';
   const tieneResult = partes.length >= 2 && partes[0] !== '' && partes[1] !== '';
   
-  // Resaltar si es un partido pendiente (Próximo partido)
   const isPending = !p.resultado || p.resultado === 'Pendiente' || p.resultado === '-' || p.resultado === '—';
-  const cardBorder = isPending 
-    ? 'border-2 border-amber-400 shadow-[0_0_20px_rgba(251,191,36,0.3)] relative overflow-hidden' 
-    : 'border border-[rgba(255,204,0,0.12)]';
+  
+  // Preparar estado del badge superior derecho
+  let estadoText = 'PROGRAMADO';
+  let estadoClass = 'border-blue-500/30 bg-blue-500/10 text-blue-400';
+  if (!isPending) {
+    const res = evaluarResultado(p);
+    if (res === 'victoria') { estadoText = 'VICTORIA'; estadoClass = 'border-green-500/30 bg-green-500/10 text-green-400'; }
+    else if (res === 'derrota') { estadoText = 'DERROTA'; estadoClass = 'border-red-500/30 bg-red-500/10 text-red-400'; }
+    else if (res === 'empate') { estadoText = 'EMPATE'; estadoClass = 'border-slate-400/30 bg-slate-400/10 text-slate-300'; }
+    else { estadoText = 'FINALIZADO'; estadoClass = 'border-slate-500/30 bg-slate-500/10 text-slate-400'; }
+  }
 
-  const glowEffect = isPending 
-    ? '<div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full animate-[shine_2s_infinite]"></div>' 
-    : '';
-
+  // Estilo de la tarjeta completo basado en la captura
   div.innerHTML = `
-    <div class="match-card h-full ${cardBorder}">
-      ${glowEffect}
-      <!-- Cabecera equipos -->
-      <div class="p-5">
-        <div class="flex items-center justify-between mb-3 text-[10px] uppercase font-black tracking-widest text-amber-500/80">
-          <span>${p.descripcion || 'Competición'}</span>
-          <span class="bg-amber-500/10 px-2 py-0.5 rounded-full">CAT. ${p.categoria || 'GENERAL'}</span>
+    <div class="h-full bg-[#131b2c] border border-amber-500/20 rounded-3xl overflow-hidden flex flex-col p-6 shadow-xl transition-transform hover:scale-[1.02]">
+      
+      <!-- Top Badges -->
+      <div class="flex items-center justify-between mb-8">
+        <span class="border border-amber-500/30 text-amber-500 px-4 py-1.5 rounded-xl text-[0.65rem] font-black tracking-widest uppercase">
+          CAT. ${p.categoria || 'GENERAL'}
+        </span>
+        <span class="border px-4 py-1.5 rounded-xl text-[0.65rem] font-black tracking-widest uppercase ${estadoClass}">
+          ${estadoText}
+        </span>
+      </div>
+      
+      <!-- Middle Area (Teams & Score) -->
+      <div class="flex items-center justify-between mb-8 px-2">
+        <!-- Local -->
+        <div class="flex flex-col items-center w-[100px]">
+          <img src="${getEscudoUrl(p.escudo_local || p.escudo, p.equipolocal)}" alt="${p.equipolocal}" class="w-20 h-20 object-contain rounded-xl drop-shadow-xl mb-3" onerror="this.src='images/ESCUDO.webp'">
+          <span class="text-white font-black text-[0.7rem] uppercase text-center leading-tight tracking-wide line-clamp-2">${p.equipolocal || 'DIBA FBC'}</span>
         </div>
-        
-        <div class="flex items-center justify-between gap-4">
-          <!-- Local -->
-          <div class="flex flex-col items-center w-1/3 text-center">
-            <img src="${getEscudoUrl(p.escudo_local || p.escudo, p.equipolocal)}" alt="${p.equipolocal}" class="w-12 h-12 object-contain mb-2 img-drop-shadow" onerror="this.src='images/ESCUDO.webp'">
-            <span class="text-white font-bold text-xs truncate w-full">${p.equipolocal || 'DIBA FBC'}</span>
-          </div>
 
-          <!-- Score/VS -->
-          <div class="flex flex-col items-center justify-center w-1/3">
-             ${tieneResult 
-               ? `<span class="match-score font-black text-2xl tracking-tight text-white">${golesLocal} – ${golesVisitante}</span>`
-               : `<span class="vs-badge text-amber-500 font-black">VS</span>`
-             }
-              <div class="mt-2 text-center">
-               ${badgeResultado(p)}
-              </div>
-          </div>
+        <!-- Center (VS & Score/Time) -->
+        <div class="flex flex-col items-center justify-center flex-1">
+           <div class="w-10 h-10 rounded-full border border-slate-600/50 flex items-center justify-center mb-2">
+             <span class="text-amber-500 font-black text-xs italic">VS</span>
+           </div>
+           ${tieneResult 
+             ? `<span class="text-white font-black text-2xl tracking-tighter">${golesLocal} - ${golesVisitante}</span>`
+             : `<span class="text-white font-black text-2xl tracking-tighter">${p.hora || 'TBD'}</span>`
+           }
+        </div>
 
-          <!-- Visitante -->
-          <div class="flex flex-col items-center w-1/3 text-center">
-            <img src="${getEscudoUrl(p.escudo_visitante, p.equipovisitante)}" 
-                 alt="${p.equipovisitante}" 
-                 class="w-12 h-12 object-contain mb-2 img-drop-shadow" 
-                 onerror="this.src='${getEscudoUrl(null, p.equipovisitante)}'">
-            <span class="text-white font-bold text-xs truncate w-full">${p.equipovisitante || 'Visitante'}</span>
-          </div>
+        <!-- Visitante -->
+        <div class="flex flex-col items-center w-[100px]">
+          <img src="${getEscudoUrl(p.escudo_visitante, p.equipovisitante)}" alt="${p.equipovisitante}" class="w-20 h-20 object-contain rounded-xl drop-shadow-xl mb-3" onerror="this.src='${getEscudoUrl(null, p.equipovisitante)}'">
+          <span class="text-white font-black text-[0.7rem] uppercase text-center leading-tight tracking-wide line-clamp-2">${p.equipovisitante || 'Visitante'}</span>
         </div>
       </div>
 
-      <!-- Detalles -->
-      <div class="border-t border-slate-800 px-5 py-4 grid grid-cols-2 gap-3 text-xs text-slate-400">
-        <div class="flex items-center gap-2">
-          <i class="fas fa-calendar-alt text-amber-400 w-4 text-center"></i>
-          <span>${formatearFecha(p.fecha)}</span>
+      <!-- Divider -->
+      <div class="h-px w-full bg-slate-800/80 mb-6"></div>
+
+      <!-- Info Badges -->
+      <div class="flex flex-col gap-2 mb-8 flex-grow">
+        <div class="flex items-center gap-3">
+          <div class="w-6 h-6 rounded-full bg-red-500/10 flex items-center justify-center shrink-0">
+            <i class="fas fa-map-marker-alt text-red-400 text-[0.6rem]"></i>
+          </div>
+          <span class="text-slate-300 font-bold text-[0.7rem] uppercase truncate tracking-wider">${p.Cancha || 'No especificada'}</span>
         </div>
-        <div class="flex items-center gap-2">
-          <i class="fas fa-clock text-amber-400 w-4 text-center"></i>
-          <span>${p.hora || 'Sin hora'}</span>
-        </div>
-        <div class="flex items-center gap-2 col-span-2">
-          <i class="fas fa-map-marker-alt text-red-400 w-4 text-center"></i>
-          <span>${p.Cancha || 'No especificada'}</span>
-        </div>
-        ${p.descripcion ? `
-        <div class="flex items-start gap-2 col-span-2">
-          <i class="fas fa-align-left text-sky-400 w-4 text-center mt-0.5"></i>
-          <span class="text-slate-300">${p.descripcion}</span>
-        </div>` : ''}
-        ${p.uniforme ? `
-        <div class="flex items-center gap-2">
-          <i class="fas fa-tshirt text-purple-400 w-4 text-center"></i>
-          <span>Uniforme: ${p.uniforme}</span>
-        </div>` : ''}
-        ${p.valor ? `
-        <div class="flex items-center gap-2">
-          <i class="fas fa-dollar-sign text-green-400 w-4 text-center"></i>
-          <span>$${p.valor}</span>
-        </div>` : ''}
-        ${p.observaciones ? `
-        <div class="flex items-start gap-2 col-span-2">
-          <i class="fas fa-comment-dots text-indigo-400 w-4 text-center mt-0.5"></i>
-          <span>${p.observaciones}</span>
+        ${(p.descripcion || p.observaciones || p.uniforme) ? `
+        <div class="flex items-center gap-3">
+          <div class="w-6 h-6 rounded-full bg-sky-500/10 flex items-center justify-center shrink-0">
+            <i class="fas fa-trophy text-sky-400 text-[0.6rem]"></i>
+          </div>
+          <span class="text-slate-300 font-bold text-[0.7rem] uppercase truncate tracking-wider">
+            ${p.descripcion ? p.descripcion : (p.uniforme ? 'Unif: ' + p.uniforme : p.observaciones)}
+          </span>
         </div>` : ''}
       </div>
+
+      <!-- Action Button -->
+      <button class="w-full py-4 border border-slate-600 hover:border-amber-500 hover:bg-amber-500/5 text-white rounded-2xl text-[0.75rem] font-black uppercase tracking-[0.2em] transition-all flex items-center justify-center gap-3"
+              onclick="window.abrirDetallesPartido('${encodeURIComponent(JSON.stringify(p))}')">
+        VER DETALLES <i class="fas fa-arrow-right"></i>
+      </button>
     </div>
   `;
   return div;
 }
+
+// Lógica del modal de detalles
+window.abrirDetallesPartido = function(partidoData) {
+  const p = JSON.parse(decodeURIComponent(partidoData));
+  
+  document.getElementById('modal-categoria').textContent = 'CAT. ' + (p.categoria || 'GENERAL');
+  document.getElementById('modal-torneo').textContent = p.descripcion ? p.descripcion.toUpperCase() : 'PARTIDO PROGRAMADO';
+  
+  // Local
+  document.getElementById('modal-local-name').textContent = p.equipolocal || 'LOCAL';
+  document.getElementById('modal-local-name-mob').textContent = (p.equipolocal || 'LOC').substring(0,4);
+  document.getElementById('modal-local-shield').src = getEscudoUrl(p.escudo_local || p.escudo, p.equipolocal);
+  
+  // Visitante
+  document.getElementById('modal-visit-name').textContent = p.equipovisitante || 'VISITANTE';
+  document.getElementById('modal-visit-name-mob').textContent = (p.equipovisitante || 'VIS').substring(0,4);
+  document.getElementById('modal-visit-shield').src = getEscudoUrl(p.escudo_visitante, p.equipovisitante);
+
+  // Score
+  const partes = (p.resultado || '').split(/[-:]/).map(x => x.trim());
+  const tieneResult = partes.length >= 2 && partes[0] !== '' && partes[1] !== '';
+  if (tieneResult) {
+    document.getElementById('modal-score').textContent = `${partes[0]} - ${partes[1]}`;
+  } else {
+    document.getElementById('modal-score').textContent = p.hora || 'VS';
+  }
+
+  // Date
+  document.getElementById('modal-date').textContent = `${p.hora || '00:00'} • ${formatearFecha(p.fecha).toUpperCase()}`;
+
+  // Resumen
+  document.getElementById('modal-lugar').textContent = p.Cancha || 'No especificado';
+  document.getElementById('modal-uniforme').textContent = p.uniforme || 'No especificado';
+  document.getElementById('modal-valor').textContent = p.valor ? '$' + p.valor : 'No especificado';
+  document.getElementById('modal-obs').textContent = p.observaciones || 'Sin observaciones registradas.';
+
+  // Show
+  const m = document.getElementById('match-details-modal');
+  m.classList.remove('hidden');
+  m.classList.remove('pointer-events-none');
+  setTimeout(() => m.classList.remove('opacity-0'), 10);
+  setTimeout(() => m.classList.add('opacity-100'), 10);
+};
 
 // ──────────────────────────────────────────────────────────────────────────────
 //  TARJETA DE ENTRENAMIENTO

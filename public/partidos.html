@@ -425,6 +425,109 @@
         btn.classList.add('active');
         document.getElementById(btn.dataset.tab).classList.add('active');
       });
+  <!-- Modal de Detalles del Partido -->
+  <div id="match-details-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 sm:p-6 opacity-0 transition-opacity duration-300">
+    <div class="absolute inset-0 bg-black/80 backdrop-blur-sm modal-backdrop"></div>
+    <div class="relative bg-slate-900 border border-slate-700 w-full max-w-4xl rounded-2xl overflow-hidden shadow-2xl shadow-black/50 transform scale-95 transition-transform duration-300 flex flex-col max-h-[90vh]">
+      
+      <!-- Botón de Cerrar -->
+      <button class="modal-close absolute top-4 right-4 z-10 w-8 h-8 flex items-center justify-center bg-black/30 hover:bg-black/60 rounded-full text-slate-300 transition-colors">
+        <i class="fas fa-times"></i>
+      </button>
+
+      <!-- Cabecera del Modal (FIFA Style) -->
+      <div class="relative bg-slate-950 px-6 py-8 sm:py-12 border-b border-slate-800 shrink-0">
+        <!-- Badge Superior -->
+        <div class="absolute top-4 left-0 right-0 flex justify-center text-[0.65rem] sm:text-xs font-black uppercase tracking-widest text-slate-500">
+          <span id="modal-categoria">CAT. 2015-2016</span>
+          <span class="mx-2">•</span>
+          <span id="modal-torneo">PARTIDO N.º 12</span>
+        </div>
+
+        <div class="flex items-center justify-between sm:justify-center sm:gap-16 mt-6">
+          <!-- Equipo Local -->
+          <div class="flex flex-col sm:flex-row items-center gap-4 sm:w-[200px] sm:justify-end">
+            <span id="modal-local-name" class="text-xl sm:text-3xl font-black uppercase tracking-tight text-white hidden sm:block text-right">NUEVO HORIZONTE</span>
+            <img id="modal-local-shield" src="" class="w-20 h-20 sm:w-24 sm:h-24 object-contain drop-shadow-2xl">
+            <span id="modal-local-name-mob" class="text-lg font-black uppercase tracking-tight text-white sm:hidden text-center">NH</span>
+          </div>
+
+          <!-- Marcador / Hora -->
+          <div class="flex flex-col items-center justify-center shrink-0">
+            <div id="modal-score" class="text-4xl sm:text-6xl font-black tracking-tighter text-white">09:20</div>
+            <div id="modal-date" class="mt-4 text-[0.65rem] sm:text-xs font-bold text-slate-400 uppercase tracking-widest">09:20 • 14 JUN 2026</div>
+          </div>
+
+          <!-- Equipo Visitante -->
+          <div class="flex flex-col sm:flex-row-reverse items-center gap-4 sm:w-[200px] sm:justify-end">
+            <span id="modal-visit-name" class="text-xl sm:text-3xl font-black uppercase tracking-tight text-white hidden sm:block text-left">DIBA FBC</span>
+            <img id="modal-visit-shield" src="" class="w-20 h-20 sm:w-24 sm:h-24 object-contain drop-shadow-2xl">
+            <span id="modal-visit-name-mob" class="text-lg font-black uppercase tracking-tight text-white sm:hidden text-center">DIBA</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pestañas de Navegación -->
+      <div class="flex items-center justify-center border-b border-slate-800 bg-slate-900 shrink-0 px-2 overflow-x-auto custom-scrollbar">
+        <button class="modal-tab-btn active px-4 py-4 text-xs font-black uppercase tracking-widest text-amber-400 border-b-2 border-amber-400 whitespace-nowrap" data-target="m-resumen">Resumen</button>
+        <button class="modal-tab-btn px-4 py-4 text-xs font-bold uppercase tracking-widest text-slate-500 hover:text-slate-300 border-b-2 border-transparent transition-colors whitespace-nowrap" data-target="m-detalles">Detalles</button>
+      </div>
+
+      <!-- Contenido del Modal -->
+      <div class="p-6 overflow-y-auto bg-slate-900 custom-scrollbar grow">
+        <div id="m-resumen" class="modal-tab-content block animate-[fadeIn_0.3s_ease-out]">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="bg-slate-800/50 rounded-xl p-5 border border-slate-700/50">
+              <h3 class="text-xs font-black uppercase tracking-widest text-slate-500 mb-4"><i class="fas fa-info-circle mr-2"></i>Información del Encuentro</h3>
+              <ul class="space-y-4 text-sm text-slate-300">
+                <li class="flex items-center gap-3"><div class="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center text-red-400"><i class="fas fa-map-marker-alt"></i></div><span id="modal-lugar">Estadio Monterrey</span></li>
+                <li class="flex items-center gap-3"><div class="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center text-purple-400"><i class="fas fa-tshirt"></i></div><span id="modal-uniforme">No especificado</span></li>
+                <li class="flex items-center gap-3"><div class="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center text-green-400"><i class="fas fa-dollar-sign"></i></div><span id="modal-valor">No especificado</span></li>
+              </ul>
+            </div>
+            <div class="bg-slate-800/50 rounded-xl p-5 border border-slate-700/50">
+              <h3 class="text-xs font-black uppercase tracking-widest text-slate-500 mb-4"><i class="fas fa-align-left mr-2"></i>Observaciones</h3>
+              <p id="modal-obs" class="text-sm text-slate-300 leading-relaxed">Sin observaciones registradas.</p>
+            </div>
+          </div>
+        </div>
+        
+        <div id="m-detalles" class="modal-tab-content hidden animate-[fadeIn_0.3s_ease-out]">
+          <div class="text-center py-12">
+            <div class="w-16 h-16 rounded-full bg-slate-800 flex items-center justify-center mx-auto mb-4 text-slate-500 text-2xl"><i class="fas fa-users"></i></div>
+            <h4 class="text-sm font-black uppercase tracking-widest text-slate-400">Alineaciones / Convocados</h4>
+            <p class="text-xs text-slate-500 mt-2">No hay información de alineación pública para este encuentro.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Modal tabs logic
+    document.querySelectorAll('.modal-tab-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        document.querySelectorAll('.modal-tab-btn').forEach(b => {
+          b.classList.remove('text-amber-400', 'border-amber-400', 'font-black');
+          b.classList.add('text-slate-500', 'border-transparent', 'font-bold');
+        });
+        const t = e.target;
+        t.classList.remove('text-slate-500', 'border-transparent', 'font-bold');
+        t.classList.add('text-amber-400', 'border-amber-400', 'font-black');
+        
+        document.querySelectorAll('.modal-tab-content').forEach(c => c.classList.add('hidden'));
+        document.getElementById(t.dataset.target).classList.remove('hidden');
+      });
+    });
+
+    // Close modal logic
+    document.querySelectorAll('.modal-close, .modal-backdrop').forEach(el => {
+      el.addEventListener('click', () => {
+        const m = document.getElementById('match-details-modal');
+        m.classList.remove('opacity-100');
+        m.classList.add('opacity-0', 'pointer-events-none');
+        setTimeout(() => m.classList.add('hidden'), 300);
+      });
     });
   </script>
 
