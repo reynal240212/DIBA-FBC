@@ -143,9 +143,6 @@
                 <button class="filter-btn flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white/5 text-slate-300 text-xs font-bold uppercase tracking-wider border border-white/5 hover:bg-white/10 transition-all whitespace-nowrap" data-cat="celebraciones">
                     <i class="fas fa-star text-slate-400 transition-colors"></i> Celebraciones
                 </button>
-                <button class="filter-btn flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white/5 text-slate-300 text-xs font-bold uppercase tracking-wider border border-white/5 hover:bg-white/10 transition-all whitespace-nowrap" data-cat="videos">
-                    <i class="fas fa-play-circle text-slate-400 transition-colors"></i> Videos
-                </button>
             </div>
         </div>
     </section>
@@ -500,66 +497,6 @@
         </div>
     </section>
 
-    <!-- ══════════════════════════════════════
-       VIDEOS (Bento Grid Premium)
-  ══════════════════════════════════════ -->
-    <section class="py-24 bg-[#020617] relative overflow-hidden border-t border-white/5" id="videos" data-cat-section="videos">
-        <!-- Glow effect -->
-        <div class="absolute inset-0 pointer-events-none">
-            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-blue-500/5 blur-[120px] rounded-full"></div>
-        </div>
-
-        <div class="max-w-6xl mx-auto px-4 relative z-10">
-            <div class="text-center mb-16">
-                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-black tracking-widest uppercase mb-4 shadow-[0_0_15px_rgba(59,130,246,0.2)]">
-                    <i class="fas fa-play-circle"></i> Videos
-                </div>
-                <h2 class="text-4xl md:text-5xl font-black italic uppercase tracking-tighter text-white">Momentos en <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-sky-200">Movimiento</span></h2>
-                <p class="text-slate-400 mt-4 max-w-lg mx-auto font-medium">Revive los mejores momentos del club en video.</p>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-10">
-                <!-- Video 1 -->
-                <div class="video-card bg-gradient-to-br from-slate-900 to-[#020617] rounded-[2rem] overflow-hidden shadow-2xl border border-slate-700/50 hover:border-blue-500/30 transition-all duration-500 group relative">
-                    <div class="absolute inset-0 bg-gradient-to-t from-[#020617] via-transparent to-transparent pointer-events-none z-10"></div>
-                    <div class="relative overflow-hidden rounded-t-[2rem]">
-                        <video controls preload="metadata" poster="images/ESCUDO.webp"
-                            class="w-full h-72 md:h-80 object-cover bg-slate-950">
-                            <source src="video/diba_ocam.mp4" type="video/mp4" />
-                            Tu navegador no soporta video HTML5.
-                        </video>
-                    </div>
-                    <div class="p-8 relative z-20 -mt-16 bg-gradient-to-t from-[#020617] to-transparent">
-                        <div class="flex items-center gap-2 mb-3">
-                            <span class="text-[10px] bg-amber-500 text-slate-900 font-bold px-3 py-1 rounded-full shadow-[0_0_10px_rgba(245,158,11,0.3)]"><i class="fas fa-star mr-1"></i> Oficial</span>
-                        </div>
-                        <h3 class="text-xl md:text-2xl font-black text-white uppercase tracking-tight">DIBA FBC — Video Oficial</h3>
-                        <p class="text-slate-400 text-sm md:text-base mt-2">Momentos destacados del club en acción.</p>
-                    </div>
-                </div>
-
-                <!-- Video 2 -->
-                <div class="video-card bg-gradient-to-bl from-slate-900 to-[#020617] rounded-[2rem] overflow-hidden shadow-2xl border border-slate-700/50 hover:border-blue-500/30 transition-all duration-500 group relative">
-                    <div class="absolute inset-0 bg-gradient-to-t from-[#020617] via-transparent to-transparent pointer-events-none z-10"></div>
-                    <div class="relative overflow-hidden rounded-t-[2rem]">
-                        <video controls preload="metadata" poster="images/ESCUDO.webp"
-                            class="w-full h-72 md:h-80 object-cover bg-slate-950">
-                            <source src="video/entrenamientopost.mp4" type="video/mp4" />
-                            Tu navegador no soporta video HTML5.
-                        </video>
-                    </div>
-                    <div class="p-8 relative z-20 -mt-16 bg-gradient-to-t from-[#020617] to-transparent">
-                        <div class="flex items-center gap-2 mb-3">
-                            <span class="text-[10px] bg-blue-500 text-white font-bold px-3 py-1 rounded-full shadow-[0_0_10px_rgba(59,130,246,0.3)]"><i class="fas fa-dumbbell mr-1"></i> Entrenamiento</span>
-                        </div>
-                        <h3 class="text-xl md:text-2xl font-black text-white uppercase tracking-tight">Entrenamiento Post-Partido</h3>
-                        <p class="text-slate-400 text-sm md:text-base mt-2">Sesión de entrenamiento y preparación del equipo.</p>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </section>
 
     <!-- ══════════════════════════════════════
        LIGHTBOX (Premium UI)
@@ -604,7 +541,6 @@
         // ── Items visibles
         const items = Array.from(document.querySelectorAll('.gallery-item'));
         const emptyState = document.getElementById('empty-state');
-        const videoSection = document.getElementById('videos');
 
         // Construir índice de lightbox a partir de las imágenes visibles
         let lightboxItems = [];
@@ -636,12 +572,6 @@
                         item.classList.remove('hidden-item');
                         visibleItems.push(item);
                     });
-                    videoSection.style.display = '';
-                } else if (cat === 'videos') {
-                    items.forEach(item => item.classList.add('hidden-item'));
-                    videoSection.style.display = '';
-                    // Scroll to videos
-                    videoSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
                 } else {
                     items.forEach(item => {
                         if (item.dataset.cat === cat) {
@@ -651,11 +581,10 @@
                             item.classList.add('hidden-item');
                         }
                     });
-                    videoSection.style.display = 'none';
                 }
 
                 // Empty state
-                const anyVisible = visibleItems.length > 0 || cat === 'videos';
+                const anyVisible = visibleItems.length > 0;
                 emptyState.classList.toggle('hidden', anyVisible);
 
                 buildLightboxIndex(visibleItems);
