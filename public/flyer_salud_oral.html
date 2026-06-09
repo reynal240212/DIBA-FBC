@@ -5,109 +5,125 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jornada de Salud Oral - DIBA FBC</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         body {
-            font-family: 'Montserrat', sans-serif;
-            background-color: #0f172a; /* Slate 900 */
+            font-family: 'Fredoka', sans-serif;
+            background-color: #1e293b;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
             margin: 0;
-            overflow-x: hidden;
+            padding: 20px;
         }
 
-        .flyer-container {
-            width: 100%;
-            max-width: 500px;
-            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-            border: 2px solid rgba(56, 189, 248, 0.3);
-            border-radius: 24px;
-            padding: 2rem;
+        #flyer-content {
+            width: 800px;
+            height: 800px;
+            background-color: #fef9eb; /* Fondo crema/beige */
             position: relative;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            border-radius: 12px;
+            border: 12px solid #eab308;
             overflow: hidden;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5), inset 0 0 40px rgba(56, 189, 248, 0.1);
+            display: flex;
+            flex-direction: column;
+            padding: 30px;
         }
 
-        .glow-circle {
+        /* Borde decorativo interno */
+        .inner-border {
             position: absolute;
-            width: 300px;
-            height: 300px;
-            background: radial-gradient(circle, rgba(56,189,248,0.2) 0%, rgba(0,0,0,0) 70%);
-            border-radius: 50%;
-            top: -100px;
-            right: -100px;
-            z-index: 0;
-            animation: pulse 4s infinite alternate;
-        }
-
-        .glow-circle-2 {
-            position: absolute;
-            width: 250px;
-            height: 250px;
-            background: radial-gradient(circle, rgba(234,179,8,0.15) 0%, rgba(0,0,0,0) 70%);
-            border-radius: 50%;
-            bottom: -50px;
-            left: -100px;
+            top: 10px; left: 10px; right: 10px; bottom: 10px;
+            border: 2px dashed #d1d5db;
+            pointer-events: none;
             z-index: 0;
         }
 
-        @keyframes pulse {
-            0% { transform: scale(1); opacity: 0.5; }
-            100% { transform: scale(1.2); opacity: 1; }
+        /* Fondo de cielo arriba */
+        .sky-bg {
+            position: absolute;
+            top: 0; left: 0; right: 0; height: 250px;
+            background: linear-gradient(180deg, #bae6fd 0%, #fef9eb 100%);
+            z-index: 1;
         }
 
         .content {
             position: relative;
             z-index: 10;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
         }
 
-        .title-gradient {
-            background: linear-gradient(to right, #38bdf8, #eab308);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+        /* Título tipo Cinta (Ribbon) */
+        .ribbon {
+            background-color: #fef9eb;
+            border: 4px solid #475569;
+            padding: 8px 30px;
+            border-radius: 8px;
+            display: inline-block;
+            position: relative;
+            box-shadow: 4px 4px 0px rgba(0,0,0,0.1);
+            font-weight: 700;
+            margin-bottom: 15px;
         }
 
-        .info-card {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
+        .main-title {
+            color: #b91c1c; /* Rojo oscuro */
+            text-shadow: 2px 2px 0px rgba(0,0,0,0.1);
+        }
+
+        /* Tarjetas inferiores */
+        .bottom-card {
             border-radius: 16px;
-            padding: 1rem;
-            margin-bottom: 1rem;
+            border: 4px solid #fff;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            padding: 20px;
             display: flex;
             align-items: center;
-            gap: 1rem;
-            transition: transform 0.3s ease, border-color 0.3s ease;
+            gap: 20px;
         }
 
-        .info-card:hover {
-            transform: translateY(-2px);
-            border-color: rgba(56, 189, 248, 0.5);
+        .card-blue {
+            background-color: #0284c7;
+            color: white;
         }
 
-        .icon-box {
-            width: 48px;
-            height: 48px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            flex-shrink: 0;
+        .card-green {
+            background-color: #16a34a;
+            color: white;
+            position: relative;
+            overflow: hidden;
         }
 
-        .floating-tooth {
-            animation: float 3s ease-in-out infinite;
+        /* Líneas del campo de fútbol para la tarjeta verde */
+        .field-lines {
+            position: absolute;
+            top: 10%; bottom: 10%; left: 10%; right: 10%;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 4px;
+            pointer-events: none;
         }
-
-        @keyframes float {
-            0% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-10px) rotate(5deg); }
-            100% { transform: translateY(0px) rotate(0deg); }
+        .field-center {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 40px; height: 40px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+        .field-center-line {
+            position: absolute;
+            top: 10%; bottom: 10%; left: 50%;
+            width: 3px;
+            background-color: rgba(255,255,255,0.3);
+            transform: translateX(-50%);
+            pointer-events: none;
         }
 
         .btn-capture {
@@ -123,120 +139,145 @@
             cursor: pointer;
             box-shadow: 0 4px 15px rgba(234, 179, 8, 0.4);
             z-index: 100;
-            transition: all 0.3s ease;
+            font-family: 'Montserrat', sans-serif;
+            transition: transform 0.2s;
         }
+        .btn-capture:hover { transform: scale(1.05); }
 
-        .btn-capture:hover {
-            transform: scale(1.05);
-            background: #fde047;
+        /* Decoraciones de borde con iconos */
+        .border-icons {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            pointer-events: none;
+            z-index: 20;
         }
+        .icon-dec {
+            position: absolute;
+            font-size: 24px;
+            color: #334155;
+            background: #fef9eb;
+            border-radius: 50%;
+        }
+        
     </style>
 </head>
 <body>
 
-    <!-- Botón para descargar el flyer -->
     <button class="btn-capture" onclick="takeScreenshot()">
         <i class="fas fa-camera mr-2"></i> Descargar Imagen
     </button>
 
-    <div class="flyer-container" id="flyer-content">
-        <div class="glow-circle"></div>
-        <div class="glow-circle-2"></div>
-        
+    <div id="flyer-content">
+        <div class="sky-bg"></div>
+        <div class="inner-border"></div>
+
+        <!-- Decoraciones de borde (simuladas) -->
+        <div class="border-icons">
+            <i class="fas fa-futbol icon-dec" style="top: -8px; left: 20%;"></i>
+            <i class="fas fa-tooth icon-dec" style="top: -8px; left: 80%;"></i>
+            <i class="fas fa-futbol icon-dec" style="bottom: -8px; left: 20%;"></i>
+            <i class="fas fa-tooth icon-dec" style="bottom: -8px; left: 80%;"></i>
+            <i class="fas fa-tooth icon-dec" style="top: 20%; left: -8px;"></i>
+            <i class="fas fa-futbol icon-dec" style="top: 80%; left: -8px;"></i>
+            <i class="fas fa-tooth icon-dec" style="top: 20%; right: -8px;"></i>
+            <i class="fas fa-futbol icon-dec" style="top: 80%; right: -8px;"></i>
+        </div>
+
         <div class="content">
-            <!-- Header -->
-            <div class="text-center mb-6 animate-element">
-                <div class="flex justify-center items-center gap-4 mb-4">
-                    <img src="images/ESCUDO.webp" alt="DIBA FBC" class="w-16 h-16 object-contain filter drop-shadow-lg" onerror="this.src='https://ui-avatars.com/api/?name=D&background=eab308&color=000'">
-                    <i class="fas fa-plus text-sky-400 text-xl"></i>
-                    <i class="fas fa-tooth text-sky-400 text-4xl floating-tooth filter drop-shadow-lg"></i>
+            <!-- Header: Escudo y Niños -->
+            <div class="flex justify-center items-center gap-10 mt-4 mb-6">
+                <!-- Niño Dibujo Izquierda -->
+                <div class="text-7xl">👦🏽⚽</div>
+                
+                <!-- Escudo -->
+                <div class="bg-white p-3 rounded-full border-4 border-slate-800 shadow-xl z-20">
+                    <img src="images/ESCUDO.webp" alt="DIBA FBC" class="w-28 h-28 object-contain">
                 </div>
-                <h3 class="text-amber-400 text-sm font-bold tracking-widest uppercase mb-1">¡Atención Familia DIBA!</h3>
-                <h1 class="text-3xl font-black text-white uppercase leading-tight mb-2">Gran Jornada de <br><span class="title-gradient">Salud Oral</span></h1>
-                <p class="text-slate-400 text-sm font-medium">Cuidando las sonrisas de nuestros futuros campeones.</p>
+
+                <!-- Niña Dibujo Derecha -->
+                <div class="text-7xl">👧🏽🪥</div>
             </div>
 
-            <!-- Info Cards -->
-            <div class="space-y-3 mb-8">
+            <!-- Título Principal -->
+            <div class="text-center mb-8 relative z-20">
+                <div class="ribbon text-xl text-slate-800 uppercase tracking-wide">
+                    D.I.B.A. FBC TE INVITA A UNA
+                </div>
+                <h1 class="text-5xl font-black uppercase main-title leading-tight mt-2">
+                    ¡Gran Jornada de<br>Salud Oral y Diversión!
+                </h1>
+            </div>
+
+            <!-- Datos: Fecha, Hora, Lugar -->
+            <div class="grid grid-cols-3 gap-6 mb-10 px-4 text-center">
                 <!-- Fecha -->
-                <div class="info-card animate-element">
-                    <div class="icon-box bg-blue-500/20 text-blue-400">
-                        <i class="fas fa-calendar-day"></i>
+                <div class="flex flex-col items-center">
+                    <h3 class="text-xl font-bold text-slate-800 uppercase mb-2">Día:</h3>
+                    <div class="bg-white border-4 border-slate-800 rounded-xl w-24 h-24 flex flex-col overflow-hidden shadow-lg mb-2">
+                        <div class="bg-red-500 text-white font-bold py-1 text-sm border-b-4 border-slate-800">JUNIO</div>
+                        <div class="flex-1 flex items-center justify-center text-4xl font-black text-slate-800 bg-slate-50">11</div>
                     </div>
-                    <div>
-                        <p class="text-xs text-slate-400 font-semibold uppercase">Día</p>
-                        <p class="text-white font-bold text-lg">Jueves 11 de Junio</p>
-                    </div>
+                    <p class="font-bold text-slate-800 text-lg leading-tight">Jueves<br>11 de junio</p>
                 </div>
 
                 <!-- Hora -->
-                <div class="info-card animate-element">
-                    <div class="icon-box bg-amber-500/20 text-amber-400">
-                        <i class="fas fa-clock"></i>
+                <div class="flex flex-col items-center">
+                    <h3 class="text-xl font-bold text-slate-800 uppercase mb-2">Hora:</h3>
+                    <div class="bg-white border-4 border-slate-800 rounded-full w-24 h-24 flex items-center justify-center shadow-lg mb-2 relative">
+                        <i class="far fa-clock text-5xl text-slate-800"></i>
                     </div>
-                    <div>
-                        <p class="text-xs text-slate-400 font-semibold uppercase">Hora</p>
-                        <p class="text-white font-bold text-lg">2:00 PM</p>
-                    </div>
+                    <p class="font-bold text-slate-800 text-lg leading-tight">2:00 PM</p>
                 </div>
 
                 <!-- Lugar -->
-                <div class="info-card animate-element">
-                    <div class="icon-box bg-emerald-500/20 text-emerald-400">
-                        <i class="fas fa-map-marker-alt"></i>
+                <div class="flex flex-col items-center">
+                    <h3 class="text-xl font-bold text-slate-800 uppercase mb-2">Lugar:</h3>
+                    <div class="bg-green-600 border-4 border-slate-800 rounded-lg w-28 h-24 flex items-center justify-center shadow-lg mb-2 relative overflow-hidden">
+                        <i class="fas fa-tree text-green-800 absolute -left-2 bottom-0 text-3xl"></i>
+                        <i class="fas fa-tree text-green-800 absolute -right-2 bottom-0 text-3xl"></i>
+                        <div class="bg-white border-2 border-slate-800 px-2 py-1 text-center relative z-10 rounded">
+                            <span class="text-[10px] font-black text-green-800 block leading-none">PARQUE DE</span>
+                            <span class="text-xs font-black text-green-800 block leading-none">LA PRADERA</span>
+                        </div>
                     </div>
+                    <p class="font-bold text-slate-800 text-lg leading-tight">Parque<br>de la Pradera</p>
+                </div>
+            </div>
+
+            <!-- Tarjetas Inferiores -->
+            <div class="grid grid-cols-2 gap-4 mt-auto">
+                <!-- Kit Salud -->
+                <div class="bottom-card card-blue">
+                    <div class="text-5xl drop-shadow-md">🪥</div>
                     <div>
-                        <p class="text-xs text-slate-400 font-semibold uppercase">Lugar</p>
-                        <p class="text-white font-bold text-lg">Parque de La Pradera</p>
+                        <h4 class="font-black text-xl uppercase leading-tight mb-1">Se les entregará</h4>
+                        <p class="font-bold text-lg text-yellow-300 uppercase leading-tight">Un Kit de Salud<br>Oral-Plus</p>
+                    </div>
+                </div>
+
+                <!-- Partidos -->
+                <div class="bottom-card card-green">
+                    <div class="field-lines"></div>
+                    <div class="field-center-line"></div>
+                    <div class="field-center"></div>
+                    <div class="relative z-10 text-center w-full">
+                        <h4 class="font-black text-lg uppercase leading-tight mb-1 text-white text-shadow">¡Y después...</h4>
+                        <p class="font-black text-xl text-yellow-300 uppercase leading-tight text-shadow drop-shadow-lg mb-1">Partidos de fútbol<br>relámpago!</p>
+                        <p class="text-sm font-bold text-white bg-black/20 rounded-full px-2 py-1 inline-block">¡Trae tus guayos!</p>
                     </div>
                 </div>
             </div>
 
-            <!-- Beneficios -->
-            <div class="bg-slate-800/50 rounded-xl p-4 border border-slate-700 animate-element relative overflow-hidden">
-                <div class="absolute right-0 bottom-0 opacity-10">
-                    <i class="fas fa-futbol text-8xl -mr-4 -mb-4"></i>
-                </div>
-                <h4 class="text-sky-400 font-bold mb-3 flex items-center gap-2">
-                    <i class="fas fa-star text-sm"></i> ¿Qué tendremos?
-                </h4>
-                <ul class="space-y-2">
-                    <li class="flex items-center gap-3 text-white text-sm font-medium">
-                        <div class="w-6 h-6 rounded-full bg-sky-500/20 flex items-center justify-center text-sky-400 flex-shrink-0">
-                            <i class="fas fa-box-open text-xs"></i>
-                        </div>
-                        Entrega de Kit Oral-Plus para cada niño.
-                    </li>
-                    <li class="flex items-center gap-3 text-white text-sm font-medium">
-                        <div class="w-6 h-6 rounded-full bg-amber-500/20 flex items-center justify-center text-amber-400 flex-shrink-0">
-                            <i class="fas fa-futbol text-xs"></i>
-                        </div>
-                        ¡Partidos de fútbol y mucha diversión!
-                    </li>
-                </ul>
-            </div>
-
-            <!-- Footer -->
-            <div class="text-center mt-6 animate-element">
-                <p class="text-xs text-slate-500 font-semibold uppercase tracking-widest">¡No faltes! #FuerzaYLealtad</p>
+            <!-- Banner Footer -->
+            <div class="text-center mt-6">
+                <h2 class="text-3xl font-black text-slate-800 uppercase tracking-widest flex items-center justify-center gap-4">
+                    <i class="fas fa-futbol"></i> FUERZA Y LEALTAD <i class="fas fa-futbol"></i>
+                </h2>
             </div>
         </div>
     </div>
 
-    <!-- Script para capturar pantalla (html2canvas) -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script>
-        // Animación de entrada con Anime.js
-        anime({
-            targets: '.animate-element',
-            translateY: [20, 0],
-            opacity: [0, 1],
-            delay: anime.stagger(150),
-            easing: 'easeOutElastic(1, .8)',
-            duration: 1000
-        });
-
-        // Función para descargar como imagen
         function takeScreenshot() {
             const btn = document.querySelector('.btn-capture');
             const flyer = document.getElementById('flyer-content');
@@ -244,8 +285,8 @@
             btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Procesando...';
             
             html2canvas(flyer, {
-                scale: 2, // Alta calidad
-                backgroundColor: '#0f172a',
+                scale: 2, 
+                backgroundColor: '#fef9eb',
                 useCORS: true
             }).then(canvas => {
                 const link = document.createElement('a');
