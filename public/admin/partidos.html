@@ -269,12 +269,18 @@
                         <td class="px-8 py-6">
                             <div class="flex items-center gap-4">
                                 <div class="flex flex-col items-center">
-                                    <img src="/images/ESCUDO.webp" class="team-shield-mini mb-1">
+                                    ${m.equipolocal && m.equipolocal.toUpperCase().includes('DIBA') 
+                                        ? '<img src="/images/ESCUDO.webp" class="team-shield-mini mb-1">' 
+                                        : `<div class="w-6 h-6 rounded-full bg-white/5 flex items-center justify-center text-[0.5rem] font-black text-gold mb-1 border border-white/10">${m.equipolocal ? m.equipolocal[0].toUpperCase() : 'L'}</div>`
+                                    }
                                     <span class="text-[0.65rem] font-bold text-white uppercase">${m.equipolocal}</span>
                                 </div>
                                 <span class="text-gold font-black italic text-xs">VS</span>
                                 <div class="flex flex-col items-center">
-                                    <div class="w-6 h-6 rounded-full bg-white/5 flex items-center justify-center text-[0.5rem] font-black text-gold mb-1 border border-white/10">${m.equipovisitante[0]}</div>
+                                    ${m.equipovisitante && m.equipovisitante.toUpperCase().includes('DIBA') 
+                                        ? '<img src="/images/ESCUDO.webp" class="team-shield-mini mb-1">' 
+                                        : `<div class="w-6 h-6 rounded-full bg-white/5 flex items-center justify-center text-[0.5rem] font-black text-gold mb-1 border border-white/10">${m.equipovisitante ? m.equipovisitante[0].toUpperCase() : 'V'}</div>`
+                                    }
                                     <span class="text-[0.65rem] font-bold text-white uppercase">${m.equipovisitante}</span>
                                 </div>
                             </div>
