@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jornada de Salud Oral - DIBA FBC</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #0f172a; /* Slate 900 */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            overflow-x: hidden;
+        }
+
+        .flyer-container {
+            width: 100%;
+            max-width: 500px;
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            border: 2px solid rgba(56, 189, 248, 0.3);
+            border-radius: 24px;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5), inset 0 0 40px rgba(56, 189, 248, 0.1);
+        }
+
+        .glow-circle {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(56,189,248,0.2) 0%, rgba(0,0,0,0) 70%);
+            border-radius: 50%;
+            top: -100px;
+            right: -100px;
+            z-index: 0;
+            animation: pulse 4s infinite alternate;
+        }
+
+        .glow-circle-2 {
+            position: absolute;
+            width: 250px;
+            height: 250px;
+            background: radial-gradient(circle, rgba(234,179,8,0.15) 0%, rgba(0,0,0,0) 70%);
+            border-radius: 50%;
+            bottom: -50px;
+            left: -100px;
+            z-index: 0;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 0.5; }
+            100% { transform: scale(1.2); opacity: 1; }
+        }
+
+        .content {
+            position: relative;
+            z-index: 10;
+        }
+
+        .title-gradient {
+            background: linear-gradient(to right, #38bdf8, #eab308);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .info-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            transition: transform 0.3s ease, border-color 0.3s ease;
+        }
+
+        .info-card:hover {
+            transform: translateY(-2px);
+            border-color: rgba(56, 189, 248, 0.5);
+        }
+
+        .icon-box {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .floating-tooth {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(5deg); }
+            100% { transform: translateY(0px) rotate(0deg); }
+        }
+
+        .btn-capture {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #eab308;
+            color: #000;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(234, 179, 8, 0.4);
+            z-index: 100;
+            transition: all 0.3s ease;
+        }
+
+        .btn-capture:hover {
+            transform: scale(1.05);
+            background: #fde047;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Botón para descargar el flyer -->
+    <button class="btn-capture" onclick="takeScreenshot()">
+        <i class="fas fa-camera mr-2"></i> Descargar Imagen
+    </button>
+
+    <div class="flyer-container" id="flyer-content">
+        <div class="glow-circle"></div>
+        <div class="glow-circle-2"></div>
+        
+        <div class="content">
+            <!-- Header -->
+            <div class="text-center mb-6 animate-element">
+                <div class="flex justify-center items-center gap-4 mb-4">
+                    <img src="images/ESCUDO.webp" alt="DIBA FBC" class="w-16 h-16 object-contain filter drop-shadow-lg" onerror="this.src='https://ui-avatars.com/api/?name=D&background=eab308&color=000'">
+                    <i class="fas fa-plus text-sky-400 text-xl"></i>
+                    <i class="fas fa-tooth text-sky-400 text-4xl floating-tooth filter drop-shadow-lg"></i>
+                </div>
+                <h3 class="text-amber-400 text-sm font-bold tracking-widest uppercase mb-1">¡Atención Familia DIBA!</h3>
+                <h1 class="text-3xl font-black text-white uppercase leading-tight mb-2">Gran Jornada de <br><span class="title-gradient">Salud Oral</span></h1>
+                <p class="text-slate-400 text-sm font-medium">Cuidando las sonrisas de nuestros futuros campeones.</p>
+            </div>
+
+            <!-- Info Cards -->
+            <div class="space-y-3 mb-8">
+                <!-- Fecha -->
+                <div class="info-card animate-element">
+                    <div class="icon-box bg-blue-500/20 text-blue-400">
+                        <i class="fas fa-calendar-day"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs text-slate-400 font-semibold uppercase">Día</p>
+                        <p class="text-white font-bold text-lg">Jueves 11 de Junio</p>
+                    </div>
+                </div>
+
+                <!-- Hora -->
+                <div class="info-card animate-element">
+                    <div class="icon-box bg-amber-500/20 text-amber-400">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs text-slate-400 font-semibold uppercase">Hora</p>
+                        <p class="text-white font-bold text-lg">2:00 PM</p>
+                    </div>
+                </div>
+
+                <!-- Lugar -->
+                <div class="info-card animate-element">
+                    <div class="icon-box bg-emerald-500/20 text-emerald-400">
+                        <i class="fas fa-map-marker-alt"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs text-slate-400 font-semibold uppercase">Lugar</p>
+                        <p class="text-white font-bold text-lg">Parque de La Pradera</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Beneficios -->
+            <div class="bg-slate-800/50 rounded-xl p-4 border border-slate-700 animate-element relative overflow-hidden">
+                <div class="absolute right-0 bottom-0 opacity-10">
+                    <i class="fas fa-futbol text-8xl -mr-4 -mb-4"></i>
+                </div>
+                <h4 class="text-sky-400 font-bold mb-3 flex items-center gap-2">
+                    <i class="fas fa-star text-sm"></i> ¿Qué tendremos?
+                </h4>
+                <ul class="space-y-2">
+                    <li class="flex items-center gap-3 text-white text-sm font-medium">
+                        <div class="w-6 h-6 rounded-full bg-sky-500/20 flex items-center justify-center text-sky-400 flex-shrink-0">
+                            <i class="fas fa-box-open text-xs"></i>
+                        </div>
+                        Entrega de Kit Oral-Plus para cada niño.
+                    </li>
+                    <li class="flex items-center gap-3 text-white text-sm font-medium">
+                        <div class="w-6 h-6 rounded-full bg-amber-500/20 flex items-center justify-center text-amber-400 flex-shrink-0">
+                            <i class="fas fa-futbol text-xs"></i>
+                        </div>
+                        ¡Partidos de fútbol y mucha diversión!
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Footer -->
+            <div class="text-center mt-6 animate-element">
+                <p class="text-xs text-slate-500 font-semibold uppercase tracking-widest">¡No faltes! #FuerzaYLealtad</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script para capturar pantalla (html2canvas) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script>
+        // Animación de entrada con Anime.js
+        anime({
+            targets: '.animate-element',
+            translateY: [20, 0],
+            opacity: [0, 1],
+            delay: anime.stagger(150),
+            easing: 'easeOutElastic(1, .8)',
+            duration: 1000
+        });
+
+        // Función para descargar como imagen
+        function takeScreenshot() {
+            const btn = document.querySelector('.btn-capture');
+            const flyer = document.getElementById('flyer-content');
+            
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Procesando...';
+            
+            html2canvas(flyer, {
+                scale: 2, // Alta calidad
+                backgroundColor: '#0f172a',
+                useCORS: true
+            }).then(canvas => {
+                const link = document.createElement('a');
+                link.download = 'DIBA_Salud_Oral.png';
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+                
+                btn.innerHTML = '<i class="fas fa-check mr-2"></i> ¡Descargado!';
+                setTimeout(() => {
+                    btn.innerHTML = '<i class="fas fa-camera mr-2"></i> Descargar Imagen';
+                }, 2000);
+            });
+        }
+    </script>
+</body>
+</html>
