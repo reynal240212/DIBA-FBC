@@ -24,207 +24,54 @@
     <script src="https://cdn.tailwindcss.com"></script>
 
     <style>
-        * {
-            font-family: 'Montserrat', sans-serif;
-        }
-
-        /* ── Gallery Grid ── */
+        * { font-family: 'Montserrat', sans-serif; }
+        
+        /* Masonry Grid CSS (Tailwind doesn't natively do masonry columns well without a plugin) */
         .gallery-grid {
-            columns: 4 280px;
-            column-gap: 12px;
+            column-count: 1;
+            column-gap: 1rem;
         }
+        @media (min-width: 640px) { .gallery-grid { column-count: 2; } }
+        @media (min-width: 1024px) { .gallery-grid { column-count: 3; } }
+        @media (min-width: 1280px) { .gallery-grid { column-count: 4; } }
 
         .gallery-item {
             break-inside: avoid;
-            margin-bottom: 12px;
-            position: relative;
-            overflow: hidden;
-            border-radius: 12px;
-            cursor: pointer;
+            margin-bottom: 1rem;
         }
 
-        .gallery-item img {
-            width: 100%;
-            display: block;
-            transition: transform 0.45s cubic-bezier(0.25, 0.8, 0.25, 1);
-        }
-
-        .gallery-item:hover img {
-            transform: scale(1.06);
-        }
-
-        .gallery-overlay {
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(to top, rgba(0, 0, 0, 0.78) 0%, transparent 55%);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
-            padding: 16px;
-        }
-
-        .gallery-item:hover .gallery-overlay {
-            opacity: 1;
-        }
-
-        /* ── Filter Buttons ── */
-        .filter-btn {
-            transition: all 0.2s ease;
-        }
-
+        /* Filter active state */
         .filter-btn.active {
-            background-color: #f59e0b;
-            color: #0f172a;
-            box-shadow: 0 4px 14px rgba(245, 158, 11, 0.45);
+            background-color: rgb(245 158 11 / 0.1);
+            border-color: rgb(245 158 11 / 0.3);
+            color: #fbbf24;
+            box-shadow: 0 0 20px rgba(245, 158, 11, 0.15);
+        }
+        .filter-btn.active i {
+            color: #fbbf24 !important;
         }
 
-        /* ── Hidden item ── */
-        .gallery-item.hidden-item {
-            display: none;
-        }
+        .hidden-item { display: none !important; }
 
-        /* ── Lightbox ── */
+        /* Lightbox specific animations */
         #lightbox {
-            position: fixed;
-            inset: 0;
-            z-index: 9999;
-            background: rgba(0, 0, 0, 0.95);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s ease;
+            transition: opacity 0.4s ease, backdrop-filter 0.4s ease;
         }
-
         #lightbox.open {
             opacity: 1;
-            pointer-events: all;
+            pointer-events: auto;
+            backdrop-filter: blur(20px);
         }
-
         #lightbox img {
-            max-width: min(90vw, 1100px);
-            max-height: 88vh;
-            object-fit: contain;
-            border-radius: 12px;
-            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.8);
-            transform: scale(0.92);
-            transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
-
         #lightbox.open img {
             transform: scale(1);
         }
-
-        #lb-close {
-            position: absolute;
-            top: 20px;
-            right: 24px;
-            width: 48px;
-            height: 48px;
-            background: rgba(255, 255, 255, 0.12);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 22px;
-            color: white;
-            cursor: pointer;
-            transition: background 0.2s, transform 0.2s;
-        }
-
-        #lb-close:hover {
-            background: #f59e0b;
-            transform: rotate(90deg) scale(1.1);
-        }
-
-        #lb-prev,
-        #lb-next {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 50%;
-            width: 52px;
-            height: 52px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 20px;
-            cursor: pointer;
-            transition: background 0.2s, transform 0.2s;
-        }
-
-        #lb-prev {
-            left: 16px;
-        }
-
-        #lb-next {
-            right: 16px;
-        }
-
-        #lb-prev:hover,
-        #lb-next:hover {
-            background: #f59e0b;
-            color: #0f172a;
-            transform: translateY(-50%) scale(1.1);
-        }
-
-        #lb-caption {
-            position: absolute;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            color: rgba(255, 255, 255, 0.85);
-            font-size: 13px;
-            font-weight: 600;
-            letter-spacing: 0.05em;
-            text-align: center;
-        }
-
-        #lb-counter {
-            position: absolute;
-            top: 24px;
-            left: 24px;
-            color: rgba(255, 255, 255, 0.6);
-            font-size: 13px;
-            font-weight: 600;
-        }
-
-        /* ── Video cards ── */
-        .video-card video {
-            transition: transform 0.3s ease;
-        }
-
-        .video-card:hover video {
-            transform: scale(1.02);
-        }
-
-        /* ── Hero ── */
-        .hero-gradient {
-            background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 50%, #0f172a 100%);
-        }
-
-        /* ── Scroll reveal ── */
-        @keyframes fadeUp {
-            from {
-                opacity: 0;
-                transform: translateY(24px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .fade-up {
-            animation: fadeUp 0.6s ease forwards;
-        }
+        
+        /* Hide scrollbar for filters */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
 </head>
 
@@ -236,40 +83,40 @@
     <!-- ══════════════════════════════════════
        HERO
   ══════════════════════════════════════ -->
-    <section class="hero-gradient pt-36 pb-20 relative overflow-hidden">
-        <!-- Decorative blobs -->
-        <div class="absolute -top-24 -left-24 w-96 h-96 bg-amber-500/10 rounded-full blur-3xl pointer-events-none">
-        </div>
-        <div class="absolute -bottom-24 -right-24 w-96 h-96 bg-blue-600/10 rounded-full blur-3xl pointer-events-none">
+    <section class="relative pt-32 pb-20 overflow-hidden bg-[#020617]">
+        <!-- Efectos de fondo tipo malla/blur -->
+        <div class="absolute top-0 inset-x-0 h-full overflow-hidden pointer-events-none">
+            <div class="absolute -top-1/2 -left-1/4 w-[150%] h-[150%] bg-gradient-to-b from-blue-900/20 via-transparent to-transparent blur-[120px] rounded-[100%]"></div>
+            <div class="absolute top-20 right-0 w-96 h-96 bg-yellow-500/10 rounded-full blur-[100px]"></div>
+            <div class="absolute bottom-0 left-10 w-80 h-80 bg-red-500/10 rounded-full blur-[100px]"></div>
         </div>
 
-        <div class="max-w-4xl mx-auto px-4 text-center relative z-10">
-            <span
-                class="inline-block px-4 py-1.5 bg-amber-500/20 border border-amber-500/40 text-amber-400 text-xs font-bold tracking-widest uppercase rounded-full mb-5">
-                <i class="fas fa-images mr-2"></i>Multimedia
-            </span>
-            <h1 class="text-5xl md:text-6xl font-black tracking-tight mb-5 leading-tight">
-                Galería <span class="text-amber-400">DIBA FBC</span>
+        <div class="max-w-4xl mx-auto px-4 text-center relative z-10 animate__animated animate__fadeInUp">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 text-xs font-black tracking-widest uppercase mb-6 shadow-[0_0_15px_rgba(245,158,11,0.2)]">
+                <i class="fas fa-images"></i> Multimedia Oficial
+            </div>
+            <h1 class="text-5xl md:text-7xl font-black italic uppercase tracking-tighter text-white mb-6">
+                Nuestra <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-yellow-200">Historia</span>
             </h1>
-            <p class="text-slate-300 text-lg md:text-xl max-w-xl mx-auto leading-relaxed">
-                Los mejores momentos del club: partidos épicos, campeonatos, cultura ciudadana y mucho más.
+            <p class="text-slate-400 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed font-medium">
+                Explora los mejores momentos del club: campeonatos, partidos inolvidables, nuestra cultura y la pasión que nos une en la cancha.
             </p>
 
-            <!-- Stats strip -->
-            <div class="mt-10 flex justify-center gap-10 text-center">
-                <div>
-                    <div class="text-3xl font-black text-amber-400" id="stat-fotos">55+</div>
-                    <div class="text-xs text-slate-400 uppercase tracking-wider mt-1">Fotos</div>
+            <!-- Stats strip Premium -->
+            <div class="mt-12 flex justify-center gap-6 md:gap-12 text-center items-center">
+                <div class="flex flex-col items-center group">
+                    <div class="text-4xl font-black text-white group-hover:scale-110 transition-transform drop-shadow-[0_0_10px_rgba(255,255,255,0.3)]">55<span class="text-amber-400">+</span></div>
+                    <div class="text-[10px] text-slate-500 font-bold uppercase tracking-widest mt-2">Fotos</div>
                 </div>
-                <div class="border-l border-slate-700"></div>
-                <div>
-                    <div class="text-3xl font-black text-amber-400">2</div>
-                    <div class="text-xs text-slate-400 uppercase tracking-wider mt-1">Videos</div>
+                <div class="w-px h-12 bg-gradient-to-b from-transparent via-white/20 to-transparent"></div>
+                <div class="flex flex-col items-center group">
+                    <div class="text-4xl font-black text-white group-hover:scale-110 transition-transform drop-shadow-[0_0_10px_rgba(255,255,255,0.3)]">2</div>
+                    <div class="text-[10px] text-slate-500 font-bold uppercase tracking-widest mt-2">Videos</div>
                 </div>
-                <div class="border-l border-slate-700"></div>
-                <div>
-                    <div class="text-3xl font-black text-amber-400">5</div>
-                    <div class="text-xs text-slate-400 uppercase tracking-wider mt-1">Categorías</div>
+                <div class="w-px h-12 bg-gradient-to-b from-transparent via-white/20 to-transparent"></div>
+                <div class="flex flex-col items-center group">
+                    <div class="text-4xl font-black text-white group-hover:scale-110 transition-transform drop-shadow-[0_0_10px_rgba(255,255,255,0.3)]">5</div>
+                    <div class="text-[10px] text-slate-500 font-bold uppercase tracking-widest mt-2">Categorías</div>
                 </div>
             </div>
         </div>
@@ -278,38 +125,26 @@
     <!-- ══════════════════════════════════════
        FILTROS
   ══════════════════════════════════════ -->
-    <section class="sticky top-[78px] z-50 bg-slate-900/95 backdrop-blur border-b border-slate-800 py-4 shadow-xl">
-        <div class="max-w-6xl mx-auto px-4">
-            <div class="flex flex-wrap justify-center gap-2" id="filter-bar">
-                <button
-                    class="filter-btn active px-5 py-2 rounded-full bg-slate-800 text-white text-sm font-bold border border-slate-700 hover:border-amber-500"
-                    data-cat="all">
-                    <i class="fas fa-th mr-1.5"></i>Todos
+    <section class="sticky top-[78px] z-40 bg-[#020617]/80 backdrop-blur-xl border-b border-white/5 py-4 shadow-2xl">
+        <div class="max-w-6xl mx-auto px-4 overflow-x-auto no-scrollbar">
+            <div class="flex flex-nowrap md:flex-wrap justify-start md:justify-center gap-3 w-max md:w-auto mx-auto pb-2 md:pb-0" id="filter-bar">
+                <button class="filter-btn active flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white/5 text-slate-300 text-xs font-bold uppercase tracking-wider border border-white/5 hover:bg-white/10 transition-all whitespace-nowrap" data-cat="all">
+                    <i class="fas fa-th text-slate-400 transition-colors"></i> Todos
                 </button>
-                <button
-                    class="filter-btn px-5 py-2 rounded-full bg-slate-800 text-white text-sm font-bold border border-slate-700 hover:border-amber-500"
-                    data-cat="partidos">
-                    <i class="fas fa-futbol mr-1.5"></i>Partidos
+                <button class="filter-btn flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white/5 text-slate-300 text-xs font-bold uppercase tracking-wider border border-white/5 hover:bg-white/10 transition-all whitespace-nowrap" data-cat="partidos">
+                    <i class="fas fa-futbol text-slate-400 transition-colors"></i> Partidos
                 </button>
-                <button
-                    class="filter-btn px-5 py-2 rounded-full bg-slate-800 text-white text-sm font-bold border border-slate-700 hover:border-amber-500"
-                    data-cat="campeonatos">
-                    <i class="fas fa-trophy mr-1.5"></i>Campeonatos
+                <button class="filter-btn flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white/5 text-slate-300 text-xs font-bold uppercase tracking-wider border border-white/5 hover:bg-white/10 transition-all whitespace-nowrap" data-cat="campeonatos">
+                    <i class="fas fa-trophy text-slate-400 transition-colors"></i> Campeonatos
                 </button>
-                <button
-                    class="filter-btn px-5 py-2 rounded-full bg-slate-800 text-white text-sm font-bold border border-slate-700 hover:border-amber-500"
-                    data-cat="cultura">
-                    <i class="fas fa-hands-helping mr-1.5"></i>Cultura Ciudadana
+                <button class="filter-btn flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white/5 text-slate-300 text-xs font-bold uppercase tracking-wider border border-white/5 hover:bg-white/10 transition-all whitespace-nowrap" data-cat="cultura">
+                    <i class="fas fa-hands-helping text-slate-400 transition-colors"></i> Cultura
                 </button>
-                <button
-                    class="filter-btn px-5 py-2 rounded-full bg-slate-800 text-white text-sm font-bold border border-slate-700 hover:border-amber-500"
-                    data-cat="celebraciones">
-                    <i class="fas fa-star mr-1.5"></i>Celebraciones
+                <button class="filter-btn flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white/5 text-slate-300 text-xs font-bold uppercase tracking-wider border border-white/5 hover:bg-white/10 transition-all whitespace-nowrap" data-cat="celebraciones">
+                    <i class="fas fa-star text-slate-400 transition-colors"></i> Celebraciones
                 </button>
-                <button
-                    class="filter-btn px-5 py-2 rounded-full bg-slate-800 text-white text-sm font-bold border border-slate-700 hover:border-amber-500"
-                    data-cat="videos">
-                    <i class="fas fa-play-circle mr-1.5"></i>Videos
+                <button class="filter-btn flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white/5 text-slate-300 text-xs font-bold uppercase tracking-wider border border-white/5 hover:bg-white/10 transition-all whitespace-nowrap" data-cat="videos">
+                    <i class="fas fa-play-circle text-slate-400 transition-colors"></i> Videos
                 </button>
             </div>
         </div>
@@ -666,54 +501,59 @@
     </section>
 
     <!-- ══════════════════════════════════════
-       VIDEOS
+       VIDEOS (Bento Grid Premium)
   ══════════════════════════════════════ -->
-    <section class="py-16 bg-slate-800" id="videos" data-cat-section="videos">
-        <div class="max-w-6xl mx-auto px-4">
-            <div class="text-center mb-12">
-                <span
-                    class="inline-block px-4 py-1.5 bg-amber-500/20 border border-amber-500/40 text-amber-400 text-xs font-bold tracking-widest uppercase rounded-full mb-4">
-                    <i class="fas fa-film mr-2"></i>Videos
-                </span>
-                <h2 class="text-3xl md:text-4xl font-black tracking-tight">Momentos en Movimiento</h2>
-                <p class="text-slate-400 mt-3 max-w-lg mx-auto">Revive los mejores momentos del club en video.</p>
+    <section class="py-24 bg-[#020617] relative overflow-hidden border-t border-white/5" id="videos" data-cat-section="videos">
+        <!-- Glow effect -->
+        <div class="absolute inset-0 pointer-events-none">
+            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-blue-500/5 blur-[120px] rounded-full"></div>
+        </div>
+
+        <div class="max-w-6xl mx-auto px-4 relative z-10">
+            <div class="text-center mb-16">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-black tracking-widest uppercase mb-4 shadow-[0_0_15px_rgba(59,130,246,0.2)]">
+                    <i class="fas fa-play-circle"></i> Videos
+                </div>
+                <h2 class="text-4xl md:text-5xl font-black italic uppercase tracking-tighter text-white">Momentos en <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-sky-200">Movimiento</span></h2>
+                <p class="text-slate-400 mt-4 max-w-lg mx-auto font-medium">Revive los mejores momentos del club en video.</p>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-
-                <div class="video-card bg-slate-900 rounded-2xl overflow-hidden shadow-2xl ring-1 ring-slate-700 group">
-                    <div class="relative overflow-hidden">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-10">
+                <!-- Video 1 -->
+                <div class="video-card bg-gradient-to-br from-slate-900 to-[#020617] rounded-[2rem] overflow-hidden shadow-2xl border border-slate-700/50 hover:border-blue-500/30 transition-all duration-500 group relative">
+                    <div class="absolute inset-0 bg-gradient-to-t from-[#020617] via-transparent to-transparent pointer-events-none z-10"></div>
+                    <div class="relative overflow-hidden rounded-t-[2rem]">
                         <video controls preload="metadata" poster="images/ESCUDO.webp"
-                            class="w-full h-64 object-cover bg-slate-950">
+                            class="w-full h-72 md:h-80 object-cover bg-slate-950">
                             <source src="video/diba_ocam.mp4" type="video/mp4" />
                             Tu navegador no soporta video HTML5.
                         </video>
                     </div>
-                    <div class="p-5">
-                        <div class="flex items-center gap-2 mb-2">
-                            <span
-                                class="text-[10px] bg-amber-500 text-slate-900 font-bold px-2 py-0.5 rounded-full">Video</span>
+                    <div class="p-8 relative z-20 -mt-16 bg-gradient-to-t from-[#020617] to-transparent">
+                        <div class="flex items-center gap-2 mb-3">
+                            <span class="text-[10px] bg-amber-500 text-slate-900 font-bold px-3 py-1 rounded-full shadow-[0_0_10px_rgba(245,158,11,0.3)]"><i class="fas fa-star mr-1"></i> Oficial</span>
                         </div>
-                        <h3 class="text-lg font-bold text-white">DIBA FBC — Video Oficial</h3>
-                        <p class="text-slate-400 text-sm mt-1">Momentos destacados del club en acción.</p>
+                        <h3 class="text-xl md:text-2xl font-black text-white uppercase tracking-tight">DIBA FBC — Video Oficial</h3>
+                        <p class="text-slate-400 text-sm md:text-base mt-2">Momentos destacados del club en acción.</p>
                     </div>
                 </div>
 
-                <div class="video-card bg-slate-900 rounded-2xl overflow-hidden shadow-2xl ring-1 ring-slate-700 group">
-                    <div class="relative overflow-hidden">
+                <!-- Video 2 -->
+                <div class="video-card bg-gradient-to-bl from-slate-900 to-[#020617] rounded-[2rem] overflow-hidden shadow-2xl border border-slate-700/50 hover:border-blue-500/30 transition-all duration-500 group relative">
+                    <div class="absolute inset-0 bg-gradient-to-t from-[#020617] via-transparent to-transparent pointer-events-none z-10"></div>
+                    <div class="relative overflow-hidden rounded-t-[2rem]">
                         <video controls preload="metadata" poster="images/ESCUDO.webp"
-                            class="w-full h-64 object-cover bg-slate-950">
+                            class="w-full h-72 md:h-80 object-cover bg-slate-950">
                             <source src="video/entrenamientopost.mp4" type="video/mp4" />
                             Tu navegador no soporta video HTML5.
                         </video>
                     </div>
-                    <div class="p-5">
-                        <div class="flex items-center gap-2 mb-2">
-                            <span
-                                class="text-[10px] bg-blue-500 text-white font-bold px-2 py-0.5 rounded-full">Entrenamiento</span>
+                    <div class="p-8 relative z-20 -mt-16 bg-gradient-to-t from-[#020617] to-transparent">
+                        <div class="flex items-center gap-2 mb-3">
+                            <span class="text-[10px] bg-blue-500 text-white font-bold px-3 py-1 rounded-full shadow-[0_0_10px_rgba(59,130,246,0.3)]"><i class="fas fa-dumbbell mr-1"></i> Entrenamiento</span>
                         </div>
-                        <h3 class="text-lg font-bold text-white">Entrenamiento Post-Partido</h3>
-                        <p class="text-slate-400 text-sm mt-1">Sesión de entrenamiento y preparación del equipo.</p>
+                        <h3 class="text-xl md:text-2xl font-black text-white uppercase tracking-tight">Entrenamiento Post-Partido</h3>
+                        <p class="text-slate-400 text-sm md:text-base mt-2">Sesión de entrenamiento y preparación del equipo.</p>
                     </div>
                 </div>
 
@@ -722,15 +562,33 @@
     </section>
 
     <!-- ══════════════════════════════════════
-       LIGHTBOX
+       LIGHTBOX (Premium UI)
   ══════════════════════════════════════ -->
-    <div id="lightbox" role="dialog" aria-modal="true" aria-label="Visor de imagen">
-        <button id="lb-close" aria-label="Cerrar"><i class="fas fa-times"></i></button>
-        <button id="lb-prev" aria-label="Anterior"><i class="fas fa-chevron-left"></i></button>
-        <button id="lb-next" aria-label="Siguiente"><i class="fas fa-chevron-right"></i></button>
-        <span id="lb-counter"></span>
-        <img id="lb-img" src="" alt="Imagen ampliada" />
-        <span id="lb-caption"></span>
+    <div id="lightbox" class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-[#020617]/90 opacity-0 pointer-events-none transition-all duration-500" role="dialog" aria-modal="true" aria-label="Visor de imagen">
+        
+        <!-- Controles Superiores -->
+        <div class="absolute top-0 inset-x-0 p-6 flex justify-between items-start z-50 pointer-events-none">
+            <span id="lb-counter" class="bg-black/50 backdrop-blur px-4 py-2 rounded-full text-white/80 text-sm font-black tracking-widest uppercase shadow-lg pointer-events-auto"></span>
+            <button id="lb-close" class="w-12 h-12 flex items-center justify-center bg-white/10 hover:bg-red-500 text-white rounded-full backdrop-blur transition-all hover:scale-110 shadow-lg pointer-events-auto" aria-label="Cerrar">
+                <i class="fas fa-times text-xl"></i>
+            </button>
+        </div>
+
+        <!-- Botones Laterales -->
+        <button id="lb-prev" class="absolute left-4 top-1/2 -translate-y-1/2 w-14 h-14 flex items-center justify-center bg-black/40 hover:bg-amber-500 text-white rounded-full backdrop-blur transition-all hover:scale-110 shadow-lg z-50 pointer-events-auto" aria-label="Anterior">
+            <i class="fas fa-chevron-left text-2xl pr-1"></i>
+        </button>
+        <button id="lb-next" class="absolute right-4 top-1/2 -translate-y-1/2 w-14 h-14 flex items-center justify-center bg-black/40 hover:bg-amber-500 text-white rounded-full backdrop-blur transition-all hover:scale-110 shadow-lg z-50 pointer-events-auto" aria-label="Siguiente">
+            <i class="fas fa-chevron-right text-2xl pl-1"></i>
+        </button>
+
+        <!-- Imagen -->
+        <div class="relative max-w-5xl w-full max-h-[85vh] flex items-center justify-center">
+            <img id="lb-img" src="" alt="Imagen ampliada" class="max-w-full max-h-[85vh] object-contain rounded-xl shadow-[0_0_50px_rgba(0,0,0,0.5)] transition-transform duration-500" />
+            <div class="absolute bottom-0 inset-x-0 p-6 bg-gradient-to-t from-black/80 to-transparent rounded-b-xl">
+                <span id="lb-caption" class="block text-center text-white font-bold text-lg drop-shadow-md"></span>
+            </div>
+        </div>
     </div>
 
     <!-- Footer -->
