@@ -17,6 +17,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;900&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
   <script src="https://cdn.tailwindcss.com"></script>
+  
   <!-- EmailJS SDK -->
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
   <link rel="stylesheet" href="styles/styles.css" />
@@ -31,7 +32,6 @@
         opacity: 0;
         transform: translateY(20px);
       }
-
       to {
         opacity: 1;
         transform: translateY(0);
@@ -71,7 +71,7 @@
       background: rgba(15, 23, 42, 0.8);
     }
 
-    /* Toast */
+    /* Toast Notification Styles */
     #toast {
       position: fixed;
       bottom: 1.5rem;
@@ -94,14 +94,13 @@
 <body class="bg-[#020617] text-white selection:bg-yellow-500/30">
   <div id="navbar-container"></div>
 
-  <!-- ══════════════ HERO ══════════════ -->
+  <!-- ══════════════ HERO SECTION ══════════════ -->
   <section class="bg-slate-900 pt-36 pb-20 relative overflow-hidden">
     <div class="absolute inset-0 flex items-center justify-center opacity-[0.05] pointer-events-none">
-      <img src="images/ESCUDO.webp" alt="" class="w-[420px]" />
+      <img src="images/ESCUDO.webp" alt="Escudo DIBA FBC Fondo" class="w-[420px]" />
     </div>
     <div class="max-w-3xl mx-auto px-4 text-center relative z-10">
-      <span
-        class="inline-block px-4 py-1.5 bg-amber-500/20 border border-amber-500/40 text-amber-400 text-xs font-bold tracking-widest uppercase rounded-full mb-5 fade-up delay-1">
+      <span class="inline-block px-4 py-1.5 bg-amber-500/20 border border-amber-500/40 text-amber-400 text-xs font-bold tracking-widest uppercase rounded-full mb-5 fade-up delay-1">
         <i class="fas fa-envelope mr-2"></i>Escríbenos
       </span>
       <h1 class="text-5xl md:text-6xl font-black text-white mb-4 fade-up delay-2">
@@ -113,12 +112,12 @@
     </div>
   </section>
 
-  <!-- ══════════════ CONTENIDO ══════════════ -->
+  <!-- ══════════════ CONTENIDO DE CONTACTO ══════════════ -->
   <section class="py-20 bg-[#020617]">
     <div class="max-w-6xl mx-auto px-4">
       <div class="grid lg:grid-cols-2 gap-14 items-start">
 
-        <!-- Info de contacto -->
+        <!-- Información Directa de Contacto -->
         <div>
           <p class="text-xs font-bold tracking-[0.2em] uppercase text-yellow-500 mb-2">Información directa</p>
           <h2 class="text-3xl font-black text-white mb-4">Estamos aquí <br />para ayudarte</h2>
@@ -129,8 +128,7 @@
 
           <div class="space-y-5">
             <!-- Dirección -->
-            <div
-              class="flex items-center gap-4 bg-slate-900/30 backdrop-blur-xl rounded-2xl p-5 border border-white/5 hover:border-yellow-500/30 hover:shadow-2xl transition-all">
+            <div class="flex items-center gap-4 bg-slate-900/30 backdrop-blur-xl rounded-2xl p-5 border border-white/5 hover:border-yellow-500/30 hover:shadow-2xl transition-all">
               <div class="flex-shrink-0 w-12 h-12 bg-yellow-500/10 rounded-xl flex items-center justify-center">
                 <i class="fas fa-map-marker-alt text-yellow-500 text-lg"></i>
               </div>
@@ -143,23 +141,20 @@
             </div>
 
             <!-- Email -->
-            <div
-              class="flex items-center gap-4 bg-slate-900/30 backdrop-blur-xl rounded-2xl p-5 border border-white/5 hover:border-yellow-500/30 hover:shadow-2xl transition-all">
+            <div class="flex items-center gap-4 bg-slate-900/30 backdrop-blur-xl rounded-2xl p-5 border border-white/5 hover:border-yellow-500/30 hover:shadow-2xl transition-all">
               <div class="flex-shrink-0 w-12 h-12 bg-yellow-500/10 rounded-xl flex items-center justify-center">
                 <i class="fas fa-envelope text-yellow-500 text-lg"></i>
               </div>
               <div>
                 <p class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-0.5">Correo electrónico</p>
-                <a href="mailto:fbcdiba@gmail.com"
-                  class="font-bold text-white text-sm hover:text-yellow-500 transition-colors">
+                <a href="mailto:fbcdiba@gmail.com" class="font-bold text-white text-sm hover:text-yellow-500 transition-colors">
                   fbcdiba@gmail.com
                 </a>
               </div>
             </div>
 
             <!-- WhatsApp -->
-            <div
-              class="flex items-center gap-4 bg-slate-900/30 backdrop-blur-xl rounded-2xl p-5 border border-white/5 hover:border-green-500/30 hover:shadow-2xl transition-all">
+            <div class="flex items-center gap-4 bg-slate-900/30 backdrop-blur-xl rounded-2xl p-5 border border-white/5 hover:border-green-500/30 hover:shadow-2xl transition-all">
               <div class="flex-shrink-0 w-12 h-12 bg-green-500/10 rounded-xl flex items-center justify-center">
                 <i class="fab fa-whatsapp text-green-500 text-xl"></i>
               </div>
@@ -175,8 +170,7 @@
             </div>
 
             <!-- Horario -->
-            <div
-              class="flex items-center gap-4 bg-slate-900/30 backdrop-blur-xl rounded-2xl p-5 border border-white/5 hover:border-yellow-500/30 hover:shadow-2xl transition-all">
+            <div class="flex items-center gap-4 bg-slate-900/30 backdrop-blur-xl rounded-2xl p-5 border border-white/5 hover:border-yellow-500/30 hover:shadow-2xl transition-all">
               <div class="flex-shrink-0 w-12 h-12 bg-yellow-500/10 rounded-xl flex items-center justify-center">
                 <i class="fas fa-clock text-yellow-500 text-lg"></i>
               </div>
@@ -189,7 +183,7 @@
           </div>
         </div>
 
-        <!-- Formulario -->
+        <!-- Formulario Interactivo -->
         <div class="bg-slate-900/30 backdrop-blur-xl rounded-3xl border border-white/5 p-8 shadow-2xl">
           <h2 class="text-2xl font-black text-white mb-1">Envíanos un Mensaje</h2>
           <p class="text-slate-400 text-sm mb-7">Te responderemos en menos de 24 horas.</p>
@@ -197,29 +191,22 @@
           <form id="contactForm" class="space-y-5" novalidate>
             <div class="grid sm:grid-cols-2 gap-4">
               <div>
-                <label for="nombre" class="block text-xs font-black uppercase text-slate-400 mb-1.5 tracking-widest">Tu
-                  Nombre *</label>
-                <input type="text" id="nombre" placeholder="Ej: Carlos Pérez" required class="input-field"
-                  autocomplete="name" />
+                <label for="nombre" class="block text-xs font-black uppercase text-slate-400 mb-1.5 tracking-widest">Tu Nombre *</label>
+                <input type="text" id="nombre" placeholder="Ej: Carlos Pérez" required class="input-field" autocomplete="name" />
               </div>
               <div>
-                <label for="telefono"
-                  class="block text-xs font-black uppercase text-slate-400 mb-1.5 tracking-widest">Teléfono</label>
+                <label for="telefono" class="block text-xs font-black uppercase text-slate-400 mb-1.5 tracking-widest">Teléfono</label>
                 <input type="tel" id="telefono" placeholder="+57 300 000 0000" class="input-field" autocomplete="tel" />
               </div>
             </div>
 
             <div>
-              <label for="correo"
-                class="block text-xs font-black uppercase text-slate-400 mb-1.5 tracking-widest">Correo Electrónico
-                *</label>
-              <input type="email" id="correo" placeholder="tucorreo@ejemplo.com" required class="input-field"
-                autocomplete="email" />
+              <label for="correo" class="block text-xs font-black uppercase text-slate-400 mb-1.5 tracking-widest">Correo Electrónico *</label>
+              <input type="email" id="correo" placeholder="tucorreo@ejemplo.com" required class="input-field" autocomplete="email" />
             </div>
 
             <div>
-              <label for="asunto"
-                class="block text-xs font-black uppercase text-slate-400 mb-1.5 tracking-widest">Asunto *</label>
+              <label for="asunto" class="block text-xs font-black uppercase text-slate-400 mb-1.5 tracking-widest">Asunto *</label>
               <select id="asunto" required class="input-field">
                 <option value="" disabled selected>Selecciona un tema…</option>
                 <option value="inscripcion">Inscripción al club</option>
@@ -232,15 +219,13 @@
             </div>
 
             <div>
-              <label for="mensaje"
-                class="block text-xs font-black uppercase text-slate-400 mb-1.5 tracking-widest">Mensaje *</label>
-              <textarea id="mensaje" rows="4" placeholder="¿En qué podemos ayudarte?" required
-                class="input-field resize-none"></textarea>
+              <label for="mensaje" class="block text-xs font-black uppercase text-slate-400 mb-1.5 tracking-widest">Mensaje *</label>
+              <textarea id="mensaje" rows="4" placeholder="¿En qué podemos ayudarte?" required class="input-field resize-none"></textarea>
               <p id="char-count" class="text-right text-xs text-slate-400 mt-1">0 / 500</p>
             </div>
 
             <button type="submit" id="submitBtn"
-              class="w-full bg-yellow-500 hover:bg-yellow-400 text-slate-950 font-black py-4 rounded-xl uppercase tracking-[0.15em] shadow-lg hover:shadow-yellow-500/20 hover:scale-[1.01] transition-all duration-300 flex items-center justify-center gap-3 group">
+              class="w-full bg-yellow-500 hover:bg-yellow-400 text-slate-950 font-black py-4 rounded-xl uppercase tracking-[0.15em] shadow-lg hover:shadow-yellow-500/20 hover:scale-[1.01] transition-all duration-300 flex items-center justify-center gap-3 group cursor-pointer">
               <span id="btnText">Enviar Mensaje</span>
               <i id="btnIcon" class="fas fa-paper-plane group-hover:translate-x-1 transition-transform"></i>
             </button>
@@ -251,12 +236,13 @@
     </div>
   </section>
 
-  <!-- ══════════════ MAPA ══════════════ -->
+  <!-- ══════════════ SECCIÓN DE UBICACIÓN Y MAPA ══════════════ -->
   <section class="bg-slate-100 py-16">
     <div class="max-w-6xl mx-auto px-4">
       <div class="text-center mb-8">
         <p class="text-xs font-bold tracking-[0.2em] uppercase text-blue-600 mb-2">¿Cómo llegar?</p>
-        <h2 class="text-2xl font-black text-slate-900">Parque La Pradera — Lugar de entrenamiento</h2>
+        <!-- Título corregido con negro absoluto para máximo contraste -->
+        <h2 class="text-2xl font-black text-black">Parque La Pradera — Lugar de entrenamiento</h2>
       </div>
       <div class="rounded-2xl overflow-hidden shadow-xl border border-slate-200">
         <iframe
@@ -269,7 +255,7 @@
 
   <div id="footer-container"></div>
 
-  <!-- Toast de éxito -->
+  <!-- Toast de Éxito -->
   <div id="toast" class="items-center gap-3 bg-green-600 text-white px-5 py-4 rounded-2xl shadow-2xl">
     <i class="fas fa-check-circle text-xl"></i>
     <div>
@@ -278,7 +264,7 @@
     </div>
   </div>
 
-  <!-- Toast de error -->
+  <!-- Toast de Error -->
   <div id="toast-error" class="items-center gap-3 bg-red-600 text-white px-5 py-4 rounded-2xl shadow-2xl"
     style="position:fixed;bottom:1.5rem;right:1.5rem;z-index:9999;display:none;transform:translateY(10px);opacity:0;transition:all 0.3s ease;">
     <i class="fas fa-exclamation-circle text-xl"></i>
@@ -288,6 +274,7 @@
     </div>
   </div>
 
+  <!-- Scripts del Proyecto -->
   <script src="scripts/config.js"></script>
   <script src="scripts/loadComponents.js" defer></script>
   <script src="scripts/main.js" defer></script>
@@ -301,6 +288,7 @@
     // ── Helpers de Toast ────────────────────────────────────────────
     function showToast(id) {
       const el = document.getElementById(id);
+      if (!el) return;
       el.style.display = 'flex';
       setTimeout(() => { el.style.transform = 'translateY(0)'; el.style.opacity = '1'; }, 10);
       setTimeout(() => {
@@ -312,11 +300,13 @@
     // ── Contador de caracteres ───────────────────────────────────────
     const msgArea = document.getElementById('mensaje');
     const charCount = document.getElementById('char-count');
-    msgArea.addEventListener('input', () => {
-      const len = Math.min(msgArea.value.length, 500);
-      charCount.textContent = `${len} / 500`;
-      if (msgArea.value.length > 500) msgArea.value = msgArea.value.slice(0, 500);
-    });
+    if (msgArea && charCount) {
+      msgArea.addEventListener('input', () => {
+        const len = Math.min(msgArea.value.length, 500);
+        charCount.textContent = `${len} / 500`;
+        if (msgArea.value.length > 500) msgArea.value = msgArea.value.slice(0, 500);
+      });
+    }
 
     // ── Envío real con EmailJS ───────────────────────────────────────
     document.getElementById('contactForm').addEventListener('submit', async function (e) {
@@ -355,7 +345,7 @@
         // ✅ Éxito real
         showToast('toast');
         document.getElementById('contactForm').reset();
-        charCount.textContent = '0 / 500';
+        if (charCount) charCount.textContent = '0 / 500';
 
       } catch (err) {
         // ❌ Error
