@@ -17,7 +17,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;900&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
   <script src="https://cdn.tailwindcss.com"></script>
-  
+
   <!-- EmailJS SDK -->
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
   <link rel="stylesheet" href="styles/styles.css" />
@@ -32,6 +32,7 @@
         opacity: 0;
         transform: translateY(20px);
       }
+
       to {
         opacity: 1;
         transform: translateY(0);
@@ -100,7 +101,8 @@
       <img src="images/ESCUDO.webp" alt="Escudo DIBA FBC Fondo" class="w-[420px]" />
     </div>
     <div class="max-w-3xl mx-auto px-4 text-center relative z-10">
-      <span class="inline-block px-4 py-1.5 bg-amber-500/20 border border-amber-500/40 text-amber-400 text-xs font-bold tracking-widest uppercase rounded-full mb-5 fade-up delay-1">
+      <span
+        class="inline-block px-4 py-1.5 bg-amber-500/20 border border-amber-500/40 text-amber-400 text-xs font-bold tracking-widest uppercase rounded-full mb-5 fade-up delay-1">
         <i class="fas fa-envelope mr-2"></i>Escríbenos
       </span>
       <h1 class="text-5xl md:text-6xl font-black text-white mb-4 fade-up delay-2">
@@ -128,7 +130,8 @@
 
           <div class="space-y-5">
             <!-- Dirección -->
-            <div class="flex items-center gap-4 bg-slate-900/30 backdrop-blur-xl rounded-2xl p-5 border border-white/5 hover:border-yellow-500/30 hover:shadow-2xl transition-all">
+            <div
+              class="flex items-center gap-4 bg-slate-900/30 backdrop-blur-xl rounded-2xl p-5 border border-white/5 hover:border-yellow-500/30 hover:shadow-2xl transition-all">
               <div class="flex-shrink-0 w-12 h-12 bg-yellow-500/10 rounded-xl flex items-center justify-center">
                 <i class="fas fa-map-marker-alt text-yellow-500 text-lg"></i>
               </div>
@@ -141,20 +144,23 @@
             </div>
 
             <!-- Email -->
-            <div class="flex items-center gap-4 bg-slate-900/30 backdrop-blur-xl rounded-2xl p-5 border border-white/5 hover:border-yellow-500/30 hover:shadow-2xl transition-all">
+            <div
+              class="flex items-center gap-4 bg-slate-900/30 backdrop-blur-xl rounded-2xl p-5 border border-white/5 hover:border-yellow-500/30 hover:shadow-2xl transition-all">
               <div class="flex-shrink-0 w-12 h-12 bg-yellow-500/10 rounded-xl flex items-center justify-center">
                 <i class="fas fa-envelope text-yellow-500 text-lg"></i>
               </div>
               <div>
                 <p class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-0.5">Correo electrónico</p>
-                <a href="mailto:fbcdiba@gmail.com" class="font-bold text-white text-sm hover:text-yellow-500 transition-colors">
+                <a href="mailto:fbcdiba@gmail.com"
+                  class="font-bold text-white text-sm hover:text-yellow-500 transition-colors">
                   fbcdiba@gmail.com
                 </a>
               </div>
             </div>
 
             <!-- WhatsApp -->
-            <div class="flex items-center gap-4 bg-slate-900/30 backdrop-blur-xl rounded-2xl p-5 border border-white/5 hover:border-green-500/30 hover:shadow-2xl transition-all">
+            <div
+              class="flex items-center gap-4 bg-slate-900/30 backdrop-blur-xl rounded-2xl p-5 border border-white/5 hover:border-green-500/30 hover:shadow-2xl transition-all">
               <div class="flex-shrink-0 w-12 h-12 bg-green-500/10 rounded-xl flex items-center justify-center">
                 <i class="fab fa-whatsapp text-green-500 text-xl"></i>
               </div>
@@ -164,13 +170,16 @@
                   target="_blank"
                   class="font-bold text-green-400 text-sm hover:text-green-300 transition-colors flex items-center gap-2">
                   +57 304 656 6784
-                  <span class="bg-green-500/20 text-green-400 text-[10px] font-black px-2 py-0.5 rounded-full border border-green-500/10">EN LÍNEA</span>
+                  <span
+                    class="bg-green-500/20 text-green-400 text-[10px] font-black px-2 py-0.5 rounded-full border border-green-500/10">EN
+                    LÍNEA</span>
                 </a>
               </div>
             </div>
 
             <!-- Horario -->
-            <div class="flex items-center gap-4 bg-slate-900/30 backdrop-blur-xl rounded-2xl p-5 border border-white/5 hover:border-yellow-500/30 hover:shadow-2xl transition-all">
+            <div
+              class="flex items-center gap-4 bg-slate-900/30 backdrop-blur-xl rounded-2xl p-5 border border-white/5 hover:border-yellow-500/30 hover:shadow-2xl transition-all">
               <div class="flex-shrink-0 w-12 h-12 bg-yellow-500/10 rounded-xl flex items-center justify-center">
                 <i class="fas fa-clock text-yellow-500 text-lg"></i>
               </div>
@@ -191,22 +200,29 @@
           <form id="contactForm" class="space-y-5" novalidate>
             <div class="grid sm:grid-cols-2 gap-4">
               <div>
-                <label for="nombre" class="block text-xs font-black uppercase text-slate-400 mb-1.5 tracking-widest">Tu Nombre *</label>
-                <input type="text" id="nombre" placeholder="Ej: Carlos Pérez" required class="input-field" autocomplete="name" />
+                <label for="nombre" class="block text-xs font-black uppercase text-slate-400 mb-1.5 tracking-widest">Tu
+                  Nombre *</label>
+                <input type="text" id="nombre" placeholder="Ej: Carlos Pérez" required class="input-field"
+                  autocomplete="name" />
               </div>
               <div>
-                <label for="telefono" class="block text-xs font-black uppercase text-slate-400 mb-1.5 tracking-widest">Teléfono</label>
+                <label for="telefono"
+                  class="block text-xs font-black uppercase text-slate-400 mb-1.5 tracking-widest">Teléfono</label>
                 <input type="tel" id="telefono" placeholder="+57 300 000 0000" class="input-field" autocomplete="tel" />
               </div>
             </div>
 
             <div>
-              <label for="correo" class="block text-xs font-black uppercase text-slate-400 mb-1.5 tracking-widest">Correo Electrónico *</label>
-              <input type="email" id="correo" placeholder="tucorreo@ejemplo.com" required class="input-field" autocomplete="email" />
+              <label for="correo"
+                class="block text-xs font-black uppercase text-slate-400 mb-1.5 tracking-widest">Correo Electrónico
+                *</label>
+              <input type="email" id="correo" placeholder="tucorreo@ejemplo.com" required class="input-field"
+                autocomplete="email" />
             </div>
 
             <div>
-              <label for="asunto" class="block text-xs font-black uppercase text-slate-400 mb-1.5 tracking-widest">Asunto *</label>
+              <label for="asunto"
+                class="block text-xs font-black uppercase text-slate-400 mb-1.5 tracking-widest">Asunto *</label>
               <select id="asunto" required class="input-field">
                 <option value="" disabled selected>Selecciona un tema…</option>
                 <option value="inscripcion">Inscripción al club</option>
@@ -219,8 +235,10 @@
             </div>
 
             <div>
-              <label for="mensaje" class="block text-xs font-black uppercase text-slate-400 mb-1.5 tracking-widest">Mensaje *</label>
-              <textarea id="mensaje" rows="4" placeholder="¿En qué podemos ayudarte?" required class="input-field resize-none"></textarea>
+              <label for="mensaje"
+                class="block text-xs font-black uppercase text-slate-400 mb-1.5 tracking-widest">Mensaje *</label>
+              <textarea id="mensaje" rows="4" placeholder="¿En qué podemos ayudarte?" required
+                class="input-field resize-none"></textarea>
               <p id="char-count" class="text-right text-xs text-slate-400 mt-1">0 / 500</p>
             </div>
 
@@ -237,14 +255,14 @@
   </section>
 
   <!-- ══════════════ SECCIÓN DE UBICACIÓN Y MAPA ══════════════ -->
-  <section class="bg-slate-100 py-16">
+  <section class="bg-[#020617] py-16 border-t border-white/5">
     <div class="max-w-6xl mx-auto px-4">
       <div class="text-center mb-8">
-        <p class="text-xs font-bold tracking-[0.2em] uppercase text-blue-600 mb-2">¿Cómo llegar?</p>
-        <!-- Título corregido con negro absoluto para máximo contraste -->
-        <h2 class="text-2xl font-black text-black">Parque La Pradera — Lugar de entrenamiento</h2>
+        <p class="text-xs font-bold tracking-[0.2em] uppercase text-yellow-500 mb-2">¿Cómo llegar?</p>
+        <!-- Título con letras blancas que contrastan perfectamente con el fondo oscuro -->
+        <h2 class="text-2xl md:text-3xl font-black text-white">Parque La Pradera — Lugar de entrenamiento</h2>
       </div>
-      <div class="rounded-2xl overflow-hidden shadow-xl border border-slate-200">
+      <div class="rounded-2xl overflow-hidden shadow-xl border border-white/10">
         <iframe
           src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3916.801711935751!2d-74.84118122607062!3d10.978334455439269!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8ef42cdd367c2453%3A0x401e8f23384cd2a6!2sParque%20La%20Pradera!5e0!3m2!1ses-419!2sco!4v1750282065919!5m2!1ses-419!2sco"
           width="100%" height="380" style="border:0;" allowfullscreen="" loading="lazy"
@@ -290,10 +308,10 @@
       const el = document.getElementById(id);
       if (!el) return;
       el.style.display = 'flex';
-      setTimeout(() => { el.style.transform = 'translateY(0)'; el.style.opacity = '1'; }, 10);
+      setTimeout(() => {el.style.transform = 'translateY(0)'; el.style.opacity = '1';}, 10);
       setTimeout(() => {
         el.style.transform = 'translateY(10px)'; el.style.opacity = '0';
-        setTimeout(() => { el.style.display = 'none'; el.style.transform = ''; el.style.opacity = ''; }, 300);
+        setTimeout(() => {el.style.display = 'none'; el.style.transform = ''; el.style.opacity = '';}, 300);
       }, 4500);
     }
 
@@ -338,7 +356,7 @@
             phone: telefono || 'No indicado',
             title: asunto,
             message: mensaje,
-            time: new Date().toLocaleString('es-CO', { dateStyle: 'medium', timeStyle: 'short' })
+            time: new Date().toLocaleString('es-CO', {dateStyle: 'medium', timeStyle: 'short'})
           }
         );
 
