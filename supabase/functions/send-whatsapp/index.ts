@@ -61,10 +61,13 @@ Deno.serve(async (req: Request) => {
     }
 
     if (!resolvedSessionId) {
-      return new Response(
-        JSON.stringify({ error: "No hay sesión de WhatsApp conectada. Escanea el QR primero." }),
-        { status: 503, headers: CORS_HEADERS }
-      );
+      // qr and status actions can work without an existing session
+      if (action !== "qr" && action !== "status") {
+        return new Response(
+          JSON.stringify({ error: "No hay sesión de WhatsApp conectada. Escanea el QR primero." }),
+          { status: 503, headers: CORS_HEADERS }
+        );
+      }
     }
 
     // ── Actions ──
@@ -317,6 +320,12 @@ Deno.serve(async (req: Request) => {
 
       // ──────────────────────── GROUPS LIST ────────────────────────────
       case "groups": {
+        if (!resolvedSessionId) {
+          return new Response(
+            JSON.stringify({ error: "No hay sesión conectada", groups: [] }),
+            { status: 503, headers: CORS_HEADERS }
+          );
+        }
         try {
           const resp = await fetch(
             `${OPENWA_URL}/api/sessions/${resolvedSessionId}/groups`,
@@ -335,6 +344,12 @@ Deno.serve(async (req: Request) => {
 
       // ──────────────────────── GROUP MEMBERS ──────────────────────────
       case "group_members": {
+        if (!resolvedSessionId) {
+          return new Response(
+            JSON.stringify({ error: "No hay sesión conectada", members: [] }),
+            { status: 503, headers: CORS_HEADERS }
+          );
+        }
         const { group_id } = body;
         if (!group_id) {
           return new Response(
