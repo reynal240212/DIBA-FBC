@@ -641,6 +641,10 @@
                     opt.textContent = c;
                     select.appendChild(opt);
                 });
+                const allOpt = document.createElement('option');
+                allOpt.value = '__ALL__';
+                allOpt.textContent = '★ TODAS LAS CATEGORÍAS';
+                select.appendChild(allOpt);
             } catch (err) {
                 console.error('Error loading categorías:', err);
             }
@@ -677,11 +681,16 @@
             btn.disabled = true;
 
             try {
-                const { data, error } = await supabase
+                let query = supabase
                     .from('identificacion')
                     .select('nombre, apellidos')
-                    .eq('categoria', categoria)
                     .order('apellidos');
+
+                if (categoria !== '__ALL__') {
+                    query = query.eq('categoria', categoria);
+                }
+
+                const { data, error } = await query;
 
                 if (error) throw error;
 
