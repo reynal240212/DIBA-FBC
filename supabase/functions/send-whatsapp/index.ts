@@ -416,7 +416,7 @@ Deno.serve(async (req: Request) => {
             try {
               const resp = await openwaFetch(url);
               const text = await resp.text();
-              console.log("[send-whatsapp] members attempt:", url, resp.status, text.slice(0, 300));
+              console.log("[send-whatsapp] members attempt:", url, resp.status, text.slice(0, 500));
               if (resp.ok) {
                 let parsed;
                 try { parsed = JSON.parse(text); } catch { parsed = null; }
@@ -439,7 +439,54 @@ Deno.serve(async (req: Request) => {
               lastError = e.message;
             }
           }
-          console.log("[send-whatsapp] final members count:", members.length);
+
+          // If members have no names, try to enrich via contact lookup or group info
+          if (members.length > 0) {
+            // Normalize member structure
+            members = members.map((m: any) => ({
+              id: m.id || m.jid || m.phone || m,
+              name: m.name || m.pushName || m.notify || "",
+              admin: m.admin || m.role || null,
+              ...m,
+            }));
+
+            // Check if names are missing — try fetching group info which may have pushNames
+            const hasNames = members.some((m: any) => m.name && m.name.length > 0);
+            if (!hasNames) {
+              console.log("[send-whatsapp] No names found, trying group info endpoint");
+              try {
+                const infoResp = await openwaFetch(`/api/sessions/${resolvedSessionId}/groups/${group_id}/info`);
+                if (infoResp.ok) {
+                  const infoText = await infoResp.text();
+                  console.log("[send-whatsapp] group info:", infoText.slice(0, 500));
+                  let info;
+                  try { info = JSON.parse(infoText); } catch { info = null; }
+                  if (info?.participants) {
+                    // Merge names from group info
+                    const nameMap = new Map<string, string>();
+                    for (const p of info.participants) {
+                      const pid = (p.id || p.jid || "").replace(/@.*$/, "");
+                      const pname = p.name || p.pushName || p.notify || "";
+                      if (pid && pname) nameMap.set(pid, pname);
+                    }
+                    members = members.map((m: any) => {
+                      const mid = (m.id || "").replace(/@.*$/, "").replace(/\D/g, "");
+                      if (!m.name && nameMap.has(mid)) m.name = nameMap.get(mid)!;
+                      // Also try full JID match
+                      for (const [key, val] of nameMap) {
+                        if ((m.id || "").includes(key) && !m.name) m.name = val;
+                      }
+                      return m;
+                    });
+                  }
+                }
+              } catch (e: any) {
+                console.log("[send-whatsapp] group info fallback failed:", e.message);
+              }
+            }
+          }
+
+          console.log("[send-whatsapp] final members count:", members.length, "with names:", members.filter((m: any) => m.name).length);
           return new Response(JSON.stringify({ members }), { headers: CORS_HEADERS });
         } catch (err: any) {
           console.error("[send-whatsapp] group_members error:", err.message);
