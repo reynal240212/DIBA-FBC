@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS whatsapp_contacts (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
     phone VARCHAR(20) NOT NULL UNIQUE,
     name VARCHAR(200) NOT NULL,
-    player_id UUID REFERENCES identificacion(numero) ON DELETE SET NULL,
+    player_id VARCHAR(50) REFERENCES identificacion(numero) ON DELETE SET NULL,
     category VARCHAR(50),
     role VARCHAR(20) DEFAULT 'tutor' CHECK (role IN ('jugador', 'tutor', 'staff', 'admin')),
     active BOOLEAN DEFAULT true,
@@ -191,6 +191,18 @@ Hola {{nombre}}, tu asistencia para el evento del {{fecha}} ha sido registrada.
 '["nombre","fecha","lugar","hora"]')
 
 ON CONFLICT (name) DO NOTHING;
+
+-- ============================================================
+-- DISABLE RLS FOR WHATSAPP TABLES
+-- ============================================================
+ALTER TABLE whatsapp_contacts DISABLE ROW LEVEL SECURITY;
+ALTER TABLE whatsapp_conversations DISABLE ROW LEVEL SECURITY;
+ALTER TABLE whatsapp_messages DISABLE ROW LEVEL SECURITY;
+ALTER TABLE whatsapp_templates DISABLE ROW LEVEL SECURITY;
+ALTER TABLE whatsapp_auto_replies DISABLE ROW LEVEL SECURITY;
+ALTER TABLE whatsapp_events DISABLE ROW LEVEL SECURITY;
+ALTER TABLE whatsapp_attendance_responses DISABLE ROW LEVEL SECURITY;
+ALTER TABLE whatsapp_config DISABLE ROW LEVEL SECURITY;
 
 -- ============================================================
 -- RESPUESTAS AUTOMÁTICAS POR DEFECTO

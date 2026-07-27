@@ -50,6 +50,34 @@
         .auto-reply-row { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-radius: 12px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); margin-bottom: 8px; }
         .auto-reply-keyword { background: rgba(255,215,0,0.1); color: #ffd700; padding: 4px 10px; border-radius: 8px; font-size: 0.6rem; font-weight: 800; letter-spacing: 0.1em; }
 
+        /* QR Loading Animation */
+        .qr-spinner-ring { width: 120px; height: 120px; border-radius: 50%; border: 3px solid rgba(255,215,0,0.1); border-top-color: #ffd700; animation: qrSpin 1.2s linear infinite; position: absolute; }
+        .qr-spinner-ring-inner { width: 90px; height: 90px; border-top-color: rgba(255,215,0,0.5); animation-direction: reverse; animation-duration: 0.9s; }
+        @keyframes qrSpin { to { transform: rotate(360deg); } }
+
+        /* QR Steps */
+        .qr-step { display: flex; flex-direction: column; align-items: center; gap: 4px; opacity: 0.3; transition: all 0.4s; }
+        .qr-step.active { opacity: 1; }
+        .qr-step.done { opacity: 1; }
+        .qr-step-num { width: 28px; height: 28px; border-radius: 50%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; font-size: 0.6rem; font-weight: 800; color: rgba(255,255,255,0.3); transition: all 0.4s; }
+        .qr-step.active .qr-step-num { background: rgba(255,215,0,0.2); border-color: #ffd700; color: #ffd700; box-shadow: 0 0 15px rgba(255,215,0,0.3); }
+        .qr-step.done .qr-step-num { background: rgba(34,197,94,0.2); border-color: #4ade80; color: #4ade80; }
+        .qr-step-label { font-size: 0.5rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.3); }
+        .qr-step.active .qr-step-label { color: #ffd700; }
+        .qr-step.done .qr-step-label { color: #4ade80; }
+        .qr-step-line { width: 40px; height: 2px; background: rgba(255,255,255,0.08); border-radius: 1px; transition: background 0.4s; }
+        .qr-step-line.done { background: #4ade80; }
+
+        /* QR Countdown Ring */
+        .qr-countdown-circle { width: 52px; height: 52px; position: relative; }
+        .qr-countdown-ring { width: 100%; height: 100%; transform: rotate(-90deg); }
+        .qr-countdown-bg { fill: none; stroke: rgba(255,255,255,0.05); stroke-width: 2; }
+        .qr-countdown-fill { fill: none; stroke: #ffd700; stroke-width: 2.5; stroke-dasharray: 100; stroke-dashoffset: 100; stroke-linecap: round; transition: stroke-dashoffset 1s linear, stroke 0.3s; }
+        .qr-countdown-text { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 0.65rem; font-weight: 800; color: #ffd700; }
+
+        .qr-status-dot { width: 6px; height: 6px; border-radius: 50%; background: #ffd700; animation: qrPulse 1.5s ease-in-out infinite; }
+        @keyframes qrPulse { 0%, 100% { opacity: 0.3; transform: scale(0.8); } 50% { opacity: 1; transform: scale(1.2); } }
+
         @keyframes fadeUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
@@ -126,6 +154,7 @@
                 <button class="tab-btn" onclick="switchTab('llamados')"><i class="fas fa-phone-volume mr-2"></i>Llamados</button>
                 <button class="tab-btn" onclick="switchTab('resultados')"><i class="fas fa-trophy mr-2"></i>Resultados</button>
                 <button class="tab-btn" onclick="switchTab('bot')"><i class="fas fa-robot mr-2"></i>Bot Info</button>
+                <button class="tab-btn" onclick="switchTab('grupo')"><i class="fas fa-users-rays mr-2"></i>Grupo WA</button>
             </div>
 
             <!-- TAB: Convocatorias -->
@@ -400,20 +429,164 @@
                 </div>
             </div>
 
+            <!-- TAB: Grupo WhatsApp -->
+            <div class="tab-content" id="tab-grupo">
+                <div class="diba-grid">
+                    <div class="col-12 lg:col-8 panel p-8 animate-fade-up">
+                        <div class="premium-p-header mb-8">
+                            <span class="premium-p-title"><i class="fas fa-users-rays text-gold"></i> Importar Grupo de WhatsApp</span>
+                        </div>
+
+                        <div class="space-y-6">
+                            <div class="premium-form-group">
+                                <label class="premium-label">Seleccionar Sesión Conectada</label>
+                                <div class="flex gap-3">
+                                    <select id="grupo-session" class="premium-input !bg-white/5 flex-1">
+                                        <option value="">CARGANDO SESIONES...</option>
+                                    </select>
+                                    <button onclick="loadGroups()" class="px-5 py-3 bg-gold/10 border border-gold/30 rounded-2xl text-gold text-[0.65rem] font-bold uppercase tracking-widest hover:bg-gold/20 transition-all whitespace-nowrap">
+                                        <i class="fas fa-sync-alt mr-2"></i>Cargar Grupos
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="premium-form-group">
+                                <label class="premium-label">Grupo de WhatsApp</label>
+                                <select id="grupo-select" class="premium-input !bg-white/5" onchange="loadGroupMembers()">
+                                    <option value="">PRIMERO CARGA LOS GRUPOS...</option>
+                                </select>
+                            </div>
+
+                            <div id="grupo-stats" class="grid grid-cols-3 gap-4 hidden">
+                                <div class="text-center p-4 rounded-2xl bg-gold/10 border border-gold/20">
+                                    <p class="text-2xl font-black text-gold" id="gs-total">0</p>
+                                    <p class="text-[0.55rem] font-bold text-gold/60 uppercase tracking-widest">Miembros</p>
+                                </div>
+                                <div class="text-center p-4 rounded-2xl bg-emerald-500/10 border border-emerald-500/20">
+                                    <p class="text-2xl font-black text-emerald-500" id="gs-matched">0</p>
+                                    <p class="text-[0.55rem] font-bold text-emerald-500/60 uppercase tracking-widest">Coinciden DB</p>
+                                </div>
+                                <div class="text-center p-4 rounded-2xl bg-blue-500/10 border border-blue-500/20">
+                                    <p class="text-2xl font-black text-blue-500" id="gs-new">0</p>
+                                    <p class="text-[0.55rem] font-bold text-blue-500/60 uppercase tracking-widest">Nuevos</p>
+                                </div>
+                            </div>
+
+                            <div id="grupo-list" class="space-y-2 max-h-[450px] overflow-y-auto custom-scrollbar hidden">
+                            </div>
+
+                            <div id="grupo-actions" class="flex gap-3 hidden">
+                                <button onclick="downloadGrupoList()" class="flex-1 py-3 bg-white/5 border border-white/10 rounded-2xl text-white/60 text-[0.65rem] font-bold uppercase tracking-widest hover:bg-white/10 transition-all">
+                                    <i class="fas fa-download mr-2"></i>Descargar Listado
+                                </button>
+                                <button onclick="importMatchedContacts()" class="flex-1 py-3 bg-emerald-600 rounded-2xl text-white text-[0.65rem] font-bold uppercase tracking-widest hover:bg-emerald-500 transition-all">
+                                    <i class="fas fa-user-plus mr-2"></i>Importar Coincidentes
+                                </button>
+                                <button onclick="importAllContacts()" class="flex-1 py-3 bg-blue-600 rounded-2xl text-white text-[0.65rem] font-bold uppercase tracking-widest hover:bg-blue-500 transition-all">
+                                    <i class="fas fa-users mr-2"></i>Importar Todos
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 lg:col-4 panel p-8 animate-fade-up" style="animation-delay:0.1s">
+                        <div class="premium-p-header mb-6">
+                            <span class="premium-p-title text-[0.7rem]"><i class="fas fa-info-circle text-gold"></i> Cómo Funciona</span>
+                        </div>
+                        <div class="space-y-4 text-[0.6rem] text-white/40">
+                            <div class="flex items-start gap-3">
+                                <div class="w-6 h-6 rounded-full bg-gold/20 flex items-center justify-center text-gold text-[0.5rem] font-black flex-none">1</div>
+                                <p>Conecta WhatsApp desde el botón <strong class="text-gold">"Conectar"</strong> arriba</p>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <div class="w-6 h-6 rounded-full bg-gold/20 flex items-center justify-center text-gold text-[0.5rem] font-black flex-none">2</div>
+                                <p>Selecciona la sesión y carga los grupos</p>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <div class="w-6 h-6 rounded-full bg-gold/20 flex items-center justify-center text-gold text-[0.5rem] font-black flex-none">3</div>
+                                <p>Elige el grupo <strong class="text-gold">"Deportivo Internacional"</strong></p>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <div class="w-6 h-6 rounded-full bg-gold/20 flex items-center justify-center text-gold text-[0.5rem] font-black flex-none">4</div>
+                                <p>Se comparan los nombres con la base de datos de jugadores</p>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <div class="w-6 h-6 rounded-full bg-gold/20 flex items-center justify-center text-gold text-[0.5rem] font-black flex-none">5</div>
+                                <p>Importa los contactos coincidentes o todos</p>
+                            </div>
+                        </div>
+
+                        <div class="mt-6 p-4 rounded-2xl bg-gold/5 border border-gold/10">
+                            <p class="text-[0.55rem] text-gold/60 uppercase tracking-widest font-bold mb-2"><i class="fas fa-lightbulb mr-1"></i> Tip</p>
+                            <p class="text-[0.55rem] text-white/30">Los contactos que coincidan con jugadores en la DB se les actualiza automáticamente el número de teléfono.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </main>
 
     <!-- Modal: QR Code -->
     <div id="qr-modal" class="fixed inset-0 z-[2000] hidden items-center justify-center p-6">
         <div class="absolute inset-0 bg-black/80 backdrop-blur-md" onclick="closeQRModal()"></div>
-        <div class="relative bg-[#020617] border border-white/10 rounded-[32px] p-10 w-full max-w-[400px] shadow-2xl animate-fade-up text-center">
+        <div class="relative bg-[#020617] border border-white/10 rounded-[32px] p-10 w-full max-w-[420px] shadow-2xl animate-fade-up text-center">
+
             <h3 class="text-xl font-black italic uppercase text-white mb-2">Conectar <span class="text-gold">WhatsApp</span></h3>
             <p class="text-[0.55rem] text-white/30 uppercase tracking-widest mb-6">Escanea el código con tu teléfono</p>
-            <div class="qr-box mx-auto mb-6">
-                <img id="qr-image" src="" alt="QR Code" class="hidden">
-                <i class="fas fa-qrcode text-6xl text-white/10" id="qr-placeholder"></i>
+
+            <!-- Steps indicator -->
+            <div class="flex items-center justify-center gap-2 mb-8">
+                <div class="qr-step active" id="qr-step-1">
+                    <span class="qr-step-num">1</span>
+                    <span class="qr-step-label">Sesión</span>
+                </div>
+                <div class="qr-step-line" id="qr-line-1"></div>
+                <div class="qr-step" id="qr-step-2">
+                    <span class="qr-step-num">2</span>
+                    <span class="qr-step-label">Generar</span>
+                </div>
+                <div class="qr-step-line" id="qr-line-2"></div>
+                <div class="qr-step" id="qr-step-3">
+                    <span class="qr-step-num">3</span>
+                    <span class="qr-step-label">Escanear</span>
+                </div>
             </div>
-            <div id="qr-status-text" class="text-[0.6rem] text-white/40 uppercase tracking-widest mb-6">Esperando código QR...</div>
+
+            <!-- QR area -->
+            <div class="qr-box mx-auto mb-6 relative">
+                <!-- Loading spinner (visible during loading) -->
+                <div id="qr-spinner" class="absolute inset-0 flex flex-col items-center justify-center">
+                    <div class="qr-spinner-ring"></div>
+                    <div class="qr-spinner-ring qr-spinner-ring-inner"></div>
+                    <i class="fas fa-qrcode text-3xl text-white/10 absolute"></i>
+                </div>
+                <!-- QR Image (hidden until loaded) -->
+                <img id="qr-image" src="" alt="QR Code" class="hidden relative z-10">
+                <!-- Success check -->
+                <div id="qr-success" class="absolute inset-0 flex items-center justify-center hidden z-10">
+                    <i class="fas fa-check-circle text-7xl text-emerald-500 animate-bounce"></i>
+                </div>
+            </div>
+
+            <!-- Countdown -->
+            <div id="qr-countdown" class="flex items-center justify-center gap-2 mb-4">
+                <div class="qr-countdown-circle">
+                    <svg class="qr-countdown-ring" viewBox="0 0 36 36">
+                        <path class="qr-countdown-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
+                        <path class="qr-countdown-fill" id="qr-countdown-fill" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
+                    </svg>
+                    <span class="qr-countdown-text" id="qr-countdown-text">0s</span>
+                </div>
+                <span class="text-[0.55rem] text-white/30 uppercase tracking-widest" id="qr-elapsed-label">Tiempo transcurrido</span>
+            </div>
+
+            <!-- Status text -->
+            <div id="qr-status-text" class="text-[0.6rem] text-white/40 uppercase tracking-widest mb-6 flex items-center justify-center gap-2">
+                <span class="qr-status-dot"></span>
+                <span id="qr-status-msg">Iniciando conexión...</span>
+            </div>
+
             <button onclick="closeQRModal()" class="px-6 py-3 bg-white/5 border border-white/10 rounded-2xl text-white/60 text-[0.65rem] font-bold uppercase tracking-widest hover:bg-white/10 transition-all">Cerrar</button>
         </div>
     </div>
@@ -889,14 +1062,327 @@
         async function loadTemplates() { /* loaded via events */ }
 
         // ── QR Modal ──
-        window.showQRModal = function() {
+        let qrInterval = null;
+        let qrTimerInterval = null;
+        let currentSessionId = null;
+        let qrStartTime = 0;
+
+        function setQRStep(step) {
+            for (let i = 1; i <= 3; i++) {
+                const el = document.getElementById(`qr-step-${i}`);
+                const line = document.getElementById(`qr-line-${i}`);
+                el.classList.remove('active', 'done');
+                if (i < step) { el.classList.add('done'); el.querySelector('.qr-step-num').innerHTML = '<i class="fas fa-check text-[0.5rem]"></i>'; }
+                else if (i === step) el.classList.add('active');
+                if (line && i < step) line.classList.add('done');
+            }
+        }
+
+        function startQRCountdown() {
+            qrStartTime = Date.now();
+            const fill = document.getElementById('qr-countdown-fill');
+            const text = document.getElementById('qr-countdown-text');
+            const label = document.getElementById('qr-elapsed-label');
+            const maxSeconds = 60;
+            fill.style.strokeDashoffset = '100';
+            fill.style.stroke = '#ffd700';
+
+            qrTimerInterval = setInterval(() => {
+                const elapsed = Math.floor((Date.now() - qrStartTime) / 1000);
+                text.textContent = `${elapsed}s`;
+                const pct = Math.min((elapsed / maxSeconds) * 100, 100);
+                fill.style.strokeDashoffset = 100 - pct;
+                if (elapsed > 40) fill.style.stroke = '#f87171';
+                else if (elapsed > 20) fill.style.stroke = '#fbbf24';
+            }, 1000);
+        }
+
+        function stopQRCountdown() {
+            if (qrTimerInterval) clearInterval(qrTimerInterval);
+        }
+
+        function resetQRModal() {
+            stopQRCountdown();
+            const fill = document.getElementById('qr-countdown-fill');
+            const text = document.getElementById('qr-countdown-text');
+            fill.style.strokeDashoffset = '100';
+            fill.style.stroke = '#ffd700';
+            text.textContent = '0s';
+            for (let i = 1; i <= 3; i++) {
+                const el = document.getElementById(`qr-step-${i}`);
+                const line = document.getElementById(`qr-line-${i}`);
+                el.classList.remove('active', 'done');
+                el.querySelector('.qr-step-num').textContent = i;
+                if (line) line.classList.remove('done');
+            }
+            document.getElementById('qr-step-1').classList.add('active');
+            document.getElementById('qr-spinner').classList.remove('hidden');
+            document.getElementById('qr-image').classList.add('hidden');
+            document.getElementById('qr-success').classList.add('hidden');
+            document.getElementById('qr-countdown').classList.remove('hidden');
+        }
+
+        window.showQRModal = async function() {
             document.getElementById('qr-modal').classList.remove('hidden');
             document.getElementById('qr-modal').classList.add('flex');
+            resetQRModal();
+            document.getElementById('qr-status-msg').textContent = 'Iniciando conexión...';
+
+            if (!WA_API || !WA_KEY) {
+                document.getElementById('qr-status-msg').textContent = 'API NO CONFIGURADA';
+                document.getElementById('qr-spinner').classList.add('hidden');
+                return;
+            }
+
+            try {
+                setQRStep(1);
+                document.getElementById('qr-status-msg').textContent = 'Creando sesión en OpenWA...';
+
+                const createR = await fetch(`${WA_API}/api/sessions`, {
+                    method: 'POST',
+                    headers: { 'x-api-key': WA_KEY, 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name: 'diba-main' })
+                });
+                const session = await createR.json();
+                currentSessionId = session.id;
+
+                setQRStep(2);
+                document.getElementById('qr-status-msg').textContent = 'Generando código QR...';
+
+                await fetch(`${WA_API}/api/sessions/${currentSessionId}/start`, {
+                    method: 'POST',
+                    headers: { 'x-api-key': WA_KEY, 'Content-Type': 'application/json' },
+                    body: '{}'
+                });
+
+                startQRCountdown();
+
+                let attempts = 0;
+                qrInterval = setInterval(async () => {
+                    attempts++;
+                    if (attempts > 60) {
+                        clearInterval(qrInterval);
+                        stopQRCountdown();
+                        document.getElementById('qr-status-msg').textContent = 'TIMEOUT — INTENTA DE NUEVO';
+                        document.getElementById('qr-spinner').classList.add('hidden');
+                        document.getElementById('qr-countdown').classList.add('hidden');
+                        return;
+                    }
+                    try {
+                        const qrR = await fetch(`${WA_API}/api/sessions/${currentSessionId}/qr`, {
+                            headers: { 'x-api-key': WA_KEY }
+                        });
+                        const qrData = await qrR.json();
+                        const qrUrl = qrData.qrCode || qrData.qr || qrData.data;
+                        if (qrUrl) {
+                            setQRStep(3);
+                            clearInterval(qrInterval);
+                            document.getElementById('qr-image').src = qrUrl;
+                            document.getElementById('qr-image').classList.remove('hidden');
+                            document.getElementById('qr-spinner').classList.add('hidden');
+                            document.getElementById('qr-status-msg').textContent = 'ESCANEA EL CÓDIGO CON TU TELÉFONO';
+                        } else if (qrData.status === 'authenticated' || qrData.status === 'connected') {
+                            clearInterval(qrInterval);
+                            stopQRCountdown();
+                            document.getElementById('qr-spinner').classList.add('hidden');
+                            document.getElementById('qr-image').classList.add('hidden');
+                            document.getElementById('qr-success').classList.remove('hidden');
+                            document.getElementById('qr-countdown').classList.add('hidden');
+                            document.getElementById('qr-status-msg').textContent = '¡CONECTADO EXITOSAMENTE!';
+                            document.getElementById('wa-status-badge').classList.remove('disconnected');
+                            document.getElementById('wa-status-badge').classList.add('connected');
+                            document.getElementById('wa-status-badge').querySelector('span').textContent = 'CONECTADO';
+                            showToast('WhatsApp conectado', 'success');
+                        }
+                    } catch (e) { /* keep polling */ }
+                }, 2000);
+
+            } catch (e) {
+                document.getElementById('qr-status-msg').textContent = 'ERROR CREANDO SESIÓN';
+                document.getElementById('qr-spinner').classList.add('hidden');
+                stopQRCountdown();
+                showToast('Error conectando a OpenWA', 'error');
+            }
         };
 
         window.closeQRModal = function() {
+            if (qrInterval) clearInterval(qrInterval);
+            stopQRCountdown();
             document.getElementById('qr-modal').classList.add('hidden');
             document.getElementById('qr-modal').classList.remove('flex');
+        };
+
+        // ── Grupo WhatsApp ──
+        let grupoMembers = [];
+        let grupoPlayers = [];
+
+        async function loadGroupSessions() {
+            const sel = document.getElementById('grupo-session');
+            if (!WA_API || !WA_KEY) { sel.innerHTML = '<option value="">SIN API CONFIGURADA</option>'; return; }
+            try {
+                const r = await fetch(`${WA_API}/api/sessions`, { headers: { 'x-api-key': WA_KEY } });
+                const sessions = await r.json();
+                if (!sessions.length) { sel.innerHTML = '<option value="">NO HAY SESIONES — CONECTA PRIMERO</option>'; return; }
+                sel.innerHTML = sessions.map(s => `<option value="${s.id}" ${s.status === 'open' ? 'selected' : ''}>${s.name || s.id.slice(0,8)} (${s.status})</option>`).join('');
+            } catch (e) { sel.innerHTML = '<option value="">ERROR AL CARGAR SESIONES</option>'; }
+        }
+
+        async function loadGroups() {
+            const sessionId = document.getElementById('grupo-session').value;
+            if (!sessionId) { showToast('Selecciona una sesión', 'error'); return; }
+            const sel = document.getElementById('grupo-select');
+            sel.innerHTML = '<option value="">CARGANDO GRUPOS...</option>';
+            try {
+                const r = await fetch(`${WA_API}/api/sessions/${sessionId}/groups`, { headers: { 'x-api-key': WA_KEY } });
+                const groups = await r.json();
+                if (!groups.length) { sel.innerHTML = '<option value="">NO SE ENCONTRARON GRUPOS</option>'; return; }
+                sel.innerHTML = '<option value="">SELECCIONA UN GRUPO...</option>' +
+                    groups.map(g => `<option value="${g.id || g.jid}" data-name="${g.name || ''}">${g.name || g.id || g.jid} (${g.members?.length || '?'} miembros)</option>`).join('');
+                showToast(`${groups.length} grupos encontrados`, 'success');
+            } catch (e) { showToast('Error cargando grupos', 'error'); sel.innerHTML = '<option value="">ERROR</option>'; }
+        }
+
+        async function loadGroupMembers() {
+            const sessionId = document.getElementById('grupo-session').value;
+            const groupId = document.getElementById('grupo-select').value;
+            if (!sessionId || !groupId) return;
+
+            const listEl = document.getElementById('grupo-list');
+            const statsEl = document.getElementById('grupo-stats');
+            const actionsEl = document.getElementById('grupo-actions');
+            listEl.classList.remove('hidden');
+            statsEl.classList.remove('hidden');
+            actionsEl.classList.remove('hidden');
+            listEl.innerHTML = '<div class="text-center py-10"><i class="fas fa-spinner fa-spin text-gold text-xl mb-3 block"></i><p class="text-white/30 text-[0.6rem] uppercase tracking-widest">Cargando miembros...</p></div>';
+
+            try {
+                const r = await fetch(`${WA_API}/api/sessions/${sessionId}/groups/${groupId}/members`, { headers: { 'x-api-key': WA_KEY } });
+                const members = await r.json();
+
+                // Get all players from DB
+                const { data: players } = await supabase.from('identificacion').select('numero, nombre, apellidos, categoria');
+                grupoPlayers = players || [];
+
+                grupoMembers = (Array.isArray(members) ? members : members.members || []).map(m => {
+                    const phone = (m.id || m.phone || m.jid || '').replace(/@s\.whatsapp\.net$/, '').replace(/@.*$/, '').replace(/\D/g, '');
+                    const waName = m.name || m.pushName || '';
+                    const matchedPlayer = findMatchingPlayer(waName, phone);
+                    return {
+                        phone,
+                        waName,
+                        playerName: matchedPlayer ? `${matchedPlayer.nombre} ${matchedPlayer.apellidos}`.trim() : null,
+                        playerNumero: matchedPlayer?.numero || null,
+                        category: matchedPlayer?.categoria || null,
+                        matched: !!matchedPlayer
+                    };
+                }).filter(m => m.phone);
+
+                const total = grupoMembers.length;
+                const matched = grupoMembers.filter(m => m.matched).length;
+
+                document.getElementById('gs-total').textContent = total;
+                document.getElementById('gs-matched').textContent = matched;
+                document.getElementById('gs-new').textContent = total - matched;
+
+                renderGrupoList();
+                showToast(`${total} miembros — ${matched} coinciden con la DB`, 'success');
+            } catch (e) {
+                listEl.innerHTML = '<div class="text-center py-10 text-red-400 text-[0.65rem]">Error cargando miembros</div>';
+                showToast('Error cargando miembros', 'error');
+            }
+        }
+
+        function findMatchingPlayer(waName, phone) {
+            if (!waName) return null;
+            const normalize = s => s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim();
+            const nameNorm = normalize(waName);
+            for (const p of grupoPlayers) {
+                const fullName = normalize(`${p.nombre} ${p.apellidos || ''}`);
+                const firstName = normalize(p.nombre || '');
+                const lastName = normalize(p.apellidos || '');
+                if (nameNorm === fullName || nameNorm === firstName || nameNorm === lastName) return p;
+                if (nameNorm.includes(firstName) && firstName.length >= 3) return p;
+                if (firstName.includes(nameNorm) && nameNorm.length >= 3) return p;
+                if (lastName && nameNorm.includes(lastName) && lastName.length >= 3) return p;
+            }
+            return null;
+        }
+
+        function renderGrupoList() {
+            const el = document.getElementById('grupo-list');
+            el.innerHTML = grupoMembers.map((m, i) => `
+                <div class="flex items-center gap-3 p-3 rounded-xl ${m.matched ? 'bg-emerald-500/10 border border-emerald-500/20' : 'bg-white/5 border border-white/10'} transition-all hover:bg-white/10">
+                    <div class="w-8 h-8 rounded-full ${m.matched ? 'bg-emerald-500/20' : 'bg-gold/20'} flex items-center justify-center flex-none">
+                        <i class="fas ${m.matched ? 'fa-check text-emerald-500' : 'fa-user text-gold'} text-[0.55rem]"></i>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <p class="text-[0.65rem] font-bold text-white truncate">${m.waName || 'Sin nombre'}</p>
+                        <p class="text-[0.5rem] text-white/30">${formatPhone(m.phone)}${m.matched ? ` → <span class="text-emerald-400">${m.playerName} (${m.category})</span>` : ''}</p>
+                    </div>
+                    <span class="text-[0.5rem] font-bold uppercase tracking-widest ${m.matched ? 'text-emerald-500' : 'text-white/20'}">${m.matched ? 'DB' : 'NUEVO'}</span>
+                </div>
+            `).join('');
+        }
+
+        function formatPhone(phone) {
+            if (!phone) return '';
+            if (phone.length === 10) return `(${phone.slice(0,3)}) ${phone.slice(3,6)}-${phone.slice(6)}`;
+            if (phone.length === 12) return `+${phone.slice(0,2)} (${phone.slice(2,5)}) ${phone.slice(5,8)}-${phone.slice(8)}`;
+            return phone;
+        }
+
+        window.downloadGrupoList = function() {
+            const lines = ['Nombre WA,Nombre Jugador,Telefono,Categoria,Coincide DB'];
+            grupoMembers.forEach(m => {
+                lines.push(`"${m.waName}","${m.playerName || ''}","${m.phone}","${m.category || ''}","${m.matched ? 'SI' : 'NO'}"`);
+            });
+            const blob = new Blob([lines.join('\n')], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `grupo_diba_${new Date().toISOString().slice(0,10)}.csv`;
+            a.click();
+            URL.revokeObjectURL(url);
+            showToast('Listado descargado', 'success');
+        };
+
+        window.importMatchedContacts = async function() {
+            const matched = grupoMembers.filter(m => m.matched && m.playerNumero);
+            if (!matched.length) { showToast('No hay contactos coincidentes para importar', 'error'); return; }
+            let count = 0;
+            for (const m of matched) {
+                const { error } = await supabase.from('identificacion').update({ numero: m.phone }).eq('numero', m.playerNumero);
+                if (!error) count++;
+            }
+            showToast(`${count} números actualizados en la DB`, 'success');
+            await loadContacts();
+        };
+
+        window.importAllContacts = async function() {
+            const existing = await supabase.from('whatsapp_contacts').select('phone');
+            const existingPhones = new Set((existing.data || []).map(c => c.phone));
+            const toInsert = grupoMembers.filter(m => !existingPhones.has(m.phone)).map(m => ({
+                name: m.playerName || m.waName || '',
+                phone: m.phone,
+                category: m.category || 'General',
+                player_numero: m.playerNumero || null,
+                active: true
+            }));
+            if (!toInsert.length) { showToast('Todos los contactos ya están en la DB', 'info'); return; }
+            const { error } = await supabase.from('whatsapp_contacts').insert(toInsert);
+            if (!error) {
+                showToast(`${toInsert.length} contactos importados`, 'success');
+                await loadContacts();
+            } else {
+                showToast('Error importando contactos', 'error');
+            }
+        };
+
+        // Auto-load sessions when switching to grupo tab
+        const originalSwitchTab = window.switchTab;
+        window.switchTab = function(tab) {
+            originalSwitchTab(tab);
+            if (tab === 'grupo') loadGroupSessions();
         };
 
         // ── Initial Preview ──

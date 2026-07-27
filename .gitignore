@@ -1,26 +1,27 @@
 # === CREDENCIALES Y SECRETS ===
 # public/scripts/config.js (Habilitado temporalmente para Vercel)
-
 # Variables de entorno del servidor
 .env
 .env.local
 .env.production
-
 # === NODE / NPM ===
 node_modules/
 npm-debug.log*
-
 # === SISTEMA OPERATIVO ===
 .DS_Store
 Thumbs.db
 desktop.ini
-
 # === EDITORES ===
 .vscode/settings.json
 *.swp
 *.swo
-
 # === BUILD / DIST ===
 dist/
 build/
 .cache/
+
+# managed
+**.data.json
+**.node-persist**
+**_IGNORE_**
+# end managed
