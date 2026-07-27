@@ -1134,6 +1134,8 @@
                 return;
             }
 
+            startQRCountdown();
+
             try {
                 setQRStep(1);
                 document.getElementById('qr-status-msg').textContent = 'Creando sesión en OpenWA...';
@@ -1154,8 +1156,6 @@
                     headers: { 'x-api-key': WA_KEY, 'Content-Type': 'application/json' },
                     body: '{}'
                 });
-
-                startQRCountdown();
 
                 let attempts = 0;
                 qrInterval = setInterval(async () => {
