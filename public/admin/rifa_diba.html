@@ -520,11 +520,7 @@
                         <div class="premium-form-group">
                             <label class="premium-label">Categoría del Equipo</label>
                             <select id="cfg-categoria" class="premium-input !bg-white/5">
-                                <option value="">SELECCIONAR CATEGORÍA</option>
-                                <option value="2012">2012</option>
-                                <option value="2013">2013</option>
-                                <option value="2014/15/16">2014/2015/2016</option>
-                                <option value="General">General</option>
+                                <option value="">CARGANDO CATEGORÍAS...</option>
                             </select>
                             <div class="quick-actions mt-2">
                                 <button class="quick-action-btn" onclick="loadJugadores()" id="btn-load"><i class="fas fa-sync-alt"></i> CARGAR JUGADORES</button>
@@ -623,8 +619,32 @@
             const session = await requireAdmin();
             if (!session) return;
             initAdminLayout();
+            loadCategorias();
         }
         init();
+
+        async function loadCategorias() {
+            try {
+                const { data, error } = await supabase
+                    .from('identificacion')
+                    .select('categoria')
+                    .not('categoria', 'is', null);
+
+                if (error) throw error;
+
+                const cats = [...new Set(data.map(d => d.categoria))].sort();
+                const select = document.getElementById('cfg-categoria');
+                select.innerHTML = '<option value="">SELECCIONAR CATEGORÍA</option>';
+                cats.forEach(c => {
+                    const opt = document.createElement('option');
+                    opt.value = c;
+                    opt.textContent = c;
+                    select.appendChild(opt);
+                });
+            } catch (err) {
+                console.error('Error loading categorías:', err);
+            }
+        }
 
         // ── Toast System ──
         function showToast(message, type = 'success', duration = 3000) {
