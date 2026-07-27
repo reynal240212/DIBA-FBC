@@ -64,26 +64,36 @@ import { supabase, requireAdmin } from '../../core/supabase.js';
                 if (phonesError && channel === 'wa') throw phonesError;
 
                 if (phonesData) {
-                    const openwaEndpoint = 'http://localhost:2785/api/sessions/default/messages/send-text';
                     const waMessage = `*${payload.title}*\n\n${payload.body}\n\nEnlace: https://diba-fbc.vercel.app${payload.url || ''}`;
+                    const contacts = phonesData
+                        .filter(p => p.celular)
+                        .map(p => {
+                            let cleanPhone = p.celular.replace(/\D/g, '');
+                            if (cleanPhone.length === 10) cleanPhone = '57' + cleanPhone;
+                            return { phone: cleanPhone };
+                        });
 
-                    for (const p of phonesData) {
-                        if (!p.celular) continue;
-                        let cleanPhone = p.celular.replace(/\D/g, '');
-                        if (cleanPhone.length === 10) cleanPhone = '57' + cleanPhone;
-                        
+                    if (contacts.length) {
+                        // Send via Supabase Edge Function (server-side proxy)
+                        const { data: { session: authSession } } = await supabase.auth.getSession();
+                        const token = authSession?.access_token;
+                        const SUPABASE_URL = window.DIBA_CONFIG?.SUPABASE_URL;
+                        const SUPABASE_ANON_KEY = window.DIBA_CONFIG?.SUPABASE_ANON_KEY;
+
                         try {
-                            const waRes = await fetch(openwaEndpoint, {
+                            const waRes = await fetch(`${SUPABASE_URL}/functions/v1/send-whatsapp`, {
                                 method: 'POST',
-                                headers: { 'Content-Type': 'application/json' },
-                                body: JSON.stringify({
-                                    chatId: `${cleanPhone}@c.us`,
-                                    text: waMessage
-                                })
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'Authorization': `Bearer ${token}`,
+                                    'apikey': SUPABASE_ANON_KEY,
+                                },
+                                body: JSON.stringify({ action: 'bulk_send', contacts, message: waMessage }),
                             });
-                            if (waRes.ok) waPushSuccess++;
+                            const result = await waRes.json();
+                            if (result.sent) waPushSuccess = result.sent;
                         } catch (err) {
-                            console.error('Error enviando WA a', cleanPhone, err);
+                            console.error('Error enviando WA via Edge Function:', err);
                         }
                     }
                 }

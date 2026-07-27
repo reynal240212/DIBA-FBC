@@ -646,8 +646,24 @@
         import { initAdminLayout } from '../src/components/layout/admin-layout.js';
         import { supabase, requireAdmin } from '../scripts/supabaseClient.js';
 
-        const WA_API = window.DIBA_CONFIG.WA_API_URL || '';
-        const WA_KEY = window.DIBA_CONFIG.WA_API_KEY || '';
+        const SUPABASE_URL = window.DIBA_CONFIG.SUPABASE_URL;
+        const SUPABASE_ANON_KEY = window.DIBA_CONFIG.SUPABASE_ANON_KEY;
+
+        // Server-side proxy for WhatsApp operations (keeps API key secret)
+        async function waProxy(action, payload = {}) {
+            const { data: { session } } = await supabase.auth.getSession();
+            const token = session?.access_token;
+            const resp = await fetch(`${SUPABASE_URL}/functions/v1/send-whatsapp`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
+                    'apikey': SUPABASE_ANON_KEY,
+                },
+                body: JSON.stringify({ action, ...payload }),
+            });
+            return resp.json();
+        }
 
         async function init() {
             const session = await requireAdmin();
@@ -770,7 +786,7 @@
 
             const msg = document.getElementById('conv-mensaje').value.trim() || `⚽ CONVOCATORIA OFICIAL DIBA FBC\n\n📅 Fecha: ${fecha}\n🕐 Hora: ${hora}\n📍 Lugar: ${lugar}\n🏆 Competición: ${competencia}\n\nEquipo: ${equipo}\nCategoría: ${categoria || 'Todas'}\n\nPor favor confirmar:\n✅ SÍ — Asistiré\n❌ NO — No podré\n\n¡DIBA FBC! 💙💛`;
 
-            // Save event
+            // Save event to DB
             const { data: event } = await supabase.from('whatsapp_events').insert({
                 event_type: 'convocatoria',
                 title: `Convocatoria ${equipo} - ${fecha}`,
@@ -782,19 +798,33 @@
                 total_sent: recipients.length
             }).select().single();
 
-            // Save messages
+            // Save messages to DB
             const messages = recipients.map(c => ({
-                conversation_id: null,
                 contact_id: c.id,
                 direction: 'outbound',
                 message_type: 'template',
-                body: msg.replace(/{{equipo}}/g, equipo).replace(/{{fecha}}/g, fecha).replace(/{{hora}}/g, hora).replace(/{{lugar}}/g, lugar).replace(/{{competencia}}/g, competencia).replace(/{{categoria}}/g, categoria || 'Todas'),
+                body: msg,
                 template_name: 'convocatoria_partido',
-                status: 'sent'
+                status: 'sending'
             }));
             await supabase.from('whatsapp_messages').insert(messages);
 
-            showToast(`Convocatoria enviada a ${recipients.length} contactos`, 'success');
+            // Actually send via Edge Function (server-side OpenWA proxy)
+            showToast(`Enviando convocatoria a ${recipients.length} contactos...`, 'info');
+            try {
+                const sendResult = await waProxy('bulk_send', {
+                    contacts: recipients.map(c => ({ id: c.id, phone: c.phone })),
+                    message: msg,
+                });
+                if (sendResult.error) {
+                    showToast(`Error: ${sendResult.error}`, 'error');
+                } else {
+                    showToast(`✅ Convocatoria enviada: ${sendResult.sent} éxitos, ${sendResult.failed} fallos`, 'success');
+                }
+            } catch (err) {
+                showToast('Error enviando mensajes', 'error');
+            }
+
             await loadEvents();
             await loadKPIs();
         };
@@ -851,7 +881,38 @@
         window.sendReminder = async function() {
             const eventId = document.getElementById('asistencia-evento').value;
             if (!eventId) { showToast('Selecciona un evento primero', 'error'); return; }
-            showToast('Recordatorios enviados a pendientes', 'success');
+
+            // Get event and find pending contacts
+            const event = allEvents.find(e => e.id === eventId);
+            if (!event) { showToast('Evento no encontrado', 'error'); return; }
+
+            // Get contacts who already responded
+            const { data: responded } = await supabase.from('whatsapp_attendance_responses')
+                .select('contact_id').eq('event_id', eventId);
+            const respondedIds = new Set((responded || []).map(r => r.contact_id));
+
+            // Get pending contacts
+            let pending = allContacts.filter(c => c.phone && c.active && !respondedIds.has(c.id));
+            if (event.category_filter) pending = pending.filter(c => c.category === event.category_filter);
+
+            if (!pending.length) { showToast('No hay contactos pendientes', 'info'); return; }
+
+            const msg = `⏰ RECORDATORIO - ${event.title}\n\n¿Confirmaste tu asistencia? Responde:\n✅ SÍ — Asistiré\n❌ NO — No podré\n\n¡DIBA FBC! 💙💛`;
+
+            showToast(`Enviando recordatorio a ${pending.length} pendientes...`, 'info');
+            try {
+                const sendResult = await waProxy('bulk_send', {
+                    contacts: pending.map(c => ({ id: c.id, phone: c.phone })),
+                    message: msg,
+                });
+                if (sendResult.error) {
+                    showToast(`Error: ${sendResult.error}`, 'error');
+                } else {
+                    showToast(`✅ Recordatorios enviados: ${sendResult.sent} éxitos`, 'success');
+                }
+            } catch (err) {
+                showToast('Error enviando recordatorios', 'error');
+            }
         };
 
         // ── Llamados ──
@@ -895,13 +956,14 @@
 
             const msg = `📢 LLAMADO OFICIAL DIBA FBC\n\n${selectedPlayer.name}, has sido convocado para:\n\n📅 ${fecha}\n🕐 ${hora}\n📍 ${lugar}\n👕 Uniforme: ${uniforme}\n\nConfirma:\n✅ SÍ — Voy\n❌ NO — No puedo\n\nDIBA FBC 💙💛`;
 
+            // Save to DB
             await supabase.from('whatsapp_messages').insert({
                 contact_id: contact.id,
                 direction: 'outbound',
                 message_type: 'template',
                 body: msg,
                 template_name: 'alerta_llamado',
-                status: 'sent'
+                status: 'sending'
             });
 
             await supabase.from('whatsapp_events').insert({
@@ -914,7 +976,19 @@
                 total_sent: 1
             });
 
-            showToast(`Llamado enviado a ${selectedPlayer.name}`, 'success');
+            // Send via Edge Function
+            showToast(`Enviando llamado a ${selectedPlayer.name}...`, 'info');
+            try {
+                const sendResult = await waProxy('send', { phone: contact.phone, message: msg });
+                if (sendResult.error) {
+                    showToast(`Error: ${sendResult.error}`, 'error');
+                } else {
+                    showToast(`✅ Llamado enviado a ${selectedPlayer.name}`, 'success');
+                }
+            } catch (err) {
+                showToast('Error enviando mensaje', 'error');
+            }
+
             selectedPlayer = null;
             document.getElementById('llamado-selected').classList.add('hidden');
             document.getElementById('llamado-search').value = '';
@@ -961,13 +1035,14 @@
             let recipients = allContacts.filter(c => c.phone && c.active);
             if (equipo !== 'General') recipients = recipients.filter(c => c.category === equipo);
 
+            // Save to DB
             const messages = recipients.map(c => ({
                 contact_id: c.id,
                 direction: 'outbound',
                 message_type: 'template',
                 body: msg,
                 template_name: 'reporte_resultado',
-                status: 'sent'
+                status: 'sending'
             }));
             if (messages.length) await supabase.from('whatsapp_messages').insert(messages);
 
@@ -980,7 +1055,26 @@
                 total_sent: messages.length
             });
 
-            showToast(`Resultado enviado a ${messages.length} contactos`, 'success');
+            // Send via Edge Function
+            if (recipients.length) {
+                showToast(`Enviando resultado a ${recipients.length} contactos...`, 'info');
+                try {
+                    const sendResult = await waProxy('bulk_send', {
+                        contacts: recipients.map(c => ({ id: c.id, phone: c.phone })),
+                        message: msg,
+                    });
+                    if (sendResult.error) {
+                        showToast(`Error: ${sendResult.error}`, 'error');
+                    } else {
+                        showToast(`✅ Resultado enviado: ${sendResult.sent} éxitos, ${sendResult.failed} fallos`, 'success');
+                    }
+                } catch (err) {
+                    showToast('Error enviando mensajes', 'error');
+                }
+            } else {
+                showToast('Resultado guardado (sin contactos para enviar)', 'info');
+            }
+
             await loadEvents();
             await loadKPIs();
         };
@@ -1083,7 +1177,7 @@
             const fill = document.getElementById('qr-countdown-fill');
             const text = document.getElementById('qr-countdown-text');
             const label = document.getElementById('qr-elapsed-label');
-            const maxSeconds = 60;
+            const maxSeconds = 100;
             fill.style.strokeDashoffset = '100';
             fill.style.stroke = '#ffd700';
 
@@ -1092,8 +1186,8 @@
                 text.textContent = `${elapsed}s`;
                 const pct = Math.min((elapsed / maxSeconds) * 100, 100);
                 fill.style.strokeDashoffset = 100 - pct;
-                if (elapsed > 40) fill.style.stroke = '#f87171';
-                else if (elapsed > 20) fill.style.stroke = '#fbbf24';
+                if (elapsed > 70) fill.style.stroke = '#f87171';
+                else if (elapsed > 40) fill.style.stroke = '#fbbf24';
             }, 1000);
         }
 
@@ -1128,80 +1222,90 @@
             resetQRModal();
             document.getElementById('qr-status-msg').textContent = 'Iniciando conexión...';
 
-            if (!WA_API || !WA_KEY) {
-                document.getElementById('qr-status-msg').textContent = 'API NO CONFIGURADA';
-                document.getElementById('qr-spinner').classList.add('hidden');
-                return;
-            }
-
             startQRCountdown();
+
+            // Show progressive status messages
+            const statusEl = document.getElementById('qr-status-msg');
+            const statusMessages = [
+                { delay: 0, msg: 'Conectando a servidor...' },
+                { delay: 5000, msg: 'Creando sesión en WhatsApp...' },
+                { delay: 15000, msg: 'Generando código QR...' },
+                { delay: 30000, msg: 'Esperando respuesta de OpenWA...' },
+                { delay: 60000, msg: 'Render puede estar despertando... paciencia' },
+            ];
+            const statusTimers = statusMessages.map(s =>
+                setTimeout(() => { if (statusEl) statusEl.textContent = s.msg; }, s.delay)
+            );
 
             try {
                 setQRStep(1);
-                document.getElementById('qr-status-msg').textContent = 'Creando sesión en OpenWA...';
 
-                const createR = await fetch(`${WA_API}/api/sessions`, {
-                    method: 'POST',
-                    headers: { 'x-api-key': WA_KEY, 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ name: 'diba-main' })
-                });
-                const session = await createR.json();
-                currentSessionId = session.id;
+                // Use Edge Function (server-side) for QR flow
+                const qrResult = await waProxy('qr');
 
-                setQRStep(2);
-                document.getElementById('qr-status-msg').textContent = 'Generando código QR...';
+                // Clear progressive status timers
+                statusTimers.forEach(t => clearTimeout(t));
 
-                await fetch(`${WA_API}/api/sessions/${currentSessionId}/start`, {
-                    method: 'POST',
-                    headers: { 'x-api-key': WA_KEY, 'Content-Type': 'application/json' },
-                    body: '{}'
-                });
+                if (qrResult.error) {
+                    document.getElementById('qr-status-msg').textContent = qrResult.error;
+                    document.getElementById('qr-spinner').classList.add('hidden');
+                    stopQRCountdown();
+                    return;
+                }
 
-                let attempts = 0;
-                qrInterval = setInterval(async () => {
-                    attempts++;
-                    if (attempts > 60) {
-                        clearInterval(qrInterval);
-                        stopQRCountdown();
-                        document.getElementById('qr-status-msg').textContent = 'TIMEOUT — INTENTA DE NUEVO';
-                        document.getElementById('qr-spinner').classList.add('hidden');
-                        document.getElementById('qr-countdown').classList.add('hidden');
-                        return;
-                    }
-                    try {
-                        const qrR = await fetch(`${WA_API}/api/sessions/${currentSessionId}/qr`, {
-                            headers: { 'x-api-key': WA_KEY }
-                        });
-                        const qrData = await qrR.json();
-                        const qrUrl = qrData.qrCode || qrData.qr || qrData.data;
-                        if (qrUrl) {
-                            setQRStep(3);
+                if (qrResult.qr) {
+                    setQRStep(3);
+                    document.getElementById('qr-image').src = qrResult.qr;
+                    document.getElementById('qr-image').classList.remove('hidden');
+                    document.getElementById('qr-spinner').classList.add('hidden');
+                    document.getElementById('qr-status-msg').textContent = 'ESCANEA EL CÓDIGO CON TU TELÉFONO';
+
+                    // Poll for connection every 3 seconds after QR is shown
+                    let scanAttempts = 0;
+                    qrInterval = setInterval(async () => {
+                        scanAttempts++;
+                        if (scanAttempts > 30) { // 90 seconds max
                             clearInterval(qrInterval);
-                            document.getElementById('qr-image').src = qrUrl;
-                            document.getElementById('qr-image').classList.remove('hidden');
-                            document.getElementById('qr-spinner').classList.add('hidden');
-                            document.getElementById('qr-status-msg').textContent = 'ESCANEA EL CÓDIGO CON TU TELÉFONO';
-                        } else if (qrData.status === 'authenticated' || qrData.status === 'connected') {
-                            clearInterval(qrInterval);
+                            document.getElementById('qr-status-msg').textContent = 'TIMEOUT — Cierra y vuelve a intentar';
                             stopQRCountdown();
-                            document.getElementById('qr-spinner').classList.add('hidden');
-                            document.getElementById('qr-image').classList.add('hidden');
-                            document.getElementById('qr-success').classList.remove('hidden');
-                            document.getElementById('qr-countdown').classList.add('hidden');
-                            document.getElementById('qr-status-msg').textContent = '¡CONECTADO EXITOSAMENTE!';
-                            document.getElementById('wa-status-badge').classList.remove('disconnected');
-                            document.getElementById('wa-status-badge').classList.add('connected');
-                            document.getElementById('wa-status-badge').querySelector('span').textContent = 'CONECTADO';
-                            showToast('WhatsApp conectado', 'success');
+                            return;
                         }
-                    } catch (e) { /* keep polling */ }
-                }, 2000);
-
+                        try {
+                            const statusResult = await waProxy('status');
+                            if (statusResult.connected) {
+                                clearInterval(qrInterval);
+                                stopQRCountdown();
+                                document.getElementById('qr-image').classList.add('hidden');
+                                document.getElementById('qr-success').classList.remove('hidden');
+                                document.getElementById('qr-countdown').classList.add('hidden');
+                                document.getElementById('qr-status-msg').textContent = '¡CONECTADO EXITOSAMENTE!';
+                                document.getElementById('wa-status-badge').classList.remove('disconnected');
+                                document.getElementById('wa-status-badge').classList.add('connected');
+                                document.getElementById('wa-status-badge').querySelector('span').textContent = 'CONECTADO';
+                                showToast('WhatsApp conectado', 'success');
+                            } else {
+                                document.getElementById('qr-status-msg').textContent = `Escaneando... (${scanAttempts * 3}s)`;
+                            }
+                        } catch { /* retry */ }
+                    }, 3000);
+                } else if (qrResult.connected) {
+                    setQRStep(3);
+                    document.getElementById('qr-spinner').classList.add('hidden');
+                    document.getElementById('qr-image').classList.add('hidden');
+                    document.getElementById('qr-success').classList.remove('hidden');
+                    document.getElementById('qr-countdown').classList.add('hidden');
+                    document.getElementById('qr-status-msg').textContent = '¡CONECTADO EXITOSAMENTE!';
+                    document.getElementById('wa-status-badge').classList.remove('disconnected');
+                    document.getElementById('wa-status-badge').classList.add('connected');
+                    document.getElementById('wa-status-badge').querySelector('span').textContent = 'CONECTADO';
+                    showToast('WhatsApp conectado', 'success');
+                }
             } catch (e) {
-                document.getElementById('qr-status-msg').textContent = 'ERROR CREANDO SESIÓN';
+                statusTimers.forEach(t => clearTimeout(t));
+                document.getElementById('qr-status-msg').textContent = 'ERROR: ' + (e.message || 'No se pudo conectar');
                 document.getElementById('qr-spinner').classList.add('hidden');
                 stopQRCountdown();
-                showToast('Error conectando a OpenWA', 'error');
+                showToast('Error conectando a WhatsApp', 'error');
             }
         };
 
@@ -1218,12 +1322,14 @@
 
         async function loadGroupSessions() {
             const sel = document.getElementById('grupo-session');
-            if (!WA_API || !WA_KEY) { sel.innerHTML = '<option value="">SIN API CONFIGURADA</option>'; return; }
             try {
-                const r = await fetch(`${WA_API}/api/sessions`, { headers: { 'x-api-key': WA_KEY } });
-                const sessions = await r.json();
-                if (!sessions.length) { sel.innerHTML = '<option value="">NO HAY SESIONES — CONECTA PRIMERO</option>'; return; }
-                sel.innerHTML = sessions.map(s => `<option value="${s.id}" ${s.status === 'open' ? 'selected' : ''}>${s.name || s.id.slice(0,8)} (${s.status})</option>`).join('');
+                const statusResult = await waProxy('status');
+                if (statusResult.connected && statusResult.session) {
+                    const s = statusResult.session;
+                    sel.innerHTML = `<option value="${s.id}" selected>${s.name || s.id.slice(0,8)} (${s.status})</option>`;
+                } else {
+                    sel.innerHTML = '<option value="">NO HAY SESIONES — CONECTA PRIMERO</option>';
+                }
             } catch (e) { sel.innerHTML = '<option value="">ERROR AL CARGAR SESIONES</option>'; }
         }
 
@@ -1233,8 +1339,8 @@
             const sel = document.getElementById('grupo-select');
             sel.innerHTML = '<option value="">CARGANDO GRUPOS...</option>';
             try {
-                const r = await fetch(`${WA_API}/api/sessions/${sessionId}/groups`, { headers: { 'x-api-key': WA_KEY } });
-                const groups = await r.json();
+                const result = await waProxy('groups');
+                const groups = result.groups || [];
                 if (!groups.length) { sel.innerHTML = '<option value="">NO SE ENCONTRARON GRUPOS</option>'; return; }
                 sel.innerHTML = '<option value="">SELECCIONA UN GRUPO...</option>' +
                     groups.map(g => `<option value="${g.id || g.jid}" data-name="${g.name || ''}">${g.name || g.id || g.jid} (${g.members?.length || '?'} miembros)</option>`).join('');
@@ -1256,8 +1362,8 @@
             listEl.innerHTML = '<div class="text-center py-10"><i class="fas fa-spinner fa-spin text-gold text-xl mb-3 block"></i><p class="text-white/30 text-[0.6rem] uppercase tracking-widest">Cargando miembros...</p></div>';
 
             try {
-                const r = await fetch(`${WA_API}/api/sessions/${sessionId}/groups/${groupId}/members`, { headers: { 'x-api-key': WA_KEY } });
-                const members = await r.json();
+                const result = await waProxy('group_members', { group_id: groupId });
+                const members = result.members || [];
 
                 // Get all players from DB
                 const { data: players } = await supabase.from('identificacion').select('numero, nombre, apellidos, categoria');
