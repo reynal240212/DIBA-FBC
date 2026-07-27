@@ -516,12 +516,31 @@
                         <span>Responsables por Boleta</span>
                     </div>
 
-                    <div class="premium-form-group">
-                        <label class="premium-label">Nombres de los Niños (uno por línea — cada nombre = una boleta)</label>
-                        <textarea id="cfg-responsables" rows="5" class="premium-input !bg-white/5" placeholder="Mario Pérez&#10;Juan García&#10;Ana López&#10;..."></textarea>
-                        <div class="flex justify-between items-center mt-2">
-                            <span class="text-[0.55rem] text-white/30 font-bold uppercase tracking-widest" id="responsables-count">0 NOMBRES</span>
-                            <span class="text-[0.55rem] text-white/30 font-bold uppercase tracking-widest">OPCIONAL — Se asignan en orden a cada boleta</span>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                        <div class="premium-form-group">
+                            <label class="premium-label">Categoría del Equipo</label>
+                            <select id="cfg-categoria" class="premium-input !bg-white/5">
+                                <option value="">SELECCIONAR CATEGORÍA</option>
+                                <option value="2012">2012</option>
+                                <option value="2013">2013</option>
+                                <option value="2014/15/16">2014/2015/2016</option>
+                                <option value="General">General</option>
+                            </select>
+                            <div class="quick-actions mt-2">
+                                <button class="quick-action-btn" onclick="loadJugadores()" id="btn-load"><i class="fas fa-sync-alt"></i> CARGAR JUGADORES</button>
+                                <button class="quick-action-btn" onclick="clearResponsables()"><i class="fas fa-times"></i> LIMPIAR</button>
+                            </div>
+                        </div>
+
+                        <div class="premium-form-group md:col-span-2">
+                            <label class="premium-label">Jugadores Asignados (se llenan automáticamente)</label>
+                            <textarea id="cfg-responsables" rows="5" class="premium-input !bg-white/5 font-mono text-[0.75rem]" placeholder="Selecciona una categoría y haz clic en CARGAR JUGADORES..."></textarea>
+                            <div class="flex justify-between items-center mt-2">
+                                <span class="text-[0.55rem] font-bold uppercase tracking-widest" id="responsables-count">
+                                    <span class="text-white/30">0 NOMBRES</span>
+                                </span>
+                                <span class="text-[0.55rem] text-white/30 font-bold uppercase tracking-widest">SE ASIGNAN EN ORDEN A CADA BOLETA</span>
+                            </div>
                         </div>
                     </div>
 
@@ -598,7 +617,7 @@
     <script src="/scripts/config.js"></script>
     <script type="module">
         import { initAdminLayout } from '../src/components/layout/admin-layout.js';
-        import { requireAdmin } from '../scripts/supabaseClient.js';
+        import { requireAdmin, supabase } from '../scripts/supabaseClient.js';
 
         async function init() {
             const session = await requireAdmin();
@@ -624,6 +643,62 @@
                 setTimeout(() => toast.remove(), 400);
             }, duration);
         }
+
+        // ── Load Players from Supabase ──
+        window.loadJugadores = async function() {
+            const categoria = document.getElementById('cfg-categoria').value;
+            if (!categoria) {
+                showToast('Selecciona una categoría primero', 'error');
+                return;
+            }
+
+            const btn = document.getElementById('btn-load');
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> CARGANDO...';
+            btn.disabled = true;
+
+            try {
+                const { data, error } = await supabase
+                    .from('identificacion')
+                    .select('nombre, apellidos')
+                    .eq('categoria', categoria)
+                    .order('apellidos');
+
+                if (error) throw error;
+
+                if (!data || data.length === 0) {
+                    showToast('No hay jugadores en esta categoría', 'info');
+                    return;
+                }
+
+                const nombres = data.map(j => {
+                    const full = `${j.nombre} ${j.apellidos || ''}`.trim();
+                    return full;
+                });
+
+                document.getElementById('cfg-responsables').value = nombres.join('\n');
+                
+                const countEl = document.getElementById('responsables-count');
+                countEl.innerHTML = `<span class="text-emerald-500">${nombres.length} JUGADORES CARGADOS</span>`;
+                
+                // Auto-set ticket count to match players
+                document.getElementById('cfg-total').value = nombres.length;
+
+                showToast(`${nombres.length} jugadores de ${categoria} cargados`, 'success');
+            } catch (err) {
+                showToast('Error: ' + err.message, 'error');
+            } finally {
+                btn.innerHTML = '<i class="fas fa-sync-alt"></i> CARGAR JUGADORES';
+                btn.disabled = false;
+            }
+        };
+
+        window.clearResponsables = function() {
+            document.getElementById('cfg-responsables').value = '';
+            document.getElementById('cfg-categoria').value = '';
+            const countEl = document.getElementById('responsables-count');
+            countEl.innerHTML = '<span class="text-white/30">0 NOMBRES</span>';
+            showToast('Responsables limpiados', 'info');
+        };
 
         // ── UI Interactions ──
         const fechaPicker = document.getElementById('cfg-fecha-picker');
@@ -923,8 +998,11 @@
         if (respTextarea && respCount) {
             const updateRespCount = () => {
                 const lines = respTextarea.value.trim().split('\n').filter(s => s.trim().length > 0).length;
-                respCount.textContent = `${lines} NOMBRE${lines !== 1 ? 'S' : ''}`;
-                respCount.style.color = lines > 0 ? '#4ade80' : '';
+                if (lines > 0) {
+                    respCount.innerHTML = `<span class="text-emerald-500">${lines} NOMBRE${lines !== 1 ? 'S' : ''}</span>`;
+                } else {
+                    respCount.innerHTML = '<span class="text-white/30">0 NOMBRES</span>';
+                }
             };
             respTextarea.addEventListener('input', updateRespCount);
             updateRespCount();
