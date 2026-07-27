@@ -1320,7 +1320,7 @@
         let grupoMembers = [];
         let grupoPlayers = [];
 
-        async function loadGroupSessions() {
+        window.loadGroupSessions = async function() {
             const sel = document.getElementById('grupo-session');
             try {
                 const statusResult = await waProxy('status');
@@ -1333,7 +1333,7 @@
             } catch (e) { sel.innerHTML = '<option value="">ERROR AL CARGAR SESIONES</option>'; }
         }
 
-        async function loadGroups() {
+        window.loadGroups = async function() {
             const sessionId = document.getElementById('grupo-session').value;
             if (!sessionId) { showToast('Selecciona una sesión', 'error'); return; }
             const sel = document.getElementById('grupo-select');
@@ -1348,7 +1348,7 @@
             } catch (e) { showToast('Error cargando grupos', 'error'); sel.innerHTML = '<option value="">ERROR</option>'; }
         }
 
-        async function loadGroupMembers() {
+        window.loadGroupMembers = async function() {
             const sessionId = document.getElementById('grupo-session').value;
             const groupId = document.getElementById('grupo-select').value;
             if (!sessionId || !groupId) return;
