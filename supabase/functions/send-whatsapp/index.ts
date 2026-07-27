@@ -8,7 +8,7 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const OPENWA_URL = Deno.env.get("OPENWA_URL") ?? "https://openwa-diba.onrender.com";
 const OPENWA_KEY = Deno.env.get("OPENWA_KEY") ?? "";
-const SESSION_NAME = "diba-main";
+const SESSION_NAME = "diba-fbc";
 const FETCH_TIMEOUT = 30000; // 30s timeout for OpenWA calls
 
 const CORS_HEADERS = {
@@ -88,6 +88,30 @@ Deno.serve(async (req: Request) => {
         return new Response(
           JSON.stringify({ error: "No hay sesión de WhatsApp conectada. Escanea el QR primero." }),
           { status: 503, headers: CORS_HEADERS }
+        );
+      }
+    }
+
+    // ── Debug: raw OpenWA response ──
+    if (action === "debug") {
+      try {
+        const sessResp = await openwaFetch("/api/sessions");
+        const text = await sessResp.text();
+        return new Response(
+          JSON.stringify({
+            status: sessResp.status,
+            body: text.slice(0, 2000),
+            resolvedSessionId,
+            sessionStatus,
+            OPENWA_URL,
+            hasKey: !!OPENWA_KEY,
+          }),
+          { headers: CORS_HEADERS }
+        );
+      } catch (e: any) {
+        return new Response(
+          JSON.stringify({ error: e.message, OPENWA_URL, hasKey: !!OPENWA_KEY }),
+          { status: 500, headers: CORS_HEADERS }
         );
       }
     }
