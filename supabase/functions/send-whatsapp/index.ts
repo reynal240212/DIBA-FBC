@@ -9,12 +9,31 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 const OPENWA_URL = Deno.env.get("OPENWA_URL") ?? "https://openwa-diba.onrender.com";
 const OPENWA_KEY = Deno.env.get("OPENWA_KEY") ?? "";
 const SESSION_NAME = "diba-main";
+const FETCH_TIMEOUT = 30000; // 30s timeout for OpenWA calls
 
 const CORS_HEADERS = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
   "Content-Type": "application/json",
 };
+
+async function openwaFetch(path: string, options: RequestInit = {}): Promise<Response> {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), FETCH_TIMEOUT);
+  try {
+    const resp = await fetch(`${OPENWA_URL}${path}`, {
+      ...options,
+      headers: {
+        "x-api-key": OPENWA_KEY,
+        ...(options.headers || {}),
+      },
+      signal: controller.signal,
+    });
+    return resp;
+  } finally {
+    clearTimeout(timeout);
+  }
+}
 
 Deno.serve(async (req: Request) => {
   if (req.method === "OPTIONS") {
@@ -45,19 +64,22 @@ Deno.serve(async (req: Request) => {
 
     // ── Resolve OpenWA session ──
     let resolvedSessionId: string | null = null;
+    let sessionStatus: string | null = null;
     try {
-      const sessResp = await fetch(`${OPENWA_URL}/api/sessions`, {
-        headers: { "x-api-key": OPENWA_KEY },
-      });
+      const sessResp = await openwaFetch("/api/sessions");
       if (sessResp.ok) {
         const sessions = await sessResp.json();
-        const found = sessions.find(
-          (s: any) => s.name === sessionId || s.status === "ready"
-        );
-        if (found) resolvedSessionId = found.id;
+        // Find by name first, then by ready status
+        let found = sessions.find((s: any) => s.name === sessionId);
+        if (!found) found = sessions.find((s: any) => s.status === "ready");
+        if (!found) found = sessions.find((s: any) => s.status === "connected");
+        if (found) {
+          resolvedSessionId = found.id;
+          sessionStatus = found.status;
+        }
       }
-    } catch (_) {
-      /* OpenWA might be down */
+    } catch (e: any) {
+      console.error("OpenWA session resolve error:", e.message);
     }
 
     if (!resolvedSessionId) {
@@ -80,15 +102,18 @@ Deno.serve(async (req: Request) => {
             { status: 400, headers: CORS_HEADERS }
           );
         }
+        if (!resolvedSessionId) {
+          return new Response(
+            JSON.stringify({ error: "No hay sesión conectada" }),
+            { status: 503, headers: CORS_HEADERS }
+          );
+        }
         const chatId = normalizeChatId(phone);
-        const sendResp = await fetch(
-          `${OPENWA_URL}/api/sessions/${resolvedSessionId}/messages/send-text`,
+        const sendResp = await openwaFetch(
+          `/api/sessions/${resolvedSessionId}/messages/send-text`,
           {
             method: "POST",
-            headers: {
-              "x-api-key": OPENWA_KEY,
-              "Content-Type": "application/json",
-            },
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ chatId, text: message }),
           }
         );
@@ -129,14 +154,11 @@ Deno.serve(async (req: Request) => {
 
           const chatId = normalizeChatId(phoneNum);
           try {
-            const sendResp = await fetch(
-              `${OPENWA_URL}/api/sessions/${resolvedSessionId}/messages/send-text`,
+            const sendResp = await openwaFetch(
+              `/api/sessions/${resolvedSessionId}/messages/send-text`,
               {
                 method: "POST",
-                headers: {
-                  "x-api-key": OPENWA_KEY,
-                  "Content-Type": "application/json",
-                },
+                headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ chatId, text: message }),
               }
             );
@@ -183,24 +205,22 @@ Deno.serve(async (req: Request) => {
       // ──────────────────────── SESSION STATUS ────────────────────────────
       case "status": {
         try {
-          const resp = await fetch(`${OPENWA_URL}/api/sessions`, {
-            headers: { "x-api-key": OPENWA_KEY },
-          });
-          if (!resp.ok) throw new Error("Failed to fetch sessions");
+          const resp = await openwaFetch("/api/sessions");
+          if (!resp.ok) throw new Error(`OpenWA status ${resp.status}`);
           const sessions = await resp.json();
           const session = sessions.find(
-            (s: any) => s.name === sessionId || s.status === "ready"
+            (s: any) => s.name === sessionId || s.status === "ready" || s.status === "connected"
           );
           return new Response(
             JSON.stringify({
-              connected: session?.status === "ready",
+              connected: session?.status === "ready" || session?.status === "connected",
               session: session ?? null,
             }),
             { headers: CORS_HEADERS }
           );
-        } catch {
+        } catch (e: any) {
           return new Response(
-            JSON.stringify({ connected: false, session: null }),
+            JSON.stringify({ connected: false, session: null, error: e.message }),
             { headers: CORS_HEADERS }
           );
         }
@@ -214,12 +234,9 @@ Deno.serve(async (req: Request) => {
         // Try to create session if none exists
         if (!sessId) {
           try {
-            const createResp = await fetch(`${OPENWA_URL}/api/sessions`, {
+            const createResp = await openwaFetch("/api/sessions", {
               method: "POST",
-              headers: {
-                "x-api-key": OPENWA_KEY,
-                "Content-Type": "application/json",
-              },
+              headers: { "Content-Type": "application/json" },
               body: JSON.stringify({ name: sessionId }),
             });
             if (createResp.ok) {
@@ -227,9 +244,7 @@ Deno.serve(async (req: Request) => {
               sessId = created.id;
             } else {
               // Session might already exist, try to find it
-              const listResp = await fetch(`${OPENWA_URL}/api/sessions`, {
-                headers: { "x-api-key": OPENWA_KEY },
-              });
+              const listResp = await openwaFetch("/api/sessions");
               if (listResp.ok) {
                 const sessions = await listResp.json();
                 const existing = sessions.find((s: any) => s.name === sessionId);
@@ -253,9 +268,7 @@ Deno.serve(async (req: Request) => {
 
         // Check if session is already ready
         try {
-          const checkResp = await fetch(`${OPENWA_URL}/api/sessions/${sessId}`, {
-            headers: { "x-api-key": OPENWA_KEY },
-          });
+          const checkResp = await openwaFetch(`/api/sessions/${sessId}`);
           if (checkResp.ok) {
             const sessData = await checkResp.json();
             if (sessData?.status === "ready" || sessData?.status === "open") {
@@ -267,25 +280,19 @@ Deno.serve(async (req: Request) => {
           }
         } catch { /* continue to start */ }
 
-        // Start session to trigger QR generation (fire and forget — don't fail if CORS blocks)
+        // Start session to trigger QR generation (fire and forget)
         try {
-          await fetch(`${OPENWA_URL}/api/sessions/${sessId}/start`, {
+          await openwaFetch(`/api/sessions/${sessId}/start`, {
             method: "POST",
-            headers: {
-              "x-api-key": OPENWA_KEY,
-              "Content-Type": "application/json",
-            },
+            headers: { "Content-Type": "application/json" },
             body: "{}",
           });
-        } catch { /* OpenWA might return CORS error but still process */ }
+        } catch { /* OpenWA might return error but still process */ }
 
         // Poll for QR (up to 90 seconds — Render cold start can be slow)
         for (let i = 0; i < 45; i++) {
           try {
-            const qrResp = await fetch(
-              `${OPENWA_URL}/api/sessions/${sessId}/qr`,
-              { headers: { "x-api-key": OPENWA_KEY } }
-            );
+            const qrResp = await openwaFetch(`/api/sessions/${sessId}/qr`);
             if (qrResp.ok) {
               const qrData = await qrResp.json();
               // OpenWA can return QR in different fields
@@ -322,21 +329,25 @@ Deno.serve(async (req: Request) => {
       case "groups": {
         if (!resolvedSessionId) {
           return new Response(
-            JSON.stringify({ error: "No hay sesión conectada", groups: [] }),
+            JSON.stringify({ error: "No hay sesión conectada. Conecta WhatsApp primero.", groups: [], debug: { sessionStatus, sessionId } }),
             { status: 503, headers: CORS_HEADERS }
           );
         }
         try {
-          const resp = await fetch(
-            `${OPENWA_URL}/api/sessions/${resolvedSessionId}/groups`,
-            { headers: { "x-api-key": OPENWA_KEY } }
-          );
-          if (!resp.ok) throw new Error("Failed to fetch groups");
-          const groups = await resp.json();
+          const resp = await openwaFetch(`/api/sessions/${resolvedSessionId}/groups`);
+          const text = await resp.text();
+          let groups;
+          try { groups = JSON.parse(text); } catch { groups = { raw: text }; }
+          if (!resp.ok) {
+            return new Response(
+              JSON.stringify({ error: `OpenWA respondió ${resp.status}`, groups: [], debug: { status: resp.status, body: text.slice(0, 500) } }),
+              { status: 502, headers: CORS_HEADERS }
+            );
+          }
           return new Response(JSON.stringify({ groups }), { headers: CORS_HEADERS });
         } catch (err: any) {
           return new Response(
-            JSON.stringify({ error: err.message, groups: [] }),
+            JSON.stringify({ error: `Error obteniendo grupos: ${err.message}`, groups: [] }),
             { status: 500, headers: CORS_HEADERS }
           );
         }
@@ -358,16 +369,20 @@ Deno.serve(async (req: Request) => {
           );
         }
         try {
-          const resp = await fetch(
-            `${OPENWA_URL}/api/sessions/${resolvedSessionId}/groups/${group_id}/members`,
-            { headers: { "x-api-key": OPENWA_KEY } }
-          );
-          if (!resp.ok) throw new Error("Failed to fetch members");
-          const members = await resp.json();
+          const resp = await openwaFetch(`/api/sessions/${resolvedSessionId}/groups/${group_id}/members`);
+          const text = await resp.text();
+          let members;
+          try { members = JSON.parse(text); } catch { members = { raw: text }; }
+          if (!resp.ok) {
+            return new Response(
+              JSON.stringify({ error: `OpenWA respondió ${resp.status}`, members: [], debug: { status: resp.status, body: text.slice(0, 500) } }),
+              { status: 502, headers: CORS_HEADERS }
+            );
+          }
           return new Response(JSON.stringify({ members }), { headers: CORS_HEADERS });
         } catch (err: any) {
           return new Response(
-            JSON.stringify({ error: err.message, members: [] }),
+            JSON.stringify({ error: `Error obteniendo miembros: ${err.message}`, members: [] }),
             { status: 500, headers: CORS_HEADERS }
           );
         }
