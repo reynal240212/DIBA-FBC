@@ -1402,8 +1402,17 @@
         }
 
         function findMatchingPlayer(waName, phone) {
-            if (!waName) return null;
             const normalize = s => s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim();
+            // Match by phone number first (most reliable with baileys)
+            if (phone && phone.length >= 10) {
+                const last10 = phone.slice(-10);
+                for (const p of grupoPlayers) {
+                    const pNum = (p.numero || '').replace(/\D/g, '').slice(-10);
+                    if (pNum && pNum === last10) return p;
+                }
+            }
+            // Then try by name
+            if (!waName) return null;
             const nameNorm = normalize(waName);
             for (const p of grupoPlayers) {
                 const fullName = normalize(`${p.nombre} ${p.apellidos || ''}`);
@@ -1425,7 +1434,7 @@
                         <i class="fas ${m.matched ? 'fa-check text-emerald-500' : 'fa-user text-gold'} text-[0.55rem]"></i>
                     </div>
                     <div class="flex-1 min-w-0">
-                        <p class="text-[0.65rem] font-bold text-white truncate">${m.waName || 'Sin nombre'}</p>
+                        <p class="text-[0.65rem] font-bold text-white truncate">${m.waName || m.playerName || 'Sin nombre'}</p>
                         <p class="text-[0.5rem] text-white/30">${formatPhone(m.phone)}${m.matched ? ` → <span class="text-emerald-400">${m.playerName} (${m.category})</span>` : ''}</p>
                     </div>
                     <span class="text-[0.5rem] font-bold uppercase tracking-widest ${m.matched ? 'text-emerald-500' : 'text-white/20'}">${m.matched ? 'DB' : 'NUEVO'}</span>
