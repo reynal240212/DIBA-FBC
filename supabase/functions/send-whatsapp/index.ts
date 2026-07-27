@@ -67,8 +67,12 @@ Deno.serve(async (req: Request) => {
     let sessionStatus: string | null = null;
     try {
       const sessResp = await openwaFetch("/api/sessions");
+      const sessText = await sessResp.text();
+      console.log("[send-whatsapp] OpenWA sessions response:", sessResp.status, sessText.slice(0, 500));
       if (sessResp.ok) {
-        const sessions = await sessResp.json();
+        let sessions;
+        try { sessions = JSON.parse(sessText); } catch { sessions = []; }
+        if (!Array.isArray(sessions)) sessions = [];
         // Find by name first, then by ready status
         let found = sessions.find((s: any) => s.name === sessionId);
         if (!found) found = sessions.find((s: any) => s.status === "ready");
@@ -79,8 +83,9 @@ Deno.serve(async (req: Request) => {
         }
       }
     } catch (e: any) {
-      console.error("OpenWA session resolve error:", e.message);
+      console.error("[send-whatsapp] OpenWA session resolve error:", e.message);
     }
+    console.log("[send-whatsapp] Resolved:", { resolvedSessionId, sessionStatus, action });
 
     if (!resolvedSessionId) {
       // qr and status actions can work without an existing session
@@ -351,6 +356,7 @@ Deno.serve(async (req: Request) => {
 
       // ──────────────────────── GROUPS LIST ────────────────────────────
       case "groups": {
+        console.log("[send-whatsapp] groups action, resolvedSessionId:", resolvedSessionId);
         if (!resolvedSessionId) {
           return new Response(
             JSON.stringify({ error: "No hay sesión conectada. Conecta WhatsApp primero.", groups: [], debug: { sessionStatus, sessionId } }),
@@ -358,21 +364,26 @@ Deno.serve(async (req: Request) => {
           );
         }
         try {
-          const resp = await openwaFetch(`/api/sessions/${resolvedSessionId}/groups`);
+          const url = `/api/sessions/${resolvedSessionId}/groups`;
+          console.log("[send-whatsapp] fetching groups from:", url);
+          const resp = await openwaFetch(url);
           const text = await resp.text();
+          console.log("[send-whatsapp] groups response:", resp.status, text.slice(0, 500));
           let groups;
           try { groups = JSON.parse(text); } catch { groups = { raw: text }; }
           if (!resp.ok) {
+            // Return 200 with error in body so frontend can show it
             return new Response(
               JSON.stringify({ error: `OpenWA respondió ${resp.status}`, groups: [], debug: { status: resp.status, body: text.slice(0, 500) } }),
-              { status: 502, headers: CORS_HEADERS }
+              { headers: CORS_HEADERS }
             );
           }
           return new Response(JSON.stringify({ groups }), { headers: CORS_HEADERS });
         } catch (err: any) {
+          console.error("[send-whatsapp] groups error:", err.message);
           return new Response(
             JSON.stringify({ error: `Error obteniendo grupos: ${err.message}`, groups: [] }),
-            { status: 500, headers: CORS_HEADERS }
+            { headers: CORS_HEADERS }
           );
         }
       }
@@ -393,18 +404,45 @@ Deno.serve(async (req: Request) => {
           );
         }
         try {
-          const resp = await openwaFetch(`/api/sessions/${resolvedSessionId}/groups/${group_id}/members`);
-          const text = await resp.text();
-          let members;
-          try { members = JSON.parse(text); } catch { members = { raw: text }; }
-          if (!resp.ok) {
-            return new Response(
-              JSON.stringify({ error: `OpenWA respondió ${resp.status}`, members: [], debug: { status: resp.status, body: text.slice(0, 500) } }),
-              { status: 502, headers: CORS_HEADERS }
-            );
+          // Try multiple endpoints for group members (baileys vs whatsapp-web.js)
+          const endpoints = [
+            `/api/sessions/${resolvedSessionId}/groups/${group_id}/members`,
+            `/api/sessions/${resolvedSessionId}/groups/${group_id}`,
+            `/api/sessions/${resolvedSessionId}/groups?groupId=${group_id}`,
+          ];
+          let members: any[] = [];
+          let lastError = "";
+          for (const url of endpoints) {
+            try {
+              const resp = await openwaFetch(url);
+              const text = await resp.text();
+              console.log("[send-whatsapp] members attempt:", url, resp.status, text.slice(0, 300));
+              if (resp.ok) {
+                let parsed;
+                try { parsed = JSON.parse(text); } catch { parsed = null; }
+                if (parsed) {
+                  // Extract members from various response shapes
+                  if (Array.isArray(parsed)) {
+                    members = parsed;
+                  } else if (parsed.members && Array.isArray(parsed.members)) {
+                    members = parsed.members;
+                  } else if (parsed.participants && Array.isArray(parsed.participants)) {
+                    members = parsed.participants;
+                  } else if (parsed.id && parsed.participants) {
+                    members = parsed.participants;
+                  }
+                  if (members.length > 0) break;
+                }
+              }
+              lastError = `${resp.status}: ${text.slice(0, 200)}`;
+            } catch (e: any) {
+              lastError = e.message;
+            }
           }
+          console.log("[send-whatsapp] final members count:", members.length);
           return new Response(JSON.stringify({ members }), { headers: CORS_HEADERS });
         } catch (err: any) {
+          console.error("[send-whatsapp] group_members error:", err.message);
           return new Response(
             JSON.stringify({ error: `Error obteniendo miembros: ${err.message}`, members: [] }),
             { status: 500, headers: CORS_HEADERS }

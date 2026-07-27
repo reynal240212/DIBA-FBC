@@ -653,6 +653,7 @@
         async function waProxy(action, payload = {}) {
             const { data: { session } } = await supabase.auth.getSession();
             const token = session?.access_token;
+            if (!token) { console.error('[waProxy] No auth token!'); return { error: 'No autenticado' }; }
             const resp = await fetch(`${SUPABASE_URL}/functions/v1/send-whatsapp`, {
                 method: 'POST',
                 headers: {
@@ -662,7 +663,9 @@
                 },
                 body: JSON.stringify({ action, ...payload }),
             });
-            return resp.json();
+            const data = await resp.json();
+            if (!resp.ok) console.error(`[waProxy] ${action} failed:`, resp.status, data);
+            return data;
         }
 
         async function init() {
