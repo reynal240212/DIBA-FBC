@@ -1,0 +1,41 @@
+services:
+  - type: web
+    name: openwa-diba
+    runtime: docker
+    rootDir: openwa
+    dockerfilePath: Dockerfile
+    envVars:
+      - key: PORT
+        value: 2785
+      - key: NODE_ENV
+        value: production
+      - key: ENGINE_TYPE
+        value: whatsapp-web.js
+      - key: PUPPETEER_HEADLESS
+        value: "true"
+      - key: DATABASE_TYPE
+        value: sqlite
+      - key: SESSION_DATA_PATH
+        value: /data/sessions
+      - key: STORAGE_TYPE
+        value: local
+      - key: STORAGE_LOCAL_PATH
+        value: /data/storage
+      - key: REDIS_ENABLED
+        value: "false"
+      - key: QUEUE_ENABLED
+        value: "false"
+      - key: CACHE_ENABLED
+        value: "false"
+      - key: SEARCH_ENABLED
+        value: "false"
+      - key: MCP_ENABLED
+        value: "false"
+      - key: AUTO_START_SESSIONS
+        value: "false"
+      - key: API_MASTER_KEY
+        generateValue: true
+    disk:
+      mountPath: /data
+      sizeGB: 1
+    healthCheckPath: /api/health
