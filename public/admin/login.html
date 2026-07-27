@@ -19,147 +19,12 @@
             --dark:  #020617;
             --mono: 'Share Tech Mono', monospace;
         }
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
         body {
             background: var(--dark);
             font-family: 'Outfit', sans-serif;
-            overflow: hidden;
             min-height: 100vh;
         }
 
-        /* ============================================================
-           BACKGROUND — estadio + campo de fútbol
-        ============================================================ */
-        #bg-scene {
-            position: fixed; inset: 0; z-index: 0; overflow: hidden;
-        }
-
-        /* Deep stadium ambiance */
-        #bg-scene::before {
-            content: '';
-            position: absolute; inset: 0;
-            background:
-                radial-gradient(ellipse 80% 60% at 20% 10%,  rgba(0,77,152,0.55) 0%, transparent 60%),
-                radial-gradient(ellipse 70% 50% at 80% 90%,  rgba(0,51,112,0.45) 0%, transparent 60%),
-                radial-gradient(ellipse 50% 40% at 50% 50%,  rgba(255,215,0,0.04) 0%, transparent 70%);
-        }
-
-        /* Subtle grass stripes — football field feel */
-        #field-lines {
-            position: absolute; inset: 0;
-            background: repeating-linear-gradient(
-                90deg,
-                transparent 0px,
-                transparent 58px,
-                rgba(255,255,255,0.018) 58px,
-                rgba(255,255,255,0.018) 60px
-            );
-            transform: perspective(800px) rotateX(55deg) scaleX(2) translateY(30%);
-            transform-origin: bottom center;
-            opacity: 0.7;
-        }
-
-        /* Center circle */
-        #field-circle {
-            position: absolute;
-            width: 520px; height: 520px;
-            border: 1px solid rgba(255,255,255,0.05);
-            border-radius: 50%;
-            left: 50%; top: 55%;
-            transform: translate(-50%,-50%) perspective(800px) rotateX(55deg);
-        }
-
-        /* Spotlight vignette */
-        #bg-scene::after {
-            content: '';
-            position: absolute; inset: 0;
-            background: radial-gradient(ellipse 70% 70% at 50% 50%, transparent 30%, rgba(2,6,23,0.92) 100%);
-        }
-
-        /* Gold light flare top-left */
-        .flare {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(90px);
-            pointer-events: none;
-            animation: flareFloat 18s ease-in-out infinite alternate;
-        }
-        .flare-1 {
-            width: 350px; height: 350px; top: -80px; left: -60px;
-            background: radial-gradient(circle, rgba(0,77,152,0.5) 0%, transparent 70%);
-            animation-duration: 14s;
-        }
-        .flare-2 {
-            width: 280px; height: 280px; top: 40%; right: -80px;
-            background: radial-gradient(circle, rgba(255,215,0,0.12) 0%, transparent 70%);
-            animation-duration: 20s; animation-delay: -6s;
-        }
-        .flare-3 {
-            width: 320px; height: 320px; bottom: -60px; left: 30%;
-            background: radial-gradient(circle, rgba(0,51,112,0.4) 0%, transparent 70%);
-            animation-duration: 24s; animation-delay: -12s;
-        }
-        @keyframes flareFloat {
-            from { transform: translate(0,0) scale(1); }
-            to   { transform: translate(30px, 20px) scale(1.1); }
-        }
-
-        /* ============================================================
-           INTRO VIDEO OVERLAY
-        ============================================================ */
-        #intro-overlay {
-            position: fixed; inset: 0; z-index: 9999;
-            background: #000;
-            display: flex; align-items: center; justify-content: center;
-        }
-        #intro-overlay.exit {
-            animation: introFade 1s ease forwards;
-        }
-        @keyframes introFade {
-            to { opacity: 0; pointer-events: none; }
-        }
-        #intro-video {
-            width: 100%; height: 100%;
-            object-fit: cover; display: block;
-        }
-        #skip-btn {
-            position: absolute; bottom: 2rem; right: 2rem;
-            display: flex; align-items: center; gap: 0.5rem;
-            padding: 0.45rem 1.1rem;
-            background: rgba(0,0,0,0.55);
-            border: 1px solid rgba(255,215,0,0.4);
-            border-radius: 9999px;
-            color: rgba(255,215,0,0.85);
-            font-family: 'Outfit', sans-serif;
-            font-size: 0.68rem; font-weight: 700;
-            letter-spacing: 0.15em; text-transform: uppercase;
-            cursor: pointer; backdrop-filter: blur(8px);
-            transition: all 0.25s ease; z-index: 2;
-        }
-        #skip-btn:hover {
-            background: rgba(255,215,0,0.15);
-            border-color: rgba(255,215,0,0.8);
-            color: #ffd700; transform: scale(1.05);
-        }
-
-        /* ============================================================
-           LOGIN WRAPPER
-        ============================================================ */
-        #login-wrapper {
-            opacity: 0; pointer-events: none;
-            position: relative; z-index: 10;
-            width: 100%; display: flex;
-            align-items: center; justify-content: center;
-            min-height: 100vh; padding: 1.5rem;
-        }
-        #login-wrapper.visible {
-            opacity: 1; pointer-events: auto;
-            transition: opacity 0.8s ease;
-        }
-
-        /* ============================================================
-           MAIN CARD
-        ============================================================ */
         .club-card {
             width: 100%; max-width: 460px;
             border-radius: 28px;
@@ -168,12 +33,8 @@
                 0 0 0 1px rgba(255,215,0,0.15),
                 0 40px 80px -20px rgba(0,0,0,0.7),
                 0 0 60px -10px rgba(0,77,152,0.3);
-            transform-style: preserve-3d;
-            will-change: transform;
-            transition: transform 0.12s ease-out;
         }
 
-        /* HEADER — azul royal con líneas de campo y escudo */
         .card-header {
             background: linear-gradient(160deg, #004d98 0%, #002d6e 60%, #001a45 100%);
             padding: 2.5rem 2rem 2rem;
@@ -181,8 +42,6 @@
             overflow: hidden;
             text-align: center;
         }
-
-        /* Jersey stripes in header */
         .card-header::before {
             content: '';
             position: absolute; inset: 0;
@@ -192,8 +51,6 @@
                 rgba(255,255,255,0.03) 14px, rgba(255,255,255,0.03) 28px
             );
         }
-
-        /* Gold top border strip */
         .card-header::after {
             content: '';
             position: absolute; top: 0; left: 0; right: 0;
@@ -201,7 +58,6 @@
             background: linear-gradient(90deg, transparent, #ffd700 30%, #f59e0b 70%, transparent);
         }
 
-        /* Shield container in header */
         .shield-wrap {
             position: relative;
             display: inline-flex;
@@ -209,8 +65,17 @@
             justify-content: center;
             margin-bottom: 1.25rem;
         }
-
-        /* Orbit ring */
+        .shield-glow-bg {
+            position: absolute;
+            width: 160px; height: 160px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255,215,0,0.18) 0%, transparent 70%);
+            animation: glowPulse 3s ease-in-out infinite;
+        }
+        @keyframes glowPulse {
+            0%,100% { transform: scale(0.9); opacity: 0.6; }
+            50%      { transform: scale(1.1); opacity: 1; }
+        }
         .orbit-ring {
             position: absolute;
             width: 128px; height: 128px;
@@ -225,115 +90,73 @@
             border-bottom-color: rgba(255,215,0,0.5);
             animation: orbit 7s linear infinite reverse;
         }
-        @keyframes orbit {
-            to { transform: rotate(360deg); }
-        }
-
-        /* Shield glow pulse */
-        .shield-glow-bg {
-            position: absolute;
-            width: 160px; height: 160px;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(255,215,0,0.18) 0%, transparent 70%);
-            animation: glowPulse 3s ease-in-out infinite;
-        }
-        @keyframes glowPulse {
-            0%,100% { transform: scale(0.9); opacity: 0.6; }
-            50%      { transform: scale(1.1); opacity: 1; }
-        }
+        @keyframes orbit { to { transform: rotate(360deg); } }
 
         #shield-3d-container {
             position: relative; z-index: 2;
             width: 96px; height: 96px;
-            transform-style: preserve-3d;
-            will-change: transform;
-            transition: transform 0.12s ease-out;
-            cursor: pointer;
         }
         #shield-image {
             width: 100%; height: 100%;
             object-fit: contain;
             filter: drop-shadow(0 8px 20px rgba(0,0,0,0.5)) drop-shadow(0 0 12px rgba(255,215,0,0.25));
-            transform: translateZ(20px);
-            transition: transform 0.12s ease-out;
         }
 
-        /* Club name + motto in header */
         .club-name {
-            font-size: 1.85rem;
-            font-weight: 900;
-            letter-spacing: -0.02em;
-            color: #fff;
-            line-height: 1;
-            text-transform: uppercase;
+            font-size: 1.85rem; font-weight: 900;
+            letter-spacing: -0.02em; color: #fff;
+            line-height: 1; text-transform: uppercase;
         }
         .club-name span { color: var(--gold); }
         .club-motto {
             font-family: var(--mono);
-            font-size: 0.55rem;
-            letter-spacing: 0.4em;
+            font-size: 0.55rem; letter-spacing: 0.4em;
             color: rgba(255,215,0,0.6);
-            text-transform: uppercase;
-            margin-top: 0.35rem;
+            text-transform: uppercase; margin-top: 0.35rem;
         }
 
-        /* Gold divider strip — jersey-style */
         .jersey-divider {
             height: 4px;
             background: linear-gradient(90deg, #002d6e, #004d98 20%, #ffd700 50%, #004d98 80%, #002d6e);
         }
 
-        /* BODY — dark glass */
         .card-body {
             background: rgba(8,15,35,0.95);
             backdrop-filter: blur(20px);
             padding: 2rem 2rem 1.75rem;
         }
 
-        /* Section badge */
         .access-badge {
             display: flex; align-items: center; justify-content: center;
             gap: 0.6rem; margin-bottom: 1.75rem;
         }
         .access-badge span {
             font-family: var(--mono);
-            font-size: 0.58rem;
-            font-weight: 700;
+            font-size: 0.58rem; font-weight: 700;
             color: rgba(255,215,0,0.85);
-            letter-spacing: 0.3em;
-            text-transform: uppercase;
+            letter-spacing: 0.3em; text-transform: uppercase;
         }
         .badge-dot {
-            width: 6px; height: 6px;
-            border-radius: 50%;
+            width: 6px; height: 6px; border-radius: 50%;
             background: var(--gold);
             box-shadow: 0 0 10px var(--gold), 0 0 20px rgba(255,215,0,0.4);
             animation: blink 2s ease-in-out infinite;
         }
-        @keyframes blink {
-            0%,100% { opacity:1; } 50% { opacity:0.3; }
-        }
+        @keyframes blink { 0%,100% { opacity:1; } 50% { opacity:0.3; } }
 
-        /* Form inputs */
         .field-group { margin-bottom: 1.2rem; }
         .field-label {
-            display: block;
-            font-size: 0.58rem;
-            font-weight: 800;
-            letter-spacing: 0.25em;
-            text-transform: uppercase;
-            color: rgba(255,255,255,0.35);
-            margin-bottom: 0.5rem;
+            display: block; font-size: 0.58rem; font-weight: 800;
+            letter-spacing: 0.25em; text-transform: uppercase;
+            color: rgba(255,255,255,0.35); margin-bottom: 0.5rem;
             padding-left: 0.25rem;
         }
         .field-wrap { position: relative; }
         .field-icon {
             position: absolute; left: 1rem; top: 50%;
             transform: translateY(-50%);
-            color: rgba(255,215,0,0.3);
-            font-size: 0.8rem;
-            transition: color 0.3s;
-            pointer-events: none;
+            color: rgba(255,215,0,0.3); font-size: 0.8rem;
+            transition: color 0.3s; pointer-events: none;
         }
         .field-wrap:focus-within .field-icon { color: var(--gold); }
         .field-input {
@@ -341,13 +164,10 @@
             padding: 0.85rem 1rem 0.85rem 2.75rem;
             background: rgba(255,255,255,0.04);
             border: 1px solid rgba(255,255,255,0.08);
-            border-radius: 12px;
-            color: #fff;
+            border-radius: 12px; color: #fff;
             font-family: 'Outfit', sans-serif;
-            font-size: 0.85rem;
-            font-weight: 600;
-            letter-spacing: 0.05em;
-            outline: none;
+            font-size: 0.85rem; font-weight: 600;
+            letter-spacing: 0.05em; outline: none;
             transition: border-color 0.3s, box-shadow 0.3s, background 0.3s;
         }
         .field-input::placeholder { color: rgba(255,255,255,0.18); font-weight: 400; }
@@ -366,10 +186,6 @@
         }
         .pw-eye:hover { color: var(--gold); }
 
-        .forgot-row {
-            display: flex; justify-content: flex-end;
-            margin-bottom: 0.5rem;
-        }
         .forgot-btn {
             font-size: 0.58rem; font-weight: 700;
             color: rgba(255,255,255,0.25);
@@ -379,11 +195,8 @@
         }
         .forgot-btn:hover { color: var(--gold); }
 
-        /* Submit button */
         .submit-btn {
-            width: 100%;
-            margin-top: 1.5rem;
-            padding: 1rem;
+            width: 100%; margin-top: 1.5rem; padding: 1rem;
             background: linear-gradient(135deg, #ffd700, #f59e0b);
             border: none; border-radius: 14px;
             color: var(--blue2);
@@ -394,21 +207,11 @@
             box-shadow: 0 8px 30px -8px rgba(255,215,0,0.4);
             display: flex; align-items: center; justify-content: center; gap: 0.7rem;
             transition: all 0.25s ease;
-            position: relative; overflow: hidden;
-        }
-        .submit-btn::before {
-            content: '';
-            position: absolute; inset: 0;
-            background: linear-gradient(135deg, rgba(255,255,255,0.15), transparent);
-            opacity: 0;
-            transition: opacity 0.3s;
         }
         .submit-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 35px -8px rgba(255,215,0,0.55); }
-        .submit-btn:hover::before { opacity: 1; }
         .submit-btn:active { transform: scale(0.97); }
         .submit-btn:disabled { opacity: 0.7; cursor: not-allowed; transform: none; }
 
-        /* Footer links */
         .card-footer {
             padding: 1rem 2rem 1.5rem;
             background: rgba(0,0,0,0.35);
@@ -425,7 +228,6 @@
         }
         .back-link:hover { color: var(--gold); }
 
-        /* Below card meta */
         .card-meta {
             text-align: center; margin-top: 1.25rem;
             display: flex; align-items: center; justify-content: center; gap: 1rem;
@@ -433,65 +235,26 @@
         .meta-line { flex: 1; max-width: 60px; height: 1px; background: rgba(255,215,0,0.2); }
         .meta-text {
             font-family: var(--mono);
-            font-size: 0.55rem;
-            font-weight: 700;
+            font-size: 0.55rem; font-weight: 700;
             color: rgba(255,215,0,0.6);
             letter-spacing: 0.25em; text-transform: uppercase;
         }
 
-        /* Alert */
         #alert-container { margin-bottom: 1rem; }
         .alert-box {
             display: flex; align-items: center; gap: 0.75rem;
-            padding: 0.85rem 1rem;
-            border-radius: 10px;
+            padding: 0.85rem 1rem; border-radius: 10px;
             font-size: 0.62rem; font-weight: 800;
             letter-spacing: 0.1em; text-transform: uppercase;
         }
         .alert-error   { background: rgba(239,68,68,0.1);  border: 1px solid rgba(239,68,68,0.25);  color: #f87171; }
         .alert-success { background: rgba(34,197,94,0.1);  border: 1px solid rgba(34,197,94,0.25);  color: #4ade80; }
-
-        /* Particles */
-        .particle {
-            position: fixed;
-            width: 2px; height: 2px;
-            border-radius: 50%; pointer-events: none;
-            animation: particleRise 10s linear infinite;
-        }
-        @keyframes particleRise {
-            from { transform: translateY(100vh); opacity: 0; }
-            10%  { opacity: 0.4; }
-            90%  { opacity: 0.2; }
-            to   { transform: translateY(-10vh); opacity: 0; }
-        }
     </style>
 </head>
 
 <body class="min-h-screen flex items-center justify-center p-6 font-['Outfit']">
-    <!-- Background scene -->
-    <div id="bg-scene">
-        <div id="field-lines"></div>
-        <div id="field-circle"></div>
-        <div class="flare flare-1"></div>
-        <div class="flare flare-2"></div>
-        <div class="flare flare-3"></div>
-    </div>
-
-    <!-- Particles -->
-    <div id="particles-container" class="fixed inset-0 pointer-events-none z-0"></div>
-
-    <!-- Intro video overlay -->
-    <div id="intro-overlay">
-        <video id="intro-video" autoplay muted playsinline>
-            <source src="/images/intro.mp4" type="video/mp4">
-        </video>
-        <button id="skip-btn"><i class="fas fa-forward"></i> Saltar</button>
-    </div>
-
-    <!-- Login wrapper -->
-    <div id="login-wrapper">
-        <div id="login-card" class="club-card">
-            <!-- Header with shield -->
+    <div>
+        <div class="club-card">
             <div class="card-header">
                 <div class="shield-wrap">
                     <div class="shield-glow-bg"></div>
@@ -507,7 +270,6 @@
 
             <div class="jersey-divider"></div>
 
-            <!-- Body -->
             <div class="card-body">
                 <div class="access-badge">
                     <div class="badge-dot"></div>
@@ -517,7 +279,6 @@
                 <div id="alert-container"></div>
 
                 <form id="login-form">
-                    <!-- Email -->
                     <div class="field-group">
                         <label class="field-label">Correo Electrónico</label>
                         <div class="field-wrap">
@@ -526,7 +287,6 @@
                         </div>
                     </div>
 
-                    <!-- Password -->
                     <div class="field-group">
                         <div class="flex justify-between items-center px-1 mb-2">
                             <label class="field-label !mb-0">Contraseña</label>
@@ -539,7 +299,6 @@
                         </div>
                     </div>
 
-                    <!-- Submit -->
                     <button type="submit" id="login-button" class="submit-btn">
                         <span class="button-text">Iniciar Sesión</span>
                         <i class="fas fa-arrow-right-to-bracket"></i>
@@ -547,7 +306,6 @@
                     </button>
                 </form>
 
-                <!-- Google Login -->
                 <div class="mt-6">
                     <div class="flex items-center gap-4 mb-5">
                         <div class="flex-1 h-[1px] bg-white/10"></div>
@@ -567,7 +325,6 @@
                 </div>
             </div>
 
-            <!-- Footer -->
             <div class="card-footer">
                 <a href="/" class="back-link">
                     <i class="fas fa-arrow-left"></i> Volver al Portal
@@ -585,81 +342,7 @@
     <script src="/scripts/config.js"></script>
     <script type="module">
         import { iniciarSesion, iniciarSesionGoogle, enviarCorreoRecuperacion } from "/scripts/auth.js";
-        import anime from 'https://cdn.jsdelivr.net/npm/animejs@3.2.2/lib/anime.es.js';
 
-        /* ── VIDEO INTRO ── */
-        const overlay   = document.getElementById('intro-overlay');
-        const loginWrap = document.getElementById('login-wrapper');
-        const introVid  = document.getElementById('intro-video');
-        const skipBtn   = document.getElementById('skip-btn');
-
-        function exitIntro() {
-            overlay.classList.add('exit');
-            overlay.addEventListener('animationend', () => {
-                overlay.style.display = 'none';
-                loginWrap.classList.add('visible');
-                bootLogin();
-            }, { once: true });
-        }
-
-        introVid.addEventListener('ended', exitIntro);
-        skipBtn.addEventListener('click', exitIntro);
-        introVid.addEventListener('error', exitIntro);
-
-        /* ── LOGIN BOOT ── */
-        function bootLogin() {
-            const card   = document.getElementById('login-card');
-            const shield = document.getElementById('shield-3d-container');
-            const img    = document.getElementById('shield-image');
-
-            // Card slide-up entrance
-            anime({
-                targets: card,
-                translateY: [60, 0], opacity: [0, 1],
-                duration: 900, easing: 'easeOutExpo'
-            });
-
-            // Shield spin-in
-            anime({
-                targets: shield,
-                rotateY: [540, 0], scale: [0.1, 1],
-                opacity: [0, 1], duration: 1800,
-                easing: 'easeOutElastic(1, 0.7)'
-            });
-
-            // Particles — gold + blue mix
-            const pc = document.getElementById('particles-container');
-            const colors = ['rgba(255,215,0,0.35)', 'rgba(0,77,152,0.4)', 'rgba(255,183,0,0.25)'];
-            for (let i = 0; i < 35; i++) {
-                const p = document.createElement('div');
-                p.className = 'particle';
-                p.style.cssText = `
-                    left:${Math.random()*100}vw;
-                    bottom: -5px;
-                    background:${colors[i % colors.length]};
-                    animation-duration:${6 + Math.random()*10}s;
-                    animation-delay:${Math.random()*8}s;
-                    width:${1 + Math.random()*2}px;
-                    height:${1 + Math.random()*2}px;
-                `;
-                pc.appendChild(p);
-            }
-
-            // 3D card + shield tilt on mouse
-            document.addEventListener('mousemove', (e) => {
-                const dx = (e.clientX / window.innerWidth  - 0.5) * 2;
-                const dy = (e.clientY / window.innerHeight - 0.5) * 2;
-                if (card)   card.style.transform   = `rotateX(${-dy*6}deg) rotateY(${dx*6}deg)`;
-                if (shield) shield.style.transform = `rotateX(${-dy*18}deg) rotateY(${dx*18}deg)`;
-                if (img)    img.style.transform    = `translateZ(20px) translate(${dx*5}px,${dy*5}px)`;
-            });
-            document.addEventListener('mouseleave', () => {
-                anime({ targets: [card, shield], rotateX:0, rotateY:0, duration:1000, easing:'easeOutElastic(1,0.8)' });
-                if (img) anime({ targets: img, translateZ:20, translateX:0, translateY:0, duration:800, easing:'easeOutExpo' });
-            });
-        }
-
-        /* ── AUTH ── */
         const loginForm      = document.getElementById('login-form');
         const loginBtn       = document.getElementById('login-button');
         const alertContainer = document.getElementById('alert-container');
@@ -694,7 +377,7 @@
                     : err.message);
                 loginBtn.disabled = false;
                 spinner.classList.add('hidden');
-                btnText.textContent = 'Ingresar al Sistema';
+                btnText.textContent = 'Iniciar Sesión';
             }
         });
 
@@ -707,16 +390,14 @@
             } catch (err) { showAlert('Error: ' + err.message); }
         });
 
-        const pwToggle = document.getElementById('pw-toggle');
-        const pwInput  = document.getElementById('login-password');
-        const pwIcon   = document.getElementById('pw-icon');
-        pwToggle.addEventListener('click', () => {
-            const show = pwInput.type !== 'text';
-            pwInput.type     = show ? 'text' : 'password';
-            pwIcon.className = show ? 'fas fa-eye' : 'fas fa-eye-slash';
+        document.getElementById('pw-toggle').addEventListener('click', () => {
+            const inp = document.getElementById('login-password');
+            const ico = document.getElementById('pw-icon');
+            const show = inp.type !== 'text';
+            inp.type = show ? 'text' : 'password';
+            ico.className = show ? 'fas fa-eye' : 'fas fa-eye-slash';
         });
 
-        /* ── GOOGLE LOGIN ── */
         document.getElementById('google-login-btn').addEventListener('click', async () => {
             alertContainer.innerHTML = '';
             try {
