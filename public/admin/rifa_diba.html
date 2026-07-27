@@ -17,33 +17,41 @@
     <script src="https://cdn.tailwindcss.com"></script>
 
     <style>
-        /* workbench style preview */
+        /* Workbench Preview */
         #contenedor {
             background: rgba(0, 0, 0, 0.4);
-            padding: 3rem;
+            padding: 2rem;
             min-height: 400px;
             display: flex;
             flex-direction: column;
-            gap: 4rem;
+            gap: 3rem;
             border-radius: 32px;
-            border: 1px border-white/5;
+            border: 1px solid rgba(255,255,255,0.05);
             box-shadow: inset 0 0 100px rgba(0,0,0,0.5);
             align-items: center;
+            transition: all 0.3s ease;
         }
 
-        /* Printable Ticket Design (Kept and Refined) */
+        #contenedor:empty {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Printable Ticket Design */
         .page-rifa {
             width: 210mm;
             min-height: 297mm;
-            padding: 10mm;
+            padding: 8mm;
             background: white;
             display: flex;
             flex-direction: column;
             box-shadow: 0 40px 80px rgba(0,0,0,0.4);
             transform: scale(0.95);
             transition: transform 0.3s;
+            gap: 2mm;
         }
-        
+
         #contenedor .page-rifa:hover {
             transform: scale(1);
         }
@@ -64,42 +72,294 @@
             background: linear-gradient(135deg, #FFD700 0%, #ffec8b 50%, #e6b800 100%);
             border: 3px solid #004d98;
             border-radius: 16px;
-            padding: 15px 25px;
+            padding: 12px 20px;
             color: #004d98;
             display: flex;
-            gap: 20px;
+            gap: 16px;
             align-items: center;
             box-shadow: inset 0 0 50px rgba(255, 255, 255, 0.4);
             position: relative;
+            overflow: hidden;
         }
 
-        .boleta-left { width: 60px; display: flex; flex-direction: column; align-items: center; justify-content: center; flex-shrink: 0; }
-        .boleta-logo { width: 55px; height: 55px; object-fit: contain; }
-        .boleta-main { flex: 1; display: flex; flex-direction: column; justify-content: space-between; height: 100%; }
-        .boleta-titulo { font-size: 1.4rem; font-weight: 900; font-style: italic; text-transform: uppercase; line-height: 1; margin-bottom: 5px; }
-        .boleta-number-id { font-size: 0.9rem; font-weight: 900; background: #004d98; color: #FFD700; padding: 4px 12px; border-radius: 6px; }
+        .boleta::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 10px,
+                rgba(0, 77, 152, 0.03) 10px,
+                rgba(0, 77, 152, 0.03) 20px
+            );
+            pointer-events: none;
+        }
+
+        .boleta-left { 
+            width: 60px; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center; 
+            flex-shrink: 0; 
+            z-index: 1;
+        }
+        .boleta-logo { width: 55px; height: 55px; object-fit: contain; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2)); }
+        .boleta-main { flex: 1; display: flex; flex-direction: column; justify-content: space-between; height: 100%; z-index: 1; }
+        .boleta-titulo { font-size: 1.3rem; font-weight: 900; font-style: italic; text-transform: uppercase; line-height: 1; margin-bottom: 4px; }
+        .boleta-number-id { font-size: 0.85rem; font-weight: 900; background: #004d98; color: #FFD700; padding: 4px 12px; border-radius: 6px; white-space: nowrap; }
         
-        .boleta-grid { display: grid; grid-template-columns: 1fr 220px; gap: 20px; flex: 1; align-items: center; }
-        .boleta-info-list { font-size: 0.65rem; font-weight: 800; text-transform: uppercase; opacity: 0.8; letter-spacing: 0.05em; }
+        .boleta-grid { display: grid; grid-template-columns: 1fr 200px; gap: 16px; flex: 1; align-items: center; }
+        .boleta-info-list { font-size: 0.6rem; font-weight: 800; text-transform: uppercase; opacity: 0.85; letter-spacing: 0.05em; line-height: 1.6; }
         .boleta-info-list strong { color: #000; font-weight: 950; }
         
-        .boleta-nums-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
-        .num-box { background: white; color: #004d98; height: 36px; border: 2px solid #004d98; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: 950; font-size: 1.1rem; box-shadow: 0 3px 0 #004d98; }
-
-        .boleta-footer { margin-top: 10px; padding: 6px 12px; background: rgba(255, 255, 255, 0.4); border: 1.5px solid #004d98; border-radius: 8px; font-size: 0.75rem; font-weight: 900; }
-
-        @media print {
-            body { background: white !important; }
-            #admin-nav, .no-print, header, aside { display: none !important; }
-            main { margin-left: 0 !important; padding: 0 !important; }
-            #contenedor { padding: 0 !important; gap: 0 !important; background: transparent !important; box-shadow: none !important; border: none !important; }
-            .page-rifa { margin: 0 !important; padding: 10mm !important; box-shadow: none !important; transform: none !important; page-break-after: always; }
+        .boleta-nums-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; }
+        .num-box { 
+            background: white; 
+            color: #004d98; 
+            height: 32px; 
+            border: 2px solid #004d98; 
+            border-radius: 8px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            font-weight: 950; 
+            font-size: 1rem;
+            box-shadow: 0 3px 0 #004d98; 
+            transition: all 0.2s;
         }
 
-        /* mobile optimization */
+        .boleta-footer { 
+            margin-top: 6px; 
+            padding: 5px 10px; 
+            background: rgba(255, 255, 255, 0.4); 
+            border: 1.5px solid #004d98; 
+            border-radius: 8px; 
+            font-size: 0.7rem; 
+            font-weight: 900; 
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* Stats Bar */
+        .rifa-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .rifa-stat {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 16px;
+            padding: 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .rifa-stat:hover {
+            background: rgba(255,255,255,0.04);
+            border-color: rgba(255,215,0,0.2);
+            transform: translateY(-2px);
+        }
+
+        .rifa-stat-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+
+        .rifa-stat-icon.gold { background: rgba(255,215,0,0.1); color: #FFD700; border: 1px solid rgba(255,215,0,0.2); }
+        .rifa-stat-icon.blue { background: rgba(0,77,152,0.1); color: #60a5fa; border: 1px solid rgba(0,77,152,0.2); }
+        .rifa-stat-icon.green { background: rgba(34,197,94,0.1); color: #4ade80; border: 1px solid rgba(34,197,94,0.2); }
+
+        .rifa-stat-value {
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: #fff;
+            line-height: 1;
+            font-style: italic;
+        }
+
+        .rifa-stat-label {
+            font-size: 0.6rem;
+            font-weight: 800;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-top: 2px;
+        }
+
+        /* Form Enhancements */
+        .form-section-title {
+            font-size: 0.6rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.3em;
+            color: #FFD700;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid rgba(255,215,0,0.1);
+            margin-bottom: 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .form-section-title i {
+            font-size: 0.8rem;
+            opacity: 0.7;
+        }
+
+        /* Generate Button Enhancement */
+        .btn-generate {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-generate::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn-generate:hover::before {
+            left: 100%;
+        }
+
+        /* Toast Notifications */
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            padding: 1rem 1.5rem;
+            border-radius: 16px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            z-index: 9999;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .toast.success {
+            background: linear-gradient(135deg, rgba(34,197,94,0.15), rgba(34,197,94,0.05));
+            border: 1px solid rgba(34,197,94,0.3);
+            color: #4ade80;
+            backdrop-filter: blur(20px);
+        }
+
+        .toast.error {
+            background: linear-gradient(135deg, rgba(239,68,68,0.15), rgba(239,68,68,0.05));
+            border: 1px solid rgba(239,68,68,0.3);
+            color: #fb7185;
+            backdrop-filter: blur(20px);
+        }
+
+        .toast.info {
+            background: linear-gradient(135deg, rgba(59,130,246,0.15), rgba(59,130,246,0.05));
+            border: 1px solid rgba(59,130,246,0.3);
+            color: #60a5fa;
+            backdrop-filter: blur(20px);
+        }
+
+        /* Validation States */
+        .premium-input.error {
+            border-color: #ef4444 !important;
+            box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1) !important;
+        }
+
+        .premium-input.success {
+            border-color: #22c55e !important;
+            box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.1) !important;
+        }
+
+        .field-error {
+            font-size: 0.6rem;
+            color: #ef4444;
+            font-weight: 600;
+            margin-top: 4px;
+            display: none;
+        }
+
+        .field-error.show {
+            display: block;
+            animation: fadeUp 0.3s ease;
+        }
+
+        /* Quick Actions */
+        .quick-actions {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-top: 0.5rem;
+        }
+
+        .quick-action-btn {
+            padding: 0.4rem 0.75rem;
+            background: rgba(255,215,0,0.08);
+            border: 1px solid rgba(255,215,0,0.15);
+            border-radius: 8px;
+            font-size: 0.55rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #FFD700;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .quick-action-btn:hover {
+            background: rgba(255,215,0,0.15);
+            border-color: rgba(255,215,0,0.3);
+            transform: translateY(-1px);
+        }
+
+        /* Print Styles */
+        @media print {
+            body { background: white !important; }
+            #admin-nav, .no-print, header, aside, .toast { display: none !important; }
+            main { margin-left: 0 !important; padding: 0 !important; }
+            #contenedor { padding: 0 !important; gap: 0 !important; background: transparent !important; box-shadow: none !important; border: none !important; }
+            .page-rifa { margin: 0 !important; padding: 8mm !important; box-shadow: none !important; transform: none !important; page-break-after: always; }
+        }
+
+        /* Mobile Optimization */
         @media (max-width: 1024px) {
             #contenedor { padding: 1rem; }
             .page-rifa { transform: scale(0.4); transform-origin: top center; width: auto; min-height: auto; }
+            .rifa-stats { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        @media (max-width: 640px) {
+            .rifa-stats { grid-template-columns: 1fr; }
+            .rifa-stat { padding: 1rem; }
         }
     </style>
 </head>
@@ -109,100 +369,211 @@
 
     <div id="admin-nav"></div>
 
+    <!-- Toast Container -->
+    <div id="toast-container"></div>
+
     <main class="lg:ml-[280px] pt-[80px] min-h-screen transition-all duration-300 relative z-10">
         <div class="p-6 lg:p-10 max-w-[1600px] mx-auto">
             
             <!-- Page Header -->
-            <div class="mb-12 animate-fade-up no-print">
+            <div class="mb-10 animate-fade-up no-print">
                 <div class="flex items-center justify-between flex-wrap gap-8">
                     <div>
                         <div class="flex items-center gap-3 mb-2">
                             <span class="w-8 h-1 bg-gold rounded-full"></span>
-                            <p class="text-white/60 font-bold uppercase tracking-[0.4em] text-[0.65rem]">Generador de Activos de Marketing</p>
+                            <p class="text-slate-500 font-bold uppercase tracking-[0.4em] text-[0.65rem]">Generador de Activos de Marketing</p>
                         </div>
                         <h2 class="text-4xl lg:text-5xl font-black italic text-white uppercase tracking-tighter">Gestión de <span class="text-gold">Rifas</span></h2>
                     </div>
-                    <div class="flex items-center gap-4">
-                        <button onclick="window.print()" class="px-8 py-4 bg-white/5 border border-white/10 rounded-2xl text-white font-black uppercase tracking-widest text-[0.7rem] hover:bg-white/10 transition-all flex items-center gap-3">
-                            <i class="fas fa-print text-gold"></i> IMPRIMIR REPORTE
+                    <div class="flex items-center gap-3">
+                        <button onclick="resetForm()" class="px-5 py-3 bg-white/5 border border-white/10 rounded-xl text-white/60 font-bold uppercase tracking-widest text-[0.6rem] hover:bg-white/10 hover:text-white transition-all flex items-center gap-2">
+                            <i class="fas fa-rotate-right"></i> RESET
+                        </button>
+                        <button onclick="window.print()" class="px-6 py-3 bg-white/5 border border-white/10 rounded-xl text-white font-bold uppercase tracking-widest text-[0.6rem] hover:bg-white/10 transition-all flex items-center gap-2">
+                            <i class="fas fa-print text-gold"></i> IMPRIMIR
+                        </button>
+                        <button onclick="exportPDF()" id="btn-export" class="px-6 py-3 bg-gold text-[#004d98] rounded-xl font-black uppercase tracking-widest text-[0.6rem] hover:scale-105 transition-all flex items-center gap-2 shadow-xl shadow-gold/20">
+                            <i class="fas fa-file-pdf"></i> EXPORTAR PDF
                         </button>
                     </div>
                 </div>
             </div>
 
+            <!-- Stats Bar -->
+            <div class="rifa-stats animate-fade-up no-print" style="animation-delay: 0.05s">
+                <div class="rifa-stat">
+                    <div class="rifa-stat-icon gold"><i class="fas fa-ticket-alt"></i></div>
+                    <div>
+                        <div class="rifa-stat-value" id="stat-total">0</div>
+                        <div class="rifa-stat-label">Boletas Generadas</div>
+                    </div>
+                </div>
+                <div class="rifa-stat">
+                    <div class="rifa-stat-icon blue"><i class="fas fa-hashtag"></i></div>
+                    <div>
+                        <div class="rifa-stat-value" id="stat-numbers">0</div>
+                        <div class="rifa-stat-label">Números Únicos</div>
+                    </div>
+                </div>
+                <div class="rifa-stat">
+                    <div class="rifa-stat-icon green"><i class="fas fa-coins"></i></div>
+                    <div>
+                        <div class="rifa-stat-value" id="stat-revenue">$0</div>
+                        <div class="rifa-stat-label">Recaudo Potencial</div>
+                    </div>
+                </div>
+            </div>
+
             <!-- Configuration Toolbar -->
-            <div class="panel p-8 mb-10 animate-fade-up no-print" style="animation-delay: 0.1s">
-                <div class="premium-p-header mb-8 bg-white/5 border-b border-white/5 -mx-8 -mt-8 rounded-t-3xl px-8 py-5">
+            <div class="panel p-8 mb-8 animate-fade-up no-print" style="animation-delay: 0.1s">
+                <div class="premium-p-header mb-0 bg-white/[0.02] border-b border-white/5 -mx-8 -mt-8 rounded-t-3xl px-8 py-5">
                     <span class="premium-p-title !text-white"><i class="fas fa-sliders text-gold"></i>Parámetros de Generación</span>
+                    <span class="premium-p-badge"><i class="fas fa-cog mr-1"></i>CONFIGURACIÓN</span>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-6">
-                    <div class="premium-form-group">
-                        <label class="premium-label">Cant. Boletas</label>
-                        <input type="number" id="cfg-total" min="1" max="1000" step="5" value="45" class="premium-input text-center !bg-white/5">
+                <div class="mt-8">
+                    <!-- Section: Datos de la Rifa -->
+                    <div class="form-section-title">
+                        <i class="fas fa-info-circle"></i>
+                        <span>Datos de la Rifa</span>
                     </div>
 
-                    <div class="premium-form-group">
-                        <label class="premium-label">Números x Boleta</label>
-                        <select id="cfg-numeros" class="premium-input !bg-white/5">
-                            <option value="4">4 NÚMEROS</option>
-                            <option value="5">5 NÚMEROS</option>
-                            <option value="6" selected>6 NÚMEROS</option>
-                            <option value="8">8 NÚMEROS</option>
-                            <option value="10">10 NÚMEROS</option>
-                        </select>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-5">
+                        <div class="premium-form-group">
+                            <label class="premium-label">Nombre de la Rifa</label>
+                            <input type="text" id="cfg-nombre" value="Rifa Oficial DIBA FBC" class="premium-input uppercase !bg-white/5">
+                            <div class="field-error" id="error-nombre">Ingresa un nombre para la rifa</div>
+                        </div>
+
+                        <div class="premium-form-group">
+                            <label class="premium-label">Cant. Boletas</label>
+                            <input type="number" id="cfg-total" min="1" max="1000" step="5" value="45" class="premium-input text-center !bg-white/5">
+                            <div class="field-error" id="error-total">Mínimo 1, máximo 1000</div>
+                            <div class="quick-actions">
+                                <button class="quick-action-btn" onclick="setQuickValue('cfg-total', 20)">20</button>
+                                <button class="quick-action-btn" onclick="setQuickValue('cfg-total', 30)">30</button>
+                                <button class="quick-action-btn" onclick="setQuickValue('cfg-total', 50)">50</button>
+                                <button class="quick-action-btn" onclick="setQuickValue('cfg-total', 100)">100</button>
+                            </div>
+                        </div>
+
+                        <div class="premium-form-group">
+                            <label class="premium-label">Números x Boleta</label>
+                            <select id="cfg-numeros" class="premium-input !bg-white/5">
+                                <option value="4">4 NÚMEROS</option>
+                                <option value="5">5 NÚMEROS</option>
+                                <option value="6" selected>6 NÚMEROS</option>
+                                <option value="8">8 NÚMEROS</option>
+                                <option value="10">10 NÚMEROS</option>
+                            </select>
+                        </div>
+
+                        <div class="premium-form-group">
+                            <label class="premium-label">Fecha Sorteo</label>
+                            <input type="date" id="cfg-fecha-picker" class="premium-input uppercase tracking-wider !bg-white/5">
+                            <input type="hidden" id="cfg-fecha">
+                            <div class="field-error" id="error-fecha">Selecciona una fecha válida</div>
+                        </div>
+
+                        <div class="premium-form-group">
+                            <label class="premium-label">Modalidad / Lotería</label>
+                            <input type="text" id="cfg-loteria" list="loterias-list" value="Sinuano Noche — Últimas 2 cifras" class="premium-input uppercase !bg-white/5">
+                            <datalist id="loterias-list">
+                                <option value="Sinuano Noche / Últimas 2 cifras">
+                                <option value="Sinuano Día / Últimas 2 cifras">
+                                <option value="Caribeña Noche / Últimas 2 cifras">
+                                <option value="Caribeña Día / Últimas 2 cifras">
+                                <option value="Lotería de Medellín">
+                                <option value="Lotería de Bogotá">
+                                <option value="Baloto">
+                                <option value="Super Asta / Últimas 3 cifras">
+                            </datalist>
+                        </div>
+
+                        <div class="premium-form-group">
+                            <label class="premium-label">Premio Mayor</label>
+                            <input type="text" id="cfg-premio" placeholder="EJ: TABLET 10 PULG." value="Perfume Importado" class="premium-input uppercase !bg-white/5">
+                            <div class="field-error" id="error-premio">Ingresa el premio</div>
+                        </div>
+
+                        <div class="premium-form-group">
+                            <label class="premium-label">Valor Boleta ($)</label>
+                            <input type="number" id="cfg-valor-num" step="500" value="3000" class="premium-input !bg-white/5">
+                            <input type="hidden" id="cfg-valor">
+                            <div class="field-error" id="error-valor">Ingresa un valor válido</div>
+                            <div class="quick-actions">
+                                <button class="quick-action-btn" onclick="setQuickValue('cfg-valor-num', 2000)">$2.000</button>
+                                <button class="quick-action-btn" onclick="setQuickValue('cfg-valor-num', 3000)">$3.000</button>
+                                <button class="quick-action-btn" onclick="setQuickValue('cfg-valor-num', 5000)">$5.000</button>
+                                <button class="quick-action-btn" onclick="setQuickValue('cfg-valor-num', 10000)">$10.000</button>
+                            </div>
+                        </div>
                     </div>
 
-                    <div class="premium-form-group">
-                        <label class="premium-label">Fecha Sorteo</label>
-                        <input type="date" id="cfg-fecha-picker" class="premium-input uppercase tracking-wider !bg-white/5">
-                        <input type="hidden" id="cfg-fecha">
+                    <!-- Section: Opciones Avanzadas -->
+                    <div class="form-section-title mt-6">
+                        <i class="fas fa-cogs"></i>
+                        <span>Opciones Avanzadas</span>
                     </div>
 
-                    <div class="premium-form-group">
-                        <label class="premium-label">Modalidad / Lotería</label>
-                        <input type="text" id="cfg-loteria" list="loterias-list" value="Sinuano Noche — Últimas 2 cifras" class="premium-input uppercase !bg-white/5">
-                        <datalist id="loterias-list">
-                            <option value="Sinuano Noche / Últimas 2 cifras">
-                            <option value="Sinuano Día / Últimas 2 cifras">
-                            <option value="Caribeña Noche / Últimas 2 cifras">
-                            <option value="Caribeña Día / Últimas 2 cifras">
-                            <option value="Lotería de Medellín">
-                            <option value="Lotería de Bogotá">
-                        </datalist>
-                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                        <div class="premium-form-group">
+                            <label class="premium-label">Rango de Números</label>
+                            <div class="flex gap-3">
+                                <input type="number" id="cfg-num-min" min="0" max="98" value="0" class="premium-input text-center !bg-white/5" placeholder="MIN">
+                                <span class="flex items-center text-white/30 font-bold">—</span>
+                                <input type="number" id="cfg-num-max" min="1" max="99" value="99" class="premium-input text-center !bg-white/5" placeholder="MAX">
+                            </div>
+                        </div>
 
-                    <div class="premium-form-group">
-                        <label class="premium-label">Premio Mayor</label>
-                        <input type="text" id="cfg-premio" placeholder="EJ: TABLET 10 PULG." value="Perfume Importado" class="premium-input uppercase !bg-white/5">
-                    </div>
+                        <div class="premium-form-group">
+                            <label class="premium-label">Tipo de Distribución</label>
+                            <select id="cfg-dist" class="premium-input !bg-white/5">
+                                <option value="random">ALEATORIO (SHUFFLE)</option>
+                                <option value="sequential">SECUENCIAL</option>
+                                <option value="balanced">EQUILIBRADO (POR BOLSA)</option>
+                            </select>
+                        </div>
 
-                    <div class="premium-form-group">
-                        <label class="premium-label">Valor Boleta ($)</label>
-                        <input type="number" id="cfg-valor-num" step="500" value="3000" class="premium-input !bg-white/5">
-                        <input type="hidden" id="cfg-valor">
+                        <div class="premium-form-group">
+                            <label class="premium-label">Número de Serie</label>
+                            <input type="text" id="cfg-serie" placeholder="EJ: DIBA-FBC" value="DIBA-FBC" class="premium-input uppercase !bg-white/5">
+                        </div>
                     </div>
                 </div>
 
-                <div class="mt-10 pt-8 border-t border-white/5 flex flex-wrap gap-4 items-center">
-                    <button id="btn-generar" class="px-10 py-5 bg-gold text-[#004d98] rounded-2xl font-black uppercase tracking-widest text-[0.75rem] shadow-xl shadow-gold/10 hover:scale-[1.03] active:scale-95 transition-all flex items-center justify-center gap-3 min-w-[280px]">
-                        <i class="fas fa-ticket-alt"></i> GENERAR BOLETAS AHORA
+                <!-- Generate Button -->
+                <div class="mt-8 pt-6 border-t border-white/5 flex flex-wrap gap-4 items-center">
+                    <button id="btn-generar" class="btn-generate px-10 py-4 bg-gold text-[#004d98] rounded-2xl font-black uppercase tracking-widest text-[0.7rem] shadow-xl shadow-gold/10 hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-3 min-w-[280px]">
+                        <i class="fas fa-wand-magic-sparkles"></i> GENERAR BOLETAS AHORA
                     </button>
                     
-                    <div id="status-bar" class="hidden items-center gap-4 px-6 py-4 bg-white/5 rounded-2xl border border-white/5 animate-fade-in">
+                    <div id="status-bar" class="hidden items-center gap-4 px-6 py-3 bg-white/5 rounded-xl border border-white/5 animate-fade-in">
                         <div class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_10px_rgba(16,185,129,0.5)]"></div>
-                        <span id="status-text" class="text-[0.65rem] font-black uppercase tracking-widest text-emerald-500 italic">Esperando generación...</span>
+                        <span id="status-text" class="text-[0.6rem] font-black uppercase tracking-widest text-emerald-500 italic">Esperando generación...</span>
+                    </div>
+
+                    <div class="ml-auto text-right">
+                        <div class="text-[0.55rem] text-white/30 font-bold uppercase tracking-widest">Última generación</div>
+                        <div class="text-[0.7rem] text-white/60 font-bold" id="last-gen-time">NUNCA</div>
                     </div>
                 </div>
             </div>
 
             <!-- Workbench Preview -->
-            <div id="contenedor" class="animate-fade-up bg-black/40 backdrop-blur-xl border border-white/5 rounded-[40px] p-12 min-h-[500px] flex flex-col items-center gap-12 overflow-hidden shadow-inner" style="animation-delay: 0.2s">
-                <div class="text-center py-24 opacity-20 flex flex-col items-center">
-                    <div class="w-24 h-24 rounded-3xl bg-gold/10 flex items-center justify-center text-gold text-4xl mb-6 border border-gold/10">
-                        <i class="fas fa-print fa-bounce"></i>
+            <div class="animate-fade-up no-print" style="animation-delay: 0.2s">
+                <div class="premium-p-header mb-0 bg-white/[0.02] border-b border-white/5 -mx-0 -mt-0 rounded-t-[40px] px-8 py-5">
+                    <span class="premium-p-title !text-white"><i class="fas fa-eye text-gold"></i>Vista Previa</span>
+                    <span class="premium-p-badge" id="preview-count">0 BOLETAS</span>
+                </div>
+                <div id="contenedor" class="rounded-b-[40px]">
+                    <div class="text-center py-24 opacity-20 flex flex-col items-center" id="empty-state">
+                        <div class="w-24 h-24 rounded-3xl bg-gold/10 flex items-center justify-center text-gold text-4xl mb-6 border border-gold/10">
+                            <i class="fas fa-print fa-bounce"></i>
+                        </div>
+                        <p class="text-[0.8rem] font-black uppercase tracking-[0.4em] text-gold">Configure y genere la vista previa</p>
+                        <p class="text-[0.6rem] text-white/30 mt-2 uppercase tracking-widest">Los boletos aparecerán aquí</p>
                     </div>
-                    <p class="text-[0.8rem] font-black uppercase tracking-[0.4em] text-gold">Configure y genere la vista previa</p>
                 </div>
             </div>
         </div>
@@ -221,7 +592,25 @@
         }
         init();
 
-        // UI Interactions
+        // ── Toast System ──
+        function showToast(message, type = 'success', duration = 3000) {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            
+            const icons = { success: 'fa-check-circle', error: 'fa-exclamation-circle', info: 'fa-info-circle' };
+            toast.innerHTML = `<i class="fas ${icons[type] || icons.info}"></i> ${message}`;
+            
+            container.appendChild(toast);
+            requestAnimationFrame(() => toast.classList.add('show'));
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 400);
+            }, duration);
+        }
+
+        // ── UI Interactions ──
         const fechaPicker = document.getElementById('cfg-fecha-picker');
         const fechaText = document.getElementById('cfg-fecha');
         const valorNum = document.getElementById('cfg-valor-num');
@@ -245,7 +634,90 @@
             updateVal();
         }
 
-        // Raffle Logic
+        // ── Quick Value Setter ──
+        window.setQuickValue = function(inputId, value) {
+            const input = document.getElementById(inputId);
+            if (input) {
+                input.value = value;
+                input.dispatchEvent(new Event('input'));
+                input.classList.add('success');
+                setTimeout(() => input.classList.remove('success'), 1500);
+            }
+        };
+
+        // ── Form Reset ──
+        window.resetForm = function() {
+            document.getElementById('cfg-nombre').value = 'RIFA OFICIAL DIBA FBC';
+            document.getElementById('cfg-total').value = 45;
+            document.getElementById('cfg-numeros').value = '6';
+            document.getElementById('cfg-premio').value = 'Perfume Importado';
+            document.getElementById('cfg-valor-num').value = 3000;
+            document.getElementById('cfg-num-min').value = 0;
+            document.getElementById('cfg-num-max').value = 99;
+            document.getElementById('cfg-serie').value = 'DIBA-FBC';
+            document.getElementById('cfg-dist').value = 'random';
+            document.getElementById('cfg-loteria').value = 'Sinuano Noche — Últimas 2 cifras';
+            
+            const defaultDate = new Date();
+            defaultDate.setDate(defaultDate.getDate() + 14);
+            fechaPicker.value = defaultDate.toISOString().split('T')[0];
+            fechaPicker.dispatchEvent(new Event('change'));
+            valorNum.dispatchEvent(new Event('input'));
+            
+            showToast('Formulario reiniciado', 'info');
+        };
+
+        // ── Validation ──
+        function validateForm() {
+            let isValid = true;
+            const errors = {
+                nombre: document.getElementById('error-nombre'),
+                total: document.getElementById('error-total'),
+                fecha: document.getElementById('error-fecha'),
+                premio: document.getElementById('error-premio'),
+                valor: document.getElementById('error-valor')
+            };
+
+            // Reset
+            Object.values(errors).forEach(el => el.classList.remove('show'));
+            document.querySelectorAll('.premium-input').forEach(el => el.classList.remove('error'));
+
+            if (!document.getElementById('cfg-nombre').value.trim()) {
+                errors.nombre.classList.add('show');
+                document.getElementById('cfg-nombre').classList.add('error');
+                isValid = false;
+            }
+
+            const total = parseInt(document.getElementById('cfg-total').value) || 0;
+            if (total < 1 || total > 1000) {
+                errors.total.classList.add('show');
+                document.getElementById('cfg-total').classList.add('error');
+                isValid = false;
+            }
+
+            if (!fechaText.value) {
+                errors.fecha.classList.add('show');
+                fechaPicker.classList.add('error');
+                isValid = false;
+            }
+
+            if (!document.getElementById('cfg-premio').value.trim()) {
+                errors.premio.classList.add('show');
+                document.getElementById('cfg-premio').classList.add('error');
+                isValid = false;
+            }
+
+            const valor = parseFloat(document.getElementById('cfg-valor-num').value) || 0;
+            if (valor <= 0) {
+                errors.valor.classList.add('show');
+                document.getElementById('cfg-valor-num').classList.add('error');
+                isValid = false;
+            }
+
+            return isValid;
+        }
+
+        // ── Number Generation Algorithms ──
         function shuffleArray(array) {
             for (let i = array.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
@@ -253,22 +725,98 @@
             }
         }
 
+        function generateNumbers(totalBoletas, numPorBoleta, min, max, type) {
+            const totalNums = totalBoletas * numPorBoleta;
+            let masterPool = [];
+            
+            if (type === 'sequential') {
+                for (let i = 0; i < totalNums; i++) {
+                    masterPool.push(String((min + i) % (max + 1)).padStart(2, '0'));
+                }
+            } else if (type === 'balanced') {
+                // Ensure balanced distribution across the range
+                const rangeSize = max - min + 1;
+                const cyclesNeeded = Math.ceil(totalNums / rangeSize);
+                for (let c = 0; c < cyclesNeeded; c++) {
+                    let ciclo = [];
+                    for (let i = min; i <= max; i++) {
+                        ciclo.push(String(i).padStart(2, '0'));
+                    }
+                    shuffleArray(ciclo);
+                    masterPool = [...masterPool, ...ciclo];
+                }
+            } else {
+                // Random (default)
+                const rangeSize = max - min + 1;
+                const cyclesNeeded = Math.ceil(totalNums / rangeSize);
+                for (let c = 0; c < cyclesNeeded; c++) {
+                    let ciclo = [];
+                    for (let i = min; i <= max; i++) {
+                        ciclo.push(String(i).padStart(2, '0'));
+                    }
+                    shuffleArray(ciclo);
+                    masterPool = [...masterPool, ...ciclo];
+                }
+            }
+            
+            return masterPool;
+        }
+
+        // ── Stats Update ──
+        function updateStats(totalBoletas, numPorBoleta, valorNumerico) {
+            const totalNums = totalBoletas * numPorBoleta;
+            const revenue = totalBoletas * valorNumerico;
+            
+            animateCounter('stat-total', totalBoletas);
+            animateCounter('stat-numbers', totalNums);
+            
+            const revenueEl = document.getElementById('stat-revenue');
+            revenueEl.textContent = '$' + revenue.toLocaleString('es-CO');
+        }
+
+        function animateCounter(elementId, target) {
+            const el = document.getElementById(elementId);
+            const start = parseInt(el.textContent) || 0;
+            const duration = 600;
+            const startTime = performance.now();
+            
+            function update(currentTime) {
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                const eased = 1 - Math.pow(1 - progress, 3);
+                el.textContent = Math.round(start + (target - start) * eased).toLocaleString('es-CO');
+                
+                if (progress < 1) {
+                    requestAnimationFrame(update);
+                }
+            }
+            requestAnimationFrame(update);
+        }
+
+        // ── Main Generator ──
         window.generarBoletas = function () {
+            if (!validateForm()) {
+                showToast('Por favor corrige los errores en el formulario', 'error');
+                return;
+            }
+
             const contenedor = document.getElementById('contenedor');
+            const emptyState = document.getElementById('empty-state');
+            if (emptyState) emptyState.remove();
+
+            const nombreRifa = document.getElementById('cfg-nombre').value.trim() || 'RIFA OFICIAL DIBA FBC';
             const totalBoletas = parseInt(document.getElementById('cfg-total').value) || 1;
             const numPorBoleta = parseInt(document.getElementById('cfg-numeros').value) || 6;
             const fecha = document.getElementById('cfg-fecha').value;
             const loteria = document.getElementById('cfg-loteria').value;
             const premio = document.getElementById('cfg-premio').value;
             const valor = document.getElementById('cfg-valor').value;
+            const serie = document.getElementById('cfg-serie').value || 'DIBA-FBC';
+            const numMin = parseInt(document.getElementById('cfg-num-min').value) || 0;
+            const numMax = parseInt(document.getElementById('cfg-num-max').value) || 99;
+            const distType = document.getElementById('cfg-dist').value;
 
-            const totalNums = totalBoletas * numPorBoleta;
-            let masterPool = [];
-            for (let c = 0; c < Math.ceil(totalNums / 100); c++) {
-                let ciclo = Array.from({length: 100}, (_, i) => String(i).padStart(2, '0'));
-                shuffleArray(ciclo);
-                masterPool = [...masterPool, ...ciclo];
-            }
+            const masterPool = generateNumbers(totalBoletas, numPorBoleta, numMin, numMax, distType);
 
             contenedor.innerHTML = '';
             const BOLETAS_POR_PAG = 5;
@@ -276,8 +824,6 @@
 
             for (let p = 0; p < Math.ceil(totalBoletas / BOLETAS_POR_PAG); p++) {
                 const page = document.createElement('div');
-                page.className = 'page-rifa scale-x-[-1]'; // Fix mirror effect if scale used or just normal
-                page.classList.remove('scale-x-[-1]'); 
                 page.className = 'page-rifa';
 
                 for (let b = 0; b < BOLETAS_POR_PAG && currentIdx < totalBoletas; b++) {
@@ -294,8 +840,11 @@
                             </div>
                             <div class="boleta-main">
                                 <div class="flex justify-between items-start">
-                                    <div class="boleta-titulo font-outfit uppercase">Rifa Oficial <span style="color:#000">DIBA FBC</span></div>
-                                    <div class="boleta-number-id">BOLETA #${String(currentIdx).padStart(3, '0')}</div>
+                                    <div>
+                                        <div class="boleta-titulo font-outfit uppercase">${nombreRifa}</div>
+                                        <div style="font-size:0.5rem;font-weight:800;opacity:0.5;margin-top:2px;">SERIE: ${serie.toUpperCase()}</div>
+                                    </div>
+                                    <div class="boleta-number-id">#${String(currentIdx).padStart(3, '0')}</div>
                                 </div>
                                 <div class="boleta-grid">
                                     <div class="boleta-info-list italic">
@@ -306,9 +855,9 @@
                                     </div>
                                     <div class="boleta-nums-grid">${numsHtml}</div>
                                 </div>
-                                <div class="boleta-footer italic uppercase flex justify-between">
-                                    <span>👤 RESPONSABLE: ____________________________</span>
-                                    <span class="opacity-30">DIBA FBC © 2025</span>
+                                <div class="boleta-footer uppercase">
+                                    <span class="italic">👤 RESPONSABLE: ____________________________</span>
+                                    <span class="opacity-40 text-[0.6rem]">${serie.toUpperCase()} © ${new Date().getFullYear()}</span>
                                 </div>
                             </div>
                         </div>
@@ -318,13 +867,50 @@
                 contenedor.appendChild(page);
             }
 
+            // Update UI
             const bar = document.getElementById('status-bar');
             bar.classList.remove('hidden');
             bar.classList.add('flex');
             document.getElementById('status-text').textContent = `${totalBoletas} BOLETAS GENERADAS CON ÉXITO`;
+            document.getElementById('preview-count').textContent = `${totalBoletas} BOLETAS`;
+            
+            const now = new Date();
+            document.getElementById('last-gen-time').textContent = now.toLocaleTimeString('es-CO', { hour: '2-digit', minute: '2-digit' });
+
+            updateStats(totalBoletas, numPorBoleta, parseFloat(document.getElementById('cfg-valor-num').value) || 0);
+            showToast(`${totalBoletas} boletas generadas exitosamente`, 'success');
         };
 
+        // ── Export PDF (Print with dialog) ──
+        window.exportPDF = function() {
+            const contenedor = document.getElementById('contenedor');
+            if (!contenedor.querySelector('.page-rifa')) {
+                showToast('Primero genera las boletas', 'error');
+                return;
+            }
+            showToast('Abriendo diálogo de impresión...', 'info');
+            setTimeout(() => window.print(), 500);
+        };
+
+        // ── Event Listeners ──
         document.getElementById('btn-generar').addEventListener('click', window.generarBoletas);
+
+        // Keyboard shortcut: Ctrl+Enter to generate
+        document.addEventListener('keydown', (e) => {
+            if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+                e.preventDefault();
+                window.generarBoletas();
+            }
+        });
+
+        // Real-time validation feedback
+        document.querySelectorAll('.premium-input').forEach(input => {
+            input.addEventListener('focus', () => {
+                input.classList.remove('error');
+                const errorEl = input.parentElement.querySelector('.field-error');
+                if (errorEl) errorEl.classList.remove('show');
+            });
+        });
     </script>
 </body>
 
