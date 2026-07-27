@@ -1483,7 +1483,7 @@
                 name: m.playerName || m.waName || '',
                 phone: m.phone,
                 category: m.category || 'General',
-                player_numero: m.playerNumero || null,
+                player_id: m.playerNumero || null,
                 active: true
             }));
             if (!toInsert.length) { showToast('Todos los contactos ya están en la DB', 'info'); return; }
