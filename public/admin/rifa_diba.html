@@ -510,6 +510,21 @@
                         </div>
                     </div>
 
+                    <!-- Section: Responsables -->
+                    <div class="form-section-title mt-6">
+                        <i class="fas fa-users"></i>
+                        <span>Responsables por Boleta</span>
+                    </div>
+
+                    <div class="premium-form-group">
+                        <label class="premium-label">Nombres de los Niños (uno por línea — cada nombre = una boleta)</label>
+                        <textarea id="cfg-responsables" rows="5" class="premium-input !bg-white/5" placeholder="Mario Pérez&#10;Juan García&#10;Ana López&#10;..."></textarea>
+                        <div class="flex justify-between items-center mt-2">
+                            <span class="text-[0.55rem] text-white/30 font-bold uppercase tracking-widest" id="responsables-count">0 NOMBRES</span>
+                            <span class="text-[0.55rem] text-white/30 font-bold uppercase tracking-widest">OPCIONAL — Se asignan en orden a cada boleta</span>
+                        </div>
+                    </div>
+
                     <!-- Section: Opciones Avanzadas -->
                     <div class="form-section-title mt-6">
                         <i class="fas fa-cogs"></i>
@@ -648,6 +663,9 @@
         // ── Form Reset ──
         window.resetForm = function() {
             document.getElementById('cfg-nombre').value = 'RIFA OFICIAL DIBA FBC';
+            document.getElementById('cfg-responsables').value = '';
+            document.getElementById('responsables-count').textContent = '0 NOMBRES';
+            document.getElementById('responsables-count').style.color = '';
             document.getElementById('cfg-total').value = 45;
             document.getElementById('cfg-numeros').value = '6';
             document.getElementById('cfg-premio').value = 'Perfume Importado';
@@ -816,6 +834,10 @@
             const numMax = parseInt(document.getElementById('cfg-num-max').value) || 99;
             const distType = document.getElementById('cfg-dist').value;
 
+            // Parse responsables list
+            const responsablesRaw = document.getElementById('cfg-responsables').value.trim();
+            const responsables = responsablesRaw ? responsablesRaw.split('\n').map(s => s.trim()).filter(s => s.length > 0) : [];
+
             const masterPool = generateNumbers(totalBoletas, numPorBoleta, numMin, numMax, distType);
 
             contenedor.innerHTML = '';
@@ -856,7 +878,7 @@
                                     <div class="boleta-nums-grid">${numsHtml}</div>
                                 </div>
                                 <div class="boleta-footer uppercase">
-                                    <span class="italic">👤 RESPONSABLE: ____________________________</span>
+                                    <span class="italic">👤 RESPONSABLE: <strong>${responsables[currentIdx - 1] || '____________________________'}</strong></span>
                                     <span class="opacity-40 text-[0.6rem]">${serie.toUpperCase()} © ${new Date().getFullYear()}</span>
                                 </div>
                             </div>
@@ -894,6 +916,19 @@
 
         // ── Event Listeners ──
         document.getElementById('btn-generar').addEventListener('click', window.generarBoletas);
+
+        // Responsables counter
+        const respTextarea = document.getElementById('cfg-responsables');
+        const respCount = document.getElementById('responsables-count');
+        if (respTextarea && respCount) {
+            const updateRespCount = () => {
+                const lines = respTextarea.value.trim().split('\n').filter(s => s.trim().length > 0).length;
+                respCount.textContent = `${lines} NOMBRE${lines !== 1 ? 'S' : ''}`;
+                respCount.style.color = lines > 0 ? '#4ade80' : '';
+            };
+            respTextarea.addEventListener('input', updateRespCount);
+            updateRespCount();
+        }
 
         // Keyboard shortcut: Ctrl+Enter to generate
         document.addEventListener('keydown', (e) => {
