@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>WhatsApp — DIBA FBC Admin</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="/images/ESCUDO.ico" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <link rel="stylesheet" href="/styles/admin-common.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .wa-status { display: inline-flex; align-items: center; gap: 6px; padding: 6px 16px; border-radius: 9999px; font-size: 0.65rem; font-weight: 800; letter-spacing: 0.15em; text-transform: uppercase; }
+        .wa-status.connected { background: rgba(34,197,94,0.15); color: #4ade80; border: 1px solid rgba(34,197,94,0.3); }
+        .wa-status.disconnected { background: rgba(239,68,68,0.15); color: #f87171; border: 1px solid rgba(239,68,68,0.3); }
+        .wa-status.qr_pending { background: rgba(255,215,0,0.15); color: #ffd700; border: 1px solid rgba(255,215,0,0.3); }
+        .wa-status-dot { width: 8px; height: 8px; border-radius: 50%; animation: blink 2s ease-in-out infinite; }
+        .wa-status.connected .wa-status-dot { background: #4ade80; box-shadow: 0 0 8px #4ade80; }
+        .wa-status.disconnected .wa-status-dot { background: #f87171; box-shadow: 0 0 8px #f87171; }
+        .wa-status.qr_pending .wa-status-dot { background: #ffd700; box-shadow: 0 0 8px #ffd700; }
+
+        .tab-btn { padding: 12px 24px; border-radius: 16px; font-size: 0.65rem; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; transition: all 0.3s; cursor: pointer; border: 1px solid transparent; background: transparent; color: rgba(255,255,255,0.3); }
+        .tab-btn:hover { color: rgba(255,255,255,0.6); background: rgba(255,255,255,0.05); }
+        .tab-btn.active { background: rgba(255,215,0,0.1); color: #ffd700; border-color: rgba(255,215,0,0.3); }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; animation: fadeUp 0.4s ease; }
+
+        .msg-bubble { max-width: 75%; padding: 12px 16px; border-radius: 16px; font-size: 0.8rem; line-height: 1.5; margin-bottom: 8px; position: relative; }
+        .msg-out { background: linear-gradient(135deg, #004d98, #003370); color: white; margin-left: auto; border-bottom-right-radius: 4px; }
+        .msg-in { background: rgba(255,255,255,0.08); color: white; margin-right: auto; border-bottom-left-radius: 4px; }
+        .msg-time { font-size: 0.55rem; color: rgba(255,255,255,0.3); margin-top: 4px; text-align: right; }
+        .msg-status { font-size: 0.5rem; color: rgba(255,215,0,0.6); }
+
+        .contact-chip { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-radius: 16px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); cursor: pointer; transition: all 0.2s; }
+        .contact-chip:hover { background: rgba(255,215,0,0.05); border-color: rgba(255,215,0,0.15); }
+        .contact-chip.selected { background: rgba(255,215,0,0.08); border-color: rgba(255,215,0,0.3); }
+
+        .template-card { padding: 16px 20px; border-radius: 16px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); transition: all 0.2s; cursor: pointer; }
+        .template-card:hover { border-color: rgba(255,215,0,0.2); }
+        .template-card.selected { border-color: rgba(255,215,0,0.5); background: rgba(255,215,0,0.05); }
+
+        .qr-box { width: 280px; height: 280px; border-radius: 24px; border: 2px dashed rgba(255,215,0,0.3); display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.03); }
+        .qr-box img { width: 260px; height: 260px; object-fit: contain; border-radius: 16px; }
+
+        .attendance-row { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; border-radius: 12px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); margin-bottom: 8px; }
+        .attendance-yes { border-left: 3px solid #4ade80; }
+        .attendance-no { border-left: 3px solid #f87171; }
+        .attendance-pending { border-left: 3px solid rgba(255,215,0,0.5); }
+
+        .auto-reply-row { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-radius: 12px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); margin-bottom: 8px; }
+        .auto-reply-keyword { background: rgba(255,215,0,0.1); color: #ffd700; padding: 4px 10px; border-radius: 8px; font-size: 0.6rem; font-weight: 800; letter-spacing: 0.1em; }
+
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+
+<body class="bg-[#020617] text-white font-['Outfit'] selection:bg-gold/30">
+    <div class="fixed inset-0 pointer-events-none z-0" style="background: var(--mesh-bg)"></div>
+
+    <div id="admin-nav"></div>
+
+    <main class="lg:ml-[280px] pt-[80px] min-h-screen transition-all duration-300 relative z-10">
+        <div class="p-6 lg:p-10 max-w-[1600px] mx-auto overflow-x-hidden">
+
+            <!-- Toast container -->
+            <div id="toast-container" class="fixed top-6 right-6 z-[3000] flex flex-col gap-3"></div>
+
+            <!-- Page Header -->
+            <div class="mb-10 animate-fade-up">
+                <div class="flex items-center justify-between flex-wrap gap-6">
+                    <div>
+                        <div class="flex items-center gap-3 mb-2">
+                            <span class="w-8 h-1 bg-gold rounded-full"></span>
+                            <p class="text-slate-500 font-bold uppercase tracking-[0.4em] text-[0.65rem]">Comunicación Directa</p>
+                        </div>
+                        <h2 class="text-4xl lg:text-5xl font-black italic text-white uppercase tracking-tighter">WhatsApp <span class="text-gold">Bot</span></h2>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <div id="wa-status-badge" class="wa-status disconnected">
+                            <div class="wa-status-dot"></div>
+                            <span>DESCONECTADO</span>
+                        </div>
+                        <button onclick="showQRModal()" class="px-5 py-2.5 bg-gold/10 border border-gold/30 rounded-2xl text-gold text-[0.65rem] font-bold uppercase tracking-widest hover:bg-gold/20 transition-all">
+                            <i class="fas fa-qrcode mr-2"></i> Conectar
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- KPI Cards -->
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
+                <div class="panel p-5 animate-fade-up" style="animation-delay:0.05s">
+                    <div class="flex items-center gap-3 mb-3">
+                        <div class="w-10 h-10 rounded-2xl bg-emerald-500/10 flex items-center justify-center text-emerald-500"><i class="fas fa-users"></i></div>
+                        <span class="text-[0.55rem] font-bold text-white/40 uppercase tracking-widest">Contactos</span>
+                    </div>
+                    <p class="text-2xl font-black text-white" id="kpi-contacts">0</p>
+                </div>
+                <div class="panel p-5 animate-fade-up" style="animation-delay:0.1s">
+                    <div class="flex items-center gap-3 mb-3">
+                        <div class="w-10 h-10 rounded-2xl bg-blue-500/10 flex items-center justify-center text-blue-500"><i class="fas fa-paper-plane"></i></div>
+                        <span class="text-[0.55rem] font-bold text-white/40 uppercase tracking-widest">Enviados</span>
+                    </div>
+                    <p class="text-2xl font-black text-white" id="kpi-sent">0</p>
+                </div>
+                <div class="panel p-5 animate-fade-up" style="animation-delay:0.15s">
+                    <div class="flex items-center gap-3 mb-3">
+                        <div class="w-10 h-10 rounded-2xl bg-green-500/10 flex items-center justify-center text-green-500"><i class="fas fa-check-double"></i></div>
+                        <span class="text-[0.55rem] font-bold text-white/40 uppercase tracking-widest">Recibidos</span>
+                    </div>
+                    <p class="text-2xl font-black text-white" id="kpi-received">0</p>
+                </div>
+                <div class="panel p-5 animate-fade-up" style="animation-delay:0.2s">
+                    <div class="flex items-center gap-3 mb-3">
+                        <div class="w-10 h-10 rounded-2xl bg-gold/10 flex items-center justify-center text-gold"><i class="fas fa-robot"></i></div>
+                        <span class="text-[0.55rem] font-bold text-white/40 uppercase tracking-widest">Auto-Reply</span>
+                    </div>
+                    <p class="text-2xl font-black text-white" id="kpi-replies">0</p>
+                </div>
+            </div>
+
+            <!-- Tabs Navigation -->
+            <div class="flex flex-wrap gap-2 mb-8 animate-fade-up" style="animation-delay:0.25s">
+                <button class="tab-btn active" onclick="switchTab('convocatorias')"><i class="fas fa-bullhorn mr-2"></i>Convocatorias</button>
+                <button class="tab-btn" onclick="switchTab('asistencia')"><i class="fas fa-clipboard-check mr-2"></i>Asistencia</button>
+                <button class="tab-btn" onclick="switchTab('llamados')"><i class="fas fa-phone-volume mr-2"></i>Llamados</button>
+                <button class="tab-btn" onclick="switchTab('resultados')"><i class="fas fa-trophy mr-2"></i>Resultados</button>
+                <button class="tab-btn" onclick="switchTab('bot')"><i class="fas fa-robot mr-2"></i>Bot Info</button>
+            </div>
+
+            <!-- TAB: Convocatorias -->
+            <div class="tab-content active" id="tab-convocatorias">
+                <div class="diba-grid">
+                    <div class="col-12 lg:col-8 panel p-8 animate-fade-up">
+                        <div class="premium-p-header mb-8">
+                            <span class="premium-p-title"><i class="fas fa-bullhorn text-gold"></i> Nueva Convocatoria</span>
+                        </div>
+                        <div class="space-y-6">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                                <div class="premium-form-group">
+                                    <label class="premium-label">Equipo</label>
+                                    <select id="conv-equipo" class="premium-input !bg-white/5">
+                                        <option value="">SELECCIONAR EQUIPO</option>
+                                    </select>
+                                </div>
+                                <div class="premium-form-group">
+                                    <label class="premium-label">Categoría</label>
+                                    <select id="conv-categoria" class="premium-input !bg-white/5">
+                                        <option value="">TODAS</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                                <div class="premium-form-group">
+                                    <label class="premium-label">Fecha</label>
+                                    <input type="date" id="conv-fecha" class="premium-input !bg-white/5">
+                                </div>
+                                <div class="premium-form-group">
+                                    <label class="premium-label">Hora</label>
+                                    <input type="time" id="conv-hora" class="premium-input !bg-white/5">
+                                </div>
+                                <div class="premium-form-group">
+                                    <label class="premium-label">Lugar</label>
+                                    <input type="text" id="conv-lugar" placeholder="Cancha DIBA FBC" class="premium-input !bg-white/5">
+                                </div>
+                            </div>
+                            <div class="premium-form-group">
+                                <label class="premium-label">Competición</label>
+                                <input type="text" id="conv-competencia" placeholder="Liga Regional / Amistoso" class="premium-input !bg-white/5">
+                            </div>
+                            <div class="premium-form-group">
+                                <label class="premium-label">Mensaje Personalizado (opcional)</label>
+                                <textarea id="conv-mensaje" rows="4" class="premium-input !bg-white/5" placeholder="Dejar vacío para usar plantilla por defecto..."></textarea>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-[0.6rem] text-white/30 font-bold uppercase tracking-widest" id="conv-preview-count">0 DESTINATARIOS</span>
+                                <div class="flex gap-3">
+                                    <button onclick="previewConvocatoria()" class="px-5 py-3 bg-white/5 border border-white/10 rounded-2xl text-white/60 text-[0.65rem] font-bold uppercase tracking-widest hover:bg-white/10 transition-all">
+                                        <i class="fas fa-eye mr-2"></i>Vista Previa
+                                    </button>
+                                    <button onclick="sendConvocatoria()" class="px-6 py-3 bg-emerald-600 rounded-2xl text-white text-[0.65rem] font-bold uppercase tracking-widest hover:bg-emerald-500 transition-all">
+                                        <i class="fas fa-paper-plane mr-2"></i>Enviar Convocatoria
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 lg:col-4 panel p-8 animate-fade-up" style="animation-delay:0.1s">
+                        <div class="premium-p-header mb-6">
+                            <span class="premium-p-title text-[0.7rem]"><i class="fas fa-history text-gold"></i> Historial</span>
+                        </div>
+                        <div id="conv-history" class="space-y-3 max-h-[400px] overflow-y-auto custom-scrollbar">
+                            <div class="text-center py-10 text-white/20 text-[0.65rem] uppercase tracking-widest">Sin convocatorias aún</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB: Asistencia -->
+            <div class="tab-content" id="tab-asistencia">
+                <div class="diba-grid">
+                    <div class="col-12 lg:col-8 panel p-8 animate-fade-up">
+                        <div class="premium-p-header mb-8">
+                            <span class="premium-p-title"><i class="fas fa-clipboard-check text-gold"></i> Respuestas de Asistencia</span>
+                            <select id="asistencia-evento" class="premium-input !bg-white/5 text-[0.6rem] w-auto py-2 px-4" onchange="loadAttendance()">
+                                <option value="">SELECCIONAR EVENTO</option>
+                            </select>
+                        </div>
+                        <div class="grid grid-cols-3 gap-4 mb-6">
+                            <div class="text-center p-4 rounded-2xl bg-emerald-500/10 border border-emerald-500/20">
+                                <p class="text-2xl font-black text-emerald-500" id="att-yes">0</p>
+                                <p class="text-[0.55rem] font-bold text-emerald-500/60 uppercase tracking-widest">Confirmados</p>
+                            </div>
+                            <div class="text-center p-4 rounded-2xl bg-red-500/10 border border-red-500/20">
+                                <p class="text-2xl font-black text-red-500" id="att-no">0</p>
+                                <p class="text-[0.55rem] font-bold text-red-500/60 uppercase tracking-widest">No Asisten</p>
+                            </div>
+                            <div class="text-center p-4 rounded-2xl bg-gold/10 border border-gold/20">
+                                <p class="text-2xl font-black text-gold" id="att-pending">0</p>
+                                <p class="text-[0.55rem] font-bold text-gold/60 uppercase tracking-widest">Pendientes</p>
+                            </div>
+                        </div>
+                        <div id="att-list" class="space-y-2 max-h-[350px] overflow-y-auto custom-scrollbar">
+                            <div class="text-center py-10 text-white/20 text-[0.65rem] uppercase tracking-widest">Selecciona un evento</div>
+                        </div>
+                    </div>
+                    <div class="col-12 lg:col-4 panel p-8 animate-fade-up" style="animation-delay:0.1s">
+                        <div class="premium-p-header mb-6">
+                            <span class="premium-p-title text-[0.7rem]"><i class="fas fa-paper-plane text-gold"></i> Recordatorio</span>
+                        </div>
+                        <p class="text-[0.6rem] text-white/30 mb-4 uppercase tracking-widest">Enviar recordatorio a pendientes</p>
+                        <button onclick="sendReminder()" class="w-full py-3 bg-gold/10 border border-gold/30 rounded-2xl text-gold text-[0.65rem] font-bold uppercase tracking-widest hover:bg-gold/20 transition-all">
+                            <i class="fas fa-bell mr-2"></i>Enviar Recordatorio
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB: Llamados -->
+            <div class="tab-content" id="tab-llamados">
+                <div class="diba-grid">
+                    <div class="col-12 lg:col-8 panel p-8 animate-fade-up">
+                        <div class="premium-p-header mb-8">
+                            <span class="premium-p-title"><i class="fas fa-phone-volume text-gold"></i> Llamado Individual</span>
+                        </div>
+                        <div class="space-y-6">
+                            <div class="premium-form-group">
+                                <label class="premium-label">Buscar Jugador</label>
+                                <input type="text" id="llamado-search" placeholder="Nombre del jugador..." class="premium-input !bg-white/5" oninput="searchPlayers()">
+                                <div id="llamado-results" class="mt-2 space-y-2 max-h-[200px] overflow-y-auto"></div>
+                            </div>
+                            <div id="llamado-selected" class="hidden p-5 rounded-2xl bg-gold/5 border border-gold/20">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-12 h-12 rounded-full bg-gold/20 flex items-center justify-center text-gold font-black" id="llamado-avatar"></div>
+                                    <div>
+                                        <p class="font-bold text-white" id="llamado-name"></p>
+                                        <p class="text-[0.55rem] text-white/40" id="llamado-cat"></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                                <div class="premium-form-group">
+                                    <label class="premium-label">Fecha</label>
+                                    <input type="date" id="llamado-fecha" class="premium-input !bg-white/5">
+                                </div>
+                                <div class="premium-form-group">
+                                    <label class="premium-label">Hora</label>
+                                    <input type="time" id="llamado-hora" class="premium-input !bg-white/5">
+                                </div>
+                                <div class="premium-form-group">
+                                    <label class="premium-label">Lugar</label>
+                                    <input type="text" id="llamado-lugar" placeholder="Cancha DIBA FBC" class="premium-input !bg-white/5">
+                                </div>
+                            </div>
+                            <div class="premium-form-group">
+                                <label class="premium-label">Uniforme</label>
+                                <input type="text" id="llamado-uniforme" placeholder="Titular / Suplente / Completo" class="premium-input !bg-white/5">
+                            </div>
+                            <button onclick="sendLlamado()" class="w-full py-4 bg-blue-600 rounded-2xl text-white text-[0.65rem] font-bold uppercase tracking-widest hover:bg-blue-500 transition-all">
+                                <i class="fas fa-phone mr-2"></i>Enviar Llamado
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-12 lg:col-4 panel p-8 animate-fade-up" style="animation-delay:0.1s">
+                        <div class="premium-p-header mb-6">
+                            <span class="premium-p-title text-[0.7rem]"><i class="fas fa-users text-gold"></i> Contactos</span>
+                        </div>
+                        <div class="premium-form-group mb-4">
+                            <input type="text" id="contact-search" placeholder="Buscar contacto..." class="premium-input !bg-white/5 text-[0.65rem]" oninput="filterContacts()">
+                        </div>
+                        <div id="contacts-list" class="space-y-2 max-h-[400px] overflow-y-auto custom-scrollbar">
+                            <div class="text-center py-10 text-white/20 text-[0.65rem] uppercase tracking-widest">Cargando...</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB: Resultados -->
+            <div class="tab-content" id="tab-resultados">
+                <div class="diba-grid">
+                    <div class="col-12 lg:col-8 panel p-8 animate-fade-up">
+                        <div class="premium-p-header mb-8">
+                            <span class="premium-p-title"><i class="fas fa-trophy text-gold"></i> Reporte de Resultado</span>
+                        </div>
+                        <div class="space-y-6">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                                <div class="premium-form-group">
+                                    <label class="premium-label">Equipo DIBA</label>
+                                    <select id="res-equipo" class="premium-input !bg-white/5">
+                                        <option value="">SELECCIONAR</option>
+                                    </select>
+                                </div>
+                                <div class="premium-form-group">
+                                    <label class="premium-label">Rival</label>
+                                    <input type="text" id="res-rival" placeholder="Nombre del rival" class="premium-input !bg-white/5">
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                                <div class="premium-form-group">
+                                    <label class="premium-label">Fecha</label>
+                                    <input type="date" id="res-fecha" class="premium-input !bg-white/5">
+                                </div>
+                                <div class="premium-form-group">
+                                    <label class="premium-label">Goles DIBA</label>
+                                    <input type="number" id="res-goles-diba" min="0" value="0" class="premium-input !bg-white/5 text-center">
+                                </div>
+                                <div class="premium-form-group">
+                                    <label class="premium-label">Goles Rival</label>
+                                    <input type="number" id="res-goles-rival" min="0" value="0" class="premium-input !bg-white/5 text-center">
+                                </div>
+                            </div>
+                            <div class="premium-form-group">
+                                <label class="premium-label">Resumen del Partido</label>
+                                <textarea id="res-resumen" rows="4" class="premium-input !bg-white/5" placeholder="Describe los goles, jugadas destacadas..."></textarea>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <label class="flex items-center gap-3 cursor-pointer">
+                                    <input type="checkbox" id="res-media" class="w-4 h-4 accent-yellow-500">
+                                    <span class="text-[0.6rem] text-white/40 uppercase tracking-widest">Incluir goleadores</span>
+                                </label>
+                                <button onclick="sendResultado()" class="px-6 py-3 bg-gold rounded-2xl text-[#004d98] text-[0.65rem] font-black uppercase tracking-widest hover:scale-105 transition-all">
+                                    <i class="fas fa-paper-plane mr-2"></i>Enviar Resultado
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 lg:col-4 panel p-8 animate-fade-up" style="animation-delay:0.1s">
+                        <div class="premium-p-header mb-6">
+                            <span class="premium-p-title text-[0.7rem]"><i class="fas fa-eye text-gold"></i> Vista Previa</span>
+                        </div>
+                        <div class="msg-bubble msg-out" id="res-preview" style="max-width:100%">
+                            <p class="text-[0.7rem]">🏆 RESULTADO DEL PARTIDO</p>
+                            <p class="text-[0.65rem] text-white/60 mt-2">Selecciona un equipo y rival para ver la vista previa del mensaje...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB: Bot Info -->
+            <div class="tab-content" id="tab-bot">
+                <div class="diba-grid">
+                    <div class="col-12 lg:col-8 panel p-8 animate-fade-up">
+                        <div class="premium-p-header mb-8">
+                            <span class="premium-p-title"><i class="fas fa-robot text-gold"></i> Respuestas Automáticas</span>
+                            <button onclick="showAddReplyModal()" class="premium-p-badge cursor-pointer hover:bg-gold/20 transition-all">
+                                <i class="fas fa-plus mr-1"></i> Nueva
+                            </button>
+                        </div>
+                        <div id="auto-replies-list" class="space-y-2">
+                            <div class="text-center py-10 text-white/20 text-[0.65rem] uppercase tracking-widest">Cargando...</div>
+                        </div>
+                    </div>
+                    <div class="col-12 lg:col-4 panel p-8 animate-fade-up" style="animation-delay:0.1s">
+                        <div class="premium-p-header mb-6">
+                            <span class="premium-p-title text-[0.7rem]"><i class="fas fa-cog text-gold"></i> Configuración Bot</span>
+                        </div>
+                        <div class="space-y-5">
+                            <label class="flex items-center justify-between cursor-pointer">
+                                <span class="text-[0.65rem] text-white/60 uppercase tracking-widest">Bot Activo</span>
+                                <input type="checkbox" id="bot-enabled" checked class="w-5 h-5 accent-yellow-500">
+                            </label>
+                            <label class="flex items-center justify-between cursor-pointer">
+                                <span class="text-[0.65rem] text-white/60 uppercase tracking-widest">Respuesta Automática Info</span>
+                                <input type="checkbox" id="bot-info" checked class="w-5 h-5 accent-yellow-500">
+                            </label>
+                            <label class="flex items-center justify-between cursor-pointer">
+                                <span class="text-[0.65rem] text-white/60 uppercase tracking-widest">Saludo de Bienvenida</span>
+                                <input type="checkbox" id="bot-welcome" checked class="w-5 h-5 accent-yellow-500">
+                            </label>
+                            <div class="premium-form-group">
+                                <label class="premium-label">Mensaje de Bienvenida</label>
+                                <textarea id="bot-welcome-msg" rows="3" class="premium-input !bg-white/5 text-[0.7rem]">⚽ ¡Hola! Bienvenido al canal de DIBA FBC. Escribe HOLA para ver las opciones disponibles.</textarea>
+                            </div>
+                            <div class="premium-form-group">
+                                <label class="premium-label">Mensaje Fuera de Horario</label>
+                                <textarea id="bot-offhours" rows="3" class="premium-input !bg-white/5 text-[0.7rem]">🕐 Estamos fuera de horario de atención. Te responderemos en el próximo horario laboral.</textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Modal: QR Code -->
+    <div id="qr-modal" class="fixed inset-0 z-[2000] hidden items-center justify-center p-6">
+        <div class="absolute inset-0 bg-black/80 backdrop-blur-md" onclick="closeQRModal()"></div>
+        <div class="relative bg-[#020617] border border-white/10 rounded-[32px] p-10 w-full max-w-[400px] shadow-2xl animate-fade-up text-center">
+            <h3 class="text-xl font-black italic uppercase text-white mb-2">Conectar <span class="text-gold">WhatsApp</span></h3>
+            <p class="text-[0.55rem] text-white/30 uppercase tracking-widest mb-6">Escanea el código con tu teléfono</p>
+            <div class="qr-box mx-auto mb-6">
+                <img id="qr-image" src="" alt="QR Code" class="hidden">
+                <i class="fas fa-qrcode text-6xl text-white/10" id="qr-placeholder"></i>
+            </div>
+            <div id="qr-status-text" class="text-[0.6rem] text-white/40 uppercase tracking-widest mb-6">Esperando código QR...</div>
+            <button onclick="closeQRModal()" class="px-6 py-3 bg-white/5 border border-white/10 rounded-2xl text-white/60 text-[0.65rem] font-bold uppercase tracking-widest hover:bg-white/10 transition-all">Cerrar</button>
+        </div>
+    </div>
+
+    <!-- Modal: Vista Previa Convocatoria -->
+    <div id="preview-modal" class="fixed inset-0 z-[2000] hidden items-center justify-center p-6">
+        <div class="absolute inset-0 bg-black/80 backdrop-blur-md" onclick="closePreviewModal()"></div>
+        <div class="relative bg-[#020617] border border-white/10 rounded-[32px] p-10 w-full max-w-[450px] shadow-2xl animate-fade-up">
+            <h3 class="text-xl font-black italic uppercase text-white mb-6">Vista <span class="text-gold">Previa</span></h3>
+            <div class="msg-bubble msg-out" id="preview-message" style="max-width:100%"></div>
+            <div class="flex justify-end mt-6">
+                <button onclick="closePreviewModal()" class="px-6 py-3 bg-white/5 border border-white/10 rounded-2xl text-white/60 text-[0.65rem] font-bold uppercase tracking-widest hover:bg-white/10 transition-all">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Add Auto-Reply -->
+    <div id="reply-modal" class="fixed inset-0 z-[2000] hidden items-center justify-center p-6">
+        <div class="absolute inset-0 bg-black/80 backdrop-blur-md" onclick="closeReplyModal()"></div>
+        <div class="relative bg-[#020617] border border-white/10 rounded-[32px] p-10 w-full max-w-[500px] shadow-2xl animate-fade-up">
+            <h3 class="text-xl font-black italic uppercase text-white mb-8">Nueva <span class="text-gold">Respuesta</span></h3>
+            <div class="space-y-5">
+                <div class="premium-form-group">
+                    <label class="premium-label">Palabra Clave</label>
+                    <input type="text" id="reply-keyword" placeholder="Ej: horarios, inscripcion, sede" class="premium-input !bg-white/5">
+                </div>
+                <div class="premium-form-group">
+                    <label class="premium-label">Tipo de Coincidencia</label>
+                    <select id="reply-type" class="premium-input !bg-white/5">
+                        <option value="contains">Contiene</option>
+                        <option value="exact">Exacta</option>
+                        <option value="starts_with">Empieza con</option>
+                    </select>
+                </div>
+                <div class="premium-form-group">
+                    <label class="premium-label">Respuesta</label>
+                    <textarea id="reply-response" rows="4" class="premium-input !bg-white/5" placeholder="Mensaje que se enviará automáticamente..."></textarea>
+                </div>
+                <div class="premium-form-group">
+                    <label class="premium-label">Categoría</label>
+                    <select id="reply-category" class="premium-input !bg-white/5">
+                        <option value="info">Informativo</option>
+                        <option value="convocatoria">Convocatoria</option>
+                        <option value="general">General</option>
+                    </select>
+                </div>
+                <div class="flex gap-3">
+                    <button onclick="closeReplyModal()" class="flex-1 py-3 bg-white/5 border border-white/10 rounded-2xl text-white/60 text-[0.65rem] font-bold uppercase tracking-widest hover:bg-white/10 transition-all">Cancelar</button>
+                    <button onclick="saveAutoReply()" class="flex-1 py-3 bg-gold rounded-2xl text-[#004d98] text-[0.65rem] font-black uppercase tracking-widest hover:scale-105 transition-all">Guardar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/scripts/config.js"></script>
+    <script type="module">
+        import { initAdminLayout } from '../src/components/layout/admin-layout.js';
+        import { supabase, requireAdmin } from '../scripts/supabaseClient.js';
+
+        const WA_API = window.DIBA_CONFIG.WA_API_URL || '';
+        const WA_KEY = window.DIBA_CONFIG.WA_API_KEY || '';
+
+        async function init() {
+            const session = await requireAdmin();
+            if (!session) return;
+            await initAdminLayout();
+            await loadAll();
+        }
+        init();
+
+        function showToast(msg, type = 'success') {
+            const c = document.getElementById('toast-container');
+            const t = document.createElement('div');
+            const icons = { success: 'fa-check-circle text-emerald-500', error: 'fa-exclamation-circle text-red-500', info: 'fa-info-circle text-gold' };
+            t.className = 'flex items-center gap-3 px-5 py-3 rounded-2xl bg-[#020617] border border-white/10 shadow-2xl animate-fade-up';
+            t.innerHTML = `<i class="fas ${icons[type] || icons.info}"></i><span class="text-[0.65rem] font-bold uppercase tracking-widest">${msg}</span>`;
+            c.appendChild(t);
+            setTimeout(() => { t.style.opacity = '0'; t.style.transition = 'opacity 0.3s'; setTimeout(() => t.remove(), 300); }, 3000);
+        }
+
+        async function loadAll() {
+            await Promise.all([loadContacts(), loadAutoReplies(), loadTemplates(), loadEvents(), loadKPIs()]);
+            populateCategories();
+        }
+
+        // ── Contacts ──
+        let allContacts = [];
+        async function loadContacts() {
+            const { data } = await supabase.from('whatsapp_contacts').select('*').eq('active', true).order('name');
+            allContacts = data || [];
+            renderContactsList(allContacts);
+        }
+
+        function renderContactsList(contacts) {
+            const el = document.getElementById('contacts-list');
+            if (!contacts.length) { el.innerHTML = '<div class="text-center py-10 text-white/20 text-[0.6rem] uppercase tracking-widest">Sin contactos</div>'; return; }
+            el.innerHTML = contacts.map(c => `
+                <div class="contact-chip" onclick="selectContact('${c.id}')">
+                    <div class="w-9 h-9 rounded-full bg-gold/20 flex items-center justify-center text-gold text-[0.65rem] font-black">${c.name.split(' ').map(n=>n[0]).join('').substring(0,2)}</div>
+                    <div class="flex-1 min-w-0">
+                        <p class="text-[0.7rem] font-bold text-white truncate">${c.name}</p>
+                        <p class="text-[0.55rem] text-white/30">${c.phone} · ${c.category || 'Sin categoría'}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function filterContacts() {
+            const q = document.getElementById('contact-search').value.toLowerCase();
+            const filtered = allContacts.filter(c => c.name.toLowerCase().includes(q) || c.phone.includes(q));
+            renderContactsList(filtered);
+        }
+
+        function populateCategories() {
+            const cats = [...new Set(allContacts.map(c => c.category).filter(Boolean))].sort();
+            ['conv-categoria'].forEach(id => {
+                const sel = document.getElementById(id);
+                sel.innerHTML = '<option value="">TODAS</option>' + cats.map(c => `<option value="${c}">${c}</option>`).join('');
+            });
+            const equipos = [...new Set(allContacts.filter(c => c.category).map(c => c.category))].sort();
+            ['conv-equipo', 'res-equipo'].forEach(id => {
+                const sel = document.getElementById(id);
+                sel.innerHTML = '<option value="">SELECCIONAR</option>' + equipos.map(e => `<option value="${e}">${e}</option>`).join('');
+            });
+        }
+
+        // ── Tab System ──
+        window.switchTab = function(tab) {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            event.target.closest('.tab-btn').classList.add('active');
+            document.getElementById('tab-' + tab).classList.add('active');
+        };
+
+        // ── Convocatorias ──
+        let allEvents = [];
+        async function loadEvents() {
+            const { data } = await supabase.from('whatsapp_events').select('*').order('created_at', { ascending: false }).limit(20);
+            allEvents = data || [];
+            renderEventHistory();
+            populateEventSelect();
+        }
+
+        function renderEventHistory() {
+            const el = document.getElementById('conv-history');
+            if (!allEvents.length) { el.innerHTML = '<div class="text-center py-10 text-white/20 text-[0.6rem] uppercase tracking-widest">Sin convocatorias</div>'; return; }
+            el.innerHTML = allEvents.map(e => `
+                <div class="p-4 rounded-2xl bg-white/[0.03] border border-white/5">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-[0.65rem] font-bold text-white">${e.title}</span>
+                        <span class="text-[0.5rem] px-2 py-0.5 rounded-full ${e.status === 'sent' ? 'bg-emerald-500/20 text-emerald-500' : 'bg-white/10 text-white/40'}">${e.status.toUpperCase()}</span>
+                    </div>
+                    <div class="flex gap-4 text-[0.5rem] text-white/30">
+                        <span><i class="fas fa-paper-plane mr-1"></i>${e.total_sent}</span>
+                        <span class="text-emerald-500"><i class="fas fa-check mr-1"></i>${e.total_confirmed}</span>
+                        <span class="text-red-500"><i class="fas fa-times mr-1"></i>${e.total_declined}</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function populateEventSelect() {
+            const sel = document.getElementById('asistencia-evento');
+            sel.innerHTML = '<option value="">SELECCIONAR EVENTO</option>' + allEvents.filter(e => e.status === 'sent').map(e => `<option value="${e.id}">${e.title}</option>`).join('');
+        }
+
+        window.sendConvocatoria = async function() {
+            const equipo = document.getElementById('conv-equipo').value;
+            const fecha = document.getElementById('conv-fecha').value;
+            const hora = document.getElementById('conv-hora').value;
+            const lugar = document.getElementById('conv-lugar').value || 'Cancha DIBA FBC';
+            const competencia = document.getElementById('conv-competencia').value || 'Partido Amistoso';
+            const categoria = document.getElementById('conv-categoria').value;
+
+            if (!equipo || !fecha || !hora) { showToast('Completa equipo, fecha y hora', 'error'); return; }
+
+            let recipients = allContacts.filter(c => c.phone && c.active);
+            if (categoria) recipients = recipients.filter(c => c.category === categoria);
+
+            if (!recipients.length) { showToast('No hay contactos para enviar', 'error'); return; }
+
+            const msg = document.getElementById('conv-mensaje').value.trim() || `⚽ CONVOCATORIA OFICIAL DIBA FBC\n\n📅 Fecha: ${fecha}\n🕐 Hora: ${hora}\n📍 Lugar: ${lugar}\n🏆 Competición: ${competencia}\n\nEquipo: ${equipo}\nCategoría: ${categoria || 'Todas'}\n\nPor favor confirmar:\n✅ SÍ — Asistiré\n❌ NO — No podré\n\n¡DIBA FBC! 💙💛`;
+
+            // Save event
+            const { data: event } = await supabase.from('whatsapp_events').insert({
+                event_type: 'convocatoria',
+                title: `Convocatoria ${equipo} - ${fecha}`,
+                description: msg,
+                match_date: new Date(`${fecha}T${hora}`),
+                location: lugar,
+                category_filter: categoria || null,
+                status: 'sent',
+                total_sent: recipients.length
+            }).select().single();
+
+            // Save messages
+            const messages = recipients.map(c => ({
+                conversation_id: null,
+                contact_id: c.id,
+                direction: 'outbound',
+                message_type: 'template',
+                body: msg.replace(/{{equipo}}/g, equipo).replace(/{{fecha}}/g, fecha).replace(/{{hora}}/g, hora).replace(/{{lugar}}/g, lugar).replace(/{{competencia}}/g, competencia).replace(/{{categoria}}/g, categoria || 'Todas'),
+                template_name: 'convocatoria_partido',
+                status: 'sent'
+            }));
+            await supabase.from('whatsapp_messages').insert(messages);
+
+            showToast(`Convocatoria enviada a ${recipients.length} contactos`, 'success');
+            await loadEvents();
+            await loadKPIs();
+        };
+
+        window.previewConvocatoria = function() {
+            const equipo = document.getElementById('conv-equipo').value || 'Equipo DIBA';
+            const fecha = document.getElementById('conv-fecha').value || 'YYYY-MM-DD';
+            const hora = document.getElementById('conv-hora').value || 'HH:MM';
+            const lugar = document.getElementById('conv-lugar').value || 'Cancha DIBA FBC';
+            const competencia = document.getElementById('conv-competencia').value || 'Partido Amistoso';
+            const custom = document.getElementById('conv-mensaje').value.trim();
+
+            const msg = custom || `⚽ CONVOCATORIA OFICIAL DIBA FBC\n\n📅 Fecha: ${fecha}\n🕐 Hora: ${hora}\n📍 Lugar: ${lugar}\n🏆 Competición: ${competencia}\n\nEquipo: ${equipo}\n\nPor favor confirmar:\n✅ SÍ — Asistiré\n❌ NO — No podré\n\n¡DIBA FBC! 💙💛`;
+
+            document.getElementById('preview-message').innerHTML = `<p class="text-[0.7rem] whitespace-pre-line">${msg}</p><div class="msg-time">${new Date().toLocaleTimeString('es-CO', {hour:'2-digit', minute:'2-digit'})}</div>`;
+            document.getElementById('preview-modal').classList.remove('hidden');
+            document.getElementById('preview-modal').classList.add('flex');
+        };
+
+        window.closePreviewModal = function() {
+            document.getElementById('preview-modal').classList.add('hidden');
+            document.getElementById('preview-modal').classList.remove('flex');
+        };
+
+        // ── Asistencia ──
+        window.loadAttendance = async function() {
+            const eventId = document.getElementById('asistencia-evento').value;
+            if (!eventId) return;
+
+            const event = allEvents.find(e => e.id === eventId);
+            const { data: responses } = await supabase.from('whatsapp_attendance_responses').select('*, whatsapp_contacts(name, phone)').eq('event_id', eventId);
+
+            const yes = (responses || []).filter(r => r.response === 'si').length;
+            const no = (responses || []).filter(r => r.response === 'no').length;
+            const pending = (event?.total_sent || 0) - yes - no;
+
+            document.getElementById('att-yes').textContent = yes;
+            document.getElementById('att-no').textContent = no;
+            document.getElementById('att-pending').textContent = Math.max(0, pending);
+
+            const el = document.getElementById('att-list');
+            if (!responses?.length) { el.innerHTML = '<div class="text-center py-10 text-white/20 text-[0.65rem] uppercase tracking-widest">Sin respuestas aún</div>'; return; }
+            el.innerHTML = responses.map(r => `
+                <div class="attendance-row ${r.response === 'si' ? 'attendance-yes' : r.response === 'no' ? 'attendance-no' : 'attendance-pending'}">
+                    <div>
+                        <p class="text-[0.7rem] font-bold text-white">${r.whatsapp_contacts?.name || 'Desconocido'}</p>
+                        <p class="text-[0.55rem] text-white/30">${r.whatsapp_contacts?.phone || ''}</p>
+                    </div>
+                    <span class="text-[0.6rem] font-black uppercase ${r.response === 'si' ? 'text-emerald-500' : r.response === 'no' ? 'text-red-500' : 'text-gold'}">${r.response === 'si' ? '✅ SÍ' : r.response === 'no' ? '❌ NO' : '⏳ PENDIENTE'}</span>
+                </div>
+            `).join('');
+        };
+
+        window.sendReminder = async function() {
+            const eventId = document.getElementById('asistencia-evento').value;
+            if (!eventId) { showToast('Selecciona un evento primero', 'error'); return; }
+            showToast('Recordatorios enviados a pendientes', 'success');
+        };
+
+        // ── Llamados ──
+        let selectedPlayer = null;
+
+        window.searchPlayers = async function() {
+            const q = document.getElementById('llamado-search').value.trim();
+            if (q.length < 2) { document.getElementById('llamado-results').innerHTML = ''; return; }
+            const { data } = await supabase.from('identificacion').select('numero, nombre, apellidos, categoria').or(`nombre.ilike.%${q}%,apellidos.ilike.%${q}%`).limit(8);
+            const el = document.getElementById('llamado-results');
+            if (!data?.length) { el.innerHTML = '<p class="text-[0.6rem] text-white/30">No encontrado</p>'; return; }
+            el.innerHTML = data.map(p => `
+                <div class="contact-chip" onclick="selectPlayer('${p.numero}','${p.nombre} ${p.apellidos || ''}','${p.categoria || ''}')">
+                    <div class="w-8 h-8 rounded-full bg-blue-500/20 flex items-center justify-center text-blue-500 text-[0.6rem] font-black">${p.nombre[0]}</div>
+                    <div><p class="text-[0.7rem] font-bold text-white">${p.nombre} ${p.apellidos || ''}</p><p class="text-[0.55rem] text-white/30">${p.categoria || ''}</p></div>
+                </div>
+            `).join('');
+        };
+
+        window.selectPlayer = function(id, name, cat) {
+            selectedPlayer = { id, name, cat };
+            document.getElementById('llamado-selected').classList.remove('hidden');
+            document.getElementById('llamado-avatar').textContent = name.split(' ').map(n=>n[0]).join('').substring(0,2);
+            document.getElementById('llamado-name').textContent = name;
+            document.getElementById('llamado-cat').textContent = cat;
+            document.getElementById('llamado-results').innerHTML = '';
+            document.getElementById('llamado-search').value = name;
+        };
+
+        window.sendLlamado = async function() {
+            if (!selectedPlayer) { showToast('Selecciona un jugador', 'error'); return; }
+            const fecha = document.getElementById('llamado-fecha').value;
+            const hora = document.getElementById('llamado-hora').value;
+            const lugar = document.getElementById('llamado-lugar').value || 'Cancha DIBA FBC';
+            const uniforme = document.getElementById('llamado-uniforme').value || 'Completo';
+
+            if (!fecha || !hora) { showToast('Completa fecha y hora', 'error'); return; }
+
+            const contact = allContacts.find(c => c.player_id === selectedPlayer.id || c.name.toLowerCase().includes(selectedPlayer.name.split(' ')[0].toLowerCase()));
+            if (!contact) { showToast('No se encontró contacto WhatsApp del jugador', 'error'); return; }
+
+            const msg = `📢 LLAMADO OFICIAL DIBA FBC\n\n${selectedPlayer.name}, has sido convocado para:\n\n📅 ${fecha}\n🕐 ${hora}\n📍 ${lugar}\n👕 Uniforme: ${uniforme}\n\nConfirma:\n✅ SÍ — Voy\n❌ NO — No puedo\n\nDIBA FBC 💙💛`;
+
+            await supabase.from('whatsapp_messages').insert({
+                contact_id: contact.id,
+                direction: 'outbound',
+                message_type: 'template',
+                body: msg,
+                template_name: 'alerta_llamado',
+                status: 'sent'
+            });
+
+            await supabase.from('whatsapp_events').insert({
+                event_type: 'llamado',
+                title: `Llamado ${selectedPlayer.name}`,
+                description: msg,
+                match_date: new Date(`${fecha}T${hora}`),
+                location: lugar,
+                status: 'sent',
+                total_sent: 1
+            });
+
+            showToast(`Llamado enviado a ${selectedPlayer.name}`, 'success');
+            selectedPlayer = null;
+            document.getElementById('llamado-selected').classList.add('hidden');
+            document.getElementById('llamado-search').value = '';
+            await loadEvents();
+            await loadKPIs();
+        };
+
+        // ── Resultados ──
+        ['res-equipo', 'res-rival', 'res-goles-diba', 'res-goles-rival', 'res-resumen'].forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.addEventListener('input', updateResultPreview);
+        });
+
+        function updateResultPreview() {
+            const equipo = document.getElementById('res-equipo').value || 'DIBA FBC';
+            const rival = document.getElementById('res-rival').value || 'Rival';
+            const golesD = document.getElementById('res-goles-diba').value || '0';
+            const golesR = document.getElementById('res-goles-rival').value || '0';
+            const resumen = document.getElementById('res-resumen').value;
+            const fecha = document.getElementById('res-fecha').value || new Date().toISOString().split('T')[0];
+
+            document.getElementById('res-preview').innerHTML = `
+                <p class="text-[0.7rem] font-black">🏆 RESULTADO DEL PARTIDO</p>
+                <p class="text-[0.65rem] mt-2">${equipo} vs ${rival}</p>
+                <p class="text-[0.65rem] text-white/60">📅 ${fecha}</p>
+                <p class="text-[0.8rem] font-black text-gold mt-2">⚽ ${golesD} - ${golesR}</p>
+                ${resumen ? `<p class="text-[0.65rem] text-white/60 mt-2">${resumen}</p>` : ''}
+                <p class="text-[0.6rem] text-gold/60 mt-2">Equipo DIBA FBC 💙💛</p>
+            `;
+        }
+
+        window.sendResultado = async function() {
+            const equipo = document.getElementById('res-equipo').value;
+            const rival = document.getElementById('res-rival').value;
+            if (!equipo || !rival) { showToast('Completa los equipos', 'error'); return; }
+
+            const golesD = document.getElementById('res-goles-diba').value;
+            const golesR = document.getElementById('res-goles-rival').value;
+            const resumen = document.getElementById('res-resumen').value;
+            const fecha = document.getElementById('res-fecha').value || new Date().toISOString().split('T')[0];
+
+            const msg = `🏆 RESULTADO DEL PARTIDO\n\n${equipo} vs ${rival}\n📅 ${fecha}\n\n⚽ Marcador: ${golesD} - ${golesR}\n${resumen ? '📝 ' + resumen : ''}\n\nEquipo DIBA FBC 💙💛`;
+
+            let recipients = allContacts.filter(c => c.phone && c.active);
+            if (equipo !== 'General') recipients = recipients.filter(c => c.category === equipo);
+
+            const messages = recipients.map(c => ({
+                contact_id: c.id,
+                direction: 'outbound',
+                message_type: 'template',
+                body: msg,
+                template_name: 'reporte_resultado',
+                status: 'sent'
+            }));
+            if (messages.length) await supabase.from('whatsapp_messages').insert(messages);
+
+            await supabase.from('whatsapp_events').insert({
+                event_type: 'resultado',
+                title: `Resultado ${equipo} ${golesD}-${golesR} ${rival}`,
+                description: msg,
+                match_date: new Date(fecha),
+                status: 'sent',
+                total_sent: messages.length
+            });
+
+            showToast(`Resultado enviado a ${messages.length} contactos`, 'success');
+            await loadEvents();
+            await loadKPIs();
+        };
+
+        // ── Auto-Replies ──
+        async function loadAutoReplies() {
+            const { data } = await supabase.from('whatsapp_auto_replies').select('*').order('priority', { ascending: false });
+            const el = document.getElementById('auto-replies-list');
+            if (!data?.length) { el.innerHTML = '<div class="text-center py-10 text-white/20 text-[0.65rem] uppercase tracking-widest">Sin respuestas</div>'; return; }
+            el.innerHTML = data.map(r => `
+                <div class="auto-reply-row">
+                    <span class="auto-reply-keyword">${r.keyword}</span>
+                    <div class="flex-1 min-w-0">
+                        <p class="text-[0.65rem] text-white/60 truncate">${r.response}</p>
+                        <p class="text-[0.5rem] text-white/20 uppercase">${r.match_type} · ${r.category || 'general'}</p>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" ${r.active ? 'checked' : ''} onchange="toggleReply('${r.id}', this.checked)" class="sr-only peer">
+                            <div class="w-9 h-5 bg-white/10 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white/40 after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-gold/50 peer-checked:after:bg-gold"></div>
+                        </label>
+                        <button onclick="deleteReply('${r.id}')" class="text-white/20 hover:text-red-500 transition-colors"><i class="fas fa-trash text-[0.6rem]"></i></button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        window.showAddReplyModal = function() {
+            document.getElementById('reply-modal').classList.remove('hidden');
+            document.getElementById('reply-modal').classList.add('flex');
+        };
+
+        window.closeReplyModal = function() {
+            document.getElementById('reply-modal').classList.add('hidden');
+            document.getElementById('reply-modal').classList.remove('flex');
+            document.getElementById('reply-keyword').value = '';
+            document.getElementById('reply-response').value = '';
+        };
+
+        window.saveAutoReply = async function() {
+            const keyword = document.getElementById('reply-keyword').value.trim().toLowerCase();
+            const response = document.getElementById('reply-response').value.trim();
+            const matchType = document.getElementById('reply-type').value;
+            const category = document.getElementById('reply-category').value;
+
+            if (!keyword || !response) { showToast('Completa keyword y respuesta', 'error'); return; }
+
+            await supabase.from('whatsapp_auto_replies').insert({ keyword, response, match_type: matchType, category, active: true });
+            showToast('Respuesta automática creada', 'success');
+            closeReplyModal();
+            await loadAutoReplies();
+        };
+
+        window.toggleReply = async function(id, active) {
+            await supabase.from('whatsapp_auto_replies').update({ active }).eq('id', id);
+        };
+
+        window.deleteReply = async function(id) {
+            await supabase.from('whatsapp_auto_replies').delete().eq('id', id);
+            await loadAutoReplies();
+            showToast('Respuesta eliminada', 'info');
+        };
+
+        // ── KPIs ──
+        async function loadKPIs() {
+            const [contacts, sent, received, replies] = await Promise.all([
+                supabase.from('whatsapp_contacts').select('id', { count: 'exact', head: true }),
+                supabase.from('whatsapp_messages').select('id', { count: 'exact', head: true }).eq('direction', 'outbound'),
+                supabase.from('whatsapp_messages').select('id', { count: 'exact', head: true }).eq('direction', 'inbound'),
+                supabase.from('whatsapp_auto_replies').select('id', { count: 'exact', head: true }).eq('active', true)
+            ]);
+            document.getElementById('kpi-contacts').textContent = contacts.count || 0;
+            document.getElementById('kpi-sent').textContent = sent.count || 0;
+            document.getElementById('kpi-received').textContent = received.count || 0;
+            document.getElementById('kpi-replies').textContent = replies.count || 0;
+        }
+
+        // ── Templates ──
+        async function loadTemplates() { /* loaded via events */ }
+
+        // ── QR Modal ──
+        window.showQRModal = function() {
+            document.getElementById('qr-modal').classList.remove('hidden');
+            document.getElementById('qr-modal').classList.add('flex');
+        };
+
+        window.closeQRModal = function() {
+            document.getElementById('qr-modal').classList.add('hidden');
+            document.getElementById('qr-modal').classList.remove('flex');
+        };
+
+        // ── Initial Preview ──
+        updateResultPreview();
+    </script>
+</body>
+</html>

@@ -100,6 +100,10 @@ export async function initAdminLayout() {
                 <div class="w-8 flex justify-center"><i class="fas fa-paper-plane text-lg ${getIconClass('push')}"></i></div>
                 <span class="text-[0.75rem] font-bold tracking-tight truncate">Notificaciones Push</span>
             </a>
+            <a href="whatsapp.html" class="nav-link flex items-center gap-3 px-4 py-3.5 rounded-2xl transition-all duration-300 ${getLinkClass('whatsapp')}">
+                <div class="w-8 flex justify-center"><i class="fab fa-whatsapp text-lg ${getIconClass('whatsapp')}"></i></div>
+                <span class="text-[0.75rem] font-bold tracking-tight truncate">WhatsApp Bot</span>
+            </a>
             <a href="https://asistencia-dibafbc.vercel.app/" target="_blank" class="nav-link flex items-center gap-3 px-4 py-3.5 rounded-2xl transition-all duration-300 text-white/40 font-bold hover:bg-white/5 hover:text-white group">
                 <div class="w-8 flex justify-center"><i class="fas fa-mobile-screen-button text-lg opacity-30 group-hover:opacity-100 group-hover:text-gold transition-all"></i></div>
                 <span class="text-[0.75rem] tracking-tight truncate flex items-center gap-2">Asistencia App <i class="fas fa-external-link text-[0.5rem] opacity-30"></i></span>
