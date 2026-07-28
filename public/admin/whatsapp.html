@@ -687,9 +687,30 @@
         }
 
         async function loadAll() {
-            await Promise.all([loadContacts(), loadAutoReplies(), loadTemplates(), loadEvents(), loadKPIs()]);
+            await Promise.all([loadContacts(), loadAutoReplies(), loadTemplates(), loadEvents(), loadKPIs(), checkSessionStatus()]);
             populateCategories();
         }
+
+        async function checkSessionStatus() {
+            try {
+                const result = await waProxy('status');
+                const badge = document.getElementById('wa-status-badge');
+                if (result.connected) {
+                    badge.classList.remove('disconnected');
+                    badge.classList.add('connected');
+                    badge.querySelector('span').textContent = 'CONECTADO';
+                } else {
+                    badge.classList.remove('connected');
+                    badge.classList.add('disconnected');
+                    badge.querySelector('span').textContent = 'DESCONECTADO';
+                }
+            } catch (e) {
+                console.error('[status] Error checking session:', e);
+            }
+        }
+
+        // Re-check status every 30 seconds
+        setInterval(checkSessionStatus, 30000);
 
         // ── Contacts ──
         let allContacts = [];
