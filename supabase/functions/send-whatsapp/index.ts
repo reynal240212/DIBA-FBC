@@ -523,10 +523,23 @@ function normalizeChatId(phone: string): string {
 
 async function findContactByPhone(supabase: any, phone: string) {
   const clean = phone.replace(/\D/g, "");
-  const { data } = await supabase
+  const last10 = clean.slice(-10);
+
+  let { data } = await supabase
     .from("whatsapp_contacts")
     .select("id")
     .eq("phone", clean)
     .single();
+
+  if (!data) {
+    const { data: all } = await supabase
+      .from("whatsapp_contacts")
+      .select("id, phone");
+    data = (all || []).find((c: any) => {
+      const cClean = (c.phone || "").replace(/\D/g, "");
+      return cClean === clean || cClean.slice(-10) === last10;
+    }) || null;
+  }
+
   return data;
 }
