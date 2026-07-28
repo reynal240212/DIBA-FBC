@@ -16,6 +16,9 @@
     <script src="/scripts/theme-switcher.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
 
+    <!-- PDF Generation -->
+    <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+
     <style>
         /* Workbench Preview */
         #contenedor {
@@ -1007,15 +1010,206 @@
             showToast(`${totalBoletas} boletas generadas exitosamente`, 'success');
         };
 
-        // ── Export PDF (Print with dialog) ──
-        window.exportPDF = function() {
+        // ── Export PDF (Real PDF Generation) ──
+        window.exportPDF = async function() {
             const contenedor = document.getElementById('contenedor');
             if (!contenedor.querySelector('.page-rifa')) {
                 showToast('Primero genera las boletas', 'error');
                 return;
             }
-            showToast('Abriendo diálogo de impresión...', 'info');
-            setTimeout(() => window.print(), 500);
+
+            showToast('Generando PDF...', 'info');
+
+            try {
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF('p', 'mm', 'letter');
+                const pageW = doc.internal.pageSize.getWidth();
+                const pageH = doc.internal.pageSize.getHeight();
+                const margin = 10;
+                const ticketH = 50;
+                const gap = 2;
+                const ticketsPerPage = 5;
+
+                // Load logo (convert WEBP to PNG for jsPDF compatibility)
+                let logoDataUrl = null;
+                try {
+                    const img = new Image();
+                    img.crossOrigin = 'anonymous';
+                    logoDataUrl = await new Promise((resolve, reject) => {
+                        img.onload = () => {
+                            const canvas = document.createElement('canvas');
+                            canvas.width = img.naturalWidth;
+                            canvas.height = img.naturalHeight;
+                            const ctx = canvas.getContext('2d');
+                            ctx.drawImage(img, 0, 0);
+                            resolve(canvas.toDataURL('image/png'));
+                        };
+                        img.onerror = reject;
+                        img.src = '/images/ESCUDO.webp';
+                    });
+                } catch (e) {
+                    console.warn('Logo load failed, continuing without logo');
+                }
+
+                // Collect all tickets from DOM
+                const pages = contenedor.querySelectorAll('.page-rifa');
+                const allBoletas = [];
+                pages.forEach(page => {
+                    page.querySelectorAll('.boleta-container').forEach(b => allBoletas.push(b));
+                });
+
+                if (allBoletas.length === 0) {
+                    showToast('No hay boletas para exportar', 'error');
+                    return;
+                }
+
+                let ticketIdx = 0;
+
+                for (let i = 0; i < allBoletas.length; i++) {
+                    const posOnPage = ticketIdx % ticketsPerPage;
+
+                    if (posOnPage === 0 && i > 0) {
+                        doc.addPage();
+                    }
+
+                    const yStart = margin + posOnPage * (ticketH + gap);
+
+                    // Extract data from DOM
+                    const boleta = allBoletas[i];
+                    const titulo = boleta.querySelector('.boleta-titulo')?.textContent?.trim() || 'RIFA';
+                    const serieNum = boleta.querySelector('.boleta-number-id')?.textContent?.trim() || '#001';
+                    const serieSmall = boleta.querySelector('.boleta-main > div:first-child > div > div:last-child')?.textContent?.replace('SERIE:', '').trim() || 'DIBA-FBC';
+                    const infoLines = boleta.querySelectorAll('.boleta-info-list strong');
+                    const fecha = infoLines[0]?.textContent?.trim() || '';
+                    const loteria = infoLines[1]?.textContent?.trim() || '';
+                    const premio = infoLines[2]?.textContent?.trim() || '';
+                    const valor = infoLines[3]?.textContent?.trim() || '';
+                    const nums = [];
+                    boleta.querySelectorAll('.num-box').forEach(n => nums.push(n.textContent.trim()));
+                    const responsable = boleta.querySelector('.boleta-footer strong')?.textContent?.trim() || '';
+
+                    // Draw ticket background (gold)
+                    doc.setFillColor(255, 215, 0);
+                    doc.roundedRect(margin, yStart, pageW - 2 * margin, ticketH, 4, 4, 'F');
+
+                    // Draw border (blue)
+                    doc.setDrawColor(0, 77, 152);
+                    doc.setLineWidth(0.8);
+                    doc.roundedRect(margin, yStart, pageW - 2 * margin, ticketH, 4, 4, 'S');
+
+                    // Draw logo
+                    if (logoDataUrl) {
+                        try {
+                            doc.addImage(logoDataUrl, 'PNG', margin + 3, yStart + 5, 18, 18);
+                        } catch (e) {
+                            // Fallback: draw a circle placeholder
+                            doc.setFillColor(0, 77, 152);
+                            doc.circle(margin + 12, yStart + 14, 8, 'F');
+                        }
+                    }
+
+                    // Title
+                    doc.setFont('helvetica', 'bold');
+                    doc.setFontSize(11);
+                    doc.setTextColor(0, 77, 152);
+                    doc.text(titulo, margin + 24, yStart + 8);
+
+                    // Serie small
+                    doc.setFontSize(5);
+                    doc.setTextColor(100);
+                    doc.text('SERIE: ' + serieSmall, margin + 24, yStart + 13);
+
+                    // Ticket number badge (right side)
+                    const badgeX = pageW - margin - 22;
+                    doc.setFillColor(0, 77, 152);
+                    doc.roundedRect(badgeX, yStart + 2, 20, 7, 1.5, 1.5, 'F');
+                    doc.setFontSize(8);
+                    doc.setTextColor(255, 215, 0);
+                    doc.text(serieNum, badgeX + 10, yStart + 7, { align: 'center' });
+
+                    // Info section
+                    doc.setFontSize(5.5);
+                    doc.setTextColor(30);
+                    const infoX = margin + 24;
+                    let infoY = yStart + 19;
+                    doc.setFont('helvetica', 'bold');
+                    doc.text('JUEGA:', infoX, infoY);
+                    doc.setFont('helvetica', 'normal');
+                    doc.text(fecha, infoX + 12, infoY);
+
+                    infoY += 4;
+                    doc.setFont('helvetica', 'bold');
+                    doc.text('LOTERIA:', infoX, infoY);
+                    doc.setFont('helvetica', 'normal');
+                    doc.text(loteria, infoX + 14, infoY);
+
+                    infoY += 4;
+                    doc.setFont('helvetica', 'bold');
+                    doc.text('PREMIO:', infoX, infoY);
+                    doc.setFont('helvetica', 'normal');
+                    doc.text(premio, infoX + 13, infoY);
+
+                    infoY += 4;
+                    doc.setFont('helvetica', 'bold');
+                    doc.text('VALOR:', infoX, infoY);
+                    doc.setFont('helvetica', 'normal');
+                    doc.text(valor, infoX + 12, infoY);
+
+                    // Number grid (right side, 3 columns)
+                    const gridX = pageW - margin - 55;
+                    const gridY = yStart + 17;
+                    const boxW = 16;
+                    const boxH = 5.5;
+                    const cols = 3;
+                    const gridGap = 1.5;
+
+                    nums.forEach((num, ni) => {
+                        const col = ni % cols;
+                        const row = Math.floor(ni / cols);
+                        const nx = gridX + col * (boxW + gridGap);
+                        const ny = gridY + row * (boxH + gridGap);
+
+                        doc.setFillColor(255, 255, 255);
+                        doc.setDrawColor(0, 77, 152);
+                        doc.setLineWidth(0.3);
+                        doc.roundedRect(nx, ny, boxW, boxH, 1, 1, 'FD');
+
+                        doc.setFontSize(7);
+                        doc.setFont('helvetica', 'bold');
+                        doc.setTextColor(0, 77, 152);
+                        doc.text(num, nx + boxW / 2, ny + boxH / 2 + 1, { align: 'center' });
+                    });
+
+                    // Footer: Responsable
+                    const footerY = yStart + ticketH - 5;
+                    doc.setFillColor(240, 240, 240);
+                    doc.roundedRect(margin + 2, footerY - 3, pageW - 2 * margin - 4, 6, 1, 1, 'F');
+                    doc.setDrawColor(0, 77, 152);
+                    doc.setLineWidth(0.3);
+                    doc.roundedRect(margin + 2, footerY - 3, pageW - 2 * margin - 4, 6, 1, 1, 'S');
+
+                    doc.setFontSize(5);
+                    doc.setFont('helvetica', 'bold');
+                    doc.setTextColor(30);
+                    doc.text('RESPONSABLE: ' + responsable, margin + 5, footerY + 0.5);
+
+                    doc.setFontSize(4.5);
+                    doc.setTextColor(150);
+                    doc.text(serieSmall + ' (C) ' + new Date().getFullYear(), pageW - margin - 5, footerY + 0.5, { align: 'right' });
+
+                    ticketIdx++;
+                }
+
+                // Save
+                const nombreRifa = document.getElementById('cfg-nombre')?.value?.trim() || 'Rifa_DIBA_FBC';
+                const filename = nombreRifa.replace(/[^a-zA-Z0-9]/g, '_') + '.pdf';
+                doc.save(filename);
+                showToast('PDF descargado: ' + filename, 'success');
+
+            } catch (err) {
+                console.error('PDF generation error:', err);
+                showToast('Error al generar PDF: ' + err.message, 'error');
+            }
         };
 
         // ── Event Listeners ──
