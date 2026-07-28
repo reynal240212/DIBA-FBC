@@ -63,6 +63,7 @@ Deno.serve(async (req: Request) => {
     const sessionId = session_name || SESSION_NAME;
 
     // ── Resolve OpenWA session ──
+    const READY_STATUSES = ["ready", "connected", "open", "authenticated"];
     let resolvedSessionId: string | null = null;
     let sessionStatus: string | null = null;
     try {
@@ -73,10 +74,10 @@ Deno.serve(async (req: Request) => {
         let sessions;
         try { sessions = JSON.parse(sessText); } catch { sessions = []; }
         if (!Array.isArray(sessions)) sessions = [];
-        // Find by name first, then by ready status
+        // Find by name first, then by any ready-like status
         let found = sessions.find((s: any) => s.name === sessionId);
-        if (!found) found = sessions.find((s: any) => s.status === "ready");
-        if (!found) found = sessions.find((s: any) => s.status === "connected");
+        if (!found) found = sessions.find((s: any) => READY_STATUSES.includes(s.status));
+        if (!found) found = sessions.find((s: any) => s.status !== "stopped" && s.status !== "disconnected" && s.status !== "error");
         if (found) {
           resolvedSessionId = found.id;
           sessionStatus = found.status;
@@ -238,11 +239,12 @@ Deno.serve(async (req: Request) => {
           if (!resp.ok) throw new Error(`OpenWA status ${resp.status}`);
           const sessions = await resp.json();
           const session = sessions.find(
-            (s: any) => s.name === sessionId || s.status === "ready" || s.status === "connected"
+            (s: any) => s.name === sessionId || READY_STATUSES.includes(s.status)
           );
+          const isConnected = session && READY_STATUSES.includes(session?.status);
           return new Response(
             JSON.stringify({
-              connected: session?.status === "ready" || session?.status === "connected",
+              connected: isConnected,
               session: session ?? null,
             }),
             { headers: CORS_HEADERS }
@@ -300,7 +302,7 @@ Deno.serve(async (req: Request) => {
           const checkResp = await openwaFetch(`/api/sessions/${sessId}`);
           if (checkResp.ok) {
             const sessData = await checkResp.json();
-            if (sessData?.status === "ready" || sessData?.status === "open") {
+            if (sessData?.status === "ready" || sessData?.status === "open" || sessData?.status === "connected" || sessData?.status === "authenticated") {
               return new Response(
                 JSON.stringify({ connected: true, session_id: sessId }),
                 { headers: CORS_HEADERS }
@@ -335,7 +337,7 @@ Deno.serve(async (req: Request) => {
                 );
               }
               // If already connected, return that
-              if (status === "authenticated" || status === "connected" || status === "ready") {
+              if (status === "authenticated" || status === "connected" || status === "ready" || status === "open") {
                 return new Response(
                   JSON.stringify({ connected: true, session_id: sessId }),
                   { headers: CORS_HEADERS }
