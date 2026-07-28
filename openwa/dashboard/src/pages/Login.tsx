@@ -58,7 +58,7 @@ export function Login({ onLogin }: LoginProps) {
     <div className="login-container">
       <div className="login-card">
         <div className="login-logo">
-          <img src="/openwa_logo.webp" alt="OpenWA" className="logo-icon" />
+          <img src="/images/ESCUDO.webp" alt="DIBA FBC" className="logo-icon" />
           <span className="version-info">
             {t('login.version', {
               version: __APP_VERSION__,

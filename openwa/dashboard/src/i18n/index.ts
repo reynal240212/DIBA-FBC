@@ -68,7 +68,7 @@ void i18n
       'pt-BR': { translation: ptBR },
       ko: { translation: ko },
     },
-    fallbackLng: 'en',
+    fallbackLng: 'es',
     supportedLngs: supportedLanguages as unknown as string[],
     nonExplicitSupportedLngs: false,
     interpolation: { escapeValue: false },

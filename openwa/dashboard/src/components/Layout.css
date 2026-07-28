@@ -18,6 +18,11 @@
     transform 0.3s ease;
 }
 
+[data-theme='dark'] .sidebar {
+  background: #0a1628;
+  border-right-color: rgba(255, 255, 255, 0.05);
+}
+
 .sidebar.collapsed {
   width: 72px;
 }
@@ -96,7 +101,7 @@
   background: var(--primary);
   border-color: var(--primary);
   color: white;
-  box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
+  box-shadow: 0 4px 12px rgba(0, 77, 152, 0.3);
 }
 
 .collapse-toggle svg {
