@@ -108,6 +108,20 @@ export async function initAdminLayout() {
                 <div class="w-8 flex justify-center"><i class="fas fa-mobile-screen-button text-lg opacity-30 group-hover:opacity-100 group-hover:text-gold transition-all"></i></div>
                 <span class="text-[0.75rem] tracking-tight truncate flex items-center gap-2">Asistencia App <i class="fas fa-external-link text-[0.5rem] opacity-30"></i></span>
             </a>
+
+            <!-- GRUPO: GOLD -->
+            <div class="px-5 mt-8 mb-2 flex items-center gap-2">
+                <span class="w-1 h-3 bg-gold rounded-full"></span>
+                <span class="text-[0.55rem] font-black uppercase tracking-[0.3em] text-gold/60 italic">⚡ Gold Edition</span>
+            </div>
+            <a href="gold-dashboard.html" class="nav-link flex items-center gap-3 px-4 py-3.5 rounded-2xl transition-all duration-300 ${getLinkClass('gold-dashboard')}">
+                <div class="w-8 flex justify-center"><i class="fas fa-crown text-lg ${getIconClass('gold-dashboard')}"></i></div>
+                <span class="text-[0.75rem] font-bold tracking-tight truncate">Dashboard Gold</span>
+            </a>
+            <a href="asistencia.html" class="nav-link flex items-center gap-3 px-4 py-3.5 rounded-2xl transition-all duration-300 ${getLinkClass('asistencia')}">
+                <div class="w-8 flex justify-center"><i class="fas fa-camera text-lg ${getIconClass('asistencia')}"></i></div>
+                <span class="text-[0.75rem] font-bold tracking-tight truncate">Asistencia Inteligente</span>
+            </a>
         </nav>
 
         <!-- User Profile (Fixed Bottom) -->
