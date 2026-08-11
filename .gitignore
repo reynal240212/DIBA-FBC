@@ -4,6 +4,8 @@
 .env
 .env.local
 .env.production
+create_admin.js
+
 # === NODE / NPM ===
 node_modules/
 npm-debug.log*
