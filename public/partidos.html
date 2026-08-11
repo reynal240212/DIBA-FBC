@@ -183,11 +183,11 @@
 
   <div id="navbar-container"></div>
 
-  <!-- SECCIÓN PATROCINADORES EN EL TOPE (debajo del navbar) -->
-  <div id="patrocinadores-container" class="pt-24 bg-white"></div>
+  <!-- BANNER DE PROGRAMACIÓN (PARTIDOS Y ENTRENAMIENTOS RECIENTES/PRÓXIMOS EN EL TOPE) -->
+  <div id="match-banner-container" class="pt-20"></div>
 
   <!-- HERO -->
-  <section class="hero-partidos py-14">
+  <section class="hero-partidos py-12">
     <div class="relative z-10 max-w-6xl mx-auto px-4 text-center">
       <span
         class="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-amber-400 bg-amber-400/10 border border-amber-400/20 px-4 py-1.5 rounded-full mb-5">
@@ -370,6 +370,9 @@
       <div id="diba-slider" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5"></div>
     </section>
 
+    <!-- SECCIÓN PATROCINADORES -->
+    <div id="patrocinadores-container" class="mt-14"></div>
+
   </main>
 
   <footer id="footer-container"></footer>
@@ -377,6 +380,7 @@
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="scripts/config.js"></script>
+  <script src="scripts/loadComponents.js" defer></script>
   <script type="module" src="src/main.js"></script>
   <script src="scripts/main.js"></script>
   <script src="scripts/partidos.js"></script>
