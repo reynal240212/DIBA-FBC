@@ -31,6 +31,16 @@ export default function PartidosPage() {
   };
 
   useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      const tab = params.get('tab');
+      if (tab === 'entrenamientos' || tab === 'partidos' || tab === 'mapa') {
+        setActiveTab(tab);
+      }
+    }
+  }, []);
+
+  useEffect(() => {
     if (activeTab === 'partidos') fetchMatches();
     if (activeTab === 'entrenamientos') fetchTrainings();
   }, [activeTab, selectedDate]);

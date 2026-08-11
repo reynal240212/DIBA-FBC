@@ -241,51 +241,93 @@ window.abrirDetallesPartido = function(partidoData) {
   setTimeout(() => m.classList.add('opacity-100'), 10);
 };
 
+// Helper para cambiar a la pestaña de cancha/mapa
+window.activarPestanaMapa = function(lugar) {
+  const btnMapa = document.querySelector('.tab-btn[data-tab="mapa-tab"]');
+  if (btnMapa) {
+    btnMapa.click();
+    window.scrollTo({ top: 400, behavior: 'smooth' });
+  }
+};
+
 // ──────────────────────────────────────────────────────────────────────────────
 //  TARJETA DE ENTRENAMIENTO
 // ──────────────────────────────────────────────────────────────────────────────
 function crearTarjetaEntrenamiento(e) {
   const div = document.createElement('div');
-  div.className = 'col-12 col-md-6 col-lg-4 animate__animated animate__fadeInUp';
-  div.style.borderColor = 'rgba(74,222,128,0.15)';
+  div.className = 'animate__animated animate__fadeInUp';
+
+  const todayStr = new Date().toISOString().split('T')[0];
+  const fechaStr = e.fecha?.includes('T') ? e.fecha.split('T')[0] : (e.fecha || '');
+  const esHoy = fechaStr === todayStr;
+  const esFuturo = fechaStr >= todayStr;
+
+  let badgeStatus = '';
+  if (esHoy) {
+    badgeStatus = `<span class="bg-emerald-500 text-slate-950 text-[10px] font-black px-3 py-1 rounded-full animate-pulse uppercase tracking-widest flex items-center gap-1.5 shadow-[0_0_15px_rgba(16,185,129,0.4)]"><span class="w-1.5 h-1.5 bg-slate-950 rounded-full"></span> HOY</span>`;
+  } else if (esFuturo) {
+    badgeStatus = `<span class="bg-emerald-500/10 text-emerald-400 text-[10px] font-black px-3 py-1 rounded-full border border-emerald-500/20 uppercase tracking-widest">PRÓXIMO</span>`;
+  } else {
+    badgeStatus = `<span class="bg-slate-800 text-slate-400 text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-widest">FINALIZADO</span>`;
+  }
 
   div.innerHTML = `
-    <div class="match-card h-full">
-      <div class="p-5">
-        <div class="flex items-center gap-3">
-          <div class="w-10 h-10 rounded-full bg-green-500/10 flex items-center justify-center flex-shrink-0">
-            <i class="fas fa-dumbbell text-green-400"></i>
-          </div>
-          <div>
-            <p class="font-black text-white text-sm">${e.titulo || 'Entrenamiento'}</p>
-            <p class="text-xs text-green-400 mt-0.5">Sesión de entrenamiento</p>
-          </div>
+    <div class="bg-[#0b1726] border border-emerald-500/20 rounded-3xl p-6 flex flex-col gap-5 hover:bg-[#0e1e32] hover:border-emerald-500/40 transition-all duration-300 shadow-xl group relative overflow-hidden h-full">
+      <!-- Glow decoration -->
+      <div class="absolute -top-12 -right-12 w-32 h-32 bg-emerald-500/10 rounded-full blur-2xl group-hover:bg-emerald-500/20 transition-all duration-500"></div>
+
+      <!-- Top Header -->
+      <div class="flex items-center justify-between relative z-10">
+        <span class="border border-emerald-500/30 text-emerald-400 px-3.5 py-1 rounded-xl text-[0.65rem] font-black tracking-widest uppercase bg-emerald-500/5">
+          CAT. ${e.categoria || 'GENERAL'}
+        </span>
+        ${badgeStatus}
+      </div>
+
+      <!-- Main info -->
+      <div class="flex items-center gap-4 py-2 relative z-10">
+        <div class="w-14 h-14 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform duration-300 shadow-[0_0_20px_rgba(16,185,129,0.15)]">
+          <i class="fas fa-running text-2xl text-emerald-400"></i>
+        </div>
+        <div class="flex-1 min-w-0">
+          <h3 class="text-white font-black text-base uppercase tracking-tight line-clamp-1 leading-snug group-hover:text-emerald-400 transition-colors">${e.titulo || 'Entrenamiento DIBA FBC'}</h3>
+          <p class="text-amber-400 font-extrabold text-xs tracking-wide mt-1 flex items-center gap-1.5">
+            <i class="far fa-clock text-[10px]"></i> ${e.hora || '5:30 PM'}
+          </p>
         </div>
       </div>
-      <div class="border-t border-slate-800 px-5 py-4 grid grid-cols-2 gap-3 text-xs text-slate-400">
-        <div class="flex items-center gap-2">
-          <i class="fas fa-calendar-alt text-green-400 w-4 text-center"></i>
-          <span>${formatearFecha(e.fecha)}</span>
+
+      <div class="h-px w-full bg-slate-800"></div>
+
+      <!-- Extra details -->
+      <div class="space-y-2.5 text-xs relative z-10 flex-grow">
+        <div class="flex items-center gap-2.5 text-slate-300">
+          <div class="w-6 h-6 rounded-lg bg-emerald-500/10 flex items-center justify-center shrink-0">
+            <i class="fas fa-calendar-day text-emerald-400 text-[10px]"></i>
+          </div>
+          <span class="font-bold uppercase tracking-wide">${formatearFecha(e.fecha)}</span>
         </div>
-        <div class="flex items-center gap-2">
-          <i class="fas fa-clock text-green-400 w-4 text-center"></i>
-          <span>${e.hora || 'Sin hora'}</span>
+
+        <div class="flex items-center gap-2.5 text-slate-300">
+          <div class="w-6 h-6 rounded-lg bg-red-500/10 flex items-center justify-center shrink-0">
+            <i class="fas fa-map-marker-alt text-red-400 text-[10px]"></i>
+          </div>
+          <span class="font-semibold uppercase tracking-wide truncate">${e.lugar || 'Parque La Pradera'}</span>
         </div>
-        <div class="flex items-center gap-2 col-span-2">
-          <i class="fas fa-map-marker-alt text-red-400 w-4 text-center"></i>
-          <span>${e.lugar || 'No especificado'}</span>
-        </div>
-        ${e.descripcion ? `
-        <div class="flex items-start gap-2 col-span-2">
-          <i class="fas fa-align-left text-sky-400 w-4 text-center mt-0.5"></i>
-          <span class="text-slate-300">${e.descripcion}</span>
-        </div>` : ''}
-        ${e.observaciones ? `
-        <div class="flex items-start gap-2 col-span-2">
-          <i class="fas fa-comment-dots text-indigo-400 w-4 text-center mt-0.5"></i>
-          <span>${e.observaciones}</span>
+
+        ${(e.descripcion || e.observaciones) ? `
+        <div class="flex items-start gap-2.5 text-slate-400 pt-1">
+          <div class="w-6 h-6 rounded-lg bg-sky-500/10 flex items-center justify-center shrink-0 mt-0.5">
+            <i class="fas fa-info-circle text-sky-400 text-[10px]"></i>
+          </div>
+          <p class="text-[0.75rem] leading-relaxed text-slate-300">${e.descripcion || e.observaciones}</p>
         </div>` : ''}
       </div>
+
+      <!-- Footer Button -->
+      <button onclick="activarPestanaMapa('${e.lugar || ''}')" class="w-full mt-auto py-3 bg-emerald-500/10 hover:bg-emerald-500 hover:text-slate-950 border border-emerald-500/30 text-emerald-400 rounded-xl text-[0.7rem] font-black uppercase tracking-[0.15em] transition-all duration-300 flex items-center justify-center gap-2 active:scale-95">
+        <i class="fas fa-location-dot"></i> Ver Cancha / Ubicación
+      </button>
     </div>
   `;
   return div;
@@ -347,42 +389,42 @@ if (inputFecha) inputFecha.addEventListener('change', filtrarPartidos);
 if (inputCategoria) inputCategoria.addEventListener('change', filtrarPartidos);
 
 // ──────────────────────────────────────────────────────────────────────────────
-//  ENTRENAMIENTOS — FILTRO POR FECHA
+//  ENTRENAMIENTOS — CÁRGA Y FILTRO
 // ──────────────────────────────────────────────────────────────────────────────
 const inputFechaEnt = document.getElementById('fecha-entrenamiento');
+const inputCatEnt = document.getElementById('filtro-categoria-entrenamientos');
 const resultsEnt = document.getElementById('entrenamientos-results');
 
-async function filtrarEntrenamientos() {
+async function cargarEntrenamientos() {
+  if (!resultsEnt) return;
+  
   const fecha = inputFechaEnt?.value;
-  mostrarInicialPanel('entrenamientos-estado-inicial', false);
+  const cat = inputCatEnt?.value;
   resultsEnt.innerHTML = '';
-
-  if (!fecha) {
-    mostrarInicialPanel('entrenamientos-estado-inicial', true);
-    return;
-  }
 
   mostrarSpinner('entrenamientos-spinner', true);
 
-  const { data: filtrados, error } = await sb
-    .from('entrenamientos')
-    .select('*')
-    .eq('fecha', fecha);
+  let query = sb.from('entrenamientos').select('*');
+  if (fecha) query = query.eq('fecha', fecha);
+  if (cat) query = query.ilike('categoria', `%${cat}%`);
+
+  const { data: filtrados, error } = await query.order('fecha', { ascending: false });
 
   mostrarSpinner('entrenamientos-spinner', false);
 
   if (error) {
-    resultsEnt.innerHTML = `<p class="text-center text-red-400 py-8"><i class="fas fa-exclamation-triangle mr-2"></i>Error al cargar entrenamientos.</p>`;
+    resultsEnt.innerHTML = `<p class="col-span-full text-center text-red-400 py-8"><i class="fas fa-exclamation-triangle mr-2"></i>Error al cargar entrenamientos.</p>`;
     return;
   }
 
   if (!filtrados || filtrados.length === 0) {
     resultsEnt.innerHTML = `
-      <div class="text-center py-14">
+      <div class="col-span-full text-center py-14">
         <div class="w-14 h-14 rounded-full bg-slate-800 flex items-center justify-center mx-auto mb-3">
           <i class="fas fa-dumbbell text-slate-600 text-xl"></i>
         </div>
-        <p class="text-slate-500 text-sm">No hay entrenamientos registrados para esta fecha</p>
+        <p class="text-slate-400 font-bold text-sm">No hay entrenamientos agendados con este filtro</p>
+        <p class="text-slate-500 text-xs mt-1">Prueba cambiando la fecha o seleccionando todas las categorías.</p>
       </div>`;
     return;
   }
@@ -390,7 +432,8 @@ async function filtrarEntrenamientos() {
   filtrados.forEach(e => resultsEnt.appendChild(crearTarjetaEntrenamiento(e)));
 }
 
-if (inputFechaEnt) inputFechaEnt.addEventListener('change', filtrarEntrenamientos);
+if (inputFechaEnt) inputFechaEnt.addEventListener('change', cargarEntrenamientos);
+if (inputCatEnt) inputCatEnt.addEventListener('change', cargarEntrenamientos);
 
 // Botones limpiar
 const btnLimpiarPartidos = document.getElementById('btn-limpiar-partidos');
@@ -398,6 +441,8 @@ if (btnLimpiarPartidos) {
   btnLimpiarPartidos.addEventListener('click', () => {
     const f = document.getElementById('fecha');
     if (f) f.value = '';
+    const c = document.getElementById('filtro-categoria');
+    if (c) c.value = '';
     resultsPartidos.innerHTML = '';
     mostrarInicialPanel('partidos-estado-inicial', true);
   });
@@ -406,10 +451,9 @@ if (btnLimpiarPartidos) {
 const btnLimpiarEnt = document.getElementById('btn-limpiar-entrenamientos');
 if (btnLimpiarEnt) {
   btnLimpiarEnt.addEventListener('click', () => {
-    const f = document.getElementById('fecha-entrenamiento');
-    if (f) f.value = '';
-    resultsEnt.innerHTML = '';
-    mostrarInicialPanel('entrenamientos-estado-inicial', true);
+    if (inputFechaEnt) inputFechaEnt.value = '';
+    if (inputCatEnt) inputCatEnt.value = '';
+    cargarEntrenamientos();
   });
 }
 // ──────────────────────────────────────────────────────────────────────────────
@@ -587,16 +631,35 @@ document.addEventListener('DOMContentLoaded', () => {
   mostrarClasificacion();
   mostrarPartidosDIBA();
   cargarEstadisticasRapidas();
+  cargarEntrenamientos();
 
-  // Supabase Real-time para recargar en vivo si el admin actualiza un partido
+  // Activar pestaña según parámetro de URL ?tab=entrenamientos
   try {
-    sb.channel('public:partidos')
+    const params = new URLSearchParams(window.location.search);
+    const tabParam = params.get('tab');
+    if (tabParam) {
+      const targetBtn = document.querySelector(`.tab-btn[data-tab="${tabParam}-tab"]`);
+      if (targetBtn) {
+        targetBtn.click();
+      }
+    }
+  } catch (e) {
+    console.error('Error procesando tab de URL:', e);
+  }
+
+  // Supabase Real-time para recargar en vivo si el admin actualiza partidos o entrenamientos
+  try {
+    sb.channel('public:partidos_entrenamientos')
       .on('postgres_changes', { event: '*', schema: 'public', table: 'partidos' }, payload => {
-        console.log('¡Cambio detectado en Supabase! Recargando datos en vivo...', payload);
+        console.log('¡Cambio en partidos detectado en Supabase! Recargando datos...', payload);
         mostrarPartidosDIBA();
         cargarEstadisticasRapidas();
         const f = document.getElementById('fecha');
         if (f && f.value) filtrarPartidos();
+      })
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'entrenamientos' }, payload => {
+        console.log('¡Cambio en entrenamientos detectado en Supabase! Recargando datos...', payload);
+        cargarEntrenamientos();
       })
       .subscribe();
   } catch (err) {
