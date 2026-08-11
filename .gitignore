@@ -11,6 +11,7 @@ npm-debug.log*
 .DS_Store
 Thumbs.db
 desktop.ini
+*.lnk
 # === EDITORES ===
 .vscode/settings.json
 *.swp
@@ -19,7 +20,17 @@ desktop.ini
 dist/
 build/
 .cache/
-
+# === SCRIPTS DE ANÁLISIS (ad-hoc, no parte del sitio) ===
+*.py
+# === IMÁGENES GENERADAS / ARCHIVOS TEMPORALES ===
+grid_*.png
+grid_v*.png
+# === ARCHIVOS EXPERIMENTALES EN RAÍZ ===
+cerebro.html
+leads.html
+# === DOCUMENTOS FÍSICOS ===
+*.pdf
+*.docx
 # managed
 **.data.json
 **.node-persist**

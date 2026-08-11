@@ -1,99 +1,93 @@
-# 🌟 Sitio Web Oficial - DIBA FBC ⚽
+﻿# 🌟 Sitio Web Oficial — DIBA FBC ⚽
 
-Bienvenido al repositorio del sitio web oficial de **DIBA FBC**, un club de fútbol amateur con sede en **Barranquilla, Colombia**.  
-Este proyecto es una plataforma integral para **informar, conectar y gestionar** la vida deportiva y administrativa del club.
+Bienvenido al repositorio del sitio web oficial de **DIBA FBC**, club de fútbol amateur con sede en **Barranquilla, Colombia**.  
+Una plataforma integral para **informar, conectar y gestionar** la vida deportiva y administrativa del club.
 
----
-
-## 🚀 Enlace al sitio
-🔗 [https://diba-fbc.vercel.app](https://diba-fbc.vercel.app)
+🔗 **[https://diba-fbc.vercel.app](https://diba-fbc.vercel.app)**
 
 ---
 
 ## 📑 Índice
-1. [Funcionalidades principales](#-funcionalidades-principales)
-2. [Arquitectura del Proyecto](#-arquitectura-del-proyecto)
-3. [Tecnologías utilizadas](#-tecnologías-utilizadas)
-4. [Documentación](#-documentación)
-5. [Backlog / Roadmap](#-por-hacer--backlog)
-6. [Autor](#-autor)
+1. [Funcionalidades](#-funcionalidades)
+2. [Arquitectura](#-arquitectura-del-proyecto)
+3. [Tecnologías](#-tecnologías-utilizadas)
+4. [Desarrollo local](#-desarrollo-local)
+5. [Autor](#-autor)
 
 ---
 
-✅ **Panel Administrativo Premium**: Interfaz unificada con diseño oscuro, glassmorphism y Tailwind CSS para la gestión total del club.  
-✅ **Autenticación y Perfiles**: Inicio de sesión para administradores y usuarios generales (vía **Google OAuth**) con perfiles dinámicos y roles gestionados desde Supabase.  
-✅ **Gestión Documental**: Subida individual de documentos obligatorios (TI, Cédulas, Registro Civil, Consentimiento) para jugadores con seguimiento de estado.
-✅ **Historia Inmersiva**: Timeline vertical interactivo con animaciones AOS y Lightbox para visualizar momentos históricos del club.
-✅ **Simbología Interactiva**: Página dedicada a la explicación dinámica de los símbolos del escudo institucional.
-✅ **Himno Oficial**: Sección multimedia para escuchar el himno oficial y consultar su letra.
-✅ **Integración Social**: Feed dinámico de Instagram integrado directamente en la sección de noticias y muro social.
-✅ **Gestión Deportiva**: Control de plantillas, asistencia, pagos, partidos y análisis de rendimiento en tiempo real.
-✅ **Planilla Pro (PDF)**: Generación de reportes profesionales de asistencia y pagos con formato para impresión a doble cara.
-✅ **Esquema Táctico**: Herramienta de entrenamiento con diagramas de cancha de fútbol y cuadrícula técnica integrados en los reportes.
-✅ **Registro de Jugadores**: Formulario extendido con recolección completa de datos de identificación (DNI, Nacionalidad, Salud, etc.).
+## ✅ Funcionalidades
+
+- 🏟️ **Panel Administrativo Premium** — Interfaz oscura con glassmorphism y Tailwind CSS.
+- 🔐 **Autenticación** — Google OAuth + roles (admin/jugador/padre) gestionados desde Supabase.
+- 📄 **Gestión Documental** — Subida de TI, Cédulas, Registro Civil y Consentimiento por jugador.
+- 🤖 **Asistencia por IA** — Reconocimiento facial con face-api.js para toma automática de asistencia.
+- 📋 **Planilla Pro** — Generación de planillas PDF a doble cara + exportación Excel.
+- 📣 **Convocatorias** — Sistema con notificaciones push a dispositivos vinculados.
+- 📸 **Feed de Instagram** — Integración dinámica de noticias del club.
+- ⚽ **Gestión Deportiva** — Partidos, entrenamientos, asistencias, pagos y estadísticas.
 
 ---
 
 ## 🏗️ Arquitectura del Proyecto
 
-El sitio utiliza una arquitectura moderna basada en **Componentes Reutilizables** y **Tailwind CSS**:
+```
+DIBA-FBC/
+├── public/
+│   ├── admin/              # Páginas del panel administrativo (HTML puro)
+│   ├── src/
+│   │   ├── core/           # utils.js, loader.js, aiWidget.js
+│   │   ├── components/     # layout/admin-layout.js
+│   │   └── features/
+│   │       ├── matches/    # banner.js, manager.js
+│   │       ├── players/    # public.js, admin.js
+│   │       └── stats/      # counter.js
+│   ├── scripts/            # Un .js por página (planilla, chat, perfil, asistencia…)
+│   ├── styles/             # CSS global
+│   ├── layout/             # Componentes HTML inyectables (navbar, footer, etc.)
+│   └── images/
+├── api/                    # Serverless Functions (Vercel)
+├── supabase/               # Edge Functions
+├── vercel.json             # Hosting, redireccionamientos y caché
+└── package.json
+```
 
-- **`dashboard.html` & Admin Suite**: Nueva suite administrativa unificada con componentes persistentes (sidebar, topbar).
-- **`loadComponents.js`**: Inyección asíncrona de componentes comunes en la parte pública (navbar, footer).
-- **`supabaseClient.js`**: Módulo centralizado para la lógica de base de datos, autenticación (Google OAuth) y RBAC.
-- **`Animate On Scroll (AOS)` & `Animate.css`**: Utilizados para la interactividad y fluidez visual en las páginas de historia y escudo.
+**Principios clave:**
+- **Sin JS inline**: todo el JavaScript está en `/scripts/*.js` o `/src/**/*.js`.
+- **Queries optimizadas**: `.select('col1, col2')` específico + `.limit()` — no `select('*')`.
+- **Caché diferenciada**: 7 días para `/scripts/` e `/images/`, sin caché solo para HTMLs y `config.js`.
 
 ---
 
 ## 🛠️ Tecnologías utilizadas
 
-**Frontend**
-- **Tailwind CSS** (Framework de diseño principal para sitio público y administrativo)
-- HTML5 & JavaScript (ES6 Modules)
-- **AOS (Animate On Scroll)** & **Animate.css** (Animaciones e interactividad)
-- **Lightbox2** (Galería de imágenes interactiva)
-- FontAwesome 6 & Bootstrap 5
-
-**Backend / Infraestructura**
-- **Supabase**: Base de datos PostgreSQL, Autenticación (JWT + OAuth), RPC functions y Storage.
-- **Vercel**: Hosting y despliegue continuo (CI/CD).
+| Capa | Herramienta |
+|---|---|
+| UI | Tailwind CSS (CDN), FontAwesome 6, AOS, Animate.css |
+| JS | ES6 Modules, face-api.js, jsPDF, XLSX.js |
+| Backend | Supabase (PostgreSQL + Auth + Storage + Edge Functions) |
+| Hosting | Vercel (CI/CD + Serverless) |
 
 ---
 
-## 📄 Documentación
+## 💻 Desarrollo local
 
-Se ha generado documentación detallada y walkthroughs de las últimas actualizaciones:
-1. **[Documentación del Proyecto](DOCUMENTACION.md)**: Guía técnica completa y reglas de categorización.
-2. **Unificación Admin UI**: Rediseño integral de la plataforma de gestión.
-3. **Manuales Originales**: Disponibles en la carpeta `documentacion pagna diba`.
+```bash
+# Clonar y configurar
+cp .env.example .env          # Rellenar SUPABASE_URL y SUPABASE_ANON_KEY
+npm run config                # Genera public/scripts/config.js
 
----
-
-## 🧠 Por hacer / Backlog
-
-- [x] Integración de Google Login en el Navbar e interfaz de usuario.
-- [x] Sistema de carga de componentes dinámicos.
-- [x] Panel de administración completo y unificado para gestión del club.
-- [x] Gestión dinámica de perfiles administrativos.
-- [x] Línea de tiempo histórica inmersiva con animaciones.
-- [x] Página de himno oficial y simbología del escudo interactiva.
-- [x] Integración de feed de Instagram en sección de Noticias.
-- [x] Subida individual de documentos (PDF/Imagen) por jugador desde el perfil.
-- [x] Automatización con n8n <!-- id: 26 -->
-    - [x] Generar JSON del flujo de Aprendizaje en Tiempo Real <!-- id: 27 -->
-    - [x] Documentar configuración de Webhooks en Supabase <!-- id: 28 -->
-    - [x] Crear flujo de Notificaciones de Partidos <!-- id: 29 -->
-- [x] Notificaciones de próximos encuentros vía Web Push (Broadcast manual listo).
+# Servir localmente
+npm run dev                   # http://localhost:3000
+```
 
 ---
 
 ## 👨‍💻 Autor
 
 **Reinaldo De Jesús Pérez Navas**  
-Técnico del club & Desarrollador de software  
-📍 Barranquilla, Colombia
+Técnico del club & Desarrollador de software — 📍 Barranquilla, Colombia
 
 ---
 
-✨ *“Jugamos con pasión, crecemos con valores.”*
-
+✨ *"Jugamos con pasión, crecemos con valores."*

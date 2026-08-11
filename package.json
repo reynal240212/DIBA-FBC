@@ -3,13 +3,19 @@
   "version": "1.0.0",
   "description": "Sitio web oficial del club de fútbol DIBA FBC - Barranquilla, Colombia",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "npx serve public -l 3000 --cors",
+    "config": "node generate-config.js",
+    "admin": "node create_admin.js",
+    "test": "echo \"No tests configured\" && exit 0"
   },
   "engines": {
     "node": ">=16"
   },
   "dependencies": {
-    "@supabase/supabase-js": "^2.110.8",
     "fs-extra": "^11.3.4"
+  },
+  "devDependencies": {
+    "@supabase/supabase-js": "^2.110.8"
   }
 }
+
