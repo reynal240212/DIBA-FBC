@@ -9,6 +9,7 @@
     "node": ">=16"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.110.8",
     "fs-extra": "^11.3.4"
   }
 }

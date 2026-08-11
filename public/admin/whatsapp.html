@@ -687,9 +687,30 @@
         }
 
         async function loadAll() {
-            await Promise.all([loadContacts(), loadAutoReplies(), loadTemplates(), loadEvents(), loadKPIs()]);
+            await Promise.all([loadContacts(), loadAutoReplies(), loadTemplates(), loadEvents(), loadKPIs(), checkSessionStatus()]);
             populateCategories();
         }
+
+        async function checkSessionStatus() {
+            try {
+                const result = await waProxy('status');
+                const badge = document.getElementById('wa-status-badge');
+                if (result.connected) {
+                    badge.classList.remove('disconnected');
+                    badge.classList.add('connected');
+                    badge.querySelector('span').textContent = 'CONECTADO';
+                } else {
+                    badge.classList.remove('connected');
+                    badge.classList.add('disconnected');
+                    badge.querySelector('span').textContent = 'DESCONECTADO';
+                }
+            } catch (e) {
+                console.error('[status] Error checking session:', e);
+            }
+        }
+
+        // Re-check status every 30 seconds
+        setInterval(checkSessionStatus, 30000);
 
         // ── Contacts ──
         let allContacts = [];
@@ -1373,8 +1394,9 @@
                 grupoPlayers = players || [];
 
                 grupoMembers = (Array.isArray(members) ? members : members.members || []).map(m => {
-                    const phone = (m.id || m.phone || m.jid || '').replace(/@s\.whatsapp\.net$/, '').replace(/@.*$/, '').replace(/\D/g, '');
-                    const waName = m.name || m.pushName || '';
+                    const rawId = (m.id || m.phone || m.jid || '');
+                    const phone = rawId.replace(/@s\.whatsapp\.net$/, '').replace(/@g\.us$/, '').replace(/@.*$/, '').replace(/\D/g, '');
+                    const waName = m.name || m.pushName || m.notify || '';
                     const matchedPlayer = findMatchingPlayer(waName, phone);
                     return {
                         phone,
@@ -1384,7 +1406,7 @@
                         category: matchedPlayer?.categoria || null,
                         matched: !!matchedPlayer
                     };
-                }).filter(m => m.phone);
+                }).filter(m => m.phone && m.phone.length >= 10);
 
                 const total = grupoMembers.length;
                 const matched = grupoMembers.filter(m => m.matched).length;
@@ -1402,28 +1424,63 @@
         }
 
         function findMatchingPlayer(waName, phone) {
-            const normalize = s => s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim();
-            // Match by celular (real phone) first — most reliable with Baileys
+            const normalize = s => s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9\s]/g, '').trim();
+            const normalizePhone = s => (s || '').replace(/\D/g, '');
+
+            // 1. Match by phone number (most reliable)
             if (phone && phone.length >= 10) {
-                const last10 = phone.slice(-10);
-                console.log(`🔍 Buscando WA phone: ${phone} → last10: ${last10}`);
+                const last10 = normalizePhone(phone).slice(-10);
                 for (const p of grupoPlayers) {
-                    const pCel = (p.celular || '').replace(/\D/g, '').slice(-10);
-                    if (pCel) console.log(`   vs ${p.nombre} ${p.apellidos}: celular="${p.celular}" → pCel="${pCel}" ${pCel === last10 ? '✅ MATCH!' : ''}`);
+                    const pCel = normalizePhone(p.celular || p.numero || '').slice(-10);
                     if (pCel && pCel === last10) return p;
                 }
+                // Also try with country code 57
+                const with57 = '57' + last10;
+                for (const p of grupoPlayers) {
+                    const pNum = normalizePhone(p.celular || p.numero || '');
+                    if (pNum === with57 || pNum === last10) return p;
+                }
             }
-            // Then try by name
+
             if (!waName) return null;
             const nameNorm = normalize(waName);
+            const nameWords = nameNorm.split(/\s+/).filter(w => w.length > 0);
+
             for (const p of grupoPlayers) {
-                const fullName = normalize(`${p.nombre} ${p.apellidos || ''}`);
+                const fullName = normalize(`${p.nombre || ''} ${p.apellidos || ''}`);
                 const firstName = normalize(p.nombre || '');
                 const lastName = normalize(p.apellidos || '');
-                if (nameNorm === fullName || nameNorm === firstName || nameNorm === lastName) return p;
-                if (nameNorm.includes(firstName) && firstName.length >= 3) return p;
-                if (firstName.includes(nameNorm) && nameNorm.length >= 3) return p;
-                if (lastName && nameNorm.includes(lastName) && lastName.length >= 3) return p;
+
+                // Exact full name match
+                if (nameNorm === fullName) return p;
+
+                // WhatsApp name contains full DB name or vice versa
+                if (nameNorm.includes(fullName) || fullName.includes(nameNorm)) return p;
+
+                // First + last name match (both present in WA name)
+                if (firstName.length >= 3 && lastName.length >= 3) {
+                    if (nameNorm.includes(firstName) && nameNorm.includes(lastName)) return p;
+                }
+
+                // First name match (only if unique enough — >= 4 chars or no common names)
+                if (firstName.length >= 4 && nameNorm.includes(firstName)) return p;
+
+                // Last name match (>= 4 chars)
+                if (lastName.length >= 4 && nameNorm.includes(lastName)) return p;
+
+                // Check if any word in WA name matches first or last name
+                for (const word of nameWords) {
+                    if (word.length >= 4) {
+                        if (word === firstName || word === lastName) return p;
+                        if (firstName.includes(word) && word.length >= Math.floor(firstName.length * 0.7)) return p;
+                        if (lastName.includes(word) && word.length >= Math.floor(lastName.length * 0.7)) return p;
+                    }
+                }
+
+                // Initials match: "J.P." or "JP" matching "Juan Perez"
+                const initials = nameWords.map(w => w[0]).join('');
+                const dbInitials = (p.nombre || '')[0] + (p.apellidos || '')[0];
+                if (initials.length === 2 && initials === normalize(dbInitials)) return p;
             }
             return null;
         }
@@ -1469,12 +1526,34 @@
         window.importMatchedContacts = async function() {
             const matched = grupoMembers.filter(m => m.matched && m.playerNumero);
             if (!matched.length) { showToast('No hay contactos coincidentes para importar', 'error'); return; }
-            let count = 0;
+
+            const existing = await supabase.from('whatsapp_contacts').select('phone');
+            const existingPhones = new Set((existing.data || []).map(c => c.phone));
+
+            let created = 0, updated = 0;
             for (const m of matched) {
-                const { error } = await supabase.from('identificacion').update({ celular: m.phone }).eq('numero', m.playerNumero);
-                if (!error) count++;
+                if (existingPhones.has(m.phone)) {
+                    // Update existing contact with player_id link
+                    const { error } = await supabase.from('whatsapp_contacts')
+                        .update({ player_id: m.playerNumero, category: m.category || 'General', name: m.playerName || m.waName })
+                        .eq('phone', m.phone);
+                    if (!error) updated++;
+                } else {
+                    // Create new contact linked to player
+                    const { error } = await supabase.from('whatsapp_contacts').insert({
+                        name: m.playerName || m.waName || '',
+                        phone: m.phone,
+                        category: m.category || 'General',
+                        player_id: m.playerNumero,
+                        role: 'jugador',
+                        active: true
+                    });
+                    if (!error) created++;
+                }
+                // Sync celular field in identificacion table
+                await supabase.from('identificacion').update({ celular: m.phone }).eq('numero', m.playerNumero);
             }
-            showToast(`${count} celulares actualizados en la DB`, 'success');
+            showToast(`${created} contactos creados/actualizados`, 'success');
             await loadContacts();
         };
 
@@ -1482,10 +1561,11 @@
             const existing = await supabase.from('whatsapp_contacts').select('phone');
             const existingPhones = new Set((existing.data || []).map(c => c.phone));
             const toInsert = grupoMembers.filter(m => !existingPhones.has(m.phone)).map(m => ({
-                name: m.playerName || m.waName || '',
+                name: m.playerName || m.waName || `Contacto ${m.phone.slice(-4)}`,
                 phone: m.phone,
                 category: m.category || 'General',
                 player_id: m.playerNumero || null,
+                role: m.matched ? 'jugador' : 'tutor',
                 active: true
             }));
             if (!toInsert.length) { showToast('Todos los contactos ya están en la DB', 'info'); return; }
@@ -1494,7 +1574,7 @@
                 showToast(`${toInsert.length} contactos importados`, 'success');
                 await loadContacts();
             } else {
-                showToast('Error importando contactos', 'error');
+                showToast('Error importando contactos: ' + error.message, 'error');
             }
         };
 

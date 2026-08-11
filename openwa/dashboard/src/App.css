@@ -1,9 +1,9 @@
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap');
 
 :root {
-  --primary: #25d366;
-  --primary-hover: #1da851;
-  --primary-soft: rgba(37, 211, 102, 0.12);
+  --primary: #004d98;
+  --primary-hover: #003d7a;
+  --primary-soft: rgba(0, 77, 152, 0.12);
   --bg-light: #f8fafc;
   --bg-white: #ffffff;
   --bg-card: #ffffff;
@@ -15,6 +15,7 @@
   --success: #22c55e;
   --warning: #f59e0b;
   --info: #2563eb; /* Blue 600 — info/permission/log badges + qr-ready pill */
+  --accent: #FFD700; /* Gold accent for DIBA FBC */
   --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
   --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
   --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
@@ -75,6 +76,7 @@
 body {
   margin: 0;
   font-family:
+    'Outfit',
     'Plus Jakarta Sans',
     -apple-system,
     BlinkMacSystemFont,

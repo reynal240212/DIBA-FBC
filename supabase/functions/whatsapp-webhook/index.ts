@@ -40,7 +40,7 @@ Deno.serve(async (req: Request) => {
     }
 
     // Extract phone number from chatId (e.g., "573001234567@c.us" -> "573001234567")
-    const phone = from.replace("@c.us", "").replace(/\D/g, "");
+    const phone = from.replace("@c.us", "").replace("@s.whatsapp.net", "").replace(/\D/g, "");
     if (!phone || phone.length < 10) {
       return new Response("invalid phone", { status: 200 });
     }
@@ -133,15 +133,19 @@ async function processAttendance(
 ) {
   if (!contactId) return;
 
-  const normalized = body.trim().toLowerCase();
+  const normalized = body.trim().toLowerCase().replace(/[.,!?;:¡¿]+$/, '').replace(/\s+/g, ' ');
   let response: "si" | "no" | "tal_vez" | null = null;
 
-  // Match common Spanish affirmation/negation patterns
-  if (/^(s[ií]|si\s*por\s*favor|asistir[é]?|voy|claro|dale|ok|todo\s*bien|affirmative|yes)$/i.test(normalized)) {
+  // Match common Spanish affirmation/negation patterns (flexible)
+  const siPatterns = /^(s[ií](\s*,?\s*(por\s*favor|gracias|claro|dale|ok|amén))?|asistir[é]?|voy(\s*,?\s*(claro|dale|ok))?|claro|dale|ok|todo\s*bien|affirmative|yes|sí señor|a\s*las\s*[\d]|confirmo|confirmado|presento|ahí\s*estoy|asisto|me\s*uno|count\s*with\s*me)$/i;
+  const noPatterns = /^(no(\s*,?\s*(puedo|voy|asistir[é]?|asisto|gracias|señor))?|negative|no\s*gracias|no\s*puedo|no\s*voy|no\s+asisto|me\s*quito|excusado|falto|no\s*asistiré)$/i;
+  const talVezPatterns = /^(tal\s*vez|quiz[aá]|ver[eé]|no\s*estoy\s*seguro|maybe|puede\s*ser|depende|veremos|todavía\s*no\s*se|posiblemente)$/i;
+
+  if (siPatterns.test(normalized)) {
     response = "si";
-  } else if (/^(no|no\s*puedo|no\s*voy|no\s*asistir[é]?|negative|no\s*gracias)$/i.test(normalized)) {
+  } else if (noPatterns.test(normalized)) {
     response = "no";
-  } else if (/^(tal\s*vez|quiz[aá]|ver[eé]|no\s*estoy\s*seguro|maybe)$/i.test(normalized)) {
+  } else if (talVezPatterns.test(normalized)) {
     response = "tal_vez";
   }
 
@@ -294,6 +298,7 @@ async function processAutoReply(
     // Log auto-reply
     await supabase.from("whatsapp_messages").insert({
       conversation_id: null,
+      contact_id: _contactId || null,
       direction: "outbound",
       message_type: "text",
       body: matchedResponse,
@@ -312,11 +317,27 @@ async function processAutoReply(
 // ══════════════════════════════════════════════════════════════
 
 async function findContactByPhone(supabase: any, phone: string) {
-  const { data } = await supabase
+  const clean = phone.replace(/\D/g, "");
+  const last10 = clean.slice(-10);
+
+  // Try exact match first
+  let { data } = await supabase
     .from("whatsapp_contacts")
     .select("id, name, category, player_id")
-    .eq("phone", phone)
+    .eq("phone", clean)
     .single();
+
+  // If not found, try matching last 10 digits (handles country code differences)
+  if (!data) {
+    const { data: all } = await supabase
+      .from("whatsapp_contacts")
+      .select("id, name, category, player_id, phone");
+    data = (all || []).find((c: any) => {
+      const cClean = (c.phone || "").replace(/\D/g, "");
+      return cClean === clean || cClean.slice(-10) === last10;
+    }) || null;
+  }
+
   return data;
 }
 

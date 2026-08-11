@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Neurarium 3D - Cerebro Neuronal</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #070714; overflow: hidden; font-family: 'Segoe UI', system-ui, sans-serif; }
+  canvas { display: block; }
+  #info {
+    position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+    color: rgba(255,255,255,0.3); font-size: 13px; letter-spacing: 1px;
+    text-align: center; pointer-events: none;
+    background: rgba(0,0,0,0.6); padding: 8px 20px; border-radius: 24px;
+    backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,0.05);
+    white-space: nowrap;
+  }
+  #info span { color: #6af; }
+  #title {
+    position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+    color: rgba(255,255,255,0.08); font-size: 12px; letter-spacing: 5px;
+    text-transform: uppercase; pointer-events: none; font-weight: 300;
+  }
+  #controls {
+    position: fixed; top: 20px; right: 20px; display: flex; gap: 8px;
+  }
+  #controls button {
+    background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.08);
+    color: rgba(255,255,255,0.5); padding: 6px 14px; border-radius: 18px;
+    cursor: pointer; font-size: 11px; letter-spacing: 0.5px;
+    backdrop-filter: blur(8px); transition: all 0.3s;
+  }
+  #controls button:hover {
+    background: rgba(255,255,255,0.12); color: rgba(255,255,255,0.8);
+    border-color: rgba(255,255,255,0.2);
+  }
+  #legend {
+    position: fixed; left: 24px; bottom: 28px;
+    color: rgba(255,255,255,0.12); font-size: 10px; letter-spacing: 0.5px;
+    pointer-events: none; line-height: 2;
+  }
+  #legend .dot { display:inline-block; width:8px; height:8px; border-radius:50%; margin-right:6px; vertical-align:middle; }
+  @media (max-width: 600px) {
+    #info { font-size: 11px; padding: 6px 14px; white-space: normal; }
+    #controls { top: 12px; right: 12px; }
+    #controls button { font-size: 10px; padding: 4px 10px; }
+  }
+</style>
+</head>
+<body>
+<div id="title">&#9679; Cerebro 3D</div>
+<div id="info">Arrastra para rotar &middot; Haz clic en una neurona para activarla &middot; <span id="count">0</span> activas</div>
+<div id="legend">
+  <span class="dot" style="background:#4a90d9;"></span> reposo<br>
+  <span class="dot" style="background:#ffb347;"></span> disparando
+</div>
+<div id="controls">
+  <button id="resetBtn">&#8634; Reiniciar</button>
+  <button id="burstBtn">&#9889; Ráfaga</button>
+</div>
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+  }
+}
+</script>
+
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+// ---- escena ----
+const scene = new THREE.Scene();
+scene.fog = new THREE.FogExp2(0x070714, 0.008);
+
+const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
+camera.position.set(12, 8, 14);
+
+const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.setClearColor(0x070714, 1);
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.2;
+document.body.prepend(renderer.domElement);
+
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+controls.dampingFactor = 0.06;
+controls.rotateSpeed = 0.5;
+controls.minDistance = 4;
+controls.maxDistance = 35;
+controls.target.set(0, 0, 0);
+
+// ---- luces ----
+const ambientLight = new THREE.AmbientLight(0x224488, 0.6);
+scene.add(ambientLight);
+
+const dirLight = new THREE.DirectionalLight(0x88bbff, 1.2);
+dirLight.position.set(5, 12, 8);
+scene.add(dirLight);
+
+const fillLight = new THREE.DirectionalLight(0x6644ff, 0.4);
+fillLight.position.set(-5, -2, -8);
+scene.add(fillLight);
+
+const rimLight = new THREE.DirectionalLight(0x4488ff, 0.3);
+rimLight.position.set(0, -10, 0);
+scene.add(rimLight);
+
+// ---- estrellas ----
+const starGeo = new THREE.BufferGeometry();
+const starCount = 2000;
+const starPos = new Float32Array(starCount * 3);
+for (let i = 0; i < starCount * 3; i++) starPos[i] = (Math.random() - 0.5) * 200;
+starGeo.setAttribute('position', new THREE.BufferAttribute(starPos, 3));
+const starMat = new THREE.PointsMaterial({ color: 0x446688, size: 0.08, transparent: true, opacity: 0.5 });
+const stars = new THREE.Points(starGeo, starMat);
+scene.add(stars);
+
+// ---- forma del cerebro 3D ----
+function insideBrain(x, y, z) {
+  // x = lateral, y = superior, z = anterior-posterior
+  const lx = (x + 0.18) / 0.72;
+  const ly = y / 0.55;
+  const lz = z / 1.0;
+  const left = lx*lx + ly*ly + lz*lz < 1;
+
+  const rx = (x - 0.18) / 0.72;
+  const ry = y / 0.55;
+  const rz = z / 1.0;
+  const right = rx*rx + ry*ry + rz*rz < 1;
+
+  if (Math.abs(x) < 0.07 && Math.abs(z) < 0.88 && Math.abs(y) < 0.48) return false;
+
+  const tl1 = Math.exp(-((x + 0.65)**2)/0.03) * Math.exp(-((z - 0.35)**2)/0.12) * Math.exp(-(y*y)/0.08);
+  const tr1 = Math.exp(-((x - 0.65)**2)/0.03) * Math.exp(-((z - 0.35)**2)/0.12) * Math.exp(-(y*y)/0.08);
+  const tl2 = Math.exp(-((x + 0.60)**2)/0.04) * Math.exp(-((z + 0.55)**2)/0.15) * Math.exp(-(y*y)/0.06);
+
+  return (left || right) || (tl1 > 0.3) || (tr1 > 0.3) || (tl2 > 0.3);
+}
+
+function generateBrainPoints(count) {
+  const pts = [];
+  let attempts = 0;
+  while (pts.length < count && attempts < count * 50) {
+    attempts++;
+    const x = (Math.random() - 0.5) * 2.0;
+    const y = (Math.random() - 0.5) * 1.4;
+    const z = (Math.random() - 0.5) * 2.4;
+    if (insideBrain(x, y, z)) {
+      pts.push(new THREE.Vector3(
+        x * 3.2,
+        y * 3.2,
+        z * 3.2
+      ));
+    }
+  }
+  while (pts.length < count) {
+    const a = Math.random() * Math.PI * 2;
+    const r = Math.random() * 1.5;
+    pts.push(new THREE.Vector3(
+      Math.cos(a) * r * 0.5,
+      (Math.random() - 0.5) * 1.0,
+      Math.sin(a) * r * 0.8
+    ));
+  }
+  return pts;
+}
+
+// ---- textura glow procedimental ----
+function makeGlowTexture() {
+  const c = document.createElement('canvas');
+  c.width = 128; c.height = 128;
+  const ctx = c.getContext('2d');
+  const grad = ctx.createRadialGradient(64, 64, 0, 64, 64, 64);
+  grad.addColorStop(0, 'rgba(255,255,255,1)');
+  grad.addColorStop(0.15, 'rgba(255,255,255,0.8)');
+  grad.addColorStop(0.4, 'rgba(200,220,255,0.3)');
+  grad.addColorStop(1, 'rgba(200,220,255,0)');
+  ctx.fillStyle = grad;
+  ctx.fillRect(0, 0, 128, 128);
+  return new THREE.CanvasTexture(c);
+}
+const glowTexture = makeGlowTexture();
+
+// ---- neuronas ----
+const NEURON_COUNT = 280;
+const points = generateBrainPoints(NEURON_COUNT);
+const neurons = [];
+const connections = [];
+
+const sphereGeo = new THREE.SphereGeometry(0.12, 12, 12);
+const restMat = new THREE.MeshStandardMaterial({
+  color: 0x4a90d9, emissive: 0x1a4a8a, emissiveIntensity: 0.5, metalness: 0.2, roughness: 0.6
+});
+const firingMat = new THREE.MeshStandardMaterial({
+  color: 0xffb347, emissive: 0xff8800, emissiveIntensity: 1.5, metalness: 0.1, roughness: 0.4
+});
+
+class Neuron3D {
+  constructor(pos, i) {
+    this.index = i;
+    this.basePos = pos.clone();
+    this.mesh = new THREE.Mesh(sphereGeo, restMat.clone());
+    this.mesh.position.copy(pos);
+    this.mesh.userData.neuronIndex = i;
+    scene.add(this.mesh);
+
+    this.glow = new THREE.Sprite(new THREE.SpriteMaterial({
+      map: glowTexture, transparent: true, blending: THREE.AdditiveBlending,
+      color: 0x4488ff, opacity: 0.3, depthWrite: false
+    }));
+    this.glow.position.copy(pos);
+    this.glow.scale.set(1.2, 1.2, 1);
+    scene.add(this.glow);
+
+    this.potential = 0.1 + Math.random() * 0.2;
+    this.firing = 0;
+    this.phase = Math.random() * Math.PI * 2;
+    this.freq = 0.3 + Math.random() * 1.5;
+    this.restP = 0.1 + Math.random() * 0.18;
+    this.resetTimer = 0;
+    this.wanderAmp = 0.3 + Math.random() * 0.6;
+    this.wanderSpeed = 0.2 + Math.random() * 0.5;
+    this.wanderPhase = Math.random() * Math.PI * 2;
+    this._propagated = false;
+  }
+
+  stimulate(amt = 1) {
+    this.potential = Math.min(this.potential + amt, 1);
+    if (this.potential >= 1 && this.firing === 0) this.fire();
+  }
+
+  fire() {
+    this.firing = 1;
+    this.potential = 0;
+    this.resetTimer = 0.3 + Math.random() * 0.15;
+  }
+
+  update(dt, time) {
+    this.phase += dt * this.freq;
+    this.wanderPhase += dt * this.wanderSpeed;
+    const wx = Math.sin(this.wanderPhase) * this.wanderAmp;
+    const wy = Math.cos(this.wanderPhase * 0.8) * this.wanderAmp * 0.6;
+    const wz = Math.sin(this.wanderPhase * 0.6 + 1.3) * this.wanderAmp * 0.7;
+    const tx = this.basePos.x + wx;
+    const ty = this.basePos.y + wy;
+    const tz = this.basePos.z + wz;
+
+    this.mesh.position.x += (tx - this.mesh.position.x) * dt * 2;
+    this.mesh.position.y += (ty - this.mesh.position.y) * dt * 2;
+    this.mesh.position.z += (tz - this.mesh.position.z) * dt * 2;
+    this.glow.position.copy(this.mesh.position);
+
+    if (this.firing > 0) {
+      this.resetTimer -= dt;
+      this.mesh.material.color.setHex(0xffb347);
+      this.mesh.material.emissive.setHex(0xff8800);
+      this.mesh.material.emissiveIntensity = 1 + Math.sin(this.resetTimer * 30) * 0.8;
+      this.glow.material.color.setHex(0xffaa44);
+      this.glow.material.opacity = 0.4 + Math.sin(this.resetTimer * 25) * 0.3;
+      const s = 1 + Math.sin(this.resetTimer * 20) * 0.3;
+      this.glow.scale.set(s * 1.2, s * 1.2, 1);
+      const ms = 1 + Math.sin(this.resetTimer * 20) * 0.15;
+      this.mesh.scale.set(ms, ms, ms);
+      if (this.resetTimer <= 0) {
+        this.firing = 0;
+        this.mesh.scale.set(1, 1, 1);
+      }
+    } else {
+      const osc = Math.sin(this.phase) * 0.02;
+      this.potential = Math.max(0, Math.min(1, this.restP + osc + (Math.random() - 0.5) * 0.006));
+      const intensity = this.potential;
+      const em = 0.3 + intensity * 0.8;
+      this.mesh.material.color.setHex(0x4a90d9);
+      this.mesh.material.emissive.setHSL(0.6, 0.8, 0.1 + intensity * 0.25);
+      this.mesh.material.emissiveIntensity = em;
+      this.glow.material.color.setHSL(0.6, 0.6, 0.3 + intensity * 0.4);
+      this.glow.material.opacity = 0.15 + intensity * 0.35;
+      this.glow.scale.set(0.6 + intensity * 1.2, 0.6 + intensity * 1.2, 1);
+    }
+  }
+}
+
+for (let i = 0; i < points.length; i++) {
+  neurons.push(new Neuron3D(points[i], i));
+}
+
+// ---- conexiones ----
+const connThreshold = 2.8;
+for (let i = 0; i < neurons.length; i++) {
+  for (let j = i + 1; j < neurons.length; j++) {
+    const d = neurons[i].basePos.distanceTo(neurons[j].basePos);
+    if (d < connThreshold) {
+      const weight = 0.3 + Math.random() * 0.7;
+      connections.push({
+        a: i, b: j, distance: d, weight,
+        active: false, progress: 0, speed: 1.2 + Math.random() * 1.8
+      });
+    }
+  }
+}
+
+// ---- líneas de sinapsis ----
+function buildSynapseLines() {
+  const positions = new Float32Array(connections.length * 6);
+  const alphas = new Float32Array(connections.length * 2);
+  for (let i = 0; i < connections.length; i++) {
+    const c = connections[i];
+    const na = neurons[c.a].mesh.position;
+    const nb = neurons[c.b].mesh.position;
+    positions[i*6] = na.x; positions[i*6+1] = na.y; positions[i*6+2] = na.z;
+    positions[i*6+3] = nb.x; positions[i*6+4] = nb.y; positions[i*6+5] = nb.z;
+    alphas[i*2] = 0.03 + Math.random() * 0.03;
+    alphas[i*2+1] = alphas[i*2];
+  }
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+  geo.setAttribute('alpha', new THREE.BufferAttribute(alphas, 1));
+  return geo;
+}
+
+let lineGeo = buildSynapseLines();
+const lineMat = new THREE.LineBasicMaterial({
+  color: 0x4488cc, transparent: true, opacity: 0.12, depthWrite: false
+});
+const synapseLines = new THREE.LineSegments(lineGeo, lineMat);
+scene.add(synapseLines);
+
+// ---- pulsos activos ----
+const pulseGeo = new THREE.SphereGeometry(0.06, 8, 8);
+const pulseMat = new THREE.MeshBasicMaterial({ color: 0xffcc44, transparent: true, opacity: 0 });
+const pulseMeshes = [];
+const MAX_PULSES = 100;
+for (let i = 0; i < MAX_PULSES; i++) {
+  const m = new THREE.Mesh(pulseGeo, pulseMat.clone());
+  m.visible = false;
+  scene.add(m);
+  pulseMeshes.push({ mesh: m, active: false, conn: null, progress: 0, startTime: 0 });
+}
+
+const firingQueue = [];
+
+function triggerSynapse(conn) {
+  if (conn.active) return;
+  conn.active = true;
+  conn.progress = 0;
+  firingQueue.push({ conn, startTime: performance.now() });
+
+  for (const p of pulseMeshes) {
+    if (!p.active) {
+      p.active = true;
+      p.conn = conn;
+      p.progress = 0;
+      p.mesh.visible = true;
+      p.mesh.material.opacity = 1;
+      const na = neurons[conn.a].mesh.position;
+      p.mesh.position.copy(na);
+      break;
+    }
+  }
+}
+
+function updatePulses(now) {
+  let activeCount = 0;
+  for (const p of pulseMeshes) {
+    if (!p.active) continue;
+    const conn = p.conn;
+    if (!conn.active) { p.active = false; p.mesh.visible = false; continue; }
+    activeCount++;
+    p.progress += 0.02;
+    if (p.progress >= 1) {
+      p.active = false;
+      p.mesh.visible = false;
+      continue;
+    }
+    const na = neurons[conn.a].mesh.position;
+    const nb = neurons[conn.b].mesh.position;
+    p.mesh.position.lerpVectors(na, nb, p.progress);
+    const intensity = Math.sin(p.progress * Math.PI);
+    p.mesh.material.opacity = intensity * 0.9;
+    const s = 0.4 + intensity * 0.8;
+    p.mesh.scale.set(s, s, s);
+    p.mesh.material.color.setHSL(0.1 - intensity * 0.1, 1, 0.5 + intensity * 0.3);
+  }
+  document.getElementById('count').textContent = activeCount;
+
+  for (let i = firingQueue.length - 1; i >= 0; i--) {
+    const item = firingQueue[i];
+    const conn = item.conn;
+    const elapsed = (now - item.startTime) / 1000;
+    conn.progress = Math.min(1, elapsed / (conn.distance / conn.speed));
+    if (conn.progress >= 1) {
+      conn.active = false;
+      neurons[conn.b].stimulate(conn.weight * 0.5);
+      firingQueue.splice(i, 1);
+    }
+  }
+}
+
+function propagateFiring(neuron) {
+  for (const conn of connections) {
+    if (conn.a === neuron.index && !conn.active) triggerSynapse(conn);
+  }
+}
+
+// ---- actualizar líneas ----
+function updateLines() {
+  const pos = lineGeo.attributes.position.array;
+  const alpha = lineGeo.attributes.alpha.array;
+  for (let i = 0; i < connections.length; i++) {
+    const c = connections[i];
+    const na = neurons[c.a].mesh.position;
+    const nb = neurons[c.b].mesh.position;
+    pos[i*6] = na.x; pos[i*6+1] = na.y; pos[i*6+2] = na.z;
+    pos[i*6+3] = nb.x; pos[i*6+4] = nb.y; pos[i*6+5] = nb.z;
+    const naF = neurons[c.a].firing;
+    const nbF = neurons[c.b].firing;
+    const act = c.active ? 0.4 : 0;
+    const base = 0.03 + Math.random() * 0.01;
+    alpha[i] = base + (naF + nbF) * 0.15 + act;
+    alpha[i + connections.length] = alpha[i];
+  }
+  lineGeo.attributes.position.needsUpdate = true;
+  lineGeo.attributes.alpha.needsUpdate = true;
+  lineMat.opacity = 0.8;
+}
+
+// ---- raycaster ----
+const raycaster = new THREE.Raycaster();
+const pointer = new THREE.Vector2();
+
+renderer.domElement.addEventListener('pointerdown', (e) => {
+  const rect = renderer.domElement.getBoundingClientRect();
+  pointer.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+  pointer.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+  raycaster.setFromCamera(pointer, camera);
+  const meshes = neurons.map(n => n.mesh);
+  const hits = raycaster.intersectObjects(meshes);
+  if (hits.length > 0) {
+    const idx = hits[0].object.userData.neuronIndex;
+    const n = neurons[idx];
+    n.fire();
+    propagateFiring(n);
+  }
+});
+
+// ---- botones ----
+document.getElementById('resetBtn').addEventListener('click', () => {
+  for (const n of neurons) {
+    n.firing = 0; n.potential = n.restP; n.resetTimer = 0; n._propagated = false;
+    n.mesh.position.copy(n.basePos);
+    n.mesh.scale.set(1, 1, 1);
+  }
+  firingQueue.length = 0;
+  for (const c of connections) c.active = false;
+  for (const p of pulseMeshes) { p.active = false; p.mesh.visible = false; }
+  document.getElementById('count').textContent = '0';
+});
+
+document.getElementById('burstBtn').addEventListener('click', () => {
+  const count = 10 + Math.floor(Math.random() * 20);
+  const shuffled = [...neurons].sort(() => Math.random() - 0.5);
+  for (let i = 0; i < count && i < shuffled.length; i++) {
+    shuffled[i].fire();
+    propagateFiring(shuffled[i]);
+  }
+});
+
+// ---- auto-actividad ----
+let autoTimer = 0;
+function spontaneousFire(dt) {
+  autoTimer -= dt;
+  if (autoTimer <= 0) {
+    autoTimer = 1.5 + Math.random() * 4;
+    if (Math.random() < 0.15) {
+      const idx = Math.floor(Math.random() * neurons.length);
+      neurons[idx].fire();
+      propagateFiring(neurons[idx]);
+    }
+  }
+}
+
+// ---- resize ----
+window.addEventListener('resize', () => {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+});
+
+// ---- loop ----
+let lastTime = 0;
+
+function animate(time) {
+  const dt = Math.min(0.05, (time - lastTime) / 1000);
+  lastTime = time;
+
+  for (const n of neurons) {
+    n.update(dt, time);
+    if (n.firing > 0 && n.resetTimer > 0.1 && !n._propagated) {
+      propagateFiring(n);
+      n._propagated = true;
+    } else if (n.firing === 0) {
+      n._propagated = false;
+    }
+  }
+
+  updatePulses(time);
+  updateLines();
+  spontaneousFire(dt);
+  controls.update();
+
+  renderer.render(scene, camera);
+  requestAnimationFrame(animate);
+}
+
+requestAnimationFrame(animate);
+
+// ---- partículas ambientales ----
+const particleCount = 300;
+const pGeo = new THREE.BufferGeometry();
+const pPos = new Float32Array(particleCount * 3);
+const pSizes = new Float32Array(particleCount);
+for (let i = 0; i < particleCount; i++) {
+  const theta = Math.random() * Math.PI * 2;
+  const phi = Math.acos(2 * Math.random() - 1);
+  const r = 5 + Math.random() * 12;
+  pPos[i*3] = r * Math.sin(phi) * Math.cos(theta);
+  pPos[i*3+1] = (Math.random() - 0.5) * 6;
+  pPos[i*3+2] = r * Math.sin(phi) * Math.sin(theta);
+  pSizes[i] = 0.02 + Math.random() * 0.04;
+}
+pGeo.setAttribute('position', new THREE.BufferAttribute(pPos, 3));
+pGeo.setAttribute('size', new THREE.BufferAttribute(pSizes, 1));
+const pMat = new THREE.PointsMaterial({
+  color: 0x446688, size: 0.06, transparent: true, opacity: 0.3,
+  blending: THREE.AdditiveBlending, depthWrite: false
+});
+const particles = new THREE.Points(pGeo, pMat);
+scene.add(particles);
+
+console.log('Neuronas:', neurons.length, 'Conexiones:', connections.length);
+</script>
+</body>
+</html>
