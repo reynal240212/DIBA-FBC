@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" class="scroll-smooth">
 
 <head>
   <meta charset="UTF-8" />
-  <title>Visión y Misión | DIBA FBC</title>
+  <title>Visión y Misión | DIBA FBC - Formando Campeones</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description"
-    content="Conoce la Misión, Visión y Ejes Estratégicos del Club Deportivo DIBA FBC, comprometido con la formación integral de jóvenes en Barranquilla." />
+    content="Conoce la Misión, Visión, Valores y Ejes Estratégicos del Club Deportivo DIBA FBC. Formación integral de jóvenes en Barranquilla con disciplina y alto rendimiento." />
   <meta property="og:title" content="Visión y Misión | DIBA FBC" />
   <meta property="og:description" content="Formando campeones dentro y fuera de la cancha en Barranquilla." />
   <meta property="og:image" content="https://diba-fbc.vercel.app/images/ESCUDO.webp" />
@@ -17,160 +17,266 @@
   <!-- Fonts & Icons -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;900&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,600;0,700;0,800;0,900;1,800;1,900&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
-  <link rel="stylesheet" href="styles/styles.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
 
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Montserrat', 'sans-serif'] },
+          colors: {
+            dibaGold: '#f59e0b',
+            dibaDark: '#020617'
+          }
+        },
+      },
+    }
+  </script>
 
   <style>
     * {
       font-family: 'Montserrat', sans-serif;
     }
 
-    @keyframes fadeUp {
-      from {
-        opacity: 0;
-        transform: translateY(24px);
-      }
-
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+    body {
+      background-color: #020617;
+      color: #f8fafc;
+      overflow-x: hidden;
     }
 
-    .fade-up {
-      animation: fadeUp 0.6s ease forwards;
+    /* Ambient background glows */
+    .glow-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(100px);
+      pointer-events: none;
+      z-index: 0;
     }
 
-    .delay-1 {
-      animation-delay: 0.1s;
-      opacity: 0;
+    /* Glass Card Standard */
+    .glass-card {
+      background: rgba(15, 23, 42, 0.65);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
-    .delay-2 {
-      animation-delay: 0.2s;
-      opacity: 0;
+    .glass-card:hover {
+      transform: translateY(-8px);
+      border-color: rgba(245, 158, 11, 0.35);
+      box-shadow: 0 25px 50px -12px rgba(245, 158, 11, 0.15);
     }
 
-    .delay-3 {
-      animation-delay: 0.3s;
-      opacity: 0;
+    /* Highlighted Vision Card */
+    .vision-featured-card {
+      background: linear-gradient(145deg, rgba(30, 41, 59, 0.8) 0%, rgba(15, 23, 42, 0.9) 100%);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(245, 158, 11, 0.3);
+      box-shadow: 0 20px 40px -15px rgba(245, 158, 11, 0.18);
     }
 
-    .card-hover {
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    .vision-featured-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      border-color: rgba(245, 158, 11, 0.6);
+      box-shadow: 0 30px 60px -15px rgba(245, 158, 11, 0.3);
     }
 
-    .card-hover:hover {
+    /* Eje item hover effect */
+    .eje-card {
+      transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .eje-card:hover {
+      transform: translateX(8px);
+      background: rgba(245, 158, 11, 0.08);
+      border-color: rgba(245, 158, 11, 0.4);
+    }
+
+    /* Valor Card Hover */
+    .valor-card {
+      transition: all 0.35s ease;
+    }
+
+    .valor-card:hover {
       transform: translateY(-6px);
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+      border-color: rgba(245, 158, 11, 0.5);
+      box-shadow: 0 15px 35px -10px rgba(245, 158, 11, 0.25);
     }
 
-    .eje-item {
-      transition: all 0.25s ease;
+    .valor-card:hover .valor-icon-wrapper {
+      background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      color: #020617;
+      transform: scale(1.1) rotate(6deg);
     }
 
-    .eje-item:hover {
-      padding-left: 1.75rem;
-      background: rgba(245, 158, 11, 0.1);
-      border-color: rgba(245, 158, 11, 0.3);
+    /* Glowing Text Gradient */
+    .gold-gradient-text {
+      background: linear-gradient(135deg, #fef08a 0%, #f59e0b 50%, #d97706 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
 
-    .valor-card:hover .valor-icon {
-      background: #f59e0b;
-      color: #fff;
+    /* Pulsing Halo */
+    @keyframes pulseHalo {
+      0%, 100% { transform: scale(1); opacity: 0.25; }
+      50% { transform: scale(1.15); opacity: 0.45; }
+    }
+
+    .halo-effect {
+      animation: pulseHalo 4s infinite ease-in-out;
     }
   </style>
 </head>
 
-<body class="bg-[#020617] text-white selection:bg-yellow-500/30">
+<body class="selection:bg-amber-500/30">
 
   <!-- Navbar -->
   <div id="navbar-container"></div>
 
   <!-- ════════════════════════════
-       HERO — fondo oscuro solo aquí
-       (igual que index.html / noticias)
+       HERO — Visión y Misión
   ════════════════════════════ -->
-  <section class="bg-[#020617] pt-36 pb-20 relative overflow-hidden">
-    <div class="absolute inset-0 flex items-center justify-center pointer-events-none opacity-[0.05]">
-      <img src="images/ESCUDO.webp" alt="" class="w-[480px]" />
+  <section class="relative pt-36 pb-24 overflow-hidden border-b border-white/5 bg-gradient-to-b from-slate-950 via-slate-900 to-[#020617]">
+    <!-- Ambient Glows -->
+    <div class="glow-orb w-96 h-96 bg-amber-500/10 top-10 left-1/2 -translate-x-1/2"></div>
+    <div class="glow-orb w-80 h-80 bg-blue-600/10 -top-20 -left-20"></div>
+
+    <div class="absolute inset-0 flex items-center justify-center pointer-events-none opacity-[0.04]">
+      <img src="images/ESCUDO.webp" alt="DIBA Escudo Fondo" class="w-[520px] filter blur-[1px]" />
     </div>
-    <div class="max-w-4xl mx-auto px-4 text-center relative z-10">
-      <span
-        class="inline-block px-4 py-1.5 bg-amber-500/20 border border-amber-500/40 text-amber-400 text-xs font-bold tracking-widest uppercase rounded-full mb-5 fade-up delay-1">
-        <i class="fas fa-compass mr-2"></i>Nuestra identidad
-      </span>
-      <h1 class="text-5xl md:text-6xl font-black tracking-tight text-white mb-5 leading-tight fade-up delay-2">
-        Visión <span class="text-amber-400">&amp;</span> Misión
+
+    <div class="max-w-5xl mx-auto px-4 text-center relative z-10 space-y-6">
+      <div class="inline-flex items-center gap-2 px-4 py-2 bg-amber-500/10 border border-amber-500/30 text-amber-400 text-xs font-extrabold tracking-widest uppercase rounded-full shadow-lg backdrop-blur-md animate__animated animate__fadeInDown">
+        <i class="fas fa-compass text-sm"></i> NUESTRA IDENTIDAD &amp; FILOSOFÍA INSTITUCIONAL
+      </div>
+
+      <h1 class="text-5xl sm:text-6xl md:text-7xl font-black italic uppercase tracking-tighter leading-none text-white animate__animated animate__zoomIn">
+        VISIÓN <span class="gold-gradient-text drop-shadow-[0_0_35px_rgba(245,158,11,0.35)]">&amp;</span> MISIÓN
       </h1>
-      <p class="text-slate-300 text-lg max-w-2xl mx-auto leading-relaxed fade-up delay-3">
-        Somos un organismo adscrito al <strong class="text-white">Sistema Nacional del Deporte</strong>, comprometidos
-        con transformar vidas en Barranquilla a través del fútbol base y la formación integral.
+
+      <p class="text-slate-300 text-base sm:text-lg md:text-xl max-w-3xl mx-auto font-medium leading-relaxed animate__animated animate__fadeInUp">
+        Organismo deportivo adscrito al <strong class="text-white font-bold">Sistema Nacional del Deporte</strong> en Barranquilla, dedicado a potenciar el talento juvenil, la disciplina táctica y el crecimiento personal.
       </p>
+
+      <!-- Quick Metrics Pills -->
+      <div class="pt-6 flex flex-wrap justify-center gap-4 text-xs font-bold text-slate-300">
+        <div class="flex items-center gap-2 bg-white/5 border border-white/10 px-5 py-2.5 rounded-2xl backdrop-blur-md">
+          <i class="fas fa-shield-halved text-amber-400"></i>
+          <span>Reconocimiento Oficial</span>
+        </div>
+        <div class="flex items-center gap-2 bg-white/5 border border-white/10 px-5 py-2.5 rounded-2xl backdrop-blur-md">
+          <i class="fas fa-trophy text-amber-400"></i>
+          <span>Alto Rendimiento Base</span>
+        </div>
+        <div class="flex items-center gap-2 bg-white/5 border border-white/10 px-5 py-2.5 rounded-2xl backdrop-blur-md">
+          <i class="fas fa-heart text-amber-400"></i>
+          <span>Formación en Valores</span>
+        </div>
+      </div>
     </div>
   </section>
 
   <!-- ════════════════════════════
-       MISIÓN · VISIÓN · OBJETIVO
-       (fondo blanco)
+       TRIPTICO: MISIÓN - VISIÓN - OBJETIVO
   ════════════════════════════ -->
-  <section class="py-20 bg-[#020617]">
-    <div class="max-w-6xl mx-auto px-4">
+  <section class="py-24 relative z-10 bg-[#020617]">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6">
 
-      <div class="text-center mb-12">
-        <p class="text-xs font-semibold tracking-[0.2em] text-amber-500 uppercase mb-2">Club Deportivo D.I.B.A. FBC</p>
-        <h2 class="text-3xl md:text-4xl font-bold text-white tracking-tight">¿Quiénes somos?</h2>
+      <div class="text-center mb-16 space-y-3">
+        <span class="text-xs font-black tracking-[0.3em] text-amber-400 uppercase">PROPÓSITO CENTRAL</span>
+        <h2 class="text-4xl md:text-5xl font-black italic uppercase tracking-tighter text-white">
+          ¿QUIÉNES <span class="gold-gradient-text">SOMOS?</span>
+        </h2>
+        <div class="w-20 h-1.5 bg-amber-500 mx-auto rounded-full"></div>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch">
 
-        <!-- Misión -->
-        <article class="card-hover bg-slate-900/30 backdrop-blur-xl rounded-2xl p-8 border border-white/5 shadow-sm">
-          <div class="w-14 h-14 rounded-xl bg-amber-500/10 flex items-center justify-center mb-6 text-amber-500">
-            <i class="fas fa-bullseye text-2xl"></i>
+        <!-- MISIÓN -->
+        <article class="glass-card rounded-3xl p-8 sm:p-10 flex flex-col justify-between relative group">
+          <div class="space-y-6">
+            <div class="w-16 h-16 rounded-2xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400 group-hover:scale-110 group-hover:bg-amber-500 group-hover:text-slate-950 transition-all duration-500 shadow-lg">
+              <i class="fas fa-bullseye text-3xl"></i>
+            </div>
+            
+            <div class="space-y-2">
+              <span class="text-[11px] font-black uppercase tracking-widest text-amber-400">Pilar 01</span>
+              <h3 class="text-2xl font-black uppercase tracking-tight text-white">MISIÓN</h3>
+              <div class="w-12 h-1 bg-amber-400 rounded-full"></div>
+            </div>
+
+            <p class="text-slate-300 text-sm leading-relaxed font-medium">
+              Velar por la <strong class="text-white font-semibold">formación integral</strong> de nuestros atletas en Barranquilla, impulsando valores fundamentales de
+              <span class="text-amber-300 font-semibold">disciplina</span>,
+              <span class="text-amber-300 font-semibold">trabajo en equipo</span> y
+              <span class="text-amber-300 font-semibold">respeto mutuo</span> para formar ciudadanos ejemplares dentro y fuera del campo.
+            </p>
           </div>
-          <h3 class="text-lg font-black uppercase tracking-wide mb-3 text-white">Misión</h3>
-          <div class="w-10 h-1 bg-amber-400 rounded mb-4"></div>
-          <p class="text-slate-300 text-sm leading-relaxed">
-            Velar por la formación integral de jóvenes deportistas, promoviendo valores de
-            <strong class="text-white">disciplina</strong>,
-            <strong class="text-white">trabajo en equipo</strong> y
-            <strong class="text-white">respeto</strong>, contribuyendo al desarrollo personal y social de nuestros
-            integrantes.
-          </p>
+
+          <div class="pt-8 mt-6 border-t border-white/5 flex items-center justify-between text-xs font-bold text-slate-400">
+            <span>Compromiso Social</span>
+            <i class="fas fa-arrow-right text-amber-400 opacity-0 group-hover:opacity-100 transition-opacity"></i>
+          </div>
         </article>
 
-        <!-- Visión — destacada -->
-        <article class="card-hover bg-slate-900/30 backdrop-blur-xl rounded-2xl p-8 border border-amber-500/20 shadow-xl shadow-amber-500/5">
-          <div class="w-14 h-14 rounded-xl bg-amber-500/20 flex items-center justify-center mb-6">
-            <i class="fas fa-eye text-amber-400 text-2xl"></i>
+        <!-- VISIÓN (DESTACADA) -->
+        <article class="vision-featured-card rounded-3xl p-8 sm:p-10 flex flex-col justify-between relative group">
+          <div class="absolute -top-3 right-6 bg-gradient-to-r from-amber-500 to-yellow-400 text-slate-950 font-black text-[10px] uppercase tracking-widest px-4 py-1.5 rounded-full shadow-lg">
+            ★ METAS INSTITUCIONALES
           </div>
-          <h3 class="text-lg font-black uppercase tracking-wide mb-3 text-white">Visión</h3>
-          <div class="w-10 h-1 bg-amber-400 rounded mb-4"></div>
-          <p class="text-slate-300 text-sm leading-relaxed">
-            Velar por ser un club referente a nivel regional y nacional por nuestra excelencia deportiva y administrativa,
-            formando ciudadanos con altos estándares de
-            <strong class="text-amber-400">responsabilidad</strong> y
-            <strong class="text-amber-400">espíritu competitivo</strong>.
-          </p>
+
+          <div class="space-y-6 pt-2">
+            <div class="w-16 h-16 rounded-2xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-400 group-hover:scale-110 group-hover:bg-amber-400 group-hover:text-slate-950 transition-all duration-500 shadow-xl shadow-amber-500/20">
+              <i class="fas fa-eye text-3xl"></i>
+            </div>
+            
+            <div class="space-y-2">
+              <span class="text-[11px] font-black uppercase tracking-widest text-amber-400">Pilar 02 — Liderazgo</span>
+              <h3 class="text-2xl font-black uppercase tracking-tight text-white">VISIÓN</h3>
+              <div class="w-16 h-1.5 bg-gradient-to-r from-amber-400 to-yellow-200 rounded-full"></div>
+            </div>
+
+            <p class="text-slate-200 text-sm leading-relaxed font-medium">
+              Consolidarnos como un <strong class="text-amber-400 font-bold">club referente a nivel regional y nacional</strong> por nuestra excelencia técnico-deportiva, sólida estructura administrativa y la formación de competidores con altos estándares de
+              <span class="text-white font-semibold">responsabilidad</span> y
+              <span class="text-white font-semibold">espíritu ganador</span>.
+            </p>
+          </div>
+
+          <div class="pt-8 mt-6 border-t border-amber-500/20 flex items-center justify-between text-xs font-bold text-amber-400">
+            <span>Proyección Nacional</span>
+            <i class="fas fa-chevron-right text-amber-400 group-hover:translate-x-1 transition-transform"></i>
+          </div>
         </article>
 
-        <!-- Objetivo -->
-        <article class="card-hover bg-slate-900/30 backdrop-blur-xl rounded-2xl p-8 border border-white/5 shadow-sm">
-          <div class="w-14 h-14 rounded-xl bg-amber-500/10 flex items-center justify-center mb-6 text-amber-500">
-            <i class="fas fa-trophy text-2xl"></i>
+        <!-- OBJETIVO -->
+        <article class="glass-card rounded-3xl p-8 sm:p-10 flex flex-col justify-between relative group">
+          <div class="space-y-6">
+            <div class="w-16 h-16 rounded-2xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400 group-hover:scale-110 group-hover:bg-amber-500 group-hover:text-slate-950 transition-all duration-500 shadow-lg">
+              <i class="fas fa-trophy text-3xl"></i>
+            </div>
+            
+            <div class="space-y-2">
+              <span class="text-[11px] font-black uppercase tracking-widest text-amber-400">Pilar 03</span>
+              <h3 class="text-2xl font-black uppercase tracking-tight text-white">OBJETIVO</h3>
+              <div class="w-12 h-1 bg-amber-400 rounded-full"></div>
+            </div>
+
+            <p class="text-slate-300 text-sm leading-relaxed font-medium">
+              Estructurar procesos continuos de <strong class="text-white font-semibold">preparación táctica y física</strong> encaminados al éxito en torneos oficiales, promoviendo simultáneamente el desarrollo de hábitos saludables y el carácter competitivo en cada categoría.
+            </p>
           </div>
-          <h3 class="text-lg font-black uppercase tracking-wide mb-3 text-white">Objetivo</h3>
-          <div class="w-10 h-1 bg-amber-400 rounded mb-4"></div>
-          <p class="text-slate-300 text-sm leading-relaxed">
-            Consolidar procesos de preparación orientados a logros competitivos y formación humana, fortaleciendo la
-            calidad del
-            <strong class="text-white">fútbol de base</strong> en cada categoría.
-          </p>
+
+          <div class="pt-8 mt-6 border-t border-white/5 flex items-center justify-between text-xs font-bold text-slate-400">
+            <span>Fútbol Base Táctico</span>
+            <i class="fas fa-arrow-right text-amber-400 opacity-0 group-hover:opacity-100 transition-opacity"></i>
+          </div>
         </article>
 
       </div>
@@ -179,59 +285,98 @@
 
   <!-- ════════════════════════════
        EJES ESTRATÉGICOS
-       (fondo slate-100 como index)
   ════════════════════════════ -->
-  <section class="py-20 bg-[#020617]">
-    <div class="max-w-6xl mx-auto px-4">
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+  <section class="py-24 relative overflow-hidden bg-gradient-to-b from-[#020617] via-slate-900 to-[#020617] border-y border-white/5">
+    <div class="glow-orb w-96 h-96 bg-amber-500/10 right-0 top-1/3"></div>
 
-        <!-- Lista -->
-        <div>
-          <p class="text-xs font-semibold tracking-[0.2em] text-amber-500 uppercase mb-2">Plan de acción</p>
-          <h2 class="text-3xl md:text-4xl font-bold text-white mb-10">
-            <i class="fas fa-list-check text-amber-500 mr-3"></i>Ejes Estratégicos
-          </h2>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
 
-          <div class="space-y-3">
-            <div class="eje-item flex items-center gap-4 bg-slate-900/30 backdrop-blur-xl rounded-xl border border-white/5 px-5 py-4">
-              <span class="flex-shrink-0 w-10 h-10 rounded-lg bg-amber-500/10 flex items-center justify-center text-amber-500">
-                <i class="fas fa-running"></i>
-              </span>
-              <p class="text-slate-300 text-sm">Instrucción técnica y preparación física avanzada por categorías.</p>
+        <!-- Left: Strategic Axes -->
+        <div class="lg:col-span-7 space-y-8">
+          <div>
+            <span class="text-xs font-black tracking-[0.3em] text-amber-400 uppercase">PLAN METODOLÓGICO</span>
+            <h2 class="text-4xl md:text-5xl font-black italic uppercase tracking-tighter text-white mt-2">
+              EJES <span class="gold-gradient-text">ESTRATÉGICOS</span>
+            </h2>
+            <p class="text-slate-400 text-sm mt-3 font-medium">
+              Los pilares operativos que garantizan el progreso de nuestros deportistas en cada sesión.
+            </p>
+          </div>
+
+          <div class="grid grid-cols-1 gap-4">
+
+            <!-- Eje 1 -->
+            <div class="eje-card glass-card rounded-2xl p-5 border border-white/5 flex items-center gap-5 cursor-default">
+              <div class="flex-shrink-0 w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 font-black text-lg">
+                01
+              </div>
+              <div>
+                <h4 class="text-white font-bold text-sm uppercase">Preparación Técnica &amp; Física Avanzada</h4>
+                <p class="text-slate-400 text-xs mt-1">Entrenamientos estructurados por categorías con metodología de vanguardia.</p>
+              </div>
             </div>
-            <div class="eje-item flex items-center gap-4 bg-slate-900/30 backdrop-blur-xl rounded-xl border border-white/5 px-5 py-4">
-              <span class="flex-shrink-0 w-10 h-10 rounded-lg bg-amber-500/10 flex items-center justify-center text-amber-500">
-                <i class="fas fa-users"></i>
-              </span>
-              <p class="text-slate-300 text-sm">Fomento del sentido de pertenencia y trabajo colaborativo.</p>
+
+            <!-- Eje 2 -->
+            <div class="eje-card glass-card rounded-2xl p-5 border border-white/5 flex items-center gap-5 cursor-default">
+              <div class="flex-shrink-0 w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 font-black text-lg">
+                02
+              </div>
+              <div>
+                <h4 class="text-white font-bold text-sm uppercase">Trabajo Colaborativo &amp; Cohesión</h4>
+                <p class="text-slate-400 text-xs mt-1">Fortalecimiento de la camaradería y el sentido de pertenencia institucional.</p>
+              </div>
             </div>
-            <div class="eje-item flex items-center gap-4 bg-slate-900/30 backdrop-blur-xl rounded-xl border border-white/5 px-5 py-4">
-              <span class="flex-shrink-0 w-10 h-10 rounded-lg bg-amber-500/10 flex items-center justify-center text-amber-500">
-                <i class="fas fa-hands-helping"></i>
-              </span>
-              <p class="text-slate-300 text-sm">Vinculación activa de padres y familias en el proceso motivacional.</p>
+
+            <!-- Eje 3 -->
+            <div class="eje-card glass-card rounded-2xl p-5 border border-white/5 flex items-center gap-5 cursor-default">
+              <div class="flex-shrink-0 w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 font-black text-lg">
+                03
+              </div>
+              <div>
+                <h4 class="text-white font-bold text-sm uppercase">Integración Familiar Activa</h4>
+                <p class="text-slate-400 text-xs mt-1">Involucramiento positivo de padres de familia como motor motivacional.</p>
+              </div>
             </div>
-            <div class="eje-item flex items-center gap-4 bg-slate-900/30 backdrop-blur-xl rounded-xl border border-white/5 px-5 py-4">
-              <span class="flex-shrink-0 w-10 h-10 rounded-lg bg-amber-500/10 flex items-center justify-center text-amber-500">
-                <i class="fas fa-clipboard-check"></i>
-              </span>
-              <p class="text-slate-300 text-sm">Alineación metodológica con ligas locales y nacionales.</p>
+
+            <!-- Eje 4 -->
+            <div class="eje-card glass-card rounded-2xl p-5 border border-white/5 flex items-center gap-5 cursor-default">
+              <div class="flex-shrink-0 w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 font-black text-lg">
+                04
+              </div>
+              <div>
+                <h4 class="text-white font-bold text-sm uppercase">Alineación Metodológica en Ligas</h4>
+                <p class="text-slate-400 text-xs mt-1">Participación activa y competitiva en torneos departamentales y nacionales.</p>
+              </div>
             </div>
-            <div class="eje-item flex items-center gap-4 bg-slate-900/30 backdrop-blur-xl rounded-xl border border-white/5 px-5 py-4">
-              <span class="flex-shrink-0 w-10 h-10 rounded-lg bg-amber-500/10 flex items-center justify-center text-amber-500">
-                <i class="fas fa-graduation-cap"></i>
-              </span>
-              <p class="text-slate-300 text-sm">Equilibrio entre rendimiento deportivo y excelencia académica.</p>
+
+            <!-- Eje 5 -->
+            <div class="eje-card glass-card rounded-2xl p-5 border border-white/5 flex items-center gap-5 cursor-default">
+              <div class="flex-shrink-0 w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 font-black text-lg">
+                05
+              </div>
+              <div>
+                <h4 class="text-white font-bold text-sm uppercase">Excelencia Académica y Deportiva</h4>
+                <p class="text-slate-400 text-xs mt-1">Promoción del rendimiento escolar a la par del desempeño en el terreno de juego.</p>
+              </div>
             </div>
+
           </div>
         </div>
 
-        <!-- Escudo -->
-        <div class="flex justify-center lg:justify-end">
-          <div class="relative">
-            <div class="absolute inset-0 bg-amber-400/20 rounded-full blur-3xl scale-110"></div>
-            <img src="images/ESCUDO.webp" alt="Escudo oficial DIBA FBC"
-              class="relative w-72 h-72 object-contain drop-shadow-xl" />
+        <!-- Right: Shield Showcase -->
+        <div class="lg:col-span-5 flex justify-center">
+          <div class="relative group">
+            <div class="halo-effect absolute inset-0 bg-amber-500/30 rounded-full blur-3xl scale-125 pointer-events-none"></div>
+            <div class="glass-card rounded-[40px] p-10 border border-amber-500/30 shadow-2xl relative z-10 text-center space-y-6">
+              <img src="images/ESCUDO.webp" alt="Escudo Oficial DIBA FBC"
+                class="w-64 h-64 object-contain mx-auto drop-shadow-[0_15px_30px_rgba(245,158,11,0.3)] group-hover:scale-105 transition-transform duration-500" />
+              <div class="space-y-1">
+                <p class="text-xs font-black tracking-widest text-amber-400 uppercase">CLUB DEPORTIVO</p>
+                <h3 class="text-2xl font-black italic uppercase text-white">DIBA FBC</h3>
+                <p class="text-slate-400 text-xs font-medium">Barranquilla, Colombia</p>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -240,94 +385,118 @@
   </section>
 
   <!-- ════════════════════════════
-       VALORES DEL CLUB
-       (fondo blanco)
+       VALORES DEL CLUB (ADN DIBA)
   ════════════════════════════ -->
-  <section class="py-20 bg-[#020617]">
-    <div class="max-w-6xl mx-auto px-4">
-      <div class="text-center mb-12">
-        <p class="text-xs font-semibold tracking-[0.2em] text-amber-500 uppercase mb-2">ADN DIBA FBC</p>
-        <h2 class="text-3xl md:text-4xl font-bold text-white">Nuestros Valores</h2>
-        <p class="text-slate-400 mt-3 max-w-lg mx-auto text-sm">Los pilares que guían cada entrenamiento, partido y
-          decisión del club.</p>
+  <section class="py-24 bg-[#020617] relative z-10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6">
+
+      <div class="text-center mb-16 space-y-3">
+        <span class="text-xs font-black tracking-[0.3em] text-amber-400 uppercase">NUESTRO ADN</span>
+        <h2 class="text-4xl md:text-5xl font-black italic uppercase tracking-tighter text-white">
+          NUESTROS <span class="gold-gradient-text">VALORES</span>
+        </h2>
+        <p class="text-slate-400 text-sm max-w-xl mx-auto font-medium">
+          Los principios inquebrantables que guían cada entrenamiento, decisión y competencia del club.
+        </p>
       </div>
 
-      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
-        <div
-          class="valor-card text-center bg-slate-900/30 backdrop-blur-xl rounded-2xl p-6 border border-white/5 hover:border-amber-500/50 hover:shadow-lg transition-all duration-300 cursor-default">
-          <div
-            class="valor-icon w-12 h-12 rounded-xl bg-amber-500/10 text-amber-500 flex items-center justify-center mx-auto mb-3 transition-all duration-300">
-            <i class="fas fa-fist-raised text-xl"></i>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+
+        <!-- Valor 1 -->
+        <div class="valor-card glass-card rounded-3xl p-8 border border-white/5 cursor-default group space-y-4">
+          <div class="valor-icon-wrapper w-14 h-14 rounded-2xl bg-amber-500/10 text-amber-400 border border-amber-500/20 flex items-center justify-center text-2xl transition-all duration-300 shadow-md">
+            <i class="fas fa-fist-raised"></i>
           </div>
-          <p class="text-xs font-bold uppercase tracking-wide text-slate-300">Disciplina</p>
+          <h3 class="text-lg font-black uppercase text-white tracking-wide">DISCIPLINA</h3>
+          <p class="text-slate-400 text-xs leading-relaxed font-medium">
+            La constancia y el compromiso diario como cimientos para alcanzar metas extraordinarias.
+          </p>
         </div>
-        <div
-          class="valor-card text-center bg-slate-900/30 backdrop-blur-xl rounded-2xl p-6 border border-white/5 hover:border-amber-500/50 hover:shadow-lg transition-all duration-300 cursor-default">
-          <div
-            class="valor-icon w-12 h-12 rounded-xl bg-amber-500/10 text-amber-500 flex items-center justify-center mx-auto mb-3 transition-all duration-300">
-            <i class="fas fa-handshake text-xl"></i>
+
+        <!-- Valor 2 -->
+        <div class="valor-card glass-card rounded-3xl p-8 border border-white/5 cursor-default group space-y-4">
+          <div class="valor-icon-wrapper w-14 h-14 rounded-2xl bg-amber-500/10 text-amber-400 border border-amber-500/20 flex items-center justify-center text-2xl transition-all duration-300 shadow-md">
+            <i class="fas fa-handshake"></i>
           </div>
-          <p class="text-xs font-bold uppercase tracking-wide text-slate-300">Respeto</p>
+          <h3 class="text-lg font-black uppercase text-white tracking-wide">RESPETO</h3>
+          <p class="text-slate-400 text-xs leading-relaxed font-medium">
+            Consideración absoluta hacia compañeros, entrenadores, rivales y jueces de juego.
+          </p>
         </div>
-        <div
-          class="valor-card text-center bg-slate-900/30 backdrop-blur-xl rounded-2xl p-6 border border-white/5 hover:border-amber-500/50 hover:shadow-lg transition-all duration-300 cursor-default">
-          <div
-            class="valor-icon w-12 h-12 rounded-xl bg-amber-500/10 text-amber-500 flex items-center justify-center mx-auto mb-3 transition-all duration-300">
-            <i class="fas fa-users text-xl"></i>
+
+        <!-- Valor 3 -->
+        <div class="valor-card glass-card rounded-3xl p-8 border border-white/5 cursor-default group space-y-4">
+          <div class="valor-icon-wrapper w-14 h-14 rounded-2xl bg-amber-500/10 text-amber-400 border border-amber-500/20 flex items-center justify-center text-2xl transition-all duration-300 shadow-md">
+            <i class="fas fa-users"></i>
           </div>
-          <p class="text-xs font-bold uppercase tracking-wide text-slate-300">Trabajo en equipo</p>
+          <h3 class="text-lg font-black uppercase text-white tracking-wide">TRABAJO EN EQUIPO</h3>
+          <p class="text-slate-400 text-xs leading-relaxed font-medium">
+            La convención de que la unión y el esfuerzo colectivo superan cualquier individualidad.
+          </p>
         </div>
-        <div
-          class="valor-card text-center bg-slate-900/30 backdrop-blur-xl rounded-2xl p-6 border border-white/5 hover:border-amber-500/50 hover:shadow-lg transition-all duration-300 cursor-default">
-          <div
-            class="valor-icon w-12 h-12 rounded-xl bg-amber-500/10 text-amber-500 flex items-center justify-center mx-auto mb-3 transition-all duration-300">
-            <i class="fas fa-heart text-xl"></i>
+
+        <!-- Valor 4 -->
+        <div class="valor-card glass-card rounded-3xl p-8 border border-white/5 cursor-default group space-y-4">
+          <div class="valor-icon-wrapper w-14 h-14 rounded-2xl bg-amber-500/10 text-amber-400 border border-amber-500/20 flex items-center justify-center text-2xl transition-all duration-300 shadow-md">
+            <i class="fas fa-heart"></i>
           </div>
-          <p class="text-xs font-bold uppercase tracking-wide text-slate-300">Compromiso</p>
+          <h3 class="text-lg font-black uppercase text-white tracking-wide">COMPROMISO</h3>
+          <p class="text-slate-400 text-xs leading-relaxed font-medium">
+            Entrega apasionada por la camiseta y el cumplimiento de los deberes deportivos y personales.
+          </p>
         </div>
-        <div
-          class="valor-card text-center bg-slate-900/30 backdrop-blur-xl rounded-2xl p-6 border border-white/5 hover:border-amber-500/50 hover:shadow-lg transition-all duration-300 cursor-default">
-          <div
-            class="valor-icon w-12 h-12 rounded-xl bg-amber-500/10 text-amber-500 flex items-center justify-center mx-auto mb-3 transition-all duration-300">
-            <i class="fas fa-star text-xl"></i>
+
+        <!-- Valor 5 -->
+        <div class="valor-card glass-card rounded-3xl p-8 border border-white/5 cursor-default group space-y-4">
+          <div class="valor-icon-wrapper w-14 h-14 rounded-2xl bg-amber-500/10 text-amber-400 border border-amber-500/20 flex items-center justify-center text-2xl transition-all duration-300 shadow-md">
+            <i class="fas fa-star"></i>
           </div>
-          <p class="text-xs font-bold uppercase tracking-wide text-slate-300">Excelencia</p>
+          <h3 class="text-lg font-black uppercase text-white tracking-wide">EXCELENCIA</h3>
+          <p class="text-slate-400 text-xs leading-relaxed font-medium">
+            Búsqueda incansable de la superación personal en cada entrenamiento y partido oficial.
+          </p>
         </div>
-        <div
-          class="valor-card text-center bg-slate-900/30 backdrop-blur-xl rounded-2xl p-6 border border-white/5 hover:border-amber-500/50 hover:shadow-lg transition-all duration-300 cursor-default">
-          <div
-            class="valor-icon w-12 h-12 rounded-xl bg-amber-500/10 text-amber-500 flex items-center justify-center mx-auto mb-3 transition-all duration-300">
-            <i class="fas fa-seedling text-xl"></i>
+
+        <!-- Valor 6 -->
+        <div class="valor-card glass-card rounded-3xl p-8 border border-white/5 cursor-default group space-y-4">
+          <div class="valor-icon-wrapper w-14 h-14 rounded-2xl bg-amber-500/10 text-amber-400 border border-amber-500/20 flex items-center justify-center text-2xl transition-all duration-300 shadow-md">
+            <i class="fas fa-seedling"></i>
           </div>
-          <p class="text-xs font-bold uppercase tracking-wide text-slate-300">Formación</p>
+          <h3 class="text-lg font-black uppercase text-white tracking-wide">FORMACIÓN HUMANA</h3>
+          <p class="text-slate-400 text-xs leading-relaxed font-medium">
+            Desarrollo de personas íntegras capacitadas para triunfar en la sociedad.
+          </p>
         </div>
+
       </div>
     </div>
   </section>
 
   <!-- ════════════════════════════
-       FRASE FINAL
-       (dark — igual que hero de index)
+       BANQUETE INSPIRACIONAL & CTA
   ════════════════════════════ -->
-  <section class="py-20 bg-[#020617] relative overflow-hidden">
-    <div class="absolute inset-0 flex items-center justify-center pointer-events-none opacity-[0.04]">
-      <img src="images/ESCUDO.webp" alt="" class="w-[500px]" />
-    </div>
-    <div class="max-w-3xl mx-auto px-4 text-center relative z-10">
-      <i class="fas fa-quote-left text-amber-400/40 text-4xl mb-6"></i>
-      <blockquote class="text-2xl md:text-3xl font-light leading-relaxed text-slate-200">
-        "El fútbol no es sólo un deporte, es una
-        <em class="text-amber-400 font-bold not-italic">escuela de vida</em>
-        que enseña valores y forja el carácter."
+  <section class="py-24 relative overflow-hidden bg-gradient-to-t from-slate-950 via-slate-900 to-[#020617] border-t border-white/5">
+    <div class="glow-orb w-96 h-96 bg-amber-500/15 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"></div>
+
+    <div class="max-w-4xl mx-auto px-4 text-center relative z-10 space-y-8">
+      <div class="w-16 h-16 rounded-full bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 text-2xl mx-auto shadow-xl">
+        <i class="fas fa-quote-left"></i>
+      </div>
+
+      <blockquote class="text-2xl sm:text-3xl md:text-4xl font-light italic leading-relaxed text-slate-200">
+        "El fútbol es la mejor herramienta pedagógica: enseña que la
+        <strong class="gold-gradient-text not-italic font-black">disciplina y la resiliencia</strong>
+        abren las puertas del triunfo en cualquier camino de la vida."
       </blockquote>
-      <div class="mt-10 flex flex-wrap justify-center gap-4">
-        <a href="galeria.html"
-          class="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-amber-500 text-slate-950 font-bold text-sm hover:bg-amber-400 transition-colors shadow-lg shadow-amber-500/30">
-          <i class="fas fa-images"></i> Ver Galería
+
+      <div class="pt-6 flex flex-wrap justify-center gap-5">
+        <a href="https://wa.me/573246656083?text=Hola%20DIBA%20FBC,%20quiero%20más%20información%20sobre%20inscripciones" target="_blank"
+          class="inline-flex items-center gap-3 px-8 py-4 rounded-2xl bg-gradient-to-r from-amber-500 to-yellow-400 text-slate-950 font-black text-xs uppercase tracking-widest hover:scale-105 transition-all shadow-xl shadow-amber-500/25">
+          <i class="fab fa-whatsapp text-lg"></i> Inscribirse en la Academia
         </a>
         <a href="Historia.html"
-          class="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white/10 text-white font-bold text-sm hover:bg-white/20 border border-white/20 transition-colors">
-          <i class="fas fa-book-open"></i> Nuestra Historia
+          class="inline-flex items-center gap-3 px-8 py-4 rounded-2xl bg-white/5 text-white font-black text-xs uppercase tracking-widest hover:bg-white/10 border border-white/10 transition-all hover:scale-105">
+          <i class="fas fa-book-open"></i> Conocer Nuestra Historia
         </a>
       </div>
     </div>
