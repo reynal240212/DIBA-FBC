@@ -3,6 +3,12 @@
    Delega la lógica pesada a los nuevos módulos en public/src
    ================================================= */
 
+// ── Service Worker ──
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/service-worker.js')
+    .catch(err => console.error('Error registrando SW:', err));
+}
+
 // Exponer loadComponent en el scope global para compatibilidad
 function loadComponent(containerId, filePath, callback) {
   const container = document.getElementById(containerId);

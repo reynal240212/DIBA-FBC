@@ -3,10 +3,13 @@
 
 <head>
   <meta charset="UTF-8" />
-  <title>DIBA FBC | Inicio, Historia y Patrocinadores</title>
+  <title>DIBA FBC | Club de Fútbol Barranquilla — Academia y Formación Deportiva</title>
+  <meta name="description" content="DIBA FBC: academia de fútbol en Barranquilla. Formación deportiva desde 2012. Conoce nuestro equipo, partidos, servicios y valores." />
   <link rel="icon" href="images/ESCUDO.ico" sizes="32x32">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google-site-verification" content="-1RpXZbMvqMy5cawFWkeUV7VLMOkZ7ZqBQzt1xUyv1c" />
+  <!-- Preload hero image for LCP -->
+  <link rel="preload" as="image" href="images/estadio.webp" fetchpriority="high">
 
   <!-- Meta tags para redes -->
   <meta property="og:title" content="DIBA FBC | Inicio, Historia y Patrocinadores" />
@@ -73,7 +76,8 @@
   </script>
   
   <!-- Supabase CDN for dynamic features -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <!-- (cargado via scripts/config.js) -->
+
 
   <style>
     /* Custom Scrollbar for Premium Look */
@@ -158,14 +162,7 @@
 </head>
 
 <body class="bg-[#020617] text-white font-sans overflow-x-hidden selection:bg-yellow-500/30">
-  <!-- Service Worker -->
-  <script>
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('service-worker.js')
-        .then(reg => console.log("SW registrado:", reg))
-        .catch(err => console.error("Error registrando SW:", err));
-    }
-  </script>
+  <!-- Service Worker (registrado via loadComponents.js) -->
 
   <!-- Navbar Injection Container -->
   <div id="navbar-container">
@@ -448,9 +445,9 @@
   <script type="module" src="src/main.js"></script>
   <script src="scripts/instagram-feed.js"></script>
   <script src="scripts/partidos.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
-  <script>
-    AOS.init({ once: true, duration: 800 });
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js" defer></script>
+  <script defer>
+    document.addEventListener('DOMContentLoaded', () => AOS.init({ once: true, duration: 800 }));
   </script>
 </body>
 
