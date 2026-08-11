@@ -15,7 +15,6 @@ const SEARCH_PAGES = [
     { title: 'Galería Multimedia', url: 'galeria.html', icon: 'fa-images', tags: 'galeria fotos videos partidos campeonatos celebraciones cultura multimedia' },
     { title: 'Plantilla de Jugadores', url: 'ficha.html', icon: 'fa-users', tags: 'plantilla jugadores equipo ficha nómina' },
     { title: 'Partidos y Entrenamiento', url: 'partidos.html', icon: 'fa-futbol', tags: 'partidos entrenamiento resultado calendario fixture' },
-    { title: 'Estadísticas', url: 'analisis.html', icon: 'fa-chart-bar', tags: 'estadisticas analisis datos rendimiento goles asistencias' },
     { title: 'Noticias', url: 'Noticias.html', icon: 'fa-newspaper', tags: 'noticias actualidad novedades indumentaria uniforme' },
     { title: 'Social DIBA', url: 'socialDIBA.html', icon: 'fa-comments', tags: 'social chat comunidad publicaciones muro red social' },
     { title: 'Contacto', url: 'contacto.html', icon: 'fa-envelope', tags: 'contacto correo email teléfono mensaje formulario' },
