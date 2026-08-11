@@ -20,8 +20,6 @@ const SEARCH_PAGES = [
     { title: 'Social DIBA', url: 'socialDIBA.html', icon: 'fa-comments', tags: 'social chat comunidad publicaciones muro red social' },
     { title: 'Contacto', url: 'contacto.html', icon: 'fa-envelope', tags: 'contacto correo email teléfono mensaje formulario' },
     { title: 'Ayuda', url: 'ayuda.html', icon: 'fa-question-circle', tags: 'ayuda soporte faq preguntas frecuentes' },
-    { title: 'Torneo Kids Soccer Pradera', url: 'KidsSoccerPradera.html', icon: 'fa-child', tags: 'torneo kids soccer pradera categorias sub infantil' },
-    { title: 'Torneo SurOccidente', url: 'torneo_suroccidente.html', icon: 'fa-trophy', tags: 'torneo suroccidente competencia liga copa' },
     { title: 'Lista de Jugadores', url: 'listaJugadores.html', icon: 'fa-list', tags: 'lista jugadores nombres categorías registrados' },
     { title: 'Registro de Jugador', url: 'registro.html', icon: 'fa-user-plus', tags: 'registro nuevo jugador inscripción formulario' },
 ];

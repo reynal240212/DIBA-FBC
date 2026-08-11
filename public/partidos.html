@@ -7,7 +7,8 @@
   <link rel="icon" href="images/ESCUDO.ico" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description"
-    content="Consulta el calendario oficial de partidos, entrenamientos y la tabla de clasificación de DIBA FBC." />
+  <meta name="description"
+    content="Consulta el calendario oficial de partidos y entrenamientos de DIBA FBC." />
 
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
@@ -109,32 +110,6 @@
       -webkit-text-fill-color: transparent;
     }
 
-    /* Tabla clasificación */
-    .tabla-clas th {
-      background: #0f1d30;
-      color: #94a3b8;
-      font-size: 0.7rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      padding: 0.75rem 1rem;
-    }
-
-    .tabla-clas td {
-      padding: 0.65rem 1rem;
-      border-top: 1px solid rgba(255, 255, 255, 0.05);
-      font-size: 0.82rem;
-    }
-
-    .tabla-clas tr.diba-row td {
-      background: rgba(255, 204, 0, 0.08);
-      color: #ffcc00;
-      font-weight: 700;
-    }
-
-    .tabla-clas tr:hover td {
-      background: rgba(255, 255, 255, 0.04);
-    }
-
     /* Input date */
     input[type="date"]::-webkit-calendar-picker-indicator {
       filter: invert(1) sepia(1) saturate(8) hue-rotate(10deg);
@@ -219,7 +194,7 @@
         Partidos &amp; <span class="text-amber-400">Entrenamientos</span>
       </h1>
       <p class="text-slate-400 max-w-xl mx-auto text-sm leading-relaxed">
-        Consulta el calendario oficial, resultados recientes y la tabla de posiciones de DIBA FBC.
+        Consulta el calendario oficial de partidos y la programación de entrenamientos de DIBA FBC.
       </p>
 
       <!-- Stats rápidas -->
@@ -258,9 +233,6 @@
         </button>
         <button class="tab-btn" data-tab="entrenamientos-tab">
           <i class="fas fa-dumbbell mr-2 text-green-400"></i>Entrenamientos
-        </button>
-        <button class="tab-btn" data-tab="clasificacion-tab">
-          <i class="fas fa-trophy mr-2 text-amber-400"></i>Clasificación
         </button>
         <button class="tab-btn" data-tab="mapa-tab">
           <i class="fas fa-map-marker-alt mr-2 text-red-400"></i>Cancha
@@ -344,22 +316,6 @@
         </div>
 
         <div id="entrenamientos-results" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
-      </div>
-
-      <!-- TAB: CLASIFICACIÓN -->
-      <div id="clasificacion-tab" class="tab-panel p-6 md:p-8">
-        <div class="flex items-center justify-between mb-6">
-          <h2 class="text-lg font-black uppercase tracking-wide text-white flex items-center gap-2">
-            <i class="fas fa-trophy text-amber-400"></i> Tabla de Posiciones
-          </h2>
-          <span class="text-xs text-slate-500 bg-slate-800 px-3 py-1 rounded-full">Cat. 2014 – 2015</span>
-        </div>
-
-        <div id="clasificacion-spinner" class="flex justify-center py-14" style="display:none">
-          <div class="spinner-ring"></div>
-        </div>
-
-        <div id="clasificacion-container" class="overflow-x-auto rounded-xl border border-slate-800"></div>
       </div>
 
       <!-- TAB: MAPA -->
