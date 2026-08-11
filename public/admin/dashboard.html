@@ -224,22 +224,36 @@
         }
 
         async function loadUpcomingMatches() {
-            const { data: matches } = await supabase.from('partidos').select('*').gte('fecha', new Date().toISOString().split('T')[0]).order('fecha', { ascending: true }).limit(2);
+            const todayStr = new Date().toISOString().split('T')[0];
+            const [partidosRes, entrenamientosRes] = await Promise.all([
+                supabase.from('partidos').select('*').order('fecha', { ascending: true }),
+                supabase.from('entrenamientos').select('*').order('fecha', { ascending: true })
+            ]);
+
+            const partidos = (partidosRes.data || []).map(p => ({ ...p, isTraining: false, dateOnly: p.fecha?.includes('T') ? p.fecha.split('T')[0] : p.fecha }));
+            const entrenamientos = (entrenamientosRes.data || []).map(e => ({ ...e, isTraining: true, equipolocal: 'DIBA FBC', equipovisitante: 'ENTRENAMIENTO', Cancha: e.lugar || 'Parque La Pradera', dateOnly: e.fecha?.includes('T') ? e.fecha.split('T')[0] : e.fecha }));
+            
+            let upcoming = [...partidos, ...entrenamientos].filter(x => x.dateOnly >= todayStr).sort((a, b) => new Date(a.fecha) - new Date(b.fecha)).slice(0, 2);
+            
+            if (upcoming.length === 0 && (partidos.length > 0 || entrenamientos.length > 0)) {
+                upcoming = [...partidos, ...entrenamientos].sort((a, b) => new Date(b.fecha) - new Date(a.fecha)).slice(0, 2);
+            }
+
             const container = document.getElementById('matches-list');
 
-            if (!matches || matches.length === 0) {
-                container.innerHTML = `<div class="col-span-2 p-10 text-center opacity-20"><i class="fas fa-futbol text-4xl mb-2"></i><p class="text-[0.6rem] font-black uppercase">No hay partidos programados</p></div>`;
+            if (!upcoming || upcoming.length === 0) {
+                container.innerHTML = `<div class="col-span-2 p-10 text-center opacity-20"><i class="fas fa-calendar text-4xl mb-2"></i><p class="text-[0.6rem] font-black uppercase">No hay partidos ni entrenamientos programados</p></div>`;
                 return;
             }
 
-            container.innerHTML = matches.map(m => {
-                const dateObj = new Date(m.fecha + 'T00:00:00');
-                const day = dateObj.getDate();
+            container.innerHTML = upcoming.map(m => {
+                const dateObj = new Date(m.fecha + (m.fecha?.includes('T') ? '' : 'T00:00:00'));
+                const day = dateObj.getDate() || '--';
                 const month = dateObj.toLocaleDateString('es-CO', { month: 'short' }).replace('.', '').toUpperCase();
                 
                 return `
                 <div class="match-card group">
-                    <span class="match-category-pill">${m.categoria}</span>
+                    <span class="match-category-pill">${m.isTraining ? 'PRÁCTICA' : (m.categoria || 'GENERAL')}</span>
                     
                     <div class="flex items-center gap-6">
                         <div class="match-date-badge">
@@ -248,6 +262,19 @@
                         </div>
                         
                         <div class="flex-1 flex flex-col gap-3">
+                            <div class="flex items-center justify-between">
+                                <span class="text-[0.7rem] font-bold text-white uppercase">${m.isTraining ? (m.titulo || 'Entrenamiento DIBA FBC') : `${m.equipolocal} vs ${m.equipovisitante}`}</span>
+                            </div>
+                            <div class="flex items-center gap-4 text-[0.6rem] text-slate-400 font-bold uppercase">
+                                <span><i class="fas fa-map-marker-alt text-amber-500 mr-1"></i>${m.Cancha || m.lugar || 'Sede DIBA'}</span>
+                                <span><i class="far fa-clock text-amber-500 mr-1"></i>${m.hora || '--:--'}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                `;
+            }).join('');
+        }
                             <div class="flex items-center gap-3">
                                 <span class="match-team">${m.equipolocal}</span>
                                 <span class="match-vs-badge">VS</span>

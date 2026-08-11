@@ -25,3 +25,5 @@ build/
 **.node-persist**
 **_IGNORE_**
 # end managed
+
+scratch/

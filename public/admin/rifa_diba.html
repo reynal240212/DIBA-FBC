@@ -492,13 +492,13 @@
 
                         <div class="premium-form-group">
                             <label class="premium-label">Premio Mayor</label>
-                            <input type="text" id="cfg-premio" placeholder="EJ: TABLET 10 PULG." value="Perfume Importado" class="premium-input uppercase !bg-white/5">
+                            <input type="text" id="cfg-premio" placeholder="EJ: TABLET 10 PULG." value="2 Perfumes Importados (1 Dama y 1 Caballero)" class="premium-input uppercase !bg-white/5">
                             <div class="field-error" id="error-premio">Ingresa el premio</div>
                         </div>
 
                         <div class="premium-form-group">
                             <label class="premium-label">Valor Boleta ($)</label>
-                            <input type="number" id="cfg-valor-num" step="500" value="3000" class="premium-input !bg-white/5">
+                            <input type="number" id="cfg-valor-num" step="500" value="5000" class="premium-input !bg-white/5">
                             <input type="hidden" id="cfg-valor">
                             <div class="field-error" id="error-valor">Ingresa un valor válido</div>
                             <div class="quick-actions">
@@ -981,9 +981,15 @@
                                     </div>
                                     <div class="boleta-nums-grid">${numsHtml}</div>
                                 </div>
-                                <div class="boleta-footer uppercase">
-                                    <span class="italic">👤 RESPONSABLE: <strong>${responsables[currentIdx - 1] || '____________________________'}</strong></span>
-                                    <span class="opacity-40 text-[0.6rem]">${serie.toUpperCase()} © ${new Date().getFullYear()}</span>
+                                <div class="boleta-footer uppercase flex-col !items-start !gap-1">
+                                    <div class="flex justify-between w-full">
+                                        <span class="italic">👤 VENDEDOR (NIÑO): <strong>${responsables[currentIdx - 1] || '____________________________'}</strong></span>
+                                        <span class="opacity-40 text-[0.6rem]">${serie.toUpperCase()} © ${new Date().getFullYear()}</span>
+                                    </div>
+                                    <div class="flex justify-between w-full text-[0.65rem] opacity-90 border-t border-blue-900/20 pt-1">
+                                        <span>📝 COMPRADOR: ___________________________</span>
+                                        <span>📞 TEL: __________________</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>

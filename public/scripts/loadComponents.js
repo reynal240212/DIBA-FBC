@@ -68,38 +68,69 @@ document.addEventListener("DOMContentLoaded", async function () {
     try {
       // Usa la instancia única de supabase definida al inicio
 
-      // Obtener la fecha actual del sistema dinámicamente
-      const today = new Date();
-      const targetDate = today.getFullYear() + '-' + String(today.getMonth() + 1).padStart(2, '0') + '-' + String(today.getDate()).padStart(2, '0');
+      // Obtener partidos y entrenamientos en paralelo
+      const [partidosRes, entrenamientosRes] = await Promise.all([
+        supabase.from('partidos').select('*').order('fecha', { ascending: true }),
+        supabase.from('entrenamientos').select('*').order('fecha', { ascending: true })
+      ]);
 
-      // Reutiliza la función toLocalDate si estuviera global, pero aquí la redefinimos para uso seguro
+      if (partidosRes.error) throw partidosRes.error;
+
       const toLocalDateBanner = (fechaISO) => {
         if (!fechaISO) return '';
-        // Usar split para evitar el desfase de zona horaria de JavaScript
         const parts = fechaISO.includes('T') ? fechaISO.split('T')[0].split('-') : fechaISO.split('-');
         return `${parts[0]}-${parts[1]}-${parts[2]}`;
       };
 
-      const { data: displayMatches, error } = await supabase
-        .from('partidos')
-        .select('*')
-        .gte('fecha', targetDate)
-        .order('fecha', { ascending: true })
-        .limit(10);
+      const partidos = (partidosRes.data || []).map(p => ({
+        ...p,
+        isTraining: false,
+        dateOnly: toLocalDateBanner(p.fecha)
+      }));
 
-      if (error) throw error;
+      const entrenamientos = (entrenamientosRes.data || []).map(e => ({
+        ...e,
+        isTraining: true,
+        equipolocal: 'DIBA FBC',
+        equipovisitante: 'ENTRENAMIENTO',
+        Cancha: e.lugar || 'Parque La Pradera',
+        categoria: e.categoria || 'GENERAL',
+        dateOnly: toLocalDateBanner(e.fecha)
+      }));
+
+      const allEvents = [...partidos, ...entrenamientos];
+
+      // 1. Buscar eventos de hoy
+      let displayEvents = allEvents.filter(e => e.dateOnly === targetDate);
+
+      // 2. Si no hay hoy, buscar eventos próximos (fecha >= hoy)
+      if (displayEvents.length === 0) {
+        const futureEvents = allEvents.filter(e => e.dateOnly >= targetDate);
+        if (futureEvents.length > 0) {
+          const sorted = futureEvents.sort((a, b) => new Date(a.fecha) - new Date(b.fecha));
+          const nextDate = sorted[0].dateOnly;
+          displayEvents = sorted.filter(e => e.dateOnly === nextDate);
+        }
+      }
+
+      // 3. Si no hay próximos, mostrar la fecha más reciente registrada para mantener la sección activa
+      if (displayEvents.length === 0 && allEvents.length > 0) {
+        const sortedDesc = allEvents.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
+        const latestDate = sortedDesc[0].dateOnly;
+        displayEvents = sortedDesc.filter(e => e.dateOnly === latestDate);
+      }
 
       if (loadingStatus) loadingStatus.style.display = 'none';
 
-      if (!displayMatches || displayMatches.length === 0) {
+      if (!displayEvents || displayEvents.length === 0) {
         dynamicContainer.innerHTML = `
            <div class="w-full py-8 flex flex-col items-center justify-center text-center space-y-4 animate__animated animate__fadeIn">
                <div class="w-12 h-12 bg-white/5 rounded-2xl flex items-center justify-center border border-white/10 text-yellow-500 animate-pulse">
                    <i class="fas fa-calendar-day text-lg"></i>
                </div>
                <div>
-                   <p class="text-xs font-black uppercase tracking-[0.2em] text-white">Sin Encuentros Programados</p>
-                   <p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest mt-1">No hay partidos agendados para esta semana.</p>
+                   <p class="text-xs font-black uppercase tracking-[0.2em] text-white">Sin Encuentros ni Entrenamientos Programados</p>
+                   <p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest mt-1">No hay actividades agendadas para esta semana.</p>
                </div>
            </div>
          `;
@@ -109,85 +140,120 @@ document.addEventListener("DOMContentLoaded", async function () {
       // Limpiar contenedor
       dynamicContainer.innerHTML = '';
 
-      displayMatches.forEach(p => {
+      displayEvents.forEach(p => {
         const card = document.createElement("div");
-        card.className = "flex-none w-80 sm:w-96 snap-center bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-5 flex flex-col gap-4 hover:bg-white/10 hover:border-amber-500/30 transition-all duration-500 group/card relative overflow-hidden";
 
-        // Obtener estado real del partido
-        const esHoy = toLocalDateBanner(p.fecha) === targetDate;
-        const tieneResultado = p.resultado && p.resultado !== '' && p.resultado !== '-';
-        
-        let statusBadge = '';
-        if (tieneResultado) {
-          statusBadge = '<span class="bg-slate-700 text-slate-300 text-[8px] font-black px-2 py-0.5 rounded-full ring-1 ring-white/10 uppercase tracking-widest">Finalizado</span>';
-        } else if (esHoy) {
-          statusBadge = '<span class="bg-red-500 text-white text-[8px] font-black px-2 py-0.5 rounded-full animate-pulse uppercase tracking-widest flex items-center gap-1.5 shadow-lg shadow-red-500/20"><span class="w-1 h-1 bg-white rounded-full"></span> En Vivo</span>';
-        } else {
-          statusBadge = '<span class="bg-blue-600 text-white text-[8px] font-black px-2 py-0.5 rounded-full uppercase tracking-widest">Próximo</span>';
-        }
+        if (p.isTraining) {
+          card.className = "flex-none w-80 sm:w-96 snap-center bg-slate-900/40 backdrop-blur-md border border-emerald-500/20 rounded-2xl p-5 flex flex-col gap-4 hover:bg-slate-800/60 hover:border-emerald-500/40 transition-all duration-500 group/card relative overflow-hidden";
+          const esHoy = p.dateOnly === targetDate;
+          const statusBadge = esHoy
+            ? '<span class="bg-emerald-500 text-slate-950 text-[8px] font-black px-2.5 py-0.5 rounded-full animate-pulse uppercase tracking-widest flex items-center gap-1.5"><span class="w-1 h-1 bg-slate-950 rounded-full"></span> Hoy</span>'
+            : '<span class="bg-emerald-500/10 text-emerald-400 text-[8px] font-black px-2.5 py-0.5 rounded-full border border-emerald-500/20 uppercase tracking-widest">Práctica</span>';
 
-        const escudoImg = (url, equipoNombre) => {
-          if (equipoNombre && equipoNombre.toUpperCase().includes('DIBA')) return "images/ESCUDO.webp";
-          if (!url) return `https://ui-avatars.com/api/?name=${encodeURIComponent(equipoNombre || 'Rival')}&background=1e293b&color=cbd5e1&bold=true`;
-          return `https://wsrv.nl/?url=${encodeURIComponent(url)}&default=https://ui-avatars.com/api/?name=${encodeURIComponent(equipoNombre || 'R')}&background=1e293b&color=cbd5e1`;
-        };
-
-        card.innerHTML = `
-             <!-- Glow background -->
-             <div class="absolute -top-10 -right-10 w-32 h-32 bg-amber-500/5 rounded-full blur-3xl group-hover/card:bg-amber-500/10 transition-all duration-700"></div>
+          card.innerHTML = `
+             <div class="absolute -top-10 -right-10 w-32 h-32 bg-emerald-500/10 rounded-full blur-3xl group-hover/card:bg-emerald-500/20 transition-all duration-700"></div>
 
              <div class="flex items-center justify-between mb-1">
-               <span class="text-[9px] font-black text-amber-500/80 uppercase tracking-[0.2em]">CAT. ${p.categoria || 'GENERAL'}</span>
+               <span class="text-[9px] font-black text-emerald-400 uppercase tracking-[0.2em] flex items-center gap-1"><i class="fas fa-dumbbell"></i> CAT. ${p.categoria || 'GENERAL'}</span>
                ${statusBadge}
              </div>
 
-             <div class="flex items-center justify-between gap-4 w-full relative z-10">
-                 <!-- Local -->
-                 <div class="flex flex-col items-center w-[35%]">
-                     <div class="relative mb-3">
-                       <div class="absolute inset-0 bg-white/5 rounded-full blur-xl scale-150 group-hover/card:bg-white/10 transition-all duration-700"></div>
-                       <img src="${escudoImg(p.escudo_local || p.escudo, p.equipolocal)}" 
-                            alt="${p.equipolocal}" 
-                            class="w-14 h-14 object-contain relative z-10 drop-shadow-[0_0_15px_rgba(255,255,255,0.1)] group-hover/card:scale-110 transition-transform duration-500" 
-                            onerror="this.src='${escudoImg(null, p.equipolocal)}'">
-                     </div>
-                     <span class="text-white font-black text-[10px] sm:text-[11px] uppercase text-center line-clamp-2 leading-tight tracking-tight">${p.equipolocal || 'DIBA FBC'}</span>
+             <div class="flex flex-col items-center justify-center text-center gap-2 w-full relative z-10 py-1">
+                 <div class="w-14 h-14 rounded-full bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center mb-1 group-hover/card:scale-110 transition-transform duration-500">
+                     <i class="fas fa-running text-2xl text-emerald-400"></i>
                  </div>
-
-                 <!-- VS / Score -->
-                 <div class="flex flex-col items-center justify-center w-[30%] px-1">
-                     <div class="mb-2 relative">
-                       ${tieneResultado 
-                         ? `<span class="text-2xl font-black text-white tracking-widest drop-shadow-[0_0_10px_rgba(255,255,255,0.2)]">${p.resultado}</span>`
-                         : `<div class="bg-amber-500 text-slate-950 text-[10px] font-black uppercase tracking-[0.2em] px-3 py-1 rounded-lg shadow-[0_4px_20px_-5px_rgba(245,158,11,0.5)] transform -rotate-2 group-hover/card:rotate-0 transition-all duration-500">${p.hora || 'VS'}</div>`
-                       }
-                     </div>
-                     <span class="text-slate-400 text-[9px] font-bold text-center w-full truncate tracking-tighter uppercase opacity-60">${p.Cancha || 'Cancha'}</span>
-                 </div>
-
-                 <!-- Visitante -->
-                 <div class="flex flex-col items-center w-[35%]">
-                     <div class="relative mb-3">
-                       <div class="absolute inset-0 bg-white/5 rounded-full blur-xl scale-150 group-hover/card:bg-white/10 transition-all duration-700"></div>
-                       <img src="${escudoImg(p.escudo_visitante, p.equipovisitante)}" 
-                            alt="${p.equipovisitante}" 
-                            class="w-14 h-14 object-contain relative z-10 drop-shadow-[0_0_15px_rgba(255,255,255,0.1)] group-hover/card:scale-110 transition-transform duration-500" 
-                            onerror="this.src='${escudoImg(null, p.equipovisitante)}'">
-                     </div>
-                     <span class="text-white font-black text-[10px] sm:text-[11px] uppercase text-center line-clamp-2 leading-tight tracking-tight">${p.equipovisitante || 'Rival'}</span>
-                 </div>
+                 <h3 class="text-white font-black text-sm uppercase line-clamp-1 leading-tight tracking-tight">${p.titulo || 'Entrenamiento DIBA FBC'}</h3>
+                 <span class="text-amber-400 font-black text-xs tracking-tight flex items-center gap-1"><i class="far fa-clock text-[10px]"></i> ${p.hora || '5:30 PM'}</span>
              </div>
 
-          <div class="mt-2 flex items-center justify-between gap-4">
-            <div class="flex items-center gap-1.5 opacity-40">
-              <i class="fas fa-calendar-day text-[9px] text-amber-500"></i>
-              <span class="text-[9px] font-bold text-white uppercase italic tracking-tighter">${toLocalDateBanner(p.fecha)}</span>
+             <div class="mt-2 flex items-center justify-between gap-4">
+               <div class="flex items-center gap-1.5 opacity-60">
+                 <i class="fas fa-map-marker-alt text-[9px] text-emerald-400"></i>
+                 <span class="text-[9px] font-bold text-white uppercase italic tracking-tighter line-clamp-1">${p.lugar || 'Parque La Pradera'}</span>
+               </div>
+               <a href="partidos.html?tab=entrenamientos" class="flex-grow inline-flex justify-center items-center gap-2 bg-emerald-500/10 hover:bg-emerald-500 hover:text-slate-950 border border-emerald-500/20 py-2 rounded-xl text-[9px] font-black text-emerald-400 uppercase tracking-[0.2em] transition-all duration-300">
+                 Horarios <i class="fas fa-chevron-right text-[8px]"></i>
+               </a>
+             </div>
+          `;
+        } else {
+          card.className = "flex-none w-80 sm:w-96 snap-center bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-5 flex flex-col gap-4 hover:bg-white/10 hover:border-amber-500/30 transition-all duration-500 group/card relative overflow-hidden";
+          const esHoy = p.dateOnly === targetDate;
+          const tieneResultado = p.resultado && p.resultado !== '' && p.resultado !== '-';
+          
+          let statusBadge = '';
+          if (tieneResultado) {
+            statusBadge = '<span class="bg-slate-700 text-slate-300 text-[8px] font-black px-2 py-0.5 rounded-full ring-1 ring-white/10 uppercase tracking-widest">Finalizado</span>';
+          } else if (esHoy) {
+            statusBadge = '<span class="bg-red-500 text-white text-[8px] font-black px-2 py-0.5 rounded-full animate-pulse uppercase tracking-widest flex items-center gap-1.5 shadow-lg shadow-red-500/20"><span class="w-1 h-1 bg-white rounded-full"></span> En Vivo</span>';
+          } else {
+            statusBadge = '<span class="bg-blue-600 text-white text-[8px] font-black px-2 py-0.5 rounded-full uppercase tracking-widest">Partido</span>';
+          }
+
+          const escudoImg = (url, equipoNombre) => {
+            if (equipoNombre && equipoNombre.toUpperCase().includes('DIBA')) return "images/ESCUDO.webp";
+            if (!url) return `https://ui-avatars.com/api/?name=${encodeURIComponent(equipoNombre || 'Rival')}&background=1e293b&color=cbd5e1&bold=true`;
+            return `https://wsrv.nl/?url=${encodeURIComponent(url)}&default=https://ui-avatars.com/api/?name=${encodeURIComponent(equipoNombre || 'R')}&background=1e293b&color=cbd5e1`;
+          };
+
+          card.innerHTML = `
+               <!-- Glow background -->
+               <div class="absolute -top-10 -right-10 w-32 h-32 bg-amber-500/5 rounded-full blur-3xl group-hover/card:bg-amber-500/10 transition-all duration-700"></div>
+
+               <div class="flex items-center justify-between mb-1">
+                 <span class="text-[9px] font-black text-amber-500/80 uppercase tracking-[0.2em]">CAT. ${p.categoria || 'GENERAL'}</span>
+                 ${statusBadge}
+               </div>
+
+               <div class="flex items-center justify-between gap-4 w-full relative z-10">
+                   <!-- Local -->
+                   <div class="flex flex-col items-center w-[35%]">
+                       <div class="relative mb-3">
+                         <div class="absolute inset-0 bg-white/5 rounded-full blur-xl scale-150 group-hover/card:bg-white/10 transition-all duration-700"></div>
+                         <img src="${escudoImg(p.escudo_local || p.escudo, p.equipolocal)}" 
+                              alt="${p.equipolocal}" 
+                              class="w-14 h-14 object-contain relative z-10 drop-shadow-[0_0_15px_rgba(255,255,255,0.1)] group-hover/card:scale-110 transition-transform duration-500" 
+                              onerror="this.src='${escudoImg(null, p.equipolocal)}'">
+                       </div>
+                       <span class="text-white font-black text-[10px] sm:text-[11px] uppercase text-center line-clamp-2 leading-tight tracking-tight">${p.equipolocal || 'DIBA FBC'}</span>
+                   </div>
+
+                   <!-- VS / Score -->
+                   <div class="flex flex-col items-center justify-center w-[30%] px-1">
+                       <div class="mb-2 relative">
+                         ${tieneResultado 
+                           ? `<span class="text-2xl font-black text-white tracking-widest drop-shadow-[0_0_10px_rgba(255,255,255,0.2)]">${p.resultado}</span>`
+                           : `<div class="bg-amber-500 text-slate-950 text-[10px] font-black uppercase tracking-[0.2em] px-3 py-1 rounded-lg shadow-[0_4px_20px_-5px_rgba(245,158,11,0.5)] transform -rotate-2 group-hover/card:rotate-0 transition-all duration-500">${p.hora || 'VS'}</div>`
+                         }
+                       </div>
+                       <span class="text-slate-400 text-[9px] font-bold text-center w-full truncate tracking-tighter uppercase opacity-60">${p.Cancha || 'Cancha'}</span>
+                   </div>
+
+                   <!-- Visitante -->
+                   <div class="flex flex-col items-center w-[35%]">
+                       <div class="relative mb-3">
+                         <div class="absolute inset-0 bg-white/5 rounded-full blur-xl scale-150 group-hover/card:scale-150 transition-all duration-700"></div>
+                         <img src="${escudoImg(p.escudo_visitante, p.equipovisitante)}" 
+                              alt="${p.equipovisitante}" 
+                              class="w-14 h-14 object-contain relative z-10 drop-shadow-[0_0_15px_rgba(255,255,255,0.1)] group-hover/card:scale-110 transition-transform duration-500" 
+                              onerror="this.src='${escudoImg(null, p.equipovisitante)}'">
+                       </div>
+                       <span class="text-white font-black text-[10px] sm:text-[11px] uppercase text-center line-clamp-2 leading-tight tracking-tight">${p.equipovisitante || 'Rival'}</span>
+                   </div>
+               </div>
+
+            <div class="mt-2 flex items-center justify-between gap-4">
+              <div class="flex items-center gap-1.5 opacity-40">
+                <i class="fas fa-calendar-day text-[9px] text-amber-500"></i>
+                <span class="text-[9px] font-bold text-white uppercase italic tracking-tighter">${p.dateOnly}</span>
+              </div>
+              <a href="partidos.html" class="flex-grow inline-flex justify-center items-center gap-2 bg-white/5 hover:bg-amber-500 hover:text-slate-950 border border-white/5 py-2 rounded-xl text-[9px] font-black text-white uppercase tracking-[0.2em] transition-all duration-300">
+                Ficha Técnica <i class="fas fa-chevron-right text-[8px]"></i>
+              </a>
             </div>
-            <a href="partidos.html" class="flex-grow inline-flex justify-center items-center gap-2 bg-white/5 hover:bg-amber-500 hover:text-slate-950 border border-white/5 py-2 rounded-xl text-[9px] font-black text-white uppercase tracking-[0.2em] transition-all duration-300">
-              Ficha Técnica <i class="fas fa-chevron-right text-[8px]"></i>
-            </a>
-          </div>
-        `;
+          `;
+        }
+
         dynamicContainer.appendChild(card);
       });
 

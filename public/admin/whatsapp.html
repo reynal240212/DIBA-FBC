@@ -1369,7 +1369,7 @@
                 const members = result.members || [];
 
                 // Get all players from DB
-                const { data: players } = await supabase.from('identificacion').select('numero, nombre, apellidos, categoria');
+                const { data: players } = await supabase.from('identificacion').select('numero, nombre, apellidos, categoria, celular');
                 grupoPlayers = players || [];
 
                 grupoMembers = (Array.isArray(members) ? members : members.members || []).map(m => {
@@ -1403,12 +1403,14 @@
 
         function findMatchingPlayer(waName, phone) {
             const normalize = s => s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim();
-            // Match by phone number first (most reliable with baileys)
+            // Match by celular (real phone) first — most reliable with Baileys
             if (phone && phone.length >= 10) {
                 const last10 = phone.slice(-10);
+                console.log(`🔍 Buscando WA phone: ${phone} → last10: ${last10}`);
                 for (const p of grupoPlayers) {
-                    const pNum = (p.numero || '').replace(/\D/g, '').slice(-10);
-                    if (pNum && pNum === last10) return p;
+                    const pCel = (p.celular || '').replace(/\D/g, '').slice(-10);
+                    if (pCel) console.log(`   vs ${p.nombre} ${p.apellidos}: celular="${p.celular}" → pCel="${pCel}" ${pCel === last10 ? '✅ MATCH!' : ''}`);
+                    if (pCel && pCel === last10) return p;
                 }
             }
             // Then try by name
@@ -1469,10 +1471,10 @@
             if (!matched.length) { showToast('No hay contactos coincidentes para importar', 'error'); return; }
             let count = 0;
             for (const m of matched) {
-                const { error } = await supabase.from('identificacion').update({ numero: m.phone }).eq('numero', m.playerNumero);
+                const { error } = await supabase.from('identificacion').update({ celular: m.phone }).eq('numero', m.playerNumero);
                 if (!error) count++;
             }
-            showToast(`${count} números actualizados en la DB`, 'success');
+            showToast(`${count} celulares actualizados en la DB`, 'success');
             await loadContacts();
         };
 
