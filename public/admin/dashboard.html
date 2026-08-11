@@ -225,19 +225,31 @@
 
         async function loadUpcomingMatches() {
             const todayStr = new Date().toISOString().split('T')[0];
+            const MATCH_COLS = 'id, fecha, hora, equipolocal, equipovisitante, categoria, Cancha';
+            const ENTRENO_COLS = 'id, fecha, hora, titulo, categoria, lugar';
+
             const [partidosRes, entrenamientosRes] = await Promise.all([
-                supabase.from('partidos').select('*').order('fecha', { ascending: true }),
-                supabase.from('entrenamientos').select('*').order('fecha', { ascending: true })
+                supabase.from('partidos').select(MATCH_COLS)
+                    .gte('fecha', todayStr).order('fecha', { ascending: true }).limit(5),
+                supabase.from('entrenamientos').select(ENTRENO_COLS)
+                    .gte('fecha', todayStr).order('fecha', { ascending: true }).limit(5)
             ]);
 
-            const partidos = (partidosRes.data || []).map(p => ({ ...p, isTraining: false, dateOnly: p.fecha?.includes('T') ? p.fecha.split('T')[0] : p.fecha }));
-            const entrenamientos = (entrenamientosRes.data || []).map(e => ({ ...e, isTraining: true, equipolocal: 'DIBA FBC', equipovisitante: 'ENTRENAMIENTO', Cancha: e.lugar || 'Parque La Pradera', dateOnly: e.fecha?.includes('T') ? e.fecha.split('T')[0] : e.fecha }));
-            
-            let upcoming = [...partidos, ...entrenamientos].filter(x => x.dateOnly >= todayStr).sort((a, b) => new Date(a.fecha) - new Date(b.fecha)).slice(0, 2);
-            
-            if (upcoming.length === 0 && (partidos.length > 0 || entrenamientos.length > 0)) {
-                upcoming = [...partidos, ...entrenamientos].sort((a, b) => new Date(b.fecha) - new Date(a.fecha)).slice(0, 2);
-            }
+            const partidos = (partidosRes.data || []).map(p => ({
+                ...p, isTraining: false,
+                dateOnly: p.fecha?.includes('T') ? p.fecha.split('T')[0] : p.fecha
+            }));
+            const entrenamientos = (entrenamientosRes.data || []).map(e => ({
+                ...e, isTraining: true,
+                equipolocal: 'DIBA FBC', equipovisitante: 'ENTRENAMIENTO',
+                Cancha: e.lugar || 'Parque La Pradera',
+                dateOnly: e.fecha?.includes('T') ? e.fecha.split('T')[0] : e.fecha
+            }));
+
+            let upcoming = [...partidos, ...entrenamientos]
+                .sort((a, b) => new Date(a.fecha) - new Date(b.fecha))
+                .slice(0, 2);
+
 
             const container = document.getElementById('matches-list');
 
