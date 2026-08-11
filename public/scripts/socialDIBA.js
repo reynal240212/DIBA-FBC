@@ -1,0 +1,513 @@
+﻿/**
+ * DIBA FBC - Social DIBA Module
+ */
+// Supabase Configuration - credenciales desde config.js centralizado
+            const { SUPABASE_URL, SUPABASE_ANON_KEY } = window.DIBA_CONFIG;
+
+            const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+            // State management
+            let currentUser = null;
+            let posts = [];
+            let notifications = [];
+
+            // DOM Elements
+            const authSection = document.getElementById('auth-section');
+            const dashboardSection = document.getElementById('dashboard-section');
+            const navButtons = document.getElementById('nav-buttons');
+
+            // Initialize the app
+            async function initApp() {
+                const { data: { session } } = await supabase.auth.getSession();
+                if (session) {
+                    currentUser = session.user;
+                    showDashboard();
+                    loadUserData();
+                    loadPosts();
+                    loadNotifications();
+                    // Aquí podrías cargar eventos y galería
+                    loadUpcomingEvents();
+                    loadGalleryMedia();
+                } else {
+                    showAuth();
+                }
+            }
+
+            // Auth functions
+            async function login() {
+                const email = document.getElementById('email').value;
+                const password = document.getElementById('password').value;
+
+                const { data, error } = await supabase.auth.signInWithPassword({
+                    email,
+                    password
+                });
+
+                if (error) {
+                    alert('Error al iniciar sesión: ' + error.message);
+                } else {
+                    currentUser = data.user;
+                    showDashboard();
+                    loadUserData();
+                    loadPosts();
+                    loadNotifications();
+                    loadUpcomingEvents();
+                    loadGalleryMedia();
+                }
+            }
+
+            async function register() {
+                const name = document.getElementById('register-name').value;
+                const email = document.getElementById('register-email').value;
+                const password = document.getElementById('register-password').value;
+
+                const { data, error } = await supabase.auth.signUp({
+                    email,
+                    password,
+                    options: {
+                        data: {
+                            full_name: name
+                        }
+                    }
+                });
+
+                if (error) {
+                    alert('Error al registrar: ' + error.message);
+                } else {
+                    // Create user profile
+                    await supabase
+                        .from('profiles')
+                        .insert([
+                            {
+                                id: data.user.id,
+                                full_name: name,
+                                // Avatar genérico para Diba FBC
+                                avatar_url: 'https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/c22d8975-4e3b-4736-8eda-0b1682622164.webp',
+                                role: 'jugador', // Por defecto, asignar rol de jugador
+                                created_at: new Date().toISOString()
+                            }
+                        ]);
+
+                    alert('¡Cuenta creada! Revisa tu email para confirmar.');
+                    showLogin();
+                }
+            }
+
+            async function logout() {
+                await supabase.auth.signOut();
+                currentUser = null;
+                showAuth();
+            }
+
+            // UI functions
+            function showAuth() {
+                authSection.classList.remove('hidden');
+                dashboardSection.classList.add('hidden');
+                navButtons.innerHTML = '';
+            }
+
+            function showDashboard() {
+                authSection.classList.add('hidden');
+                dashboardSection.classList.remove('hidden');
+
+                navButtons.innerHTML = `
+                <button onclick="openChat()" class="text-gray-600 hover:text-blue-600">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+                    </svg>
+                </button>
+                <button onclick="logout()" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition duration-300">
+                    Cerrar Sesión
+                </button>
+            `;
+            }
+
+            function showRegister() {
+                document.getElementById('login-form').classList.add('hidden');
+                document.getElementById('register-form').classList.remove('hidden');
+            }
+
+            function showLogin() {
+                document.getElementById('register-form').classList.add('hidden');
+                document.getElementById('login-form').classList.remove('hidden');
+            }
+
+            // Data loading functions
+            async function loadUserData() {
+                const { data: profile } = await supabase
+                    .from('profiles')
+                    .select('*')
+                    .eq('id', currentUser.id)
+                    .single();
+
+                if (profile) {
+                    document.getElementById('profile-name').textContent = profile.full_name;
+                    document.getElementById('profile-email').textContent = currentUser.email;
+                    document.getElementById('profile-avatar').src = profile.avatar_url;
+                    document.getElementById('current-user-avatar').src = profile.avatar_url;
+                    document.getElementById('player-role').textContent = profile.role === 'jugador' ? 'Jugador' : 'Padre';
+
+                    // Aquí cargarías las estadísticas del jugador desde una tabla 'player_stats'
+                    // O si es padre, mostrarías un resumen diferente.
+                    const { data: playerStats } = await supabase
+                        .from('player_stats')
+                        .select('*')
+                        .eq('player_id', currentUser.id)
+                        .single();
+
+                    if (playerStats) {
+                        document.querySelector('#player-stats .font-bold:nth-child(1)').textContent = playerStats.goals || 0;
+                        document.querySelector('#player-stats .font-bold:nth-child(2)').textContent = playerStats.assists || 0;
+                        document.querySelector('#player-stats .font-bold:nth-child(3)').textContent = playerStats.matches_played || 0;
+                        document.querySelector('#player-stats .font-bold:nth-child(4)').textContent = (playerStats.practice_attendance * 100).toFixed(0) + '%';
+                        document.querySelector('#player-stats .font-bold:nth-child(5)').textContent = playerStats.payment_status === 'paid' ? 'Al día' : 'Pendiente';
+                        document.querySelector('#player-stats .font-bold:nth-child(5)').className = playerStats.payment_status === 'paid' ? 'font-bold text-green-600' : 'font-bold text-red-600';
+                    } else {
+                        // Ocultar o mostrar un mensaje si no hay estadísticas para este usuario
+                        document.getElementById('player-stats').innerHTML = '<p class="text-center text-gray-500">No hay estadísticas disponibles.</p>';
+                    }
+                }
+            }
+
+            async function loadPosts() {
+                const { data: postsData } = await supabase
+                    .from('posts')
+                    .select(`
+                    *,
+                    profiles:user_id (full_name, avatar_url),
+                    likes (id),
+                    comments (id)
+                `)
+                    .order('created_at', { ascending: false });
+
+                posts = postsData || [];
+                renderPosts();
+            }
+
+            async function loadNotifications() {
+                // Adaptar para notificaciones específicas del equipo
+                const { data: notificationsData } = await supabase
+                    .from('team_notifications') // Nueva tabla para notificaciones del equipo
+                    .select('*')
+                    // .eq('user_id', currentUser.id) // Las notificaciones del equipo podrían ser para todos o segmentadas
+                    .order('created_at', { ascending: false })
+                    .limit(5);
+
+                notifications = notificationsData || [];
+                renderNotifications();
+            }
+
+            // NUEVA FUNCIONALIDAD: Cargar Próximos Eventos (Prácticas y Partidos)
+            async function loadUpcomingEvents() {
+                const upcomingEventsContainer = document.getElementById('upcoming-events');
+                upcomingEventsContainer.innerHTML = ''; // Limpiar eventos anteriores
+
+                // Suponiendo una tabla 'team_events' con 'type', 'title', 'location', 'date'
+                const { data: events, error } = await supabase
+                    .from('team_events')
+                    .select('*')
+                    .gte('date', new Date().toISOString()) // Solo eventos futuros
+                    .order('date', { ascending: true })
+                    .limit(5); // Mostrar los 5 eventos más próximos
+
+                if (error) {
+                    console.error('Error al cargar eventos:', error.message);
+                    upcomingEventsContainer.innerHTML = '<p class="text-gray-500">Error al cargar eventos.</p>';
+                    return;
+                }
+
+                if (events.length === 0) {
+                    upcomingEventsContainer.innerHTML = '<p class="text-gray-500">No hay eventos próximos.</p>';
+                } else {
+                    events.forEach(event => {
+                        const eventElement = document.createElement('div');
+                        eventElement.className = 'p-3 bg-blue-50 rounded-lg';
+                        const eventDate = new Date(event.date).toLocaleString('es-ES', { weekday: 'long', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+                        eventElement.innerHTML = `
+                        <p class="font-medium text-blue-800">${event.type === 'practice' ? 'Práctica' : 'Partido'}: ${event.title}</p>
+                        <p class="text-sm text-gray-600">${event.location}</p>
+                        <p class="text-xs text-gray-500">${eventDate}</p>
+                    `;
+                        upcomingEventsContainer.appendChild(eventElement);
+                    });
+                }
+            }
+
+            // NUEVA FUNCIONALIDAD: Cargar Galería de Fotos y Videos
+            async function loadGalleryMedia() {
+                const mediaGalleryContainer = document.getElementById('media-gallery');
+                mediaGalleryContainer.innerHTML = ''; // Limpiar galería anterior
+
+                // Suponiendo una tabla 'gallery_media' con 'url', 'type' (image/video), 'description'
+                const { data: media, error } = await supabase
+                    .from('gallery_media')
+                    .select('*')
+                    .order('created_at', { ascending: false })
+                    .limit(4); // Mostrar 4 elementos recientes
+
+                if (error) {
+                    console.error('Error al cargar la galería:', error.message);
+                    mediaGalleryContainer.innerHTML = '<p class="text-gray-500">Error al cargar la galería.</p>';
+                    return;
+                }
+
+                if (media.length === 0) {
+                    mediaGalleryContainer.innerHTML = '<p class="text-gray-500">No hay contenido en la galería.</p>';
+                } else {
+                    media.forEach(item => {
+                        const mediaElement = document.createElement('div');
+                        mediaElement.className = 'w-full h-auto rounded-lg object-cover overflow-hidden'; // Contenedor para la imagen/video
+                        if (item.type === 'image') {
+                            mediaElement.innerHTML = `<img src="${item.url}" alt="${item.description}" class="w-full h-auto rounded-lg object-cover cursor-pointer" onclick="openMediaViewer('${item.url}', '${item.type}')">`;
+                        } else if (item.type === 'video') {
+                            mediaElement.innerHTML = `<video src="${item.url}" controls class="w-full h-auto rounded-lg object-cover"></video>`;
+                        }
+                        mediaGalleryContainer.appendChild(mediaElement);
+                    });
+                }
+                // Añadir el botón "Ver Galería Completa" siempre al final
+                const viewGalleryButton = document.createElement('button');
+                viewGalleryButton.onclick = openGallery;
+                viewGalleryButton.className = 'col-span-2 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-300 mt-2';
+                viewGalleryButton.textContent = 'Ver Galería Completa';
+                mediaGalleryContainer.appendChild(viewGalleryButton);
+            }
+
+            // Render functions
+            function renderPosts() {
+                const postsContainer = document.getElementById('posts-container');
+                postsContainer.innerHTML = '';
+
+                posts.forEach(post => {
+                    const postElement = document.createElement('div');
+                    postElement.className = 'bg-white rounded-lg shadow-md p-6 card-hover';
+                    postElement.innerHTML = `
+                    <div class="flex items-start space-x-4 mb-4">
+                        <img src="${post.profiles.avatar_url}" alt="Foto de perfil de ${post.profiles.full_name}" class="w-12 h-12 rounded-full">
+                        <div>
+                            <h4 class="font-bold">${post.profiles.full_name}</h4>
+                            <p class="text-sm text-gray-600">${new Date(post.created_at).toLocaleString()}</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-800 mb-4">${post.content}</p>
+                    ${post.image_url ? `<img src="${post.image_url}" alt="Imagen de la publicación" class="w-full rounded-lg mb-4">` : ''}
+                    <div class="flex items-center justify-between text-sm text-gray-600">
+                        <div class="flex items-center space-x-4">
+                                                        <button onclick="likePost('${post.id}')" class="flex items-center space-x-1 hover:text-blue-600">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                                </svg>
+                                <span>${post.likes.length}</span>
+                            </button>
+                            <button class="flex items-center space-x-1 hover:text-blue-600">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+                                </svg>
+                                <span>${post.comments.length}</span>
+                            </button>
+                        </div>
+                        ${post.user_id === currentUser.id ? `
+                            <button onclick="deletePost('${post.id}')" class="text-red-500 hover:text-red-700">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                </svg>
+                            </button>
+                        ` : ''}
+                    </div>
+                `;
+                    postsContainer.appendChild(postElement);
+                });
+            }
+
+            function renderNotifications() {
+                const container = document.getElementById('notifications');
+                container.innerHTML = '';
+
+                if (notifications.length === 0) {
+                    container.innerHTML = '<p class="text-gray-500 text-sm">No hay notificaciones recientes.</p>';
+                } else {
+                    notifications.forEach(notification => {
+                        const notificationElement = document.createElement('div');
+                        notificationElement.className = `p-3 rounded-lg ${notification.type === 'cancelation' ? 'bg-red-50' : 'bg-green-50'}`;
+                        notificationElement.innerHTML = `
+                        <p class="text-sm ${notification.type === 'cancelation' ? 'text-red-800' : 'text-green-800'} font-medium">${notification.message}</p>
+                        <p class="text-xs text-gray-500">${new Date(notification.created_at).toLocaleString()}</p>
+                    `;
+                        container.appendChild(notificationElement);
+                    });
+                }
+            }
+
+            // Post functions
+            async function createPost() {
+                const content = document.getElementById('post-content').value.trim();
+                if (!content) return;
+
+                const { error } = await supabase
+                    .from('posts')
+                    .insert([
+                        {
+                            content,
+                            user_id: currentUser.id,
+                            created_at: new Date().toISOString()
+                        }
+                    ]);
+
+                if (error) {
+                    alert('Error al crear la publicación: ' + error.message);
+                } else {
+                    document.getElementById('post-content').value = '';
+                    loadPosts();
+                }
+            }
+
+            async function likePost(postId) {
+                // Verificar si el usuario ya le dio "like"
+                const { data: existingLike } = await supabase
+                    .from('likes')
+                    .select('id')
+                    .eq('post_id', postId)
+                    .eq('user_id', currentUser.id)
+                    .single();
+
+                if (existingLike) {
+                    // Si ya existe, eliminar el like (unlike)
+                    const { error } = await supabase
+                        .from('likes')
+                        .delete()
+                        .eq('post_id', postId)
+                        .eq('user_id', currentUser.id);
+
+                    if (error) {
+                        console.error('Error al quitar like:', error.message);
+                    } else {
+                        loadPosts();
+                    }
+                } else {
+                    // Si no existe, agregar el like
+                    const { error } = await supabase
+                        .from('likes')
+                        .insert([
+                            {
+                                post_id: postId,
+                                user_id: currentUser.id,
+                                created_at: new Date().toISOString()
+                            }
+                        ]);
+
+                    if (error) {
+                        console.error('Error al dar like:', error.message);
+                    } else {
+                        loadPosts();
+                    }
+                }
+            }
+
+            async function deletePost(postId) {
+                if (confirm('¿Estás seguro de que quieres eliminar esta publicación?')) {
+                    const { error } = await supabase
+                        .from('posts')
+                        .delete()
+                        .eq('id', postId);
+
+                    if (!error) {
+                        loadPosts();
+                    } else {
+                        alert('Error al eliminar la publicación: ' + error.message);
+                    }
+                }
+            }
+
+            // NUEVA FUNCIONALIDAD: Perfil Completo de Jugador
+            function viewFullProfile() {
+                alert('Esta función te llevaría a una página/modal con el perfil completo del jugador.');
+                // Aquí podrías redirigir a una ruta como '/profile?id=' + currentUser.id
+                // o abrir un modal con más detalles.
+                // Para un MVP, simplemente una alerta es suficiente.
+            }
+
+            // NUEVA FUNCIONALIDAD: Abrir Galería Completa
+            function openGallery() {
+                alert('Esta función te llevaría a una página/modal con la galería completa de fotos y videos.');
+                // Implementar un modal o una nueva página para la galería completa.
+                // Por ahora, solo una alerta.
+            }
+
+            // Chat functions
+            function openChat() {
+                document.getElementById('chat-modal').classList.remove('hidden');
+                // Aquí cargarías los mensajes del chat y establecerías una suscripción en tiempo real
+                // para nuevos mensajes.
+                alert('El chat del equipo está abierto. ¡Aquí se cargarán los mensajes!');
+            }
+
+            function closeChat() {
+                document.getElementById('chat-modal').classList.add('hidden');
+            }
+
+            // Media Viewer (opcional, para ver fotos/videos en grande)
+            function openMediaViewer(url, type) {
+                // Implementar un modal para mostrar la imagen/video en grande
+                alert(`Ver ${type}: ${url}`);
+                // Ejemplo de cómo podrías implementarlo (requiere HTML adicional para el modal)
+                /*
+                const viewerModal = document.createElement('div');
+                viewerModal.className = 'fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-[100]';
+                viewerModal.innerHTML = `
+                    <div class="relative bg-white p-4 rounded-lg max-w-3xl max-h-screen overflow-auto">
+                        <button onclick="this.parentElement.parentElement.remove()" class="absolute top-2 right-2 text-white bg-red-500 rounded-full w-8 h-8 flex items-center justify-center">✕</button>
+                        ${type === 'image' ? `<img src="${url}" class="max-w-full max-h-[80vh] object-contain"/>` : `<video src="${url}" controls class="max-w-full max-h-[80vh]"></video>`}
+                    </div>
+                `;
+                document.body.appendChild(viewerModal);
+                */
+            }
+
+
+            // Initialize the app
+            initApp();
+
+            // Real-time subscriptions
+            supabase
+                .channel('posts')
+                .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'posts' }, payload => {
+                    loadPosts(); // Recargar posts cuando se añade uno nuevo
+                })
+                .on('postgres_changes', { event: 'DELETE', schema: 'public', table: 'posts' }, payload => {
+                    loadPosts(); // Recargar posts cuando se elimina uno
+                })
+                .subscribe();
+
+            supabase
+                .channel('likes')
+                .on('postgres_changes', { event: '*', schema: 'public', table: 'likes' }, payload => {
+                    loadPosts(); // Recargar posts cuando cambia el número de likes
+                })
+                .subscribe();
+
+
+            // Suscripción para notificaciones del equipo
+            supabase
+                .channel('team_notifications')
+                .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'team_notifications' }, payload => {
+                    // Solo cargar si la notificación es relevante para el usuario logueado o es una notificación general
+                    // Aquí podrías tener lógica para filtrar por 'role', 'team_id', etc.
+                    loadNotifications();
+                })
+                .subscribe();
+
+            // Suscripción para eventos (prácticas/partidos)
+            supabase
+                .channel('team_events')
+                .on('postgres_changes', { event: '*', schema: 'public', table: 'team_events' }, payload => {
+                    loadUpcomingEvents();
+                })
+                .subscribe();
+
+            // Suscripción para galería (fotos/videos)
+            supabase
+                .channel('gallery_media')
+                .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'gallery_media' }, payload => {
+                    loadGalleryMedia();
+                })
+                .subscribe();
