@@ -3,20 +3,7 @@
  * Handles the dynamic schedule banner for matches and training sessions.
  */
 import { supabase } from '../../core/supabase.js';
-
-function formatFecha(fechaStr) {
-    if (!fechaStr) return '';
-    // Normaliza: toma solo la parte de fecha (YYYY-MM-DD) y agrega mediodía UTC para evitar desfase
-    const parteDate = fechaStr.includes('T') ? fechaStr.split('T')[0] : fechaStr;
-    const [year, month, day] = parteDate.split('-').map(Number);
-    const date = new Date(year, month - 1, day); // Fecha local, sin zona horaria
-    return date.toLocaleDateString('es-ES', {
-        weekday: 'long',
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric'
-    });
-}
+import { formatearFechaLarga, getEscudoUrl } from '../../core/utils.js';
 
 export async function initMatchBanner() {
     const dynamicContainer = document.getElementById("dynamic-match-banner-container");
@@ -28,10 +15,25 @@ export async function initMatchBanner() {
         const today = new Date();
         const targetDate = today.toISOString().split('T')[0];
 
+        // Fecha hace 30 días para mostrar también la programación reciente
+        const hace30Dias = new Date(today);
+        hace30Dias.setDate(hace30Dias.getDate() - 30);
+        const desde = hace30Dias.toISOString().split('T')[0];
+
         // Obtener partidos y entrenamientos en paralelo
+        // Solo cols necesarias + filtro de fecha para no descargar todo el historial
+        const PARTIDOS_COLS = 'id, fecha, hora, equipolocal, equipovisitante, resultado, categoria, Cancha, descripcion, escudo_local, escudo_visitante, escudo';
+        const ENTRENOS_COLS = 'id, fecha, hora, titulo, categoria, lugar';
+
         const [partidosRes, entrenamientosRes] = await Promise.all([
-            supabase.from('partidos').select('*').order('fecha', { ascending: true }),
-            supabase.from('entrenamientos').select('*').order('fecha', { ascending: true })
+            supabase.from('partidos').select(PARTIDOS_COLS)
+                .gte('fecha', desde)
+                .order('fecha', { ascending: true })
+                .limit(50),
+            supabase.from('entrenamientos').select(ENTRENOS_COLS)
+                .gte('fecha', desde)
+                .order('fecha', { ascending: true })
+                .limit(50)
         ]);
 
         if (partidosRes.error) throw partidosRes.error;
@@ -118,7 +120,7 @@ export async function initMatchBanner() {
             titleContainer.innerHTML = `
                 <div class="flex flex-col items-center justify-center animate__animated animate__fadeIn">
                     <span class="text-[10px] font-black ${colorClass} uppercase tracking-[0.3em] mb-1">${label}</span>
-                    <h2 class="text-white font-black text-lg sm:text-xl uppercase tracking-tight">${formatFecha(displayEvents[0].fecha)}</h2>
+                    <h2 class="text-white font-black text-lg sm:text-xl uppercase tracking-tight">${formatearFechaLarga(displayEvents[0].fecha)}</h2>
                     <div class="w-12 h-1 ${bgClass} mt-2 rounded-full shadow-[0_0_10px_rgba(245,158,11,0.5)]"></div>
                 </div>
             `;
@@ -138,7 +140,7 @@ export async function initMatchBanner() {
     }
 }
 
-function renderMatchCard(p) {
+export function renderMatchCard(p) {
     const card = document.createElement("div");
     card.className = "flex-none w-[85vw] max-w-[360px] sm:w-[380px] snap-center bg-slate-900/40 backdrop-blur-xl border border-white/5 rounded-[2rem] p-5 sm:p-6 flex flex-col gap-5 hover:bg-slate-800/60 hover:border-amber-500/30 transition-all duration-500 group/card relative overflow-hidden shadow-2xl animate__animated animate__fadeInUp";
     
@@ -155,12 +157,6 @@ function renderMatchCard(p) {
     } else {
         statusBadge = '<span class="bg-blue-500/10 text-blue-400 text-[9px] font-black px-3 py-1 rounded-full border border-blue-500/20 uppercase tracking-widest">Partido</span>';
     }
-
-    const escudoImg = (url, name) => {
-        if (name?.toUpperCase().includes('DIBA')) return "images/ESCUDO.webp";
-        if (!url) return `https://ui-avatars.com/api/?name=${encodeURIComponent(name || 'R')}&background=0f172a&color=f59e0b&bold=true&font-size=0.55`;
-        return `https://wsrv.nl/?url=${encodeURIComponent(url)}&w=100&h=100&fit=contain&default=https://ui-avatars.com/api/?name=${encodeURIComponent(name || 'R')}&background=0f172a&color=f59e0b`;
-    };
 
     card.innerHTML = `
         <!-- Glow effect -->
@@ -179,7 +175,7 @@ function renderMatchCard(p) {
             <div class="flex flex-col items-center w-[38%] group/team">
                 <div class="relative w-16 h-16 sm:w-20 sm:h-20 flex items-center justify-center mb-3">
                     <div class="absolute inset-0 bg-white/5 rounded-full blur-2xl group-hover/card:scale-125 transition-all duration-700"></div>
-                    <img src="${escudoImg(p.escudo_local || p.escudo, p.equipolocal)}" 
+                    <img src="${getEscudoUrl(p.escudo_local || p.escudo, p.equipolocal)}" 
                          class="w-full h-full object-contain relative z-10 drop-shadow-[0_8px_15px_rgba(0,0,0,0.5)] group-hover/card:scale-110 transition-transform duration-500" 
                          onerror="this.src='images/ESCUDO.webp'">
                 </div>
@@ -201,9 +197,9 @@ function renderMatchCard(p) {
             <div class="flex flex-col items-center w-[38%] group/team">
                 <div class="relative w-16 h-16 sm:w-20 sm:h-20 flex items-center justify-center mb-3">
                     <div class="absolute inset-0 bg-white/5 rounded-full blur-2xl group-hover/card:scale-125 transition-all duration-700"></div>
-                    <img src="${escudoImg(p.escudo_visitante, p.equipovisitante)}" 
+                    <img src="${getEscudoUrl(p.escudo_visitante, p.equipovisitante)}" 
                          class="w-full h-full object-contain relative z-10 drop-shadow-[0_8px_15px_rgba(0,0,0,0.5)] group-hover/card:scale-110 transition-transform duration-500" 
-                         onerror="this.src='${escudoImg(null, p.equipovisitante)}'">
+                         onerror="this.src='${getEscudoUrl(null, p.equipovisitante)}'">
                 </div>
                 <span class="text-white font-black text-xs sm:text-sm uppercase text-center line-clamp-2 leading-tight tracking-tight group-hover/team:text-amber-400 transition-colors">${p.equipovisitante || 'Rival'}</span>
             </div>
@@ -233,7 +229,7 @@ function renderMatchCard(p) {
     return card;
 }
 
-function renderTrainingCard(e) {
+export function renderTrainingCard(e) {
     const card = document.createElement("div");
     card.className = "flex-none w-[85vw] max-w-[360px] sm:w-[380px] snap-center bg-slate-900/40 backdrop-blur-xl border border-emerald-500/20 rounded-[2rem] p-5 sm:p-6 flex flex-col gap-5 hover:bg-slate-800/60 hover:border-emerald-500/40 transition-all duration-500 group/card relative overflow-hidden shadow-2xl animate__animated animate__fadeInUp";
     
@@ -298,4 +294,3 @@ function setupScroll(el) {
         el.scrollLeft = scrollLeft - (x - startX) * 2;
     });
 }
-
