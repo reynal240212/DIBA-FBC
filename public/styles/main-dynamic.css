@@ -1,15 +1,20 @@
 /* public/styles/main-dynamic.css */
 :root {
-  /* DIBA Brand Colors - Unified */
-  --diba-yellow: #FFD700;
-  --diba-yellow-rgb: 255, 215, 0;
-  --diba-navy: #002a40;
-  --diba-navy-dark: #001a2e;
+  /* DIBA Brand Colors - White-First System */
+  --diba-white: #ffffff;
+  --diba-white-soft: #f8fafc;
+  --diba-white-border: #e2e8f0;
+  --diba-yellow: #eab308;
+  --diba-yellow-hover: #d97706;
+  --diba-yellow-rgb: 234, 179, 8;
+  --diba-black: #0f172a;
+  --diba-black-dark: #020617;
+  --diba-muted: #64748b;
   
-  /* Shared Glassmorphism */
-  --glass-bg: rgba(15, 23, 42, 0.6);
+  /* Shared Glassmorphism Light */
+  --glass-bg: rgba(255, 255, 255, 0.85);
   --glass-blur: 12px;
-  --glass-border: rgba(255, 255, 255, 0.1);
+  --glass-border: rgba(226, 232, 240, 0.8);
   
   /* Animations */
   --transition-smooth: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
@@ -99,7 +104,7 @@
 
 /* Skeleton UI Refined */
 .skeleton-box {
-  background: linear-gradient(90deg, #1e293b 25%, #334155 50%, #1e293b 75%);
+  background: linear-gradient(90deg, #e2e8f0 25%, #f1f5f9 50%, #e2e8f0 75%);
   background-size: 200% 100%;
   animation: skeleton-loading 1.5s infinite;
 }

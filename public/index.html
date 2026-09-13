@@ -47,14 +47,31 @@
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- Tailwind Configuration to replace custom CSS with Premium Look -->
+  <!-- Tailwind Configuration to replace custom CSS with White-First Premium Look -->
   <script>
     tailwind.config = {
       theme: {
         extend: {
+          colors: {
+            diba: {
+              white: '#FFFFFF',
+              soft: '#F8FAFC',
+              border: '#E2E8F0',
+              yellow: '#EAB308',
+              yellowHover: '#D97706',
+              yellowLight: '#FEF9C3',
+              black: '#0F172A',
+              dark: '#020617',
+              muted: '#64748B'
+            }
+          },
           fontFamily: {
             sans: ['Outfit', 'Montserrat', 'system-ui', '-apple-system', 'sans-serif'],
             display: ['Montserrat', 'sans-serif'],
+          },
+          boxShadow: {
+            'diba-card': '0 4px 20px -2px rgba(15, 23, 42, 0.05)',
+            'diba-yellow': '0 10px 25px -5px rgba(234, 179, 8, 0.3)',
           },
           keyframes: {
             fadeInUpSoft: {
@@ -80,20 +97,20 @@
 
 
   <style>
-    /* Custom Scrollbar for Premium Look */
+    /* Custom Scrollbar for White-First Premium Look */
     ::-webkit-scrollbar {
       width: 8px;
     }
     ::-webkit-scrollbar-track {
-      background: #020617;
+      background: #F8FAFC;
     }
     ::-webkit-scrollbar-thumb {
-      background: #1e293b;
+      background: #CBD5E1;
       border-radius: 9999px;
-      border: 2px solid #020617;
+      border: 2px solid #F8FAFC;
     }
     ::-webkit-scrollbar-thumb:hover {
-      background: #eab308;
+      background: #EAB308;
     }
 
     /* Tabla clasificación Premium */
