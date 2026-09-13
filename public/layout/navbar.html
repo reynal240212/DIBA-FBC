@@ -1,5 +1,5 @@
 <nav
-  class="fixed top-0 inset-x-0 z-[1000] bg-slate-900/80 backdrop-blur-xl border-b border-white/5 shadow-2xl transition-all duration-500">
+  class="fixed top-0 inset-x-0 z-[1000] bg-white/90 backdrop-blur-xl border-b border-slate-200 shadow-md transition-all duration-500">
   <style>
     /* Supresión de widgets flotantes cuando el menú está abierto */
     body.nav-open {
@@ -8,7 +8,7 @@
     
     body.nav-open nav {
       z-index: 20000 !important;
-      background: #0f172a !important;
+      background: #ffffff !important;
       height: 100vh !important;
       overflow-y: auto !important;
     }
@@ -35,27 +35,27 @@
       </a>
 
       <div class="hidden lg:flex lg:items-center">
-        <ul class="flex items-center space-x-7 text-[13px] font-bold text-white tracking-wide">
+        <ul class="flex items-center space-x-7 text-[13px] font-bold text-slate-900 tracking-wide">
 
           <li class="relative group">
-            <a href="index.html" class="hover:text-amber-400 transition-colors uppercase">Inicio</a>
-            <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-amber-400 transition-all group-hover:w-full"></span>
+            <a href="index.html" class="hover:text-amber-500 transition-colors uppercase">Inicio</a>
+            <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-amber-500 transition-all group-hover:w-full"></span>
           </li>
 
           <li class="relative group py-7">
             <button type="button"
-              class="flex items-center gap-1.5 hover:text-amber-400 transition-colors uppercase outline-none">
+              class="flex items-center gap-1.5 hover:text-amber-500 transition-colors uppercase outline-none">
               Club
               <i class="fas fa-chevron-down text-[9px] transition-transform group-hover:rotate-180"></i>
             </button>
             <ul
-              class="absolute left-0 top-full w-48 bg-slate-900/95 backdrop-blur-2xl border border-white/10 rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.7)] py-3 opacity-0 invisible translate-y-4 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 transition-all duration-500 z-[1100]">
+              class="absolute left-0 top-full w-48 bg-white border border-slate-200 rounded-2xl shadow-xl py-3 opacity-0 invisible translate-y-4 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 transition-all duration-500 z-[1100]">
               <li><a href="Historia.html"
-                  class="block px-5 py-2.5 hover:bg-amber-500 hover:text-slate-900 transition-colors">Historia</a></li>
+                  class="block px-5 py-2.5 hover:bg-amber-500 hover:text-slate-950 transition-colors text-slate-900">Historia</a></li>
               <li><a href="escudo.html"
-                  class="block px-5 py-2.5 hover:bg-amber-500 hover:text-slate-900 transition-colors">Escudo</a></li>
+                  class="block px-5 py-2.5 hover:bg-amber-500 hover:text-slate-950 transition-colors text-slate-900">Escudo</a></li>
               <li><a href="himno.html"
-                  class="block px-5 py-2.5 hover:bg-amber-500 hover:text-slate-900 transition-colors">Himno</a></li>
+                  class="block px-5 py-2.5 hover:bg-amber-500 hover:text-slate-950 transition-colors text-slate-900">Himno</a></li>
             </ul>
           </li>
 
