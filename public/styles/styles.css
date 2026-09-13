@@ -36,25 +36,12 @@ body {
 }
 
 /* 2. Textos y Títulos */
-h1, h2, h3, h4, h5, h6,
-.h1, .h2, .h3, .h4, .h5, .h6 {
-  color: #0f172a !important;
-}
-
-.text-slate-900, .text-slate-800, .text-slate-700 {
-  color: #0f172a !important;
-}
-
-.text-muted {
-  color: var(--text-muted) !important;
-}
-
 .text-primary {
-  color: var(--gold) !important;
+  color: var(--gold);
 }
 
 .text-success {
-  color: #10b981 !important;
+  color: #10b981;
 }
 
 /* 3. Formularios y Entradas */
