@@ -5,7 +5,7 @@
     <!-- Metadatos básicos -->
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Cuerpo Técnico | DIBA FBC - Líderes en la Cancha</title>
+    <title>Cuerpo Técnico | DIBA FBC — Líderes y Formadores</title>
     
     <!-- Open Graph (Facebook, WhatsApp, LinkedIn) -->
     <meta property="og:title" content="Cuerpo Técnico - DIBA FBC | Líderes en la Cancha" />
@@ -26,308 +26,320 @@
     <link rel="icon" type="image/webp" href="images/ESCUDO.webp?v=2" />
     <link rel="shortcut icon" href="images/ESCUDO.ico" type="image/x-icon" />
 
-    <!-- Font Awesome 6.7.2 -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
-
-    <!-- Animate.css -->
+    <!-- Fonts y estilos globales -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;700;900&family=Montserrat:ital,wght@0,400;0,700;1,900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
-
-    <!-- AOS (Animate on Scroll) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" />
 
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
 
-    <!-- Estilos globales -->
-    <link rel="stylesheet" href="styles/styles.css" />
+    <!-- Configuración Tailwind idéntica a index.html -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        diba: {
+                            white: '#FFFFFF',
+                            soft: '#F8FAFC',
+                            border: '#E2E8F0',
+                            yellow: '#EAB308',
+                            yellowHover: '#D97706',
+                            black: '#0F172A',
+                            dark: '#020617',
+                            muted: '#64748B'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Outfit', 'Montserrat', 'system-ui', 'sans-serif'],
+                        display: ['Montserrat', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
 
+    <!-- Custom Scrollbar -->
     <style>
-        .staff-card {
-            background: rgba(15, 23, 42, 0.55);
-            backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .staff-card:hover {
-            transform: translateY(-10px);
-            border-color: rgba(245, 158, 11, 0.4);
-            box-shadow: 0 20px 40px -15px rgba(245, 158, 11, 0.15);
-        }
-
-        .img-glow {
-            box-shadow: 0 0 25px rgba(245, 158, 11, 0.25);
-        }
-
-        .staff-card:hover .img-glow {
-            box-shadow: 0 0 35px rgba(245, 158, 11, 0.45);
-            transform: scale(1.03);
-        }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #F8FAFC; }
+        ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 9999px; }
+        ::-webkit-scrollbar-thumb:hover { background: #EAB308; }
     </style>
 </head>
 
-<body class="bg-[#020617] text-white selection:bg-amber-500/30 font-sans min-h-screen flex flex-col">
-    <!-- Contenedores dinámicos -->
+<body class="bg-slate-50 text-slate-900 font-sans min-h-screen flex flex-col selection:bg-yellow-500/30 overflow-x-hidden">
+    <!-- Navbar Container -->
     <div id="navbar-container"></div>
 
     <main class="flex-grow">
-        <!-- HEADER HERO -->
-        <section class="relative pt-32 pb-20 overflow-hidden">
-            <!-- Destellos de luz en fondo -->
-            <div class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-amber-500/10 rounded-full blur-[140px] pointer-events-none"></div>
-            <div class="absolute top-1/3 right-10 w-[400px] h-[400px] bg-blue-500/5 rounded-full blur-[120px] pointer-events-none"></div>
+        <!-- HERO HEADLINE (Sincronizado con estilo oscuro de index.html) -->
+        <section class="relative py-28 bg-slate-900 overflow-hidden text-center text-white">
+            <!-- Imagen de fondo con filtro -->
+            <div class="absolute inset-0 pointer-events-none opacity-25">
+                <img src="images/estadio.webp" class="w-full h-full object-cover" alt="Estadio DIBA FBC" />
+                <div class="absolute inset-0 bg-gradient-to-b from-slate-950/90 via-slate-950/70 to-slate-950"></div>
+            </div>
 
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center" data-aos="fade-down">
-                <!-- Badge -->
-                <div class="inline-flex items-center gap-2 px-4 py-1.5 bg-amber-500/10 text-amber-400 border border-amber-500/20 rounded-full text-xs font-black uppercase tracking-widest mb-6 backdrop-blur-md">
-                    <i class="fas fa-award text-amber-500"></i> Liderazgo y Formación Deportiva
+            <div class="max-w-6xl mx-auto px-6 relative z-10 space-y-6" data-aos="fade-down">
+                <!-- Badge Pill -->
+                <div class="inline-block px-6 py-2 border border-yellow-500/30 bg-yellow-500/10 rounded-full backdrop-blur-md">
+                    <span class="text-yellow-400 text-xs font-black tracking-[0.3em] uppercase">Liderazgo & Formación Deportiva</span>
                 </div>
 
-                <!-- Título principal -->
-                <h1 class="text-4xl sm:text-6xl lg:text-7xl font-black uppercase italic tracking-tighter text-white mb-6">
-                    Cuerpo <span class="text-amber-500">Técnico</span>
+                <!-- Título -->
+                <h1 class="text-5xl md:text-7xl font-black italic uppercase tracking-tighter font-display leading-none">
+                    CUERPO <span class="text-yellow-500 drop-shadow-[0_0_25px_rgba(234,179,8,0.3)]">TÉCNICO</span>
                 </h1>
 
                 <!-- Subtítulo -->
-                <p class="text-slate-300 text-base sm:text-xl max-w-3xl mx-auto leading-relaxed font-medium mb-12">
-                    Profesionales dedicados a potenciar el talento, la disciplina táctica y el alto rendimiento de nuestros atletas en la cancha.
+                <p class="text-slate-200 text-base md:text-xl max-w-3xl mx-auto leading-relaxed font-medium">
+                    Profesionales dedicados a potenciar el talento, la disciplina táctica y la formación integral de nuestros atletas en Barranquilla.
                 </p>
 
-                <!-- Estadísticas rápidas -->
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto" data-aos="zoom-in" data-aos-delay="100">
-                    <div class="p-4 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-md">
-                        <span class="block text-3xl sm:text-4xl font-black text-amber-400">+15</span>
-                        <span class="text-xs uppercase tracking-wider text-slate-400 font-semibold">Años de Trayectoria</span>
+                <!-- Tarjetas de Estadísticas Rápida -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto pt-8" data-aos="zoom-in" data-aos-delay="100">
+                    <div class="p-5 rounded-2xl bg-white/10 border border-white/15 backdrop-blur-md shadow-lg">
+                        <span class="block text-3xl md:text-4xl font-black text-yellow-400 font-display">+15</span>
+                        <span class="text-[11px] uppercase tracking-wider text-slate-300 font-bold">Años de Experiencia</span>
                     </div>
-                    <div class="p-4 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-md">
-                        <span class="block text-3xl sm:text-4xl font-black text-amber-400">100%</span>
-                        <span class="text-xs uppercase tracking-wider text-slate-400 font-semibold">Formación Integral</span>
+                    <div class="p-5 rounded-2xl bg-white/10 border border-white/15 backdrop-blur-md shadow-lg">
+                        <span class="block text-3xl md:text-4xl font-black text-yellow-400 font-display">100%</span>
+                        <span class="text-[11px] uppercase tracking-wider text-slate-300 font-bold">Formación Integral</span>
                     </div>
-                    <div class="p-4 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-md">
-                        <span class="block text-3xl sm:text-4xl font-black text-amber-400">3</span>
-                        <span class="text-xs uppercase tracking-wider text-slate-400 font-semibold">Especialistas Clave</span>
+                    <div class="p-5 rounded-2xl bg-white/10 border border-white/15 backdrop-blur-md shadow-lg">
+                        <span class="block text-3xl md:text-4xl font-black text-yellow-400 font-display">2</span>
+                        <span class="text-[11px] uppercase tracking-wider text-slate-300 font-bold">Líderes Estratégicos</span>
                     </div>
-                    <div class="p-4 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-md">
-                        <span class="block text-3xl sm:text-4xl font-black text-amber-400">+500</span>
-                        <span class="text-xs uppercase tracking-wider text-slate-400 font-semibold">Jugadores Impactados</span>
+                    <div class="p-5 rounded-2xl bg-white/10 border border-white/15 backdrop-blur-md shadow-lg">
+                        <span class="block text-3xl md:text-4xl font-black text-yellow-400 font-display">+500</span>
+                        <span class="text-[11px] uppercase tracking-wider text-slate-300 font-bold">Jugadores Formados</span>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- SECCIÓN INTEGRANTES DEL CUERPO TÉCNICO -->
-        <section id="equipo" class="py-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16" data-aos="fade-up">
-                <span class="text-amber-500 font-black uppercase tracking-[0.2em] text-xs">Nuestro Staff</span>
-                <h2 class="text-3xl sm:text-5xl font-black uppercase italic tracking-tighter text-white mt-2">
-                    Líderes de <span class="text-amber-500">DIBA FBC</span>
-                </h2>
-                <div class="w-20 h-1 bg-amber-500 mx-auto mt-4 rounded-full"></div>
-            </div>
-
-            <div class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-
-                <!-- TARJETA 1: REINALDO PEREZ -->
-                <div class="staff-card rounded-3xl p-8 flex flex-col justify-between relative overflow-hidden group" data-aos="fade-up" data-aos-delay="100">
-                    <div class="absolute top-0 right-0 w-32 h-32 bg-amber-500/10 rounded-full blur-2xl group-hover:bg-amber-500/20 transition-all"></div>
-                    
-                    <div>
-                        <!-- Foto del Integrante -->
-                        <div class="relative w-40 h-40 mx-auto mb-6">
-                            <img src="images/profesor.webp" alt="Reinaldo Pérez, Director Técnico"
-                                class="w-full h-full object-cover rounded-full border-4 border-amber-500 img-glow transition-all duration-500"
-                                loading="lazy" />
-                            <div class="absolute bottom-1 right-1 bg-amber-500 text-slate-950 w-9 h-9 rounded-full flex items-center justify-center text-sm font-black shadow-lg">
-                                <i class="fas fa-whistle"></i>
-                            </div>
-                        </div>
-
-                        <!-- Info Básica -->
-                        <div class="text-center mb-6">
-                            <h3 class="text-2xl font-black text-white tracking-tight">Reinaldo Pérez</h3>
-                            <span class="inline-block px-3 py-1 bg-amber-500/20 text-amber-400 border border-amber-500/30 rounded-full text-xs font-bold uppercase tracking-wider mt-2">
-                                Director Técnico y Deportivo
-                            </span>
-                        </div>
-
-                        <!-- Etiquetas de Especialidad -->
-                        <div class="flex flex-wrap justify-center gap-1.5 mb-6">
-                            <span class="px-2.5 py-0.5 bg-slate-800 text-slate-300 rounded-md text-[11px] font-semibold border border-white/5">Táctica y Estrategia</span>
-                            <span class="px-2.5 py-0.5 bg-slate-800 text-slate-300 rounded-md text-[11px] font-semibold border border-white/5">Liderazgo</span>
-                            <span class="px-2.5 py-0.5 bg-slate-800 text-slate-300 rounded-md text-[11px] font-semibold border border-white/5">Fútbol Formativo</span>
-                        </div>
-
-                        <!-- Bio -->
-                        <p class="text-slate-300 text-sm leading-relaxed text-justify mb-6">
-                            Con más de 15 años de experiencia en la dirección técnica en Barranquilla, ha liderado múltiples categorías competitivas. Su enfoque combina la disciplina táctica, la pasión caribeña y la formación integral en valores dentro y fuera de la cancha.
-                        </p>
-
-                        <!-- Puntos Clave -->
-                        <ul class="space-y-2 text-xs text-slate-300 mb-8 border-t border-white/10 pt-4">
-                            <li class="flex items-center gap-2">
-                                <i class="fas fa-check-circle text-amber-500"></i> Planificación táctica semanal y microciclos
-                            </li>
-                            <li class="flex items-center gap-2">
-                                <i class="fas fa-check-circle text-amber-500"></i> Desarrollo de talento juvenil y liderazgo
-                            </li>
-                            <li class="flex items-center gap-2">
-                                <i class="fas fa-check-circle text-amber-500"></i> Dirección en torneos departamentales y locales
-                            </li>
-                        </ul>
-                    </div>
-
-                    <!-- Botón de Contacto -->
-                    <div class="pt-4 border-t border-white/10 flex gap-2">
-                        <a href="mailto:reinaldo@dibafbc.com"
-                            class="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black rounded-xl text-xs uppercase tracking-wider transition-colors shadow-lg">
-                            <i class="fas fa-envelope"></i> Contactar
-                        </a>
-                        <a href="https://wa.me/573000000000?text=Hola%20Profe%20Reinaldo,%20quisiera%20informaci%C3%B3n%20sobre%20DIBA%20FBC" target="_blank" rel="noopener noreferrer"
-                            class="px-3.5 py-2.5 bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-400 border border-emerald-500/30 rounded-xl text-xs font-bold transition-colors">
-                            <i class="fab fa-whatsapp text-sm"></i>
-                        </a>
-                    </div>
-                </div>
-
-                <!-- TARJETA 2: REINALDO PEREZ NAVAS -->
-                <div class="staff-card rounded-3xl p-8 flex flex-col justify-between relative overflow-hidden group" data-aos="fade-up" data-aos-delay="200">
-                    <div class="absolute top-0 right-0 w-32 h-32 bg-blue-500/10 rounded-full blur-2xl group-hover:bg-blue-500/20 transition-all"></div>
-                    
-                    <div>
-                        <!-- Foto del Integrante -->
-                        <div class="relative w-40 h-40 mx-auto mb-6">
-                            <img src="images/reinaldoNavas.webp" alt="Reinaldo Pérez Navas, Asistente Técnico y Desarrollador"
-                                class="w-full h-full object-cover rounded-full border-4 border-amber-500 img-glow transition-all duration-500"
-                                loading="lazy" />
-                            <div class="absolute bottom-1 right-1 bg-amber-500 text-slate-950 w-9 h-9 rounded-full flex items-center justify-center text-sm font-black shadow-lg">
-                                <i class="fas fa-laptop-code"></i>
-                            </div>
-                        </div>
-
-                        <!-- Info Básica -->
-                        <div class="text-center mb-6">
-                            <h3 class="text-2xl font-black text-white tracking-tight">Reinaldo Pérez Navas</h3>
-                            <span class="inline-block px-3 py-1 bg-amber-500/20 text-amber-400 border border-amber-500/30 rounded-full text-xs font-bold uppercase tracking-wider mt-2">
-                                Asistente Técnico & Developer
-                            </span>
-                        </div>
-
-                        <!-- Etiquetas de Especialidad -->
-                        <div class="flex flex-wrap justify-center gap-1.5 mb-6">
-                            <span class="px-2.5 py-0.5 bg-slate-800 text-slate-300 rounded-md text-[11px] font-semibold border border-white/5">Análisis de Video</span>
-                            <span class="px-2.5 py-0.5 bg-slate-800 text-slate-300 rounded-md text-[11px] font-semibold border border-white/5">Software Deportivo</span>
-                            <span class="px-2.5 py-0.5 bg-slate-800 text-slate-300 rounded-md text-[11px] font-semibold border border-white/5">Scouting</span>
-                        </div>
-
-                        <!-- Bio -->
-                        <p class="text-slate-300 text-sm leading-relaxed text-justify mb-6">
-                            Estratega dinámico y desarrollador de software. Integra la tecnología al servicio del deporte mediante análisis estadístico de partidos, gestión digital del plantel y herramientas interactivas para potenciar el rendimiento táctico.
-                        </p>
-
-                        <!-- Puntos Clave -->
-                        <ul class="space-y-2 text-xs text-slate-300 mb-8 border-t border-white/10 pt-4">
-                            <li class="flex items-center gap-2">
-                                <i class="fas fa-check-circle text-amber-500"></i> Análisis de rendimiento por partido
-                            </li>
-                            <li class="flex items-center gap-2">
-                                <i class="fas fa-check-circle text-amber-500"></i> Plataforma digital y control de asistencias
-                            </li>
-                            <li class="flex items-center gap-2">
-                                <i class="fas fa-check-circle text-amber-500"></i> Apoyo en metodología de entrenamiento
-                            </li>
-                        </ul>
-                    </div>
-
-                    <!-- Botón de Contacto -->
-                    <div class="pt-4 border-t border-white/10 flex gap-2">
-                        <a href="mailto:reinaldonavas@dibafbc.com"
-                            class="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black rounded-xl text-xs uppercase tracking-wider transition-colors shadow-lg">
-                            <i class="fas fa-envelope"></i> Contactar
-                        </a>
-                        <a href="https://wa.me/573000000000?text=Hola%20Profe%20Reinaldo%20Navas,%20quisiera%20informaci%C3%B3n%20sobre%20DIBA%20FBC" target="_blank" rel="noopener noreferrer"
-                            class="px-3.5 py-2.5 bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-400 border border-emerald-500/30 rounded-xl text-xs font-bold transition-colors">
-                            <i class="fab fa-whatsapp text-sm"></i>
-                        </a>
-                    </div>
-                </div>
-
-            </div>
-        </section>
-
-        <!-- SECCIÓN NSTRA METODOLOGÍA -->
-        <section class="py-20 bg-slate-900/40 border-y border-white/5 relative overflow-hidden">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-                <div class="text-center mb-16" data-aos="fade-up">
-                    <span class="text-amber-500 font-black uppercase tracking-[0.2em] text-xs">Excelencia en Cancha</span>
-                    <h2 class="text-3xl sm:text-5xl font-black uppercase italic tracking-tighter text-white mt-2">
-                        Pilares del <span class="text-amber-500">Entrenamiento</span>
-                    </h2>
-                    <p class="text-slate-400 text-sm sm:text-base max-w-2xl mx-auto mt-3">
-                        Nuestra metodología integra la pedagogía deportiva, el acondicionamiento científico y el análisis de datos.
+        <!-- SECCIÓN INTEGRANTES (White Premium Theme) -->
+        <section id="equipo" class="py-24 bg-slate-50 border-t border-slate-200">
+            <div class="max-w-6xl mx-auto px-6 space-y-16">
+                <header class="text-center space-y-4" data-aos="fade-up">
+                    <p class="text-xs font-black tracking-[0.2em] text-yellow-600 uppercase">
+                        NUESTRO STAFF TÉCNICO
                     </p>
-                </div>
+                    <h2 class="text-4xl md:text-6xl font-black italic uppercase tracking-tighter text-slate-900 font-display leading-none">
+                        LÍDERES DE <span class="text-yellow-500">DIBA FBC</span>
+                    </h2>
+                    <div class="w-20 h-1.5 bg-yellow-500 mx-auto rounded-full"></div>
+                </header>
 
-                <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-10 max-w-4xl mx-auto">
+
+                    <!-- INTEGRANTE 1: REINALDO PEREZ -->
+                    <div class="bg-white rounded-[2.5rem] border border-slate-200 p-8 md:p-10 flex flex-col justify-between space-y-6 hover:border-yellow-500/50 hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 shadow-lg group relative overflow-hidden" data-aos="fade-up" data-aos-delay="100">
+                        <div class="space-y-6">
+                            <!-- Foto -->
+                            <div class="relative w-44 h-44 mx-auto">
+                                <div class="absolute inset-0 bg-yellow-500 rounded-full rotate-6 opacity-20 group-hover:rotate-12 transition-transform duration-500"></div>
+                                <img src="images/profesor.webp" alt="Reinaldo Pérez, Director Técnico"
+                                    class="relative z-10 w-full h-full object-cover rounded-full shadow-xl border-4 border-white group-hover:scale-105 transition-transform duration-500"
+                                    loading="lazy" />
+                                <div class="absolute bottom-1 right-1 bg-yellow-500 text-slate-950 w-9 h-9 rounded-full flex items-center justify-center text-xs font-black shadow-md z-20">
+                                    <i class="fas fa-whistle"></i>
+                                </div>
+                            </div>
+
+                            <!-- Info -->
+                            <div class="text-center space-y-2">
+                                <h3 class="text-2xl md:text-3xl font-black italic uppercase tracking-tight text-slate-900 font-display">Reinaldo Pérez</h3>
+                                <span class="inline-block px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full text-xs font-black uppercase tracking-wider border border-yellow-200">
+                                    Director Técnico y Deportivo
+                                </span>
+                            </div>
+
+                            <!-- Tags -->
+                            <div class="flex flex-wrap justify-center gap-1.5">
+                                <span class="px-3 py-1 bg-slate-100 text-slate-700 rounded-lg text-xs font-bold border border-slate-200">Táctica y Estrategia</span>
+                                <span class="px-3 py-1 bg-slate-100 text-slate-700 rounded-lg text-xs font-bold border border-slate-200">Liderazgo</span>
+                                <span class="px-3 py-1 bg-slate-100 text-slate-700 rounded-lg text-xs font-bold border border-slate-200">Fútbol Formativo</span>
+                            </div>
+
+                            <!-- Bio -->
+                            <p class="text-slate-600 text-xs md:text-sm leading-relaxed font-medium text-justify">
+                                Con más de 15 años de experiencia técnica en Barranquilla, ha liderado múltiples categorías competitivas. Su enfoque integra la disciplina táctica, la pasión caribeña y la formación de valores fundamentales dentro y fuera del campo.
+                            </p>
+
+                            <!-- Puntos Clave -->
+                            <ul class="space-y-2.5 text-xs text-slate-700 font-medium border-t border-slate-100 pt-4">
+                                <li class="flex items-center gap-2.5">
+                                    <i class="fas fa-check-circle text-yellow-600 text-sm"></i> Planificación táctica semanal y microciclos
+                                </li>
+                                <li class="flex items-center gap-2.5">
+                                    <i class="fas fa-check-circle text-yellow-600 text-sm"></i> Desarrollo de talento juvenil y capitanía
+                                </li>
+                                <li class="flex items-center gap-2.5">
+                                    <i class="fas fa-check-circle text-yellow-600 text-sm"></i> Dirección en torneos departamentales y locales
+                                </li>
+                            </ul>
+                        </div>
+
+                        <!-- Botones de Acción -->
+                        <div class="pt-4 border-t border-slate-100 flex gap-3">
+                            <a href="mailto:reinaldo@dibafbc.com"
+                                class="flex-1 inline-flex items-center justify-center gap-2 px-5 py-3 bg-slate-900 hover:bg-yellow-500 hover:text-slate-950 text-white font-black rounded-xl text-xs uppercase tracking-wider transition-all shadow-md">
+                                <i class="fas fa-envelope"></i> Contactar
+                            </a>
+                            <a href="https://wa.me/573246656083?text=Hola%20Profe%20Reinaldo,%20quisiera%20informaci%C3%B3n%20sobre%20DIBA%20FBC" target="_blank" rel="noopener noreferrer"
+                                class="px-4 py-3 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl text-xs transition-colors shadow-md flex items-center justify-center" title="Escribir a WhatsApp">
+                                <i class="fab fa-whatsapp text-base"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- INTEGRANTE 2: REINALDO PEREZ NAVAS -->
+                    <div class="bg-white rounded-[2.5rem] border border-slate-200 p-8 md:p-10 flex flex-col justify-between space-y-6 hover:border-yellow-500/50 hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 shadow-lg group relative overflow-hidden" data-aos="fade-up" data-aos-delay="200">
+                        <div class="space-y-6">
+                            <!-- Foto -->
+                            <div class="relative w-44 h-44 mx-auto">
+                                <div class="absolute inset-0 bg-blue-500 rounded-full rotate-6 opacity-20 group-hover:rotate-12 transition-transform duration-500"></div>
+                                <img src="images/reinaldoNavas.webp" alt="Reinaldo Pérez Navas, Asistente Técnico y Desarrollador"
+                                    class="relative z-10 w-full h-full object-cover rounded-full shadow-xl border-4 border-white group-hover:scale-105 transition-transform duration-500"
+                                    loading="lazy" />
+                                <div class="absolute bottom-1 right-1 bg-yellow-500 text-slate-950 w-9 h-9 rounded-full flex items-center justify-center text-xs font-black shadow-md z-20">
+                                    <i class="fas fa-laptop-code"></i>
+                                </div>
+                            </div>
+
+                            <!-- Info -->
+                            <div class="text-center space-y-2">
+                                <h3 class="text-2xl md:text-3xl font-black italic uppercase tracking-tight text-slate-900 font-display">Reinaldo Pérez Navas</h3>
+                                <span class="inline-block px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-black uppercase tracking-wider border border-blue-200">
+                                    Asistente Técnico & Developer
+                                </span>
+                            </div>
+
+                            <!-- Tags -->
+                            <div class="flex flex-wrap justify-center gap-1.5">
+                                <span class="px-3 py-1 bg-slate-100 text-slate-700 rounded-lg text-xs font-bold border border-slate-200">Análisis de Video</span>
+                                <span class="px-3 py-1 bg-slate-100 text-slate-700 rounded-lg text-xs font-bold border border-slate-200">Software Deportivo</span>
+                                <span class="px-3 py-1 bg-slate-100 text-slate-700 rounded-lg text-xs font-bold border border-slate-200">Scouting</span>
+                            </div>
+
+                            <!-- Bio -->
+                            <p class="text-slate-600 text-xs md:text-sm leading-relaxed font-medium text-justify">
+                                Estratega dinámico y desarrollador de software. Integra la tecnología al servicio del fútbol mediante análisis estadístico de partidos, seguimiento digital de planillas y herramientas interactivas para potenciar la táctica.
+                            </p>
+
+                            <!-- Puntos Clave -->
+                            <ul class="space-y-2.5 text-xs text-slate-700 font-medium border-t border-slate-100 pt-4">
+                                <li class="flex items-center gap-2.5">
+                                    <i class="fas fa-check-circle text-yellow-600 text-sm"></i> Análisis de rendimiento por partido y video
+                                </li>
+                                <li class="flex items-center gap-2.5">
+                                    <i class="fas fa-check-circle text-yellow-600 text-sm"></i> Plataforma digital y control de asistencias
+                                </li>
+                                <li class="flex items-center gap-2.5">
+                                    <i class="fas fa-check-circle text-yellow-600 text-sm"></i> Apoyo en metodología de entrenamiento
+                                </li>
+                            </ul>
+                        </div>
+
+                        <!-- Botones de Acción -->
+                        <div class="pt-4 border-t border-slate-100 flex gap-3">
+                            <a href="mailto:reinaldonavas@dibafbc.com"
+                                class="flex-1 inline-flex items-center justify-center gap-2 px-5 py-3 bg-slate-900 hover:bg-yellow-500 hover:text-slate-950 text-white font-black rounded-xl text-xs uppercase tracking-wider transition-all shadow-md">
+                                <i class="fas fa-envelope"></i> Contactar
+                            </a>
+                            <a href="https://wa.me/573246656083?text=Hola%20Profe%20Reinaldo%20Navas,%20quisiera%20informaci%C3%B3n%20sobre%20DIBA%20FBC" target="_blank" rel="noopener noreferrer"
+                                class="px-4 py-3 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl text-xs transition-colors shadow-md flex items-center justify-center" title="Escribir a WhatsApp">
+                                <i class="fab fa-whatsapp text-base"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN PILARES Y METODOLOGÍA (White Theme) -->
+        <section class="py-24 bg-white border-t border-slate-200">
+            <div class="max-w-6xl mx-auto px-6 space-y-16">
+                <header class="text-center space-y-4" data-aos="fade-up">
+                    <p class="text-xs font-black tracking-[0.2em] text-yellow-600 uppercase">
+                        EXCELENCIA EN CANCHA
+                    </p>
+                    <h2 class="text-4xl md:text-6xl font-black italic uppercase tracking-tighter text-slate-900 font-display leading-none">
+                        PILARES DEL <span class="text-yellow-500">ENTRENAMIENTO</span>
+                    </h2>
+                    <div class="w-20 h-1.5 bg-yellow-500 mx-auto rounded-full"></div>
+                    <p class="text-slate-600 max-w-xl mx-auto text-sm md:text-base leading-relaxed font-medium">
+                        Nuestra metodología integra la pedagogía deportiva, la táctica moderna y la tecnología.
+                    </p>
+                </header>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                     <!-- Pilar 1 -->
-                    <div class="p-8 rounded-3xl bg-white/5 border border-white/10 hover:border-amber-500/40 transition-all duration-300 group" data-aos="fade-up" data-aos-delay="100">
-                        <div class="w-14 h-14 rounded-2xl bg-amber-500/10 text-amber-400 flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition-transform">
+                    <div class="p-8 rounded-[2rem] bg-slate-50 border border-slate-200 hover:border-yellow-500/50 hover:shadow-xl transition-all duration-300 group" data-aos="fade-up" data-aos-delay="100">
+                        <div class="w-14 h-14 rounded-2xl bg-yellow-100 border border-yellow-200 text-yellow-700 flex items-center justify-center text-2xl mb-6 group-hover:bg-yellow-500 group-hover:text-slate-950 transition-colors shadow-sm">
                             <i class="fas fa-chess-board"></i>
                         </div>
-                        <h4 class="text-xl font-black text-white uppercase tracking-tight mb-3">Táctica Moderna</h4>
-                        <p class="text-slate-400 text-sm leading-relaxed">
-                            Lectura de juego inteligente, ocupación de espacios y principios de presión tras pérdida adaptados a cada categoría.
+                        <h4 class="text-lg font-black text-slate-900 uppercase tracking-tight mb-3 italic">Táctica Moderna</h4>
+                        <p class="text-slate-600 text-xs md:text-sm leading-relaxed font-medium">
+                            Lectura inteligente de juego, ocupación de espacios y principios tácticos adaptados a cada categoría.
                         </p>
                     </div>
 
                     <!-- Pilar 2 -->
-                    <div class="p-8 rounded-3xl bg-white/5 border border-white/10 hover:border-amber-500/40 transition-all duration-300 group" data-aos="fade-up" data-aos-delay="200">
-                        <div class="w-14 h-14 rounded-2xl bg-amber-500/10 text-amber-400 flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition-transform">
+                    <div class="p-8 rounded-[2rem] bg-slate-50 border border-slate-200 hover:border-yellow-500/50 hover:shadow-xl transition-all duration-300 group" data-aos="fade-up" data-aos-delay="200">
+                        <div class="w-14 h-14 rounded-2xl bg-yellow-100 border border-yellow-200 text-yellow-700 flex items-center justify-center text-2xl mb-6 group-hover:bg-yellow-500 group-hover:text-slate-950 transition-colors shadow-sm">
                             <i class="fas fa-dumbbell"></i>
                         </div>
-                        <h4 class="text-xl font-black text-white uppercase tracking-tight mb-3">Fuerza & Potencia</h4>
-                        <p class="text-slate-400 text-sm leading-relaxed">
-                            Acondicionamiento físico estructurado para desarrollar velocidad máxima, aceleración y prevención activa de lesiones.
+                        <h4 class="text-lg font-black text-slate-900 uppercase tracking-tight mb-3 italic">Fuerza & Potencia</h4>
+                        <p class="text-slate-600 text-xs md:text-sm leading-relaxed font-medium">
+                            Acondicionamiento físico estructurado para desarrollar velocidad máxima, aceleración y resistencia.
                         </p>
                     </div>
 
                     <!-- Pilar 3 -->
-                    <div class="p-8 rounded-3xl bg-white/5 border border-white/10 hover:border-amber-500/40 transition-all duration-300 group" data-aos="fade-up" data-aos-delay="300">
-                        <div class="w-14 h-14 rounded-2xl bg-amber-500/10 text-amber-400 flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition-transform">
+                    <div class="p-8 rounded-[2rem] bg-slate-50 border border-slate-200 hover:border-yellow-500/50 hover:shadow-xl transition-all duration-300 group" data-aos="fade-up" data-aos-delay="300">
+                        <div class="w-14 h-14 rounded-2xl bg-yellow-100 border border-yellow-200 text-yellow-700 flex items-center justify-center text-2xl mb-6 group-hover:bg-yellow-500 group-hover:text-slate-950 transition-colors shadow-sm">
                             <i class="fas fa-chart-line"></i>
                         </div>
-                        <h4 class="text-xl font-black text-white uppercase tracking-tight mb-3">Tecnología DIBA</h4>
-                        <p class="text-slate-400 text-sm leading-relaxed">
-                            Software propio de seguimiento de asistencias, ficha técnica del deportista y convocatorias automatizadas.
+                        <h4 class="text-lg font-black text-slate-900 uppercase tracking-tight mb-3 italic">Tecnología DIBA</h4>
+                        <p class="text-slate-600 text-xs md:text-sm leading-relaxed font-medium">
+                            Sistemas propios de control de asistencias, planillas de juego y estadísticas individuales del deportista.
                         </p>
                     </div>
 
                     <!-- Pilar 4 -->
-                    <div class="p-8 rounded-3xl bg-white/5 border border-white/10 hover:border-amber-500/40 transition-all duration-300 group" data-aos="fade-up" data-aos-delay="400">
-                        <div class="w-14 h-14 rounded-2xl bg-amber-500/10 text-amber-400 flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition-transform">
+                    <div class="p-8 rounded-[2rem] bg-slate-50 border border-slate-200 hover:border-yellow-500/50 hover:shadow-xl transition-all duration-300 group" data-aos="fade-up" data-aos-delay="400">
+                        <div class="w-14 h-14 rounded-2xl bg-yellow-100 border border-yellow-200 text-yellow-700 flex items-center justify-center text-2xl mb-6 group-hover:bg-yellow-500 group-hover:text-slate-950 transition-colors shadow-sm">
                             <i class="fas fa-heart"></i>
                         </div>
-                        <h4 class="text-xl font-black text-white uppercase tracking-tight mb-3">Valores & Lealtad</h4>
-                        <p class="text-slate-400 text-sm leading-relaxed">
-                            Formación integral bajo el lema "Fuerza y Lealtad", forjando deportistas disciplinados y mejores seres humanos.
+                        <h4 class="text-lg font-black text-slate-900 uppercase tracking-tight mb-3 italic">Valores & Lealtad</h4>
+                        <p class="text-slate-600 text-xs md:text-sm leading-relaxed font-medium">
+                            Formación integral bajo el lema "Fuerza y Lealtad", forjando deportistas disciplinados y ciudadanos ejemplares.
                         </p>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- FILOSOFÍA BANNER CITAS -->
-        <section class="py-16 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="bg-gradient-to-r from-amber-500/10 via-slate-900/80 to-slate-900/90 border border-amber-500/30 rounded-3xl p-8 sm:p-12 shadow-2xl relative overflow-hidden text-center" data-aos="zoom-in">
-                <i class="fas fa-quote-left text-amber-500/20 text-6xl sm:text-8xl absolute top-4 left-6 pointer-events-none"></i>
-                <div class="relative z-10">
-                    <p class="text-lg sm:text-2xl font-bold italic text-slate-200 leading-relaxed mb-6">
-                        "En DIBA FBC no solo preparamos futbolistas para ganar un partido; formamos líderes capaces de transformar su futuro mediante el trabajo en equipo, la perseverancia y la disciplina constante."
+        <!-- BANNER DE FILOSOFÍA (Dark Accent Box like Index) -->
+        <section class="py-16 max-w-5xl mx-auto px-6">
+            <div class="bg-slate-900 text-white rounded-[2.5rem] p-10 md:p-14 shadow-2xl relative overflow-hidden text-center" data-aos="zoom-in">
+                <i class="fas fa-quote-left text-yellow-500/15 text-7xl md:text-9xl absolute top-4 left-6 pointer-events-none"></i>
+                <div class="relative z-10 space-y-6">
+                    <p class="text-lg md:text-2xl font-bold italic text-slate-100 leading-relaxed max-w-3xl mx-auto">
+                        "En DIBA FBC no solo preparamos futbolistas para ganar partidos; formamos jóvenes capaces de transformar su entorno mediante el trabajo en equipo, el esfuerzo constante y la disciplina."
                     </p>
-                    <div class="inline-flex items-center gap-3">
-                        <img src="images/ESCUDO.webp?v=2" alt="Escudo DIBA FBC" class="w-10 h-10 object-contain drop-shadow-md">
+                    <div class="inline-flex items-center gap-3 pt-2">
+                        <img src="images/ESCUDO.webp?v=2" alt="Escudo DIBA FBC" class="w-12 h-12 object-contain drop-shadow-md">
                         <div class="text-left">
-                            <span class="block text-sm font-black text-amber-400 uppercase tracking-wider">Filosofía Institucional</span>
+                            <span class="block text-sm font-black text-yellow-400 uppercase tracking-wider">Filosofía Institucional</span>
                             <span class="text-xs text-slate-400 font-medium">Deportivo Internacional de Barranquilla</span>
                         </div>
                     </div>
@@ -336,23 +348,23 @@
         </section>
 
         <!-- LLAMADO A LA ACCIÓN (CTA) -->
-        <section class="pb-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="bg-slate-900/60 border border-white/10 rounded-3xl p-8 sm:p-14 text-center backdrop-blur-xl relative overflow-hidden" data-aos="fade-up">
-                <div class="max-w-2xl mx-auto">
-                    <span class="text-amber-500 font-black uppercase tracking-widest text-xs">Forma Parte del Proyecto</span>
-                    <h3 class="text-3xl sm:text-4xl font-black uppercase italic tracking-tight text-white mt-2 mb-4">
-                        ¿Quieres entrenar con <span class="text-amber-500">nosotros?</span>
+        <section class="py-20 bg-slate-50 border-t border-slate-200">
+            <div class="max-w-4xl mx-auto px-6">
+                <div class="bg-white border border-slate-200 rounded-[2.5rem] p-10 md:p-14 text-center shadow-xl space-y-6" data-aos="fade-up">
+                    <span class="text-yellow-600 font-black uppercase tracking-widest text-xs">Unirse a la Academia</span>
+                    <h3 class="text-3xl md:text-4xl font-black uppercase italic tracking-tight text-slate-900 font-display">
+                        ¿Quieres entrenar con <span class="text-yellow-500">nosotros?</span>
                     </h3>
-                    <p class="text-slate-300 text-sm sm:text-base leading-relaxed mb-8">
-                        Ponte en contacto directamente con el cuerpo técnico para coordinar pruebas de admisión, horarios de entrenamiento y categorías disponibles.
+                    <p class="text-slate-600 text-sm md:text-base leading-relaxed max-w-xl mx-auto font-medium">
+                        Ponte en contacto con el cuerpo técnico para coordinar inscripciones, horarios de entrenamiento y categorías disponibles.
                     </p>
-                    <div class="flex flex-wrap justify-center gap-4">
+                    <div class="flex flex-wrap justify-center gap-4 pt-4">
                         <a href="contacto.html"
-                            class="px-8 py-3.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black rounded-2xl text-xs uppercase tracking-wider transition-colors shadow-xl shadow-amber-500/20 inline-flex items-center gap-2">
+                            class="px-8 py-4 bg-yellow-500 hover:bg-yellow-400 text-slate-950 font-black rounded-2xl text-xs uppercase tracking-widest transition-all shadow-lg hover:scale-105 inline-flex items-center gap-2">
                             <i class="fas fa-paper-plane"></i> Formulario de Contacto
                         </a>
-                        <a href="https://wa.me/573000000000?text=Hola,%20quisiera%20informaci%C3%B3n%20sobre%20inscripciones%20y%20entrenamientos%20en%20DIBA%20FBC" target="_blank" rel="noopener noreferrer"
-                            class="px-8 py-3.5 bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-400 border border-emerald-500/30 font-bold rounded-2xl text-xs uppercase tracking-wider transition-colors inline-flex items-center gap-2">
+                        <a href="https://wa.me/573246656083?text=Hola,%20quisiera%20informaci%C3%B3n%20sobre%20inscripciones%20y%20entrenamientos%20en%20DIBA%20FBC" target="_blank" rel="noopener noreferrer"
+                            class="px-8 py-4 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-2xl text-xs uppercase tracking-widest transition-all shadow-lg hover:scale-105 inline-flex items-center gap-2">
                             <i class="fab fa-whatsapp text-base"></i> Escribir a WhatsApp
                         </a>
                     </div>
@@ -377,8 +389,7 @@
             if (typeof AOS !== 'undefined') {
                 AOS.init({
                     duration: 800,
-                    once: true,
-                    easing: 'ease-out-cubic'
+                    once: true
                 });
             }
         });
