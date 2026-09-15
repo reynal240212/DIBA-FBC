@@ -46,7 +46,7 @@ export default function PartidosPage() {
   }, [activeTab, selectedDate]);
   const getEscudoUrl = (url: string, equipoNombre: string) => {
     if (equipoNombre && equipoNombre.toUpperCase().includes('DIBA')) {
-      return '/images/ESCUDO.png';
+      return '/images/ESCUDO.png?v=2';
     }
     if (!url) {
       return `https://ui-avatars.com/api/?name=${encodeURIComponent(equipoNombre || 'R')}&background=1e293b&color=cbd5e1`;

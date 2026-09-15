@@ -965,7 +965,7 @@
                     boleta.innerHTML = `
                         <div class="boleta">
                             <div class="boleta-left">
-                                <img src="/images/ESCUDO.webp" class="boleta-logo">
+                                <img src="/images/ESCUDO.webp?v=2" class="boleta-logo">
                             </div>
                             <div class="boleta-main">
                                 <div class="flex justify-between items-start">
@@ -1051,7 +1051,7 @@
                             resolve(canvas.toDataURL('image/png'));
                         };
                         img.onerror = reject;
-                        img.src = '/images/ESCUDO.webp';
+                        img.src = '/images/ESCUDO.webp?v=2';
                     });
                 } catch (e) {
                     console.warn('Logo load failed, continuing without logo');
