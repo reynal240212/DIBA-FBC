@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Rifa Pro-Inscripción Campeonato — DIBA FBC</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="/images/ESCUDO.ico" type="image/x-icon">
+
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        :root {
+            --azul-diba: #004d98;
+            --azul-oscuro: #002a54;
+            --dorado-diba: #FFD700;
+            --dorado-suave: #fffbeb;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: #020617;
+            color: #f8fafc;
+        }
+
+        /* Workbench Preview */
+        #contenedor {
+            background: rgba(15, 23, 42, 0.7);
+            border-radius: 24px;
+            padding: 2rem;
+            min-height: 400px;
+            display: flex;
+            flex-direction: column;
+            gap: 2.5rem;
+            align-items: center;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: inset 0 0 60px rgba(0, 0, 0, 0.5);
+        }
+
+        /* --- ESTILOS DE PÁGINA IMPRIMIBLE (CARTA) --- */
+        .page-rifa {
+            width: 215.9mm;
+            min-height: 279.4mm;
+            padding: 8mm 10mm;
+            background: white;
+            color: #0f172a;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            border-radius: 8px;
+            box-sizing: border-box;
+            gap: 3mm;
+            page-break-after: always;
+        }
+
+        /* --- FORMATO 1: BOLETAS OFICIALES DIBA (5 POR PÁGINA) --- */
+        .boleta-oficial-container {
+            width: 100%;
+            height: 48mm;
+            display: flex;
+            align-items: center;
+            border-bottom: 1.5px dashed #cbd5e1;
+            padding-bottom: 2mm;
+            box-sizing: border-box;
+        }
+
+        .boleta-oficial-container:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .boleta-oficial {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 60%, #fde68a 100%);
+            border: 2.5px solid var(--azul-diba);
+            border-radius: 12px;
+            padding: 8px 14px;
+            color: var(--azul-diba);
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            position: relative;
+            box-shadow: inset 0 0 25px rgba(255, 215, 0, 0.25);
+            box-sizing: border-box;
+        }
+
+        .boleta-num-box {
+            background: white;
+            color: var(--azul-diba);
+            border: 1.8px solid var(--azul-diba);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 1.05rem;
+            box-shadow: 0 2px 0 var(--azul-diba);
+            height: 30px;
+        }
+
+        /* --- FORMATO 2: TALÓN DESPRENDIBLE INDIVIDUAL --- */
+        .boleta-talon-container {
+            width: 100%;
+            height: 48mm;
+            display: flex;
+            border: 2px solid var(--azul-diba);
+            border-radius: 10px;
+            overflow: hidden;
+            background: white;
+            border-bottom: 2px dashed #94a3b8;
+            margin-bottom: 3mm;
+            box-sizing: border-box;
+        }
+
+        .talon-izq {
+            width: 60mm;
+            background: #f8fafc;
+            border-right: 1.5px dashed #94a3b8;
+            padding: 8px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+        }
+
+        .talon-der {
+            flex: 1;
+            background: linear-gradient(135deg, #fffbeb 0%, #ffffff 100%);
+            padding: 10px 14px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        /* --- FORMATO 3: PLANILLAS DE CONTROL POR NIÑO --- */
+        .planilla-nino {
+            border: 2px solid var(--azul-diba);
+            border-radius: 10px;
+            padding: 10px 14px;
+            background: white;
+            margin-bottom: 4mm;
+            box-sizing: border-box;
+        }
+
+        .planilla-tabla {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 6px;
+            font-size: 0.75rem;
+        }
+
+        .planilla-tabla th {
+            background: var(--azul-diba);
+            color: white;
+            padding: 4px 6px;
+            font-weight: 800;
+            text-transform: uppercase;
+            font-size: 0.65rem;
+            letter-spacing: 0.05em;
+        }
+
+        .planilla-tabla td {
+            border: 1px solid #cbd5e1;
+            padding: 4px 6px;
+            height: 24px;
+        }
+
+        /* Print Media Styles */
+        @media print {
+            body {
+                background: white !important;
+                color: black !important;
+                padding: 0 !important;
+                margin: 0 !important;
+            }
+
+            .no-print {
+                display: none !important;
+            }
+
+            main {
+                margin: 0 !important;
+                padding: 0 !important;
+                max-width: 100% !important;
+            }
+
+            #contenedor {
+                background: transparent !important;
+                border: none !important;
+                box-shadow: none !important;
+                padding: 0 !important;
+                gap: 0 !important;
+            }
+
+            .page-rifa {
+                box-shadow: none !important;
+                border-radius: 0 !important;
+                padding: 6mm 8mm !important;
+                margin: 0 !important;
+                width: 100% !important;
+                min-height: auto !important;
+            }
+        }
+    </style>
+</head>
+
+<body class="min-h-screen">
+
+    <!-- Top Navigation Bar -->
+    <header class="no-print border-b border-white/10 bg-slate-900/90 backdrop-blur sticky top-0 z-50 px-6 py-4">
+        <div class="max-w-7xl mx-auto flex items-center justify-between flex-wrap gap-4">
+            <div class="flex items-center gap-3">
+                <img src="/images/ESCUDO.webp" onerror="this.src='/images/ESCUDO.png'" class="w-10 h-10 object-contain drop-shadow" alt="DIBA FBC">
+                <div>
+                    <h1 class="text-lg font-black tracking-tight text-white uppercase italic">DIBA FBC <span class="text-amber-400">— Gestión de Rifas</span></h1>
+                    <p class="text-xs text-slate-400 font-semibold tracking-wider uppercase">Rifa Oficial Pro-Inscripción Campeonato</p>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-3 flex-wrap">
+                <button onclick="copiarMensajeWhatsApp()" class="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl font-bold text-xs uppercase tracking-wider flex items-center gap-2 transition shadow-lg shadow-emerald-900/30">
+                    <i class="fab fa-whatsapp text-sm"></i> Copiar para WhatsApp
+                </button>
+                <button onclick="window.print()" class="px-5 py-2.5 bg-amber-400 hover:bg-amber-300 text-slate-950 rounded-xl font-black text-xs uppercase tracking-wider flex items-center gap-2 transition shadow-lg shadow-amber-400/20">
+                    <i class="fas fa-print text-sm"></i> Imprimir / Guardar PDF
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto p-6 lg:p-8">
+
+        <!-- Banner de Información y Accesos Rápidos -->
+        <div class="no-print mb-8 p-6 rounded-3xl bg-gradient-to-r from-blue-950/80 via-slate-900 to-slate-900 border border-blue-500/20 shadow-2xl">
+            <div class="flex items-center justify-between flex-wrap gap-6">
+                <div>
+                    <span class="px-3 py-1 bg-amber-400/10 text-amber-400 border border-amber-400/30 rounded-full text-[0.65rem] font-black uppercase tracking-widest">
+                        Rifa Pro-Inscripción Campeonato
+                    </span>
+                    <h2 class="text-2xl lg:text-3xl font-black uppercase italic mt-2 text-white">
+                        100 Números <span class="text-amber-400">• 6 Números por Niño</span> • $2.500 c/u
+                    </h2>
+                    <p class="text-slate-400 text-sm mt-1 max-w-2xl">
+                        Juega el <strong class="text-white">Martes 27 de Octubre de 2026</strong> con la Lotería <strong class="text-white">Sinuano Noche</strong> (2 últimas cifras). Premio: <strong class="text-amber-400">Una Colonia Original</strong>. Recaudo potencial: <strong class="text-emerald-400">$250.000 COP</strong>.
+                    </p>
+                </div>
+
+                <div class="flex items-center gap-3 flex-wrap">
+                    <a href="/Planillas_Control_Rifa_17_Ninos.pdf" download class="px-4 py-2.5 bg-white/10 hover:bg-white/20 text-white rounded-xl font-bold text-xs uppercase tracking-wider flex items-center gap-2 transition border border-white/10">
+                        <i class="fas fa-file-pdf text-red-400"></i> Descargar Planillas PDF
+                    </a>
+                    <a href="/Boletas_Oficiales_Rifa_17_Talonarios.pdf" download class="px-4 py-2.5 bg-white/10 hover:bg-white/20 text-white rounded-xl font-bold text-xs uppercase tracking-wider flex items-center gap-2 transition border border-white/10">
+                        <i class="fas fa-ticket text-amber-400"></i> Descargar Boletas Oficiales PDF
+                    </a>
+                    <a href="/Boletas_Rifa_100_Numeros_Talon.pdf" download class="px-4 py-2.5 bg-white/10 hover:bg-white/20 text-white rounded-xl font-bold text-xs uppercase tracking-wider flex items-center gap-2 transition border border-white/10">
+                        <i class="fas fa-scissors text-blue-400"></i> 100 Boletas c/ Talón PDF
+                    </a>
+                </div>
+            </div>
+
+            <!-- Métricas Financieras -->
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-6 pt-6 border-t border-white/10">
+                <div class="p-4 rounded-2xl bg-white/5 border border-white/5">
+                    <span class="text-[0.65rem] font-bold text-slate-400 uppercase tracking-widest block">Total Números</span>
+                    <span class="text-2xl font-black text-white italic">100</span>
+                    <span class="text-[0.65rem] text-slate-500 block">Del 00 al 99</span>
+                </div>
+                <div class="p-4 rounded-2xl bg-white/5 border border-white/5">
+                    <span class="text-[0.65rem] font-bold text-slate-400 uppercase tracking-widest block">Valor por Número</span>
+                    <span class="text-2xl font-black text-amber-400 italic">$2.500</span>
+                    <span class="text-[0.65rem] text-slate-500 block">COP cada número</span>
+                </div>
+                <div class="p-4 rounded-2xl bg-white/5 border border-white/5">
+                    <span class="text-[0.65rem] font-bold text-slate-400 uppercase tracking-widest block">Niños Participantes</span>
+                    <span class="text-2xl font-black text-blue-400 italic">17 Niños</span>
+                    <span class="text-[0.65rem] text-slate-500 block">16 de 6 # y 1 de 4 #</span>
+                </div>
+                <div class="p-4 rounded-2xl bg-white/5 border border-white/5">
+                    <span class="text-[0.65rem] font-bold text-slate-400 uppercase tracking-widest block">Recaudo Total</span>
+                    <span class="text-2xl font-black text-emerald-400 italic">$250.000</span>
+                    <span class="text-[0.65rem] text-slate-500 block">100% Campeonato</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Barra de Configuración y Filtros -->
+        <div class="no-print mb-8 p-6 rounded-3xl bg-slate-900 border border-white/10">
+            <div class="flex items-center justify-between flex-wrap gap-4 pb-4 border-b border-white/10">
+                <div class="flex items-center gap-2">
+                    <i class="fas fa-sliders text-amber-400"></i>
+                    <h3 class="text-sm font-bold uppercase tracking-wider text-white">Selecciona el Formato de Impresión</h3>
+                </div>
+                <div class="flex items-center gap-2 flex-wrap" id="formato-selector">
+                    <button onclick="cambiarFormato('oficial')" id="btn-fmt-oficial" class="px-4 py-2 rounded-xl text-xs font-bold uppercase transition bg-amber-400 text-slate-950">
+                        <i class="fas fa-ticket-alt mr-1"></i> Boletas Oficiales (17 Talonarios de 6 #)
+                    </button>
+                    <button onclick="cambiarFormato('planillas')" id="btn-fmt-planillas" class="px-4 py-2 rounded-xl text-xs font-bold uppercase transition bg-white/5 text-slate-300 hover:bg-white/10">
+                        <i class="fas fa-clipboard-list mr-1"></i> Planillas de Control por Niño
+                    </button>
+                    <button onclick="cambiarFormato('individuales')" id="btn-fmt-individuales" class="px-4 py-2 rounded-xl text-xs font-bold uppercase transition bg-white/5 text-slate-300 hover:bg-white/10">
+                        <i class="fas fa-scissors mr-1"></i> 100 Boletas con Talón Desprendible
+                    </button>
+                </div>
+            </div>
+
+            <!-- Personalización rápida de datos -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-4">
+                <div>
+                    <label class="text-[0.65rem] font-bold uppercase text-slate-400 block mb-1">Nombre de la Rifa</label>
+                    <input type="text" id="inp-nombre" value="Rifa Pro-Inscripción Campeonato" onchange="actualizarVista()" class="w-full bg-slate-950 border border-white/10 rounded-xl px-3 py-2 text-xs text-white focus:border-amber-400 outline-none">
+                </div>
+                <div>
+                    <label class="text-[0.65rem] font-bold uppercase text-slate-400 block mb-1">Fecha del Sorteo</label>
+                    <input type="text" id="inp-fecha" value="Martes 27 de Octubre de 2026" onchange="actualizarVista()" class="w-full bg-slate-950 border border-white/10 rounded-xl px-3 py-2 text-xs text-white focus:border-amber-400 outline-none">
+                </div>
+                <div>
+                    <label class="text-[0.65rem] font-bold uppercase text-slate-400 block mb-1">Lotería / Modalidad</label>
+                    <input type="text" id="inp-loteria" value="Sinuano Noche (Últimas 2 Cifras)" onchange="actualizarVista()" class="w-full bg-slate-950 border border-white/10 rounded-xl px-3 py-2 text-xs text-white focus:border-amber-400 outline-none">
+                </div>
+                <div>
+                    <label class="text-[0.65rem] font-bold uppercase text-slate-400 block mb-1">Premio</label>
+                    <input type="text" id="inp-premio" value="Una Colonia Original" onchange="actualizarVista()" class="w-full bg-slate-950 border border-white/10 rounded-xl px-3 py-2 text-xs text-white focus:border-amber-400 outline-none">
+                </div>
+            </div>
+        </div>
+
+        <!-- CONTENEDOR DE VISTA PREVIA IMPRIMIBLE -->
+        <div id="contenedor">
+            <!-- Se llena dinámicamente según el formato seleccionado -->
+        </div>
+
+    </main>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-6 right-6 px-5 py-3 rounded-2xl bg-emerald-600 text-white font-bold text-xs uppercase tracking-wider shadow-2xl flex items-center gap-3 transform translate-y-24 opacity-0 transition duration-300 z-50">
+        <i class="fas fa-check-circle text-base"></i>
+        <span id="toast-msg">Mensaje copiado con éxito</span>
+    </div>
+
+    <script>
+        let formatoActual = 'oficial';
+        const TOTAL_NUMEROS = 100;
+        const NUMS_POR_NINO = 6;
+
+        // Distribución de los 100 números en 17 niños (16 con 6 y 1 con 4)
+        function obtenerDistribucion() {
+            const talonarios = [];
+            let curr = 0;
+            let id = 1;
+            while (curr < TOTAL_NUMEROS) {
+                const count = Math.min(NUMS_POR_NINO, TOTAL_NUMEROS - curr);
+                const nums = [];
+                for (let i = 0; i < count; i++) {
+                    nums.push(String(curr + i).padStart(2, '0'));
+                }
+                talonarios.push({ id, nums, meta: nums.length * 2500 });
+                curr += count;
+                id++;
+            }
+            return talonarios;
+        }
+
+        function cambiarFormato(nuevoFormato) {
+            formatoActual = nuevoFormato;
+            
+            // Actualizar botones
+            ['oficial', 'planillas', 'individuales'].forEach(fmt => {
+                const btn = document.getElementById(`btn-fmt-${fmt}`);
+                if (fmt === nuevoFormato) {
+                    btn.className = "px-4 py-2 rounded-xl text-xs font-bold uppercase transition bg-amber-400 text-slate-950";
+                } else {
+                    btn.className = "px-4 py-2 rounded-xl text-xs font-bold uppercase transition bg-white/5 text-slate-300 hover:bg-white/10";
+                }
+            });
+
+            actualizarVista();
+        }
+
+        function actualizarVista() {
+            const contenedor = document.getElementById('contenedor');
+            contenedor.innerHTML = '';
+
+            const nombre = document.getElementById('inp-nombre').value;
+            const fecha = document.getElementById('inp-fecha').value;
+            const loteria = document.getElementById('inp-loteria').value;
+            const premio = document.getElementById('inp-premio').value;
+            const talonarios = obtenerDistribucion();
+
+            if (formatoActual === 'oficial') {
+                renderBoletasOficiales(contenedor, talonarios, nombre, fecha, loteria, premio);
+            } else if (formatoActual === 'planillas') {
+                renderPlanillasControl(contenedor, talonarios, nombre, fecha, loteria, premio);
+            } else if (formatoActual === 'individuales') {
+                renderBoletasIndividuales(contenedor, nombre, fecha, loteria, premio);
+            }
+        }
+
+        // --- RENDER 1: BOLETAS OFICIALES (5 POR PÁGINA) ---
+        function renderBoletasOficiales(contenedor, talonarios, nombre, fecha, loteria, premio) {
+            const POR_PAG = 5;
+            for (let p = 0; p < Math.ceil(talonarios.length / POR_PAG); p++) {
+                const page = document.createElement('div');
+                page.className = 'page-rifa';
+
+                const lote = talonarios.slice(p * POR_PAG, (p + 1) * POR_PAG);
+                lote.forEach(t => {
+                    const item = document.createElement('div');
+                    item.className = 'boleta-oficial-container';
+
+                    const numsHtml = t.nums.map(n => `<div class="boleta-num-box">${n}</div>`).join('');
+
+                    item.innerHTML = `
+                        <div class="boleta-oficial">
+                            <div class="w-[50px] flex flex-col items-center justify-center shrink-0">
+                                <img src="/images/ESCUDO.webp" onerror="this.src='/images/ESCUDO.png'" class="w-[45px] h-[45px] object-contain drop-shadow">
+                            </div>
+                            <div class="flex-1 flex flex-col justify-between h-full">
+                                <div class="flex justify-between items-start">
+                                    <div>
+                                        <div class="font-black text-xs uppercase text-[#004d98] tracking-tight">CLUB DEPORTIVO DIBA FBC</div>
+                                        <div class="font-black text-[0.7rem] uppercase text-amber-700 italic">${nombre}</div>
+                                    </div>
+                                    <div class="bg-[#004d98] text-amber-400 font-black text-xs px-2.5 py-1 rounded-md">
+                                        TALÓN #${String(t.id).padStart(2, '0')}
+                                    </div>
+                                </div>
+
+                                <div class="grid grid-cols-[1fr_130px] gap-3 items-center">
+                                    <div class="text-[0.62rem] font-bold text-slate-800 leading-tight space-y-0.5">
+                                        <div>📅 JUEGA: <strong class="text-[#004d98]">${fecha}</strong></div>
+                                        <div>🎰 LOTERÍA: <strong class="text-[#004d98]">${loteria}</strong></div>
+                                        <div>🏆 PREMIO: <strong class="text-red-700">${premio}</strong></div>
+                                        <div>💰 VALOR: <strong class="text-[#004d98]">$2.500 CADA NÚMERO</strong></div>
+                                    </div>
+                                    <div>
+                                        <div class="text-[0.55rem] font-black uppercase text-center text-[#004d98] mb-1">TUS NÚMEROS</div>
+                                        <div class="grid grid-cols-3 gap-1.5">${numsHtml}</div>
+                                    </div>
+                                </div>
+
+                                <div class="bg-white/80 border border-slate-300 rounded px-2.5 py-1 text-[0.6rem] font-bold flex justify-between items-center text-slate-700">
+                                    <span>👤 VENDEDOR (NIÑO): ________________________________</span>
+                                    <span>COMPRADOR: ____________________ TEL: ________</span>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    page.appendChild(item);
+                });
+
+                contenedor.appendChild(page);
+            }
+        }
+
+        // --- RENDER 2: PLANILLAS DE CONTROL POR NIÑO (2 POR PÁGINA) ---
+        function renderPlanillasControl(contenedor, talonarios, nombre, fecha, loteria, premio) {
+            const POR_PAG = 2;
+            for (let p = 0; p < Math.ceil(talonarios.length / POR_PAG); p++) {
+                const page = document.createElement('div');
+                page.className = 'page-rifa';
+
+                const lote = talonarios.slice(p * POR_PAG, (p + 1) * POR_PAG);
+                lote.forEach(t => {
+                    const card = document.createElement('div');
+                    card.className = 'planilla-nino';
+
+                    let filasHtml = '';
+                    t.nums.forEach(n => {
+                        filasHtml += `
+                            <tr>
+                                <td class="text-center font-black bg-amber-50 text-[#004d98] text-sm">${n}</td>
+                                <td></td>
+                                <td></td>
+                                <td class="text-center font-bold text-xs text-slate-700">$2.500</td>
+                                <td class="text-center text-slate-400 font-bold">[   ]</td>
+                            </tr>
+                        `;
+                    });
+
+                    card.innerHTML = `
+                        <div class="flex justify-between items-center border-b border-slate-200 pb-2 mb-2">
+                            <div class="flex items-center gap-2">
+                                <img src="/images/ESCUDO.webp" onerror="this.src='/images/ESCUDO.png'" class="w-8 h-8 object-contain">
+                                <div>
+                                    <div class="font-black text-xs text-[#004d98] uppercase">CLUB DEPORTIVO DIBA FBC</div>
+                                    <div class="text-[0.65rem] font-black text-amber-600 uppercase">${nombre}</div>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <span class="bg-[#004d98] text-amber-400 font-black text-xs px-2.5 py-1 rounded">
+                                    TALONARIO DE CONTROL #${String(t.id).padStart(2, '0')}
+                                </span>
+                                <div class="text-[0.6rem] font-bold text-emerald-700 mt-1">META: $${t.meta.toLocaleString('es-CO')} COP</div>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-2 text-[0.62rem] bg-slate-50 p-2 rounded border border-slate-200 mb-2">
+                            <div>📅 JUEGA: <strong>${fecha}</strong></div>
+                            <div>🎰 LOTERÍA: <strong>${loteria}</strong></div>
+                            <div>🏆 PREMIO: <strong class="text-red-700">${premio}</strong></div>
+                            <div>💰 VALOR NÚMERO: <strong>$2.500 COP</strong></div>
+                            <div class="col-span-2 pt-1 border-t border-slate-200">
+                                👤 <strong>NIÑO / DEPORTISTA RESPONSABLE:</strong> __________________________________________________
+                            </div>
+                        </div>
+
+                        <table class="planilla-tabla">
+                            <thead>
+                                <tr>
+                                    <th style="width: 12%">N°</th>
+                                    <th style="width: 50%">NOMBRE DEL COMPRADOR</th>
+                                    <th style="width: 20%">TELÉFONO</th>
+                                    <th style="width: 10%">VALOR</th>
+                                    <th style="width: 8%">PAGÓ</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${filasHtml}
+                            </tbody>
+                        </table>
+
+                        <div class="text-[0.55rem] text-slate-500 italic mt-2 text-center">
+                            * Entregar el dinero y este talón diligenciado al director técnico o delegado antes del sorteo. ¡Gracias por apoyar!
+                        </div>
+                    `;
+                    page.appendChild(card);
+                });
+
+                contenedor.appendChild(page);
+            }
+        }
+
+        // --- RENDER 3: 100 BOLETAS INDIVIDUALES CON TALÓN ---
+        function renderBoletasIndividuales(contenedor, nombre, fecha, loteria, premio) {
+            const POR_PAG = 5;
+            for (let p = 0; p < Math.ceil(TOTAL_NUMEROS / POR_PAG); p++) {
+                const page = document.createElement('div');
+                page.className = 'page-rifa';
+
+                for (let i = 0; i < POR_PAG && (p * POR_PAG + i) < TOTAL_NUMEROS; i++) {
+                    const numInt = p * POR_PAG + i;
+                    const numStr = String(numInt).padStart(2, '0');
+                    const ninoAsignado = Math.floor(numInt / NUMS_POR_NINO) + 1;
+
+                    const item = document.createElement('div');
+                    item.className = 'boleta-talon-container';
+                    item.innerHTML = `
+                        <div class="talon-izq">
+                            <div class="border-b border-slate-200 pb-1 text-center">
+                                <span class="text-[0.55rem] font-black uppercase text-[#004d98] block">TALÓN DE CONTROL</span>
+                                <span class="text-[0.5rem] text-slate-500 font-bold">TALONARIO #${String(ninoAsignado).padStart(2, '0')}</span>
+                            </div>
+                            <div class="text-center font-black text-xl text-[#004d98] my-1">
+                                N° ${numStr}
+                            </div>
+                            <div class="space-y-1 text-[0.55rem] text-slate-700">
+                                <div>COMPRADOR: <div class="border-b border-slate-300 w-full mt-0.5"></div></div>
+                                <div>TEL: <div class="border-b border-slate-300 w-full mt-0.5"></div></div>
+                                <div>VENDEDOR: <div class="border-b border-slate-300 w-full mt-0.5"></div></div>
+                            </div>
+                            <div class="flex justify-between items-center text-[0.55rem] font-bold text-[#004d98] pt-1 border-t border-slate-200 mt-1">
+                                <span>$2.500</span>
+                                <span class="border border-slate-400 px-1.5 py-0.5 rounded">PAGADO [ ]</span>
+                            </div>
+                        </div>
+
+                        <div class="talon-der">
+                            <div class="flex justify-between items-start">
+                                <div class="flex items-center gap-2">
+                                    <img src="/images/ESCUDO.webp" onerror="this.src='/images/ESCUDO.png'" class="w-8 h-8 object-contain">
+                                    <div>
+                                        <div class="font-black text-xs uppercase text-[#004d98]">CLUB DEPORTIVO DIBA FBC</div>
+                                        <div class="font-black text-[0.65rem] uppercase text-amber-700">${nombre}</div>
+                                    </div>
+                                </div>
+                                <div class="bg-[#004d98] text-amber-400 px-3 py-1 rounded text-center">
+                                    <span class="text-[0.5rem] font-bold block leading-none">NÚMERO</span>
+                                    <span class="text-lg font-black leading-none"># ${numStr}</span>
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-1 text-[0.62rem] text-slate-800 my-1">
+                                <div>🏆 PREMIO: <strong class="text-red-700">${premio}</strong></div>
+                                <div>📅 JUEGA: <strong class="text-[#004d98]">${fecha}</strong></div>
+                                <div>🎰 LOTERÍA: <strong>${loteria}</strong></div>
+                                <div>💰 VALOR: <strong class="text-[#004d98]">$2.500 COP</strong></div>
+                            </div>
+
+                            <div class="border-t border-slate-200 pt-1 text-[0.55rem] text-slate-600 flex justify-between items-center">
+                                <span>VENDEDOR: ____________________________________</span>
+                                <span class="font-bold text-[#004d98]">TALONARIO #${String(ninoAsignado).padStart(2, '0')}</span>
+                            </div>
+                        </div>
+                    `;
+                    page.appendChild(item);
+                }
+
+                contenedor.appendChild(page);
+            }
+        }
+
+        // --- COPIAR MENSAJE PARA WHATSAPP ---
+        function copiarMensajeWhatsApp() {
+            const fecha = document.getElementById('inp-fecha').value;
+            const loteria = document.getElementById('inp-loteria').value;
+            const premio = document.getElementById('inp-premio').value;
+            
+            const texto = `⚽ *CLUB DEPORTIVO DIBA FBC* ⚽\n` +
+                          `🎟️ *GRAN RIFA PRO-INSCRIPCIÓN CAMPEONATO*\n\n` +
+                          `Estimados padres de familia y acudientes:\n` +
+                          `Para apoyar la inscripción de nuestros campeones al torneo, iniciamos la venta de la rifa oficial con los siguientes parámetros:\n\n` +
+                          `🏆 *Premio Mayor:* ${premio}\n` +
+                          `📅 *Fecha de Sorteo:* ${fecha}\n` +
+                          `🎰 *Lotería:* ${loteria}\n` +
+                          `💰 *Valor por Número:* $2.500 COP\n` +
+                          `👦 *Asignación por Niño:* 6 números (Meta: $15.000 COP por niño)\n` +
+                          `🔢 *Total de la Rifa:* 100 números (del 00 al 99)\n\n` +
+                          `¡Agradecemos de corazón su compromiso y apoyo constante con nuestros deportistas!\n` +
+                          `*¡DIBA FBC, FORJANDO CAMPEONES!* 💙💛`;
+
+            navigator.clipboard.writeText(texto).then(() => {
+                mostrarToast("¡Texto para WhatsApp copiado al portapapeles!");
+            }).catch(() => {
+                mostrarToast("Copiado al portapapeles");
+            });
+        }
+
+        function mostrarToast(msg) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-msg').textContent = msg;
+            toast.classList.remove('translate-y-24', 'opacity-0');
+            setTimeout(() => {
+                toast.classList.add('translate-y-24', 'opacity-0');
+            }, 3000);
+        }
+
+        // Cargar vista inicial
+        window.addEventListener('DOMContentLoaded', () => {
+            actualizarVista();
+        });
+    </script>
+</body>
+
+</html>

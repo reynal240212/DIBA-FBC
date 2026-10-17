@@ -24,6 +24,7 @@ build/
 .cache/
 # === SCRIPTS DE ANÁLISIS (ad-hoc, no parte del sitio) ===
 *.py
+!scripts/*.py
 # === IMÁGENES GENERADAS / ARCHIVOS TEMPORALES ===
 grid_*.png
 grid_v*.png

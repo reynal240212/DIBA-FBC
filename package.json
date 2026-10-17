@@ -1,11 +1,14 @@
 {
   "name": "diba-fbc",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Sitio web oficial del club de fútbol DIBA FBC - Barranquilla, Colombia",
   "scripts": {
     "dev": "npx serve public -l 3000 --cors",
     "config": "node generate-config.js",
     "admin": "node create_admin.js",
+    "rifa:planillas": "python scripts/generate_planillas.py",
+    "rifa:boletas": "python scripts/generate_boletas_diba.py",
+    "rifa:100": "python scripts/generate_boletas_100.py",
     "test": "echo \"No tests configured\" && exit 0"
   },
   "engines": {

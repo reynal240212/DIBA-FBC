@@ -435,6 +435,27 @@
                 </div>
 
                 <div class="mt-8">
+                    <!-- Plantilla Rápida de Rifa -->
+                    <div class="mb-8 p-5 rounded-2xl bg-gradient-to-r from-blue-950/80 to-slate-900 border border-gold/30 flex items-center justify-between flex-wrap gap-4 shadow-xl">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-xl bg-gold/10 border border-gold/30 flex items-center justify-center text-gold text-lg">
+                                <i class="fas fa-trophy"></i>
+                            </div>
+                            <div>
+                                <div class="text-white text-xs font-black uppercase tracking-wider">Plantilla Lista: Rifa Pro-Inscripción Campeonato</div>
+                                <div class="text-slate-400 text-[0.65rem]">Martes 27 Octubre • Sinuano Noche • Colonia • $2.500 c/u • 100 Números</div>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2 flex-wrap">
+                            <button type="button" onclick="cargarPlantillaCampeonato()" class="px-4 py-2.5 bg-gold text-[#004d98] font-black rounded-xl text-[0.65rem] uppercase tracking-wider hover:scale-105 transition shadow-lg shadow-gold/20 flex items-center gap-2">
+                                <i class="fas fa-wand-magic-sparkles"></i> CARGAR Y GENERAR AHORA
+                            </button>
+                            <a href="/rifa_campeonato.html" target="_blank" class="px-4 py-2.5 bg-white/10 hover:bg-white/20 text-white font-bold rounded-xl text-[0.65rem] uppercase tracking-wider transition border border-white/10 flex items-center gap-2">
+                                <i class="fas fa-external-link-alt text-gold"></i> ABRIR VISOR ESPECIAL E IMPRESIÓN
+                            </a>
+                        </div>
+                    </div>
+
                     <!-- Section: Datos de la Rifa -->
                     <div class="form-section-title">
                         <i class="fas fa-info-circle"></i>
@@ -619,12 +640,75 @@
         import { requireAdmin, supabase } from '../scripts/supabaseClient.js';
 
         async function init() {
-            const session = await requireAdmin();
-            if (!session) return;
-            initAdminLayout();
-            loadCategorias();
+            try {
+                const session = await requireAdmin();
+                if (session) {
+                    initAdminLayout();
+                    loadCategorias();
+                }
+            } catch (err) {
+                console.warn('Ejecutando en modo local/directo sin Supabase:', err);
+            }
         }
         init();
+
+        window.cargarPlantillaCampeonato = function() {
+            document.getElementById('cfg-nombre').value = 'RIFA PRO-INSCRIPCIÓN CAMPEONATO';
+            document.getElementById('cfg-total').value = 17;
+            document.getElementById('cfg-numeros').value = '6';
+            document.getElementById('cfg-premio').value = 'UNA COLONIA ORIGINAL';
+            
+            const vNum = document.getElementById('cfg-valor-num');
+            if (vNum) {
+                vNum.value = 2500;
+                vNum.dispatchEvent(new Event('input'));
+            }
+            
+            document.getElementById('cfg-num-min').value = 0;
+            document.getElementById('cfg-num-max').value = 99;
+            document.getElementById('cfg-dist').value = 'sequential';
+            document.getElementById('cfg-serie').value = 'DIBA-CAMPEONATO';
+            document.getElementById('cfg-loteria').value = 'Sinuano Noche — Últimas 2 cifras';
+            
+            const fp = document.getElementById('cfg-fecha-picker');
+            if (fp) {
+                fp.value = '2026-10-27';
+                fp.dispatchEvent(new Event('change'));
+            }
+            
+            showToast('Plantilla Rifa Campeonato cargada con éxito', 'success');
+            setTimeout(() => {
+                if (typeof window.generarBoletas === 'function') {
+                    window.generarBoletas();
+                }
+            }, 100);
+        };
+
+        window.copiarMensajeWhatsApp = function() {
+            const fecha = document.getElementById('cfg-fecha')?.value || 'Martes 27 de Octubre de 2026';
+            const loteria = document.getElementById('cfg-loteria')?.value || 'Sinuano Noche — Últimas 2 cifras';
+            const premio = document.getElementById('cfg-premio')?.value || 'Una Colonia Original';
+            const valor = document.getElementById('cfg-valor')?.value || '$2.500';
+            
+            const texto = `⚽ *CLUB DEPORTIVO DIBA FBC* ⚽\n` +
+                          `🎟️ *GRAN RIFA PRO-INSCRIPCIÓN CAMPEONATO*\n\n` +
+                          `Estimados padres de familia y acudientes:\n` +
+                          `Para recaudar los fondos de inscripción de nuestros futbolistas al campeonato, ya está disponible la rifa oficial:\n\n` +
+                          `🏆 *Premio:* ${premio}\n` +
+                          `📅 *Juega:* ${fecha}\n` +
+                          `🎰 *Lotería:* ${loteria}\n` +
+                          `💰 *Valor por Número:* ${valor}\n` +
+                          `👦 *Asignación:* 6 números por cada niño ($15.000 COP por niño)\n` +
+                          `🔢 *Total Rifa:* 100 números (del 00 al 99)\n\n` +
+                          `¡Contamos con su valioso apoyo para que nuestros campeones participen y brillen en el torneo!\n` +
+                          `*DIBA FBC, FORJANDO CAMPEONES* 💙💛`;
+
+            navigator.clipboard.writeText(texto).then(() => {
+                showToast('Mensaje de WhatsApp copiado al portapapeles', 'success');
+            }).catch(() => {
+                showToast('Copiado al portapapeles', 'info');
+            });
+        };
 
         async function loadCategorias() {
             try {
