@@ -66,10 +66,10 @@ def draw_boleta_diba(c, x, y, w, h, boleta_num, nums, logo_path):
     line_spacing = 10.5
 
     labels = [
-        ("📅 JUEGA:", "MARTES 27 DE OCTUBRE DE 2026"),
-        ("🎰 LOTERÍA:", "SINUANO NOCHE (Últimas 2 Cifras)"),
-        ("🏆 PREMIO:", "UNA COLONIA ORIGINAL"),
-        ("💰 VALOR:", "$2.500 EL NÚMERO"),
+        ("FECHA DE JUEGO:", "MARTES 27 DE OCTUBRE DE 2026"),
+        ("SORTEO / LOTERÍA:", "SINUANO NOCHE (Últimas 2 Cifras)"),
+        ("PREMIO MAYOR:", "UNA COLONIA ORIGINAL"),
+        ("VALOR POR NÚMERO:", "$2.500 COP"),
     ]
 
     for label, val in labels:
@@ -78,7 +78,7 @@ def draw_boleta_diba(c, x, y, w, h, boleta_num, nums, logo_path):
         c.drawString(content_x, detail_y, label)
         c.setFont("Helvetica-Bold" if "PREMIO" in label or "VALOR" in label else "Helvetica", 7.5)
         c.setFillColor(colors.HexColor("#b91c1c") if "PREMIO" in label else colors.black)
-        c.drawString(content_x + 55, detail_y, val)
+        c.drawString(content_x + 92, detail_y, val)
         detail_y -= line_spacing
 
     # 5. Cuadrícula de números asignados (Columna Derecha)
@@ -207,7 +207,7 @@ def generate_boletas_pdf(output_path, logo_path):
             c.line(margin_x, cut_y, margin_x + ticket_w, cut_y)
             c.setFont("Helvetica", 6)
             c.setFillColor(colors.HexColor("#94a3b8"))
-            c.drawString(margin_x + 5, cut_y + 1, "✂ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -")
+            c.drawString(margin_x + 5, cut_y + 1, "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -")
             c.restoreState()
 
     c.save()

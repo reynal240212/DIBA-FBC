@@ -431,10 +431,10 @@
 
                                 <div class="grid grid-cols-[1fr_130px] gap-3 items-center">
                                     <div class="text-[0.62rem] font-bold text-slate-800 leading-tight space-y-0.5">
-                                        <div>📅 JUEGA: <strong class="text-[#004d98]">${fecha}</strong></div>
-                                        <div>🎰 LOTERÍA: <strong class="text-[#004d98]">${loteria}</strong></div>
-                                        <div>🏆 PREMIO: <strong class="text-red-700">${premio}</strong></div>
-                                        <div>💰 VALOR: <strong class="text-[#004d98]">$2.500 CADA NÚMERO</strong></div>
+                                        <div>FECHA: <strong class="text-[#004d98]">${fecha}</strong></div>
+                                        <div>LOTERÍA: <strong class="text-[#004d98]">${loteria}</strong></div>
+                                        <div>PREMIO: <strong class="text-red-700">${premio}</strong></div>
+                                        <div>VALOR: <strong class="text-[#004d98]">$2.500 CADA NÚMERO</strong></div>
                                     </div>
                                     <div>
                                         <div class="text-[0.55rem] font-black uppercase text-center text-[#004d98] mb-1">TUS NÚMEROS</div>
@@ -443,7 +443,7 @@
                                 </div>
 
                                 <div class="bg-white/80 border border-slate-300 rounded px-2.5 py-1 text-[0.6rem] font-bold flex justify-between items-center text-slate-700">
-                                    <span>👤 VENDEDOR (NIÑO): ________________________________</span>
+                                    <span>VENDEDOR: ________________________________</span>
                                     <span>COMPRADOR: ____________________ TEL: ________</span>
                                 </div>
                             </div>
@@ -499,12 +499,12 @@
                         </div>
 
                         <div class="grid grid-cols-2 gap-2 text-[0.62rem] bg-slate-50 p-2 rounded border border-slate-200 mb-2">
-                            <div>📅 JUEGA: <strong>${fecha}</strong></div>
-                            <div>🎰 LOTERÍA: <strong>${loteria}</strong></div>
-                            <div>🏆 PREMIO: <strong class="text-red-700">${premio}</strong></div>
-                            <div>💰 VALOR NÚMERO: <strong>$2.500 COP</strong></div>
+                            <div>FECHA: <strong>${fecha}</strong></div>
+                            <div>LOTERÍA: <strong>${loteria}</strong></div>
+                            <div>PREMIO: <strong class="text-red-700">${premio}</strong></div>
+                            <div>VALOR NÚMERO: <strong>$2.500 COP</strong></div>
                             <div class="col-span-2 pt-1 border-t border-slate-200">
-                                👤 <strong>NIÑO / DEPORTISTA RESPONSABLE:</strong> __________________________________________________
+                                <strong>DEPORTISTA RESPONSABLE:</strong> __________________________________________________
                             </div>
                         </div>
 
@@ -524,7 +524,7 @@
                         </table>
 
                         <div class="text-[0.55rem] text-slate-500 italic mt-2 text-center">
-                            * Entregar el dinero y este talón diligenciado al director técnico o delegado antes del sorteo. ¡Gracias por apoyar!
+                            * Entregar el dinero y este talón diligenciado al director técnico o delegado antes del sorteo. ¡Muchas gracias por su apoyo!
                         </div>
                     `;
                     page.appendChild(card);
@@ -584,10 +584,10 @@
                             </div>
 
                             <div class="grid grid-cols-2 gap-1 text-[0.62rem] text-slate-800 my-1">
-                                <div>🏆 PREMIO: <strong class="text-red-700">${premio}</strong></div>
-                                <div>📅 JUEGA: <strong class="text-[#004d98]">${fecha}</strong></div>
-                                <div>🎰 LOTERÍA: <strong>${loteria}</strong></div>
-                                <div>💰 VALOR: <strong class="text-[#004d98]">$2.500 COP</strong></div>
+                                <div>PREMIO: <strong class="text-red-700">${premio}</strong></div>
+                                <div>FECHA: <strong class="text-[#004d98]">${fecha}</strong></div>
+                                <div>LOTERÍA: <strong>${loteria}</strong></div>
+                                <div>VALOR: <strong class="text-[#004d98]">$2.500 COP</strong></div>
                             </div>
 
                             <div class="border-t border-slate-200 pt-1 text-[0.55rem] text-slate-600 flex justify-between items-center">
@@ -609,21 +609,21 @@
             const loteria = document.getElementById('inp-loteria').value;
             const premio = document.getElementById('inp-premio').value;
             
-            const texto = `⚽ *CLUB DEPORTIVO DIBA FBC* ⚽\n` +
-                          `🎟️ *GRAN RIFA PRO-INSCRIPCIÓN CAMPEONATO*\n\n` +
+            const texto = `CLUB DEPORTIVO DIBA FBC\n` +
+                          `RIFA PRO-INSCRIPCIÓN CAMPEONATO\n\n` +
                           `Estimados padres de familia y acudientes:\n` +
-                          `Para apoyar la inscripción de nuestros campeones al torneo, iniciamos la venta de la rifa oficial con los siguientes parámetros:\n\n` +
-                          `🏆 *Premio Mayor:* ${premio}\n` +
-                          `📅 *Fecha de Sorteo:* ${fecha}\n` +
-                          `🎰 *Lotería:* ${loteria}\n` +
-                          `💰 *Valor por Número:* $2.500 COP\n` +
-                          `👦 *Asignación por Niño:* 6 números (Meta: $15.000 COP por niño)\n` +
-                          `🔢 *Total de la Rifa:* 100 números (del 00 al 99)\n\n` +
-                          `¡Agradecemos de corazón su compromiso y apoyo constante con nuestros deportistas!\n` +
-                          `*¡DIBA FBC, FORJANDO CAMPEONES!* 💙💛`;
+                          `Para cubrir los costos de inscripción de nuestros deportistas al próximo campeonato, iniciamos la actividad de recaudo oficial con los siguientes parámetros:\n\n` +
+                          `- PREMIO MAYOR: ${premio}\n` +
+                          `- FECHA DE JUEGO: ${fecha}\n` +
+                          `- SORTEO / LOTERÍA: ${loteria}\n` +
+                          `- VALOR POR NÚMERO: $2.500 COP\n` +
+                          `- ASIGNACIÓN POR DEPORTISTA: 6 números (Meta: $15.000 COP por niño)\n` +
+                          `- TOTAL DE NÚMEROS: 100 números (del 00 al 99)\n\n` +
+                          `Agradecemos su compromiso y colaboración activa en beneficio de nuestros deportistas.\n` +
+                          `DIBA FBC — FORJANDO CAMPEONES`;
 
             navigator.clipboard.writeText(texto).then(() => {
-                mostrarToast("¡Texto para WhatsApp copiado al portapapeles!");
+                mostrarToast("Texto institucional para WhatsApp copiado al portapapeles");
             }).catch(() => {
                 mostrarToast("Copiado al portapapeles");
             });

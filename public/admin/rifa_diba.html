@@ -1060,22 +1060,22 @@
                                     <div class="boleta-number-id">#${String(currentIdx).padStart(3, '0')}</div>
                                 </div>
                                 <div class="boleta-grid">
-                                    <div class="boleta-info-list italic">
-                                        📅 JUEGA: <strong>${fecha}</strong><br>
-                                        🎰 LOTERÍA: <strong>${loteria}</strong><br>
-                                        🏆 PREMIO: <strong>${premio}</strong><br>
-                                        💰 VALOR: <strong>${valor}</strong>
+                                    <div class="boleta-info-list">
+                                        FECHA: <strong>${fecha}</strong><br>
+                                        LOTERÍA: <strong>${loteria}</strong><br>
+                                        PREMIO: <strong>${premio}</strong><br>
+                                        VALOR: <strong>${valor}</strong>
                                     </div>
                                     <div class="boleta-nums-grid">${numsHtml}</div>
                                 </div>
                                 <div class="boleta-footer uppercase flex-col !items-start !gap-1">
                                     <div class="flex justify-between w-full">
-                                        <span class="italic">👤 VENDEDOR (NIÑO): <strong>${responsables[currentIdx - 1] || '____________________________'}</strong></span>
+                                        <span class="font-bold">VENDEDOR: <strong>${responsables[currentIdx - 1] || '____________________________'}</strong></span>
                                         <span class="opacity-40 text-[0.6rem]">${serie.toUpperCase()} © ${new Date().getFullYear()}</span>
                                     </div>
                                     <div class="flex justify-between w-full text-[0.65rem] opacity-90 border-t border-blue-900/20 pt-1">
-                                        <span>📝 COMPRADOR: ___________________________</span>
-                                        <span>📞 TEL: __________________</span>
+                                        <span>COMPRADOR: ___________________________</span>
+                                        <span>TEL: __________________</span>
                                     </div>
                                 </div>
                             </div>

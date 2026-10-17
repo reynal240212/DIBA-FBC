@@ -123,7 +123,7 @@ def generar_boletas_100_individuales(pdf_path):
         c.saveState()
         c.translate(cut_x + 4, y + ticket_h/2 - 20)
         c.rotate(90)
-        c.drawString(0, 0, "✂ - - - CORTAR AQUÍ - - -")
+        c.drawString(0, 0, "- - - CORTAR AQUÍ - - -")
         c.restoreState()
 
         # --- PARTE 2: BOLETA PARA EL COMPRADOR (DERECHA) ---
@@ -171,10 +171,10 @@ def generar_boletas_100_individuales(pdf_path):
         d_spacing = 11.5
 
         items = [
-            ("🏆 PREMIO:", PREMIO, colors.HexColor("#dc2626"), "Helvetica-Bold"),
-            ("📅 JUEGA:", FECHA_SORTEO, colors.black, "Helvetica-Bold"),
-            ("🎰 LOTERÍA:", LOTERIA, colors.black, "Helvetica"),
-            ("💰 VALOR:", f"{VALOR_NUMERO} C/U", AZUL_DIBA, "Helvetica-Bold"),
+            ("PREMIO MAYOR:", PREMIO, colors.HexColor("#dc2626"), "Helvetica-Bold"),
+            ("FECHA DE JUEGO:", FECHA_SORTEO, colors.black, "Helvetica-Bold"),
+            ("SORTEO / LOTERÍA:", LOTERIA, colors.black, "Helvetica"),
+            ("VALOR NÚMERO:", f"{VALOR_NUMERO} C/U", AZUL_DIBA, "Helvetica-Bold"),
         ]
 
         for lbl, val, col, fstyle in items:
@@ -183,7 +183,7 @@ def generar_boletas_100_individuales(pdf_path):
             c.drawString(text_x, detail_y, lbl)
             c.setFont(fstyle, 7.5)
             c.setFillColor(col)
-            c.drawString(text_x + 62, detail_y, val)
+            c.drawString(text_x + 92, detail_y, val)
             detail_y -= d_spacing
 
         # Footer de la boleta del comprador
