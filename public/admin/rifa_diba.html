@@ -690,18 +690,18 @@
             const premio = document.getElementById('cfg-premio')?.value || 'Una Colonia Original';
             const valor = document.getElementById('cfg-valor')?.value || '$2.500';
             
-            const texto = `⚽ *CLUB DEPORTIVO DIBA FBC* ⚽\n` +
-                          `🎟️ *GRAN RIFA PRO-INSCRIPCIÓN CAMPEONATO*\n\n` +
+            const texto = `CLUB DEPORTIVO DIBA FBC\n` +
+                          `RIFA PRO-INSCRIPCIÓN CAMPEONATO\n\n` +
                           `Estimados padres de familia y acudientes:\n` +
-                          `Para recaudar los fondos de inscripción de nuestros futbolistas al campeonato, ya está disponible la rifa oficial:\n\n` +
-                          `🏆 *Premio:* ${premio}\n` +
-                          `📅 *Juega:* ${fecha}\n` +
-                          `🎰 *Lotería:* ${loteria}\n` +
-                          `💰 *Valor por Número:* ${valor}\n` +
-                          `👦 *Asignación:* 6 números por cada niño ($15.000 COP por niño)\n` +
-                          `🔢 *Total Rifa:* 100 números (del 00 al 99)\n\n` +
-                          `¡Contamos con su valioso apoyo para que nuestros campeones participen y brillen en el torneo!\n` +
-                          `*DIBA FBC, FORJANDO CAMPEONES* 💙💛`;
+                          `Para cubrir los costos de inscripción de nuestros deportistas al próximo campeonato, iniciamos la actividad de recaudo oficial con los siguientes parámetros:\n\n` +
+                          `- PREMIO MAYOR: ${premio}\n` +
+                          `- FECHA DE JUEGO: ${fecha}\n` +
+                          `- SORTEO / LOTERÍA: ${loteria}\n` +
+                          `- VALOR POR NÚMERO: ${valor}\n` +
+                          `- ASIGNACIÓN POR DEPORTISTA: 6 números (Meta: $15.000 COP por niño)\n` +
+                          `- TOTAL DE NÚMEROS: 100 números (del 00 al 99)\n\n` +
+                          `Agradecemos su compromiso y colaboración activa en beneficio de nuestros deportistas.\n` +
+                          `DIBA FBC — FORJANDO CAMPEONES`;
 
             navigator.clipboard.writeText(texto).then(() => {
                 showToast('Mensaje de WhatsApp copiado al portapapeles', 'success');
