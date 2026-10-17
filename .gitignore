@@ -33,6 +33,9 @@ cerebro.html
 leads.html
 # === DOCUMENTOS FÍSICOS ===
 *.pdf
+!public/Planillas_Control_Rifa_17_Ninos.pdf
+!public/Boletas_Oficiales_Rifa_17_Talonarios.pdf
+!public/Boletas_Rifa_100_Numeros_Talon.pdf
 *.docx
 # managed
 **.data.json
