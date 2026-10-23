@@ -44,3 +44,7 @@ leads.html
 # end managed
 
 scratch/
+
+# === MICROSERVICIOS DESACOPLADOS ===
+openwa/
+openwa-config/
