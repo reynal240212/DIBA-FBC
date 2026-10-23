@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Liga El Jolparrismo - Posiciones y Goleadores (Cat. 2014) | DIBA FBC</title>
+  <link rel="icon" href="images/ESCUDO.ico" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description"
+    content="Tabla de Posiciones y Tabla de Goleadores oficial del Campeonato Liga El Jolparrismo - La Bombonera (Categoría 2014) con diseño institucional de DIBA FBC." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;700;900&family=Montserrat:ital,wght@0,400;0,600;0,700;0,800;0,900;1,900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Outfit', 'Montserrat', 'sans-serif'],
+            display: ['Montserrat', 'sans-serif'],
+          },
+          colors: {
+            dibaGold: '#ffd700',
+            dibaBlue: '#004d98',
+            dibaRed: '#a50044',
+            dibaDark: '#020617'
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background-color: #020617;
+      color: #f8fafc;
+      overflow-x: hidden;
+    }
+
+    .hero-jolparrismo {
+      position: relative;
+      background:
+        radial-gradient(ellipse at 20% 20%, rgba(0, 77, 152, 0.35) 0%, transparent 55%),
+        radial-gradient(ellipse at 80% 30%, rgba(165, 0, 68, 0.28) 0%, transparent 55%),
+        radial-gradient(ellipse at 50% 85%, rgba(234, 179, 8, 0.18) 0%, transparent 60%),
+        linear-gradient(180deg, #020617 0%, #091326 60%, #020617 100%);
+      border-bottom: 1px solid rgba(234, 179, 8, 0.2);
+    }
+
+    .glass-panel {
+      background: rgba(15, 23, 42, 0.75);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.65);
+    }
+
+    .diba-table {
+      border-collapse: separate;
+      border-spacing: 0 6px;
+      width: 100%;
+    }
+
+    .diba-table thead th {
+      color: #94a3b8;
+      font-size: 0.68rem;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 0.75rem 0.75rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .diba-table tbody tr {
+      background: rgba(30, 41, 59, 0.45);
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .diba-table tbody tr:hover {
+      background: rgba(30, 41, 59, 0.85);
+      transform: translateY(-1px);
+    }
+
+    .diba-table tbody td {
+      padding: 0.85rem 0.75rem;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: #e2e8f0;
+      border-top: 1px solid rgba(255, 255, 255, 0.04);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    }
+
+    .diba-table tbody td:first-child {
+      border-top-left-radius: 14px;
+      border-bottom-left-radius: 14px;
+      border-left: 1px solid rgba(255, 255, 255, 0.04);
+      padding-left: 1rem;
+    }
+
+    .diba-table tbody td:last-child {
+      border-top-right-radius: 14px;
+      border-bottom-right-radius: 14px;
+      border-right: 1px solid rgba(255, 255, 255, 0.04);
+      padding-right: 1rem;
+    }
+
+    /* Fila destacada de DIBA FBC */
+    .diba-table tbody tr.row-diba {
+      background: linear-gradient(90deg, rgba(234, 179, 8, 0.18) 0%, rgba(0, 77, 152, 0.22) 60%, rgba(165, 0, 68, 0.18) 100%);
+      box-shadow: 0 10px 25px -5px rgba(234, 179, 8, 0.15);
+    }
+
+    .diba-table tbody tr.row-diba td {
+      color: #ffffff;
+      font-weight: 800;
+      border-top-color: rgba(234, 179, 8, 0.45);
+      border-bottom-color: rgba(234, 179, 8, 0.45);
+    }
+
+    .diba-table tbody tr.row-diba td:first-child {
+      border-left: 3px solid #eab308;
+    }
+
+    .diba-table tbody tr.row-diba td:last-child {
+      border-right: 1px solid rgba(234, 179, 8, 0.45);
+    }
+
+    .filter-pill.active {
+      background: #eab308;
+      color: #020617;
+      border-color: #eab308;
+      box-shadow: 0 8px 20px -4px rgba(234, 179, 8, 0.4);
+    }
+  </style>
+</head>
+
+<body class="min-h-screen flex flex-col">
+
+  <div id="navbar-container"></div>
+
+  <!-- HERO TORNEO EL JOLPARRISMO -->
+  <section class="hero-jolparrismo pt-10 pb-14 px-4">
+    <div class="max-w-6xl mx-auto">
+      <div class="flex flex-col lg:flex-row items-center justify-between gap-8">
+
+        <!-- Emblema Oficial Extraído del Torneo + Escudo DIBA -->
+        <div class="flex flex-col sm:flex-row items-center gap-6 text-center sm:text-left">
+          <div class="relative flex items-center gap-3">
+            <div class="w-28 h-28 sm:w-32 sm:h-32 rounded-2xl overflow-hidden border-2 border-amber-400/50 shadow-[0_0_30px_rgba(234,179,8,0.25)] bg-slate-900 p-1 flex-shrink-0">
+              <img src="images/torneo/logo-liga-jolparrismo.webp" alt="Logo Liga El Jolparrismo" class="w-full h-full object-cover rounded-xl" />
+            </div>
+            <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-slate-900/90 border border-white/15 p-2 flex items-center justify-center shadow-xl -ml-5 mt-12">
+              <img src="images/ESCUDO.webp" alt="Escudo DIBA FBC" class="w-full h-full object-contain" />
+            </div>
+          </div>
+
+          <div>
+            <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-amber-400/10 border border-amber-400/30 text-amber-400 text-[11px] font-black uppercase tracking-widest mb-3">
+              <i class="fas fa-trophy"></i> La Bombonera • Dios Nos Guía
+            </div>
+            <h1 class="text-3xl sm:text-5xl font-black uppercase tracking-tight leading-none text-white">
+              Liga <span class="text-amber-400">El Jolparrismo</span>
+            </h1>
+            <p class="text-slate-300 text-sm sm:text-base font-semibold mt-2">
+               Estadísticas Oficiales — <span class="text-amber-400 font-black">Categoría 2014</span>
+            </p>
+          </div>
+        </div>
+
+        <!-- Resumen Destacado DIBA FBC -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 w-full lg:w-auto">
+          <div class="glass-panel rounded-2xl p-4 text-center border-amber-400/30">
+            <div class="text-[10px] font-black uppercase tracking-widest text-amber-400">Posición DIBA</div>
+            <div class="text-2xl sm:text-3xl font-black text-white mt-1">1° Lugar</div>
+            <div class="text-[10px] text-emerald-400 font-bold uppercase mt-0.5">Líder Invicto</div>
+          </div>
+          <div class="glass-panel rounded-2xl p-4 text-center">
+            <div class="text-[10px] font-black uppercase tracking-widest text-slate-400">Puntos</div>
+            <div class="text-2xl sm:text-3xl font-black text-amber-400 mt-1">10 PTS</div>
+            <div class="text-[10px] text-slate-400 font-bold uppercase mt-0.5">3 PG • 1 PE • 0 PP</div>
+          </div>
+          <div class="glass-panel rounded-2xl p-4 text-center">
+            <div class="text-[10px] font-black uppercase tracking-widest text-slate-400">Goles DIBA</div>
+            <div class="text-2xl sm:text-3xl font-black text-emerald-400 mt-1">11 GF</div>
+            <div class="text-[10px] text-slate-400 font-bold uppercase mt-0.5">4 GC (DG +7)</div>
+          </div>
+          <div class="glass-panel rounded-2xl p-4 text-center">
+            <div class="text-[10px] font-black uppercase tracking-widest text-slate-400">Goleadores DIBA</div>
+            <div class="text-2xl sm:text-3xl font-black text-sky-400 mt-1">5</div>
+            <div class="text-[10px] text-slate-400 font-bold uppercase mt-0.5">En Tabla Oficial</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTENIDO PRINCIPAL -->
+  <main class="max-w-6xl mx-auto px-4 py-10 space-y-12 flex-grow w-full">
+
+    <!-- PODIO DE GOLEADORES CATEGORÍA 2014 -->
+    <section>
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+        <div>
+          <span class="text-[11px] font-black uppercase tracking-widest text-amber-400 flex items-center gap-2">
+            <i class="fas fa-medal"></i> Podio de Artilleros • Categoría 2014
+          </span>
+          <h2 class="text-2xl sm:text-3xl font-black uppercase tracking-tight text-white mt-1">
+            Top 3 <span class="text-amber-400">Goleadores del Torneo</span>
+          </h2>
+        </div>
+        <a href="partidos.html" class="inline-flex items-center gap-2 text-xs font-black uppercase tracking-wider px-4 py-2.5 rounded-xl bg-slate-800/80 hover:bg-amber-400 hover:text-slate-950 text-slate-200 border border-slate-700 transition-all">
+          <i class="fas fa-calendar-alt"></i> Ver Calendario de Partidos
+        </a>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+        <!-- #1 Isaac Urina -->
+        <div class="glass-panel rounded-2xl p-5 flex items-center justify-between border-l-4 border-l-red-500">
+          <div class="flex items-center gap-4">
+            <div class="relative">
+              <img src="images/torneo/escudo-redimidos.webp" alt="Redimidos" class="w-14 h-14 object-contain" />
+              <span class="absolute -top-1.5 -left-1.5 w-6 h-6 rounded-full bg-amber-400 text-slate-950 font-black text-xs flex items-center justify-center shadow">1</span>
+            </div>
+            <div>
+              <div class="text-xs font-bold uppercase tracking-wider text-red-400">Redimidos</div>
+              <div class="text-lg font-black text-white">Isaac Urina</div>
+              <div class="text-[11px] text-slate-400 font-semibold">Líder de Goleo • Cat. 2014</div>
+            </div>
+          </div>
+          <div class="text-right">
+            <div class="text-3xl font-black text-amber-400 leading-none">6</div>
+            <div class="text-[10px] font-black uppercase tracking-widest text-slate-400 mt-1">Goles</div>
+          </div>
+        </div>
+
+        <!-- #2 Maite Garizabalo -->
+        <div class="glass-panel rounded-2xl p-5 flex items-center justify-between border-l-4 border-l-sky-400">
+          <div class="flex items-center gap-4">
+            <div class="relative">
+              <img src="images/torneo/escudo-jolparr-fc.webp" alt="Jolparr FC" class="w-14 h-14 object-contain" />
+              <span class="absolute -top-1.5 -left-1.5 w-6 h-6 rounded-full bg-slate-300 text-slate-950 font-black text-xs flex items-center justify-center shadow">2</span>
+            </div>
+            <div>
+              <div class="text-xs font-bold uppercase tracking-wider text-sky-400">Jolparr FC</div>
+              <div class="text-lg font-black text-white">Maite Garizabalo</div>
+              <div class="text-[11px] text-slate-400 font-semibold">2° Lugar • Cat. 2014</div>
+            </div>
+          </div>
+          <div class="text-right">
+            <div class="text-3xl font-black text-white leading-none">5</div>
+            <div class="text-[10px] font-black uppercase tracking-widest text-slate-400 mt-1">Goles</div>
+          </div>
+        </div>
+
+        <!-- #3 Jair Moreno (DIBA FBC) -->
+        <div class="glass-panel rounded-2xl p-5 flex items-center justify-between border-2 border-amber-400/60 bg-gradient-to-r from-amber-500/15 via-blue-900/20 to-slate-900">
+          <div class="flex items-center gap-4">
+            <div class="relative">
+              <img src="images/ESCUDO.webp" alt="DIBA FBC" class="w-14 h-14 object-contain" />
+              <span class="absolute -top-1.5 -left-1.5 w-6 h-6 rounded-full bg-amber-500 text-slate-950 font-black text-xs flex items-center justify-center shadow">3</span>
+            </div>
+            <div>
+              <div class="inline-flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-amber-400 bg-amber-400/15 px-2 py-0.5 rounded-full border border-amber-400/30">
+                <i class="fas fa-star text-[8px]"></i> DIBA FBC
+              </div>
+              <div class="text-lg font-black text-white mt-0.5">Jair Moreno</div>
+              <div class="text-[11px] text-amber-300/90 font-semibold">Máximo Artillero DIBA</div>
+            </div>
+          </div>
+          <div class="text-right">
+            <div class="text-3xl font-black text-amber-400 leading-none">3</div>
+            <div class="text-[10px] font-black uppercase tracking-widest text-amber-300 mt-1">Goles</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- GRID PRINCIPAL: TABLA DE POSICIONES + TABLA DE GOLEADORES -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+
+      <!-- COLUMNA IZQUIERDA (7 cols): TABLA DE POSICIONES -->
+      <section class="lg:col-span-7 glass-panel rounded-3xl p-6 sm:p-8">
+        <div class="flex flex-wrap items-center justify-between gap-4 pb-5 mb-5 border-b border-white/10">
+          <div class="flex items-center gap-3.5">
+            <img src="images/torneo/icono-liga-jolparrismo.webp" alt="Liga El Jolparrismo" class="w-12 h-12 rounded-xl object-cover border border-amber-400/40" />
+            <div>
+              <span class="text-[10px] font-black uppercase tracking-widest text-amber-400">Clasificación General</span>
+              <h2 class="text-xl sm:text-2xl font-black uppercase tracking-tight text-white">
+                Tabla de Posiciones
+              </h2>
+            </div>
+          </div>
+          <span class="px-3 py-1 rounded-full text-[11px] font-black uppercase tracking-wider bg-blue-500/15 text-blue-300 border border-blue-500/30">
+            Categoría 2014
+          </span>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="diba-table">
+            <thead>
+              <tr>
+                <th class="text-center w-12">Pos</th>
+                <th class="text-left">Club / Equipo</th>
+                <th class="text-center">PJ</th>
+                <th class="text-center">PG</th>
+                <th class="text-center">PE</th>
+                <th class="text-center">PP</th>
+                <th class="text-center">GF</th>
+                <th class="text-center">GC</th>
+                <th class="text-center">DG</th>
+                <th class="text-center">PTS</th>
+              </tr>
+            </thead>
+            <tbody id="jolparrismo-posiciones-body">
+              <!-- 1. DIBA FBC -->
+              <tr class="row-diba">
+                <td class="text-center">
+                  <span class="inline-flex items-center justify-center w-7 h-7 rounded-lg bg-amber-400 text-slate-950 font-black text-xs shadow">1</span>
+                </td>
+                <td>
+                  <div class="flex items-center gap-3">
+                    <img src="images/ESCUDO.webp" alt="DIBA FBC" class="w-9 h-9 object-contain flex-shrink-0" />
+                    <div>
+                      <div class="flex items-center gap-2">
+                        <span class="text-amber-400 font-black tracking-wide">DIBA FBC</span>
+                        <span class="text-[9px] font-black uppercase tracking-widest px-2 py-0.5 rounded-full bg-amber-400/20 text-amber-300 border border-amber-400/40 hidden sm:inline-block">Líder</span>
+                      </div>
+                      <div class="text-[10px] text-slate-300 font-medium">Invicto • 83% Rendimiento</div>
+                    </div>
+                  </div>
+                </td>
+                <td class="text-center">4</td>
+                <td class="text-center text-emerald-400 font-bold">3</td>
+                <td class="text-center text-amber-300">1</td>
+                <td class="text-center text-slate-400">0</td>
+                <td class="text-center font-bold">11</td>
+                <td class="text-center text-slate-300">4</td>
+                <td class="text-center text-emerald-400 font-bold">+7</td>
+                <td class="text-center">
+                  <span class="inline-flex items-center justify-center px-3 py-1 rounded-lg bg-amber-400 text-slate-950 font-black text-sm shadow">10</span>
+                </td>
+              </tr>
+
+              <!-- 2. REDIMIDOS -->
+              <tr>
+                <td class="text-center">
+                  <span class="inline-flex items-center justify-center w-7 h-7 rounded-lg bg-slate-700 text-white font-black text-xs">2</span>
+                </td>
+                <td>
+                  <div class="flex items-center gap-3">
+                    <img src="images/torneo/escudo-redimidos.webp" alt="Redimidos" class="w-9 h-9 object-contain flex-shrink-0" />
+                    <div>
+                      <div class="font-bold text-white">REDIMIDOS</div>
+                      <div class="text-[10px] text-slate-400">Categoría 2014</div>
+                    </div>
+                  </div>
+                </td>
+                <td class="text-center">4</td>
+                <td class="text-center text-emerald-400">2</td>
+                <td class="text-center">1</td>
+                <td class="text-center text-rose-400">1</td>
+                <td class="text-center">12</td>
+                <td class="text-center">4</td>
+                <td class="text-center text-emerald-400 font-bold">+8</td>
+                <td class="text-center">
+                  <span class="inline-flex items-center justify-center px-3 py-1 rounded-lg bg-slate-800 text-amber-400 font-black text-sm border border-white/10">7</span>
+                </td>
+              </tr>
+
+              <!-- 3. CAYENAS FC -->
+              <tr>
+                <td class="text-center">
+                  <span class="inline-flex items-center justify-center w-7 h-7 rounded-lg bg-amber-700/60 text-amber-200 font-black text-xs">3</span>
+                </td>
+                <td>
+                  <div class="flex items-center gap-3">
+                    <img src="images/torneo/escudo-cayenas-fc.webp" alt="Cayenas FC" class="w-9 h-9 object-contain flex-shrink-0" />
+                    <div>
+                      <div class="font-bold text-white">CAYENAS FC</div>
+                      <div class="text-[10px] text-slate-400">Categoría 2014</div>
+                    </div>
+                  </div>
+                </td>
+                <td class="text-center">4</td>
+                <td class="text-center text-emerald-400">2</td>
+                <td class="text-center">0</td>
+                <td class="text-center text-rose-400">1</td>
+                <td class="text-center">8</td>
+                <td class="text-center">7</td>
+                <td class="text-center text-emerald-400 font-bold">+1</td>
+                <td class="text-center">
+                  <span class="inline-flex items-center justify-center px-3 py-1 rounded-lg bg-slate-800 text-amber-400 font-black text-sm border border-white/10">6</span>
+                </td>
+              </tr>
+
+              <!-- 4. AMIGOS KIDS -->
+              <tr>
+                <td class="text-center">
+                  <span class="inline-flex items-center justify-center w-7 h-7 rounded-lg bg-slate-800 text-slate-300 font-bold text-xs">4</span>
+                </td>
+                <td>
+                  <div class="flex items-center gap-3">
+                    <img src="images/torneo/escudo-amigos-kids.webp" alt="Amigos Kids" class="w-9 h-9 object-contain flex-shrink-0" />
+                    <div>
+                      <div class="font-bold text-white">AMIGOS KIDS</div>
+                      <div class="text-[10px] text-slate-400">Categoría 2014</div>
+                    </div>
+                  </div>
+                </td>
+                <td class="text-center">2</td>
+                <td class="text-center text-emerald-400">1</td>
+                <td class="text-center">1</td>
+                <td class="text-center">0</td>
+                <td class="text-center">5</td>
+                <td class="text-center">4</td>
+                <td class="text-center text-emerald-400 font-bold">+1</td>
+                <td class="text-center">
+                  <span class="inline-flex items-center justify-center px-3 py-1 rounded-lg bg-slate-800 text-white font-black text-sm border border-white/10">4</span>
+                </td>
+              </tr>
+
+              <!-- 5. FUDAVIS -->
+              <tr>
+                <td class="text-center">
+                  <span class="inline-flex items-center justify-center w-7 h-7 rounded-lg bg-slate-800 text-slate-400 font-bold text-xs">5</span>
+                </td>
+                <td>
+                  <div class="flex items-center gap-3">
+                    <img src="images/torneo/escudo-fudavis.webp" alt="Fudavis" class="w-9 h-9 object-contain flex-shrink-0" />
+                    <div>
+                      <div class="font-bold text-white">FUDAVIS</div>
+                      <div class="text-[10px] text-slate-400">Categoría 2014</div>
+                    </div>
+                  </div>
+                </td>
+                <td class="text-center">3</td>
+                <td class="text-center text-emerald-400">1</td>
+                <td class="text-center">0</td>
+                <td class="text-center text-rose-400">2</td>
+                <td class="text-center">4</td>
+                <td class="text-center">11</td>
+                <td class="text-center text-rose-400 font-bold">-7</td>
+                <td class="text-center">
+                  <span class="inline-flex items-center justify-center px-3 py-1 rounded-lg bg-slate-800 text-white font-black text-sm border border-white/10">3</span>
+                </td>
+              </tr>
+
+              <!-- 6. JOLPARR FC -->
+              <tr>
+                <td class="text-center">
+                  <span class="inline-flex items-center justify-center w-7 h-7 rounded-lg bg-slate-800 text-slate-400 font-bold text-xs">6</span>
+                </td>
+                <td>
+                  <div class="flex items-center gap-3">
+                    <img src="images/torneo/escudo-jolparr-fc.webp" alt="Jolparr FC" class="w-9 h-9 object-contain flex-shrink-0" />
+                    <div>
+                      <div class="font-bold text-white">JOLPARR FC</div>
+                      <div class="text-[10px] text-slate-400">Categoría 2014</div>
+                    </div>
+                  </div>
+                </td>
+                <td class="text-center">4</td>
+                <td class="text-center">0</td>
+                <td class="text-center">1</td>
+                <td class="text-center text-rose-400">3</td>
+                <td class="text-center">6</td>
+                <td class="text-center">13</td>
+                <td class="text-center text-rose-400 font-bold">-7</td>
+                <td class="text-center">
+                  <span class="inline-flex items-center justify-center px-3 py-1 rounded-lg bg-slate-800 text-white font-black text-sm border border-white/10">1</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Leyenda de Tabla -->
+        <div class="mt-6 pt-4 border-t border-white/10 flex flex-wrap items-center justify-between gap-3 text-[11px] text-slate-400">
+          <div class="flex items-center gap-4">
+            <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-amber-400"></span> Líder del Campeonato (DIBA FBC)</span>
+            <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-emerald-400"></span> Zona de Clasificación</span>
+          </div>
+          <div class="font-semibold text-slate-500">
+            PJ: Jugados • PG: Ganados • PE: Empates • PP: Perdidos • GF/GC: Goles
+          </div>
+        </div>
+      </section>
+
+      <!-- COLUMNA DERECHA (5 cols): TABLA DE GOLEADORES -->
+      <section class="lg:col-span-5 glass-panel rounded-3xl p-6 sm:p-8">
+        <div class="flex flex-wrap items-center justify-between gap-3 pb-4 mb-4 border-b border-white/10">
+          <div>
+            <span class="text-[10px] font-black uppercase tracking-widest text-amber-400">Artilleros Oficiales</span>
+            <h2 class="text-xl sm:text-2xl font-black uppercase tracking-tight text-white">
+              Tabla de Goleadores
+            </h2>
+          </div>
+
+          <!-- Filtro Todos / Solo DIBA -->
+          <div class="flex items-center gap-1.5 bg-slate-900/90 p-1 rounded-xl border border-white/10">
+            <button type="button" data-scorer-filter="all" class="filter-pill active px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-wider transition-all">
+              Todos (21)
+            </button>
+            <button type="button" data-scorer-filter="diba" class="filter-pill px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-wider text-slate-300 hover:text-white transition-all">
+              DIBA FBC (5)
+            </button>
+          </div>
+        </div>
+
+        <div class="max-h-[540px] overflow-y-auto pr-1">
+          <table class="diba-table">
+            <thead>
+              <tr>
+                <th class="text-center w-10">#</th>
+                <th class="text-left">Jugador / Club</th>
+                <th class="text-center w-16">Goles</th>
+              </tr>
+            </thead>
+            <tbody id="jolparrismo-goleadores-body">
+              <!-- Renderizado por JS con fallback estático inmediato -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+    </div>
+
+  </main>
+
+  <footer id="footer-container"></footer>
+
+  <script src="scripts/config.js"></script>
+  <script src="scripts/loadComponents.js" defer></script>
+  <script type="module" src="src/main.js"></script>
+  <script src="scripts/main.js"></script>
+
+  <script>
+    const JOLPARRISMO_SCORERS = [
+      { pos: 1, equipo: "REDIMIDOS", escudo: "images/torneo/escudo-redimidos.webp", nombre: "Isaac Urina", goles: 6, isDiba: false },
+      { pos: 2, equipo: "JOLPARR FC", escudo: "images/torneo/escudo-jolparr-fc.webp", nombre: "Maite Garizabalo", goles: 5, isDiba: false },
+      { pos: 3, equipo: "DIBA FBC", escudo: "images/ESCUDO.webp", nombre: "Jair Moreno", goles: 3, isDiba: true },
+      { pos: 4, equipo: "REDIMIDOS", escudo: "images/torneo/escudo-redimidos.webp", nombre: "Navid Contreras", goles: 3, isDiba: false },
+      { pos: 5, equipo: "DIBA FBC", escudo: "images/ESCUDO.webp", nombre: "Andrés Sierra", goles: 2, isDiba: true },
+      { pos: 6, equipo: "REDIMIDOS", escudo: "images/torneo/escudo-redimidos.webp", nombre: "Dilan Jiménez", goles: 2, isDiba: false },
+      { pos: 7, equipo: "CAYENAS FCC", escudo: "images/torneo/escudo-cayenas-fc.webp", nombre: "Iker Amaya", goles: 2, isDiba: false },
+      { pos: 8, equipo: "CAYENAS FCC", escudo: "images/torneo/escudo-cayenas-fc.webp", nombre: "Luis Mateo Castro", goles: 2, isDiba: false },
+      { pos: 9, equipo: "REDIMIDOS", escudo: "images/torneo/escudo-redimidos.webp", nombre: "Wilder Sandoval", goles: 2, isDiba: false },
+      { pos: 10, equipo: "AMIGOS KIDS", escudo: "images/torneo/escudo-amigos-kids.webp", nombre: "Jesús Gregory", goles: 1, isDiba: false },
+      { pos: 11, equipo: "AMIGOS KIDS", escudo: "images/torneo/escudo-amigos-kids.webp", nombre: "Angel Hernández", goles: 1, isDiba: false },
+      { pos: 12, equipo: "AMIGOS KIDS", escudo: "images/torneo/escudo-amigos-kids.webp", nombre: "Angel Zabaleta", goles: 1, isDiba: false },
+      { pos: 13, equipo: "AMIGOS KIDS", escudo: "images/torneo/escudo-amigos-kids.webp", nombre: "Maxwell Ardilla", goles: 1, isDiba: false },
+      { pos: 14, equipo: "DIBA FBC", escudo: "images/ESCUDO.webp", nombre: "Abrahan Perez", goles: 1, isDiba: true },
+      { pos: 15, equipo: "DIBA FBC", escudo: "images/ESCUDO.webp", nombre: "Cristian Marcano", goles: 1, isDiba: true },
+      { pos: 16, equipo: "DIBA FBC", escudo: "images/ESCUDO.webp", nombre: "Mario Pérez", goles: 1, isDiba: true },
+      { pos: 17, equipo: "FUDAVIS", escudo: "images/torneo/escudo-fudavis.webp", nombre: "Moisés Romero", goles: 1, isDiba: false },
+      { pos: 18, equipo: "CAYENAS FCC", escudo: "images/torneo/escudo-cayenas-fc.webp", nombre: "Jesus Viloria", goles: 1, isDiba: false },
+      { pos: 19, equipo: "CAYENAS FCC", escudo: "images/torneo/escudo-cayenas-fc.webp", nombre: "Josimar Jaramillo", goles: 1, isDiba: false },
+      { pos: 20, equipo: "CAYENAS FCC", escudo: "images/torneo/escudo-cayenas-fc.webp", nombre: "Yuliana Pérez", goles: 1, isDiba: false },
+      { pos: 21, equipo: "CAYENAS FCC", escudo: "images/torneo/escudo-cayenas-fc.webp", nombre: "Luis Jaramillo", goles: 1, isDiba: false }
+    ];
+
+    function renderScorers(filter = 'all') {
+      const tbody = document.getElementById('jolparrismo-goleadores-body');
+      if (!tbody) return;
+      const list = filter === 'diba' ? JOLPARRISMO_SCORERS.filter(s => s.isDiba) : JOLPARRISMO_SCORERS;
+      tbody.innerHTML = list.map(s => `
+        <tr class="${s.isDiba ? 'row-diba' : ''}">
+          <td class="text-center">
+            <span class="inline-flex items-center justify-center w-6 h-6 rounded-md ${s.pos <= 3 ? 'bg-amber-400 text-slate-950 font-black' : 'bg-slate-800 text-slate-400 font-bold'} text-xs">
+              ${s.pos}
+            </span>
+          </td>
+          <td>
+            <div class="flex items-center gap-3">
+              <img src="${s.escudo}" alt="${s.equipo}" class="w-8 h-8 object-contain flex-shrink-0" />
+              <div>
+                <div class="${s.isDiba ? 'text-amber-300 font-black' : 'text-white font-bold'} text-sm leading-tight">${s.nombre}</div>
+                <div class="text-[10px] ${s.isDiba ? 'text-amber-400 font-black' : 'text-slate-400 font-semibold'} uppercase tracking-wider mt-0.5">${s.equipo}</div>
+              </div>
+            </div>
+          </td>
+          <td class="text-center">
+            <span class="inline-flex items-center justify-center min-w-[2rem] px-2.5 py-1 rounded-lg ${s.isDiba ? 'bg-amber-400 text-slate-950' : 'bg-slate-800 text-amber-400 border border-white/10'} font-black text-sm">
+              ${s.goles}
+            </span>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      renderScorers('all');
+      document.querySelectorAll('[data-scorer-filter]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('[data-scorer-filter]').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          renderScorers(btn.getAttribute('data-scorer-filter'));
+        });
+      });
+    });
+  </script>
+</body>
+
+</html>
