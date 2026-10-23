@@ -34,7 +34,10 @@ Deno.serve(async (req: Request) => {
     const body = msgData.body || msgData.text || "";
     const msgId = msgData.id || msgData._id || "";
 
-    // Skip group messages and own messages
+    // ── Auto-detect and insert match announcements from official group or admin ──
+    await processMatchAnnouncement(supabase, body, from);
+
+    // Skip group messages and own messages for 1-to-1 auto-replies
     if (from.includes("@g.us") || msgData.fromMe || msgData.isMe) {
       return new Response("skipped", { status: 200 });
     }
@@ -119,6 +122,113 @@ Deno.serve(async (req: Request) => {
     });
   }
 });
+
+// ══════════════════════════════════════════════════════════════
+//  AUTO MATCH PARSER (GRUPO DEPORTIVO INTERNACIONAL & ADMIN)
+// ══════════════════════════════════════════════════════════════
+async function processMatchAnnouncement(supabase: any, rawBody: string, from: string) {
+  if (!rawBody) return;
+  const isOfficialSource =
+    from.includes("120363141323973958") ||
+    from.includes("3128051695") ||
+    from.includes("3246656083");
+  if (!isOfficialSource) return;
+
+  const body = rawBody.trim();
+  const lower = body.toLowerCase();
+  const hasPartido = lower.includes("partido") || lower.includes("vs ") || lower.includes("convocados");
+  const hasDetails = lower.includes("cancha") || lower.includes("hora") || lower.includes("lugar");
+  if (!hasPartido || !hasDetails || body.length < 45) return;
+  if (lower.startsWith("recuerden hoy") || lower.startsWith("les recuerdo")) return;
+
+  const MESES: Record<string, number> = {
+    enero: 1, febrero: 2, marzo: 3, abril: 4, mayo: 5, junio: 6,
+    julio: 7, agosto: 8, septiembre: 9, setiembre: 9, octubre: 10, noviembre: 11, diciembre: 12,
+  };
+
+  let rival = "Por definir";
+  const vsMatch = body.match(/\bvs\.?\s+([^\n\r]+)/i);
+  if (vsMatch) {
+    const rClean = vsMatch[1].split(/hora|cancha|categoria|\$/i)[0].trim().toUpperCase();
+    if (rClean) rival = rClean;
+  }
+
+  let cat = "2012";
+  const catMatch = body.match(/categor[ií]as?\s*:?[\s]*([0-9\/\-\s]+)/i) || body.match(/\b(201[0-9](?:\/[0-9]{2,4})?)\b/i);
+  if (catMatch) {
+    cat = catMatch[1].replace(/\s+/g, "");
+    if (cat === "2012/13" || cat === "2013/12") cat = "2012/2013";
+    if (cat === "2014/15" || cat === "2015/14") cat = "2014/2015";
+    if (cat === "2015/16" || cat === "2016/15") cat = "2015/2016";
+  }
+
+  let hora = "09:00 AM";
+  const horaMatch = body.match(/hora\s*(?:en la cancha)?\s*:?[\s]*([0-9]{1,2}\s*[:; ]\s*[0-9]{2}(?:\s*(?:am|pm|a\s*m|p\s*m))?)/i);
+  if (horaMatch) {
+    hora = horaMatch[1].trim().toUpperCase().replace(";", ":").replace("A M", "AM").replace("P M", "PM").replace(/(\d{1,2})\s+(\d{2})/, "$1:$2").replace(/\s+/g, " ");
+    if (!/AM|PM/.test(hora)) {
+      const h = parseInt(hora.split(":")[0], 10);
+      hora += h >= 6 && h <= 11 ? " AM" : " PM";
+    }
+  }
+
+  let cancha = "La Bombonera";
+  const canchaMatch = body.match(/(?:cancha|lugar|en la cancha)\s*:?[\s]*([^\n\r]+)/i);
+  if (canchaMatch) {
+    const cVal = canchaMatch[1].trim().replace(/\.$/, "");
+    if (cVal.length > 2 && !/hora|partido|sabado|sábado|domingo|casa del profe/i.test(cVal)) {
+      cancha = cVal.charAt(0).toUpperCase() + cVal.slice(1);
+    }
+  }
+
+  const now = new Date();
+  const year = 2026;
+  let fechaIso = `${year}-${String(now.getUTCMonth() + 1).padStart(2, "0")}-${String(now.getUTCDate()).padStart(2, "0")}T12:00:00+00:00`;
+  const dateMatch = body.match(/(\d{1,2})\s+de\s+([a-zA-Z]+)/i);
+  if (dateMatch) {
+    const dia = String(Math.min(31, Math.max(1, parseInt(dateMatch[1], 10)))).padStart(2, "0");
+    const mes = String(MESES[dateMatch[2].toLowerCase()] || 10).padStart(2, "0");
+    fechaIso = `${year}-${mes}-${dia}T12:00:00+00:00`;
+  }
+
+  const datePrefix = fechaIso.split("T")[0];
+  const { data: existing } = await supabase
+    .from("partidos")
+    .select("id, fecha, hora, categoria")
+    .gte("fecha", `${datePrefix}T00:00:00`)
+    .lte("fecha", `${datePrefix}T23:59:59`);
+
+  const isDup = (existing || []).some(
+    (ex: any) =>
+      String(ex.categoria || "").trim() === cat &&
+      String(ex.hora || "").trim().toUpperCase() === hora.toUpperCase()
+  );
+  if (isDup) return;
+
+  let torneo = "Torneo Local - WhatsApp";
+  const tMatch = body.match(/Torneo\s+([^\n\r]+)/i);
+  if (tMatch) torneo = "Torneo " + tMatch[1].trim();
+
+  await supabase.from("partidos").insert([
+    {
+      equipolocal: "DIBA FBC",
+      equipovisitante: rival,
+      fecha: fechaIso,
+      hora,
+      categoria: cat,
+      Cancha: cancha,
+      descripcion: torneo,
+      resultado: "Pendiente",
+      valor: 6000,
+      uniforme: lower.includes("antiguo") ? "Homenaje a Barranquilla (antiguo)" : "Nuevo de competencia",
+      observaciones: body.slice(0, 500),
+      metodo_pago: "NEQUI 3246656083 Reinaldo Pérez",
+      escudo_local: "/images/ESCUDO.webp",
+      escudo_visitante: `https://ui-avatars.com/api/?name=${encodeURIComponent(rival)}&background=004d98&color=FFD700&size=200`,
+    },
+  ]);
+  console.log(`[webhook] Auto-inserted match: DIBA FBC vs ${rival} (${cat}) on ${datePrefix}`);
+}
 
 // ══════════════════════════════════════════════════════════════
 //  ATTENDANCE DETECTION

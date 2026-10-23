@@ -14,6 +14,9 @@ import { supabase, requireAdmin } from './supabaseClient.js';
                 await initAdminLayout();
                 await loadMatches();
                 setupHandlers();
+                // Auto-sincronizar en segundo plano al abrir y cada 60 segundos
+                syncWhatsAppMatches({ silent: true });
+                setInterval(() => syncWhatsAppMatches({ silent: true }), 60000);
             } catch (error) {
                 console.error("Init error:", error);
             }
@@ -213,131 +216,168 @@ import { supabase, requireAdmin } from './supabaseClient.js';
 
             const btnSync = document.getElementById('btn-sync-wa');
             if (btnSync) {
-                btnSync.addEventListener('click', async () => {
-                    const originalHtml = btnSync.innerHTML;
-                    btnSync.disabled = true;
-                    btnSync.innerHTML = '<i class="fas fa-spinner fa-spin text-sm"></i> Sincronizando...';
+                btnSync.addEventListener('click', () => syncWhatsAppMatches({ silent: false }));
+            }
+        }
 
-                    try {
-                        // 1. Consultar mensajes de WhatsApp en OpenWA local
-                        const cfg = window.DIBA_CONFIG || {};
-                        const baseUrl = cfg.OPENWA_URL || 'http://localhost:2785';
-                        const sessId = cfg.OPENWA_SESSION_ID || '4c331538-1a66-4002-93d2-cb49e5fa2ad3';
-                        const apiKey = cfg.OPENWA_API_KEY || 'dev-admin-key';
-                        const openwaUrl = `${baseUrl}/api/sessions/${sessId}/messages?chatId=573128051695%40c.us&limit=60`;
-                        const res = await fetch(openwaUrl, {
-                            headers: apiKey ? { 'x-api-key': apiKey } : {}
-                        });
-                        if (!res.ok) throw new Error('No se pudo conectar a OpenWA local (puerto 2785). Asegúrate de que el servicio esté activo.');
-                        const json = await res.json();
-                        const messages = json.messages || [];
+        async function syncWhatsAppMatches({ silent = false } = {}) {
+            const btnSync = document.getElementById('btn-sync-wa');
+            const originalHtml = btnSync ? btnSync.innerHTML : '';
+            if (btnSync && !silent) {
+                btnSync.disabled = true;
+                btnSync.innerHTML = '<i class="fas fa-spinner fa-spin text-sm"></i> Sincronizando...';
+            }
 
-                        // 2. Extraer partidos de los mensajes
-                        const MESES = { enero:1, febrero:2, marzo:3, abril:4, mayo:5, junio:6, julio:7, agosto:8, septiembre:9, octubre:10, noviembre:11, diciembre:12 };
-                        let newCount = 0;
+            try {
+                const cfg = window.DIBA_CONFIG || {};
+                const baseUrl = cfg.OPENWA_URL || 'http://localhost:2785';
+                const sessId = cfg.OPENWA_SESSION_ID || '4c331538-1a66-4002-93d2-cb49e5fa2ad3';
+                const apiKey = cfg.OPENWA_API_KEY || 'dev-admin-key';
+                const headers = apiKey ? { 'x-api-key': apiKey } : {};
 
-                        // Partidos existentes en memoria
-                        const existingKeys = new Set(matches.map(m => {
-                            const d = (m.fecha || '').split('T')[0];
-                            return `${d}_${(m.hora || '').trim().toUpperCase()}_${(m.categoria || '').trim()}`;
-                        }));
+                const targetChats = [
+                    '120363141323973958@g.us', // Grupo oficial Deportivo internacional
+                    '573128051695@c.us'        // Reinaldo Pérez (3128051695)
+                ];
 
-                        for (const msg of messages.reverse()) {
-                            if (msg.direction !== 'incoming') continue;
-                            const body = msg.body || '';
-                            const lower = body.toLowerCase();
-
-                            if (!lower.includes('partido') && !lower.includes('cancha') && !lower.includes('vs')) continue;
-                            if (body.length < 30) continue;
-
-                            // Parse rival
-                            let rival = 'Por definir';
-                            const vsMatch = body.match(/vs\s+([^\n\r]+)/i);
-                            if (vsMatch) {
-                                rival = vsMatch[1].split(/hora|cancha|categoria|\$/i)[0].trim().toUpperCase();
-                            }
-
-                            // Parse categoria
-                            let cat = '2012';
-                            const catMatch = body.match(/categoria\s*:?[\s]*([0-9\/\-\s]+)/i) || body.match(/cat\s+([0-9\/\-]+)/i);
-                            if (catMatch) {
-                                cat = catMatch[1].replace(/\s+/g, '');
-                                if (cat === '2014/15') cat = '2014/2015';
-                                if (cat === '2015/16') cat = '2015/2016';
-                            }
-
-                            // Parse hora
-                            let hora = '09:00 AM';
-                            const horaMatch = body.match(/hora\s*:?[\s]*([0-9]{1,2}\s*:\s*[0-9]{2}(?:\s*(?:am|pm|AM|PM))?)/i);
-                            if (horaMatch) {
-                                hora = horaMatch[1].trim().toUpperCase();
-                                if (!/AM|PM/.test(hora)) {
-                                    const h = parseInt(hora.split(':')[0]);
-                                    hora += h < 12 ? ' AM' : ' PM';
-                                }
-                            }
-
-                            // Parse cancha
-                            let cancha = 'La Bombonera';
-                            const canchaMatch = body.match(/(?:cancha|lugar|en la cancha)\s*:?[\s]*([^\n\r]+)/i);
-                            if (canchaMatch) {
-                                const cVal = canchaMatch[1].trim();
-                                if (cVal.length > 2 && !/hora|partido|sabado|domingo/i.test(cVal)) {
-                                    cancha = cVal.charAt(0).toUpperCase() + cVal.slice(1);
-                                }
-                            }
-
-                            // Parse fecha
-                            let fechaIso = new Date().toISOString().split('T')[0] + 'T12:00:00+00:00';
-                            const dateMatch = body.match(/(?:lunes|martes|mi[eé]rcoles|jueves|viernes|s[aá]bado|domingo)?\s*(\d{1,2})\s+de\s+([a-zA-Z]+)/i);
-                            if (dateMatch) {
-                                const dia = String(dateMatch[1]).padStart(2, '0');
-                                const mes = String(MESES[dateMatch[2].toLowerCase()] || 10).padStart(2, '0');
-                                const year = new Date().getFullYear();
-                                fechaIso = `${year}-${mes}-${dia}T12:00:00+00:00`;
-                            }
-
-                            // Deduplicación
-                            const key = `${fechaIso.split('T')[0]}_${hora.trim().toUpperCase()}_${cat.trim()}`;
-                            if (existingKeys.has(key)) continue;
-
-                            // Insertar en Supabase
-                            const payload = {
-                                equipolocal: 'DIBA FBC',
-                                equipovisitante: rival,
-                                fecha: fechaIso,
-                                hora: hora,
-                                categoria: cat,
-                                Cancha: cancha,
-                                descripcion: 'Torneo Local - WhatsApp',
-                                resultado: 'Pendiente',
-                                valor: 6000,
-                                uniforme: body.toLowerCase().includes('antiguo') ? 'Homenaje a Barranquilla (antiguo)' : 'Nuevo de competencia',
-                                observaciones: body.slice(0, 500),
-                                metodo_pago: 'NEQUI 3246656083 Reinaldo Pérez',
-                                escudo_local: '/images/ESCUDO.webp',
-                                escudo_visitante: `https://ui-avatars.com/api/?name=${encodeURIComponent(rival)}&background=004d98&color=FFD700&size=200`
-                            };
-
-                            const { error: insErr } = await supabase.from('partidos').insert([payload]);
-                            if (!insErr) {
-                                existingKeys.add(key);
-                                newCount++;
-                            }
-                        }
-
-                        alert(newCount > 0 
-                            ? `Sincronización exitosa: Se agregaron ${newCount} partidos nuevos a la base de datos.` 
-                            : 'El calendario ya está al día. No hay partidos nuevos pendientes por sincronizar.');
-                        await loadMatches();
-                    } catch (err) {
-                        console.error('Error sincronizando WhatsApp:', err);
-                        alert(`Error al sincronizar: ${err.message}`);
-                    } finally {
-                        btnSync.disabled = false;
-                        btnSync.innerHTML = originalHtml;
+                let allMessages = [];
+                for (const chatId of targetChats) {
+                    const historyUrl = `${baseUrl}/api/sessions/${sessId}/messages/${encodeURIComponent(chatId)}/history?limit=80`;
+                    const res = await fetch(historyUrl, { headers, signal: AbortSignal.timeout(6000) });
+                    if (res.ok) {
+                        const data = await res.json();
+                        const list = Array.isArray(data) ? data : (data.messages || []);
+                        allMessages = allMessages.concat(list);
                     }
-                });
+                }
+
+                if (!allMessages.length) {
+                    if (!silent) throw new Error('No se pudo conectar a OpenWA local (puerto 2785) o no hay mensajes.');
+                    return 0;
+                }
+
+                const MESES = { enero:1, febrero:2, marzo:3, abril:4, mayo:5, junio:6, julio:7, agosto:8, septiembre:9, setiembre:9, octubre:10, noviembre:11, diciembre:12 };
+                let newCount = 0;
+
+                const existingKeys = new Set(matches.map(m => {
+                    const d = (m.fecha || '').split('T')[0];
+                    return `${d}_${(m.hora || '').trim().toUpperCase()}_${(m.categoria || '').trim()}`;
+                }));
+
+                for (const msg of allMessages) {
+                    const body = (msg.body || '').trim();
+                    const lower = body.toLowerCase();
+
+                    const hasPartido = lower.includes('partido') || lower.includes('vs ') || lower.includes('convocados');
+                    const hasDetails = lower.includes('cancha') || lower.includes('hora') || lower.includes('lugar');
+                    if (!hasPartido || !hasDetails) continue;
+                    if (body.length < 45) continue;
+                    if (lower.startsWith('recuerden hoy') || lower.startsWith('les recuerdo') || lower.includes('quiero aclararles algo')) continue;
+
+                    // Parse rival
+                    let rival = 'Por definir';
+                    const vsMatch = body.match(/\bvs\.?\s+([^\n\r]+)/i);
+                    if (vsMatch) {
+                        const rClean = vsMatch[1].split(/hora|cancha|categoria|\$/i)[0].trim().toUpperCase();
+                        if (rClean) rival = rClean;
+                    }
+
+                    // Parse categoria
+                    let cat = '2012';
+                    const catMatch = body.match(/categor[ií]as?\s*:?[\s]*([0-9\/\-\s]+)/i) || body.match(/\b(201[0-9](?:\/[0-9]{2,4})?)\b/i);
+                    if (catMatch) {
+                        cat = catMatch[1].replace(/\s+/g, '');
+                        if (cat === '2012/13' || cat === '2013/12') cat = '2012/2013';
+                        if (cat === '2014/15' || cat === '2015/14') cat = '2014/2015';
+                        if (cat === '2015/16' || cat === '2016/15') cat = '2015/2016';
+                    }
+
+                    // Parse hora
+                    let hora = '09:00 AM';
+                    const horaMatch = body.match(/hora\s*(?:en la cancha)?\s*:?[\s]*([0-9]{1,2}\s*[:; ]\s*[0-9]{2}(?:\s*(?:am|pm|a\s*m|p\s*m))?)/i);
+                    if (horaMatch) {
+                        hora = horaMatch[1].trim().toUpperCase().replace(';', ':').replace('A M', 'AM').replace('P M', 'PM').replace(/(\d{1,2})\s+(\d{2})/, '$1:$2').replace(/\s+/g, ' ');
+                        if (!/AM|PM/.test(hora)) {
+                            const h = parseInt(hora.split(':')[0]);
+                            hora += (h >= 6 && h <= 11) ? ' AM' : ' PM';
+                        }
+                    }
+
+                    // Parse cancha
+                    let cancha = 'La Bombonera';
+                    const canchaMatch = body.match(/(?:cancha|lugar|en la cancha)\s*:?[\s]*([^\n\r]+)/i);
+                    if (canchaMatch) {
+                        const cVal = canchaMatch[1].trim().replace(/\.$/, '');
+                        if (cVal.length > 2 && !/hora|partido|sabado|sábado|domingo|casa del profe/i.test(cVal)) {
+                            cancha = cVal.charAt(0).toUpperCase() + cVal.slice(1);
+                        }
+                    }
+
+                    // Parse fecha
+                    const year = 2026;
+                    let fechaIso = `${year}-${String(new Date().getMonth() + 1).padStart(2, '0')}-${String(new Date().getDate()).padStart(2, '0')}T12:00:00+00:00`;
+                    const dateMatch = body.match(/(\d{1,2})\s+de\s+([a-zA-Z]+)/i);
+                    if (dateMatch) {
+                        const diaNum = Math.min(31, Math.max(1, parseInt(dateMatch[1], 10)));
+                        const dia = String(diaNum).padStart(2, '0');
+                        const mes = String(MESES[dateMatch[2].toLowerCase()] || 10).padStart(2, '0');
+                        fechaIso = `${year}-${mes}-${dia}T12:00:00+00:00`;
+                    }
+
+                    // Deduplicación
+                    const key = `${fechaIso.split('T')[0]}_${hora.trim().toUpperCase()}_${cat.trim()}`;
+                    if (existingKeys.has(key)) continue;
+
+                    // Torneo / Descripción
+                    let torneo = 'Torneo Local - WhatsApp';
+                    const tMatch = body.match(/Torneo\s+([^\n\r]+)/i);
+                    if (tMatch) torneo = 'Torneo ' + tMatch[1].trim();
+
+                    const payload = {
+                        equipolocal: 'DIBA FBC',
+                        equipovisitante: rival,
+                        fecha: fechaIso,
+                        hora: hora,
+                        categoria: cat,
+                        Cancha: cancha,
+                        descripcion: torneo,
+                        resultado: 'Pendiente',
+                        valor: 6000,
+                        uniforme: lower.includes('antiguo') ? 'Homenaje a Barranquilla (antiguo)' : 'Nuevo de competencia',
+                        observaciones: body.slice(0, 500),
+                        metodo_pago: 'NEQUI 3246656083 Reinaldo Pérez',
+                        escudo_local: '/images/ESCUDO.webp',
+                        escudo_visitante: `https://ui-avatars.com/api/?name=${encodeURIComponent(rival)}&background=004d98&color=FFD700&size=200`
+                    };
+
+                    const { error: insErr } = await supabase.from('partidos').insert([payload]);
+                    if (!insErr) {
+                        existingKeys.add(key);
+                        newCount++;
+                    }
+                }
+
+                if (newCount > 0) {
+                    await loadMatches();
+                }
+
+                if (!silent) {
+                    alert(newCount > 0 
+                        ? `Sincronización exitosa: Se agregaron ${newCount} partidos nuevos a la base de datos.` 
+                        : 'El calendario ya está al día. No hay partidos nuevos pendientes por sincronizar.');
+                }
+                return newCount;
+            } catch (err) {
+                if (!silent) {
+                    console.error('Error sincronizando WhatsApp:', err);
+                    alert(`Error al sincronizar: ${err.message}`);
+                }
+                return 0;
+            } finally {
+                if (btnSync && !silent) {
+                    btnSync.disabled = false;
+                    btnSync.innerHTML = originalHtml;
+                }
             }
         }
 
