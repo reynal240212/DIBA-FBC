@@ -203,6 +203,59 @@
   <!-- CONTENIDO PRINCIPAL -->
   <main class="max-w-6xl mx-auto px-4 py-10 space-y-12 flex-grow w-full">
 
+    <!-- BANNER DESTACADO: PRÓXIMA FECHA (6° FECHA) -->
+    <section class="relative overflow-hidden rounded-3xl border-2 border-amber-400/50 bg-gradient-to-r from-slate-950 via-[#002a40] to-slate-950 p-6 sm:p-8 shadow-2xl">
+      <div class="absolute -top-12 -right-12 w-48 h-48 bg-amber-400/10 rounded-full blur-3xl pointer-events-none"></div>
+      
+      <div class="flex flex-col lg:flex-row items-center justify-between gap-6 relative z-10">
+        <!-- Info Principal -->
+        <div class="space-y-3 text-center lg:text-left">
+          <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-amber-400 text-slate-950 text-[10px] font-black uppercase tracking-widest shadow-md">
+            <i class="fas fa-bolt"></i> PRÓXIMO PARTIDO • 6° FECHA OFICIAL
+          </div>
+          <h2 class="text-2xl sm:text-3xl font-black uppercase tracking-tight text-white">
+            DIBA FBC <span class="text-amber-400 italic">vs</span> PHOTOS FC
+          </h2>
+          <div class="flex flex-wrap items-center justify-center lg:justify-start gap-4 text-xs font-bold text-slate-300">
+            <span class="flex items-center gap-1.5 text-amber-400">
+              <i class="fas fa-calendar-day"></i> Sábado 24 de Octubre
+            </span>
+            <span class="flex items-center gap-1.5 text-white">
+              <i class="far fa-clock text-amber-400"></i> 2:40 PM en cancha
+            </span>
+            <span class="flex items-center gap-1.5 text-slate-300">
+              <i class="fas fa-map-marker-alt text-red-400"></i> Cancha La Bombonera
+            </span>
+            <span class="px-2.5 py-0.5 rounded-md bg-blue-500/20 text-blue-300 border border-blue-500/30 text-[10px] font-black uppercase">
+              Cat. 2014/15
+            </span>
+          </div>
+          <p class="text-[11px] text-slate-400 max-w-xl">
+            <strong class="text-slate-200">Uniforme:</strong> Competencia (Nuevo) • <strong class="text-slate-200">Arbitraje:</strong> $6.000 (NEQUI 3246656083) • 17 Convocados confirmados.
+          </p>
+        </div>
+
+        <!-- Enfrentamiento Escudos + Botón -->
+        <div class="flex flex-col sm:flex-row items-center gap-6 shrink-0">
+          <div class="flex items-center gap-4 bg-slate-900/90 border border-slate-700/80 rounded-2xl px-5 py-3 shadow-xl">
+            <div class="flex flex-col items-center">
+              <img src="images/ESCUDO.webp" alt="DIBA FBC" class="w-12 h-12 object-contain drop-shadow" />
+              <span class="text-[10px] font-black text-amber-400 mt-1 uppercase">DIBA</span>
+            </div>
+            <span class="text-xs font-black text-slate-500 italic">VS</span>
+            <div class="flex flex-col items-center">
+              <img src="images/torneo/escudo-photos-fc.webp" alt="PHOTOS FC" class="w-12 h-12 object-contain drop-shadow" onerror="this.src='https://ui-avatars.com/api/?name=PHOTOS+FC&background=004d98&color=FFD700'" />
+              <span class="text-[10px] font-black text-white mt-1 uppercase">PHOTOS</span>
+            </div>
+          </div>
+
+          <a href="partidos.html" class="px-6 py-3.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-black uppercase text-xs tracking-wider transition-all shadow-lg shadow-amber-400/25 active:scale-95 shrink-0 flex items-center gap-2">
+            <i class="fas fa-clipboard-list"></i> Ver Convocados
+          </a>
+        </div>
+      </div>
+    </section>
+
     <!-- PODIO DE GOLEADORES CATEGORÍA 2014 -->
     <section>
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
