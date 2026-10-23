@@ -195,7 +195,7 @@ def parse_match_message(msg_body, msg_timestamp=None, msg_created_at=None):
         "resultado": "Pendiente",
         "descripcion": torneo,
         "uniforme": uniforme,
-        "observaciones": text[:500],
+        "observaciones": text[:2500],
         "metodo_pago": "NEQUI 3246656083 Reinaldo Pérez",
         "escudo_local": "/images/ESCUDO.webp",
         "escudo_visitante": f"https://ui-avatars.com/api/?name={urllib.parse.quote(equipo_visitante)}&background=004d98&color=FFD700&size=200"

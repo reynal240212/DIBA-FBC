@@ -1,17 +1,18 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" class="scroll-smooth">
 
 <head>
   <meta charset="UTF-8" />
   <title>Partidos y Entrenamientos | DIBA FBC</title>
-  <link rel="icon" href="images/ESCUDO.ico" />
+  <link rel="icon" href="images/ESCUDO.ico" sizes="32x32" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description"
-  <meta name="description"
-    content="Consulta el calendario oficial de partidos y entrenamientos de DIBA FBC." />
+  <meta name="description" content="Consulta el calendario oficial de partidos, convocatorias y entrenamientos de DIBA FBC en Barranquilla." />
 
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+  <!-- Fonts & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;700;900&family=Montserrat:ital,wght@0,400;0,700;1,900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
 
   <script src="https://cdn.tailwindcss.com"></script>
@@ -19,61 +20,75 @@
     tailwind.config = {
       theme: {
         extend: {
-          fontFamily: { sans: ['Montserrat', 'sans-serif'] },
+          fontFamily: {
+            sans: ['Outfit', 'Montserrat', 'system-ui', 'sans-serif'],
+            display: ['Montserrat', 'sans-serif']
+          },
           colors: {
-            dibaGold: '#ffcc00',
-            dibaBlue: '#002a40',
-            dibaDark: '#0a0f1a'
+            diba: {
+              dark: '#020617',
+              slate: '#0f172a',
+              card: '#0f172a',
+              gold: '#eab308',
+              goldHover: '#d97706',
+              blue: '#004d98',
+              red: '#a50044'
+            }
           }
-        },
-      },
+        }
+      }
     }
   </script>
 
   <style>
     body {
-      font-family: 'Montserrat', sans-serif;
-      background: #f8fafc;
-      color: #0f172a;
+      font-family: 'Outfit', 'Montserrat', sans-serif;
+      background: #020617;
+      color: #f8fafc;
+      overflow-x: hidden;
     }
 
-    .hero-partidos {
-      background: #0f172a;
-      position: relative;
-      overflow: hidden;
-      color: #ffffff;
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
     }
-
-    .hero-partidos::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(ellipse at 30% 50%, rgba(255, 204, 0, 0.12) 0%, transparent 60%),
-        radial-gradient(ellipse at 70% 20%, rgba(0, 100, 200, 0.12) 0%, transparent 50%);
+    ::-webkit-scrollbar-track {
+      background: #020617;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #1e293b;
+      border-radius: 9999px;
+      border: 2px solid #020617;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #eab308;
     }
 
     /* Tabs */
     .tab-btn {
       position: relative;
-      padding: 0.75rem 1.75rem;
-      font-weight: 700;
+      padding: 1rem 1.75rem;
+      font-weight: 800;
       text-transform: uppercase;
-      font-size: 0.8rem;
-      letter-spacing: 0.08em;
-      color: #64748b;
+      font-size: 0.78rem;
+      letter-spacing: 0.1em;
+      color: #94a3b8;
       border-bottom: 3px solid transparent;
-      transition: all 0.25s;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       cursor: pointer;
       white-space: nowrap;
     }
 
     .tab-btn:hover {
-      color: #0f172a;
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.02);
     }
 
     .tab-btn.active {
-      color: #d97706;
+      color: #eab308;
       border-bottom-color: #eab308;
+      background: rgba(234, 179, 8, 0.05);
     }
 
     .tab-panel {
@@ -82,35 +97,12 @@
     }
 
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
+      from { opacity: 0; transform: translateY(12px); }
       to { opacity: 1; transform: translateY(0); }
     }
 
     .tab-panel.active {
       display: block;
-    }
-
-    /* Card de partido */
-    .match-card {
-      background: #ffffff;
-      border: 1px solid #e2e8f0;
-      border-radius: 1.25rem;
-      overflow: hidden;
-      box-shadow: 0 4px 15px rgba(15, 23, 42, 0.05);
-      transition: transform 0.25s, box-shadow 0.25s, border-color 0.25s;
-    }
-
-    .match-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 20px 40px rgba(15, 23, 42, 0.1);
-      border-color: rgba(234, 179, 8, 0.5);
-    }
-
-    .match-score {
-      background: linear-gradient(90deg, #ffcc00, #f59e0b);
-      -webkit-background-clip: text;
-      background-clip: text;
-      -webkit-text-fill-color: transparent;
     }
 
     /* Input date */
@@ -121,388 +113,467 @@
 
     /* Spinner */
     .spinner-ring {
-      width: 40px;
-      height: 40px;
-      border: 3px solid rgba(255, 204, 0, 0.2);
-      border-top-color: #ffcc00;
+      width: 44px;
+      height: 44px;
+      border: 3px solid rgba(234, 179, 8, 0.2);
+      border-top-color: #eab308;
       border-radius: 50%;
       animation: spin 0.8s linear infinite;
     }
 
     @keyframes spin {
-      to {
-        transform: rotate(360deg);
-      }
+      to { transform: rotate(360deg); }
     }
 
-    /* vs badge */
-    .vs-badge {
-      background: rgba(255, 204, 0, 0.15);
-      color: #ffcc00;
-      font-weight: 900;
-      font-size: 0.7rem;
-      letter-spacing: 0.12em;
-      padding: 0.25rem 0.6rem;
-      border-radius: 4px;
-      border: 1px solid rgba(255, 204, 0, 0.3);
+    /* Tabla clasificación dentro de tab */
+    .tabla-clas {
+      border-collapse: separate;
+      border-spacing: 0 4px;
+      width: 100%;
     }
 
-    .badge-resultado {
-      font-size: 0.65rem;
-      padding: 0.2rem 0.65rem;
-      border-radius: 999px;
-      font-weight: 700;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-    }
-
-    .badge-victoria {
-      background: rgba(34, 197, 94, 0.15);
-      color: #4ade80;
-      border: 1px solid rgba(34, 197, 94, 0.3);
-    }
-
-    .badge-derrota {
-      background: rgba(239, 68, 68, 0.15);
-      color: #f87171;
-      border: 1px solid rgba(239, 68, 68, 0.3);
-    }
-
-    .badge-empate {
-      background: rgba(148, 163, 184, 0.15);
+    .tabla-clas th {
       color: #94a3b8;
-      border: 1px solid rgba(148, 163, 184, 0.3);
+      font-size: 0.65rem;
+      font-weight: 850;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 0.75rem 0.6rem;
+      border: none;
     }
 
-    .badge-pendiente {
-      background: rgba(251, 191, 36, 0.15);
-      color: #fbbf24;
-      border: 1px solid rgba(251, 191, 36, 0.3);
+    .tabla-clas td {
+      padding: 0.65rem 0.6rem;
+      border: none;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #cbd5e1;
+    }
+
+    .tabla-clas tbody tr {
+      background: rgba(255, 255, 255, 0.02);
+      transition: all 0.25s;
+    }
+
+    .tabla-clas tbody tr td:first-child {
+      border-top-left-radius: 12px;
+      border-bottom-left-radius: 12px;
+      padding-left: 0.9rem;
+    }
+
+    .tabla-clas tbody tr td:last-child {
+      border-top-right-radius: 12px;
+      border-bottom-right-radius: 12px;
+      padding-right: 0.9rem;
+    }
+
+    .tabla-clas tbody tr:hover td {
+      background: rgba(255, 255, 255, 0.05);
+      color: #fff;
+    }
+
+    .tabla-clas tr.diba-row td {
+      background: rgba(234, 179, 8, 0.12);
+      color: #ffd700;
+      font-weight: 800;
+      border-top: 1px solid rgba(234, 179, 8, 0.3);
+      border-bottom: 1px solid rgba(234, 179, 8, 0.3);
     }
   </style>
 </head>
 
-<body class="text-white min-h-screen">
+<body class="bg-[#020617] text-white min-h-screen flex flex-col selection:bg-yellow-500/30">
 
   <div id="navbar-container"></div>
 
-  <!-- SECCIÓN PATROCINADORES EN EL TOPE (debajo del navbar) -->
-<!-- HERO -->
-  <section class="hero-partidos py-12">
-    <div class="relative z-10 max-w-6xl mx-auto px-4 text-center">
-      <span
-        class="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-amber-400 bg-amber-400/10 border border-amber-400/20 px-4 py-1.5 rounded-full mb-5">
-        <i class="fas fa-futbol"></i> Temporada 2025 – 2026
-      </span>
-      <h1 class="text-4xl md:text-6xl font-black uppercase tracking-tight mb-4">
-        Partidos &amp; <span class="text-amber-400">Entrenamientos</span>
+  <!-- HERO PARTIDOS & ENTRENAMIENTOS -->
+  <section class="relative pt-12 pb-16 overflow-hidden border-b border-white/10 bg-slate-950">
+    <!-- Ambient Glows -->
+    <div class="absolute inset-0 pointer-events-none">
+      <div class="absolute -top-32 -left-32 w-96 h-96 bg-blue-600/20 rounded-full blur-[140px]"></div>
+      <div class="absolute -bottom-32 -right-32 w-96 h-96 bg-yellow-500/15 rounded-full blur-[140px]"></div>
+    </div>
+
+    <div class="relative z-10 max-w-6xl mx-auto px-4 text-center space-y-6">
+      <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-yellow-500/15 border border-yellow-500/30 text-yellow-400 text-xs font-black uppercase tracking-[0.25em]">
+        <i class="fas fa-futbol"></i> Temporada Oficial 2025 – 2026
+      </div>
+
+      <h1 class="text-4xl sm:text-6xl md:text-7xl font-black italic uppercase tracking-tighter font-display leading-none text-white">
+        PARTIDOS &amp; <span class="text-yellow-500">PROGRAMACIÓN</span>
       </h1>
-      <p class="text-slate-400 max-w-xl mx-auto text-sm leading-relaxed">
-        Consulta el calendario oficial de partidos y la programación de entrenamientos de DIBA FBC.
+
+      <p class="text-slate-300 max-w-2xl mx-auto text-sm sm:text-base leading-relaxed font-medium">
+        Consulta el calendario en vivo, las convocatorias por categoría y los horarios de entrenamiento de DIBA FBC.
       </p>
 
-      <!-- Stats rápidas -->
-      <div class="flex flex-wrap justify-center gap-6 mt-10">
-        <div class="text-center">
-          <div class="text-3xl font-black text-amber-400" id="stat-partidos">—</div>
-          <div class="text-xs text-slate-500 uppercase tracking-wider mt-1">Partidos</div>
+      <!-- Stats Rápidas -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-3xl mx-auto pt-6">
+        <div class="bg-slate-900/80 border border-white/10 rounded-2xl p-4 backdrop-blur-md">
+          <div class="text-3xl font-black text-yellow-400" id="stat-partidos">—</div>
+          <div class="text-[10px] font-black uppercase tracking-widest text-slate-400 mt-1">Partidos Jugados</div>
         </div>
-        <div class="w-px bg-slate-700 hidden sm:block"></div>
-        <div class="text-center">
-          <div class="text-3xl font-black text-green-400" id="stat-victorias">—</div>
-          <div class="text-xs text-slate-500 uppercase tracking-wider mt-1">Victorias</div>
+        <div class="bg-slate-900/80 border border-white/10 rounded-2xl p-4 backdrop-blur-md">
+          <div class="text-3xl font-black text-emerald-400" id="stat-victorias">—</div>
+          <div class="text-[10px] font-black uppercase tracking-widest text-slate-400 mt-1">Victorias</div>
         </div>
-        <div class="w-px bg-slate-700 hidden sm:block"></div>
-        <div class="text-center">
-          <div class="text-3xl font-black text-red-400" id="stat-derrotas">—</div>
-          <div class="text-xs text-slate-500 uppercase tracking-wider mt-1">Derrotas</div>
-        </div>
-        <div class="w-px bg-slate-700 hidden sm:block"></div>
-        <div class="text-center">
+        <div class="bg-slate-900/80 border border-white/10 rounded-2xl p-4 backdrop-blur-md">
           <div class="text-3xl font-black text-sky-400" id="stat-empates">—</div>
-          <div class="text-xs text-slate-500 uppercase tracking-wider mt-1">Empates</div>
+          <div class="text-[10px] font-black uppercase tracking-widest text-slate-400 mt-1">Empates</div>
+        </div>
+        <div class="bg-slate-900/80 border border-white/10 rounded-2xl p-4 backdrop-blur-md">
+          <div class="text-3xl font-black text-rose-400" id="stat-derrotas">—</div>
+          <div class="text-[10px] font-black uppercase tracking-widest text-slate-400 mt-1">Derrotas</div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- CONTENIDO PRINCIPAL -->
-  <main class="max-w-6xl mx-auto px-4 py-12 space-y-14">
+  <!-- CONTENIDO PRINCIPAL CON PESTAÑAS -->
+  <main class="max-w-6xl mx-auto px-4 py-12 flex-grow w-full space-y-10">
 
-    <!-- TABS -->
-    <div class="bg-slate-900/60 border border-slate-800 rounded-2xl overflow-hidden">
-      <div class="flex overflow-x-auto border-b border-slate-800">
-        <button class="tab-btn active" data-tab="partidos-tab">
-          <i class="fas fa-futbol mr-2 text-amber-400"></i>Partidos
+    <!-- CONTENEDOR DE PESTAÑAS (TABS) -->
+    <div class="bg-slate-900/80 border border-white/10 rounded-3xl overflow-hidden shadow-2xl backdrop-blur-xl">
+      
+      <!-- Barra de Navegación de Pestañas -->
+      <div class="flex overflow-x-auto border-b border-slate-800 bg-slate-950/60 custom-scrollbar">
+        <button class="tab-btn active flex items-center gap-2.5" data-tab="partidos-tab">
+          <i class="fas fa-futbol text-yellow-400"></i> Partidos
         </button>
-        <button class="tab-btn" data-tab="jolparrismo-tab">
-          <i class="fas fa-trophy mr-2 text-yellow-400"></i>Liga El Jolparrismo
+        <button class="tab-btn flex items-center gap-2.5" data-tab="jolparrismo-tab">
+          <i class="fas fa-trophy text-yellow-400"></i> Liga El Jolparrismo
         </button>
-        <button class="tab-btn" data-tab="entrenamientos-tab">
-          <i class="fas fa-dumbbell mr-2 text-green-400"></i>Entrenamientos
+        <button class="tab-btn flex items-center gap-2.5" data-tab="entrenamientos-tab">
+          <i class="fas fa-dumbbell text-emerald-400"></i> Entrenamientos
         </button>
-        <button class="tab-btn" data-tab="mapa-tab">
-          <i class="fas fa-map-marker-alt mr-2 text-red-400"></i>Cancha
+        <button class="tab-btn flex items-center gap-2.5" data-tab="mapa-tab">
+          <i class="fas fa-map-marker-alt text-rose-400"></i> Cancha &amp; Mapa
         </button>
       </div>
 
-      <!-- TAB: PARTIDOS -->
-      <div id="partidos-tab" class="tab-panel active p-6 md:p-8">
-        <div class="flex flex-col md:flex-row md:items-end gap-4 mb-8">
-          <div class="flex-1">
-            <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">
-              <i class="fas fa-calendar mr-1"></i>Filtrar por fecha
-            </label>
-            <input type="date" id="fecha"
-              class="w-full bg-slate-800 border border-slate-700 text-white rounded-xl px-4 py-3 focus:border-amber-400 focus:outline-none transition-all text-sm" />
+      <!-- ==============================================
+           TAB 1: PARTIDOS (CALENDARIO EN VIVO)
+           ============================================== -->
+      <div id="partidos-tab" class="tab-panel active p-6 sm:p-8 space-y-8">
+        
+        <!-- PRÓXIMO ENCUENTRO DESTACADO (HERO CARD) -->
+        <div class="relative overflow-hidden rounded-3xl border border-yellow-500/40 bg-gradient-to-r from-slate-950 via-[#002a40]/90 to-slate-950 p-6 sm:p-8 shadow-2xl">
+          <div class="absolute -top-12 -right-12 w-48 h-48 bg-yellow-500/10 rounded-full blur-3xl pointer-events-none"></div>
+          
+          <div class="flex flex-col lg:flex-row items-center justify-between gap-6 relative z-10">
+            <div class="space-y-3 text-center lg:text-left">
+              <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-yellow-400 text-slate-950 text-[10px] font-black uppercase tracking-widest shadow-md">
+                <i class="fas fa-bolt"></i> PRÓXIMO ENCUENTRO • 6.ª FECHA OFICIAL
+              </div>
+              <h2 class="text-2xl sm:text-3xl font-black uppercase italic tracking-tight text-white">
+                DIBA FBC <span class="text-yellow-400">vs</span> PHOTOS FC
+              </h2>
+              <div class="flex flex-wrap items-center justify-center lg:justify-start gap-4 text-xs font-bold text-slate-300">
+                <span class="flex items-center gap-1.5 text-yellow-400">
+                  <i class="fas fa-calendar-day"></i> Sábado 24 de Octubre
+                </span>
+                <span class="flex items-center gap-1.5 text-white">
+                  <i class="far fa-clock text-yellow-400"></i> 2:40 PM en cancha
+                </span>
+                <span class="flex items-center gap-1.5 text-slate-300">
+                  <i class="fas fa-map-marker-alt text-rose-400"></i> Cancha La Bombonera
+                </span>
+                <span class="px-2.5 py-0.5 rounded-md bg-blue-500/20 text-blue-300 border border-blue-500/30 text-[10px] font-black uppercase">
+                  Cat. 2014/15
+                </span>
+              </div>
+              <p class="text-[11px] text-slate-400 max-w-xl">
+                <strong class="text-white">Uniforme:</strong> Competencia (Nuevo) • <strong class="text-white">Arbitraje:</strong> $6.000 (NEQUI 3246656083) • 17 Convocados confirmados.
+              </p>
+            </div>
+
+            <!-- Enfrentamiento Escudos + Botón -->
+            <div class="flex flex-col sm:flex-row items-center gap-5 shrink-0">
+              <div class="flex items-center gap-4 bg-slate-900/90 border border-slate-700/80 rounded-2xl px-5 py-3 shadow-xl">
+                <div class="flex flex-col items-center">
+                  <img src="images/ESCUDO.webp" alt="DIBA FBC" class="w-12 h-12 object-contain drop-shadow" />
+                  <span class="text-[10px] font-black text-yellow-400 mt-1 uppercase">DIBA</span>
+                </div>
+                <span class="text-xs font-black text-slate-500 italic">VS</span>
+                <div class="flex flex-col items-center">
+                  <img src="images/torneo/escudo-photos-fc.webp" alt="PHOTOS FC" class="w-12 h-12 object-contain drop-shadow" onerror="this.src='https://ui-avatars.com/api/?name=PHOTOS+FC&background=004d98&color=FFD700'" />
+                  <span class="text-[10px] font-black text-white mt-1 uppercase">PHOTOS</span>
+                </div>
+              </div>
+
+              <a href="torneo-jolparrismo.html" class="px-6 py-3.5 rounded-xl bg-yellow-500 hover:bg-yellow-400 text-slate-950 font-black uppercase text-xs tracking-wider transition-all shadow-lg shadow-yellow-500/25 active:scale-95 shrink-0 flex items-center gap-2">
+                <i class="fas fa-trophy"></i> Ver Torneo
+              </a>
+            </div>
           </div>
-          <div class="flex-1">
-            <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">
-              <i class="fas fa-layer-group mr-1"></i>Categoría
-            </label>
-            <select id="filtro-categoria"
-              class="w-full bg-slate-800 border border-slate-700 text-white rounded-xl px-4 py-3 focus:border-amber-400 focus:outline-none transition-all text-sm">
-              <option value="">Todas las Categorías</option>
-              <option value="2012">Cat. 2012</option>
-              <option value="2013">Cat. 2013</option>
-              <option value="2014/15">Cat. 2014/15</option>
-            </select>
-          </div>
-          <button id="btn-limpiar-partidos"
-            class="flex items-center gap-2 px-5 py-3 rounded-xl border border-slate-700 text-slate-400 hover:text-white hover:border-slate-500 transition-all text-sm font-semibold">
-            <i class="fas fa-times"></i> Limpiar
-          </button>
         </div>
 
-        <!-- Estado inicial -->
-        <div id="partidos-estado-inicial" class="text-center py-16">
-          <div class="w-16 h-16 rounded-full bg-amber-400/10 flex items-center justify-center mx-auto mb-4">
-            <i class="fas fa-calendar-alt text-amber-400 text-2xl"></i>
+        <!-- BARRA DE FILTROS RÁPIDOS POR CATEGORÍA Y FECHA -->
+        <div class="bg-slate-950/70 border border-slate-800 rounded-2xl p-5 space-y-4">
+          <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+            <!-- Pills Rápidos de Categoría -->
+            <div class="flex flex-wrap items-center gap-2 w-full md:w-auto">
+              <span class="text-[11px] font-black uppercase tracking-wider text-slate-400 mr-1">
+                <i class="fas fa-layer-group text-yellow-400 mr-1"></i> Categorías:
+              </span>
+              <button class="cat-filter-btn active px-4 py-2 rounded-xl text-xs font-black uppercase tracking-wider border border-yellow-400 bg-yellow-400 text-slate-950 transition-all shadow-sm" data-cat="">
+                Todas
+              </button>
+              <button class="cat-filter-btn px-4 py-2 rounded-xl text-xs font-black uppercase tracking-wider border border-slate-700 bg-slate-800/80 text-slate-300 hover:border-yellow-400/50 hover:text-white transition-all" data-cat="2012">
+                Cat. 2012
+              </button>
+              <button class="cat-filter-btn px-4 py-2 rounded-xl text-xs font-black uppercase tracking-wider border border-slate-700 bg-slate-800/80 text-slate-300 hover:border-yellow-400/50 hover:text-white transition-all" data-cat="2013">
+                Cat. 2013
+              </button>
+              <button class="cat-filter-btn px-4 py-2 rounded-xl text-xs font-black uppercase tracking-wider border border-slate-700 bg-slate-800/80 text-slate-300 hover:border-yellow-400/50 hover:text-white transition-all" data-cat="2014">
+                Cat. 2014/15
+              </button>
+              <button class="cat-filter-btn px-4 py-2 rounded-xl text-xs font-black uppercase tracking-wider border border-slate-700 bg-slate-800/80 text-slate-300 hover:border-yellow-400/50 hover:text-white transition-all" data-cat="2015">
+                Cat. 2015/16
+              </button>
+            </div>
+
+            <!-- Selector de Fecha + Limpiar -->
+            <div class="flex items-center gap-3 w-full md:w-auto">
+              <!-- Select oculto sincronizado para accesibilidad -->
+              <select id="filtro-categoria" class="hidden">
+                <option value="">Todas</option>
+                <option value="2012">2012</option>
+                <option value="2013">2013</option>
+                <option value="2014">2014</option>
+                <option value="2015">2015</option>
+              </select>
+
+              <div class="relative flex-1 md:w-48">
+                <input type="date" id="fecha"
+                  class="w-full bg-slate-900 border border-slate-700 text-white rounded-xl px-4 py-2.5 text-xs font-bold focus:border-yellow-400 focus:outline-none transition-all shadow-inner" />
+              </div>
+
+              <button id="btn-limpiar-partidos"
+                class="px-4 py-2.5 rounded-xl border border-slate-700 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-all text-xs font-bold flex items-center gap-1.5 shrink-0"
+                title="Limpiar filtros">
+                <i class="fas fa-undo text-[10px]"></i> Limpiar
+              </button>
+            </div>
           </div>
-          <p class="text-slate-400 text-sm">Selecciona una fecha para ver los partidos</p>
         </div>
 
-        <div id="partidos-spinner" class="flex justify-center py-14" style="display:none">
+        <!-- Spinner de Carga -->
+        <div id="partidos-spinner" class="flex justify-center py-16" style="display:none">
           <div class="spinner-ring"></div>
         </div>
 
-        <div id="partidos-results" class="grid grid-cols-1 gap-5"></div>
+        <!-- Grid Responsivo de Tarjetas de Partidos -->
+        <div id="partidos-results" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
       </div>
 
-      <!-- TAB: LIGA EL JOLPARRISMO (POSICIONES Y GOLEADORES) -->
-      <div id="jolparrismo-tab" class="tab-panel p-5 md:p-8 bg-slate-950/90">
-        <!-- Encabezado Institucional del Torneo -->
-        <div class="relative overflow-hidden rounded-3xl border border-amber-500/30 bg-gradient-to-br from-[#004d98]/35 via-slate-950 to-[#a50044]/30 p-6 md:p-8 mb-8 shadow-2xl">
+      <!-- ==============================================
+           TAB 2: LIGA EL JOLPARRISMO (POSICIONES Y GOLEADORES)
+           ============================================== -->
+      <div id="jolparrismo-tab" class="tab-panel p-6 sm:p-8 space-y-8 bg-slate-950/80">
+        <!-- Banner Institucional Torneo -->
+        <div class="relative overflow-hidden rounded-3xl border border-yellow-500/30 bg-gradient-to-br from-[#004d98]/30 via-slate-950 to-[#a50044]/25 p-6 sm:p-8 shadow-2xl">
           <div class="flex flex-col lg:flex-row items-center justify-between gap-6">
             <div class="flex flex-col sm:flex-row items-center gap-5 text-center sm:text-left">
               <div class="flex items-center -space-x-3 shrink-0">
-                <div class="w-20 h-20 rounded-2xl bg-slate-900/95 border-2 border-amber-400/50 p-1.5 shadow-xl flex items-center justify-center">
+                <div class="w-20 h-20 rounded-2xl bg-slate-900 border-2 border-yellow-500/60 p-1.5 shadow-xl flex items-center justify-center">
                   <img src="images/torneo/logo-liga-jolparrismo.webp" alt="Logo Liga El Jolparrismo" class="w-full h-full object-contain rounded-xl" />
                 </div>
-                <div class="w-16 h-16 rounded-2xl bg-slate-900/95 border-2 border-blue-400/50 p-2 shadow-xl flex items-center justify-center">
+                <div class="w-16 h-16 rounded-2xl bg-slate-900 border-2 border-blue-500/60 p-2 shadow-xl flex items-center justify-center">
                   <img src="images/ESCUDO.webp" alt="Escudo DIBA FBC" class="w-full h-full object-contain" />
                 </div>
               </div>
               <div>
-                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-400/15 border border-amber-400/30 text-amber-300 text-[10px] font-black uppercase tracking-widest mb-2">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-yellow-500/15 border border-yellow-500/30 text-yellow-300 text-[10px] font-black uppercase tracking-widest mb-2">
                   <i class="fas fa-crown"></i> La Bombonera • "Dios Nos Guía" • Categoría 2014
                 </div>
-                <h2 class="text-2xl md:text-3xl font-black uppercase italic tracking-tight text-white">
-                  Campeonato <span class="text-amber-400">Liga El Jolparrismo</span>
+                <h2 class="text-2xl sm:text-3xl font-black uppercase italic tracking-tight text-white">
+                  Campeonato <span class="text-yellow-500">Liga El Jolparrismo</span>
                 </h2>
-                <p class="text-xs text-slate-300 mt-1">
-                  DIBA FBC líder invicto con <strong class="text-amber-400">10 PTS</strong> (+7 DG) y <strong class="text-amber-400">5 artilleros</strong> en la tabla oficial de goleadores.
+                <p class="text-xs text-slate-300 mt-1 max-w-xl">
+                  DIBA FBC líder invicto con <strong class="text-yellow-400">10 PTS</strong> (+7 DG) y <strong class="text-yellow-400">5 artilleros</strong> en la tabla oficial de goleadores.
                 </p>
               </div>
             </div>
             <a href="torneo-jolparrismo.html"
-              class="shrink-0 inline-flex items-center gap-2.5 px-5 py-3 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-black uppercase text-xs tracking-wider transition-all shadow-lg shadow-amber-400/20">
+              class="shrink-0 inline-flex items-center gap-2.5 px-6 py-3.5 rounded-xl bg-yellow-500 hover:bg-yellow-400 text-slate-950 font-black uppercase text-xs tracking-wider transition-all shadow-lg shadow-yellow-500/20 active:scale-95">
               <i class="fas fa-external-link-alt"></i> Ver Especial Completo
             </a>
           </div>
         </div>
 
-        <!-- Grid: Tabla de Posiciones + Tabla de Goleadores -->
+        <!-- Grid: Tabla de Posiciones + Goleadores -->
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-          <!-- TABLA DE POSICIONES (7 cols) -->
-          <div class="lg:col-span-7 bg-slate-900/90 border border-slate-800 rounded-2xl overflow-hidden shadow-xl">
-            <div class="px-5 py-4 border-b border-slate-800 flex items-center justify-between bg-slate-950/60">
+          <!-- Standings Table (7 cols) -->
+          <div class="lg:col-span-7 bg-slate-900/90 border border-slate-800 rounded-3xl p-6 shadow-2xl">
+            <div class="flex items-center justify-between mb-5 pb-4 border-b border-slate-800">
               <div class="flex items-center gap-3">
-                <img src="images/torneo/icono-liga-jolparrismo.webp" alt="Liga El Jolparrismo" class="w-8 h-8 rounded-lg object-cover border border-amber-400/40" />
+                <img src="images/torneo/icono-liga-jolparrismo.webp" alt="Liga El Jolparrismo" class="w-9 h-9 rounded-xl object-cover border border-yellow-500/40" />
                 <div>
                   <h3 class="text-sm font-black uppercase tracking-wider text-white">Tabla de Posiciones</h3>
-                  <p class="text-[10px] text-amber-400 font-bold uppercase tracking-widest">Categoría 2014 • La Bombonera</p>
+                  <p class="text-[10px] text-yellow-400 font-bold uppercase tracking-widest">Oficial • Categoría 2014</p>
                 </div>
               </div>
               <span class="px-3 py-1 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 text-[10px] font-black uppercase tracking-widest">
                 1° DIBA Invicto
               </span>
             </div>
-            <div class="overflow-x-auto p-3 sm:p-4">
-              <table class="w-full text-left border-collapse">
+
+            <div class="overflow-x-auto">
+              <table class="tabla-clas">
                 <thead>
-                  <tr class="text-[10px] font-black uppercase tracking-wider text-slate-400 border-b border-slate-800">
-                    <th class="py-2.5 px-2 text-center">#</th>
-                    <th class="py-2.5 px-2">Club</th>
-                    <th class="py-2.5 px-1.5 text-center">PJ</th>
-                    <th class="py-2.5 px-1.5 text-center">PG</th>
-                    <th class="py-2.5 px-1.5 text-center">PE</th>
-                    <th class="py-2.5 px-1.5 text-center">PP</th>
-                    <th class="py-2.5 px-1.5 text-center">GF</th>
-                    <th class="py-2.5 px-1.5 text-center">GC</th>
-                    <th class="py-2.5 px-1.5 text-center">DG</th>
-                    <th class="py-2.5 px-2 text-center text-amber-400">PTS</th>
+                  <tr>
+                    <th class="text-center">#</th>
+                    <th class="text-left">Club</th>
+                    <th class="text-center">PJ</th>
+                    <th class="text-center">PG</th>
+                    <th class="text-center">PE</th>
+                    <th class="text-center">PP</th>
+                    <th class="text-center">GF</th>
+                    <th class="text-center">GC</th>
+                    <th class="text-center">DG</th>
+                    <th class="text-center text-yellow-400">PTS</th>
                   </tr>
                 </thead>
-                <tbody class="divide-y divide-slate-800/60 text-xs font-bold">
-                  <!-- 1. DIBA -->
-                  <tr class="bg-gradient-to-r from-amber-500/20 via-blue-900/30 to-amber-500/15 text-amber-300">
-                    <td class="py-3 px-2 text-center">
-                      <span class="inline-flex items-center justify-center w-6 h-6 rounded-md bg-amber-400 text-slate-950 font-black text-xs">1</span>
-                    </td>
-                    <td class="py-3 px-2">
+                <tbody>
+                  <tr class="diba-row">
+                    <td class="text-center font-black">1</td>
+                    <td>
                       <div class="flex items-center gap-2.5">
-                        <img src="images/ESCUDO.webp" alt="DIBA FBC" class="w-7 h-7 object-contain shrink-0 drop-shadow" />
-                        <div>
-                          <span class="font-black text-white tracking-wide">DIBA FBC</span>
-                          <span class="block text-[9px] text-amber-400 font-black uppercase tracking-widest">Líder Invicto</span>
-                        </div>
+                        <img src="images/ESCUDO.webp" alt="DIBA FBC" class="w-6 h-6 object-contain shrink-0" />
+                        <span class="text-yellow-400 font-black">DIBA FBC</span>
                       </div>
                     </td>
-                    <td class="py-3 px-1.5 text-center">4</td>
-                    <td class="py-3 px-1.5 text-center text-emerald-400">3</td>
-                    <td class="py-3 px-1.5 text-center">1</td>
-                    <td class="py-3 px-1.5 text-center">0</td>
-                    <td class="py-3 px-1.5 text-center">11</td>
-                    <td class="py-3 px-1.5 text-center">4</td>
-                    <td class="py-3 px-1.5 text-center text-emerald-400 font-black">+7</td>
-                    <td class="py-3 px-2 text-center">
-                      <span class="inline-block px-2.5 py-1 rounded-lg bg-amber-400 text-slate-950 font-black text-xs">10</span>
-                    </td>
+                    <td class="text-center">4</td>
+                    <td class="text-center text-emerald-400 font-bold">3</td>
+                    <td class="text-center">1</td>
+                    <td class="text-center">0</td>
+                    <td class="text-center">11</td>
+                    <td class="text-center">4</td>
+                    <td class="text-center text-emerald-400 font-bold">+7</td>
+                    <td class="text-center font-black text-yellow-400 text-sm">10</td>
                   </tr>
-                  <!-- 2. REDIMIDOS -->
-                  <tr class="hover:bg-slate-800/50 text-slate-200 transition-colors">
-                    <td class="py-2.5 px-2 text-center text-slate-400 font-black">2</td>
-                    <td class="py-2.5 px-2">
+                  <tr>
+                    <td class="text-center font-bold">2</td>
+                    <td>
                       <div class="flex items-center gap-2.5">
-                        <img src="images/torneo/escudo-redimidos.webp" alt="Redimidos" class="w-7 h-7 object-contain shrink-0" />
-                        <span class="font-extrabold text-white">REDIMIDOS</span>
+                        <img src="images/torneo/escudo-redimidos.webp" alt="Redimidos" class="w-6 h-6 object-contain shrink-0" />
+                        <span class="text-white font-bold">REDIMIDOS</span>
                       </div>
                     </td>
-                    <td class="py-2.5 px-1.5 text-center">4</td>
-                    <td class="py-2.5 px-1.5 text-center">2</td>
-                    <td class="py-2.5 px-1.5 text-center">1</td>
-                    <td class="py-2.5 px-1.5 text-center">1</td>
-                    <td class="py-2.5 px-1.5 text-center">12</td>
-                    <td class="py-2.5 px-1.5 text-center">4</td>
-                    <td class="py-2.5 px-1.5 text-center text-emerald-400">+8</td>
-                    <td class="py-2.5 px-2 text-center font-black text-white">7</td>
+                    <td class="text-center">4</td>
+                    <td class="text-center">2</td>
+                    <td class="text-center">1</td>
+                    <td class="text-center">1</td>
+                    <td class="text-center">12</td>
+                    <td class="text-center">4</td>
+                    <td class="text-center text-emerald-400">+8</td>
+                    <td class="text-center font-black text-white">7</td>
                   </tr>
-                  <!-- 3. CAYENAS FC -->
-                  <tr class="hover:bg-slate-800/50 text-slate-200 transition-colors">
-                    <td class="py-2.5 px-2 text-center text-slate-400 font-black">3</td>
-                    <td class="py-2.5 px-2">
+                  <tr>
+                    <td class="text-center font-bold">3</td>
+                    <td>
                       <div class="flex items-center gap-2.5">
-                        <img src="images/torneo/escudo-cayenas-fc.webp" alt="Cayenas FC" class="w-7 h-7 object-contain shrink-0" />
-                        <span class="font-extrabold text-white">CAYENAS FC</span>
+                        <img src="images/torneo/escudo-cayenas-fc.webp" alt="Cayenas FC" class="w-6 h-6 object-contain shrink-0" />
+                        <span class="text-white font-bold">CAYENAS FC</span>
                       </div>
                     </td>
-                    <td class="py-2.5 px-1.5 text-center">4</td>
-                    <td class="py-2.5 px-1.5 text-center">2</td>
-                    <td class="py-2.5 px-1.5 text-center">0</td>
-                    <td class="py-2.5 px-1.5 text-center">1</td>
-                    <td class="py-2.5 px-1.5 text-center">8</td>
-                    <td class="py-2.5 px-1.5 text-center">7</td>
-                    <td class="py-2.5 px-1.5 text-center text-emerald-400">+1</td>
-                    <td class="py-2.5 px-2 text-center font-black text-white">6</td>
+                    <td class="text-center">4</td>
+                    <td class="text-center">2</td>
+                    <td class="text-center">0</td>
+                    <td class="text-center">1</td>
+                    <td class="text-center">8</td>
+                    <td class="text-center">7</td>
+                    <td class="text-center text-emerald-400">+1</td>
+                    <td class="text-center font-black text-white">6</td>
                   </tr>
-                  <!-- 4. AMIGOS KIDS -->
-                  <tr class="hover:bg-slate-800/50 text-slate-200 transition-colors">
-                    <td class="py-2.5 px-2 text-center text-slate-400 font-black">4</td>
-                    <td class="py-2.5 px-2">
+                  <tr>
+                    <td class="text-center font-bold">4</td>
+                    <td>
                       <div class="flex items-center gap-2.5">
-                        <img src="images/torneo/escudo-amigos-kids.webp" alt="Amigos Kids" class="w-7 h-7 object-contain shrink-0" />
-                        <span class="font-extrabold text-white">AMIGOS KIDS</span>
+                        <img src="images/torneo/escudo-amigos-kids.webp" alt="Amigos Kids" class="w-6 h-6 object-contain shrink-0" />
+                        <span class="text-white font-bold">AMIGOS KIDS</span>
                       </div>
                     </td>
-                    <td class="py-2.5 px-1.5 text-center">2</td>
-                    <td class="py-2.5 px-1.5 text-center">1</td>
-                    <td class="py-2.5 px-1.5 text-center">1</td>
-                    <td class="py-2.5 px-1.5 text-center">0</td>
-                    <td class="py-2.5 px-1.5 text-center">5</td>
-                    <td class="py-2.5 px-1.5 text-center">4</td>
-                    <td class="py-2.5 px-1.5 text-center text-emerald-400">+1</td>
-                    <td class="py-2.5 px-2 text-center font-black text-white">4</td>
+                    <td class="text-center">2</td>
+                    <td class="text-center">1</td>
+                    <td class="text-center">1</td>
+                    <td class="text-center">0</td>
+                    <td class="text-center">5</td>
+                    <td class="text-center">4</td>
+                    <td class="text-center text-emerald-400">+1</td>
+                    <td class="text-center font-black text-white">4</td>
                   </tr>
-                  <!-- 5. FUDAVIS -->
-                  <tr class="hover:bg-slate-800/50 text-slate-200 transition-colors">
-                    <td class="py-2.5 px-2 text-center text-slate-400 font-black">5</td>
-                    <td class="py-2.5 px-2">
+                  <tr>
+                    <td class="text-center font-bold">5</td>
+                    <td>
                       <div class="flex items-center gap-2.5">
-                        <img src="images/torneo/escudo-fudavis.webp" alt="Fudavis" class="w-7 h-7 object-contain shrink-0" />
-                        <span class="font-extrabold text-white">FUDAVIS</span>
+                        <img src="images/torneo/escudo-fudavis.webp" alt="Fudavis" class="w-6 h-6 object-contain shrink-0" />
+                        <span class="text-white font-bold">FUDAVIS</span>
                       </div>
                     </td>
-                    <td class="py-2.5 px-1.5 text-center">3</td>
-                    <td class="py-2.5 px-1.5 text-center">1</td>
-                    <td class="py-2.5 px-1.5 text-center">0</td>
-                    <td class="py-2.5 px-1.5 text-center">2</td>
-                    <td class="py-2.5 px-1.5 text-center">4</td>
-                    <td class="py-2.5 px-1.5 text-center">11</td>
-                    <td class="py-2.5 px-1.5 text-center text-rose-400">-7</td>
-                    <td class="py-2.5 px-2 text-center font-black text-white">3</td>
+                    <td class="text-center">3</td>
+                    <td class="text-center">1</td>
+                    <td class="text-center">0</td>
+                    <td class="text-center">2</td>
+                    <td class="text-center">4</td>
+                    <td class="text-center">11</td>
+                    <td class="text-center text-rose-400">-7</td>
+                    <td class="text-center font-black text-white">3</td>
                   </tr>
-                  <!-- 6. JOLPARR FC -->
-                  <tr class="hover:bg-slate-800/50 text-slate-200 transition-colors">
-                    <td class="py-2.5 px-2 text-center text-slate-400 font-black">6</td>
-                    <td class="py-2.5 px-2">
+                  <tr>
+                    <td class="text-center font-bold">6</td>
+                    <td>
                       <div class="flex items-center gap-2.5">
-                        <img src="images/torneo/escudo-jolparr-fc.webp" alt="Jolparr FC" class="w-7 h-7 object-contain shrink-0" />
-                        <span class="font-extrabold text-white">JOLPARR FC</span>
+                        <img src="images/torneo/escudo-jolparr-fc.webp" alt="Jolparr FC" class="w-6 h-6 object-contain shrink-0" />
+                        <span class="text-white font-bold">JOLPARR FC</span>
                       </div>
                     </td>
-                    <td class="py-2.5 px-1.5 text-center">4</td>
-                    <td class="py-2.5 px-1.5 text-center">0</td>
-                    <td class="py-2.5 px-1.5 text-center">1</td>
-                    <td class="py-2.5 px-1.5 text-center">3</td>
-                    <td class="py-2.5 px-1.5 text-center">6</td>
-                    <td class="py-2.5 px-1.5 text-center">13</td>
-                    <td class="py-2.5 px-1.5 text-center text-rose-400">-7</td>
-                    <td class="py-2.5 px-2 text-center font-black text-white">1</td>
+                    <td class="text-center">4</td>
+                    <td class="text-center">0</td>
+                    <td class="text-center">1</td>
+                    <td class="text-center">3</td>
+                    <td class="text-center">6</td>
+                    <td class="text-center">13</td>
+                    <td class="text-center text-rose-400">-7</td>
+                    <td class="text-center font-black text-white">1</td>
                   </tr>
                 </tbody>
               </table>
             </div>
           </div>
 
-          <!-- TABLA DE GOLEADORES RESUMIDA + DIBA ARTILLEROS (5 cols) -->
-          <div class="lg:col-span-5 bg-slate-900/90 border border-slate-800 rounded-2xl overflow-hidden shadow-xl">
-            <div class="px-5 py-4 border-b border-slate-800 flex items-center justify-between bg-slate-950/60">
+          <!-- Scorers Table (5 cols) -->
+          <div class="lg:col-span-5 bg-slate-900/90 border border-slate-800 rounded-3xl p-6 shadow-2xl">
+            <div class="flex items-center justify-between mb-5 pb-4 border-b border-slate-800">
               <div class="flex items-center gap-2.5">
-                <i class="fas fa-futbol text-amber-400 text-lg"></i>
+                <div class="w-9 h-9 rounded-xl bg-yellow-500/15 border border-yellow-500/40 flex items-center justify-center text-yellow-400">
+                  <i class="fas fa-futbol"></i>
+                </div>
                 <div>
                   <h3 class="text-sm font-black uppercase tracking-wider text-white">Tabla de Goleadores</h3>
-                  <p class="text-[10px] text-amber-400 font-bold uppercase tracking-widest">Top Artilleros &amp; Goleadores DIBA</p>
+                  <p class="text-[10px] text-yellow-400 font-bold uppercase tracking-widest">Top Artilleros &amp; DIBA</p>
                 </div>
               </div>
-              <a href="torneo-jolparrismo.html#goleadores" class="text-[10px] font-black uppercase tracking-wider text-amber-400 hover:underline">
-                Ver los 21 →
+              <a href="torneo-jolparrismo.html#goleadores" class="text-[10px] font-black uppercase tracking-wider text-yellow-400 hover:underline">
+                Ver 21 →
               </a>
             </div>
-            <div class="p-4 space-y-2.5 max-h-[420px] overflow-y-auto">
-              <!-- 1. Isaac Urina -->
+
+            <div class="space-y-2.5">
+              <!-- Isaac Urina -->
               <div class="flex items-center justify-between p-2.5 rounded-xl bg-slate-800/50 border border-slate-700/60">
                 <div class="flex items-center gap-3">
-                  <span class="w-6 h-6 rounded-md bg-amber-400 text-slate-950 font-black text-xs flex items-center justify-center">1</span>
+                  <span class="w-6 h-6 rounded-md bg-yellow-500 text-slate-950 font-black text-xs flex items-center justify-center">1</span>
                   <img src="images/torneo/escudo-redimidos.webp" alt="Redimidos" class="w-6 h-6 object-contain" />
                   <div>
                     <div class="text-xs font-black text-white">Isaac Urina</div>
                     <div class="text-[10px] text-slate-400 font-bold uppercase">REDIMIDOS</div>
                   </div>
                 </div>
-                <span class="px-2.5 py-1 rounded-lg bg-amber-400/20 border border-amber-400/40 text-amber-300 font-black text-xs">6 ⚽</span>
+                <span class="px-2.5 py-1 rounded-lg bg-yellow-500/20 text-yellow-300 font-black text-xs">6 ⚽</span>
               </div>
-              <!-- 2. Maite Garizabalo -->
+              <!-- Maite Garizabalo -->
               <div class="flex items-center justify-between p-2.5 rounded-xl bg-slate-800/50 border border-slate-700/60">
                 <div class="flex items-center gap-3">
                   <span class="w-6 h-6 rounded-md bg-slate-300 text-slate-950 font-black text-xs flex items-center justify-center">2</span>
@@ -512,110 +583,72 @@
                     <div class="text-[10px] text-slate-400 font-bold uppercase">JOLPARR FC</div>
                   </div>
                 </div>
-                <span class="px-2.5 py-1 rounded-lg bg-slate-700 text-white font-black text-xs">5 ⚽</span>
+                <span class="px-2.5 py-1 rounded-lg bg-slate-800 text-white font-black text-xs">5 ⚽</span>
               </div>
-              <!-- 3. Jair Moreno (DIBA) -->
-              <div class="flex items-center justify-between p-2.5 rounded-xl bg-gradient-to-r from-amber-500/20 to-blue-900/30 border border-amber-400/40">
+              <!-- Jair Moreno (DIBA) -->
+              <div class="flex items-center justify-between p-2.5 rounded-xl bg-gradient-to-r from-yellow-500/20 to-blue-900/30 border border-yellow-500/40">
                 <div class="flex items-center gap-3">
-                  <span class="w-6 h-6 rounded-md bg-amber-500 text-slate-950 font-black text-xs flex items-center justify-center">3</span>
+                  <span class="w-6 h-6 rounded-md bg-yellow-500 text-slate-950 font-black text-xs flex items-center justify-center">3</span>
                   <img src="images/ESCUDO.webp" alt="DIBA FBC" class="w-6 h-6 object-contain" />
                   <div>
-                    <div class="text-xs font-black text-amber-300">Jair Moreno</div>
-                    <div class="text-[10px] text-amber-400 font-black uppercase">DIBA FBC</div>
+                    <div class="text-xs font-black text-yellow-300">Jair Moreno</div>
+                    <div class="text-[10px] text-yellow-400 font-black uppercase">DIBA FBC</div>
                   </div>
                 </div>
-                <span class="px-2.5 py-1 rounded-lg bg-amber-400 text-slate-950 font-black text-xs">3 ⚽</span>
+                <span class="px-2.5 py-1 rounded-lg bg-yellow-500 text-slate-950 font-black text-xs">3 ⚽</span>
               </div>
-              <!-- 4. Navid Contreras -->
-              <div class="flex items-center justify-between p-2.5 rounded-xl bg-slate-800/50 border border-slate-700/60">
+              <!-- Andrés Sierra (DIBA) -->
+              <div class="flex items-center justify-between p-2.5 rounded-xl bg-gradient-to-r from-yellow-500/15 to-blue-900/25 border border-yellow-500/30">
                 <div class="flex items-center gap-3">
-                  <span class="w-6 h-6 rounded-md bg-slate-800 text-slate-400 font-black text-xs flex items-center justify-center">4</span>
-                  <img src="images/torneo/escudo-redimidos.webp" alt="Redimidos" class="w-6 h-6 object-contain" />
-                  <div>
-                    <div class="text-xs font-black text-white">Navid Contreras</div>
-                    <div class="text-[10px] text-slate-400 font-bold uppercase">REDIMIDOS</div>
-                  </div>
-                </div>
-                <span class="px-2.5 py-1 rounded-lg bg-slate-700 text-white font-black text-xs">3 ⚽</span>
-              </div>
-              <!-- 5. Andrés Sierra (DIBA) -->
-              <div class="flex items-center justify-between p-2.5 rounded-xl bg-gradient-to-r from-amber-500/20 to-blue-900/30 border border-amber-400/40">
-                <div class="flex items-center gap-3">
-                  <span class="w-6 h-6 rounded-md bg-amber-500 text-slate-950 font-black text-xs flex items-center justify-center">5</span>
+                  <span class="w-6 h-6 rounded-md bg-slate-800 text-yellow-400 font-black text-xs flex items-center justify-center">5</span>
                   <img src="images/ESCUDO.webp" alt="DIBA FBC" class="w-6 h-6 object-contain" />
                   <div>
-                    <div class="text-xs font-black text-amber-300">Andrés Sierra</div>
-                    <div class="text-[10px] text-amber-400 font-black uppercase">DIBA FBC</div>
+                    <div class="text-xs font-black text-yellow-200">Andrés Sierra</div>
+                    <div class="text-[10px] text-yellow-400 font-black uppercase">DIBA FBC</div>
                   </div>
                 </div>
-                <span class="px-2.5 py-1 rounded-lg bg-amber-400 text-slate-950 font-black text-xs">2 ⚽</span>
+                <span class="px-2.5 py-1 rounded-lg bg-yellow-500/20 text-yellow-300 font-black text-xs">2 ⚽</span>
               </div>
-              <!-- 14. Abrahan Perez (DIBA) -->
-              <div class="flex items-center justify-between p-2.5 rounded-xl bg-gradient-to-r from-amber-500/15 to-blue-900/25 border border-amber-400/30">
-                <div class="flex items-center gap-3">
-                  <span class="w-6 h-6 rounded-md bg-slate-800 text-amber-400 font-black text-xs flex items-center justify-center">14</span>
-                  <img src="images/ESCUDO.webp" alt="DIBA FBC" class="w-6 h-6 object-contain" />
-                  <div>
-                    <div class="text-xs font-black text-amber-200">Abrahan Perez</div>
-                    <div class="text-[10px] text-amber-400 font-black uppercase">DIBA FBC</div>
-                  </div>
-                </div>
-                <span class="px-2.5 py-1 rounded-lg bg-amber-400/20 border border-amber-400/40 text-amber-300 font-black text-xs">1 ⚽</span>
-              </div>
-              <!-- 15. Cristian Marcano (DIBA) -->
-              <div class="flex items-center justify-between p-2.5 rounded-xl bg-gradient-to-r from-amber-500/15 to-blue-900/25 border border-amber-400/30">
-                <div class="flex items-center gap-3">
-                  <span class="w-6 h-6 rounded-md bg-slate-800 text-amber-400 font-black text-xs flex items-center justify-center">15</span>
-                  <img src="images/ESCUDO.webp" alt="DIBA FBC" class="w-6 h-6 object-contain" />
-                  <div>
-                    <div class="text-xs font-black text-amber-200">Cristian Marcano</div>
-                    <div class="text-[10px] text-amber-400 font-black uppercase">DIBA FBC</div>
-                  </div>
-                </div>
-                <span class="px-2.5 py-1 rounded-lg bg-amber-400/20 border border-amber-400/40 text-amber-300 font-black text-xs">1 ⚽</span>
-              </div>
-              <!-- 16. Mario Pérez (DIBA) -->
-              <div class="flex items-center justify-between p-2.5 rounded-xl bg-gradient-to-r from-amber-500/15 to-blue-900/25 border border-amber-400/30">
-                <div class="flex items-center gap-3">
-                  <span class="w-6 h-6 rounded-md bg-slate-800 text-amber-400 font-black text-xs flex items-center justify-center">16</span>
-                  <img src="images/ESCUDO.webp" alt="DIBA FBC" class="w-6 h-6 object-contain" />
-                  <div>
-                    <div class="text-xs font-black text-amber-200">Mario Pérez</div>
-                    <div class="text-[10px] text-amber-400 font-black uppercase">DIBA FBC</div>
-                  </div>
-                </div>
-                <span class="px-2.5 py-1 rounded-lg bg-amber-400/20 border border-amber-400/40 text-amber-300 font-black text-xs">1 ⚽</span>
+              <!-- Otros DIBA -->
+              <div class="p-3 rounded-xl bg-slate-950/70 border border-slate-800 flex items-center justify-between text-[11px]">
+                <span class="text-slate-300">
+                  <strong class="text-yellow-400">Con 1 Gol (DIBA):</strong> Abrahan Perez, Cristian Marcano, Mario Pérez
+                </span>
+                <span class="text-yellow-400 font-bold">1 ⚽ c/u</span>
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- TAB: ENTRENAMIENTOS -->
-      <div id="entrenamientos-tab" class="tab-panel p-6 md:p-8">
-        <div class="flex flex-col md:flex-row md:items-end gap-4 mb-8">
+      <!-- ==============================================
+           TAB 3: ENTRENAMIENTOS
+           ============================================== -->
+      <div id="entrenamientos-tab" class="tab-panel p-6 sm:p-8 space-y-6">
+        <div class="flex flex-col md:flex-row md:items-end gap-4 bg-slate-950/60 p-5 rounded-2xl border border-slate-800">
           <div class="flex-1">
-            <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">
-              <i class="fas fa-calendar mr-1"></i>Filtrar por fecha
+            <label class="block text-xs font-black text-slate-400 uppercase tracking-wider mb-2">
+              <i class="fas fa-calendar mr-1 text-emerald-400"></i> Filtrar por fecha
             </label>
             <input type="date" id="fecha-entrenamiento"
-              class="w-full bg-slate-800 border border-slate-700 text-white rounded-xl px-4 py-3 focus:border-emerald-400 focus:outline-none transition-all text-sm" />
+              class="w-full bg-slate-900 border border-slate-700 text-white rounded-xl px-4 py-3 focus:border-emerald-400 focus:outline-none transition-all text-xs font-bold" />
           </div>
           <div class="flex-1">
-            <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">
-              <i class="fas fa-layer-group mr-1"></i>Categoría
+            <label class="block text-xs font-black text-slate-400 uppercase tracking-wider mb-2">
+              <i class="fas fa-layer-group mr-1 text-emerald-400"></i> Categoría
             </label>
             <select id="filtro-categoria-entrenamientos"
-              class="w-full bg-slate-800 border border-slate-700 text-white rounded-xl px-4 py-3 focus:border-emerald-400 focus:outline-none transition-all text-sm">
+              class="w-full bg-slate-900 border border-slate-700 text-white rounded-xl px-4 py-3 focus:border-emerald-400 focus:outline-none transition-all text-xs font-bold">
               <option value="">Todas las Categorías</option>
               <option value="2012">Cat. 2012</option>
               <option value="2013">Cat. 2013</option>
-              <option value="2014/15">Cat. 2014/15</option>
+              <option value="2014">Cat. 2014/15</option>
+              <option value="2015">Cat. 2015/16</option>
               <option value="General">General / Todas</option>
             </select>
           </div>
           <button id="btn-limpiar-entrenamientos"
-            class="flex items-center gap-2 px-5 py-3 rounded-xl border border-slate-700 text-slate-400 hover:text-white hover:border-slate-500 transition-all text-sm font-semibold">
+            class="flex items-center justify-center gap-2 px-5 py-3 rounded-xl border border-slate-700 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-all text-xs font-bold">
             <i class="fas fa-times"></i> Limpiar
           </button>
         </div>
@@ -627,62 +660,148 @@
         <div id="entrenamientos-results" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
       </div>
 
-      <!-- TAB: MAPA -->
-      <div id="mapa-tab" class="tab-panel p-6 md:p-8">
-        <div class="mb-6">
-          <h2 class="text-lg font-black uppercase tracking-wide text-white flex items-center gap-2">
-            <i class="fas fa-map-marker-alt text-red-400"></i> Cancha Parque La Pradera
-          </h2>
-          <p class="text-slate-400 text-sm mt-1">Barranquilla, Colombia — Campo oficial de entrenamiento de DIBA FBC</p>
-        </div>
-
-        <div class="rounded-2xl overflow-hidden border border-slate-700 shadow-2xl">
-          <iframe
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3916.6341232!2d-74.8386063!3d10.9783292!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8ef42cdd367c2453%3A0x401e8f23384cd2a6!2sParque%20La%20Pradera!5e0!3m2!1ses!2sco!4v1710000000000!5m2!1ses!2sco"
-            class="w-full h-[380px]" style="border:0;" allowfullscreen="" loading="lazy"
-            referrerpolicy="no-referrer-when-downgrade">
-          </iframe>
-        </div>
-
-        <div class="mt-4 flex flex-wrap gap-3">
+      <!-- ==============================================
+           TAB 4: CANCHA & MAPA
+           ============================================== -->
+      <div id="mapa-tab" class="tab-panel p-6 sm:p-8 space-y-6">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <h2 class="text-xl font-black uppercase tracking-tight text-white flex items-center gap-2">
+              <i class="fas fa-map-marker-alt text-rose-400"></i> Canchas Oficiales de Entrenamiento y Competencia
+            </h2>
+            <p class="text-slate-400 text-xs sm:text-sm mt-1">
+              Parque La Pradera &amp; Cancha La Bombonera — Barranquilla, Atlántico
+            </p>
+          </div>
           <a href="https://maps.app.goo.gl/kx1Yogsmqdgqexoq7" target="_blank"
-            class="inline-flex items-center gap-2 px-5 py-2.5 bg-amber-400 text-slate-900 font-bold rounded-full hover:bg-amber-300 transition-all text-sm shadow-lg shadow-amber-400/20">
+            class="inline-flex items-center gap-2 px-5 py-3 bg-yellow-500 hover:bg-yellow-400 text-slate-950 font-black rounded-xl text-xs uppercase tracking-wider transition-all shadow-lg shadow-yellow-500/20 shrink-0">
             <i class="fas fa-location-arrow"></i> Abrir en Google Maps
           </a>
-          <div class="flex items-center gap-2 text-sm text-slate-400 bg-slate-800 px-4 py-2.5 rounded-full">
-            <i class="fas fa-clock text-amber-400"></i>
-            <span>Entrenamientos Oficiales DIBA FBC</span>
-          </div>
+        </div>
+
+        <div class="rounded-3xl overflow-hidden border border-slate-800 shadow-2xl">
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3916.6341232!2d-74.8386063!3d10.9783292!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8ef42cdd367c2453%3A0x401e8f23384cd2a6!2sParque%20La%20Pradera!5e0!3m2!1ses!2sco!4v1710000000000!5m2!1ses!2sco"
+            class="w-full h-[420px]" style="border:0;" allowfullscreen="" loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade">
+          </iframe>
         </div>
       </div>
 
     </div>
 
-    <!-- PRÓXIMOS PARTIDOS DIBA -->
-    <section id="section-diba-fbc">
-      <div class="flex items-center gap-4 mb-8">
-        <div class="flex-shrink-0">
-          <span class="inline-flex items-center gap-2 text-sm font-black uppercase tracking-widest text-amber-400">
-            <i class="fas fa-star"></i> Partidos DIBA FBC
-          </span>
-        </div>
-        <div class="flex-grow h-px bg-gradient-to-r from-amber-400/40 to-transparent"></div>
-      </div>
-
-      <div id="diba-spinner" class="flex justify-center py-14" style="display:none">
-        <div class="spinner-ring"></div>
-      </div>
-
-      <div id="diba-slider" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5"></div>
-    </section>
-
-    <!-- BANNER DE PROGRAMACIÓN DE PARTIDOS Y ENTRENAMIENTOS -->
-    <div id="match-banner-container" class="mt-14"></div>
-
   </main>
 
   <footer id="footer-container"></footer>
 
+  <!-- MODAL DE DETALLES DEL ENCUENTRO Y CONVOCADOS (FIFA STYLE) -->
+  <div id="match-details-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 sm:p-6 opacity-0 transition-opacity duration-300">
+    <div class="absolute inset-0 bg-black/85 backdrop-blur-md modal-backdrop"></div>
+    <div class="relative bg-slate-900 border border-slate-700/80 w-full max-w-4xl rounded-3xl overflow-hidden shadow-2xl shadow-black/80 transform scale-95 transition-transform duration-300 flex flex-col max-h-[90vh]">
+      
+      <!-- Botón de Cerrar -->
+      <button class="modal-close absolute top-4 right-4 z-20 w-9 h-9 flex items-center justify-center bg-black/50 hover:bg-black/80 rounded-full text-slate-300 hover:text-white transition-colors border border-white/10">
+        <i class="fas fa-times text-sm"></i>
+      </button>
+
+      <!-- Cabecera del Encuentro -->
+      <div class="relative bg-slate-950 px-6 py-8 sm:py-10 border-b border-slate-800 shrink-0">
+        <div class="absolute top-4 left-0 right-0 flex justify-center text-[10px] font-black uppercase tracking-widest text-yellow-400">
+          <span id="modal-categoria">CAT. 2014/15</span>
+          <span class="mx-2 text-slate-600">•</span>
+          <span id="modal-torneo">TORNEO EL JOLPARRISMO</span>
+        </div>
+
+        <div class="flex items-center justify-between sm:justify-center sm:gap-14 mt-4">
+          <!-- Equipo Local -->
+          <div class="flex flex-col sm:flex-row items-center gap-4 sm:w-[220px] sm:justify-end text-center sm:text-right">
+            <span id="modal-local-name" class="text-xl sm:text-2xl font-black uppercase tracking-tight text-white hidden sm:block">DIBA FBC</span>
+            <div class="w-20 h-20 rounded-2xl bg-slate-900 p-2 border border-slate-700 flex items-center justify-center shadow-2xl">
+              <img id="modal-local-shield" src="images/ESCUDO.webp" class="w-full h-full object-contain" alt="Local">
+            </div>
+            <span id="modal-local-name-mob" class="text-xs font-black uppercase text-white sm:hidden mt-1">DIBA</span>
+          </div>
+
+          <!-- Marcador / Hora -->
+          <div class="flex flex-col items-center justify-center shrink-0 px-2">
+            <div id="modal-score" class="text-3xl sm:text-5xl font-black tracking-tight text-yellow-400">2:40 PM</div>
+            <div id="modal-date" class="mt-2 text-[10px] sm:text-xs font-bold text-slate-400 uppercase tracking-widest">SÁBADO, 24 DE OCTUBRE</div>
+          </div>
+
+          <!-- Equipo Visitante -->
+          <div class="flex flex-col sm:flex-row-reverse items-center gap-4 sm:w-[220px] sm:justify-end text-center sm:text-left">
+            <span id="modal-visit-name" class="text-xl sm:text-2xl font-black uppercase tracking-tight text-white hidden sm:block">PHOTOS FC</span>
+            <div class="w-20 h-20 rounded-2xl bg-slate-900 p-2 border border-slate-700 flex items-center justify-center shadow-2xl">
+              <img id="modal-visit-shield" src="" class="w-full h-full object-contain" alt="Visitante">
+            </div>
+            <span id="modal-visit-name-mob" class="text-xs font-black uppercase text-white sm:hidden mt-1">PHOTOS</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pestañas del Modal -->
+      <div class="flex items-center justify-center border-b border-slate-800 bg-slate-900/90 shrink-0 px-4">
+        <button class="modal-tab-btn active px-6 py-3.5 text-xs font-black uppercase tracking-widest text-yellow-400 border-b-2 border-yellow-400" data-target="m-resumen">
+          <i class="fas fa-info-circle mr-1.5"></i> Resumen
+        </button>
+        <button class="modal-tab-btn px-6 py-3.5 text-xs font-bold uppercase tracking-widest text-slate-400 hover:text-white border-b-2 border-transparent transition-colors" data-target="m-convocados">
+          <i class="fas fa-users mr-1.5"></i> Convocados
+        </button>
+      </div>
+
+      <!-- Contenido del Modal -->
+      <div class="p-6 overflow-y-auto bg-slate-900 custom-scrollbar grow space-y-6">
+        <!-- Pestaña: Resumen -->
+        <div id="m-resumen" class="modal-tab-content block animate__animated animate__fadeIn">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="bg-slate-950/70 rounded-2xl p-5 border border-slate-800 space-y-4">
+              <h4 class="text-xs font-black uppercase tracking-widest text-yellow-400 flex items-center gap-2">
+                <i class="fas fa-map-pin"></i> Datos Logísticos del Encuentro
+              </h4>
+              <ul class="space-y-3.5 text-xs text-slate-300">
+                <li class="flex items-center gap-3">
+                  <div class="w-8 h-8 rounded-xl bg-rose-500/10 flex items-center justify-center text-rose-400 shrink-0"><i class="fas fa-map-marker-alt"></i></div>
+                  <div><span class="text-slate-500 text-[10px] block uppercase font-bold">Cancha</span><strong id="modal-lugar" class="text-white text-xs">La Bombonera</strong></div>
+                </li>
+                <li class="flex items-center gap-3">
+                  <div class="w-8 h-8 rounded-xl bg-blue-500/10 flex items-center justify-center text-blue-400 shrink-0"><i class="fas fa-tshirt"></i></div>
+                  <div><span class="text-slate-500 text-[10px] block uppercase font-bold">Uniforme Exigido</span><strong id="modal-uniforme" class="text-white text-xs">Nuevo de Competencia</strong></div>
+                </li>
+                <li class="flex items-center gap-3">
+                  <div class="w-8 h-8 rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-400 shrink-0"><i class="fas fa-dollar-sign"></i></div>
+                  <div><span class="text-slate-500 text-[10px] block uppercase font-bold">Arbitraje &amp; Pago</span><strong id="modal-valor" class="text-emerald-400 text-xs">$6.000 (NEQUI 3246656083)</strong></div>
+                </li>
+              </ul>
+            </div>
+
+            <div class="bg-slate-950/70 rounded-2xl p-5 border border-slate-800 space-y-3">
+              <h4 class="text-xs font-black uppercase tracking-widest text-yellow-400 flex items-center gap-2">
+                <i class="fas fa-align-left"></i> Observaciones Oficiales
+              </h4>
+              <div class="text-xs text-slate-300 leading-relaxed max-h-48 overflow-y-auto whitespace-pre-line p-3 bg-slate-900 rounded-xl border border-slate-800" id="modal-obs">
+                Sin observaciones adicionales.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pestaña: Convocados -->
+        <div id="m-convocados" class="modal-tab-content hidden animate__animated animate__fadeIn">
+          <div id="modal-convocados-empty" class="text-center py-12" style="display:none">
+            <div class="w-16 h-16 rounded-2xl bg-slate-800 flex items-center justify-center mx-auto mb-3 text-slate-500 text-2xl">
+              <i class="fas fa-users-slash"></i>
+            </div>
+            <h4 class="text-sm font-black uppercase tracking-wider text-slate-300">Convocatoria General</h4>
+            <p class="text-xs text-slate-500 mt-1">Todos los jugadores de la categoría están citados al encuentro.</p>
+          </div>
+
+          <div id="modal-convocados-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="scripts/config.js"></script>
@@ -691,120 +810,45 @@
   <script src="scripts/main.js"></script>
   <script src="scripts/partidos.js"></script>
 
-  <!-- Tabs Logic -->
+  <!-- Tabs Navigation & Modal Control Script -->
   <script>
+    // Tab switching
     document.querySelectorAll('.tab-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
         document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
         btn.classList.add('active');
-        document.getElementById(btn.dataset.tab).classList.add('active');
+        const target = document.getElementById(btn.dataset.tab);
+        if (target) target.classList.add('active');
       });
     });
-  </script>
 
-  <!-- Modal de Detalles del Partido -->
-  <div id="match-details-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 sm:p-6 opacity-0 transition-opacity duration-300">
-    <div class="absolute inset-0 bg-black/80 backdrop-blur-sm modal-backdrop"></div>
-    <div class="relative bg-slate-900 border border-slate-700 w-full max-w-4xl rounded-2xl overflow-hidden shadow-2xl shadow-black/50 transform scale-95 transition-transform duration-300 flex flex-col max-h-[90vh]">
-      
-      <!-- Botón de Cerrar -->
-      <button class="modal-close absolute top-4 right-4 z-10 w-8 h-8 flex items-center justify-center bg-black/30 hover:bg-black/60 rounded-full text-slate-300 transition-colors">
-        <i class="fas fa-times"></i>
-      </button>
-
-      <!-- Cabecera del Modal (FIFA Style) -->
-      <div class="relative bg-slate-950 px-6 py-8 sm:py-12 border-b border-slate-800 shrink-0">
-        <!-- Badge Superior -->
-        <div class="absolute top-4 left-0 right-0 flex justify-center text-[0.65rem] sm:text-xs font-black uppercase tracking-widest text-slate-500">
-          <span id="modal-categoria">CAT. 2015-2016</span>
-          <span class="mx-2">•</span>
-          <span id="modal-torneo">PARTIDO N.º 12</span>
-        </div>
-
-        <div class="flex items-center justify-between sm:justify-center sm:gap-16 mt-6">
-          <!-- Equipo Local -->
-          <div class="flex flex-col sm:flex-row items-center gap-4 sm:w-[200px] sm:justify-end">
-            <span id="modal-local-name" class="text-xl sm:text-3xl font-black uppercase tracking-tight text-white hidden sm:block text-right">NUEVO HORIZONTE</span>
-            <img id="modal-local-shield" src="" class="w-20 h-20 sm:w-24 sm:h-24 object-contain drop-shadow-2xl">
-            <span id="modal-local-name-mob" class="text-lg font-black uppercase tracking-tight text-white sm:hidden text-center">NH</span>
-          </div>
-
-          <!-- Marcador / Hora -->
-          <div class="flex flex-col items-center justify-center shrink-0">
-            <div id="modal-score" class="text-4xl sm:text-6xl font-black tracking-tighter text-white">09:20</div>
-            <div id="modal-date" class="mt-4 text-[0.65rem] sm:text-xs font-bold text-slate-400 uppercase tracking-widest">09:20 • 14 JUN 2026</div>
-          </div>
-
-          <!-- Equipo Visitante -->
-          <div class="flex flex-col sm:flex-row-reverse items-center gap-4 sm:w-[200px] sm:justify-end">
-            <span id="modal-visit-name" class="text-xl sm:text-3xl font-black uppercase tracking-tight text-white hidden sm:block text-left">DIBA FBC</span>
-            <img id="modal-visit-shield" src="" class="w-20 h-20 sm:w-24 sm:h-24 object-contain drop-shadow-2xl">
-            <span id="modal-visit-name-mob" class="text-lg font-black uppercase tracking-tight text-white sm:hidden text-center">DIBA</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Pestañas de Navegación -->
-      <div class="flex items-center justify-center border-b border-slate-800 bg-slate-900 shrink-0 px-2 overflow-x-auto custom-scrollbar">
-        <button class="modal-tab-btn active px-4 py-4 text-xs font-black uppercase tracking-widest text-amber-400 border-b-2 border-amber-400 whitespace-nowrap" data-target="m-resumen">Resumen</button>
-        <button class="modal-tab-btn px-4 py-4 text-xs font-bold uppercase tracking-widest text-slate-500 hover:text-slate-300 border-b-2 border-transparent transition-colors whitespace-nowrap" data-target="m-detalles">Detalles</button>
-      </div>
-
-      <!-- Contenido del Modal -->
-      <div class="p-6 overflow-y-auto bg-slate-900 custom-scrollbar grow">
-        <div id="m-resumen" class="modal-tab-content block animate-[fadeIn_0.3s_ease-out]">
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div class="bg-slate-800/50 rounded-xl p-5 border border-slate-700/50">
-              <h3 class="text-xs font-black uppercase tracking-widest text-slate-500 mb-4"><i class="fas fa-info-circle mr-2"></i>Información del Encuentro</h3>
-              <ul class="space-y-4 text-sm text-slate-300">
-                <li class="flex items-center gap-3"><div class="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center text-red-400"><i class="fas fa-map-marker-alt"></i></div><span id="modal-lugar">Estadio Monterrey</span></li>
-                <li class="flex items-center gap-3"><div class="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center text-purple-400"><i class="fas fa-tshirt"></i></div><span id="modal-uniforme">No especificado</span></li>
-                <li class="flex items-center gap-3"><div class="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center text-green-400"><i class="fas fa-dollar-sign"></i></div><span id="modal-valor">No especificado</span></li>
-              </ul>
-            </div>
-            <div class="bg-slate-800/50 rounded-xl p-5 border border-slate-700/50">
-              <h3 class="text-xs font-black uppercase tracking-widest text-slate-500 mb-4"><i class="fas fa-align-left mr-2"></i>Observaciones</h3>
-              <p id="modal-obs" class="text-sm text-slate-300 leading-relaxed">Sin observaciones registradas.</p>
-            </div>
-          </div>
-        </div>
-        
-        <div id="m-detalles" class="modal-tab-content hidden animate-[fadeIn_0.3s_ease-out]">
-          <div class="text-center py-12">
-            <div class="w-16 h-16 rounded-full bg-slate-800 flex items-center justify-center mx-auto mb-4 text-slate-500 text-2xl"><i class="fas fa-users"></i></div>
-            <h4 class="text-sm font-black uppercase tracking-widest text-slate-400">Alineaciones / Convocados</h4>
-            <p class="text-xs text-slate-500 mt-2">No hay información de alineación pública para este encuentro.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <script>
-    // Modal tabs logic
+    // Modal tabs
     document.querySelectorAll('.modal-tab-btn').forEach(btn => {
       btn.addEventListener('click', (e) => {
         document.querySelectorAll('.modal-tab-btn').forEach(b => {
-          b.classList.remove('text-amber-400', 'border-amber-400', 'font-black');
-          b.classList.add('text-slate-500', 'border-transparent', 'font-bold');
+          b.classList.remove('text-yellow-400', 'border-yellow-400', 'active');
+          b.classList.add('text-slate-400', 'border-transparent');
         });
-        const t = e.target;
-        t.classList.remove('text-slate-500', 'border-transparent', 'font-bold');
-        t.classList.add('text-amber-400', 'border-amber-400', 'font-black');
+        const t = e.currentTarget;
+        t.classList.add('text-yellow-400', 'border-yellow-400', 'active');
+        t.classList.remove('text-slate-400', 'border-transparent');
         
         document.querySelectorAll('.modal-tab-content').forEach(c => c.classList.add('hidden'));
-        document.getElementById(t.dataset.target).classList.remove('hidden');
+        const targetContent = document.getElementById(t.dataset.target);
+        if (targetContent) targetContent.classList.remove('hidden');
       });
     });
 
-    // Close modal logic
+    // Modal close
     document.querySelectorAll('.modal-close, .modal-backdrop').forEach(el => {
       el.addEventListener('click', () => {
         const m = document.getElementById('match-details-modal');
-        m.classList.remove('opacity-100');
-        m.classList.add('opacity-0', 'pointer-events-none');
-        setTimeout(() => m.classList.add('hidden'), 300);
+        if (m) {
+          m.classList.remove('opacity-100');
+          m.classList.add('opacity-0', 'pointer-events-none');
+          setTimeout(() => m.classList.add('hidden'), 250);
+        }
       });
     });
   </script>
