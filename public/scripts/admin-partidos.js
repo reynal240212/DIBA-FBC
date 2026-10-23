@@ -224,7 +224,7 @@ import { supabase, requireAdmin } from './supabaseClient.js';
                         const baseUrl = cfg.OPENWA_URL || 'http://localhost:2785';
                         const sessId = cfg.OPENWA_SESSION_ID || '4c331538-1a66-4002-93d2-cb49e5fa2ad3';
                         const apiKey = cfg.OPENWA_API_KEY || 'dev-admin-key';
-                        const openwaUrl = ${baseUrl}/api/sessions//messages?chatId=573128051695%40c.us&limit=60;
+                        const openwaUrl = `${baseUrl}/api/sessions/${sessId}/messages?chatId=573128051695%40c.us&limit=60`;
                         const res = await fetch(openwaUrl, {
                             headers: apiKey ? { 'x-api-key': apiKey } : {}
                         });

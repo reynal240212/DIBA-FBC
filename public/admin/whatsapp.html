@@ -8,6 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
     <link rel="stylesheet" href="/styles/admin-common.css">
+    <script src="/scripts/theme-switcher.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         .wa-status { display: inline-flex; align-items: center; gap: 6px; padding: 6px 16px; border-radius: 9999px; font-size: 0.65rem; font-weight: 800; letter-spacing: 0.15em; text-transform: uppercase; }
@@ -154,7 +155,7 @@
                 <button class="tab-btn" onclick="switchTab('llamados')"><i class="fas fa-phone-volume mr-2"></i>Llamados</button>
                 <button class="tab-btn" onclick="switchTab('resultados')"><i class="fas fa-trophy mr-2"></i>Resultados</button>
                 <button class="tab-btn" onclick="switchTab('bot')"><i class="fas fa-robot mr-2"></i>Bot Info</button>
-                <button class="tab-btn" onclick="switchTab('grupo')"><i class="fas fa-users-rays mr-2"></i>Grupo WA</button>
+                <button class="tab-btn" onclick="switchTab('grupo')"><i class="fas fa-users mr-2"></i>Grupo WA</button>
             </div>
 
             <!-- TAB: Convocatorias -->
@@ -201,9 +202,9 @@
                                 <label class="premium-label">Mensaje Personalizado (opcional)</label>
                                 <textarea id="conv-mensaje" rows="4" class="premium-input !bg-white/5" placeholder="Dejar vacío para usar plantilla por defecto..."></textarea>
                             </div>
-                            <div class="flex items-center justify-between">
+                            <div class="flex flex-wrap items-center justify-between gap-4">
                                 <span class="text-[0.6rem] text-white/30 font-bold uppercase tracking-widest" id="conv-preview-count">0 DESTINATARIOS</span>
-                                <div class="flex gap-3">
+                                <div class="flex flex-wrap gap-3">
                                     <button onclick="previewConvocatoria()" class="px-5 py-3 bg-white/5 border border-white/10 rounded-2xl text-white/60 text-[0.65rem] font-bold uppercase tracking-widest hover:bg-white/10 transition-all">
                                         <i class="fas fa-eye mr-2"></i>Vista Previa
                                     </button>
@@ -378,7 +379,7 @@
                             <span class="premium-p-title text-[0.7rem]"><i class="fas fa-eye text-gold"></i> Vista Previa</span>
                         </div>
                         <div class="msg-bubble msg-out" id="res-preview" style="max-width:100%">
-                            <p class="text-[0.7rem]">🏆 RESULTADO DEL PARTIDO</p>
+                            <p class="text-[0.7rem] font-black">RESULTADO DEL PARTIDO</p>
                             <p class="text-[0.65rem] text-white/60 mt-2">Selecciona un equipo y rival para ver la vista previa del mensaje...</p>
                         </div>
                     </div>
@@ -418,11 +419,11 @@
                             </label>
                             <div class="premium-form-group">
                                 <label class="premium-label">Mensaje de Bienvenida</label>
-                                <textarea id="bot-welcome-msg" rows="3" class="premium-input !bg-white/5 text-[0.7rem]">⚽ ¡Hola! Bienvenido al canal de DIBA FBC. Escribe HOLA para ver las opciones disponibles.</textarea>
+                                <textarea id="bot-welcome-msg" rows="3" class="premium-input !bg-white/5 text-[0.7rem]">Hola. Bienvenido al canal oficial de DIBA FBC. Escribe HOLA para ver las opciones disponibles.</textarea>
                             </div>
                             <div class="premium-form-group">
                                 <label class="premium-label">Mensaje Fuera de Horario</label>
-                                <textarea id="bot-offhours" rows="3" class="premium-input !bg-white/5 text-[0.7rem]">🕐 Estamos fuera de horario de atención. Te responderemos en el próximo horario laboral.</textarea>
+                                <textarea id="bot-offhours" rows="3" class="premium-input !bg-white/5 text-[0.7rem]">Estamos fuera de horario de atención. Te responderemos en el próximo horario laboral.</textarea>
                             </div>
                         </div>
                     </div>
@@ -434,14 +435,14 @@
                 <div class="diba-grid">
                     <div class="col-12 lg:col-8 panel p-8 animate-fade-up">
                         <div class="premium-p-header mb-8">
-                            <span class="premium-p-title"><i class="fas fa-users-rays text-gold"></i> Importar Grupo de WhatsApp</span>
+                            <span class="premium-p-title"><i class="fas fa-users text-gold"></i> Importar Grupo de WhatsApp</span>
                         </div>
 
                         <div class="space-y-6">
                             <div class="premium-form-group">
                                 <label class="premium-label">Seleccionar Sesión Conectada</label>
-                                <div class="flex gap-3">
-                                    <select id="grupo-session" class="premium-input !bg-white/5 flex-1">
+                                <div class="flex flex-wrap gap-3">
+                                    <select id="grupo-session" class="premium-input !bg-white/5 flex-1 min-w-[200px]" onchange="loadGroups()">
                                         <option value="">CARGANDO SESIONES...</option>
                                     </select>
                                     <button onclick="loadGroups()" class="px-5 py-3 bg-gold/10 border border-gold/30 rounded-2xl text-gold text-[0.65rem] font-bold uppercase tracking-widest hover:bg-gold/20 transition-all whitespace-nowrap">
@@ -475,7 +476,7 @@
                             <div id="grupo-list" class="space-y-2 max-h-[450px] overflow-y-auto custom-scrollbar hidden">
                             </div>
 
-                            <div id="grupo-actions" class="flex gap-3 hidden">
+                            <div id="grupo-actions" class="flex flex-wrap gap-3 hidden">
                                 <button onclick="downloadGrupoList()" class="flex-1 py-3 bg-white/5 border border-white/10 rounded-2xl text-white/60 text-[0.65rem] font-bold uppercase tracking-widest hover:bg-white/10 transition-all">
                                     <i class="fas fa-download mr-2"></i>Descargar Listado
                                 </button>
@@ -649,8 +650,120 @@
         const SUPABASE_URL = window.DIBA_CONFIG.SUPABASE_URL;
         const SUPABASE_ANON_KEY = window.DIBA_CONFIG.SUPABASE_ANON_KEY;
 
-        // Server-side proxy for WhatsApp operations (keeps API key secret)
+        const OPENWA_LOCAL_URL = window.DIBA_CONFIG.OPENWA_URL || 'http://localhost:2785';
+        const OPENWA_LOCAL_KEY = window.DIBA_CONFIG.OPENWA_API_KEY || 'dev-admin-key';
+        const PREFERRED_SESSION_ID = window.DIBA_CONFIG.OPENWA_SESSION_ID || '4c331538-1a66-4002-93d2-cb49e5fa2ad3';
+
+        // Hybrid proxy: tries Local OpenWA (http://localhost:2785) first, falls back to Supabase Edge Function
         async function waProxy(action, payload = {}) {
+            const localHeaders = {
+                'Content-Type': 'application/json',
+                ...(OPENWA_LOCAL_KEY ? { 'x-api-key': OPENWA_LOCAL_KEY } : {})
+            };
+
+            try {
+                const sessResp = await fetch(`${OPENWA_LOCAL_URL}/api/sessions`, {
+                    headers: localHeaders,
+                    signal: AbortSignal.timeout(3500)
+                });
+                if (sessResp.ok) {
+                    const sessData = await sessResp.json();
+                    const list = Array.isArray(sessData) ? sessData : (sessData.sessions || []);
+                    const readySessions = list.filter(s => s.status === 'CONNECTED' || s.status === 'ready' || s.engineLoaded);
+                    const selectedId = payload.session_id || document.getElementById('grupo-session')?.value || PREFERRED_SESSION_ID;
+                    const activeSession = readySessions.find(s => s.id === selectedId)
+                        || readySessions.find(s => s.id === PREFERRED_SESSION_ID)
+                        || readySessions[0]
+                        || list[0];
+
+                    if (action === 'status') {
+                        return {
+                            connected: readySessions.length > 0,
+                            session: activeSession || null,
+                            sessions: readySessions.length ? readySessions : list,
+                            engine: 'local'
+                        };
+                    }
+
+                    if (action === 'qr') {
+                        if (activeSession && (activeSession.status === 'ready' || activeSession.status === 'CONNECTED')) {
+                            return { connected: true, sessionId: activeSession.id, session: activeSession };
+                        }
+                        const targetId = activeSession ? activeSession.id : PREFERRED_SESSION_ID;
+                        const qrResp = await fetch(`${OPENWA_LOCAL_URL}/api/sessions/${targetId}/qr`, { headers: localHeaders });
+                        if (qrResp.ok) {
+                            const qrData = await qrResp.json();
+                            const qrImg = qrData.qrDataUrl || qrData.qr || qrData.dataUrl || qrData.base64;
+                            if (qrImg) return { qr: qrImg, sessionId: targetId };
+                        }
+                        return { error: 'No se pudo obtener el codigo QR del motor local.' };
+                    }
+
+                    if (!activeSession) {
+                        return { error: 'No hay sesion activa en OpenWA local.' };
+                    }
+
+                    const sid = activeSession.id;
+
+                    if (action === 'groups') {
+                        const gResp = await fetch(`${OPENWA_LOCAL_URL}/api/sessions/${sid}/groups`, { headers: localHeaders });
+                        const gData = await gResp.json();
+                        return { groups: Array.isArray(gData) ? gData : (gData.groups || []) };
+                    }
+
+                    if (action === 'group_members') {
+                        const gmResp = await fetch(`${OPENWA_LOCAL_URL}/api/sessions/${sid}/groups/${encodeURIComponent(payload.group_id)}`, { headers: localHeaders });
+                        const gmData = await gmResp.json();
+                        return { members: gmData.participants || gmData.members || (Array.isArray(gmData) ? gmData : []) };
+                    }
+
+                    if (action === 'send') {
+                        const cleanPhone = String(payload.phone || '').replace(/\D/g, '');
+                        const sResp = await fetch(`${OPENWA_LOCAL_URL}/api/sessions/${sid}/messages/send-text`, {
+                            method: 'POST',
+                            headers: localHeaders,
+                            body: JSON.stringify({ to: cleanPhone, text: payload.message })
+                        });
+                        const sData = await sResp.json();
+                        if (!sResp.ok) return { error: sData.error || 'Error enviando mensaje' };
+                        return { success: true, data: sData };
+                    }
+
+                    if (action === 'bulk_send') {
+                        const contacts = payload.contacts || [];
+                        let sent = 0, failed = 0;
+                        for (const c of contacts) {
+                            const cleanPhone = String(c.phone || '').replace(/\D/g, '');
+                            try {
+                                const bResp = await fetch(`${OPENWA_LOCAL_URL}/api/sessions/${sid}/messages/send-text`, {
+                                    method: 'POST',
+                                    headers: localHeaders,
+                                    body: JSON.stringify({ to: cleanPhone, text: payload.message })
+                                });
+                                if (bResp.ok) {
+                                    sent++;
+                                    if (c.id) {
+                                        await supabase.from('whatsapp_messages')
+                                            .update({ status: 'sent' })
+                                            .eq('contact_id', c.id)
+                                            .eq('status', 'sending');
+                                    }
+                                } else {
+                                    failed++;
+                                }
+                            } catch {
+                                failed++;
+                            }
+                            await new Promise(r => setTimeout(r, 900));
+                        }
+                        return { success: true, sent, failed };
+                    }
+                }
+            } catch (localErr) {
+                console.warn('[waProxy] Local OpenWA no disponible, usando Cloud Edge Function:', localErr.message);
+            }
+
+            // Cloud Edge Function Fallback
             const { data: { session } } = await supabase.auth.getSession();
             const token = session?.access_token;
             if (!token) { console.error('[waProxy] No auth token!'); return { error: 'No autenticado' }; }
@@ -708,7 +821,8 @@
                 if (result.connected) {
                     badge.classList.remove('disconnected');
                     badge.classList.add('connected');
-                    badge.querySelector('span').textContent = 'CONECTADO';
+                    const phoneTag = result.session?.phone ? ` · ${result.session.phone}` : '';
+                    badge.querySelector('span').textContent = `CONECTADO${phoneTag}`;
                 } else {
                     badge.classList.remove('connected');
                     badge.classList.add('disconnected');
@@ -818,7 +932,7 @@
 
             if (!recipients.length) { showToast('No hay contactos para enviar', 'error'); return; }
 
-            const msg = document.getElementById('conv-mensaje').value.trim() || `⚽ CONVOCATORIA OFICIAL DIBA FBC\n\n📅 Fecha: ${fecha}\n🕐 Hora: ${hora}\n📍 Lugar: ${lugar}\n🏆 Competición: ${competencia}\n\nEquipo: ${equipo}\nCategoría: ${categoria || 'Todas'}\n\nPor favor confirmar:\n✅ SÍ — Asistiré\n❌ NO — No podré\n\n¡DIBA FBC! 💙💛`;
+            const msg = document.getElementById('conv-mensaje').value.trim() || `CONVOCATORIA OFICIAL DIBA FBC\n\nFecha: ${fecha}\nHora: ${hora}\nLugar: ${lugar}\nCompetición: ${competencia}\n\nEquipo: ${equipo}\nCategoría: ${categoria || 'Todas'}\n\nPor favor confirmar:\n[SI] — Asistiré\n[NO] — No podré\n\nDIBA FBC`;
 
             // Save event to DB
             const { data: event } = await supabase.from('whatsapp_events').insert({
@@ -853,7 +967,7 @@
                 if (sendResult.error) {
                     showToast(`Error: ${sendResult.error}`, 'error');
                 } else {
-                    showToast(`✅ Convocatoria enviada: ${sendResult.sent} éxitos, ${sendResult.failed} fallos`, 'success');
+                    showToast(`Convocatoria enviada: ${sendResult.sent} éxitos, ${sendResult.failed} fallos`, 'success');
                 }
             } catch (err) {
                 showToast('Error enviando mensajes', 'error');
@@ -871,7 +985,7 @@
             const competencia = document.getElementById('conv-competencia').value || 'Partido Amistoso';
             const custom = document.getElementById('conv-mensaje').value.trim();
 
-            const msg = custom || `⚽ CONVOCATORIA OFICIAL DIBA FBC\n\n📅 Fecha: ${fecha}\n🕐 Hora: ${hora}\n📍 Lugar: ${lugar}\n🏆 Competición: ${competencia}\n\nEquipo: ${equipo}\n\nPor favor confirmar:\n✅ SÍ — Asistiré\n❌ NO — No podré\n\n¡DIBA FBC! 💙💛`;
+            const msg = custom || `CONVOCATORIA OFICIAL DIBA FBC\n\nFecha: ${fecha}\nHora: ${hora}\nLugar: ${lugar}\nCompetición: ${competencia}\n\nEquipo: ${equipo}\n\nPor favor confirmar:\n[SI] — Asistiré\n[NO] — No podré\n\nDIBA FBC`;
 
             document.getElementById('preview-message').innerHTML = `<p class="text-[0.7rem] whitespace-pre-line">${msg}</p><div class="msg-time">${new Date().toLocaleTimeString('es-CO', {hour:'2-digit', minute:'2-digit'})}</div>`;
             document.getElementById('preview-modal').classList.remove('hidden');
@@ -907,7 +1021,7 @@
                         <p class="text-[0.7rem] font-bold text-white">${r.whatsapp_contacts?.name || 'Desconocido'}</p>
                         <p class="text-[0.55rem] text-white/30">${r.whatsapp_contacts?.phone || ''}</p>
                     </div>
-                    <span class="text-[0.6rem] font-black uppercase ${r.response === 'si' ? 'text-emerald-500' : r.response === 'no' ? 'text-red-500' : 'text-gold'}">${r.response === 'si' ? '✅ SÍ' : r.response === 'no' ? '❌ NO' : '⏳ PENDIENTE'}</span>
+                    <span class="text-[0.6rem] font-black uppercase ${r.response === 'si' ? 'text-emerald-500' : r.response === 'no' ? 'text-red-500' : 'text-gold'}">${r.response === 'si' ? 'CONFIRMADO' : r.response === 'no' ? 'NO ASISTE' : 'PENDIENTE'}</span>
                 </div>
             `).join('');
         };
@@ -931,7 +1045,7 @@
 
             if (!pending.length) { showToast('No hay contactos pendientes', 'info'); return; }
 
-            const msg = `⏰ RECORDATORIO - ${event.title}\n\n¿Confirmaste tu asistencia? Responde:\n✅ SÍ — Asistiré\n❌ NO — No podré\n\n¡DIBA FBC! 💙💛`;
+            const msg = `RECORDATORIO - ${event.title}\n\n¿Confirmaste tu asistencia? Responde:\n[SI] — Asistiré\n[NO] — No podré\n\nDIBA FBC`;
 
             showToast(`Enviando recordatorio a ${pending.length} pendientes...`, 'info');
             try {
@@ -942,7 +1056,7 @@
                 if (sendResult.error) {
                     showToast(`Error: ${sendResult.error}`, 'error');
                 } else {
-                    showToast(`✅ Recordatorios enviados: ${sendResult.sent} éxitos`, 'success');
+                    showToast(`Recordatorios enviados: ${sendResult.sent} éxitos`, 'success');
                 }
             } catch (err) {
                 showToast('Error enviando recordatorios', 'error');
@@ -988,7 +1102,7 @@
             const contact = allContacts.find(c => c.player_id === selectedPlayer.id || c.name.toLowerCase().includes(selectedPlayer.name.split(' ')[0].toLowerCase()));
             if (!contact) { showToast('No se encontró contacto WhatsApp del jugador', 'error'); return; }
 
-            const msg = `📢 LLAMADO OFICIAL DIBA FBC\n\n${selectedPlayer.name}, has sido convocado para:\n\n📅 ${fecha}\n🕐 ${hora}\n📍 ${lugar}\n👕 Uniforme: ${uniforme}\n\nConfirma:\n✅ SÍ — Voy\n❌ NO — No puedo\n\nDIBA FBC 💙💛`;
+            const msg = `LLAMADO OFICIAL DIBA FBC\n\n${selectedPlayer.name}, has sido convocado para:\n\nFecha: ${fecha}\nHora: ${hora}\nLugar: ${lugar}\nUniforme: ${uniforme}\n\nConfirma:\n[SI] — Voy\n[NO] — No puedo\n\nDIBA FBC`;
 
             // Save to DB
             await supabase.from('whatsapp_messages').insert({
@@ -1017,7 +1131,7 @@
                 if (sendResult.error) {
                     showToast(`Error: ${sendResult.error}`, 'error');
                 } else {
-                    showToast(`✅ Llamado enviado a ${selectedPlayer.name}`, 'success');
+                    showToast(`Llamado enviado a ${selectedPlayer.name}`, 'success');
                 }
             } catch (err) {
                 showToast('Error enviando mensaje', 'error');
@@ -1045,12 +1159,12 @@
             const fecha = document.getElementById('res-fecha').value || new Date().toISOString().split('T')[0];
 
             document.getElementById('res-preview').innerHTML = `
-                <p class="text-[0.7rem] font-black">🏆 RESULTADO DEL PARTIDO</p>
+                <p class="text-[0.7rem] font-black">RESULTADO DEL PARTIDO</p>
                 <p class="text-[0.65rem] mt-2">${equipo} vs ${rival}</p>
-                <p class="text-[0.65rem] text-white/60">📅 ${fecha}</p>
-                <p class="text-[0.8rem] font-black text-gold mt-2">⚽ ${golesD} - ${golesR}</p>
+                <p class="text-[0.65rem] text-white/60">Fecha: ${fecha}</p>
+                <p class="text-[0.8rem] font-black text-gold mt-2">Marcador: ${golesD} - ${golesR}</p>
                 ${resumen ? `<p class="text-[0.65rem] text-white/60 mt-2">${resumen}</p>` : ''}
-                <p class="text-[0.6rem] text-gold/60 mt-2">Equipo DIBA FBC 💙💛</p>
+                <p class="text-[0.6rem] text-gold/60 mt-2">Equipo DIBA FBC</p>
             `;
         }
 
@@ -1064,7 +1178,7 @@
             const resumen = document.getElementById('res-resumen').value;
             const fecha = document.getElementById('res-fecha').value || new Date().toISOString().split('T')[0];
 
-            const msg = `🏆 RESULTADO DEL PARTIDO\n\n${equipo} vs ${rival}\n📅 ${fecha}\n\n⚽ Marcador: ${golesD} - ${golesR}\n${resumen ? '📝 ' + resumen : ''}\n\nEquipo DIBA FBC 💙💛`;
+            const msg = `RESULTADO DEL PARTIDO\n\n${equipo} vs ${rival}\nFecha: ${fecha}\n\nMarcador: ${golesD} - ${golesR}\n${resumen ? 'Resumen: ' + resumen : ''}\n\nEquipo DIBA FBC`;
 
             let recipients = allContacts.filter(c => c.phone && c.active);
             if (equipo !== 'General') recipients = recipients.filter(c => c.category === equipo);
@@ -1100,7 +1214,7 @@
                     if (sendResult.error) {
                         showToast(`Error: ${sendResult.error}`, 'error');
                     } else {
-                        showToast(`✅ Resultado enviado: ${sendResult.sent} éxitos, ${sendResult.failed} fallos`, 'success');
+                        showToast(`Resultado enviado: ${sendResult.sent} éxitos, ${sendResult.failed} fallos`, 'success');
                     }
                 } catch (err) {
                     showToast('Error enviando mensajes', 'error');
@@ -1358,9 +1472,14 @@
             const sel = document.getElementById('grupo-session');
             try {
                 const statusResult = await waProxy('status');
-                if (statusResult.connected && statusResult.session) {
-                    const s = statusResult.session;
-                    sel.innerHTML = `<option value="${s.id}" selected>${s.name || s.id.slice(0,8)} (${s.status})</option>`;
+                const sessions = statusResult.sessions || (statusResult.session ? [statusResult.session] : []);
+                if (statusResult.connected && sessions.length) {
+                    const prefId = statusResult.session?.id || PREFERRED_SESSION_ID;
+                    sel.innerHTML = sessions.map(s => {
+                        const label = `${s.name || s.id.slice(0,8)}${s.phone ? ' · ' + s.phone : ''} (${s.status})`;
+                        return `<option value="${s.id}" ${s.id === prefId ? 'selected' : ''}>${label}</option>`;
+                    }).join('');
+                    await loadGroups();
                 } else {
                     sel.innerHTML = '<option value="">NO HAY SESIONES — CONECTA PRIMERO</option>';
                 }
@@ -1373,11 +1492,11 @@
             const sel = document.getElementById('grupo-select');
             sel.innerHTML = '<option value="">CARGANDO GRUPOS...</option>';
             try {
-                const result = await waProxy('groups');
+                const result = await waProxy('groups', { session_id: sessionId });
                 const groups = result.groups || [];
                 if (!groups.length) { sel.innerHTML = '<option value="">NO SE ENCONTRARON GRUPOS</option>'; return; }
                 sel.innerHTML = '<option value="">SELECCIONA UN GRUPO...</option>' +
-                    groups.map(g => `<option value="${g.id || g.jid}" data-name="${g.name || ''}">${g.name || g.id || g.jid} (${g.members?.length || '?'} miembros)</option>`).join('');
+                    groups.map(g => `<option value="${g.id || g.jid}" data-name="${g.name || ''}">${g.name || g.id || g.jid}${g.members?.length ? ' (' + g.members.length + ' miembros)' : ''}</option>`).join('');
                 showToast(`${groups.length} grupos encontrados`, 'success');
             } catch (e) { showToast('Error cargando grupos', 'error'); sel.innerHTML = '<option value="">ERROR</option>'; }
         }
@@ -1396,7 +1515,7 @@
             listEl.innerHTML = '<div class="text-center py-10"><i class="fas fa-spinner fa-spin text-gold text-xl mb-3 block"></i><p class="text-white/30 text-[0.6rem] uppercase tracking-widest">Cargando miembros...</p></div>';
 
             try {
-                const result = await waProxy('group_members', { group_id: groupId });
+                const result = await waProxy('group_members', { group_id: groupId, session_id: sessionId });
                 const members = result.members || [];
 
                 // Get all players from DB

@@ -1,5 +1,6 @@
 // DIBA FBC - Player Management (Admin)
 import { supabase } from '../../../scripts/supabaseClient.js';
+import { optimizeImageToWebP } from '../gestor/docs.js';
 
 /**
  * Handle player creation form
@@ -12,6 +13,8 @@ export function hookCreatePlayerForm() {
         e.preventDefault();
         const fd = new FormData(form);
         const payload = Object.fromEntries(fd.entries());
+        const fileInput = document.getElementById('playerPhotoInput');
+        const rawFile = fileInput?.files?.[0] || null;
 
         const submitBtn = form.querySelector('button[type="submit"]');
         const originalText = submitBtn.innerHTML;
@@ -22,17 +25,43 @@ export function hookCreatePlayerForm() {
         submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Guardando...';
 
         try {
+            let uploadedPath = null;
+            if (rawFile) {
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Optimizando archivo...';
+                const optimized = await optimizeImageToWebP(rawFile);
+                const safeDni = (payload.dni || Date.now()).toString().replace(/[^a-zA-Z0-9_-]/g, '');
+                const safeName = optimized.name.replace(/[^a-zA-Z0-9._-]/g, '_');
+                const storageName = `jugador_${safeDni}_${Date.now()}_${safeName}`;
+
+                const { error: upErr } = await supabase.storage
+                    .from('documents')
+                    .upload(storageName, optimized, { cacheControl: '3600', upsert: false });
+
+                if (!upErr) {
+                    uploadedPath = storageName;
+                    const { data: { session } } = await supabase.auth.getSession();
+                    if (session?.user?.id) {
+                        await supabase.from('documents').insert({
+                            file_name: `${payload.nombre} - ${optimized.name}`,
+                            storage_path: storageName,
+                            owner_id: session.user.id,
+                            is_signed: true
+                        });
+                    }
+                }
+            }
+
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Guardando ficha...';
+
             // 1. Insert into jugadores
-            const { data: player, error: playerError } = await supabase
+            const { error: playerError } = await supabase
                 .from('jugadores')
                 .insert([{
                     nombre: payload.nombre,
                     categoria: payload.categoria,
                     status: payload.status || 'Activo',
                     fecha_registro: new Date().toISOString()
-                }])
-                .select()
-                .single();
+                }]);
 
             if (playerError) throw playerError;
 
@@ -49,8 +78,10 @@ export function hookCreatePlayerForm() {
                 if (idError) console.error('Error syncing to identificacion:', idError);
             }
 
-            alert('¡Jugador creado con éxito!');
-            window.location.href = 'planilla.html'; // Redirigir a planilla o lista de jugadores
+            alert(uploadedPath
+                ? 'Jugador registrado y documento/fotografia optimizado en el Gestor Documental.'
+                : 'Jugador creado con éxito.');
+            window.location.href = 'planilla.html';
 
         } catch (err) {
             console.error('Error creating player:', err);
@@ -67,9 +98,6 @@ export function hookCreatePlayerForm() {
  */
 export async function updatePlayer(dni, payload) {
     try {
-        // 1. Update in jugadores (searching by name or adding a way to link)
-        // Since we might not have the jugadores.id easily, we can try to find it via name/category or use a better mapping.
-        // For now, let's update identificacion which is the source for Planilla.
         const { error: idError } = await supabase
             .from('identificacion')
             .update({
@@ -81,15 +109,13 @@ export async function updatePlayer(dni, payload) {
 
         if (idError) throw idError;
 
-        // Also update in jugadores if possible
-        // Note: This relies on name matching which is fragile, but without a clear FK in jugadores it's a best effort.
         await supabase
             .from('jugadores')
             .update({
                 nombre: payload.nombre,
                 categoria: payload.categoria
             })
-            .eq('nombre', payload.oldNombre); // We'll need the old name to match
+            .eq('nombre', payload.oldNombre);
 
         return { success: true };
     } catch (err) {
@@ -103,19 +129,12 @@ export async function updatePlayer(dni, payload) {
  */
 export async function deletePlayer(dni) {
     try {
-        // Warning: This will fail if there are foreign key constraints (asistencias, planillas)
-        // A better approach would be to delete those first or use a 'status = Inactivo'
         const { error } = await supabase
             .from('identificacion')
             .delete()
             .eq('numero', dni);
 
         if (error) throw error;
-
-        // Also delete from jugadores if we can find them
-        // (Best effort since no direct link)
-        // We might want to pass the name too.
-        
         return { success: true };
     } catch (err) {
         console.error('Error deleting player:', err);
@@ -123,5 +142,4 @@ export async function deletePlayer(dni) {
     }
 }
 
-// Diagnostic Log
-console.log('DIBA Admin Players Module Loaded v2');
+console.log('DIBA Admin Players Module Loaded v3');

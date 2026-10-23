@@ -8,5 +8,5 @@ window.DIBA_CONFIG = {
   // URL base para OpenWA local (evitar exponer claves admin en frontend)
   OPENWA_URL: 'http://localhost:2785',
   OPENWA_SESSION_ID: '4c331538-1a66-4002-93d2-cb49e5fa2ad3',
-  OPENWA_API_KEY: ''
+  OPENWA_API_KEY: 'dev-admin-key'
 };

@@ -522,3 +522,69 @@ tbody td {
 .badge-status.success { background: rgba(34, 197, 94, 0.12); color: #4ade80; border: 1px solid rgba(34, 197, 94, 0.25); }
 .badge-status.warning { background: rgba(234, 179, 8, 0.12); color: #facc15; border: 1px solid rgba(234, 179, 8, 0.25); }
 .badge-status.danger  { background: rgba(239, 68, 68, 0.12); color: #fb7185; border: 1px solid rgba(239, 68, 68, 0.25); }
+
+/* ── MULTI-SCREEN RESPONSIVENESS (MOBILE / TABLET / DESKTOP) ── */
+.overflow-x-auto {
+    -webkit-overflow-scrolling: touch;
+}
+
+@media (max-width: 1023px) {
+    #contenedor {
+        overflow-x: auto !important;
+        padding: 1rem !important;
+        align-items: flex-start !important;
+    }
+    .page-rifa {
+        transform: scale(0.82) !important;
+        transform-origin: top left !important;
+    }
+}
+
+@media (max-width: 767px) {
+    :root {
+        --radius-xl: 22px;
+        --radius-lg: 16px;
+    }
+
+    .premium-p-header {
+        padding: 1rem 1.25rem;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+    }
+
+    .premium-stat-card {
+        padding: 1.25rem;
+        border-radius: 20px;
+    }
+
+    .premium-stat-value {
+        font-size: 1.85rem;
+    }
+
+    .glass-premium {
+        padding: 1.25rem !important;
+    }
+
+    thead th,
+    tbody td {
+        padding: 0.9rem 1rem !important;
+        white-space: nowrap;
+    }
+
+    .match-card {
+        padding: 1rem 1.15rem;
+    }
+
+    .match-category-pill {
+        position: static;
+        align-self: flex-start;
+        margin-bottom: 0.25rem;
+    }
+
+    .page-rifa {
+        transform: scale(0.42) !important;
+        transform-origin: top left !important;
+        margin-bottom: -150mm !important;
+    }
+}
+
