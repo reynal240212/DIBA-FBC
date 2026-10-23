@@ -19,8 +19,7 @@ export async function requireAdmin() {
 
   const user = session.user;
 
-
-  // 2. Validación de rol en la base de datos
+  // Validación de rol en la base de datos
   const { data: userData, error: roleError } = await supabase
     .from('users')
     .select('role')
@@ -29,7 +28,7 @@ export async function requireAdmin() {
 
   if (roleError || userData?.role !== 'admin') {
     console.warn('Acceso restringido para:', user.email);
-    alert('⚠️ No tienes permisos de administrador.');
+    alert('Acceso denegado: No tienes permisos de administrador.');
     window.location.replace('/index.html');
     return null;
   }
@@ -42,3 +41,14 @@ export const sanitizeDNI = (dni) => {
     if (!dni) return '';
     return dni.toString().replace(/[^0-9]/g, '');
 };
+
+// Sanitización de cadenas para prevención de XSS al renderizar en HTML
+export function escapeHTML(str) {
+  if (str === null || str === undefined) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}

@@ -220,9 +220,13 @@ import { supabase, requireAdmin } from './supabaseClient.js';
 
                     try {
                         // 1. Consultar mensajes de WhatsApp en OpenWA local
-                        const OPENWA_URL = 'http://localhost:2785/api/sessions/4c331538-1a66-4002-93d2-cb49e5fa2ad3/messages?chatId=573128051695%40c.us&limit=60';
-                        const res = await fetch(OPENWA_URL, {
-                            headers: { 'x-api-key': 'dev-admin-key' }
+                        const cfg = window.DIBA_CONFIG || {};
+                        const baseUrl = cfg.OPENWA_URL || 'http://localhost:2785';
+                        const sessId = cfg.OPENWA_SESSION_ID || '4c331538-1a66-4002-93d2-cb49e5fa2ad3';
+                        const apiKey = cfg.OPENWA_API_KEY || 'dev-admin-key';
+                        const openwaUrl = ${baseUrl}/api/sessions//messages?chatId=573128051695%40c.us&limit=60;
+                        const res = await fetch(openwaUrl, {
+                            headers: apiKey ? { 'x-api-key': apiKey } : {}
                         });
                         if (!res.ok) throw new Error('No se pudo conectar a OpenWA local (puerto 2785). Asegúrate de que el servicio esté activo.');
                         const json = await res.json();

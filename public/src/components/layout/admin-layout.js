@@ -4,11 +4,25 @@ export async function initAdminLayout() {
     const navContainer = document.getElementById('admin-nav');
     if (!navContainer) return;
 
-    // Security Check
-    const { data: { session } } = await supabase.auth.getSession();
-    if (!session && !window.location.pathname.includes('login')) {
-        window.location.href = '/admin/login.html';
+    // Security Check & Role Verification
+    const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+    if (sessionError || (!session && !window.location.pathname.includes('login'))) {
+        window.location.replace('/admin/login.html');
         return;
+    }
+
+    if (session && !window.location.pathname.includes('login')) {
+        const { data: userData, error: roleError } = await supabase
+            .from('users')
+            .select('role')
+            .eq('id', session.user.id)
+            .single();
+
+        if (roleError || userData?.role !== 'admin') {
+            console.warn('Acceso denegado: Usuario sin permisos de administrador');
+            window.location.replace('/index.html');
+            return;
+        }
     }
 
     const user = session?.user;

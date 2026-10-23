@@ -676,12 +676,22 @@
         }
         init();
 
+                function escapeHTML(str) {
+            if (str === null || str === undefined) return '';
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
+
         function showToast(msg, type = 'success') {
             const c = document.getElementById('toast-container');
             const t = document.createElement('div');
             const icons = { success: 'fa-check-circle text-emerald-500', error: 'fa-exclamation-circle text-red-500', info: 'fa-info-circle text-gold' };
             t.className = 'flex items-center gap-3 px-5 py-3 rounded-2xl bg-[#020617] border border-white/10 shadow-2xl animate-fade-up';
-            t.innerHTML = `<i class="fas ${icons[type] || icons.info}"></i><span class="text-[0.65rem] font-bold uppercase tracking-widest">${msg}</span>`;
+            t.innerHTML = `<i class="fas ${icons[type] || icons.info}"></i><span class="text-[0.65rem] font-bold uppercase tracking-widest">${escapeHTML(msg)}</span>`;
             c.appendChild(t);
             setTimeout(() => { t.style.opacity = '0'; t.style.transition = 'opacity 0.3s'; setTimeout(() => t.remove(), 300); }, 3000);
         }
