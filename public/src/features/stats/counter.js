@@ -24,10 +24,17 @@ async function fetchAndAnimate() {
 
     let totalPlayers = 0;
     try {
-        const { count } = await supabase
-            .from('identificacion')
+        const { count, error } = await supabase
+            .from('vista_deportistas_publica')
             .select('*', { count: 'exact', head: true });
-        totalPlayers = count || 0;
+        if (!error && count !== null) {
+            totalPlayers = count;
+        } else {
+            const fallback = await supabase
+                .from('identificacion')
+                .select('*', { count: 'exact', head: true });
+            totalPlayers = fallback.count || 0;
+        }
     } catch (e) {
         console.error("Stats fetch error:", e);
     }

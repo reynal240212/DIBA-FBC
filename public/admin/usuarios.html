@@ -32,7 +32,7 @@
                     <div class="min-w-[300px]">
                         <div class="flex items-center gap-3 mb-2">
                             <span class="w-8 h-1 bg-gold rounded-full"></span>
-                            <p class="text-slate-500 font-bold uppercase tracking-[0.4em] text-[0.65rem]">Administración de Sistema</p>
+                            <p class="text-slate-400 font-bold uppercase tracking-[0.4em] text-[0.65rem]">Administración de Sistema</p>
                         </div>
                         <h2 class="text-4xl lg:text-5xl font-black italic text-white uppercase tracking-tighter">Gestión de <span class="text-gold">Usuarios</span></h2>
                     </div>
@@ -44,7 +44,7 @@
                                 placeholder="BUSCAR USUARIO..." 
                                 class="bg-white/5 border border-white/10 rounded-2xl py-4 pl-12 pr-6 text-white text-[0.7rem] font-bold tracking-widest uppercase focus:bg-white/10 focus:border-gold/30 transition-all w-full lg:w-[320px] shadow-inner outline-none">
                         </div>
-                        <a href="crear-usuario.html" class="px-10 py-4 bg-gold rounded-2xl text-[#004d98] font-black uppercase tracking-widest text-[0.7rem] hover:scale-105 hover:bg-white transition-all shadow-2xl shadow-gold/10 flex items-center justify-center gap-3 w-full lg:w-auto">
+                        <a href="crear-usuario.html" class="px-8 py-4 bg-gold rounded-2xl text-[#004d98] font-black uppercase tracking-widest text-[0.7rem] hover:scale-105 hover:bg-white transition-all shadow-2xl shadow-gold/10 flex items-center justify-center gap-3 w-full lg:w-auto">
                             <i class="fas fa-user-plus"></i> NUEVO USUARIO
                         </a>
                     </div>
@@ -63,12 +63,12 @@
                 <div class="p-0 overflow-x-auto custom-scrollbar">
                     <table id="usersTable" class="w-full text-left font-['Outfit'] border-collapse">
                         <thead>
-                            <tr class="bg-slate-100">
-                                <th class="px-8 py-6 text-[0.6rem] font-black text-slate-500 uppercase tracking-[0.25em]">Usuario</th>
-                                <th class="px-8 py-6 text-[0.6rem] font-black text-slate-500 uppercase tracking-[0.25em]">Nombre Real</th>
-                                <th class="px-8 py-6 text-[0.6rem] font-black text-slate-500 uppercase tracking-[0.25em]">Rol / Permiso</th>
-                                <th class="px-8 py-6 text-[0.6rem] font-black text-slate-500 uppercase tracking-[0.25em]">Status</th>
-                                <th class="px-8 py-6 text-[0.6rem] font-black text-slate-500 uppercase tracking-[0.25em] text-right">Acciones</th>
+                            <tr class="bg-white/[0.03] border-b border-white/10">
+                                <th class="px-8 py-5 text-[0.62rem] font-black text-gold uppercase tracking-[0.22em]">Usuario</th>
+                                <th class="px-8 py-5 text-[0.62rem] font-black text-gold uppercase tracking-[0.22em]">Nombre Real</th>
+                                <th class="px-8 py-5 text-[0.62rem] font-black text-gold uppercase tracking-[0.22em]">Rol / Permiso</th>
+                                <th class="px-8 py-5 text-[0.62rem] font-black text-gold uppercase tracking-[0.22em]">Status</th>
+                                <th class="px-8 py-5 text-[0.62rem] font-black text-gold uppercase tracking-[0.22em] text-right">Acciones</th>
                             </tr>
                         </thead>
                         <tbody id="users-tbody" class="divide-y divide-white/5">
@@ -98,7 +98,7 @@
 
             <div class="text-center mb-10 mt-4">
                 <h3 class="text-2xl font-black italic uppercase text-white mb-2">Activar <span id="modal-username" class="text-gold">Usuario</span></h3>
-                <p class="text-[0.65rem] font-bold text-slate-500 uppercase tracking-[0.3em]">Configure la vigencia del acceso</p>
+                <p class="text-[0.65rem] font-bold text-slate-400 uppercase tracking-[0.3em]">Configure la vigencia del acceso</p>
             </div>
             
             <div class="space-y-6">
@@ -112,7 +112,7 @@
                 </div>
                 
                 <div class="flex gap-4 pt-4">
-                    <button id="cancel-activation" class="flex-1 py-4 text-[0.65rem] font-black uppercase tracking-widest text-slate-500 hover:bg-slate-100 rounded-2xl border border-white/5 transition-all">
+                    <button id="cancel-activation" class="flex-1 py-4 text-[0.65rem] font-black uppercase tracking-widest text-slate-400 hover:bg-white/10 hover:text-white rounded-2xl border border-white/10 transition-all">
                         Cancelar
                     </button>
                     <button id="confirm-activation" class="flex-1 py-4 text-[0.65rem] font-black uppercase tracking-widest bg-gold text-[#004d98] rounded-2xl hover:scale-[1.05] hover:bg-white transition-all shadow-xl shadow-gold/20">
@@ -128,7 +128,6 @@
         import { initAdminLayout } from '../src/components/layout/admin-layout.js';
         initAdminLayout();
 
-        // Control básico del modal (el resto lo maneja admin.js)
         const modal = document.getElementById('activation-modal');
         const cancelBtn = document.getElementById('cancel-activation');
         const backdrop = document.getElementById('modal-backdrop');
@@ -141,7 +140,6 @@
         cancelBtn?.addEventListener('click', closeModal);
         backdrop?.addEventListener('click', closeModal);
         
-        // Exponer función de apertura globalmente para admin.js
         window.openActivationModal = () => {
              modal.classList.remove('hidden');
              modal.classList.add('flex');

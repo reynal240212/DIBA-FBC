@@ -5,6 +5,8 @@ import { supabase, requireAdmin } from '../../core/supabase.js';
 
 function qs(sel, root = document) { return root.querySelector(sel); }
 
+let allUsersCache = [];
+
 function renderRows(rows) {
   const tbody = qs('#users-tbody');
   const badge = qs('#user-count');
@@ -29,11 +31,9 @@ function renderRows(rows) {
     return;
   }
 
-  rows.forEach((u, i) => {
+  rows.forEach((u) => {
     const tr = document.createElement('tr');
     tr.className = "group hover:bg-white/[0.02] transition-colors border-b border-white/5";
-    
-    const isDeletable = u.role !== 'admin'; // Ejemplo: no dejar borrar admins principales fácilmente
 
     tr.innerHTML = `
       <td class="px-8 py-6">
@@ -63,8 +63,8 @@ function renderRows(rows) {
       </td>
       <td class="px-8 py-6 text-right">
         <div class="flex items-center justify-end gap-3">
-            <button class="w-10 h-10 rounded-xl bg-white/5 text-white/40 hover:bg-white/10 hover:text-white transition-all border border-white/5" 
-                    title="Editar Perfil">
+            <button class="w-10 h-10 rounded-xl bg-white/5 text-white/40 hover:bg-gold hover:text-black transition-all border border-white/5" 
+                    data-action="edit" data-id="${u.id}" title="Editar Usuario">
               <i class="fas fa-edit text-xs"></i>
             </button>
             <button class="w-10 h-10 rounded-xl bg-rose-500/10 text-rose-500 hover:bg-rose-500 hover:text-white transition-all border border-rose-500/20" 
@@ -90,7 +90,8 @@ async function loadUsers() {
       .order('created_at', { ascending: false });
 
     if (error) throw error;
-    renderRows(data || []);
+    allUsersCache = data || [];
+    renderRows(allUsersCache);
   } catch (err) {
     console.error('Error fetching users:', err);
     if (badge) badge.textContent = 'Error';
@@ -105,24 +106,47 @@ async function loadUsers() {
 
 function hookListEvents() {
   const table = qs('#usersTable');
-  if (!table) return;
-  table.addEventListener('click', async (e) => {
-    const btn = e.target.closest('button[data-action]');
-    if (!btn) return;
-    const id = btn.dataset.id;
+  if (table) {
+    table.addEventListener('click', async (e) => {
+      const btn = e.target.closest('button[data-action]');
+      if (!btn) return;
+      const id = btn.dataset.id;
 
-    if (btn.dataset.action === 'del') {
-      if (!confirm('¿Seguro que deseas eliminar este usuario?')) return;
-
-      try {
-        const { error } = await supabase.rpc('admin_delete_user', { target_user_id: id });
-        if (error) throw error;
-        await loadUsers();
-      } catch (err) {
-        alert('Error al eliminar: ' + err.message);
+      if (btn.dataset.action === 'edit') {
+        window.location.href = `editar-usuario.html?id=${encodeURIComponent(id)}`;
+        return;
       }
-    }
-  });
+
+      if (btn.dataset.action === 'del') {
+        if (!confirm('¿Seguro que deseas eliminar este usuario?')) return;
+
+        try {
+          const { error } = await supabase.rpc('admin_delete_user', { target_user_id: id });
+          if (error) throw error;
+          await loadUsers();
+        } catch (err) {
+          alert('Error al eliminar: ' + err.message);
+        }
+      }
+    });
+  }
+
+  const searchInput = qs('#search-user');
+  if (searchInput) {
+    searchInput.addEventListener('input', (e) => {
+      const term = (e.target.value || '').trim().toLowerCase();
+      if (!term) {
+        renderRows(allUsersCache);
+        return;
+      }
+      const filtered = allUsersCache.filter(u =>
+        (u.username || '').toLowerCase().includes(term) ||
+        (u.full_name || '').toLowerCase().includes(term) ||
+        (u.role || '').toLowerCase().includes(term)
+      );
+      renderRows(filtered);
+    });
+  }
 }
 
 function hookCreateForm() {
@@ -160,7 +184,7 @@ function hookCreateForm() {
 (async () => {
     try {
         const session = await requireAdmin();
-        if (!session) return; // Redirección ya manejada en requireAdmin
+        if (!session) return;
 
         if (qs('#usersTable')) {
             await loadUsers();

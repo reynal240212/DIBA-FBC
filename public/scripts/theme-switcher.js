@@ -1,34 +1,43 @@
 /**
- * DIBA FBC - Theme Switcher
- * Manages light/dark mode preference and persistence.
+ * DIBA FBC - Theme & Tailwind Brand Configurator
+ * Ensures dark mode and injects custom DIBA FBC palette into Tailwind CDN.
  */
 
 (function() {
-    // 1. Theme Initialization (Prevent FOUC)
     document.documentElement.setAttribute('data-theme', 'dark');
-    // Support for Bootstrap 5.3+
     document.documentElement.setAttribute('data-bs-theme', 'dark');
 
-    window.addEventListener('DOMContentLoaded', () => {
-        const themeToggle = document.getElementById('theme-toggle');
-        const themeIcon = document.getElementById('theme-icon');
-
-        // Initial icon state
-        updateIcon('dark');
-
-        if (themeToggle) {
-            themeToggle.addEventListener('click', () => {
-                document.documentElement.setAttribute('data-theme', 'dark');
-                document.documentElement.setAttribute('data-bs-theme', 'dark');
-                localStorage.setItem('diba-theme', 'dark');
-                updateIcon('dark');
-            });
+    const dibaTailwindConfig = {
+        darkMode: 'class',
+        theme: {
+            extend: {
+                colors: {
+                    gold: '#FFD700',
+                    diba: {
+                        blue: '#004d98',
+                        red: '#a50044',
+                        gold: '#FFD700',
+                        dark: '#020617'
+                    }
+                },
+                fontFamily: {
+                    outfit: ['Outfit', 'sans-serif'],
+                    montserrat: ['Montserrat', 'sans-serif']
+                }
+            }
         }
+    };
 
-        function updateIcon(theme) {
-            if (!themeIcon) return;
-            themeIcon.className = 'fas fa-sun';
-            if (themeToggle) themeToggle.title = 'Modo Oscuro Activo';
+    // Apply immediately if tailwind is already loaded, or hook before/after it loads
+    if (window.tailwind) {
+        window.tailwind.config = dibaTailwindConfig;
+    } else {
+        window.tailwind = { config: dibaTailwindConfig };
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+        if (window.tailwind && (!window.tailwind.config || !window.tailwind.config.theme)) {
+            window.tailwind.config = dibaTailwindConfig;
         }
     });
 })();

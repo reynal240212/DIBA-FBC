@@ -11,14 +11,21 @@ export async function initPublicPlayers() {
     container.innerHTML = `<div class="col-span-full flex flex-col items-center justify-center py-20 opacity-50"><i class="fas fa-circle-notch animate-spin text-4xl text-amber-500 mb-4"></i><p class="text-[10px] font-black uppercase tracking-widest text-slate-500">Cargando Plantilla Oficial...</p></div>`;
 
     try {
-        // Solo seleccionar campos públicos (NO incluir DNI/numero ni datos personales sensibles)
-        const { data: jugadores, error } = await supabase
-            .from('identificacion')
+        // Consultar vista pública sanitizada (sin DNI, teléfonos ni biometría)
+        let { data: jugadores, error } = await supabase
+            .from('vista_deportistas_publica')
             .select('nombre, apellidos, categoria, foto_url')
             .order('apellidos');
 
+        if (error) {
+            const fallback = await supabase
+                .from('identificacion')
+                .select('nombre, apellidos, categoria, foto_url')
+                .order('apellidos');
+            jugadores = fallback.data;
+            if (fallback.error) throw fallback.error;
+        }
 
-        if (error) throw error;
         if (!jugadores?.length) {
             container.innerHTML = '<p class="text-center py-16 col-span-full uppercase text-xs font-black italic">No hay jugadores registrados.</p>';
             return;
