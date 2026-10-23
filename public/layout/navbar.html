@@ -13,8 +13,8 @@
       overflow-y: auto !important;
     }
 
-    body.nav-open #ai-widget-trigger,
-    body.nav-open .fixed.bottom-8.right-8 {
+    body.nav-open #fab-wrapper,
+    body.nav-open #ai-widget-trigger {
       opacity: 0 !important;
       pointer-events: none !important;
       transform: translateY(20px) !important;
@@ -34,6 +34,7 @@
         <img src="images/ESCUDO.webp?v=2" alt="Logo DIBA FBC" class="h-14 w-auto object-contain" />
       </a>
 
+      <!-- Navegación Desktop Institucional -->
       <div class="hidden lg:flex lg:items-center">
         <ul class="flex items-center space-x-7 text-[13px] font-bold text-white tracking-wide">
 
@@ -71,15 +72,6 @@
             <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-amber-400 transition-all group-hover:w-full"></span>
           </li>
 
-          <!-- 
-          <li class="relative group">
-            <a href="chat.html" class="hover:text-amber-400 transition-colors uppercase flex items-center gap-1">
-              <i class="fas fa-comments text-[11px]"></i>Chat
-            </a>
-            <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-amber-400 transition-all group-hover:w-full"></span>
-          </li>
-          -->
-
           <li class="relative group py-7">
             <button type="button"
               class="flex items-center gap-1.5 hover:text-amber-400 transition-colors uppercase outline-none">
@@ -99,13 +91,6 @@
                   <img src="images/torneo/icono-liga-jolparrismo.webp" alt="Liga El Jolparrismo" class="w-5 h-5 rounded-full object-cover border border-amber-400/50" />
                   Torneo El Jolparrismo
                 </a></li>
-              <!-- <li class="my-2 border-t border-slate-700"></li>
-              <li><a href="KidsSoccerPradera.html"
-                  class="block px-5 py-2.5 hover:bg-amber-500 hover:text-slate-900 transition-colors text-xs">Torneo
-                  Kids SOCCER</a></li>
-              <li><a href="torneo_suroccidente.html"
-                  class="block px-5 py-2.5 hover:bg-amber-500 hover:text-slate-900 transition-colors text-xs">Torneo
-                  SurOccidente</a></li> -->
             </ul>
           </li>
 
@@ -121,45 +106,6 @@
               <i class="fas fa-search" aria-hidden="true"></i>
             </button>
           </li>
-
-          <!-- Auth State Desktop -->
-          <li id="auth-container-desktop" class="flex items-center ml-2 border-l border-slate-700 pl-4">
-            <div id="auth-loading" class="animate-pulse flex space-x-2">
-              <div class="rounded-full bg-slate-700 h-8 w-8"></div>
-            </div>
-            <div id="auth-logged-out" class="hidden">
-              <button id="btn-login-google"
-                class="flex items-center gap-2 bg-white text-slate-900 px-4 py-1.5 rounded-full hover:bg-amber-400 transition-all font-bold text-[11px]">
-                <i class="fab fa-google"></i> ENTRAR
-              </button>
-            </div>
-            <div id="auth-logged-in" class="hidden relative group">
-              <button class="flex items-center gap-2 outline-none">
-                <img id="user-avatar" src="" alt=""
-                  class="h-8 w-8 rounded-full border-2 border-amber-500 object-cover hidden">
-                <div id="user-initials"
-                  class="h-8 w-8 rounded-full border-2 border-amber-500 bg-slate-800 flex items-center justify-center text-[10px] font-bold text-amber-500">
-                </div>
-                <i class="fas fa-chevron-down text-[9px] text-slate-400"></i>
-              </button>
-              <ul
-                class="absolute right-0 top-[110%] w-48 bg-slate-900 border border-slate-700 rounded-xl shadow-2xl py-2 opacity-0 invisible translate-y-2 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 transition-all duration-200 z-[1200]">
-                <li class="px-4 py-2 border-b border-slate-800">
-                  <p id="user-name" class="text-xs font-bold text-white truncate"></p>
-                  <p id="user-role" class="text-[9px] text-amber-500 font-bold uppercase"></p>
-                </li>
-                <li><a href="/admin/dashboard.html" id="link-admin"
-                    class="hidden block px-4 py-2 hover:bg-slate-800 text-xs text-white">Panel Admin</a></li>
-                <li><a href="documentos.html" id="link-docs"
-                    class="hidden block px-4 py-2 hover:bg-slate-800 text-xs text-white">Mis Documentos</a></li>
-                <li><a href="perfil.html" class="block px-4 py-2 hover:bg-slate-800 text-xs text-white">Mi Perfil</a>
-                </li>
-                <li><button id="btn-logout"
-                    class="w-full text-left px-4 py-2 hover:bg-rose-500/10 hover:text-rose-500 text-xs text-slate-300">Cerrar
-                    Sesión</button></li>
-              </ul>
-            </div>
-          </li>
         </ul>
       </div>
 
@@ -170,6 +116,7 @@
       </button>
     </div>
 
+    <!-- Menú Móvil Institucional -->
     <div id="mobile-menu" class="hidden lg:hidden pb-12 space-y-4 px-2">
       <a href="index.html" class="block px-4 py-3 rounded-xl bg-slate-800 text-amber-400 font-bold">INICIO</a>
 
@@ -185,18 +132,11 @@
         </div>
       </details>
 
-      <a href="vision_mision.html" class="block px-4 py-3 text-white font-bold uppercase hover:text-amber-400">Visión y
-        Misión</a>
+      <a href="vision_mision.html" class="block px-4 py-3 text-white font-bold uppercase hover:text-amber-400">Visión y Misión</a>
 
       <a href="galeria.html" class="block px-4 py-3 text-white font-bold uppercase hover:text-amber-400">
         <i class="fas fa-images mr-2 text-amber-400"></i>Galería
       </a>
-
-      <!-- 
-      <a href="chat.html" class="block px-4 py-3 text-white font-bold uppercase hover:text-amber-400">
-        <i class="fas fa-comments mr-2 text-amber-400"></i>Chat
-      </a>
-      -->
 
       <details class="group bg-slate-800/40 rounded-xl">
         <summary
@@ -214,39 +154,6 @@
       </details>
 
       <div class="pt-4 space-y-3 px-4">
-        <!-- Auth State Mobile -->
-        <div id="auth-container-mobile" class="border-t border-slate-800 pt-4 mt-4">
-          <div id="auth-mobile-logged-out">
-            <button id="btn-login-google-mobile"
-              class="flex items-center justify-center gap-2 w-full bg-white text-slate-900 py-3 rounded-xl font-black">
-              <i class="fab fa-google"></i> ENTRAR CON GOOGLE
-            </button>
-          </div>
-          <div id="auth-mobile-logged-in" class="hidden space-y-3">
-            <div class="flex items-center gap-3 px-2">
-              <img id="user-avatar-mobile" src="" alt=""
-                class="h-10 w-10 rounded-full border-2 border-amber-500 object-cover hidden">
-              <div id="user-initials-mobile"
-                class="h-10 w-10 rounded-full border-2 border-amber-500 bg-slate-800 flex items-center justify-center font-bold text-amber-500">
-              </div>
-              <div>
-                <p id="user-name-mobile" class="text-sm font-bold text-white"></p>
-                <p id="user-role-mobile" class="text-[10px] text-amber-500 font-bold uppercase"></p>
-              </div>
-            </div>
-            <a href="/admin/dashboard.html" id="link-admin-mobile"
-              class="hidden block w-full text-center bg-slate-800 text-white py-3 rounded-xl font-bold">PANEL ADMIN</a>
-            <a href="documentos.html" id="link-docs-mobile"
-              class="hidden block w-full text-center bg-slate-800 text-white py-3 rounded-xl font-bold">MIS
-              DOCUMENTOS</a>
-            <a href="perfil.html" class="block w-full text-center bg-slate-800 text-white py-3 rounded-xl font-bold">MI
-              PERFIL</a>
-            <button id="btn-logout-mobile"
-              class="block w-full text-center bg-rose-500/10 text-rose-500 py-3 rounded-xl font-bold border border-rose-500/20">CERRAR
-              SESIÓN</button>
-          </div>
-        </div>
-
         <a href="contacto.html"
           class="block w-full text-center bg-amber-500 text-slate-900 py-3 rounded-xl font-black">CONTACTO</a>
         <a href="ayuda.html"

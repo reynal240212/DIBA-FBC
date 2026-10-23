@@ -1,24 +1,84 @@
-<div class="fixed bottom-24 right-4 md:bottom-8 md:right-8 z-[2000] flex flex-col items-end gap-3 group">
-    <!-- Botones secundarios (ocultos inicialmente) -->
-    <div
-        class="flex flex-col gap-3 opacity-0 translate-y-10 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto transition-all duration-300">
+<div id="fab-wrapper" class="fixed bottom-24 right-4 md:bottom-8 md:right-8 z-[2000] flex flex-col items-end gap-3 group">
+    <!-- Botones secundarios (ocultos inicialmente, se despliegan al pasar el mouse o tocar +) -->
+    <div id="fab-options"
+        class="flex flex-col gap-3 opacity-0 translate-y-6 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto transition-all duration-300">
+        
+        <!-- Asistente Virtual IA DIBA -->
+        <button id="ai-widget-trigger"
+            class="w-12 h-12 bg-amber-500 text-slate-950 rounded-full flex items-center justify-center shadow-xl hover:scale-110 hover:bg-white active:scale-95 transition-all relative group/fabitem cursor-pointer"
+            title="Asistente Virtual IA DIBA" aria-label="Abrir Asistente IA">
+            <i class="fas fa-robot text-xl"></i>
+            <span
+                class="absolute right-14 bg-slate-900/95 backdrop-blur border border-amber-500/30 text-amber-400 text-[10px] font-black uppercase tracking-wider px-2.5 py-1.5 rounded-lg opacity-0 group-hover/fabitem:opacity-100 transition-opacity whitespace-nowrap shadow-xl pointer-events-none">
+                Asistente IA
+            </span>
+        </button>
+
+        <!-- WhatsApp Oficial -->
         <a href="https://wa.me/573000000000" target="_blank"
-            class="w-12 h-12 bg-emerald-500 text-white rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-transform">
+            class="w-12 h-12 bg-emerald-500 text-white rounded-full flex items-center justify-center shadow-xl hover:scale-110 active:scale-95 transition-all relative group/fabitem"
+            title="Escribir a WhatsApp" aria-label="WhatsApp Oficial">
             <i class="fab fa-whatsapp text-xl"></i>
+            <span
+                class="absolute right-14 bg-slate-900/95 backdrop-blur border border-emerald-500/30 text-emerald-400 text-[10px] font-black uppercase tracking-wider px-2.5 py-1.5 rounded-lg opacity-0 group-hover/fabitem:opacity-100 transition-opacity whitespace-nowrap shadow-xl pointer-events-none">
+                WhatsApp Club
+            </span>
         </a>
+
+        <!-- Instagram Oficial -->
         <a href="https://instagram.com/dibafbc" target="_blank"
-            class="w-12 h-12 bg-pink-600 text-white rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-transform">
+            class="w-12 h-12 bg-pink-600 text-white rounded-full flex items-center justify-center shadow-xl hover:scale-110 active:scale-95 transition-all relative group/fabitem"
+            title="Seguir en Instagram" aria-label="Instagram Oficial">
             <i class="fab fa-instagram text-xl"></i>
+            <span
+                class="absolute right-14 bg-slate-900/95 backdrop-blur border border-pink-500/30 text-pink-400 text-[10px] font-black uppercase tracking-wider px-2.5 py-1.5 rounded-lg opacity-0 group-hover/fabitem:opacity-100 transition-opacity whitespace-nowrap shadow-xl pointer-events-none">
+                Instagram
+            </span>
         </a>
     </div>
 
-    <!-- Botón Principal -->
-    <button
-        class="w-16 h-16 bg-amber-500 text-slate-900 rounded-full flex items-center justify-center shadow-2xl hover:bg-white hover:scale-110 active:scale-95 transition-all duration-300 relative">
-        <i class="fas fa-plus text-2xl transition-transform group-hover:rotate-45"></i>
+    <!-- Botón Principal (+) -->
+    <button id="fab-main-btn"
+        class="w-16 h-16 bg-amber-500 text-slate-950 rounded-full flex items-center justify-center shadow-2xl hover:bg-white hover:scale-105 active:scale-95 transition-all duration-300 relative group/main"
+        aria-label="Abrir opciones de contacto e IA">
+        <i id="fab-main-icon" class="fas fa-plus text-2xl transition-transform duration-300 group-hover:rotate-45"></i>
         <span
-            class="absolute right-20 bg-slate-900 text-white text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
-            Contactar Club
+            class="absolute right-20 bg-slate-900/95 backdrop-blur border border-slate-700 text-white text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
+            Contacto e IA
         </span>
     </button>
 </div>
+
+<script>
+    (() => {
+        const fabBtn = document.getElementById('fab-main-btn');
+        const fabOptions = document.getElementById('fab-options');
+        const fabIcon = document.getElementById('fab-main-icon');
+        let isOpen = false;
+
+        if (fabBtn && fabOptions) {
+            fabBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                isOpen = !isOpen;
+                if (isOpen) {
+                    fabOptions.classList.remove('opacity-0', 'translate-y-6', 'pointer-events-none');
+                    fabOptions.classList.add('opacity-100', 'translate-y-0', 'pointer-events-auto');
+                    fabIcon?.classList.add('rotate-45');
+                } else {
+                    fabOptions.classList.add('opacity-0', 'translate-y-6', 'pointer-events-none');
+                    fabOptions.classList.remove('opacity-100', 'translate-y-0', 'pointer-events-auto');
+                    fabIcon?.classList.remove('rotate-45');
+                }
+            });
+
+            document.addEventListener('click', (e) => {
+                if (!e.target.closest('#fab-wrapper') && isOpen) {
+                    isOpen = false;
+                    fabOptions.classList.add('opacity-0', 'translate-y-6', 'pointer-events-none');
+                    fabOptions.classList.remove('opacity-100', 'translate-y-0', 'pointer-events-auto');
+                    fabIcon?.classList.remove('rotate-45');
+                }
+            });
+        }
+    })();
+</script>

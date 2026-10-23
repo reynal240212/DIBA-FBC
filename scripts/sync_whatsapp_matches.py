@@ -16,10 +16,11 @@ from datetime import datetime, timezone
 if hasattr(sys.stdout, 'reconfigure'):
     sys.stdout.reconfigure(encoding='utf-8')
 
-# ── Configuración ──────────────────────────────────────────────
-OPENWA_BASE_URL = "http://localhost:2785"
-OPENWA_API_KEY = "dev-admin-key"
-OPENWA_SESSION_ID = "4c331538-1a66-4002-93d2-cb49e5fa2ad3"
+import os
+# ── Configuración (Soporta Render en la nube o local) ─────────
+OPENWA_BASE_URL = os.environ.get("OPENWA_BASE_URL", "http://localhost:2785").rstrip('/')
+OPENWA_API_KEY = os.environ.get("OPENWA_API_KEY", "dev-admin-key")
+OPENWA_SESSION_ID = os.environ.get("OPENWA_SESSION_ID", "4c331538-1a66-4002-93d2-cb49e5fa2ad3")
 TARGET_CHATS = [
     "120363141323973958@g.us",  # Grupo Oficial: Deportivo internacional
     "573128051695@c.us"         # Contacto: Reinaldo Pérez (3128051695)

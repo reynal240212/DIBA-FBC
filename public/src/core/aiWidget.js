@@ -47,10 +47,13 @@ class AIWidget {
     }
 
     injectHTML() {
+        let triggerHtml = '';
+        if (!document.getElementById('ai-widget-trigger')) {
+            triggerHtml = '<div id="ai-widget-trigger" class="standalone"><i class="fas fa-robot"></i></div>';
+        }
+
         const html = `
-            <div id="ai-widget-trigger">
-                <i class="fas fa-robot"></i>
-            </div>
+            ${triggerHtml}
             <div id="ai-chat-window">
                 <div class="ai-header">
                     <div class="ai-header-info">
@@ -60,6 +63,9 @@ class AIWidget {
                     <div class="ai-header-status">
                         <div id="widget-status-dot" class="status-dot"></div>
                         <span id="widget-status-text">Online</span>
+                        <button type="button" id="ai-header-close-btn" class="ai-header-close" title="Cerrar asistente" aria-label="Cerrar asistente">
+                            <i class="fas fa-times"></i>
+                        </button>
                     </div>
                 </div>
                 <div class="ai-messages-container" id="widget-messages">
@@ -71,7 +77,7 @@ class AIWidget {
                             <i class="fas fa-microphone"></i>
                         </button>
                         <input type="text" id="widget-input" placeholder="Escribe tu mensaje..." autocomplete="off">
-                        <button type="submit" class="ai-send-btn">
+                        <button type="submit" class="ai-send-btn" aria-label="Enviar mensaje">
                             <i class="fas fa-paper-plane"></i>
                         </button>
                     </form>
@@ -90,7 +96,19 @@ class AIWidget {
     }
 
     setupEventListeners() {
-        this.trigger.addEventListener('click', () => this.toggle());
+        if (this.trigger) {
+            this.trigger.addEventListener('click', (e) => {
+                e.stopPropagation();
+                this.toggle();
+            });
+        }
+        const closeBtn = document.getElementById('ai-header-close-btn');
+        if (closeBtn) {
+            closeBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                this.toggle(false);
+            });
+        }
 
         this.form.addEventListener('submit', (e) => {
             e.preventDefault();
@@ -197,14 +215,15 @@ class AIWidget {
         utterance.onend = () => { this.isSpeaking = false; };
     }
 
-    toggle() {
-        this.isOpen = !this.isOpen;
+    toggle(forceState) {
+        this.isOpen = typeof forceState === 'boolean' ? forceState : !this.isOpen;
         this.window.classList.toggle('active', this.isOpen);
         if (this.isOpen) {
-            this.input.focus();
-            this.trigger.innerHTML = '<i class="fas fa-times"></i>';
-        } else {
-            this.trigger.innerHTML = '<i class="fas fa-robot"></i>';
+            this.input?.focus();
+        }
+        const icon = this.trigger?.querySelector('i');
+        if (icon) {
+            icon.className = this.isOpen ? 'fas fa-times text-xl' : 'fas fa-robot text-xl';
         }
     }
 
