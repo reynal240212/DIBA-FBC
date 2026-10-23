@@ -16,7 +16,7 @@ export async function requireAdmin() {
     const { data: { session }, error: sessionError } = await supabase.auth.getSession();
 
     if (sessionError || !session) {
-        window.location.replace('/admin/login.html'); // Keeping absolute for now as admin is a top-level folder in public
+        window.location.replace('/admin/login.html');
         return null;
     }
 
@@ -27,8 +27,8 @@ export async function requireAdmin() {
         .single();
 
     if (userData?.role !== 'admin') {
-        alert('⚠️ Acceso restringido.');
-        window.location.replace('/index.html'); // Keeping absolute for now
+        alert('Acceso denegado: No tienes permisos de administrador.');
+        window.location.replace('/index.html');
         return null;
     }
 
@@ -42,3 +42,13 @@ export const sanitizeDNI = (dni) => {
     if (!dni) return '';
     return dni.toString().replace(/[^0-9]/g, '');
 };
+
+export function escapeHTML(str) {
+    if (str === null || str === undefined) return '';
+    return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+}

@@ -4,7 +4,7 @@
 //  + Soporte completo de Web Push Notifications
 // ============================================================
 
-const CACHE_VERSION = 'diba-v4';
+const CACHE_VERSION = 'diba-v5';
 const CACHE_STATIC = `${CACHE_VERSION}-static`;
 const CACHE_PAGES = `${CACHE_VERSION}-pages`;
 
@@ -13,15 +13,19 @@ const PRECACHE_ASSETS = [
   'offline.html',
   'images/ESCUDO.webp',
   'images/ESCUDO.ico',
+  'images/estadio.webp',
   'manifest.json',
   'scripts/config.js',
-  'scripts/loadComponents.js',
-  'scripts/main.js',
-  'scripts/navbar.js',
-  'scripts/auth.js',
-  'scripts/supabaseClient.js',
+  'src/main.js',
+  'src/core/supabase.js',
+  'src/core/loader.js',
+  'src/core/utils.js',
+  'src/features/navigation/navbar.js',
+  'src/features/matches/banner.js',
+  'src/features/stats/counter.js',
   'scripts/search.js',
   'layout/navbar.html',
+  'layout/match_banner.html',
   'layout/footer.html',
   'layout/hero.html',
   'layout/fab.html',
