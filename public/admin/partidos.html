@@ -177,21 +177,66 @@
         </div>
     </div>
 
-    <!-- Modal: Editar Resultado -->
+    <!-- Modal: Actualizar Marcador & Goleadores -->
     <div id="editScoreModal" class="fixed inset-0 z-[2000] hidden items-center justify-center p-6">
-        <div class="absolute inset-0 bg-black/80 backdrop-blur-md" onclick="closeScoreModal()"></div>
-        <div class="relative bg-[#020617] border border-white/10 rounded-[32px] p-10 w-full max-w-[450px] shadow-2xl animate-fade-up">
-            <h3 class="text-2xl font-black italic uppercase text-white mb-2 text-center">Actualizar <span class="text-gold">Marcador</span></h3>
-            <p id="scoreTeams" class="text-[0.65rem] font-black text-slate-400 uppercase tracking-widest text-center mb-8"></p>
+        <div class="absolute inset-0 bg-black/85 backdrop-blur-md" onclick="closeScoreModal()"></div>
+        <div class="relative bg-[#020617] border border-white/10 rounded-[32px] p-8 w-full max-w-[550px] shadow-2xl animate-fade-up max-h-[90vh] overflow-y-auto custom-scrollbar">
+            <h3 class="text-2xl font-black italic uppercase text-white mb-2 text-center">
+                Marcador &amp; <span class="text-gold">Goleadores</span>
+            </h3>
+            <p id="scoreTeams" class="text-[0.65rem] font-black text-slate-400 uppercase tracking-widest text-center mb-6"></p>
+            
             <form id="editScoreForm" class="space-y-6">
                 <input type="hidden" id="scoreId">
-                <div class="premium-form-group">
-                    <label class="premium-label">Resultado Final</label>
-                    <input type="text" id="scoreValue" placeholder="EJ: 3 - 1" class="premium-input text-center text-2xl font-black italic tracking-widest" required>
+                <input type="hidden" id="scoreValue">
+
+                <!-- Goles Inputs -->
+                <div class="grid grid-cols-2 gap-4 bg-slate-900/60 p-4 rounded-2xl border border-slate-800">
+                    <div class="text-center">
+                        <label class="block text-[10px] font-black uppercase text-gold mb-1.5" id="labelLocal">DIBA FBC</label>
+                        <input type="number" min="0" max="99" id="scoreLocal" class="w-full bg-slate-950 border border-slate-700 text-white text-3xl font-black text-center py-3 rounded-xl focus:border-gold outline-none" placeholder="0">
+                    </div>
+                    <div class="text-center">
+                        <label class="block text-[10px] font-black uppercase text-slate-400 mb-1.5" id="labelVisit">RIVAL</label>
+                        <input type="number" min="0" max="99" id="scoreVisit" class="w-full bg-slate-950 border border-slate-700 text-white text-3xl font-black text-center py-3 rounded-xl focus:border-gold outline-none" placeholder="0">
+                    </div>
                 </div>
-                <button type="submit" class="w-full py-5 bg-gold text-[#004d98] rounded-2xl font-black uppercase text-[0.75rem] tracking-widest shadow-xl shadow-gold/20 hover:scale-105 transition-all">
-                    Guardar Resultado
-                </button>
+
+                <!-- Estado Rápido -->
+                <div>
+                    <label class="premium-label">Estado del Partido</label>
+                    <select id="scoreStatus" class="premium-input bg-[#020617]">
+                        <option value="Finalizado">FINALIZADO</option>
+                        <option value="Victoria">VICTORIA DIBA</option>
+                        <option value="Empate">EMPATE</option>
+                        <option value="Derrota">DERROTA DIBA</option>
+                        <option value="Pendiente">PENDIENTE / EN JUEGO</option>
+                    </select>
+                </div>
+
+                <!-- Goleadores DIBA -->
+                <div>
+                    <label class="premium-label flex items-center justify-between">
+                        <span>Goleadores DIBA FBC</span>
+                        <span class="text-[9px] text-slate-500 font-bold lowercase">toca un jugador para sumar gol</span>
+                    </label>
+                    
+                    <!-- Botones de Convocados para sumar gol -->
+                    <div id="scorersPills" class="flex flex-wrap gap-1.5 mb-3 max-h-32 overflow-y-auto p-1 bg-slate-950/60 rounded-xl border border-slate-800/80">
+                        <!-- Botones de jugadores inyectados -->
+                    </div>
+
+                    <input type="text" id="scoreGoles" placeholder="EJ: Jair Moreno (2), Andrés Sierra (1)" class="premium-input text-xs">
+                </div>
+
+                <div class="flex gap-3 pt-2">
+                    <button type="button" onclick="closeScoreModal()" class="flex-1 py-4 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-2xl font-black uppercase text-[0.7rem] tracking-wider transition-all">
+                        Cancelar
+                    </button>
+                    <button type="submit" class="flex-1 py-4 bg-gold text-[#004d98] rounded-2xl font-black uppercase text-[0.7rem] tracking-widest shadow-xl shadow-gold/20 hover:scale-[1.02] transition-all">
+                        Guardar Marcador
+                    </button>
+                </div>
             </form>
         </div>
     </div>

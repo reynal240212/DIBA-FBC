@@ -27,7 +27,7 @@ import { supabase, requireAdmin } from './supabaseClient.js';
             const tableBody = document.getElementById('matches-body');
             try {
                 // Solo las columnas necesarias para la tabla — evita descargar todos los datos
-                const COLS = 'id, fecha, hora, equipolocal, equipovisitante, resultado, categoria, Cancha, descripcion, escudo_local, escudo_visitante, escudo';
+                const COLS = 'id, fecha, hora, equipolocal, equipovisitante, resultado, goles, observaciones, categoria, Cancha, descripcion, escudo_local, escudo_visitante, escudo';
                 const { data, error } = await supabase.from('partidos').select(COLS).order('fecha', { ascending: false });
                 if (error) throw error;
                 matches = data || [];
@@ -114,16 +114,23 @@ import { supabase, requireAdmin } from './supabaseClient.js';
                         </td>
                         <td class="px-8 py-6 text-right">
                             <div class="flex items-center justify-end gap-2">
+                                <a href="asistencia.html?partidoId=${m.id}"
+                                   class="w-10 h-10 rounded-xl bg-emerald-500/15 text-emerald-400 hover:bg-emerald-500 hover:text-slate-950 flex items-center justify-center transition-all shadow-sm"
+                                   title="Control de Asistencia & Arbitrajes">
+                                    <i class="fas fa-clipboard-user text-sm"></i>
+                                </a>
                                 <button
-                                    class="btn-score w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-gold hover:bg-gold hover:text-[#004d98] transition-all"
+                                    class="btn-score w-10 h-10 rounded-xl bg-gold/15 text-gold hover:bg-gold hover:text-[#004d98] flex items-center justify-center transition-all shadow-sm"
                                     data-id="${m.id}"
                                     data-teams="${m.equipolocal} vs ${m.equipovisitante}"
                                     data-resultado="${m.resultado || ''}"
-                                    title="Actualizar Marcador">
+                                    data-goles="${m.goles || ''}"
+                                    data-obs="${encodeURIComponent(m.observaciones || '')}"
+                                    title="Actualizar Marcador & Goleadores">
                                     <i class="fas fa-trophy text-sm"></i>
                                 </button>
                                 <button
-                                    class="btn-delete w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-red-500 hover:bg-red-500 hover:text-white transition-all"
+                                    class="btn-delete w-10 h-10 rounded-xl bg-red-500/10 text-red-400 hover:bg-red-500 hover:text-white flex items-center justify-center transition-all shadow-sm"
                                     data-id="${m.id}"
                                     title="Eliminar">
                                     <i class="fas fa-trash text-sm"></i>
@@ -135,11 +142,27 @@ import { supabase, requireAdmin } from './supabaseClient.js';
             }).join('');
         }
 
+        function extraerConvocados(texto) {
+            if (!texto) return [];
+            const idx = texto.toUpperCase().indexOf('CONVOCADOS');
+            if (idx === -1) return [];
+            const after = texto.substring(idx + 10);
+            const rawLines = after.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+            const players = [];
+            for (const line of rawLines) {
+                const l = line.toLowerCase();
+                if (l.includes('nequi') || l.includes('nota') || l.includes('arbitraje') || l.includes('deben llevar') || l.startsWith('$') || l.includes('transferencia')) break;
+                if (l.includes('solo estos') || l.includes('jugadores') || l.includes('categoria') || l.length < 3) continue;
+                players.push(line);
+            }
+            return players;
+        }
+
         function setupHandlers() {
             document.getElementById('match-search').oninput = renderMatches;
             document.getElementById('filter-category').onchange = renderMatches;
 
-            // Use event delegation for score + delete buttons (avoids inline onclick string escaping bugs)
+            // Delegación de eventos para botones de marcador, asistencia y eliminar
             document.getElementById('matches-body').addEventListener('click', (e) => {
                 const scoreBtn  = e.target.closest('.btn-score');
                 const deleteBtn = e.target.closest('.btn-delete');
@@ -147,10 +170,69 @@ import { supabase, requireAdmin } from './supabaseClient.js';
                 if (scoreBtn) {
                     const id       = scoreBtn.dataset.id;
                     const teams    = scoreBtn.dataset.teams;
-                    const current  = scoreBtn.dataset.resultado;
-                    document.getElementById('scoreId').value      = id;
+                    const current  = scoreBtn.dataset.resultado || '';
+                    const golesVal = scoreBtn.dataset.goles || '';
+                    const rawObs   = decodeURIComponent(scoreBtn.dataset.obs || '');
+
+                    document.getElementById('scoreId').value = id;
                     document.getElementById('scoreTeams').innerText = teams;
-                    document.getElementById('scoreValue').value   = (current === 'Pendiente' || current === '') ? '' : current;
+                    document.getElementById('scoreGoles').value = golesVal;
+
+                    // Parsear marcador previo (ej: "3 - 1" o "3-1")
+                    const parts = current.split(/[-:]/).map(x => x.trim());
+                    if (parts.length >= 2 && !isNaN(parseInt(parts[0])) && !isNaN(parseInt(parts[1]))) {
+                        document.getElementById('scoreLocal').value = parseInt(parts[0]);
+                        document.getElementById('scoreVisit').value = parseInt(parts[1]);
+                    } else {
+                        document.getElementById('scoreLocal').value = '';
+                        document.getElementById('scoreVisit').value = '';
+                    }
+
+                    // Estado
+                    const statusSelect = document.getElementById('scoreStatus');
+                    if (current.includes('Victoria') || current.includes('Ganó')) statusSelect.value = 'Victoria';
+                    else if (current.includes('Empate')) statusSelect.value = 'Empate';
+                    else if (current.includes('Derrota')) statusSelect.value = 'Derrota';
+                    else if (current === 'Pendiente' || current === '') statusSelect.value = 'Pendiente';
+                    else statusSelect.value = 'Finalizado';
+
+                    // Parsear y armar botones de convocados para sumar goles
+                    const convocados = extraerConvocados(rawObs);
+                    const pillsContainer = document.getElementById('scorersPills');
+                    pillsContainer.innerHTML = '';
+
+                    if (convocados.length > 0) {
+                        convocados.forEach(nombre => {
+                            const pill = document.createElement('button');
+                            pill.type = 'button';
+                            pill.className = 'px-2.5 py-1 rounded-lg bg-slate-900 hover:bg-gold hover:text-[#004d98] text-slate-300 border border-slate-700/80 text-[10px] font-black uppercase transition-all flex items-center gap-1 active:scale-95';
+                            pill.innerHTML = `<span>${nombre}</span> <span class="text-gold group-hover:text-[#004d98] font-black">+1⚽</span>`;
+                            pill.onclick = () => {
+                                const currentGolesInput = document.getElementById('scoreGoles');
+                                let val = currentGolesInput.value.trim();
+                                if (!val) {
+                                    val = `${nombre} (1)`;
+                                } else if (val.includes(nombre)) {
+                                    // Incrementar conteo
+                                    const regex = new RegExp(`${nombre}\\s*\\((\\d+)\\)`, 'i');
+                                    const match = val.match(regex);
+                                    if (match) {
+                                        const count = parseInt(match[1]) + 1;
+                                        val = val.replace(regex, `${nombre} (${count})`);
+                                    } else {
+                                        val += `, ${nombre} (1)`;
+                                    }
+                                } else {
+                                    val += `, ${nombre} (1)`;
+                                }
+                                currentGolesInput.value = val;
+                            };
+                            pillsContainer.appendChild(pill);
+                        });
+                    } else {
+                        pillsContainer.innerHTML = '<span class="text-[10px] text-slate-500 font-bold p-1">Escribe los goleadores en el campo inferior</span>';
+                    }
+
                     document.getElementById('editScoreModal').classList.remove('hidden');
                     document.getElementById('editScoreModal').classList.add('flex');
                 }
@@ -186,18 +268,41 @@ import { supabase, requireAdmin } from './supabaseClient.js';
 
             document.getElementById('editScoreForm').onsubmit = async (e) => {
                 e.preventDefault();
-                const id     = document.getElementById('scoreId').value;
-                const result = document.getElementById('scoreValue').value.trim();
+                const id = document.getElementById('scoreId').value;
+                const gLoc = document.getElementById('scoreLocal').value.trim();
+                const gVis = document.getElementById('scoreVisit').value.trim();
+                const status = document.getElementById('scoreStatus').value;
+                const goles = document.getElementById('scoreGoles').value.trim();
 
-                console.log('Guardando resultado:', { id, result });
+                let resultadoStr = 'Pendiente';
+                if (status === 'Pendiente') {
+                    resultadoStr = 'Pendiente';
+                } else if (gLoc !== '' && gVis !== '') {
+                    resultadoStr = `${gLoc} - ${gVis}`;
+                } else {
+                    resultadoStr = status;
+                }
+
+                console.log('Guardando resultado y goleadores:', { id, resultadoStr, goles });
 
                 const { data, error } = await supabase
                     .from('partidos')
-                    .update({ resultado: result })
+                    .update({ 
+                        resultado: resultadoStr,
+                        goles: goles || null 
+                    })
                     .eq('id', id)
                     .select();
 
                 if (error) {
+                    console.error('Error Supabase:', error);
+                    alert('Error al guardar: ' + error.message);
+                } else {
+                    console.log('Marcador y Goleadores guardados OK:', data);
+                    closeScoreModal();
+                    await loadMatches();
+                }
+            };
                     console.error('Error Supabase:', error);
                     alert('Error al guardar: ' + error.message);
                 } else {

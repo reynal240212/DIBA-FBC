@@ -150,8 +150,8 @@ export async function initAdminLayout() {
                 <span class="text-[0.75rem] tracking-tight truncate">Dashboard Gold</span>
             </a>
             <a href="asistencia.html" class="nav-link flex items-center gap-3 px-4 py-3 rounded-2xl transition-all duration-200 ${getLinkClass('asistencia')}">
-                <div class="w-7 flex justify-center"><i class="fas fa-camera text-base ${getIconClass('asistencia')}"></i></div>
-                <span class="text-[0.75rem] tracking-tight truncate">Asistencia Inteligente</span>
+                <div class="w-7 flex justify-center"><i class="fas fa-clipboard-user text-base ${getIconClass('asistencia')}"></i></div>
+                <span class="text-[0.75rem] tracking-tight truncate">Asistencia & Arbitrajes</span>
             </a>
         </nav>
 
