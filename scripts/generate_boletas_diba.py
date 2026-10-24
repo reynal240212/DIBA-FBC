@@ -66,7 +66,7 @@ def draw_boleta_diba(c, x, y, w, h, boleta_num, nums, logo_path):
     line_spacing = 10.5
 
     labels = [
-        ("FECHA DE JUEGO:", "MARTES 27 DE OCTUBRE DE 2026"),
+        ("FECHA DE JUEGO:", "LUNES 2 DE NOVIEMBRE DE 2026"),
         ("SORTEO / LOTERÍA:", "SINUANO NOCHE (Últimas 2 Cifras)"),
         ("PREMIO MAYOR:", "UNA COLONIA ORIGINAL"),
         ("VALOR POR NÚMERO:", "$2.500 COP"),

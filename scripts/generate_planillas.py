@@ -115,7 +115,7 @@ def create_planillas_pdf(output_path):
         info_data = [
             [
                 Paragraph("<b>MOTIVO:</b> RIFA PRO-INSCRIPCIÓN CAMPEONATO", bold_info_style),
-                Paragraph("<b>FECHA:</b> MARTES 27 DE OCTUBRE DE 2026", bold_info_style)
+                Paragraph("<b>FECHA:</b> LUNES 2 DE NOVIEMBRE DE 2026", bold_info_style)
             ],
             [
                 Paragraph("<b>PREMIO:</b> UNA COLONIA ORIGINAL", bold_info_style),
@@ -187,7 +187,7 @@ def create_planillas_pdf(output_path):
             Spacer(1, 4),
             t_rows,
             Spacer(1, 6),
-            Paragraph("<i>* Entregar el dinero recaudado y este talón diligenciado a más tardar el lunes 26 de octubre. ¡Muchas gracias por apoyar al equipo!</i>", ParagraphStyle('Notice', parent=info_style, fontSize=7, textColor=colors.HexColor('#64748b'), alignment=1)),
+            Paragraph("<i>* Entregar el dinero recaudado y este talón diligenciado a más tardar el domingo 1 de noviembre. ¡Muchas gracias por apoyar al equipo!</i>", ParagraphStyle('Notice', parent=info_style, fontSize=7, textColor=colors.HexColor('#64748b'), alignment=1)),
             Spacer(1, 8),
             HRFlowable(width="100%", thickness=1, color=colors.HexColor('#94a3b8'), spaceAfter=8, dash=[4, 3])
         ]
