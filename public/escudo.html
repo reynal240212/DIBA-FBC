@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Escudo Oficial e Identidad Heráldica - DIBA FBC</title>
+    <title>Escudo Oficial e Identidad Heráldica — DIBA FBC</title>
     <link rel="icon" href="images/ESCUDO.ico" type="image/x-icon" />
     <meta name="description"
         content="Conoce la historia, anatomía heráldica y significado de los símbolos del escudo oficial de DIBA FBC. Descarga el kit de medios y colores institucionales." />
@@ -25,78 +25,56 @@
     <style>
         body {
             font-family: 'Montserrat', sans-serif;
-            background-color: #020617;
-        }
-
-        .bg-diba-card {
-            background: rgba(15, 23, 42, 0.7);
-            backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
         }
 
         .crest-glow {
-            filter: drop-shadow(0 0 35px rgba(245, 158, 11, 0.28));
-            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            filter: drop-shadow(0 15px 30px rgba(0, 0, 0, 0.35));
+            transition: all 0.4s ease;
         }
 
         .crest-glow:hover {
-            filter: drop-shadow(0 0 50px rgba(245, 158, 11, 0.55));
-            transform: scale(1.04);
+            filter: drop-shadow(0 20px 40px rgba(245, 158, 11, 0.45));
+            transform: scale(1.03);
         }
 
         .symbol-card {
-            transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            background: linear-gradient(135deg, rgba(30, 41, 59, 0.5) 0%, rgba(15, 23, 42, 0.8) 100%);
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .symbol-card:hover {
-            transform: translateY(-6px);
-            border-color: rgba(245, 158, 11, 0.5);
-            box-shadow: 0 20px 40px -15px rgba(245, 158, 11, 0.2);
-        }
-
-        .symbol-card.active-part {
+            transform: translateY(-5px);
             border-color: #f59e0b;
-            background: linear-gradient(135deg, rgba(245, 158, 11, 0.15) 0%, rgba(15, 23, 42, 0.9) 100%);
-            box-shadow: 0 0 25px rgba(245, 158, 11, 0.3);
         }
 
-        .color-swatch {
-            transition: transform 0.2s, box-shadow 0.2s;
+        .color-card {
+            transition: transform 0.25s, box-shadow 0.25s;
         }
 
-        .color-swatch:hover {
+        .color-card:hover {
             transform: translateY(-4px);
-        }
-
-        .tab-pill.active {
-            background-color: #f59e0b;
-            color: #020617;
-            border-color: #f59e0b;
         }
     </style>
 </head>
 
-<body class="bg-[#020617] text-white selection:bg-amber-500/30 min-h-screen flex flex-col justify-between">
+<body class="bg-slate-50 text-slate-900 font-sans selection:bg-yellow-500/30 overflow-x-hidden min-h-screen flex flex-col justify-between">
     <div id="navbar-container"></div>
 
     <main class="w-full">
-        <!-- ── HERO SECTION ──────────────────────────────────────── -->
-        <section class="relative pt-36 pb-20 overflow-hidden">
-            <!-- Glows ambientales de fondo -->
-            <div class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-amber-500/10 rounded-full blur-[140px] pointer-events-none"></div>
-            <div class="absolute top-1/3 right-10 w-96 h-96 bg-blue-600/10 rounded-full blur-[120px] pointer-events-none"></div>
+        <!-- ── HERO SECTION (Fondo institucional oscuro con acentos dorados) ── -->
+        <section class="relative pt-36 pb-20 overflow-hidden border-b border-slate-200 bg-slate-900 text-white">
+            <!-- Glows sutiles decorativos -->
+            <div class="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[550px] h-[550px] bg-amber-500/10 rounded-full blur-[140px] pointer-events-none"></div>
+            <div class="absolute top-1/4 right-8 w-80 h-80 bg-blue-600/15 rounded-full blur-[110px] pointer-events-none"></div>
 
             <div class="max-w-6xl mx-auto px-4 relative z-10">
-                <div class="text-center mb-16" data-aos="fade-down">
-                    <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-400 text-xs font-black uppercase tracking-[0.25em] mb-6 shadow-inner">
-                        <i class="fas fa-shield-halved text-[11px]"></i> Identidad Visual & Heráldica Oficial
+                <div class="text-center mb-14" data-aos="fade-down">
+                    <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-yellow-500/10 border border-yellow-500/30 text-yellow-400 text-xs font-black uppercase tracking-[0.25em] mb-5 shadow-lg backdrop-blur-md">
+                        <i class="fas fa-shield-halved text-xs"></i> Identidad Visual &amp; Heráldica Oficial
                     </div>
                     <h1 class="text-5xl sm:text-6xl md:text-7xl font-black uppercase italic tracking-tight text-white leading-none">
-                        El <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-yellow-300 to-amber-500">Escudo Sagrado</span>
+                        El <span class="text-amber-500">Escudo Sagrado</span>
                     </h1>
-                    <p class="text-slate-300 mt-6 max-w-2xl mx-auto text-base sm:text-lg leading-relaxed font-normal">
+                    <p class="text-slate-200 mt-5 max-w-2xl mx-auto text-base sm:text-lg leading-relaxed font-normal">
                         Cada trazo, color y estrella guarda la historia viva de nuestra academia, el orgullo de Barranquilla y la pasión inquebrantable de nuestros guerreros en el campo.
                     </p>
 
@@ -104,30 +82,30 @@
                         <a href="#anatomia" class="px-6 py-3 rounded-full bg-amber-500 text-slate-950 font-black uppercase text-xs tracking-wider hover:bg-white hover:scale-105 transition-all shadow-xl shadow-amber-500/20 flex items-center gap-2">
                             <i class="fas fa-crosshairs"></i> Explorar Simbología
                         </a>
-                        <a href="#descargas" class="px-6 py-3 rounded-full bg-slate-900/90 text-white border border-slate-700 font-bold uppercase text-xs tracking-wider hover:border-amber-400 hover:text-amber-400 hover:scale-105 transition-all flex items-center gap-2">
+                        <a href="#descargas" class="px-6 py-3 rounded-full bg-white/10 text-white border border-white/20 font-bold uppercase text-xs tracking-wider hover:bg-white/20 hover:scale-105 transition-all flex items-center gap-2">
                             <i class="fas fa-download"></i> Descargar Kit HD
                         </a>
-                        <a href="himno.html" class="px-5 py-3 rounded-full bg-slate-800/60 text-slate-300 border border-slate-700/60 font-semibold uppercase text-xs tracking-wider hover:text-white hover:bg-slate-800 transition-all flex items-center gap-2">
+                        <a href="himno.html" class="px-5 py-3 rounded-full bg-slate-800 text-slate-300 border border-slate-700 font-semibold uppercase text-xs tracking-wider hover:text-white hover:bg-slate-700 transition-all flex items-center gap-2">
                             <i class="fas fa-music text-amber-400"></i> Escuchar Himno
                         </a>
                     </div>
                 </div>
 
-                <!-- Showcase Central del Escudo -->
-                <div class="grid lg:grid-cols-12 gap-12 items-center my-16 bg-gradient-to-b from-slate-900/50 to-slate-950/80 border border-slate-800/80 rounded-[3rem] p-8 sm:p-14 shadow-2xl relative" data-aos="zoom-in">
+                <!-- Showcase Central del Escudo en el Hero -->
+                <div class="grid lg:grid-cols-12 gap-10 items-center bg-slate-800/80 border border-slate-700/80 rounded-3xl p-8 sm:p-12 shadow-2xl relative backdrop-blur-md" data-aos="zoom-in">
                     <div class="lg:col-span-5 flex justify-center relative group">
-                        <div class="absolute inset-0 bg-amber-500/10 rounded-full blur-3xl transform group-hover:scale-125 transition-transform duration-700 pointer-events-none"></div>
+                        <div class="absolute inset-0 bg-amber-500/10 rounded-full blur-2xl transform group-hover:scale-115 transition-transform duration-700 pointer-events-none"></div>
                         <img src="images/ESCUDO.webp?v=2" alt="Escudo Oficial DIBA FBC" id="main-crest-img"
-                            class="relative z-10 w-72 sm:w-80 md:w-96 object-contain crest-glow cursor-pointer"
-                            title="Haz clic para inspeccionar" />
+                            class="relative z-10 w-64 sm:w-72 md:w-80 object-contain crest-glow cursor-pointer"
+                            title="Emblema Oficial DIBA FBC" />
                     </div>
 
                     <div class="lg:col-span-7 space-y-6">
                         <div class="flex items-center gap-3">
-                            <span class="px-3 py-1 bg-amber-500/10 border border-amber-500/30 text-amber-400 text-[10px] font-black uppercase tracking-widest rounded-lg">
+                            <span class="px-3 py-1 bg-amber-500/15 border border-amber-500/30 text-amber-400 text-[10px] font-black uppercase tracking-widest rounded-lg">
                                 <i class="fas fa-award mr-1"></i> Emblema Registrado
                             </span>
-                            <span class="text-xs text-slate-400 font-semibold tracking-wide">Creado por Reinaldo Pérez G.</span>
+                            <span class="text-xs text-slate-300 font-semibold tracking-wide">Creado por Reinaldo Pérez G.</span>
                         </div>
 
                         <h2 class="text-2xl sm:text-4xl font-black text-white uppercase italic tracking-tight leading-tight">
@@ -138,14 +116,11 @@
                             Diseñado en el corazón de Barranquilla, el blasón de <strong class="text-amber-400 font-bold">DIBA FBC</strong> nace como símbolo de protección para cada sueño infantil y juvenil que da sus primeros pasos en una cancha de barrio, transformándose en una armadura de disciplina y superación integral.
                         </p>
 
-                        <div class="p-6 rounded-2xl bg-slate-950/60 border border-amber-500/20 relative overflow-hidden">
-                            <i class="fas fa-quote-left text-amber-500/20 text-5xl absolute -top-2 -left-2 pointer-events-none"></i>
-                            <p class="text-xs sm:text-sm italic text-slate-300 relative z-10 pl-6 border-l-2 border-amber-500">
-                                "El escudo no es un simple logo comercial; es el juramento que cada profe, padre y jugador hace al entrar al terreno: defender los colores con hidalguía, juego limpio y corazón valiente."
-                            </p>
+                        <div class="p-5 rounded-2xl bg-slate-950/50 border-l-4 border-amber-500 text-slate-200 italic text-xs sm:text-sm">
+                            "El escudo no es un simple logo comercial; es el juramento que cada profe, padre y jugador hace al entrar al terreno: defender los colores con hidalguía, juego limpio y corazón valiente."
                         </div>
 
-                        <div class="grid grid-cols-3 gap-4 pt-4 border-t border-slate-800">
+                        <div class="grid grid-cols-3 gap-4 pt-4 border-t border-slate-700/60">
                             <div>
                                 <span class="text-2xl sm:text-3xl font-black text-amber-400 block tracking-tight">2012</span>
                                 <span class="text-[10px] uppercase tracking-wider text-slate-400 font-bold">Año de Creación</span>
@@ -164,100 +139,101 @@
             </div>
         </section>
 
-        <!-- ── SIMBOLOGÍA Y ANATOMÍA HERÁLDICA ────────────────────── -->
-        <section id="anatomia" class="py-20 relative bg-slate-950/60 border-y border-slate-900">
+        <!-- ── SIMBOLOGÍA Y ANATOMÍA HERÁLDICA (Fondo claro homogéneo bg-slate-50) ── -->
+        <section id="anatomia" class="py-20 relative bg-slate-50">
             <div class="max-w-6xl mx-auto px-4">
                 <div class="text-center mb-16" data-aos="fade-up">
-                    <span class="text-amber-400 font-black uppercase tracking-[0.25em] text-xs">Desglose Gráfico</span>
-                    <h3 class="text-3xl sm:text-4xl md:text-5xl font-black uppercase italic tracking-tight text-white mt-2">
+                    <span class="text-xs font-black tracking-[0.3em] text-amber-600 uppercase">DESGLOSE GRÁFICO</span>
+                    <h3 class="text-4xl md:text-5xl font-black text-slate-900 tracking-tight mt-2">
                         Anatomía del <span class="text-amber-500">Blasón</span>
                     </h3>
-                    <p class="text-slate-400 text-sm max-w-xl mx-auto mt-3">
-                        Haz clic en cada componente para descubrir el significado técnico y espiritual plasmado en su diseño.
+                    <div class="w-20 h-1.5 bg-amber-500 mx-auto rounded-full mt-4"></div>
+                    <p class="text-slate-600 text-sm max-w-xl mx-auto mt-4 font-medium">
+                        Conoce el significado técnico y espiritual plasmado en cada uno de los componentes del emblema.
                     </p>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" data-aos="fade-up">
                     <!-- 1. Corona y Estrellas -->
-                    <div class="symbol-card p-8 rounded-3xl relative overflow-hidden group cursor-pointer" onclick="highlightShieldPart('stars')">
-                        <div class="w-14 h-14 rounded-2xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400 text-2xl mb-6 group-hover:scale-110 group-hover:bg-amber-500 group-hover:text-slate-950 transition-all duration-300">
+                    <div class="symbol-card bg-white p-7 rounded-2xl border border-slate-200 shadow-md hover:shadow-xl transition-all">
+                        <div class="w-12 h-12 rounded-xl bg-amber-50 border border-amber-200 flex items-center justify-center text-amber-600 text-xl mb-5">
                             <i class="fas fa-star"></i>
                         </div>
                         <div class="flex items-center justify-between mb-2">
-                            <h4 class="text-lg font-black uppercase tracking-wide text-white">Las Estrellas</h4>
-                            <span class="text-[10px] font-bold text-amber-400 uppercase tracking-widest bg-amber-400/10 px-2.5 py-0.5 rounded-full border border-amber-400/20">Excelencia</span>
+                            <h4 class="text-lg font-black uppercase tracking-tight text-slate-900">Las Estrellas</h4>
+                            <span class="text-[10px] font-bold text-amber-800 bg-amber-100 px-2.5 py-0.5 rounded-full uppercase tracking-wider">Excelencia</span>
                         </div>
-                        <p class="text-xs sm:text-sm text-slate-400 leading-relaxed">
-                            Simbolizan los 3 pilares supremos de nuestra academia: <strong class="text-white">Disciplina</strong> para superarse, <strong class="text-white">Talento</strong> cultivado día a día y <strong class="text-white">Resiliencia</strong> para levantarse tras cada caída en la cancha y en la vida.
+                        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                            Simbolizan los 3 pilares supremos de nuestra academia: <strong class="text-slate-900">Disciplina</strong> para superarse, <strong class="text-slate-900">Talento</strong> cultivado día a día y <strong class="text-slate-900">Resiliencia</strong> para levantarse tras cada caída en la cancha y en la vida.
                         </p>
                     </div>
 
                     <!-- 2. El Balón Central -->
-                    <div class="symbol-card p-8 rounded-3xl relative overflow-hidden group cursor-pointer" onclick="highlightShieldPart('ball')">
-                        <div class="w-14 h-14 rounded-2xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400 text-2xl mb-6 group-hover:scale-110 group-hover:bg-amber-500 group-hover:text-slate-950 transition-all duration-300">
+                    <div class="symbol-card bg-white p-7 rounded-2xl border border-slate-200 shadow-md hover:shadow-xl transition-all">
+                        <div class="w-12 h-12 rounded-xl bg-blue-50 border border-blue-200 flex items-center justify-center text-blue-700 text-xl mb-5">
                             <i class="fas fa-futbol"></i>
                         </div>
                         <div class="flex items-center justify-between mb-2">
-                            <h4 class="text-lg font-black uppercase tracking-wide text-white">El Balón Clásico</h4>
-                            <span class="text-[10px] font-bold text-amber-400 uppercase tracking-widest bg-amber-400/10 px-2.5 py-0.5 rounded-full border border-amber-400/20">Esencia</span>
+                            <h4 class="text-lg font-black uppercase tracking-tight text-slate-900">El Balón Clásico</h4>
+                            <span class="text-[10px] font-bold text-blue-800 bg-blue-100 px-2.5 py-0.5 rounded-full uppercase tracking-wider">Esencia</span>
                         </div>
-                        <p class="text-xs sm:text-sm text-slate-400 leading-relaxed">
+                        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
                             Ubicado exactamente en el centro geométrico. Representa el corazón del club: la redonda como puente educativo, herramienta de paz en las comunidades y el vehículo de alegría para las familias.
                         </p>
                     </div>
 
                     <!-- 3. Contorno de Blindaje Suizo -->
-                    <div class="symbol-card p-8 rounded-3xl relative overflow-hidden group cursor-pointer" onclick="highlightShieldPart('shield')">
-                        <div class="w-14 h-14 rounded-2xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400 text-2xl mb-6 group-hover:scale-110 group-hover:bg-amber-500 group-hover:text-slate-950 transition-all duration-300">
+                    <div class="symbol-card bg-white p-7 rounded-2xl border border-slate-200 shadow-md hover:shadow-xl transition-all">
+                        <div class="w-12 h-12 rounded-xl bg-amber-50 border border-amber-200 flex items-center justify-center text-amber-600 text-xl mb-5">
                             <i class="fas fa-shield-halved"></i>
                         </div>
                         <div class="flex items-center justify-between mb-2">
-                            <h4 class="text-lg font-black uppercase tracking-wide text-white">El Blindaje</h4>
-                            <span class="text-[10px] font-bold text-amber-400 uppercase tracking-widest bg-amber-400/10 px-2.5 py-0.5 rounded-full border border-amber-400/20">Protección</span>
+                            <h4 class="text-lg font-black uppercase tracking-tight text-slate-900">El Blindaje</h4>
+                            <span class="text-[10px] font-bold text-amber-800 bg-amber-100 px-2.5 py-0.5 rounded-full uppercase tracking-wider">Protección</span>
                         </div>
-                        <p class="text-xs sm:text-sm text-slate-400 leading-relaxed">
+                        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
                             Un perfil heráldico con curvas clásicas y remate inferior agudo. Manifiesta la fortaleza mental del deportista barranquillero y la protección integral que la academia brinda a cada niño.
                         </p>
                     </div>
 
                     <!-- 4. Siglas DIBA FBC -->
-                    <div class="symbol-card p-8 rounded-3xl relative overflow-hidden group cursor-pointer" onclick="highlightShieldPart('typography')">
-                        <div class="w-14 h-14 rounded-2xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400 text-2xl mb-6 group-hover:scale-110 group-hover:bg-amber-500 group-hover:text-slate-950 transition-all duration-300">
+                    <div class="symbol-card bg-white p-7 rounded-2xl border border-slate-200 shadow-md hover:shadow-xl transition-all">
+                        <div class="w-12 h-12 rounded-xl bg-blue-50 border border-blue-200 flex items-center justify-center text-blue-700 text-xl mb-5">
                             <i class="fas fa-font"></i>
                         </div>
                         <div class="flex items-center justify-between mb-2">
-                            <h4 class="text-lg font-black uppercase tracking-wide text-white">Siglas y Tipografía</h4>
-                            <span class="text-[10px] font-bold text-amber-400 uppercase tracking-widest bg-amber-400/10 px-2.5 py-0.5 rounded-full border border-amber-400/20">Identidad</span>
+                            <h4 class="text-lg font-black uppercase tracking-tight text-slate-900">Siglas y Tipografía</h4>
+                            <span class="text-[10px] font-bold text-blue-800 bg-blue-100 px-2.5 py-0.5 rounded-full uppercase tracking-wider">Identidad</span>
                         </div>
-                        <p class="text-xs sm:text-sm text-slate-400 leading-relaxed">
-                            <strong class="text-white font-bold">D</strong>eportivo <strong class="text-white font-bold">I</strong>nternacional <strong class="text-white font-bold">Ba</strong>rranquilla. Trazos robustos en tipografía de alto impacto que proyectan presencia competitiva y solidez institucional.
+                        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                            <strong class="text-slate-900 font-bold">D</strong>eportivo <strong class="text-slate-900 font-bold">I</strong>nternacional <strong class="text-slate-900 font-bold">Ba</strong>rranquilla. Trazos robustos en tipografía de alto impacto que proyectan presencia competitiva y solidez institucional.
                         </p>
                     </div>
 
                     <!-- 5. Lema Institucional -->
-                    <div class="symbol-card p-8 rounded-3xl relative overflow-hidden group cursor-pointer" onclick="highlightShieldPart('motto')">
-                        <div class="w-14 h-14 rounded-2xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400 text-2xl mb-6 group-hover:scale-110 group-hover:bg-amber-500 group-hover:text-slate-950 transition-all duration-300">
+                    <div class="symbol-card bg-white p-7 rounded-2xl border border-slate-200 shadow-md hover:shadow-xl transition-all">
+                        <div class="w-12 h-12 rounded-xl bg-amber-50 border border-amber-200 flex items-center justify-center text-amber-600 text-xl mb-5">
                             <i class="fas fa-handshake"></i>
                         </div>
                         <div class="flex items-center justify-between mb-2">
-                            <h4 class="text-lg font-black uppercase tracking-wide text-white">Fuerza & Lealtad</h4>
-                            <span class="text-[10px] font-bold text-amber-400 uppercase tracking-widest bg-amber-400/10 px-2.5 py-0.5 rounded-full border border-amber-400/20">Principio</span>
+                            <h4 class="text-lg font-black uppercase tracking-tight text-slate-900">Fuerza &amp; Lealtad</h4>
+                            <span class="text-[10px] font-bold text-amber-800 bg-amber-100 px-2.5 py-0.5 rounded-full uppercase tracking-wider">Principio</span>
                         </div>
-                        <p class="text-xs sm:text-sm text-slate-400 leading-relaxed">
+                        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
                             La consigna moral del club. Fuerza no es solo potencia física, sino el temple para no rendirse ante el marcador; lealtad hacia los compañeros, la camiseta, el club y el juego limpio.
                         </p>
                     </div>
 
                     <!-- 6. Arraigo Barranquillero -->
-                    <div class="symbol-card p-8 rounded-3xl relative overflow-hidden group cursor-pointer" onclick="highlightShieldPart('caribbean')">
-                        <div class="w-14 h-14 rounded-2xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400 text-2xl mb-6 group-hover:scale-110 group-hover:bg-amber-500 group-hover:text-slate-950 transition-all duration-300">
+                    <div class="symbol-card bg-white p-7 rounded-2xl border border-slate-200 shadow-md hover:shadow-xl transition-all">
+                        <div class="w-12 h-12 rounded-xl bg-blue-50 border border-blue-200 flex items-center justify-center text-blue-700 text-xl mb-5">
                             <i class="fas fa-sun"></i>
                         </div>
                         <div class="flex items-center justify-between mb-2">
-                            <h4 class="text-lg font-black uppercase tracking-wide text-white">Caribe Inmortal</h4>
-                            <span class="text-[10px] font-bold text-amber-400 uppercase tracking-widest bg-amber-400/10 px-2.5 py-0.5 rounded-full border border-amber-400/20">Origen</span>
+                            <h4 class="text-lg font-black uppercase tracking-tight text-slate-900">Caribe Inmortal</h4>
+                            <span class="text-[10px] font-bold text-blue-800 bg-blue-100 px-2.5 py-0.5 rounded-full uppercase tracking-wider">Origen</span>
                         </div>
-                        <p class="text-xs sm:text-sm text-slate-400 leading-relaxed">
+                        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
                             Barranquilla corre por las venas del diseño: la calidez de su gente, el viento de la arenosa que mece las canchas y la pasión desbordada que solo la costa colombiana sabe imprimir al fútbol.
                         </p>
                     </div>
@@ -265,217 +241,220 @@
             </div>
         </section>
 
-        <!-- ── PALETA CROMÁTICA OFICIAL (1-CLICK COPY) ─────────────── -->
-        <section class="py-20 relative">
+        <!-- ── MANUAL CROMÁTICO (Fondo blanco institucional con 1-click copy) ── -->
+        <section class="py-20 bg-white border-y border-slate-200">
             <div class="max-w-6xl mx-auto px-4">
                 <div class="text-center mb-16" data-aos="fade-up">
-                    <span class="text-amber-400 font-black uppercase tracking-[0.25em] text-xs">Manual Cromático</span>
-                    <h3 class="text-3xl sm:text-4xl font-black uppercase italic tracking-tight text-white mt-2">
+                    <span class="text-xs font-black tracking-[0.3em] text-amber-600 uppercase">MANUAL CROMÁTICO</span>
+                    <h3 class="text-4xl md:text-5xl font-black text-slate-900 tracking-tight mt-2">
                         Colores <span class="text-amber-500">Institucionales</span>
                     </h3>
-                    <p class="text-slate-400 text-sm max-w-lg mx-auto mt-3">
-                        Haz clic sobre cualquier tono para copiar el código HEX oficial al portapapeles.
+                    <div class="w-20 h-1.5 bg-amber-500 mx-auto rounded-full mt-4"></div>
+                    <p class="text-slate-600 text-sm max-w-lg mx-auto mt-4 font-medium">
+                        Haz clic sobre cualquier muestra para copiar el código HEX oficial al portapapeles.
                     </p>
                 </div>
 
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-6" data-aos="fade-up">
                     <!-- Oro Caribe -->
-                    <div class="color-swatch bg-slate-900 border border-slate-800 rounded-3xl p-6 text-center cursor-pointer relative group" onclick="copyHex('#F59E0B', this)">
-                        <div class="w-full h-24 rounded-2xl bg-[#F59E0B] shadow-lg shadow-amber-500/20 mb-4 flex items-center justify-center group-hover:scale-105 transition-transform">
-                            <i class="fas fa-copy text-slate-900 opacity-0 group-hover:opacity-100 transition-opacity text-xl"></i>
+                    <div class="color-card bg-slate-50 border border-slate-200 rounded-2xl p-6 text-center cursor-pointer relative group shadow-sm hover:shadow-md" onclick="copyHex('#F59E0B', this)">
+                        <div class="w-full h-24 rounded-xl bg-[#F59E0B] shadow-sm mb-4 flex items-center justify-center group-hover:scale-105 transition-transform">
+                            <i class="fas fa-copy text-slate-950 opacity-0 group-hover:opacity-100 transition-opacity text-xl"></i>
                         </div>
-                        <h5 class="text-sm font-black text-white uppercase tracking-wider">Oro Caribe</h5>
-                        <p class="text-[11px] text-slate-400 mt-1">Primario • Energía</p>
-                        <div class="mt-3 px-3 py-1 bg-slate-950 rounded-xl border border-slate-800 font-mono text-xs font-bold text-amber-400 inline-block">
+                        <h5 class="text-sm font-black text-slate-900 uppercase tracking-wider">Oro Caribe</h5>
+                        <p class="text-[11px] text-slate-500 mt-1">Primario • Energía</p>
+                        <div class="mt-3 px-3 py-1 bg-white rounded-lg border border-slate-200 font-mono text-xs font-bold text-amber-600 inline-block">
                             #F59E0B
                         </div>
-                        <span class="copy-feedback hidden absolute top-4 right-4 bg-emerald-500 text-slate-950 font-black text-[9px] uppercase px-2 py-0.5 rounded-md shadow">¡Copiado!</span>
+                        <span class="copy-feedback hidden absolute top-4 right-4 bg-emerald-600 text-white font-bold text-[9px] uppercase px-2 py-0.5 rounded shadow">¡Copiado! ✓</span>
                     </div>
 
-                    <!-- Amarillo Dorado -->
-                    <div class="color-swatch bg-slate-900 border border-slate-800 rounded-3xl p-6 text-center cursor-pointer relative group" onclick="copyHex('#FFD700', this)">
-                        <div class="w-full h-24 rounded-2xl bg-[#FFD700] shadow-lg shadow-yellow-400/20 mb-4 flex items-center justify-center group-hover:scale-105 transition-transform">
-                            <i class="fas fa-copy text-slate-900 opacity-0 group-hover:opacity-100 transition-opacity text-xl"></i>
+                    <!-- Amarillo Sol -->
+                    <div class="color-card bg-slate-50 border border-slate-200 rounded-2xl p-6 text-center cursor-pointer relative group shadow-sm hover:shadow-md" onclick="copyHex('#FFD700', this)">
+                        <div class="w-full h-24 rounded-xl bg-[#FFD700] shadow-sm mb-4 flex items-center justify-center group-hover:scale-105 transition-transform">
+                            <i class="fas fa-copy text-slate-950 opacity-0 group-hover:opacity-100 transition-opacity text-xl"></i>
                         </div>
-                        <h5 class="text-sm font-black text-white uppercase tracking-wider">Amarillo Sol</h5>
-                        <p class="text-[11px] text-slate-400 mt-1">Acento • Gloria</p>
-                        <div class="mt-3 px-3 py-1 bg-slate-950 rounded-xl border border-slate-800 font-mono text-xs font-bold text-yellow-400 inline-block">
+                        <h5 class="text-sm font-black text-slate-900 uppercase tracking-wider">Amarillo Sol</h5>
+                        <p class="text-[11px] text-slate-500 mt-1">Acento • Gloria</p>
+                        <div class="mt-3 px-3 py-1 bg-white rounded-lg border border-slate-200 font-mono text-xs font-bold text-amber-700 inline-block">
                             #FFD700
                         </div>
-                        <span class="copy-feedback hidden absolute top-4 right-4 bg-emerald-500 text-slate-950 font-black text-[9px] uppercase px-2 py-0.5 rounded-md shadow">¡Copiado!</span>
+                        <span class="copy-feedback hidden absolute top-4 right-4 bg-emerald-600 text-white font-bold text-[9px] uppercase px-2 py-0.5 rounded shadow">¡Copiado! ✓</span>
                     </div>
 
-                    <!-- Azul Noche -->
-                    <div class="color-swatch bg-slate-900 border border-slate-800 rounded-3xl p-6 text-center cursor-pointer relative group" onclick="copyHex('#0F172A', this)">
-                        <div class="w-full h-24 rounded-2xl bg-[#0F172A] border border-slate-700/60 shadow-lg mb-4 flex items-center justify-center group-hover:scale-105 transition-transform">
-                            <i class="fas fa-copy text-amber-400 opacity-0 group-hover:opacity-100 transition-opacity text-xl"></i>
+                    <!-- Azul Marino DIBA -->
+                    <div class="color-card bg-slate-50 border border-slate-200 rounded-2xl p-6 text-center cursor-pointer relative group shadow-sm hover:shadow-md" onclick="copyHex('#004D98', this)">
+                        <div class="w-full h-24 rounded-xl bg-[#004D98] shadow-sm mb-4 flex items-center justify-center group-hover:scale-105 transition-transform">
+                            <i class="fas fa-copy text-white opacity-0 group-hover:opacity-100 transition-opacity text-xl"></i>
                         </div>
-                        <h5 class="text-sm font-black text-white uppercase tracking-wider">Azul Noche</h5>
-                        <p class="text-[11px] text-slate-400 mt-1">Contraste • Templanza</p>
-                        <div class="mt-3 px-3 py-1 bg-slate-950 rounded-xl border border-slate-800 font-mono text-xs font-bold text-slate-300 inline-block">
+                        <h5 class="text-sm font-black text-slate-900 uppercase tracking-wider">Azul DIBA</h5>
+                        <p class="text-[11px] text-slate-500 mt-1">Identidad • Fuerza</p>
+                        <div class="mt-3 px-3 py-1 bg-white rounded-lg border border-slate-200 font-mono text-xs font-bold text-blue-700 inline-block">
+                            #004D98
+                        </div>
+                        <span class="copy-feedback hidden absolute top-4 right-4 bg-emerald-600 text-white font-bold text-[9px] uppercase px-2 py-0.5 rounded shadow">¡Copiado! ✓</span>
+                    </div>
+
+                    <!-- Negro Élite -->
+                    <div class="color-card bg-slate-50 border border-slate-200 rounded-2xl p-6 text-center cursor-pointer relative group shadow-sm hover:shadow-md" onclick="copyHex('#0F172A', this)">
+                        <div class="w-full h-24 rounded-xl bg-[#0F172A] shadow-sm mb-4 flex items-center justify-center group-hover:scale-105 transition-transform">
+                            <i class="fas fa-copy text-white opacity-0 group-hover:opacity-100 transition-opacity text-xl"></i>
+                        </div>
+                        <h5 class="text-sm font-black text-slate-900 uppercase tracking-wider">Negro Élite</h5>
+                        <p class="text-[11px] text-slate-500 mt-1">Elegancia • Solidez</p>
+                        <div class="mt-3 px-3 py-1 bg-white rounded-lg border border-slate-200 font-mono text-xs font-bold text-slate-800 inline-block">
                             #0F172A
                         </div>
-                        <span class="copy-feedback hidden absolute top-4 right-4 bg-emerald-500 text-slate-950 font-black text-[9px] uppercase px-2 py-0.5 rounded-md shadow">¡Copiado!</span>
-                    </div>
-
-                    <!-- Negro Carbón -->
-                    <div class="color-swatch bg-slate-900 border border-slate-800 rounded-3xl p-6 text-center cursor-pointer relative group" onclick="copyHex('#020617', this)">
-                        <div class="w-full h-24 rounded-2xl bg-[#020617] border border-slate-800 shadow-lg mb-4 flex items-center justify-center group-hover:scale-105 transition-transform">
-                            <i class="fas fa-copy text-amber-400 opacity-0 group-hover:opacity-100 transition-opacity text-xl"></i>
-                        </div>
-                        <h5 class="text-sm font-black text-white uppercase tracking-wider">Negro Élite</h5>
-                        <p class="text-[11px] text-slate-400 mt-1">Fondo • Fortaleza</p>
-                        <div class="mt-3 px-3 py-1 bg-slate-950 rounded-xl border border-slate-800 font-mono text-xs font-bold text-slate-400 inline-block">
-                            #020617
-                        </div>
-                        <span class="copy-feedback hidden absolute top-4 right-4 bg-emerald-500 text-slate-950 font-black text-[9px] uppercase px-2 py-0.5 rounded-md shadow">¡Copiado!</span>
+                        <span class="copy-feedback hidden absolute top-4 right-4 bg-emerald-600 text-white font-bold text-[9px] uppercase px-2 py-0.5 rounded shadow">¡Copiado! ✓</span>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- ── LÍNEA DE EVOLUCIÓN HISTÓRICA ────────────────────────── -->
-        <section class="py-20 bg-slate-950/70 border-t border-slate-900 relative">
+        <!-- ── LÍNEA DE EVOLUCIÓN HISTÓRICA (Fondo slate-50) ── -->
+        <section class="py-20 bg-slate-50">
             <div class="max-w-6xl mx-auto px-4">
                 <div class="text-center mb-16" data-aos="fade-up">
-                    <span class="text-amber-400 font-black uppercase tracking-[0.25em] text-xs">Transformación</span>
-                    <h3 class="text-3xl sm:text-4xl md:text-5xl font-black uppercase italic tracking-tight text-white mt-2">
+                    <span class="text-xs font-black tracking-[0.3em] text-amber-600 uppercase">TRANSFORMACIÓN</span>
+                    <h3 class="text-4xl md:text-5xl font-black text-slate-900 tracking-tight mt-2">
                         Evolución en el <span class="text-amber-500">Tiempo</span>
                     </h3>
-                    <p class="text-slate-400 text-sm max-w-lg mx-auto mt-3">
+                    <div class="w-20 h-1.5 bg-amber-500 mx-auto rounded-full mt-4"></div>
+                    <p class="text-slate-600 text-sm max-w-lg mx-auto mt-4 font-medium">
                         Más de una década de perfeccionamiento estético manteniendo intacto el espíritu fundador.
                     </p>
                 </div>
 
                 <div class="grid md:grid-cols-2 gap-8 items-stretch" data-aos="fade-up">
                     <!-- 2012: Origen -->
-                    <div class="bg-gradient-to-b from-slate-900/40 to-slate-950/80 border border-slate-800/80 rounded-[3rem] p-8 sm:p-12 text-center relative overflow-hidden flex flex-col justify-between group hover:border-slate-700 transition-all">
+                    <div class="bg-white border border-slate-200 rounded-3xl p-8 sm:p-10 text-center relative overflow-hidden flex flex-col justify-between group shadow-md hover:shadow-xl transition-all">
                         <div>
-                            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-800 text-slate-400 text-[10px] font-black uppercase tracking-widest mb-6">
-                                <i class="fas fa-seedling"></i> El Inicio • 2012
+                            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 text-slate-700 text-[10px] font-black uppercase tracking-widest mb-6">
+                                <i class="fas fa-seedling text-amber-600"></i> El Inicio • 2012
                             </div>
-                            <h4 class="text-2xl font-black text-white uppercase italic tracking-wide mb-2">Identidad Fundacional</h4>
-                            <p class="text-xs text-slate-400 mb-8">El primer emblema diseñado a mano para los primeros torneos barriales.</p>
+                            <h4 class="text-2xl font-black text-slate-900 uppercase italic tracking-wide mb-2">Identidad Fundacional</h4>
+                            <p class="text-xs text-slate-500 mb-6">El primer emblema diseñado a mano para los primeros torneos barriales.</p>
                             
-                            <div class="h-56 flex items-center justify-center mb-8">
+                            <div class="h-52 flex items-center justify-center mb-6">
                                 <img src="images/escudoOrigin.webp" alt="Escudo Origen 2012" class="max-h-full w-auto object-contain filter grayscale group-hover:grayscale-0 transition-all duration-500 transform group-hover:scale-105" />
                             </div>
                         </div>
 
-                        <ul class="text-left space-y-3 text-xs text-slate-300 border-t border-slate-800 pt-6">
-                            <li class="flex items-center gap-2"><i class="fas fa-check text-slate-500"></i> Trazo original con foco en la energía del amarillo primario.</li>
-                            <li class="flex items-center gap-2"><i class="fas fa-check text-slate-500"></i> Estructura heráldica temprana pensada para camisetas de algodón.</li>
-                            <li class="flex items-center gap-2"><i class="fas fa-check text-slate-500"></i> Sello inicial que acompañó las primeras copas locales.</li>
+                        <ul class="text-left space-y-2.5 text-xs text-slate-600 border-t border-slate-100 pt-6">
+                            <li class="flex items-center gap-2"><i class="fas fa-check text-slate-400"></i> Trazo original con foco en la energía del amarillo primario.</li>
+                            <li class="flex items-center gap-2"><i class="fas fa-check text-slate-400"></i> Estructura heráldica temprana pensada para camisetas de algodón.</li>
+                            <li class="flex items-center gap-2"><i class="fas fa-check text-slate-400"></i> Sello inicial que acompañó las primeras copas locales.</li>
                         </ul>
                     </div>
 
                     <!-- 2024: Era Premium -->
-                    <div class="bg-gradient-to-b from-amber-500/10 via-slate-900/60 to-slate-950/90 border-2 border-amber-500/40 rounded-[3rem] p-8 sm:p-12 text-center relative overflow-hidden flex flex-col justify-between group shadow-2xl shadow-amber-500/10 hover:border-amber-400 transition-all">
-                        <div class="absolute -top-12 -right-12 w-40 h-40 bg-amber-500/10 rounded-full blur-2xl pointer-events-none"></div>
+                    <div class="bg-white border-2 border-amber-500 rounded-3xl p-8 sm:p-10 text-center relative overflow-hidden flex flex-col justify-between group shadow-xl hover:shadow-2xl transition-all">
+                        <div class="absolute -top-10 -right-10 w-36 h-36 bg-amber-500/10 rounded-full blur-xl pointer-events-none"></div>
                         <div>
-                            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500 text-slate-950 text-[10px] font-black uppercase tracking-widest mb-6 shadow-md shadow-amber-500/30">
+                            <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-amber-500 text-slate-950 text-[10px] font-black uppercase tracking-widest mb-6 shadow-md shadow-amber-500/20">
                                 <i class="fas fa-crown"></i> Versión Actual • Oficial
                             </div>
-                            <h4 class="text-2xl font-black text-white uppercase italic tracking-wide mb-2">Renovación Alta Gama</h4>
-                            <p class="text-xs text-amber-400 font-semibold mb-8">Vectorización milimétrica, balance óptico y acabado digital de élite.</p>
+                            <h4 class="text-2xl font-black text-slate-900 uppercase italic tracking-wide mb-2">Renovación Alta Gama</h4>
+                            <p class="text-xs text-amber-600 font-bold mb-6">Vectorización milimétrica, balance óptico y acabado digital de élite.</p>
                             
-                            <div class="h-56 flex items-center justify-center mb-8">
-                                <img src="images/ESCUDO.webp?v=2" alt="Escudo Oficial Actual" class="max-h-full w-auto object-contain crest-glow transform group-hover:scale-110 transition-transform duration-500" />
+                            <div class="h-52 flex items-center justify-center mb-6">
+                                <img src="images/ESCUDO.webp?v=2" alt="Escudo Oficial Actual" class="max-h-full w-auto object-contain crest-glow transform group-hover:scale-105 transition-transform duration-500" />
                             </div>
                         </div>
 
-                        <ul class="text-left space-y-3 text-xs text-slate-200 border-t border-amber-500/20 pt-6">
-                            <li class="flex items-center gap-2"><i class="fas fa-circle-check text-amber-400"></i> Curvas vectorizadas adaptadas a pantallas Retina y 4K.</li>
-                            <li class="flex items-center gap-2"><i class="fas fa-circle-check text-amber-400"></i> Armonización cromática con el Oro Solar y Negro Carbón.</li>
-                            <li class="flex items-center gap-2"><i class="fas fa-circle-check text-amber-400"></i> Aplicación oficial en uniformes de competición y trofeos.</li>
+                        <ul class="text-left space-y-2.5 text-xs text-slate-700 border-t border-amber-100 pt-6">
+                            <li class="flex items-center gap-2"><i class="fas fa-circle-check text-amber-500"></i> Curvas vectorizadas adaptadas a pantallas Retina y 4K.</li>
+                            <li class="flex items-center gap-2"><i class="fas fa-circle-check text-amber-500"></i> Armonización cromática con el Oro Caribe y Azul Marino.</li>
+                            <li class="flex items-center gap-2"><i class="fas fa-circle-check text-amber-500"></i> Aplicación oficial en uniformes de competición y trofeos.</li>
                         </ul>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- ── CENTRO DE DESCARGAS Y KIT DE MEDIOS ─────────────────── -->
-        <section id="descargas" class="py-20 relative">
+        <!-- ── CENTRO DE DESCARGAS Y KIT DE MEDIOS (Fondo blanco) ── -->
+        <section id="descargas" class="py-20 bg-white border-t border-slate-200">
             <div class="max-w-6xl mx-auto px-4">
                 <div class="text-center mb-16" data-aos="fade-up">
-                    <span class="text-amber-400 font-black uppercase tracking-[0.25em] text-xs">Recursos Oficiales</span>
-                    <h3 class="text-3xl sm:text-4xl font-black uppercase italic tracking-tight text-white mt-2">
-                        Kit de Medios & <span class="text-amber-500">Descargas</span>
+                    <span class="text-xs font-black tracking-[0.3em] text-amber-600 uppercase">RECURSOS OFICIALES</span>
+                    <h3 class="text-4xl md:text-5xl font-black text-slate-900 tracking-tight mt-2">
+                        Kit de Medios &amp; <span class="text-amber-500">Descargas</span>
                     </h3>
-                    <p class="text-slate-400 text-sm max-w-lg mx-auto mt-3">
+                    <div class="w-20 h-1.5 bg-amber-500 mx-auto rounded-full mt-4"></div>
+                    <p class="text-slate-600 text-sm max-w-lg mx-auto mt-4 font-medium">
                         Archivos oficiales en alta resolución autorizados para medios de comunicación, torneos y patrocinadores.
                     </p>
                 </div>
 
                 <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6" data-aos="fade-up">
                     <!-- PNG HD Transparente -->
-                    <div class="bg-slate-900/70 border border-slate-800 rounded-3xl p-6 flex flex-col justify-between group hover:border-amber-400/50 transition-all">
+                    <div class="bg-slate-50 border border-slate-200 rounded-2xl p-6 flex flex-col justify-between group hover:border-amber-400 hover:shadow-lg transition-all">
                         <div>
                             <div class="flex items-center justify-between mb-4">
-                                <div class="w-12 h-12 rounded-2xl bg-amber-500/10 flex items-center justify-center text-amber-400 text-xl font-black">
+                                <div class="w-12 h-12 rounded-xl bg-amber-100 flex items-center justify-center text-amber-700 text-lg font-black">
                                     PNG
                                 </div>
-                                <span class="text-[10px] uppercase font-bold text-slate-400 bg-slate-800 px-2.5 py-1 rounded-lg">Transparente</span>
+                                <span class="text-[10px] uppercase font-bold text-slate-600 bg-white border border-slate-200 px-2.5 py-1 rounded-md">Transparente</span>
                             </div>
-                            <h5 class="text-base font-black text-white uppercase tracking-wide">Escudo HD PNG</h5>
-                            <p class="text-xs text-slate-400 mt-2 leading-relaxed">Máxima resolución sin fondo, ideal para banners, posters, documentos oficiales y publicaciones.</p>
+                            <h5 class="text-base font-black text-slate-900 uppercase tracking-wide">Escudo HD PNG</h5>
+                            <p class="text-xs text-slate-600 mt-2 leading-relaxed">Máxima resolución sin fondo, ideal para banners, posters, documentos oficiales y publicaciones.</p>
                         </div>
-                        <a href="images/ESCUDO.png" download="DIBA-FBC-Escudo-Oficial.png" class="mt-6 w-full py-3 bg-amber-500 hover:bg-white text-slate-950 font-black text-xs uppercase tracking-wider rounded-xl transition-all flex items-center justify-center gap-2 active:scale-95 shadow-lg shadow-amber-500/20">
+                        <a href="images/ESCUDO.png" download="DIBA-FBC-Escudo-Oficial.png" class="mt-6 w-full py-3 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs uppercase tracking-wider rounded-xl transition-all flex items-center justify-center gap-2 active:scale-95 shadow-md shadow-amber-500/20">
                             <i class="fas fa-download"></i> Descargar PNG HD
                         </a>
                     </div>
 
                     <!-- WebP Optimizado -->
-                    <div class="bg-slate-900/70 border border-slate-800 rounded-3xl p-6 flex flex-col justify-between group hover:border-amber-400/50 transition-all">
+                    <div class="bg-slate-50 border border-slate-200 rounded-2xl p-6 flex flex-col justify-between group hover:border-blue-500 hover:shadow-lg transition-all">
                         <div>
                             <div class="flex items-center justify-between mb-4">
-                                <div class="w-12 h-12 rounded-2xl bg-blue-500/10 flex items-center justify-center text-blue-400 text-xl font-black">
+                                <div class="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center text-blue-700 text-lg font-black">
                                     WEBP
                                 </div>
-                                <span class="text-[10px] uppercase font-bold text-slate-400 bg-slate-800 px-2.5 py-1 rounded-lg">Web Ultra Rápido</span>
+                                <span class="text-[10px] uppercase font-bold text-slate-600 bg-white border border-slate-200 px-2.5 py-1 rounded-md">Web Ultra Rápido</span>
                             </div>
-                            <h5 class="text-base font-black text-white uppercase tracking-wide">Escudo WebP Liviano</h5>
-                            <p class="text-xs text-slate-400 mt-2 leading-relaxed">Formato ultra comprimido de última generación para desarrollos web, apps y cargas instantáneas.</p>
+                            <h5 class="text-base font-black text-slate-900 uppercase tracking-wide">Escudo WebP Liviano</h5>
+                            <p class="text-xs text-slate-600 mt-2 leading-relaxed">Formato ultra comprimido de última generación para desarrollos web, apps y cargas instantáneas.</p>
                         </div>
-                        <a href="images/ESCUDO.webp?v=2" download="DIBA-FBC-Escudo-Web.webp" class="mt-6 w-full py-3 bg-slate-800 hover:bg-slate-700 text-white font-black text-xs uppercase tracking-wider rounded-xl transition-all flex items-center justify-center gap-2 active:scale-95 border border-slate-700">
+                        <a href="images/ESCUDO.webp?v=2" download="DIBA-FBC-Escudo-Web.webp" class="mt-6 w-full py-3 bg-blue-700 hover:bg-blue-800 text-white font-black text-xs uppercase tracking-wider rounded-xl transition-all flex items-center justify-center gap-2 active:scale-95 shadow-md shadow-blue-700/20">
                             <i class="fas fa-download"></i> Descargar WebP
                         </a>
                     </div>
 
                     <!-- Favicon Oficial ICO -->
-                    <div class="bg-slate-900/70 border border-slate-800 rounded-3xl p-6 flex flex-col justify-between group hover:border-amber-400/50 transition-all">
+                    <div class="bg-slate-50 border border-slate-200 rounded-2xl p-6 flex flex-col justify-between group hover:border-slate-400 hover:shadow-lg transition-all">
                         <div>
                             <div class="flex items-center justify-between mb-4">
-                                <div class="w-12 h-12 rounded-2xl bg-emerald-500/10 flex items-center justify-center text-emerald-400 text-xl font-black">
+                                <div class="w-12 h-12 rounded-xl bg-slate-200 flex items-center justify-center text-slate-800 text-lg font-black">
                                     ICO
                                 </div>
-                                <span class="text-[10px] uppercase font-bold text-slate-400 bg-slate-800 px-2.5 py-1 rounded-lg">Icono Web</span>
+                                <span class="text-[10px] uppercase font-bold text-slate-600 bg-white border border-slate-200 px-2.5 py-1 rounded-md">Icono Web</span>
                             </div>
-                            <h5 class="text-base font-black text-white uppercase tracking-wide">Favicon Oficial ICO</h5>
-                            <p class="text-xs text-slate-400 mt-2 leading-relaxed">Icono de pestaña para navegadores y atajos en teléfonos móviles con múltiples resoluciones.</p>
+                            <h5 class="text-base font-black text-slate-900 uppercase tracking-wide">Favicon Oficial ICO</h5>
+                            <p class="text-xs text-slate-600 mt-2 leading-relaxed">Icono de pestaña para navegadores y atajos en teléfonos móviles con múltiples resoluciones.</p>
                         </div>
-                        <a href="images/ESCUDO.ico" download="DIBA-FBC-Favicon.ico" class="mt-6 w-full py-3 bg-slate-800 hover:bg-slate-700 text-white font-black text-xs uppercase tracking-wider rounded-xl transition-all flex items-center justify-center gap-2 active:scale-95 border border-slate-700">
+                        <a href="images/ESCUDO.ico" download="DIBA-FBC-Favicon.ico" class="mt-6 w-full py-3 bg-slate-800 hover:bg-slate-900 text-white font-black text-xs uppercase tracking-wider rounded-xl transition-all flex items-center justify-center gap-2 active:scale-95">
                             <i class="fas fa-download"></i> Descargar Favicon
                         </a>
                     </div>
                 </div>
 
                 <!-- Normas de Uso Rápido -->
-                <div class="mt-12 bg-slate-950/80 border border-slate-800/80 rounded-3xl p-8" data-aos="fade-up">
-                    <h5 class="text-sm font-black uppercase tracking-wider text-amber-400 mb-4 flex items-center gap-2">
-                        <i class="fas fa-circle-exclamation"></i> Guía Rápida de Aplicación de Marca
+                <div class="mt-12 bg-slate-50 border border-slate-200 rounded-2xl p-8" data-aos="fade-up">
+                    <h5 class="text-sm font-black uppercase tracking-wider text-slate-900 mb-4 flex items-center gap-2">
+                        <i class="fas fa-circle-exclamation text-amber-500"></i> Guía Rápida de Aplicación de Marca
                     </h5>
-                    <div class="grid md:grid-cols-3 gap-6 text-xs text-slate-300">
+                    <div class="grid md:grid-cols-3 gap-6 text-xs text-slate-600">
                         <div class="flex items-start gap-3">
-                            <i class="fas fa-check-circle text-emerald-400 mt-0.5 shrink-0"></i>
-                            <p><strong>Contraste seguro:</strong> Aplicar preferiblemente sobre fondos oscuros (azul marino, negro, gris carbón) para garantizar la lectura de los destellos dorados.</p>
+                            <i class="fas fa-check-circle text-emerald-600 mt-0.5 shrink-0"></i>
+                            <p><strong>Contraste seguro:</strong> Aplicar preferiblemente sobre fondos oscuros o con suficiente contraste para garantizar la lectura de los destellos dorados.</p>
                         </div>
                         <div class="flex items-start gap-3">
-                            <i class="fas fa-xmark-circle text-rose-400 mt-0.5 shrink-0"></i>
+                            <i class="fas fa-xmark-circle text-rose-600 mt-0.5 shrink-0"></i>
                             <p><strong>No deformar:</strong> Mantener siempre la relación de aspecto 1:1. No estirar, rotar ni alterar las proporciones de las estrellas ni las letras.</p>
                         </div>
                         <div class="flex items-start gap-3">
-                            <i class="fas fa-shield-cat text-amber-400 mt-0.5 shrink-0"></i>
+                            <i class="fas fa-shield-cat text-amber-600 mt-0.5 shrink-0"></i>
                             <p><strong>Área de reserva:</strong> Dejar un margen libre perimetral equivalente al 20% del ancho del escudo para evitar que otros elementos lo saturen.</p>
                         </div>
                     </div>
@@ -483,23 +462,23 @@
             </div>
         </section>
 
-        <!-- ── FOOTER DE IDENTIDAD / ENLACES RELACIONADOS ─────────── -->
-        <section class="py-16 bg-gradient-to-t from-slate-950 to-transparent border-t border-slate-900">
+        <!-- ── FOOTER DE IDENTIDAD / ENLACES RELACIONADOS ── -->
+        <section class="py-16 bg-slate-100 border-t border-slate-200">
             <div class="max-w-4xl mx-auto px-4 text-center">
-                <span class="text-xs uppercase font-bold tracking-[0.2em] text-slate-500 block mb-2">Conoce Más del Club</span>
-                <h4 class="text-2xl font-black uppercase italic text-white tracking-tight mb-8">Nuestra Identidad Vive en Cada Detalle</h4>
+                <span class="text-xs uppercase font-bold tracking-[0.2em] text-slate-500 block mb-2">CONOCE MÁS DEL CLUB</span>
+                <h4 class="text-2xl font-black uppercase italic text-slate-900 tracking-tight mb-8">Nuestra Identidad Vive en Cada Detalle</h4>
                 
                 <div class="grid sm:grid-cols-3 gap-4">
-                    <a href="Historia.html" class="p-5 rounded-2xl bg-slate-900/60 border border-slate-800 hover:border-amber-400/50 text-white font-bold text-xs uppercase tracking-wider transition-all hover:-translate-y-1 block">
-                        <i class="fas fa-book-open text-amber-400 text-lg mb-2 block"></i>
+                    <a href="Historia.html" class="p-5 rounded-2xl bg-white border border-slate-200 hover:border-amber-400 text-slate-900 font-bold text-xs uppercase tracking-wider transition-all hover:-translate-y-1 block shadow-sm hover:shadow-md">
+                        <i class="fas fa-book-open text-amber-500 text-lg mb-2 block"></i>
                         Historia del Club
                     </a>
-                    <a href="himno.html" class="p-5 rounded-2xl bg-slate-900/60 border border-slate-800 hover:border-amber-400/50 text-white font-bold text-xs uppercase tracking-wider transition-all hover:-translate-y-1 block">
-                        <i class="fas fa-music text-amber-400 text-lg mb-2 block"></i>
+                    <a href="himno.html" class="p-5 rounded-2xl bg-white border border-slate-200 hover:border-amber-400 text-slate-900 font-bold text-xs uppercase tracking-wider transition-all hover:-translate-y-1 block shadow-sm hover:shadow-md">
+                        <i class="fas fa-music text-amber-500 text-lg mb-2 block"></i>
                         Himno Oficial
                     </a>
-                    <a href="vision_mision.html" class="p-5 rounded-2xl bg-slate-900/60 border border-slate-800 hover:border-amber-400/50 text-white font-bold text-xs uppercase tracking-wider transition-all hover:-translate-y-1 block">
-                        <i class="fas fa-bullseye text-amber-400 text-lg mb-2 block"></i>
+                    <a href="vision_mision.html" class="p-5 rounded-2xl bg-white border border-slate-200 hover:border-amber-400 text-slate-900 font-bold text-xs uppercase tracking-wider transition-all hover:-translate-y-1 block shadow-sm hover:shadow-md">
+                        <i class="fas fa-bullseye text-amber-500 text-lg mb-2 block"></i>
                         Visión y Misión
                     </a>
                 </div>
@@ -529,21 +508,6 @@
             }).catch(err => {
                 console.error("Error al copiar al portapapeles:", err);
             });
-        }
-
-        // Resaltar suavemente el escudo al hacer clic en las partes anatómicas
-        function highlightShieldPart(part) {
-            const img = document.getElementById('main-crest-img');
-            if (!img) return;
-
-            img.classList.remove('animate__animated', 'animate__pulse');
-            void img.offsetWidth; // Force reflow
-            img.classList.add('animate__animated', 'animate__pulse');
-            
-            // Scroll suave hacia el escudo si está en móvil
-            if (window.innerWidth < 768) {
-                img.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }
         }
     </script>
 </body>
