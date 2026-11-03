@@ -238,9 +238,133 @@ def insert_match_to_supabase(match_data):
         print(f"[ERROR Supabase] {e}")
         return None
 
+def parse_training_message(msg_body, msg_timestamp=None, msg_created_at=None):
+    """
+    Analiza un texto de WhatsApp y extrae los datos de un entrenamiento o práctica.
+    Retorna None si el mensaje no es una convocatoria de entrenamiento.
+    """
+    if not msg_body:
+        return None
+
+    text = msg_body.strip()
+    text_lower = text.lower()
+
+    has_training = any(w in text_lower for w in ['entrenamiento', 'entrenos', 'entreno', 'practica', 'práctica', 'entrenar'])
+    is_match = ('vs ' in text_lower or 'vs.' in text_lower or ('partido' in text_lower and 'torneo' in text_lower))
+    if not has_training or is_match or len(text) < 30:
+        return None
+
+    has_details = any(w in text_lower for w in ['cancha', 'hora', 'lugar', 'pradera', 'parque', 'pm', 'am']) or re.search(r'\d{1,2}:\d{2}', text)
+    if not has_details:
+        return None
+
+    # 1. Hora
+    hora = "04:30 PM"
+    m_hora = re.search(r'hora\s*(?:en la cancha)?\s*:?[\s]*([0-9]{1,2}\s*[:; ]\s*[0-9]{2}(?:\s*(?:am|pm|a\s*m|p\s*m))?)', text, re.IGNORECASE) or \
+             re.search(r'\b([0-9]{1,2}:[0-9]{2}\s*(?:am|pm)?)\b', text, re.IGNORECASE)
+    if m_hora:
+        raw_h = m_hora.group(1).strip().upper().replace(';', ':').replace('A M', 'AM').replace('P M', 'PM')
+        raw_h = re.sub(r'(\d{1,2})\s+(\d{2})', r'\1:\2', raw_h)
+        raw_h = re.sub(r'\s+', ' ', raw_h)
+        if not re.search(r'AM|PM', raw_h):
+            h_num = int(raw_h.split(':')[0])
+            raw_h += " AM" if (h_num >= 6 and h_num <= 11) else " PM"
+        hora = raw_h
+
+    # 2. Lugar / Cancha
+    lugar = "Parque La Pradera"
+    m_lugar = re.search(r'(?:cancha|lugar|en la cancha|sede)\s*:?[\s]*([^\n\r]+)', text, re.IGNORECASE)
+    if m_lugar:
+        l_val = m_lugar.group(1).strip().rstrip('.')
+        l_val = re.split(r'\b(?:a\s+las|hora|de|desde|puntualidad|traer|con)\b', l_val, flags=re.IGNORECASE)[0].strip()
+        if len(l_val) > 2 and not any(w in l_val.lower() for w in ['sabado', 'domingo', 'hoy', 'mañana']):
+            lugar = l_val.title()
+    if 'pradera' in lugar.lower():
+        lugar = "Parque La Pradera"
+
+    # 3. Fecha
+    base_dt = datetime.now(timezone.utc)
+    if msg_timestamp:
+        try:
+            base_dt = datetime.fromtimestamp(int(msg_timestamp), tz=timezone.utc)
+        except Exception:
+            pass
+    elif msg_created_at:
+        try:
+            base_dt = datetime.fromisoformat(msg_created_at.replace('Z', '+00:00'))
+        except Exception:
+            pass
+
+    year = 2026
+    fecha_iso = f"{year}-{base_dt.month:02d}-{base_dt.day:02d}T17:00:00+00:00"
+    m_date = re.search(r'(\d{1,2})\s+de\s+([a-zA-Z]+)', text, re.IGNORECASE)
+    if m_date:
+        dia = int(m_date.group(1))
+        mes_str = m_date.group(2).lower()
+        mes = MESES_ES.get(mes_str, base_dt.month)
+        try:
+            dt = datetime(year, mes, dia, 17, 0, 0, tzinfo=timezone.utc)
+            fecha_iso = dt.isoformat()
+        except Exception:
+            pass
+
+    # 4. Categoría si la menciona con dígitos
+    cat_text = ""
+    m_cat = re.search(r'CATEGOR[IÍ]AS?\s*:?[\s]*([0-9\/\-\s]+)', text, re.IGNORECASE) or re.search(r'\b(201[0-9](?:\/[0-9]{2,4})?)\b', text)
+    if m_cat:
+        val_cat = m_cat.group(1).strip()
+        if re.search(r'\d', val_cat):
+            cat_text = f" - Cat. {val_cat}"
+    titulo = f"Entrenamiento DIBA FBC{cat_text}"
+
+    return {
+        "titulo": titulo,
+        "descripcion": text[:500],
+        "fecha": fecha_iso,
+        "hora": hora,
+        "lugar": lugar,
+        "observaciones": text[:2000]
+    }
+
+def get_existing_trainings():
+    url = f"{SUPABASE_URL}/rest/v1/entrenamientos?select=id,fecha,hora,titulo,lugar"
+    headers = {
+        "apikey": SUPABASE_KEY,
+        "Authorization": f"Bearer {SUPABASE_KEY}"
+    }
+    req = urllib.request.Request(url, headers=headers)
+    try:
+        with urllib.request.urlopen(req, timeout=10) as resp:
+            return json.loads(resp.read().decode('utf-8'))
+    except Exception as e:
+        print(f"[WARN Supabase] Fallo al leer entrenamientos: {e}")
+        return []
+
+def insert_training_to_supabase(training_data):
+    url = f"{SUPABASE_URL}/rest/v1/entrenamientos"
+    headers = {
+        "apikey": SUPABASE_KEY,
+        "Authorization": f"Bearer {SUPABASE_KEY}",
+        "Content-Type": "application/json",
+        "Prefer": "return=representation"
+    }
+    body = json.dumps(training_data).encode('utf-8')
+    req = urllib.request.Request(url, data=body, headers=headers, method="POST")
+    try:
+        with urllib.request.urlopen(req, timeout=10) as resp:
+            res = json.loads(resp.read().decode('utf-8'))
+            print(f"[SUPABASE OK] Entrenamiento insertado: {training_data['fecha'][:10]} {training_data['hora']} | {training_data['titulo']}")
+            return res
+    except urllib.error.HTTPError as e:
+        print(f"[ERROR Supabase Entrenos HTTP] {e.code}: {e.read().decode('utf-8')}")
+        return None
+    except Exception as e:
+        print(f"[ERROR Supabase Entrenos] {e}")
+        return None
+
 def sync_whatsapp_matches():
     print("\n=======================================================")
-    print("DIBA FBC - SINCRONIZADOR DE PARTIDOS DESDE WHATSAPP")
+    print("DIBA FBC - SINCRONIZADOR DE PARTIDOS Y ENTRENAMIENTOS")
     print(f"Sesión OpenWA: {OPENWA_SESSION_ID}")
     print(f"Chats objetivo: {', '.join(TARGET_CHATS)}")
     print("=======================================================\n")
@@ -251,49 +375,76 @@ def sync_whatsapp_matches():
         print(f"Mensajes recuperados de {chat_id}: {len(msgs)}")
         all_messages.extend(msgs)
 
-    existing = get_existing_matches()
-    print(f"Partidos existentes en Supabase: {len(existing)}")
+    existing_matches = get_existing_matches()
+    existing_trainings = get_existing_trainings()
+    print(f"Partidos existentes en Supabase: {len(existing_matches)}")
+    print(f"Entrenamientos existentes en Supabase: {len(existing_trainings)}")
 
-    synced_count = 0
-    ignored_count = 0
+    synced_matches = 0
+    synced_trainings = 0
     duplicate_count = 0
+    ignored_count = 0
 
     for msg in all_messages:
         body = msg.get('body') or ''
         timestamp = msg.get('timestamp')
         created_at = msg.get('createdAt')
 
-        parsed = parse_match_message(body, timestamp, created_at)
-        if not parsed:
-            ignored_count += 1
+        # 1. Intentar como Partido
+        parsed_match = parse_match_message(body, timestamp, created_at)
+        if parsed_match:
+            parsed_date_prefix = parsed_match['fecha'][:10]
+            is_dup = False
+            for ex in existing_matches:
+                ex_date_prefix = (ex.get('fecha') or '')[:10]
+                if (ex_date_prefix == parsed_date_prefix and
+                    str(ex.get('categoria', '')).strip() == parsed_match['categoria'] and
+                    str(ex.get('hora', '')).strip().upper() == parsed_match['hora'].upper()):
+                    is_dup = True
+                    break
+
+            if is_dup:
+                duplicate_count += 1
+                continue
+
+            inserted = insert_match_to_supabase(parsed_match)
+            if inserted:
+                synced_matches += 1
+                existing_matches.append(parsed_match)
             continue
 
-        parsed_date_prefix = parsed['fecha'][:10]
-        is_dup = False
-        for ex in existing:
-            ex_date_prefix = (ex.get('fecha') or '')[:10]
-            if (ex_date_prefix == parsed_date_prefix and
-                str(ex.get('categoria', '')).strip() == parsed['categoria'] and
-                str(ex.get('hora', '')).strip().upper() == parsed['hora'].upper()):
-                is_dup = True
-                break
+        # 2. Intentar como Entrenamiento
+        parsed_training = parse_training_message(body, timestamp, created_at)
+        if parsed_training:
+            parsed_date_prefix = parsed_training['fecha'][:10]
+            is_dup = False
+            for ex in existing_trainings:
+                ex_date_prefix = (ex.get('fecha') or '')[:10]
+                if (ex_date_prefix == parsed_date_prefix and
+                    str(ex.get('hora', '')).strip().upper() == parsed_training['hora'].upper()):
+                    is_dup = True
+                    break
 
-        if is_dup:
-            duplicate_count += 1
+            if is_dup:
+                duplicate_count += 1
+                continue
+
+            inserted = insert_training_to_supabase(parsed_training)
+            if inserted:
+                synced_trainings += 1
+                existing_trainings.append(parsed_training)
             continue
 
-        inserted = insert_match_to_supabase(parsed)
-        if inserted:
-            synced_count += 1
-            existing.append(parsed)
+        ignored_count += 1
 
     print("\n───────────────────────────────────────────────────────")
     print("Resumen de sincronización:")
-    print(f"  Partidos nuevos insertados: {synced_count}")
-    print(f"  Partidos omitidos por duplicado: {duplicate_count}")
+    print(f"  Partidos nuevos insertados: {synced_matches}")
+    print(f"  Entrenamientos nuevos insertados: {synced_trainings}")
+    print(f"  Eventos omitidos por duplicado: {duplicate_count}")
     print(f"  Mensajes no relacionados: {ignored_count}")
     print("───────────────────────────────────────────────────────\n")
-    return synced_count
+    return synced_matches + synced_trainings
 
 if __name__ == "__main__":
     sync_whatsapp_matches()

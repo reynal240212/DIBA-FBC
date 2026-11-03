@@ -23,7 +23,7 @@ export async function initMatchBanner() {
         // Obtener partidos y entrenamientos en paralelo
         // Solo cols necesarias + filtro de fecha para no descargar todo el historial
         const PARTIDOS_COLS = 'id, fecha, hora, equipolocal, equipovisitante, resultado, categoria, Cancha, descripcion, escudo_local, escudo_visitante, escudo';
-        const ENTRENOS_COLS = 'id, fecha, hora, titulo, categoria, lugar';
+        const ENTRENOS_COLS = 'id, fecha, hora, titulo, lugar, descripcion, observaciones';
 
         const [partidosRes, entrenamientosRes] = await Promise.all([
             supabase.from('partidos').select(PARTIDOS_COLS)
@@ -44,15 +44,22 @@ export async function initMatchBanner() {
             dateOnly: p.fecha?.includes('T') ? p.fecha.split('T')[0] : (p.fecha || '')
         }));
 
-        const entrenamientos = (entrenamientosRes.data || []).map(e => ({
-            ...e,
-            isTraining: true,
-            equipolocal: 'DIBA FBC',
-            equipovisitante: 'ENTRENAMIENTO',
-            Cancha: e.lugar || 'Parque La Pradera',
-            categoria: e.categoria || 'GENERAL',
-            dateOnly: e.fecha?.includes('T') ? e.fecha.split('T')[0] : (e.fecha || '')
-        }));
+        const entrenamientos = (entrenamientosRes.data || []).map(e => {
+            const fullTxt = `${e.titulo || ''} ${e.descripcion || ''} ${e.observaciones || ''}`;
+            let cat = 'GENERAL';
+            const catMatch = fullTxt.match(/categor[ií]as?\s*:?[\s]*([0-9\/\-\s]+)/i) || fullTxt.match(/\b(201[0-9](?:\/[0-9]{2,4})?)\b/i);
+            if (catMatch) cat = catMatch[1].trim();
+
+            return {
+                ...e,
+                isTraining: true,
+                equipolocal: 'DIBA FBC',
+                equipovisitante: 'ENTRENAMIENTO',
+                Cancha: e.lugar || 'Parque La Pradera',
+                categoria: cat,
+                dateOnly: e.fecha?.includes('T') ? e.fecha.split('T')[0] : (e.fecha || '')
+            };
+        });
 
         // Combinar todos los eventos
         const allEvents = [...partidos, ...entrenamientos];

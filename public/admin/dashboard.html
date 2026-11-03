@@ -365,7 +365,7 @@
 
             const todayStr = new Date().toISOString().split('T')[0];
             const MATCH_COLS = 'id, fecha, hora, equipolocal, equipovisitante, categoria, Cancha';
-            const ENTRENO_COLS = 'id, fecha, hora, titulo, categoria, lugar';
+            const ENTRENO_COLS = 'id, fecha, hora, titulo, lugar, descripcion, observaciones';
 
             const [partidosRes, entrenamientosRes] = await Promise.all([
                 supabase.from('partidos').select(MATCH_COLS)

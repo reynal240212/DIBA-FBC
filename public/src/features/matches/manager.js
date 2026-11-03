@@ -484,11 +484,17 @@ export async function cargarEntrenamientos() {
   mostrarSpinner('entrenamientos-spinner', true);
 
   let query = supabase.from('entrenamientos')
-    .select('id, fecha, hora, titulo, categoria, lugar, descripcion, observaciones');
+    .select('id, fecha, hora, titulo, lugar, descripcion, observaciones');
   if (fecha) query = query.gte('fecha', fecha).lte('fecha', fecha + 'T23:59:59Z');
-  if (cat) query = query.ilike('categoria', `%${cat}%`);
 
-  const { data: filtrados, error } = await query.order('fecha', { ascending: false }).limit(30);
+  let { data: filtrados, error } = await query.order('fecha', { ascending: false }).limit(30);
+
+  if (filtrados && cat) {
+    filtrados = filtrados.filter(e => {
+      const txt = `${e.titulo || ''} ${e.descripcion || ''} ${e.observaciones || ''}`.toLowerCase();
+      return txt.includes(cat.toLowerCase());
+    });
+  }
 
   mostrarSpinner('entrenamientos-spinner', false);
 
