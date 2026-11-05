@@ -3,6 +3,7 @@ services:
     name: openwa-diba
     runtime: docker
     rootDir: openwa
+    plan: starter
     dockerfilePath: Dockerfile
     envVars:
       - key: PORT
@@ -10,17 +11,19 @@ services:
       - key: NODE_ENV
         value: production
       - key: ENGINE_TYPE
-        value: whatsapp-web.js
+        value: baileys
       - key: PUPPETEER_HEADLESS
         value: "true"
       - key: DATABASE_TYPE
         value: sqlite
       - key: SESSION_DATA_PATH
-        value: /data/sessions
+        value: /app/data/sessions
+      - key: BAILEYS_AUTH_DIR
+        value: /app/data/baileys
       - key: STORAGE_TYPE
         value: local
       - key: STORAGE_LOCAL_PATH
-        value: /data/storage
+        value: /app/data/storage
       - key: REDIS_ENABLED
         value: "false"
       - key: QUEUE_ENABLED
@@ -32,12 +35,13 @@ services:
       - key: MCP_ENABLED
         value: "false"
       - key: AUTO_START_SESSIONS
-        value: "false"
+        value: "true"
       - key: API_MASTER_KEY
         value: "diba-fbc-2026"
       - key: CORS_ORIGINS
-        value: "https://diba-fbc.vercel.app"
+        value: "https://diba-fbc.vercel.app,http://localhost:3000,http://localhost:5173"
     disk:
-      mountPath: /data
+      name: openwa-data
+      mountPath: /app/data
       sizeGB: 1
     healthCheckPath: /api/health
