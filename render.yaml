@@ -3,7 +3,7 @@ services:
     name: openwa-diba
     runtime: docker
     rootDir: openwa
-    plan: starter
+    plan: free
     dockerfilePath: Dockerfile
     envVars:
       - key: PORT
@@ -40,8 +40,4 @@ services:
         value: "diba-fbc-2026"
       - key: CORS_ORIGINS
         value: "https://diba-fbc.vercel.app,http://localhost:3000,http://localhost:5173"
-    disk:
-      name: openwa-data
-      mountPath: /app/data
-      sizeGB: 1
     healthCheckPath: /api/health
