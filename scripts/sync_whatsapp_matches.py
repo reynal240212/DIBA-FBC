@@ -19,8 +19,45 @@ if hasattr(sys.stdout, 'reconfigure'):
 import os
 # ── Configuración (Soporta Render en la nube o local) ─────────
 OPENWA_BASE_URL = os.environ.get("OPENWA_BASE_URL", "http://localhost:2785").rstrip('/')
-OPENWA_API_KEY = os.environ.get("OPENWA_API_KEY", "dev-admin-key")
-OPENWA_SESSION_ID = os.environ.get("OPENWA_SESSION_ID", "4c331538-1a66-4002-93d2-cb49e5fa2ad3")
+# Instancia local activa: servicio Windows "CostaConnectOpenWA" (dev-admin-key fue deshabilitada).
+LOCAL_OPENWA_ENV = r"C:\Users\Public\Documents\automatizacion de call centerr\openwa\.env"
+
+
+def _read_local_openwa_key():
+    """Lee API_MASTER_KEY del .env del OpenWA local (solo si existe en esta máquina)."""
+    try:
+        with open(LOCAL_OPENWA_ENV, encoding="utf-8") as fh:
+            for line in fh:
+                if line.strip().startswith("API_MASTER_KEY="):
+                    return line.split("=", 1)[1].strip().strip('"').strip("'")
+    except OSError:
+        pass
+    return ""
+
+
+OPENWA_API_KEY = os.environ.get("OPENWA_API_KEY") or _read_local_openwa_key()
+# Sesión de la línea 573246656083. Si no se define el ID, se resuelve por nombre o teléfono.
+OPENWA_SESSION_NAME = os.environ.get("OPENWA_SESSION_NAME", "session-Admin")
+OPENWA_SESSION_PHONE = os.environ.get("OPENWA_SESSION_PHONE", "573246656083")
+
+
+def _resolve_session_id():
+    try:
+        req = urllib.request.Request(f"{OPENWA_BASE_URL}/api/sessions", headers={"x-api-key": OPENWA_API_KEY})
+        with urllib.request.urlopen(req, timeout=15) as resp:
+            sessions = json.loads(resp.read().decode('utf-8'))
+        for s in sessions:
+            if s.get("name") == OPENWA_SESSION_NAME:
+                return s["id"]
+        for s in sessions:
+            if s.get("phone") == OPENWA_SESSION_PHONE:
+                return s["id"]
+    except Exception as e:
+        print(f"[WARN OpenWA] No se pudo resolver la sesión: {e}")
+    return "121baeff-f600-4e8a-815f-1d2058e4b9c5"
+
+
+OPENWA_SESSION_ID = os.environ.get("OPENWA_SESSION_ID") or _resolve_session_id()
 TARGET_CHATS = [
     "120363141323973958@g.us",  # Grupo Oficial: Deportivo internacional
     "573128051695@c.us"         # Contacto: Reinaldo Pérez (3128051695)

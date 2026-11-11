@@ -861,6 +861,25 @@
       });
     });
 
+    // Auto-activación de pestaña desde parámetro URL (?tab=entrenamientos-tab o ?tab=entrenamientos)
+    document.addEventListener('DOMContentLoaded', () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const tabParam = urlParams.get('tab');
+      if (tabParam) {
+        const tabId = tabParam.endsWith('-tab') ? tabParam : `${tabParam}-tab`;
+        const btn = document.querySelector(`.tab-btn[data-tab="${tabId}"]`);
+        if (btn) {
+          btn.click();
+          const target = document.getElementById(tabId);
+          if (target) {
+            setTimeout(() => {
+              target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 200);
+          }
+        }
+      }
+    });
+
     // Modal tabs
     document.querySelectorAll('.modal-tab-btn').forEach(btn => {
       btn.addEventListener('click', (e) => {
