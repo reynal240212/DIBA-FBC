@@ -1,6 +1,6 @@
 /**
  * DIBA FBC - Instagram Feed Manager
- * Integración dinámica usando Behold.so
+ * Integración dinámica usando Behold.so con validación de caducidad de firmas CDN y fallback institucional
  */
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -11,6 +11,57 @@ document.addEventListener("DOMContentLoaded", function () {
     // ID REAL DE DIBA FBC - Vinculado a Behold.so
     const BEHOLD_ID = '5mpGVzRLEdsEQpFCbEnH';
     const API_URL = `https://feeds.behold.so/${BEHOLD_ID}`;
+
+    // Colección de imágenes locales institucionales de respaldo en caso de firmas vencidas de Instagram
+    const FALLBACK_CLUB_IMAGES = [
+        'images/calentamiento.webp',
+        'images/2014_2015.webp',
+        'images/final categoria 2010.webp',
+        'images/entrega de indumentaria 1.webp',
+        'images/campeon2010.webp',
+        'images/charla.webp',
+        'images/cultura ciudadana 2.webp',
+        'images/campeon2002.webp',
+        'images/estadio.webp'
+    ];
+
+    /**
+     * Valida si una URL de CDN de Instagram/Facebook tiene su token de expiración 'oe' vencido.
+     * Esto evita que el navegador intente hacer peticiones con firmas expiradas que arrojan 403 Forbidden.
+     */
+    const isInstagramUrlExpired = (url) => {
+        if (!url) return true;
+        try {
+            const u = new URL(url);
+            if (u.hostname.includes('cdninstagram.com') || u.hostname.includes('fbcdn.net')) {
+                const oe = u.searchParams.get('oe');
+                if (oe) {
+                    const expiryMs = parseInt(oe, 16) * 1000;
+                    if (!isNaN(expiryMs) && Date.now() >= expiryMs) {
+                        return true;
+                    }
+                }
+            }
+        } catch (e) {
+            return true;
+        }
+        return false;
+    };
+
+    /**
+     * Resuelve la mejor imagen disponible para la publicación
+     */
+    const resolvePostImageUrl = (post, index) => {
+        const fallback = FALLBACK_CLUB_IMAGES[index % FALLBACK_CLUB_IMAGES.length];
+        const rawUrl = post.mediaType === 'VIDEO' ? (post.thumbnailUrl || post.mediaUrl) : post.mediaUrl;
+
+        // Si la URL directa de Instagram ya expiró según su timestamp 'oe', usamos el fallback local
+        if (isInstagramUrlExpired(rawUrl)) {
+            return fallback;
+        }
+
+        return rawUrl || fallback;
+    };
 
     const renderSkeleton = () => {
         let skeletons = '';
@@ -29,8 +80,12 @@ document.addEventListener("DOMContentLoaded", function () {
     };
 
     const formatDate = (dateStr) => {
-        const date = new Date(dateStr);
-        return new Intl.DateTimeFormat('es-ES', { day: 'numeric', month: 'long', year: 'numeric' }).format(date);
+        try {
+            const date = new Date(dateStr);
+            return new Intl.DateTimeFormat('es-ES', { day: 'numeric', month: 'long', year: 'numeric' }).format(date);
+        } catch (e) {
+            return 'Reciente';
+        }
     };
 
     const renderFeed = (posts) => {
@@ -47,9 +102,10 @@ document.addEventListener("DOMContentLoaded", function () {
         feedContainer.innerHTML = '';
         posts.slice(0, 9).forEach((post, index) => {
             const isVideo = post.mediaType === 'VIDEO';
-            const postUrl = post.permalink;
-            const imageUrl = post.mediaType === 'VIDEO' ? post.thumbnailUrl : post.mediaUrl;
-            const caption = post.caption || 'DIBA FBC #FuerzayLealtad';
+            const postUrl = post.permalink || 'https://www.instagram.com/diba_fbc/';
+            const imageUrl = resolvePostImageUrl(post, index);
+            const fallbackUrl = FALLBACK_CLUB_IMAGES[index % FALLBACK_CLUB_IMAGES.length];
+            const caption = post.caption || post.prunedCaption || 'DIBA FBC #FuerzayLealtad';
 
             const article = document.createElement('article');
             article.className = "group bg-white rounded-2xl overflow-hidden shadow-lg shadow-slate-200/50 border border-slate-100 flex flex-col transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl";
@@ -58,10 +114,15 @@ document.addEventListener("DOMContentLoaded", function () {
 
             article.innerHTML = `
                 <div class="relative aspect-square overflow-hidden bg-slate-900">
-                    <img src="${imageUrl}" alt="Instagram Post" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-90 group-hover:opacity-100">
+                    <img src="${imageUrl}" 
+                         alt="Publicación DIBA FBC" 
+                         loading="lazy"
+                         referrerpolicy="no-referrer"
+                         onerror="this.onerror=null; this.src='${fallbackUrl}';"
+                         class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-90 group-hover:opacity-100">
                     
                     ${isVideo ? `
-                        <div class="absolute top-4 right-4 text-white drop-shadow-lg">
+                        <div class="absolute top-4 right-4 text-white drop-shadow-lg z-10">
                             <i class="fas fa-play-circle text-2xl"></i>
                         </div>
                     ` : ''}
@@ -69,7 +130,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     <div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent opacity-60"></div>
                     
                     <!-- Hover Overlay -->
-                    <a href="${postUrl}" target="_blank" class="absolute inset-0 flex items-center justify-center bg-amber-500/20 backdrop-blur-[2px] opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20">
+                    <a href="${postUrl}" target="_blank" rel="noopener noreferrer" class="absolute inset-0 flex items-center justify-center bg-amber-500/20 backdrop-blur-[2px] opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20">
                          <span class="bg-white text-slate-900 font-black py-2 px-6 rounded-full text-xs uppercase tracking-widest shadow-xl transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
                             Ver en Instagram
                          </span>
@@ -88,9 +149,9 @@ document.addEventListener("DOMContentLoaded", function () {
                     <div class="mt-auto flex items-center justify-between pt-4 border-t border-slate-50">
                         <div class="flex items-center gap-4 text-slate-400 text-xs font-bold">
                             <span><i class="far fa-heart mr-1"></i> ${post.likeCount || 0}</span>
-                            <span><i class="far fa-comment mr-1"></i> ${post.commentCount || 0}</span>
+                            <span><i class="far fa-comment mr-1"></i> ${post.commentsCount || post.commentCount || 0}</span>
                         </div>
-                        <a href="${postUrl}" target="_blank" class="text-amber-500 hover:text-amber-600">
+                        <a href="${postUrl}" target="_blank" rel="noopener noreferrer" class="text-amber-500 hover:text-amber-600 transition-colors">
                             <i class="fab fa-instagram text-xl"></i>
                         </a>
                     </div>
@@ -118,10 +179,9 @@ document.addEventListener("DOMContentLoaded", function () {
                             El Feed de Instagram está listo, pero requiere un <b>ID de Behold.so</b> válido vinculado a la cuenta del club.
                         </p>
                         <div class="flex flex-col gap-3 items-center">
-                            <a href="https://behold.so/" target="_blank" class="bg-slate-900 text-white text-[10px] font-black uppercase tracking-widest px-6 py-3 rounded-xl hover:bg-amber-500 hover:text-slate-900 transition-all">
+                            <a href="https://behold.so/" target="_blank" rel="noopener noreferrer" class="bg-slate-900 text-white text-[10px] font-black uppercase tracking-widest px-6 py-3 rounded-xl hover:bg-amber-500 hover:text-slate-900 transition-all">
                                 Obtener ID en Behold.so
                             </a>
-                            <span class="text-[10px] text-slate-400">Instrucciones enviadas al chat de Antigravity</span>
                         </div>
                     </div>
                 `;
@@ -129,7 +189,7 @@ document.addEventListener("DOMContentLoaded", function () {
             }
             if (!response.ok) throw new Error('Network response was not ok');
             const data = await response.json();
-            renderFeed(data.posts);
+            renderFeed(data.posts || data);
         } catch (error) {
             console.error('Error fetching Instagram feed:', error);
             renderFeed([]);
