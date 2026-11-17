@@ -12,6 +12,12 @@ import { initPublicPlayers, initScorers } from './features/players/public.js';
 import { initPrimaryHeroAnimations, initSharedHeroAnimations } from './features/animations/hero.js';
 
 document.addEventListener('DOMContentLoaded', () => {
+    // 0. Service Worker
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/service-worker.js')
+            .catch(err => console.error('Error registrando SW:', err));
+    }
+
     // 1. Base UI
     initTheme();
     initCommonUI();

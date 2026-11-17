@@ -4,7 +4,7 @@
 //  + Soporte completo de Web Push Notifications
 // ============================================================
 
-const CACHE_VERSION = 'diba-v5';
+const CACHE_VERSION = 'diba-v6';
 const CACHE_STATIC = `${CACHE_VERSION}-static`;
 const CACHE_PAGES = `${CACHE_VERSION}-pages`;
 
@@ -139,7 +139,7 @@ self.addEventListener('fetch', (event) => {
 
 // ── WEB PUSH: mostrar notificación ─────────────────────────
 self.addEventListener('push', (event) => {
-  let data = { title: 'DIBA FBC', body: '¡Tienes una nueva notificación!', url: '/' };
+  let data = { title: 'DIBA FBC', body: '¡Tienes una nueva notificación!', url: '/chat.html' };
   try {
     if (event.data) data = { ...data, ...event.data.json() };
   } catch (e) { /* payload vacío */ }
@@ -149,7 +149,7 @@ self.addEventListener('push', (event) => {
     icon: '/images/ESCUDO.webp',
     badge: '/images/ESCUDO.webp',
     vibrate: [200, 100, 200],
-    data: { url: data.url || '/' },
+    data: { url: data.url || '/chat.html' },
     actions: [
       { action: 'open', title: 'Ver más' },
       { action: 'close', title: 'Cerrar' }

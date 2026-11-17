@@ -14,7 +14,7 @@ const { SUPABASE_URL, SUPABASE_ANON_KEY } = window.DIBA_CONFIG;
 
         // Registro de Service Worker para Notificaciones
         if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('sw.js')
+            navigator.serviceWorker.register('/service-worker.js')
                 .then(reg => console.log('SW registrado', reg))
                 .catch(err => console.log('Error SW', err));
         }
