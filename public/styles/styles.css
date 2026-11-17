@@ -1,35 +1,36 @@
-/* DIBA FBC - Hojas de Estilo Globales y Overrides (Paleta Blanco Primordial) */
+/* DIBA FBC - Hojas de Estilo Globales (Dark Luxury Institucional) */
 
 :root {
-  --bg-white: #ffffff;
-  --bg-soft: #f8fafc;
-  --bg-card: #ffffff;
-  --text-dark: #0f172a;
-  --text-muted: #475569;
-  --gold: #eab308;
+  --bg-dark: #020617;
+  --bg-slate: #0b1120;
+  --bg-card: rgba(15, 23, 42, 0.7);
+  --text-light: #f8fafc;
+  --text-dark: #f8fafc;
+  --text-muted: #94a3b8;
+  --gold: #f59e0b;
   --gold-hover: #d97706;
-  --glass-border: #e2e8f0;
+  --glass-border: rgba(255, 255, 255, 0.1);
 }
 
-/* 1. Reset Global - Blanco Predominante */
+/* 1. Reset Global - Dark Luxury Institucional */
 body {
-  background-color: var(--bg-soft) !important;
-  color: var(--text-dark) !important;
+  background-color: var(--bg-dark) !important;
+  color: var(--text-light) !important;
   font-family: 'Outfit', 'Montserrat', -apple-system, BlinkMacSystemFont, sans-serif !important;
 }
 
-/* Scrollbar Premium Claro */
+/* Scrollbar Dark Luxury */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
 }
 ::-webkit-scrollbar-track {
-  background: var(--bg-soft);
+  background: var(--bg-dark);
 }
 ::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
+  background: #1e293b;
   border-radius: 9999px;
-  border: 2px solid var(--bg-soft);
+  border: 2px solid var(--bg-dark);
 }
 ::-webkit-scrollbar-thumb:hover {
   background: var(--gold);
@@ -37,45 +38,46 @@ body {
 
 /* 2. Textos y Títulos */
 .text-primary {
-  color: var(--gold);
+  color: var(--gold) !important;
 }
 
 .text-success {
-  color: #10b981;
+  color: #10b981 !important;
 }
 
 /* 3. Formularios y Entradas */
 input, textarea, select, .input-field {
-  background-color: #ffffff !important;
-  color: #0f172a !important;
+  background-color: #0f172a !important;
+  color: #f8fafc !important;
   border: 1px solid var(--glass-border) !important;
   transition: all 0.3s ease !important;
 }
 
 input:focus, textarea:focus, select:focus, .input-field:focus {
   border-color: var(--gold) !important;
-  box-shadow: 0 0 0 3px rgba(234, 179, 8, 0.15) !important;
-  background-color: #ffffff !important;
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.2) !important;
+  background-color: #0f172a !important;
 }
 
 /* 4. Overrides de Componentes */
 .card, .content-section, .carta-container, .pdf-viewer, .pdf-placeholder, .photo-card {
-  background: #ffffff !important;
+  background: rgba(15, 23, 42, 0.7) !important;
   border: 1px solid var(--glass-border) !important;
-  box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.05) !important;
-  color: var(--text-dark) !important;
+  box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.5) !important;
+  color: var(--text-light) !important;
+  backdrop-filter: blur(16px) !important;
 }
 
 .list-group-item, .fixture-item, .stat-item {
-  background: #ffffff !important;
+  background: rgba(15, 23, 42, 0.7) !important;
   border: 1px solid var(--glass-border) !important;
-  color: var(--text-dark) !important;
+  color: var(--text-light) !important;
   transition: all 0.25s ease !important;
 }
 
 .list-group-item:hover, .fixture-item:hover {
-  background: #f8fafc !important;
-  color: #0f172a !important;
+  background: rgba(255, 255, 255, 0.05) !important;
+  color: #ffffff !important;
 }
 
 .month-header {
@@ -86,26 +88,26 @@ input:focus, textarea:focus, select:focus, .input-field:focus {
 }
 
 .table {
-  color: var(--text-dark) !important;
+  color: var(--text-light) !important;
 }
 
 .table td, .table th {
-  border-color: rgba(255, 255, 255, 0.05) !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
   background: transparent !important;
 }
 
 .table-striped tbody tr:nth-of-type(odd) {
-  background-color: rgba(255, 255, 255, 0.01) !important;
+  background-color: rgba(255, 255, 255, 0.02) !important;
 }
 
 .table-hover tbody tr:hover td {
-  background-color: rgba(255, 255, 255, 0.03) !important;
+  background-color: rgba(255, 255, 255, 0.05) !important;
   color: #ffffff !important;
 }
 
 .bg-light, .bg-white, .nav-container {
   background-color: var(--bg-dark) !important;
-  border-color: rgba(255, 255, 255, 0.05) !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
 }
 
 /* Botones de Bootstrap */
@@ -122,12 +124,12 @@ input:focus, textarea:focus, select:focus, .input-field:focus {
   background-color: var(--gold-hover) !important;
   border-color: var(--gold-hover) !important;
   transform: translateY(-2px);
-  box-shadow: 0 10px 20px rgba(255, 215, 0, 0.2) !important;
+  box-shadow: 0 10px 25px rgba(245, 158, 11, 0.3) !important;
 }
 
 .btn-outline-primary {
   color: var(--gold) !important;
-  border-color: rgba(255, 215, 0, 0.4) !important;
+  border-color: rgba(245, 158, 11, 0.4) !important;
   border-radius: 9999px !important;
   transition: all 0.3s ease !important;
 }
@@ -185,7 +187,7 @@ input:focus, textarea:focus, select:focus, .input-field:focus {
 }
 
 .scorers-info {
-  background: rgba(255, 255, 255, 0.01) !important;
+  background: rgba(255, 255, 255, 0.02) !important;
 }
 
 .score {

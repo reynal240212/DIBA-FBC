@@ -1,13 +1,18 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" class="scroll-smooth">
 
 <head>
   <meta charset="UTF-8" />
-  <title>Historia - DIBA FBC</title>
+  <title>Historia Oficial — DIBA FBC</title>
   <link rel="icon" href="images/ESCUDO.ico" type="image/x-icon" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description"
-    content="Conoce la historia y los momentos más destacados de DIBA FBC, un recorrido lleno de pasión y logros deportivos." />
+    content="Conoce la historia, palmarés y momentos más destacados de DIBA FBC, un recorrido lleno de pasión y gloria deportiva en Barranquilla." />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,600;0,700;0,800;0,900;1,700&family=Outfit:wght@400;600;700;900&display=swap" rel="stylesheet">
 
   <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
@@ -23,13 +28,19 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/css/lightbox.min.css" />
 
   <!-- Tailwind CSS CDN -->
-  <script src="https://cdn.tailwindcss.com"></script> <!-- [web:25][web:15] -->
+  <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- Estilos globales opcionales -->
-  <link rel="stylesheet" href="styles/styles.css" />
+  <style>
+    body {
+      font-family: 'Montserrat', sans-serif;
+    }
+    .font-display {
+      font-family: 'Outfit', sans-serif;
+    }
+  </style>
 </head>
 
-<body class="bg-slate-50 text-slate-900 selection:bg-yellow-500/30">
+<body class="bg-slate-950 text-slate-100 font-sans selection:bg-amber-500/30 overflow-x-hidden min-h-screen flex flex-col justify-between">
   <!-- Service Worker -->
   <script>
     if ("serviceWorker" in navigator) {
@@ -41,187 +52,202 @@
   </script>
 
   <div id="navbar-container"></div>
-  <div id="hero-container"></div>
-<!-- TIMELINE / MOMENTOS DESTACADOS INMERSIVO -->
-  <section class="py-16 bg-slate-50 relative overflow-hidden" role="region" aria-labelledby="timeline-heading">
-    <!-- Decoración de fondo -->
-    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-px h-full bg-slate-200 z-0 hidden md:block"></div>
 
-    <div class="max-w-6xl mx-auto px-4 relative z-10">
-      <div class="text-center mb-16">
-        <h2 id="timeline-heading" class="text-4xl md:text-5xl font-black text-slate-900 tracking-tight">
-          Nuestra <span class="text-amber-500">Trayectoria</span>
-        </h2>
-        <p class="mt-4 text-slate-500 max-w-2xl mx-auto uppercase tracking-widest text-xs font-bold">
-          DÉCADAS DE PASIÓN, ESFUERZO Y GLORIA DEPORTIVA
+  <main class="w-full">
+    <!-- HERO DE HISTORIA (Dark Luxury) -->
+    <section class="relative pt-36 pb-20 overflow-hidden border-b border-white/10 bg-[radial-gradient(circle_at_50%_-20%,#1e293b_0%,#070b14_100%)] text-white">
+      <div class="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-amber-500/10 rounded-full blur-[140px] pointer-events-none"></div>
+      <div class="absolute top-1/3 right-10 w-[450px] h-[450px] bg-blue-600/10 rounded-full blur-[130px] pointer-events-none"></div>
+
+      <div class="max-w-6xl mx-auto px-4 relative z-10 text-center" data-aos="fade-down">
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-400 text-xs font-black uppercase tracking-[0.25em] mb-5 shadow-lg backdrop-blur-md">
+          <i class="fas fa-trophy text-xs"></i> Legado &amp; Gloria Deportiva
+        </div>
+        <h1 class="text-5xl sm:text-6xl md:text-7xl font-black uppercase italic tracking-tight font-display text-white leading-none">
+          Nuestra <span class="text-amber-500 drop-shadow-[0_0_30px_rgba(245,158,11,0.35)]">Historia</span>
+        </h1>
+        <p class="text-slate-300 mt-5 max-w-2xl mx-auto text-base sm:text-lg leading-relaxed font-normal">
+          DÉCADAS DE PASIÓN, ESFUERZO Y TRIUNFOS. Conoce el camino recorrido por DIBA FBC forjando campeones dentro y fuera de la cancha en Barranquilla.
         </p>
       </div>
+    </section>
 
-      <div class="space-y-12 md:space-y-0 relative">
-        <!-- 1999 -->
-        <div class="flex flex-col md:flex-row items-center justify-between mb-16" data-aos="fade-up">
-          <div class="md:w-[45%] bg-white p-6 rounded-2xl border border-slate-200 shadow-md text-center md:text-right mb-6 md:mb-0">
-            <span class="text-3xl font-black text-blue-700 block mb-2">1999</span>
-            <h3 class="text-xl font-bold text-slate-900 mb-3">Campeón Territorial</h3>
-            <p class="text-sm text-slate-600 leading-relaxed">Iniciamos nuestra senda ganadora con el primer título
-              importante, marcando el comienzo de una era de triunfos para el club.</p>
-          </div>
-          <div
-            class="w-10 h-10 bg-blue-700 rounded-full border-4 border-white shadow-xl z-20 hidden md:flex items-center justify-center">
-            <i class="fas fa-trophy text-white text-xs"></i>
-          </div>
-          <div class="md:w-[45%]">
-            <a href="https://scontent-bog2-1.xx.fbcdn.net/v/t39.30808-6/462653696_3807840056124001_6948574123012724707_n.jpg?_nc_cat=100&ccb=1-7&_nc_sid=833d8c&_nc_eui2=AeFkV314E1tu_Dz36WqKOe7UKvUB8damhz4q9QHx1qaHPlqEobnLbcpqwBF1SsNsPsCZx476CRZ1L_xtIRRoED0K&_nc_ohc=AjoCmAW_2gQQ7kNvgHV6QRf&_nc_oc=Adk2C_2kMtia1SUZjl2WL86c5Uds7Xy-oR6UhmBaUSpZGJg1ByooKhvWZ31eEpXDtJQ&_nc_zt=23&_nc_ht=scontent-bog2-1.xx&_nc_gid=gSmZBFcdA3TDB9byx_w7Ig&oh=00_AYF-gJTqxqSV8oEj1TnTPyd2W7CyJZKDFeUULbW9nn8dsA&oe=67E4003E"
-              data-lightbox="timeline" data-title="Campeón 1999"
-              class="block rounded-2xl overflow-hidden shadow-xl hover:scale-[1.02] transition-transform">
-              <img
-                src="https://scontent-bog2-1.xx.fbcdn.net/v/t39.30808-6/462653696_3807840056124001_6948574123012724707_n.jpg?_nc_cat=100&ccb=1-7&_nc_sid=833d8c&_nc_eui2=AeFkV314E1tu_Dz36WqKOe7UKvUB8damhz4q9QHx1qaHPlqEobnLbcpqwBF1SsNsPsCZx476CRZ1L_xtIRRoED0K&_nc_ohc=AjoCmAW_2gQQ7kNvgHV6QRf&_nc_oc=Adk2C_2kMtia1SUZjl2WL86c5Uds7Xy-oR6UhmBaUSpZGJg1ByooKhvWZ31eEpXDtJQ&_nc_zt=23&_nc_ht=scontent-bog2-1.xx&_nc_gid=gSmZBFcdA3TDB9byx_w7Ig&oh=00_AYF-gJTqxqSV8oEj1TnTPyd2W7CyJZKDFeUULbW9nn8dsA&oe=67E4003E"
-                class="w-full h-64 object-cover">
-            </a>
-          </div>
-        </div>
+    <!-- TIMELINE / MOMENTOS DESTACADOS INMERSIVO -->
+    <section class="py-24 bg-slate-950 relative overflow-hidden" role="region" aria-labelledby="timeline-heading">
+      <!-- Línea central decorativa con resplandor dorado -->
+      <div class="absolute top-0 left-1/2 -translate-x-1/2 w-1 h-full bg-gradient-to-b from-amber-500 via-amber-400 to-amber-600 z-0 hidden md:block opacity-30 shadow-[0_0_15px_rgba(245,158,11,0.5)]"></div>
 
-        <!-- 2002 -->
-        <div class="flex flex-col md:flex-row-reverse items-center justify-between mb-16" data-aos="fade-up">
-          <div class="md:w-[45%] bg-white p-6 rounded-2xl border border-slate-200 shadow-md text-center md:text-left mb-6 md:mb-0">
-            <span class="text-3xl font-black text-amber-500 block mb-2">2002</span>
-            <h3 class="text-xl font-bold text-slate-900 mb-3">Gloria Departamental</h3>
-            <p class="text-sm text-slate-600 leading-relaxed">Consolidación del club en el departamento, obteniendo el
-              título máximo y demostrando la calidad de nuestra cantera.</p>
+      <div class="max-w-6xl mx-auto px-4 relative z-10">
+        <div class="space-y-16 md:space-y-20 relative">
+          
+          <!-- Hito: 1999 -->
+          <div class="flex flex-col md:flex-row items-center justify-between" data-aos="fade-up">
+            <div class="md:w-[45%] bg-slate-900/60 backdrop-blur-xl p-8 rounded-3xl border border-white/10 shadow-2xl text-center md:text-right mb-6 md:mb-0 hover:border-amber-500/40 transition-all">
+              <span class="text-3xl sm:text-4xl font-black text-amber-400 block mb-2 font-display">1999</span>
+              <h3 class="text-xl sm:text-2xl font-black text-white uppercase italic tracking-tight font-display mb-3">Campeón Territorial</h3>
+              <p class="text-sm text-slate-300 leading-relaxed">
+                Iniciamos nuestra senda ganadora con el primer título importante en los torneos locales, marcando el comienzo de una era dorada de triunfos para el club.
+              </p>
+            </div>
+            <div class="w-12 h-12 bg-amber-500 rounded-full border-4 border-slate-950 shadow-[0_0_20px_rgba(245,158,11,0.6)] z-20 hidden md:flex items-center justify-center text-slate-950 font-black">
+              <i class="fas fa-trophy text-sm"></i>
+            </div>
+            <div class="md:w-[45%]">
+              <a href="images/campeon2002.webp" data-lightbox="timeline" data-title="Campeón Territorial 1999"
+                class="block rounded-3xl overflow-hidden shadow-2xl border border-white/10 hover:border-amber-500/40 hover:scale-[1.02] transition-all">
+                <img src="images/campeon2002.webp" class="w-full h-64 object-cover" alt="Campeón Territorial">
+              </a>
+            </div>
           </div>
-          <div
-            class="w-10 h-10 bg-amber-500 rounded-full border-4 border-white shadow-xl z-20 hidden md:flex items-center justify-center">
-            <i class="fas fa-certificate text-white text-xs"></i>
-          </div>
-          <div class="md:w-[45%]">
-            <a href="images/2002.webp" data-lightbox="timeline" data-title="Campeón 2002"
-              class="block rounded-2xl overflow-hidden shadow-xl hover:scale-[1.02] transition-transform">
-              <img src="images/2002.webp" class="w-full h-64 object-cover">
-            </a>
-          </div>
-        </div>
 
-        <!-- 2003 (Sub-cap) -->
-        <div class="flex flex-col md:flex-row items-center justify-between mb-16" data-aos="fade-up">
-          <div class="md:w-[45%] bg-white p-6 rounded-2xl border border-slate-200 shadow-md text-center md:text-right mb-6 md:mb-0">
-            <span class="text-3xl font-black text-slate-400 block mb-2">2003</span>
-            <h3 class="text-xl font-bold text-slate-900 mb-3">Subcampeonato Élite</h3>
-            <p class="text-sm text-slate-600 leading-relaxed">Un año de lucha constante que nos llevó hasta la gran
-              final, demostrando que DIBA siempre está en los puestos de honor.</p>
+          <!-- Hito: 2002 -->
+          <div class="flex flex-col md:flex-row-reverse items-center justify-between" data-aos="fade-up">
+            <div class="md:w-[45%] bg-slate-900/60 backdrop-blur-xl p-8 rounded-3xl border border-white/10 shadow-2xl text-center md:text-left mb-6 md:mb-0 hover:border-amber-500/40 transition-all">
+              <span class="text-3xl sm:text-4xl font-black text-amber-400 block mb-2 font-display">2002</span>
+              <h3 class="text-xl sm:text-2xl font-black text-white uppercase italic tracking-tight font-display mb-3">Gloria Departamental</h3>
+              <p class="text-sm text-slate-300 leading-relaxed">
+                Consolidación del club en el departamento del Atlántico, obteniendo el título máximo y demostrando la calidad insuperable de nuestra cantera barranquillera.
+              </p>
+            </div>
+            <div class="w-12 h-12 bg-amber-500 rounded-full border-4 border-slate-950 shadow-[0_0_20px_rgba(245,158,11,0.6)] z-20 hidden md:flex items-center justify-center text-slate-950 font-black">
+              <i class="fas fa-medal text-sm"></i>
+            </div>
+            <div class="md:w-[45%]">
+              <a href="images/2002.webp" data-lightbox="timeline" data-title="Campeón 2002"
+                class="block rounded-3xl overflow-hidden shadow-2xl border border-white/10 hover:border-amber-500/40 hover:scale-[1.02] transition-all">
+                <img src="images/2002.webp" class="w-full h-64 object-cover" alt="Campeón 2002">
+              </a>
+            </div>
           </div>
-          <div
-            class="w-10 h-10 bg-slate-400 rounded-full border-4 border-white shadow-xl z-20 hidden md:flex items-center justify-center">
-            <i class="fas fa-medal text-white text-xs"></i>
+
+          <!-- Hito: 2003 -->
+          <div class="flex flex-col md:flex-row items-center justify-between" data-aos="fade-up">
+            <div class="md:w-[45%] bg-slate-900/60 backdrop-blur-xl p-8 rounded-3xl border border-white/10 shadow-2xl text-center md:text-right mb-6 md:mb-0 hover:border-amber-500/40 transition-all">
+              <span class="text-3xl sm:text-4xl font-black text-slate-400 block mb-2 font-display">2003</span>
+              <h3 class="text-xl sm:text-2xl font-black text-white uppercase italic tracking-tight font-display mb-3">Subcampeonato Élite</h3>
+              <p class="text-sm text-slate-300 leading-relaxed">
+                Un año de lucha constante que nos llevó hasta la gran final en el departamento, ratificando que DIBA FBC siempre compite en los puestos de honor.
+              </p>
+            </div>
+            <div class="w-12 h-12 bg-slate-400 rounded-full border-4 border-slate-950 shadow-[0_0_20px_rgba(148,163,184,0.4)] z-20 hidden md:flex items-center justify-center text-slate-950 font-black">
+              <i class="fas fa-star text-sm"></i>
+            </div>
+            <div class="md:w-[45%]">
+              <a href="images/subCAP_2003.webp" data-lightbox="timeline" data-title="Subcampeonato 2003"
+                class="block rounded-3xl overflow-hidden shadow-2xl border border-white/10 hover:border-amber-500/40 hover:scale-[1.02] transition-all">
+                <img src="images/subCAP_2003.webp" class="w-full h-64 object-cover" alt="Subcampeonato 2003">
+              </a>
+            </div>
           </div>
-          <div class="md:w-[45%]">
-            <a href="images/subCAP_2003.webp" data-lightbox="timeline" data-title="Subcampeonato 2003"
-              class="block rounded-2xl overflow-hidden shadow-xl hover:scale-[1.02] transition-transform">
-              <img src="images/subCAP_2003.webp" class="w-full h-64 object-cover">
-            </a>
+
+          <!-- Hito: 2005 -->
+          <div class="flex flex-col md:flex-row-reverse items-center justify-between" data-aos="fade-up">
+            <div class="md:w-[45%] bg-slate-900/60 backdrop-blur-xl p-8 rounded-3xl border border-white/10 shadow-2xl text-center md:text-left mb-6 md:mb-0 hover:border-rose-500/40 transition-all">
+              <span class="text-3xl sm:text-4xl font-black text-rose-500 block mb-2 font-display">2005</span>
+              <h3 class="text-xl sm:text-2xl font-black text-white uppercase italic tracking-tight font-display mb-3">La Gran Remontada</h3>
+              <p class="text-sm text-slate-300 leading-relaxed">
+                Rememoramos uno de los partidos más épicos de nuestra historia deportiva, donde el corazón y la garra nos dieron una victoria inolvidable.
+              </p>
+            </div>
+            <div class="w-12 h-12 bg-rose-500 rounded-full border-4 border-slate-950 shadow-[0_0_20px_rgba(244,63,94,0.5)] z-20 hidden md:flex items-center justify-center text-white font-black">
+              <i class="fas fa-fire text-sm"></i>
+            </div>
+            <div class="md:w-[45%]">
+              <a href="images/2005.webp" data-lightbox="timeline" data-title="La Gran Remontada 2005"
+                class="block rounded-3xl overflow-hidden shadow-2xl border border-white/10 hover:border-rose-500/40 hover:scale-[1.02] transition-all">
+                <img src="images/2005.webp" class="w-full h-64 object-cover" alt="Remontada 2005">
+              </a>
+            </div>
           </div>
-        </div>
 
-        <!-- 2005 -->
-        <div class="flex flex-col md:flex-row-reverse items-center justify-between mb-16" data-aos="fade-up">
-          <div class="md:w-[45%] bg-white p-6 rounded-2xl border border-slate-200 shadow-md text-center md:text-left mb-6 md:mb-0">
-            <span class="text-3xl font-black text-rose-600 block mb-2">2005</span>
-            <h3 class="text-xl font-bold text-slate-900 mb-3">La Gran Remontada</h3>
-            <p class="text-sm text-slate-600 leading-relaxed">Rememoramos uno de los partidos más épicos de nuestra
-              historia, donde el corazón y la garra nos dieron una victoria inolvidable.</p>
+          <!-- Hito: 2014 -->
+          <div class="flex flex-col md:flex-row items-center justify-between" data-aos="fade-up">
+            <div class="md:w-[45%] bg-slate-900/60 backdrop-blur-xl p-8 rounded-3xl border border-white/10 shadow-2xl text-center md:text-right mb-6 md:mb-0 hover:border-sky-500/40 transition-all">
+              <span class="text-3xl sm:text-4xl font-black text-sky-400 block mb-2 font-display">2014</span>
+              <h3 class="text-xl sm:text-2xl font-black text-white uppercase italic tracking-tight font-display mb-3">Nueva Era de Formación</h3>
+              <p class="text-sm text-slate-300 leading-relaxed">
+                Renovación total de nuestras categorías infantiles y juveniles, fortaleciendo el cuerpo técnico para afrontar los retos del fútbol moderno.
+              </p>
+            </div>
+            <div class="w-12 h-12 bg-sky-500 rounded-full border-4 border-slate-950 shadow-[0_0_20px_rgba(56,189,248,0.5)] z-20 hidden md:flex items-center justify-center text-slate-950 font-black">
+              <i class="fas fa-shield-halved text-sm"></i>
+            </div>
+            <div class="md:w-[45%]">
+              <a href="images/2014.webp" data-lightbox="timeline" data-title="Categoría 2014"
+                class="block rounded-3xl overflow-hidden shadow-2xl border border-white/10 hover:border-sky-500/40 hover:scale-[1.02] transition-all">
+                <img src="images/2014.webp" class="w-full h-64 object-cover" alt="Categoría 2014">
+              </a>
+            </div>
           </div>
-          <div
-            class="w-10 h-10 bg-rose-600 rounded-full border-4 border-white shadow-xl z-20 hidden md:flex items-center justify-center">
-            <i class="fas fa-fire text-white text-xs"></i>
-          </div>
-          <div class="md:w-[45%]">
-            <a href="images/2005.webp" data-lightbox="timeline" data-title="La Gran Remontada 2005"
-              class="block rounded-2xl overflow-hidden shadow-xl hover:scale-[1.02] transition-transform">
-              <img src="images/2005.webp" class="w-full h-64 object-cover">
-            </a>
-          </div>
-        </div>
 
-        <!-- 2014 -->
-        <div class="flex flex-col md:flex-row items-center justify-between mb-16" data-aos="fade-up">
-          <div class="md:w-[45%] bg-white p-6 rounded-2xl border border-slate-200 shadow-md text-center md:text-right mb-6 md:mb-0">
-            <span class="text-3xl font-black text-indigo-600 block mb-2">2014</span>
-            <h3 class="text-xl font-bold text-slate-900 mb-3">Nueva Era</h3>
-            <p class="text-sm text-slate-600 leading-relaxed">Renovación de nuestras categorías y fortalecimiento del
-              equipo técnico para afrontar los retos del fútbol moderno.</p>
-          </div>
-          <div
-            class="w-10 h-10 bg-indigo-600 rounded-full border-4 border-white shadow-xl z-20 hidden md:flex items-center justify-center">
-            <i class="fas fa-sync text-white text-xs"></i>
-          </div>
-          <div class="md:w-[45%]">
-            <a href="images/2014.webp" data-lightbox="timeline" data-title="Categoría 2014"
-              class="block rounded-2xl overflow-hidden shadow-xl hover:scale-[1.02] transition-transform">
-              <img src="images/2014.webp" class="w-full h-64 object-cover">
-            </a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- SECCIÓN DE VIDEOS -->
-  <section class="py-12 animate__animated animate__fadeInUp" role="region" aria-labelledby="videos-heading">
-    <div class="max-w-6xl mx-auto px-4">
-      <h2 id="videos-heading" class="text-3xl md:text-4xl font-bold text-center mb-8 text-yellow-500">
-        DIBA FBC VIDEOS
-      </h2>
-
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 justify-items-center">
-        <div class="w-full">
-          <blockquote class="instagram-media w-full" data-instgrm-captioned
-            data-instgrm-permalink="https://www.instagram.com/p/DMIdIXFuEjU/?utm_source=ig_embed&amp;utm_campaign=loading"
-            data-instgrm-version="14"></blockquote>
-        </div>
-
-        <div class="w-full">
-          <blockquote class="instagram-media w-full" data-instgrm-captioned
-            data-instgrm-permalink="https://www.instagram.com/reel/DMIdTUHOgda/?utm_source=ig_embed&amp;utm_campaign=loading"
-            data-instgrm-version="14"></blockquote>
-        </div>
-
-        <div class="w-full">
-          <blockquote class="instagram-media w-full" data-instgrm-captioned
-            data-instgrm-permalink="https://www.instagram.com/reel/C_rFfacR4wy/?utm_source=ig_embed&amp;utm_campaign=loading"
-            data-instgrm-version="14"></blockquote>
-        </div>
-
-        <div class="w-full">
-          <blockquote class="instagram-media w-full" data-instgrm-captioned
-            data-instgrm-permalink="https://www.instagram.com/p/C_fBVJrOCQd/?utm_source=ig_embed&amp;utm_campaign=loading"
-            data-instgrm-version="14"></blockquote>
-        </div>
-
-        <div class="w-full">
-          <blockquote class="instagram-media w-full" data-instgrm-captioned
-            data-instgrm-permalink="https://www.instagram.com/reel/C823iJeRjDj/?utm_source=ig_embed&amp;utm_campaign=loading"
-            data-instgrm-version="14"></blockquote>
-        </div>
-
-        <div class="w-full">
-          <blockquote class="instagram-media w-full" data-instgrm-captioned
-            data-instgrm-permalink="https://www.instagram.com/p/C823YDzRN-X/?utm_source=ig_embed&amp;utm_campaign=loading"
-            data-instgrm-version="14"></blockquote>
         </div>
       </div>
+    </section>
 
-      <script async src="//www.instagram.com/embed.js"></script>
-    </div>
-  </section>
+    <!-- SECCIÓN DE VIDEOS INSTITUCIONALES -->
+    <section class="py-20 bg-slate-900/60 border-t border-white/5" role="region" aria-labelledby="videos-heading">
+      <div class="max-w-6xl mx-auto px-4">
+        <div class="text-center mb-12">
+          <span class="text-xs font-black tracking-[0.3em] text-amber-400 uppercase">CONTENIDO MULTIMEDIA</span>
+          <h2 id="videos-heading" class="text-3xl md:text-5xl font-black uppercase italic tracking-tight font-display text-white mt-2">
+            Momentos en <span class="text-amber-500">Video</span>
+          </h2>
+          <div class="w-20 h-1.5 bg-gradient-to-r from-amber-500 to-amber-400 mx-auto rounded-full mt-4 shadow-[0_0_12px_rgba(245,158,11,0.5)]"></div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 justify-items-center">
+          <div class="w-full bg-slate-950/80 rounded-2xl p-2 border border-white/10 shadow-xl overflow-hidden">
+            <blockquote class="instagram-media w-full" data-instgrm-captioned
+              data-instgrm-permalink="https://www.instagram.com/p/DMIdIXFuEjU/?utm_source=ig_embed&amp;utm_campaign=loading"
+              data-instgrm-version="14"></blockquote>
+          </div>
+
+          <div class="w-full bg-slate-950/80 rounded-2xl p-2 border border-white/10 shadow-xl overflow-hidden">
+            <blockquote class="instagram-media w-full" data-instgrm-captioned
+              data-instgrm-permalink="https://www.instagram.com/reel/DMIdTUHOgda/?utm_source=ig_embed&amp;utm_campaign=loading"
+              data-instgrm-version="14"></blockquote>
+          </div>
+
+          <div class="w-full bg-slate-950/80 rounded-2xl p-2 border border-white/10 shadow-xl overflow-hidden">
+            <blockquote class="instagram-media w-full" data-instgrm-captioned
+              data-instgrm-permalink="https://www.instagram.com/reel/C_rFfacR4wy/?utm_source=ig_embed&amp;utm_campaign=loading"
+              data-instgrm-version="14"></blockquote>
+          </div>
+
+          <div class="w-full bg-slate-950/80 rounded-2xl p-2 border border-white/10 shadow-xl overflow-hidden">
+            <blockquote class="instagram-media w-full" data-instgrm-captioned
+              data-instgrm-permalink="https://www.instagram.com/p/C_fBVJrOCQd/?utm_source=ig_embed&amp;utm_campaign=loading"
+              data-instgrm-version="14"></blockquote>
+          </div>
+
+          <div class="w-full bg-slate-950/80 rounded-2xl p-2 border border-white/10 shadow-xl overflow-hidden">
+            <blockquote class="instagram-media w-full" data-instgrm-captioned
+              data-instgrm-permalink="https://www.instagram.com/reel/C823iJeRjDj/?utm_source=ig_embed&amp;utm_campaign=loading"
+              data-instgrm-version="14"></blockquote>
+          </div>
+
+          <div class="w-full bg-slate-950/80 rounded-2xl p-2 border border-white/10 shadow-xl overflow-hidden">
+            <blockquote class="instagram-media w-full" data-instgrm-captioned
+              data-instgrm-permalink="https://www.instagram.com/p/C823YDzRN-X/?utm_source=ig_embed&amp;utm_campaign=loading"
+              data-instgrm-version="14"></blockquote>
+          </div>
+        </div>
+
+        <script async src="//www.instagram.com/embed.js"></script>
+      </div>
+    </section>
+  </main>
 
   <!-- Botón Volver Arriba -->
-  <button id="btnBackToTop" class="fixed bottom-4 right-4 z-40 w-12 h-12 rounded-full bg-blue-600 text-white
-           flex items-center justify-center shadow-lg hover:bg-blue-700 transition
+  <button id="btnBackToTop" class="fixed bottom-6 right-6 z-40 w-12 h-12 rounded-2xl bg-amber-500 hover:bg-amber-400 text-slate-950
+           flex items-center justify-center shadow-2xl transition-all active:scale-90
            hidden" title="Volver arriba">
-    <i class="fas fa-arrow-up"></i>
+    <i class="fas fa-arrow-up text-base font-black"></i>
   </button>
 
   <!-- Footer -->
   <div id="footer-container"></div>
+  <div id="fab-container"></div>
 
   <!-- Lightbox2 JS -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/js/lightbox.min.js"></script>
@@ -232,10 +258,10 @@
     AOS.init({ once: true, duration: 800 });
   </script>
 
-  <!-- Scripts personalizados -->
+  <!-- Scripts -->
   <script src="scripts/config.js"></script>
-  <script src="scripts/config.js"></script>
-  <script type="module" src="src/main.js"></script>
+  <script src="scripts/loadComponents.js"></script>
+  <script src="scripts/main.js"></script>
 
   <!-- Script para botón "Volver arriba" -->
   <script>

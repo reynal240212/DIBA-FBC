@@ -67,11 +67,11 @@ document.addEventListener("DOMContentLoaded", function () {
         let skeletons = '';
         for (let i = 0; i < 6; i++) {
             skeletons += `
-                <div class="bg-white rounded-2xl overflow-hidden shadow-lg animate-pulse border border-slate-100">
-                    <div class="aspect-square bg-slate-200"></div>
+                <div class="bg-slate-900/60 rounded-2xl overflow-hidden shadow-2xl animate-pulse border border-white/10">
+                    <div class="aspect-square bg-slate-800"></div>
                     <div class="p-5 space-y-3">
-                        <div class="h-4 bg-slate-200 rounded w-3/4"></div>
-                        <div class="h-3 bg-slate-200 rounded w-1/2"></div>
+                        <div class="h-4 bg-slate-800 rounded w-3/4"></div>
+                        <div class="h-3 bg-slate-800 rounded w-1/2"></div>
                     </div>
                 </div>
             `;
@@ -92,8 +92,8 @@ document.addEventListener("DOMContentLoaded", function () {
         if (!posts || posts.length === 0) {
             feedContainer.innerHTML = `
                 <div class="col-span-full text-center py-20">
-                    <i class="fab fa-instagram text-4xl text-slate-200 mb-4"></i>
-                    <p class="text-slate-500 font-medium">No se pudieron cargar las publicaciones en este momento.</p>
+                    <i class="fab fa-instagram text-4xl text-slate-700 mb-4"></i>
+                    <p class="text-slate-400 font-medium">No se pudieron cargar las publicaciones en este momento.</p>
                 </div>
             `;
             return;
@@ -108,12 +108,12 @@ document.addEventListener("DOMContentLoaded", function () {
             const caption = post.caption || post.prunedCaption || 'DIBA FBC #FuerzayLealtad';
 
             const article = document.createElement('article');
-            article.className = "group bg-white rounded-2xl overflow-hidden shadow-lg shadow-slate-200/50 border border-slate-100 flex flex-col transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl";
+            article.className = "group bg-slate-900/70 backdrop-blur-xl rounded-2xl overflow-hidden shadow-2xl border border-white/10 flex flex-col transition-all duration-300 hover:-translate-y-2 hover:border-amber-400/50 hover:shadow-amber-500/10";
             article.setAttribute('data-aos', 'fade-up');
             article.setAttribute('data-aos-delay', (index % 3) * 100);
 
             article.innerHTML = `
-                <div class="relative aspect-square overflow-hidden bg-slate-900">
+                <div class="relative aspect-square overflow-hidden bg-slate-950">
                     <img src="${imageUrl}" 
                          alt="Publicación DIBA FBC" 
                          loading="lazy"
@@ -127,11 +127,11 @@ document.addEventListener("DOMContentLoaded", function () {
                         </div>
                     ` : ''}
 
-                    <div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent opacity-60"></div>
+                    <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent opacity-60"></div>
                     
                     <!-- Hover Overlay -->
                     <a href="${postUrl}" target="_blank" rel="noopener noreferrer" class="absolute inset-0 flex items-center justify-center bg-amber-500/20 backdrop-blur-[2px] opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20">
-                         <span class="bg-white text-slate-900 font-black py-2 px-6 rounded-full text-xs uppercase tracking-widest shadow-xl transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+                         <span class="bg-amber-400 text-slate-950 font-black py-2.5 px-6 rounded-full text-xs uppercase tracking-widest shadow-xl transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
                             Ver en Instagram
                          </span>
                     </a>
@@ -140,18 +140,18 @@ document.addEventListener("DOMContentLoaded", function () {
                 <div class="p-6 flex-1 flex flex-col">
                     <div class="flex items-center gap-2 mb-3">
                         <img src="images/ESCUDO.webp" class="w-6 h-6 object-contain" alt="DIBA">
-                        <span class="text-[10px] font-black text-amber-500 uppercase tracking-widest">DIBA FBC</span>
+                        <span class="text-[10px] font-black text-amber-400 uppercase tracking-widest">DIBA FBC</span>
                         <span class="text-[10px] text-slate-400 font-bold ml-auto">${formatDate(post.timestamp)}</span>
                     </div>
-                    <p class="text-slate-700 text-sm leading-relaxed line-clamp-3 mb-4 italic">
+                    <p class="text-slate-300 text-sm leading-relaxed line-clamp-3 mb-4 italic">
                         "${caption}"
                     </p>
-                    <div class="mt-auto flex items-center justify-between pt-4 border-t border-slate-50">
+                    <div class="mt-auto flex items-center justify-between pt-4 border-t border-white/10">
                         <div class="flex items-center gap-4 text-slate-400 text-xs font-bold">
                             <span><i class="far fa-heart mr-1"></i> ${post.likeCount || 0}</span>
                             <span><i class="far fa-comment mr-1"></i> ${post.commentsCount || post.commentCount || 0}</span>
                         </div>
-                        <a href="${postUrl}" target="_blank" rel="noopener noreferrer" class="text-amber-500 hover:text-amber-600 transition-colors">
+                        <a href="${postUrl}" target="_blank" rel="noopener noreferrer" class="text-amber-400 hover:text-amber-300 transition-colors">
                             <i class="fab fa-instagram text-xl"></i>
                         </a>
                     </div>

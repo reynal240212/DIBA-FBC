@@ -118,16 +118,19 @@
      SECCIÓN
   ====================== */
   .pat-section {
-    background: #ffffff;
-    padding: 5rem 1.5rem;
-    border-top: 4px solid #d97706;
-    /* línea ámbar DIBA */
-    border-bottom: 4px solid #d97706;
+    background: #070b14;
+    padding: 6rem 1.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    position: relative;
+    overflow: hidden;
   }
 
   .pat-container {
     max-width: 1280px;
     margin: 0 auto;
+    position: relative;
+    z-index: 10;
   }
 
   /* ======================
@@ -142,41 +145,40 @@
     display: inline-block;
     font-size: 0.7rem;
     font-weight: 800;
-    letter-spacing: 0.18em;
+    letter-spacing: 0.22em;
     text-transform: uppercase;
-    color: #92400e;
-    /* marrón cálido */
-    background: #fef3c7;
-    /* amarillo pálido */
-    border: 1.5px solid #fbbf24;
-    padding: 0.35rem 1.1rem;
+    color: #fbbf24;
+    background: rgba(245, 158, 11, 0.12);
+    border: 1px solid rgba(245, 158, 11, 0.35);
+    padding: 0.4rem 1.2rem;
     border-radius: 999px;
     margin-bottom: 1rem;
+    box-shadow: 0 0 15px rgba(245, 158, 11, 0.15);
   }
 
   .pat-title {
-    font-size: clamp(2rem, 4.5vw, 3rem);
+    font-size: clamp(2.2rem, 5vw, 3.5rem);
     font-weight: 900;
     font-style: italic;
     text-transform: uppercase;
-    letter-spacing: 0.04em;
-    color: #0f172a;
-    /* azul marino DIBA */
+    letter-spacing: -0.02em;
+    color: #ffffff;
     margin: 0 0 0.9rem;
     line-height: 1.1;
   }
 
   .pat-accent {
-    color: #d97706;
-    /* amarillo mostaza DIBA */
+    color: #f59e0b;
+    text-shadow: 0 0 25px rgba(245, 158, 11, 0.35);
   }
 
   .pat-subtitle {
-    color: #64748b;
+    color: #94a3b8;
     font-size: 1rem;
-    max-width: 500px;
+    max-width: 520px;
     margin: 0 auto;
     line-height: 1.65;
+    font-weight: 500;
   }
 
   /* ======================
@@ -185,7 +187,7 @@
   .pat-track-wrapper {
     position: relative;
     overflow: hidden;
-    padding: 0.5rem 0;
+    padding: 1rem 0;
   }
 
   .pat-fade-left,
@@ -193,19 +195,19 @@
     position: absolute;
     top: 0;
     height: 100%;
-    width: 100px;
+    width: 120px;
     z-index: 10;
     pointer-events: none;
   }
 
   .pat-fade-left {
     left: 0;
-    background: linear-gradient(to right, #ffffff, transparent);
+    background: linear-gradient(to right, #070b14, transparent);
   }
 
   .pat-fade-right {
     right: 0;
-    background: linear-gradient(to left, #ffffff, transparent);
+    background: linear-gradient(to left, #070b14, transparent);
   }
 
   /* ======================
@@ -245,20 +247,22 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 1rem;
+    gap: 1.25rem;
     padding: 2rem 2.5rem;
-    background: #fff;
-    border: 2px solid #e2e8f0;
-    border-radius: 20px;
+    background: rgba(15, 23, 42, 0.7);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 24px;
     min-width: 310px;
     text-decoration: none;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.07);
+    transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
   }
 
   .pat-card:hover {
-    border-color: #f59e0b;
-    box-shadow: 0 12px 40px rgba(245, 158, 11, 0.25), 0 0 0 3px rgba(245, 158, 11, 0.18);
+    border-color: rgba(245, 158, 11, 0.5);
+    background: rgba(15, 23, 42, 0.9);
+    box-shadow: 0 20px 45px rgba(245, 158, 11, 0.2);
     transform: translateY(-8px);
   }
 
@@ -272,32 +276,37 @@
     align-items: center;
     justify-content: center;
     overflow: hidden;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 16px;
+    padding: 1.25rem;
   }
 
   .pat-logo {
     width: 100%;
     height: 100%;
     object-fit: contain;
-    filter: none;
-    opacity: 1;
-    transition: transform 0.3s ease;
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.4));
+    opacity: 0.95;
+    transition: transform 0.3s ease, opacity 0.3s ease;
   }
 
   .pat-card:hover .pat-logo {
-    transform: scale(1.07);
+    transform: scale(1.08);
+    opacity: 1;
   }
 
   /* Para logos con fondo oscuro */
   .pat-logo--dark {
-    background: #1e293b;
-    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.06);
+    border-radius: 12px;
     padding: 12px 16px;
     opacity: 1;
     object-fit: contain;
   }
 
   .pat-card:hover .pat-logo--dark {
-    box-shadow: 0 0 0 3px #fbbf24;
+    box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.5);
     transform: scale(1.05);
   }
 
@@ -305,17 +314,17 @@
      NOMBRE
   ====================== */
   .pat-name {
-    font-size: 0.72rem;
+    font-size: 0.75rem;
     font-weight: 800;
     text-transform: uppercase;
-    letter-spacing: 0.12em;
-    color: #64748b;
+    letter-spacing: 0.15em;
+    color: #cbd5e1;
     transition: color 0.3s ease;
     white-space: nowrap;
   }
 
   .pat-card:hover .pat-name {
-    color: #d97706;
+    color: #f59e0b;
   }
 
   /* ======================
@@ -323,40 +332,40 @@
   ====================== */
   .pat-cta {
     text-align: center;
-    margin-top: 3.5rem;
+    margin-top: 4rem;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 1rem;
+    gap: 1.25rem;
   }
 
   .pat-cta-text {
-    font-size: 0.9rem;
-    color: #475569;
+    font-size: 0.95rem;
+    color: #94a3b8;
     font-weight: 600;
   }
 
   .pat-cta-btn {
-    display: inline-block;
-    padding: 0.8rem 2rem;
-    background: #0f172a;
-    color: #fbbf24;
-    border: 2px solid #0f172a;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem 2.5rem;
+    background: linear-gradient(to right, #f59e0b, #d97706);
+    color: #020617;
     border-radius: 999px;
     font-size: 0.82rem;
-    font-weight: 800;
-    letter-spacing: 0.08em;
+    font-weight: 900;
+    letter-spacing: 0.12em;
     text-transform: uppercase;
     text-decoration: none;
     transition: all 0.3s ease;
+    box-shadow: 0 10px 25px rgba(245, 158, 11, 0.3);
   }
 
   .pat-cta-btn:hover {
-    background: #fbbf24;
-    color: #0f172a;
-    border-color: #fbbf24;
-    box-shadow: 0 6px 20px rgba(251, 191, 36, 0.4);
-    transform: translateY(-2px);
+    background: linear-gradient(to right, #fbbf24, #f59e0b);
+    box-shadow: 0 15px 35px rgba(245, 158, 11, 0.45);
+    transform: translateY(-3px) scale(1.02);
   }
 
   /* ======================
