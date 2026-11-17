@@ -1,0 +1,40 @@
+# ==============================================================================
+# Vercel Deployment Optimization (.vercelignore)
+# Excluye archivos y carpetas innecesarias para la web en producción.
+# Esto reduce drásticamente el tamaño del despliegue (Deployment Storage)
+# y acelera el tiempo de build en Vercel.
+# ==============================================================================
+
+# Microservicios y configuraciones desacopladas
+openwa/
+openwa-config/
+diba-fbc-gold/
+scratch/
+supabase/
+scripts/
+
+# Archivos de diseño y documentos de oficina
+*.psd
+*.docx
+*.lnk
+DOCUMENTACION.*
+
+# Archivos gráficos temporales o de prueba
+grid_*.png
+grid_v*.png
+*.tmp
+
+# Archivos PDF administrativos que no se sirven en la web pública
+Reconocimiento Deportivo DIBA FBC.pdf
+Planilla_DIBA_FBC_*.pdf
+public/Boletas_Rifa_DIBA_FBC_v2.pdf
+
+# Videos y fotos pesadas no referenciadas en producción (ahorro de +75 MB)
+public/images/DIBA FBC/
+public/video/
+public/videos/
+
+# Scripts de utilidad local
+create_admin.js
+generate-config.js
+render.yaml
