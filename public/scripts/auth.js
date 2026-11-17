@@ -31,17 +31,31 @@ export async function iniciarSesion(username, password) {
     role: role
   }));
 
-  return data;
+  return { ...data, role };
+}
+
+/**
+ * Determina si el rol corresponde a cuerpo técnico o administración
+ */
+export function esRolStaff(role) {
+  return role === 'admin' || role === 'tecnico';
+}
+
+/**
+ * Retorna la ruta de panel correspondiente según el rol del usuario
+ */
+export function obtenerRutaPorRol(role) {
+  return esRolStaff(role) ? '/admin/dashboard.html' : '/perfil.html';
 }
 
 /**
  * Inicia sesión con Google (OAuth)
  */
-export async function iniciarSesionGoogle() {
+export async function iniciarSesionGoogle(redirectPath = '/perfil.html') {
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: 'google',
     options: {
-      redirectTo: window.location.origin + '/index.html'
+      redirectTo: window.location.origin + redirectPath
     }
   });
 
@@ -86,9 +100,14 @@ export async function verificarSesion(rolRequerido = null) {
   // Guardar en local para rapidez en UI
   localStorage.setItem("usuario", JSON.stringify(usuarioLocal));
 
-  if (rolRequerido && usuarioLocal.role !== rolRequerido && usuarioLocal.role !== 'admin') {
+  const tienePermiso = !rolRequerido
+    || usuarioLocal.role === rolRequerido
+    || usuarioLocal.role === 'admin'
+    || (esRolStaff(rolRequerido) && esRolStaff(usuarioLocal.role));
+
+  if (!tienePermiso) {
     alert("⚠️ No tienes permisos para acceder a esta sección.");
-    window.location.replace("/index.html");
+    window.location.replace(obtenerRutaPorRol(usuarioLocal.role));
     return usuarioLocal;
   }
 

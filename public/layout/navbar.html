@@ -27,16 +27,16 @@
       overflow-y: auto;
     }
   </style>
-  <div class="max-w-6xl mx-auto px-4">
+  <div class="max-w-7xl mx-auto px-4 lg:px-6">
     <div class="flex items-center justify-between h-20">
 
-      <a href="index.html" class="flex items-center transition-transform hover:scale-105 active:scale-95">
+      <a href="index.html" class="flex items-center shrink-0 transition-transform hover:scale-105 active:scale-95">
         <img src="images/ESCUDO.webp?v=2" alt="Logo DIBA FBC" class="h-14 w-auto object-contain" />
       </a>
 
       <!-- Navegación Desktop Institucional -->
       <div class="hidden lg:flex lg:items-center">
-        <ul class="flex items-center space-x-7 text-[13px] font-bold text-white tracking-wide">
+        <ul class="flex items-center space-x-4 xl:space-x-6 text-[12px] xl:text-[13px] font-bold text-white tracking-wide whitespace-nowrap">
 
           <li class="relative group">
             <a href="index.html" class="hover:text-amber-400 transition-colors uppercase">Inicio</a>
@@ -94,10 +94,82 @@
             </ul>
           </li>
 
-          <li class="flex items-center gap-4 border-l border-slate-700 pl-6 ml-2">
+          <li class="flex items-center gap-3 border-l border-slate-700 pl-4 ml-1">
             <a href="contacto.html"
-              class="bg-amber-500 text-slate-900 px-5 py-2 rounded-full hover:bg-white hover:scale-105 transition-all font-black text-[11px]">CONTACTO</a>
+              class="bg-amber-500 text-slate-900 px-4 py-2 rounded-full hover:bg-white hover:scale-105 transition-all font-black text-[11px]">CONTACTO</a>
             <a href="ayuda.html" class="text-amber-400 hover:text-white transition-colors text-[11px]">AYUDA</a>
+          </li>
+
+          <!-- Acceso por Rol / Sesión Desktop -->
+          <li class="relative">
+            <span id="auth-loading" class="hidden text-slate-400 text-[11px]"><i class="fas fa-circle-notch fa-spin"></i></span>
+
+            <!-- Estado Desconectado: Desplegable ACCEDER -->
+            <div id="auth-logged-out" class="relative group py-5">
+              <button type="button"
+                class="flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 hover:bg-amber-500 hover:text-slate-950 border border-white/15 hover:border-amber-400 text-white font-black text-[11px] uppercase tracking-wider transition-all outline-none">
+                <i class="fas fa-user-circle text-sm text-amber-400 group-hover:text-slate-950 transition-colors"></i>
+                <span>ACCEDER</span>
+                <i class="fas fa-chevron-down text-[9px] transition-transform group-hover:rotate-180"></i>
+              </button>
+              <div
+                class="absolute right-0 top-full w-64 bg-slate-900/95 backdrop-blur-2xl border border-white/10 rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.8)] p-2 opacity-0 invisible translate-y-4 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 transition-all duration-300 z-[1100] space-y-1">
+                <a href="/admin/login.html?rol=jugador"
+                  class="flex items-center gap-3 px-3.5 py-3 rounded-xl hover:bg-amber-500/15 border border-transparent hover:border-amber-500/30 transition-all group/item">
+                  <span class="w-9 h-9 rounded-xl bg-amber-500/15 text-amber-400 flex items-center justify-center shrink-0 group-hover/item:bg-amber-500 group-hover/item:text-slate-950 transition-colors">
+                    <i class="fas fa-futbol"></i>
+                  </span>
+                  <div class="min-w-0">
+                    <div class="text-xs font-black text-white uppercase tracking-tight">Acceso Jugador</div>
+                    <div class="text-[10px] text-slate-400 font-medium">Mi Ficha y Documentos</div>
+                  </div>
+                </a>
+                <a href="/admin/login.html?rol=staff"
+                  class="flex items-center gap-3 px-3.5 py-3 rounded-xl hover:bg-blue-500/15 border border-transparent hover:border-blue-500/30 transition-all group/item">
+                  <span class="w-9 h-9 rounded-xl bg-blue-500/15 text-blue-400 flex items-center justify-center shrink-0 group-hover/item:bg-blue-500 group-hover/item:text-white transition-colors">
+                    <i class="fas fa-shield-halved"></i>
+                  </span>
+                  <div class="min-w-0">
+                    <div class="text-xs font-black text-white uppercase tracking-tight">Entrenador / Admin</div>
+                    <div class="text-[10px] text-slate-400 font-medium">Centro de Mando</div>
+                  </div>
+                </a>
+              </div>
+            </div>
+
+            <!-- Estado Conectado -->
+            <div id="auth-logged-in" class="hidden relative group py-5">
+              <button type="button"
+                class="flex items-center gap-2.5 pl-1.5 pr-3 py-1 rounded-full bg-white/5 hover:bg-white/10 border border-amber-500/30 transition-all outline-none">
+                <img id="user-avatar" src="" alt="Avatar" class="hidden w-7 h-7 rounded-full object-cover border border-amber-400" />
+                <span id="user-initials"
+                  class="w-7 h-7 rounded-full bg-amber-500 text-slate-950 font-black text-xs flex items-center justify-center uppercase">U</span>
+                <span id="user-name" class="text-[11px] font-black text-white uppercase max-w-[95px] truncate">Usuario</span>
+                <i class="fas fa-chevron-down text-[9px] text-amber-400 transition-transform group-hover:rotate-180"></i>
+              </button>
+              <div
+                class="absolute right-0 top-full w-60 bg-slate-900/95 backdrop-blur-2xl border border-white/10 rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.8)] p-2 opacity-0 invisible translate-y-4 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 transition-all duration-300 z-[1100]">
+                <div class="px-3 py-2 border-b border-white/10 mb-1.5">
+                  <span class="text-[9px] text-slate-400 uppercase tracking-widest block">Rol Activo</span>
+                  <span id="user-role" class="text-[11px] font-black text-amber-400 uppercase tracking-wider">usuario</span>
+                </div>
+                <a id="link-docs" href="/perfil.html"
+                  class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-bold text-slate-200 hover:bg-amber-500 hover:text-slate-950 transition-colors">
+                  <i class="fas fa-id-card w-4 text-center"></i>
+                  <span>Mi Panel de Jugador</span>
+                </a>
+                <a id="link-admin" href="/admin/dashboard.html"
+                  class="hidden flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-bold text-amber-400 hover:bg-amber-500 hover:text-slate-950 transition-colors">
+                  <i class="fas fa-shield-halved w-4 text-center"></i>
+                  <span>Centro de Mando</span>
+                </a>
+                <button id="btn-logout" type="button"
+                  class="w-full mt-1 flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-bold text-rose-400 hover:bg-rose-500/15 transition-colors text-left border-t border-white/10 pt-2.5">
+                  <i class="fas fa-sign-out-alt w-4 text-center"></i>
+                  <span>Cerrar Sesión</span>
+                </button>
+              </div>
+            </div>
           </li>
 
           <li>
@@ -154,6 +226,42 @@
       </details>
 
       <div class="pt-4 space-y-3 px-4">
+        <!-- Acceso por Rol / Sesión Móvil -->
+        <div id="auth-mobile-logged-out" class="grid grid-cols-2 gap-2.5">
+          <a href="/admin/login.html?rol=jugador"
+            class="flex items-center justify-center gap-2 py-3 px-3 rounded-xl bg-amber-500/15 border border-amber-500/40 text-amber-400 font-black text-xs uppercase tracking-wider hover:bg-amber-500 hover:text-slate-950 transition-all">
+            <i class="fas fa-futbol"></i> Soy Jugador
+          </a>
+          <a href="/admin/login.html?rol=staff"
+            class="flex items-center justify-center gap-2 py-3 px-3 rounded-xl bg-blue-500/15 border border-blue-500/40 text-blue-300 font-black text-xs uppercase tracking-wider hover:bg-blue-500 hover:text-white transition-all">
+            <i class="fas fa-shield-halved"></i> Soy Entrenador
+          </a>
+        </div>
+
+        <div id="auth-mobile-logged-in" class="hidden bg-slate-900/90 border border-white/10 rounded-2xl p-3.5 space-y-2.5">
+          <div class="flex items-center gap-3 pb-2.5 border-b border-white/10">
+            <img id="user-avatar-mobile" src="" alt="Avatar" class="hidden w-9 h-9 rounded-full object-cover border border-amber-400" />
+            <span id="user-initials-mobile"
+              class="w-9 h-9 rounded-full bg-amber-500 text-slate-950 font-black text-sm flex items-center justify-center uppercase">U</span>
+            <div class="min-w-0 flex-1">
+              <div id="user-name-mobile" class="text-xs font-black text-white uppercase truncate">Usuario</div>
+              <div id="user-role-mobile" class="text-[10px] font-bold text-amber-400 uppercase tracking-wider">usuario</div>
+            </div>
+          </div>
+          <a id="link-docs-mobile" href="/perfil.html"
+            class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl bg-white/5 text-white font-bold text-xs uppercase tracking-wider">
+            <i class="fas fa-id-card text-amber-400"></i> Mi Panel de Jugador
+          </a>
+          <a id="link-admin-mobile" href="/admin/dashboard.html"
+            class="hidden flex items-center gap-2.5 px-3 py-2.5 rounded-xl bg-amber-500/15 border border-amber-500/30 text-amber-400 font-bold text-xs uppercase tracking-wider">
+            <i class="fas fa-shield-halved"></i> Centro de Mando
+          </a>
+          <button id="btn-logout-mobile" type="button"
+            class="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl bg-rose-500/15 text-rose-400 font-black text-xs uppercase tracking-wider">
+            <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+          </button>
+        </div>
+
         <a href="contacto.html"
           class="block w-full text-center bg-amber-500 text-slate-900 py-3 rounded-xl font-black">CONTACTO</a>
         <a href="ayuda.html"

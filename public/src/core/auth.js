@@ -23,16 +23,30 @@ export async function iniciarSesion(username, password) {
     };
 
     localStorage.setItem("usuario", JSON.stringify(usuarioLocal));
-    return data;
+    return { ...data, role: usuarioLocal.role };
+}
+
+/**
+ * Check if role belongs to staff (admin or tecnico)
+ */
+export function esRolStaff(role) {
+    return role === 'admin' || role === 'tecnico';
+}
+
+/**
+ * Resolve dashboard path based on user role
+ */
+export function obtenerRutaPorRol(role) {
+    return esRolStaff(role) ? '/admin/dashboard.html' : '/perfil.html';
 }
 
 /**
  * Log in with Google (OAuth)
  */
-export async function iniciarSesionGoogle() {
+export async function iniciarSesionGoogle(redirectPath = '/perfil.html') {
     const { data, error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
-        options: { redirectTo: window.location.origin + '/index.html' }
+        options: { redirectTo: window.location.origin + redirectPath }
     });
     if (error) throw error;
     return data;
@@ -79,9 +93,14 @@ export async function verificarSesion(rolRequerido = null) {
 
     localStorage.setItem("usuario", JSON.stringify(usuarioLocal));
 
-    if (rolRequerido && usuarioLocal.role !== rolRequerido && usuarioLocal.role !== 'admin') {
+    const tienePermiso = !rolRequerido
+        || usuarioLocal.role === rolRequerido
+        || usuarioLocal.role === 'admin'
+        || (esRolStaff(rolRequerido) && esRolStaff(usuarioLocal.role));
+
+    if (!tienePermiso) {
         alert("⚠️ Acceso denegado.");
-        window.location.replace("/index.html");
+        window.location.replace(obtenerRutaPorRol(usuarioLocal.role));
         return usuarioLocal;
     }
 

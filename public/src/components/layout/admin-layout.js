@@ -18,9 +18,9 @@ export async function initAdminLayout() {
             .eq('id', session.user.id)
             .single();
 
-        if (roleError || userData?.role !== 'admin') {
-            console.warn('Acceso denegado: Usuario sin permisos de administrador');
-            window.location.replace('/index.html');
+        if (roleError || (userData?.role !== 'admin' && userData?.role !== 'tecnico')) {
+            console.warn('Acceso denegado: Usuario sin permisos administrativos ni técnicos');
+            window.location.replace('/perfil.html');
             return;
         }
     }

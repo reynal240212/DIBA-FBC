@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Acceso Administrativo — DIBA FBC</title>
+    <title>Acceso Oficial — DIBA FBC</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="/images/ESCUDO.ico" type="image/x-icon">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
@@ -249,6 +249,44 @@
         }
         .alert-error   { background: rgba(239,68,68,0.1);  border: 1px solid rgba(239,68,68,0.25);  color: #f87171; }
         .alert-success { background: rgba(34,197,94,0.1);  border: 1px solid rgba(34,197,94,0.25);  color: #4ade80; }
+
+        .role-tabs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.5rem;
+            padding: 0.35rem;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 16px;
+            margin-bottom: 1.4rem;
+        }
+        .role-tab {
+            padding: 0.7rem 0.6rem;
+            border-radius: 12px;
+            border: 1px solid transparent;
+            background: transparent;
+            color: rgba(255,255,255,0.5);
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.65rem;
+            font-weight: 800;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.45rem;
+            transition: all 0.25s ease;
+        }
+        .role-tab:hover {
+            color: #fff;
+            background: rgba(255,255,255,0.04);
+        }
+        .role-tab.active {
+            background: linear-gradient(135deg, #ffd700, #f59e0b);
+            color: #020617;
+            box-shadow: 0 6px 20px -5px rgba(255,215,0,0.45);
+        }
     </style>
 </head>
 
@@ -265,25 +303,37 @@
                     </div>
                 </div>
                 <h2 class="club-name">DIBA <span>FBC</span></h2>
-                <p class="club-motto">Sistema Administrativo</p>
+                <p class="club-motto" id="club-motto">Sistema Técnico & Administrativo</p>
             </div>
 
             <div class="jersey-divider"></div>
 
             <div class="card-body">
+                <!-- Selector de Rol -->
+                <div class="role-tabs" role="tablist" aria-label="Tipo de acceso">
+                    <button type="button" class="role-tab" data-role="jugador" role="tab" aria-selected="false">
+                        <i class="fas fa-futbol"></i>
+                        <span>Jugador</span>
+                    </button>
+                    <button type="button" class="role-tab active" data-role="staff" role="tab" aria-selected="true">
+                        <i class="fas fa-shield-halved"></i>
+                        <span>Entrenador / Admin</span>
+                    </button>
+                </div>
+
                 <div class="access-badge">
                     <div class="badge-dot"></div>
-                    <span>Acceso Restringido</span>
+                    <span id="access-badge-text">Acceso Cuerpos Técnicos y Directivos</span>
                 </div>
 
                 <div id="alert-container"></div>
 
                 <form id="login-form">
                     <div class="field-group">
-                        <label class="field-label">Correo Electrónico</label>
+                        <label class="field-label" id="user-field-label">Usuario o Correo Institucional</label>
                         <div class="field-wrap">
                             <i class="fas fa-user field-icon"></i>
-                            <input type="email" id="login-username" required placeholder="admin@diba.com" class="field-input">
+                            <input type="text" id="login-username" required autocomplete="username" placeholder="profe@diba.com o usuario" class="field-input">
                         </div>
                     </div>
 
@@ -294,17 +344,24 @@
                         </div>
                         <div class="field-wrap">
                             <i class="fas fa-lock field-icon"></i>
-                            <input type="password" id="login-password" required placeholder="••••••••" class="field-input">
+                            <input type="password" id="login-password" required autocomplete="current-password" placeholder="••••••••" class="field-input">
                             <span class="pw-eye" id="pw-toggle"><i class="fas fa-eye-slash" id="pw-icon"></i></span>
                         </div>
                     </div>
 
                     <button type="submit" id="login-button" class="submit-btn">
-                        <span class="button-text">Iniciar Sesión</span>
+                        <span class="button-text">Ingresar al Centro de Mando</span>
                         <i class="fas fa-arrow-right-to-bracket"></i>
                         <i class="fas fa-circle-notch fa-spin hidden" id="spinner"></i>
                     </button>
                 </form>
+
+                <div id="player-register-box" class="hidden mt-4 text-center">
+                    <a href="/registro.html" class="inline-flex items-center gap-2 text-[0.68rem] font-bold text-amber-400 hover:text-amber-300 transition-colors">
+                        <i class="fas fa-user-plus"></i>
+                        <span>¿Nuevo en el club? Regístrate como jugador aquí</span>
+                    </a>
+                </div>
 
                 <div class="mt-6">
                     <div class="flex items-center gap-4 mb-5">
@@ -341,13 +398,78 @@
 
     <script src="/scripts/config.js"></script>
     <script type="module">
-        import { iniciarSesion, iniciarSesionGoogle, enviarCorreoRecuperacion } from "/scripts/auth.js";
+        import {
+            iniciarSesion,
+            iniciarSesionGoogle,
+            enviarCorreoRecuperacion,
+            esRolStaff,
+            obtenerRutaPorRol
+        } from "/scripts/auth.js";
 
         const loginForm      = document.getElementById('login-form');
         const loginBtn       = document.getElementById('login-button');
         const alertContainer = document.getElementById('alert-container');
         const spinner        = document.getElementById('spinner');
         const btnText        = loginBtn.querySelector('.button-text');
+
+        const clubMotto      = document.getElementById('club-motto');
+        const badgeText      = document.getElementById('access-badge-text');
+        const userLabel      = document.getElementById('user-field-label');
+        const userInput      = document.getElementById('login-username');
+        const registerBox    = document.getElementById('player-register-box');
+        const roleTabs       = document.querySelectorAll('.role-tab');
+
+        const ROLE_UI = {
+            jugador: {
+                motto: 'Portal del Deportista',
+                badge: 'Ficha Deportiva · Documentos · Categorías',
+                label: 'Usuario o Correo del Jugador',
+                placeholder: 'jugador@diba.com o usuario',
+                button: 'Ingresar como Jugador',
+                showRegister: true
+            },
+            staff: {
+                motto: 'Sistema Técnico & Administrativo',
+                badge: 'Acceso Cuerpos Técnicos y Directivos',
+                label: 'Usuario o Correo Institucional',
+                placeholder: 'profe@diba.com o usuario',
+                button: 'Ingresar al Centro de Mando',
+                showRegister: false
+            }
+        };
+
+        let activeRole = 'staff';
+
+        function setRoleMode(role) {
+            activeRole = role === 'jugador' ? 'jugador' : 'staff';
+            const cfg = ROLE_UI[activeRole];
+
+            roleTabs.forEach(tab => {
+                const isSelected = tab.dataset.role === activeRole;
+                tab.classList.toggle('active', isSelected);
+                tab.setAttribute('aria-selected', String(isSelected));
+            });
+
+            clubMotto.textContent = cfg.motto;
+            badgeText.textContent = cfg.badge;
+            userLabel.textContent = cfg.label;
+            userInput.placeholder = cfg.placeholder;
+            if (!loginBtn.disabled) btnText.textContent = cfg.button;
+            registerBox.classList.toggle('hidden', !cfg.showRegister);
+            alertContainer.innerHTML = '';
+        }
+
+        roleTabs.forEach(tab => {
+            tab.addEventListener('click', () => setRoleMode(tab.dataset.role));
+        });
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const rolParam = (urlParams.get('rol') || '').toLowerCase();
+        if (rolParam === 'jugador') {
+            setRoleMode('jugador');
+        } else {
+            setRoleMode('staff');
+        }
 
         function showAlert(msg, type = 'error') {
             const cls = type === 'error' ? 'alert-error' : 'alert-success';
@@ -360,29 +482,38 @@
 
         loginForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            const username = document.getElementById('login-username').value.trim();
+            const username = userInput.value.trim();
             const password = document.getElementById('login-password').value;
             loginBtn.disabled = true;
             spinner.classList.remove('hidden');
             btnText.textContent = 'Verificando...';
             alertContainer.innerHTML = '';
             try {
-                await iniciarSesion(username, password);
+                const result = await iniciarSesion(username, password);
+                const targetUrl = obtenerRutaPorRol(result.role);
                 btnText.textContent = 'Acceso concedido';
-                showAlert('Credenciales verificadas. Cargando panel...', 'success');
-                setTimeout(() => window.location.href = 'dashboard.html', 1200);
+
+                if (esRolStaff(result.role)) {
+                    showAlert('Acceso de Staff verificado. Cargando Centro de Mando...', 'success');
+                } else if (activeRole === 'staff') {
+                    showAlert('Tu cuenta tiene rol de Deportista. Redirigiendo a tu Panel de Jugador...', 'success');
+                } else {
+                    showAlert('¡Bienvenido! Cargando tu Panel de Jugador...', 'success');
+                }
+
+                setTimeout(() => window.location.href = targetUrl, 1000);
             } catch (err) {
                 showAlert(err.message === 'Invalid login credentials'
                     ? 'Usuario o contraseña incorrectos.'
                     : err.message);
                 loginBtn.disabled = false;
                 spinner.classList.add('hidden');
-                btnText.textContent = 'Iniciar Sesión';
+                btnText.textContent = ROLE_UI[activeRole].button;
             }
         });
 
         document.getElementById('forgot-link').addEventListener('click', async () => {
-            const email = document.getElementById('login-username').value.trim();
+            const email = userInput.value.trim();
             if (!email) { showAlert('Ingresa tu correo primero.'); return; }
             try {
                 await enviarCorreoRecuperacion(email);
@@ -401,9 +532,9 @@
         document.getElementById('google-login-btn').addEventListener('click', async () => {
             alertContainer.innerHTML = '';
             try {
-                await iniciarSesionGoogle();
+                const redirectPath = activeRole === 'staff' ? '/admin/dashboard.html' : '/perfil.html';
+                await iniciarSesionGoogle(redirectPath);
                 showAlert('Acceso con Google concedido. Cargando...', 'success');
-                setTimeout(() => window.location.href = 'dashboard.html', 1200);
             } catch (err) {
                 showAlert('Error con Google: ' + err.message);
             }

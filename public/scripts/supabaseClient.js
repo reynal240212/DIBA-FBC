@@ -26,10 +26,10 @@ export async function requireAdmin() {
     .eq('id', user.id)
     .single();
 
-  if (roleError || userData?.role !== 'admin') {
-    console.warn('Acceso restringido para:', user.email);
-    alert('Acceso denegado: No tienes permisos de administrador.');
-    window.location.replace('/index.html');
+  const role = userData?.role;
+  if (roleError || (role !== 'admin' && role !== 'tecnico')) {
+    console.warn('Redirigiendo usuario sin rol administrativo a perfil de jugador:', user.email);
+    window.location.replace('/perfil.html');
     return null;
   }
 
