@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gran Final Oro - DIBA FBC vs Amigos Kids (Cat. 2014-2015)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@500;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: radial-gradient(circle at top, #1e293b 0%, #090d16 100%);
+            min-height: 100vh;
+            margin: 0;
+            padding: 28px 16px 96px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+        }
+
+        .font-display {
+            font-family: 'Bebas Neue', sans-serif;
+        }
+
+        /* Contenedor principal 4:5 (800x1000 -> exporta en 1600x2000 HD) */
+        #flyer-content {
+            width: 800px;
+            height: 1000px;
+            position: relative;
+            overflow: hidden;
+            border-radius: 18px;
+            background: linear-gradient(160deg, #071226 0%, #0b1e3d 42%, #070d19 100%);
+            box-shadow: 0 30px 70px rgba(0, 0, 0, 0.75);
+            border: 8px solid #d97706;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Marco interior dorado fino */
+        .gold-inner-frame {
+            position: absolute;
+            inset: 14px;
+            border: 2px solid rgba(255, 215, 0, 0.45);
+            border-radius: 10px;
+            pointer-events: none;
+            z-index: 25;
+        }
+
+        /* Esquinas ornamentales */
+        .corner-accent {
+            position: absolute;
+            width: 28px;
+            height: 28px;
+            border-color: #ffd700;
+            border-style: solid;
+            z-index: 26;
+            pointer-events: none;
+        }
+        .corner-tl { top: 10px; left: 10px; border-width: 4px 0 0 4px; border-top-left-radius: 6px; }
+        .corner-tr { top: 10px; right: 10px; border-width: 4px 4px 0 0; border-top-right-radius: 6px; }
+        .corner-bl { bottom: 10px; left: 10px; border-width: 0 0 4px 4px; border-bottom-left-radius: 6px; }
+        .corner-br { bottom: 10px; right: 10px; border-width: 0 4px 4px 0; border-bottom-right-radius: 6px; }
+
+        /* Efectos de luces de estadio */
+        .spotlight-left {
+            position: absolute;
+            top: -120px;
+            left: -100px;
+            width: 440px;
+            height: 440px;
+            background: radial-gradient(circle, rgba(255, 215, 0, 0.28) 0%, rgba(245, 158, 11, 0.08) 45%, transparent 72%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .spotlight-right {
+            position: absolute;
+            top: -120px;
+            right: -100px;
+            width: 440px;
+            height: 440px;
+            background: radial-gradient(circle, rgba(220, 38, 38, 0.42) 0%, rgba(153, 27, 27, 0.14) 45%, transparent 72%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .diagonal-stripe {
+            position: absolute;
+            top: -80px;
+            left: 50%;
+            width: 260px;
+            height: 1200px;
+            background: linear-gradient(180deg, rgba(255, 215, 0, 0.08) 0%, rgba(255, 215, 0, 0.02) 50%, rgba(255, 215, 0, 0.08) 100%);
+            transform: translateX(-50%) skewX(-18deg);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* Tipografía dorada compatible 100% con html2canvas */
+        .gold-title {
+            color: #ffd700;
+            text-shadow:
+                0 2px 0 #b45309,
+                0 4px 0 #78350f,
+                0 10px 25px rgba(245, 158, 11, 0.45);
+        }
+
+        .gold-subtitle {
+            color: #fde68a;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.7);
+        }
+
+        /* Anillos de escudos (más grandes al ser el centro protagonista) */
+        .crest-ring-diba {
+            width: 224px;
+            height: 224px;
+            border-radius: 50%;
+            padding: 9px;
+            background: linear-gradient(145deg, #fff1b8 0%, #f59e0b 50%, #92400e 100%);
+            box-shadow:
+                0 0 48px rgba(245, 158, 11, 0.65),
+                0 18px 36px rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .crest-ring-rival {
+            width: 224px;
+            height: 224px;
+            border-radius: 50%;
+            padding: 9px;
+            background: linear-gradient(145deg, #fde047 0%, #dc2626 52%, #7f1d1d 100%);
+            box-shadow:
+                0 0 48px rgba(220, 38, 38, 0.6),
+                0 18px 36px rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .crest-inner {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: #0b1324;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 4px;
+            overflow: hidden;
+        }
+
+        /* Emblema VS */
+        .vs-badge {
+            width: 82px;
+            height: 82px;
+            border-radius: 50%;
+            background: linear-gradient(145deg, #fef08a 0%, #f59e0b 55%, #b45309 100%);
+            border: 4px solid #0f172a;
+            box-shadow: 0 0 28px rgba(255, 215, 0, 0.6), 0 8px 20px rgba(0, 0, 0, 0.65);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #090d16;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 46px;
+            line-height: 1;
+            letter-spacing: 1px;
+        }
+
+        /* Tarjetas de datos del partido */
+        .info-card {
+            background: rgba(15, 23, 42, 0.86);
+            border: 2px solid rgba(255, 215, 0, 0.5);
+            border-radius: 14px;
+            padding: 14px 12px;
+            text-align: center;
+            box-shadow: 0 10px 24px rgba(0, 0, 0, 0.45);
+        }
+
+        /* Foto del equipo 2014-2015 */
+        .team-photo-frame {
+            position: relative;
+            border-radius: 14px;
+            overflow: hidden;
+            border: 3px solid rgba(255, 215, 0, 0.75);
+            box-shadow: 0 16px 36px rgba(0, 0, 0, 0.65);
+            height: 225px;
+        }
+
+        .team-photo-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(7, 13, 25, 0.15) 0%, rgba(7, 13, 25, 0.05) 55%, rgba(7, 13, 25, 0.88) 100%);
+        }
+
+        /* Barra flotante de acciones */
+        .toolbar {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 12px;
+            background: rgba(15, 23, 42, 0.92);
+            border: 1px solid rgba(255, 215, 0, 0.35);
+            padding: 10px 16px;
+            border-radius: 9999px;
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.6);
+            z-index: 100;
+            backdrop-filter: blur(8px);
+        }
+
+        .btn-gold {
+            background: linear-gradient(135deg, #ffd700 0%, #f59e0b 100%);
+            color: #090d16;
+            font-weight: 800;
+            border: none;
+            padding: 10px 22px;
+            border-radius: 9999px;
+            cursor: pointer;
+            font-size: 14px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .btn-gold:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(245, 158, 11, 0.45);
+        }
+
+        .btn-outline {
+            background: rgba(255, 255, 255, 0.08);
+            color: #f8fafc;
+            font-weight: 700;
+            border: 1px solid rgba(255, 255, 255, 0.22);
+            padding: 10px 18px;
+            border-radius: 9999px;
+            cursor: pointer;
+            font-size: 14px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: background 0.2s, transform 0.2s;
+        }
+        .btn-outline:hover {
+            background: rgba(255, 255, 255, 0.16);
+            transform: translateY(-2px);
+        }
+
+        body.export-mode {
+            padding: 0;
+            margin: 0;
+            min-height: 0;
+            display: block;
+            background: #071226;
+        }
+        body.export-mode .toolbar {
+            display: none !important;
+        }
+        body.export-mode #flyer-content {
+            border-radius: 0;
+            box-shadow: none;
+        }
+    </style>
+</head>
+<body>
+    <script>
+        if (new URLSearchParams(window.location.search).get('export') === '1') {
+            document.body.classList.add('export-mode');
+        }
+    </script>
+
+    <div id="flyer-content">
+        <!-- Fondos y luces -->
+        <div class="spotlight-left"></div>
+        <div class="spotlight-right"></div>
+        <div class="diagonal-stripe"></div>
+        <div class="gold-inner-frame"></div>
+        <div class="corner-accent corner-tl"></div>
+        <div class="corner-accent corner-tr"></div>
+        <div class="corner-accent corner-bl"></div>
+        <div class="corner-accent corner-br"></div>
+
+        <!-- Contenido Principal -->
+        <div class="relative z-10 flex flex-col justify-between h-full px-10 py-8">
+
+            <!-- HEADER: Badge + Título Gran Final Oro -->
+            <div class="text-center">
+                <div class="inline-flex items-center gap-2 px-5 py-1.5 rounded-full bg-amber-500/20 border border-amber-400/70 mb-2">
+                    <i class="fas fa-trophy text-amber-300 text-sm"></i>
+                    <span class="text-xs font-extrabold tracking-[0.22em] text-amber-200 uppercase">
+                        DÍA DE PARTIDO • BARRANQUILLA
+                    </span>
+                    <i class="fas fa-trophy text-amber-300 text-sm"></i>
+                </div>
+
+                <h1 class="font-display gold-title uppercase leading-none tracking-wider" style="font-size: 92px; margin-top: 2px;">
+                    GRAN FINAL ORO
+                </h1>
+
+                <div class="flex items-center justify-center gap-3 mt-1">
+                    <span class="h-[2px] w-16 bg-amber-400/70"></span>
+                    <span class="px-4 py-1 rounded-md bg-gradient-to-r from-amber-500 to-yellow-400 text-slate-950 font-black text-sm tracking-[0.18em] uppercase shadow-lg">
+                        CATEGORÍA 2014 - 2015
+                    </span>
+                    <span class="h-[2px] w-16 bg-amber-400/70"></span>
+                </div>
+            </div>
+
+            <!-- ENFRENTAMIENTO CENTRAL: DIBA FBC VS AMIGOS KIDS FC -->
+            <div class="flex items-center justify-between px-2 my-4">
+                <!-- Local: DIBA FBC -->
+                <div class="flex flex-col items-center w-[265px]">
+                    <div class="crest-ring-diba">
+                        <div class="crest-inner">
+                            <img src="images/ESCUDO.png" alt="Escudo DIBA FBC" class="w-full h-full object-contain">
+                        </div>
+                    </div>
+                    <h2 class="font-display text-5xl tracking-wider text-white mt-4 leading-none" style="text-shadow: 0 4px 12px rgba(0,0,0,0.85);">
+                        DIBA FBC
+                    </h2>
+                    <span class="text-xs font-extrabold tracking-[0.22em] text-amber-300 uppercase mt-1.5">
+                        Fuerza y Lealtad
+                    </span>
+                </div>
+
+                <!-- VS Central + Gran Trofeo -->
+                <div class="flex flex-col items-center">
+                    <div class="w-20 h-20 rounded-full bg-amber-500/15 border-2 border-amber-400/60 flex items-center justify-center mb-3 shadow-[0_0_30px_rgba(255,215,0,0.35)]">
+                        <i class="fas fa-trophy text-amber-300 text-4xl drop-shadow-[0_0_14px_rgba(255,215,0,0.9)]"></i>
+                    </div>
+                    <div class="vs-badge">VS</div>
+                    <div class="flex items-center gap-1.5 mt-3 text-amber-400 text-sm">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star text-base"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                </div>
+
+                <!-- Rival: AMIGOS KIDS FC -->
+                <div class="flex flex-col items-center w-[265px]">
+                    <div class="crest-ring-rival">
+                        <div class="crest-inner">
+                            <img src="images/torneo/escudo-amigos-kids-fc.jpg" alt="Escudo Amigos Kids FC" class="w-full h-full object-cover rounded-full">
+                        </div>
+                    </div>
+                    <h2 class="font-display text-5xl tracking-wider text-white mt-4 leading-none" style="text-shadow: 0 4px 12px rgba(0,0,0,0.85);">
+                        AMIGOS KIDS FC
+                    </h2>
+                    <span class="text-xs font-extrabold tracking-[0.22em] uppercase mt-1.5 opacity-0 select-none">
+                        &nbsp;
+                    </span>
+                </div>
+            </div>
+
+            <!-- CINTA LEMA DEL ENCUENTRO (SIN FOTO DE PERSONAS) -->
+            <div class="mx-6 py-3.5 px-6 rounded-2xl bg-gradient-to-r from-amber-500/10 via-amber-400/25 to-amber-500/10 border border-amber-400/50 text-center shadow-lg">
+                <p class="font-extrabold text-base tracking-[0.24em] uppercase gold-subtitle">
+                    <i class="fas fa-futbol text-amber-400 mr-2"></i>
+                    ¡GRAN DEFINICIÓN POR LA COPA DE ORO!
+                    <i class="fas fa-futbol text-amber-400 ml-2"></i>
+                </p>
+            </div>
+
+            <!-- DATOS DEL PARTIDO: FECHA, HORA, CANCHA -->
+            <div class="grid grid-cols-3 gap-4 mx-2 mt-2">
+                <!-- Fecha -->
+                <div class="info-card">
+                    <div class="text-amber-400 text-xl mb-1">
+                        <i class="fas fa-calendar-day"></i>
+                    </div>
+                    <div class="text-[11px] font-bold tracking-[0.18em] text-slate-300 uppercase">FECHA</div>
+                    <div class="font-display text-3xl text-white tracking-wide leading-tight mt-0.5">
+                        SÁB. 21 NOV
+                    </div>
+                    <div class="text-[11px] font-semibold text-amber-300 uppercase">Noviembre 2026</div>
+                </div>
+
+                <!-- Hora -->
+                <div class="info-card">
+                    <div class="text-amber-400 text-xl mb-1">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="text-[11px] font-bold tracking-[0.18em] text-slate-300 uppercase">HORA</div>
+                    <div class="font-display text-3xl text-amber-300 tracking-wide leading-tight mt-0.5">
+                        1:40 PM
+                    </div>
+                    <div class="text-[11px] font-semibold text-slate-200 uppercase">¡Llegar puntual!</div>
+                </div>
+
+                <!-- Lugar -->
+                <div class="info-card">
+                    <div class="text-amber-400 text-xl mb-1">
+                        <i class="fas fa-location-dot"></i>
+                    </div>
+                    <div class="text-[11px] font-bold tracking-[0.18em] text-slate-300 uppercase">ESCENARIO</div>
+                    <div class="font-display text-3xl text-white tracking-wide leading-tight mt-0.5">
+                        LA BOMBONERA
+                    </div>
+                    <div class="text-[11px] font-semibold text-amber-300 uppercase">Cancha Oficial</div>
+                </div>
+            </div>
+
+            <!-- FOOTER INSTITUCIONAL -->
+            <div class="pt-3 border-t border-amber-400/30 flex items-center justify-between px-2">
+                <div class="flex items-center gap-2 text-xs font-extrabold tracking-[0.18em] text-amber-300 uppercase">
+                    <i class="fas fa-shield-halved"></i>
+                    <span>DIBA FBC • FUERZA Y LEALTAD</span>
+                </div>
+                <div class="text-xs font-bold text-slate-300 tracking-wider">
+                    ¡TE ESPERAMOS PARA APOYAR AL CLUB! ⚽🏆
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Barra flotante para descargar o copiar texto de WhatsApp -->
+    <div class="toolbar">
+        <button id="btn-download" class="btn-gold" onclick="downloadFlyer()">
+            <i class="fas fa-download"></i> Descargar PNG HD
+        </button>
+        <button id="btn-copy" class="btn-outline" onclick="copyWhatsAppText()">
+            <i class="fab fa-whatsapp text-green-400 text-lg"></i> Copiar texto WhatsApp
+        </button>
+    </div>
+
+    <script>
+        function downloadFlyer() {
+            const btn = document.getElementById('btn-download');
+            const flyer = document.getElementById('flyer-content');
+            const originalHtml = btn.innerHTML;
+
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generando HD...';
+
+            html2canvas(flyer, {
+                scale: 2,
+                backgroundColor: '#071226',
+                useCORS: true,
+                allowTaint: true
+            }).then(canvas => {
+                const link = document.createElement('a');
+                link.download = 'DIBA_FBC_Gran_Final_Oro_2014_2015.png';
+                link.href = canvas.toDataURL('image/png', 1.0);
+                link.click();
+
+                btn.innerHTML = '<i class="fas fa-check"></i> ¡Flyer descargado!';
+                setTimeout(() => {
+                    btn.innerHTML = originalHtml;
+                    btn.disabled = false;
+                }, 2200);
+            }).catch(err => {
+                console.error('Error al generar imagen:', err);
+                btn.innerHTML = '<i class="fas fa-triangle-exclamation"></i> Abre con servidor local';
+                setTimeout(() => {
+                    btn.innerHTML = originalHtml;
+                    btn.disabled = false;
+                }, 3000);
+            });
+        }
+
+        function copyWhatsAppText() {
+            const btn = document.getElementById('btn-copy');
+            const originalHtml = btn.innerHTML;
+            const msg = [
+                '🏆⚽ *¡GRAN FINAL ORO!* ⚽🏆',
+                '',
+                '🔥 *DIBA FBC* 🆚 *AMIGOS KIDS* 🔥',
+                '👦 *Categoría:* 2014 - 2015',
+                '📅 *Fecha:* Sábado 21 de noviembre',
+                '⏰ *Hora:* 1:40 PM',
+                '📍 *Lugar:* Cancha La Bombonera',
+                '',
+                '💛🖤 ¡Acompañemos a nuestros guerreros en busca del título!',
+                '✨ *DIBA FBC — Fuerza y Lealtad*'
+            ].join('\n');
+
+            navigator.clipboard.writeText(msg).then(() => {
+                btn.innerHTML = '<i class="fas fa-check text-green-400"></i> ¡Texto copiado!';
+                setTimeout(() => {
+                    btn.innerHTML = originalHtml;
+                }, 2200);
+            });
+        }
+    </script>
+</body>
+</html>

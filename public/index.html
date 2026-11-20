@@ -9,12 +9,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google-site-verification" content="-1RpXZbMvqMy5cawFWkeUV7VLMOkZ7ZqBQzt1xUyv1c" />
   <!-- Preload hero image for LCP -->
-  <link rel="preload" as="image" href="images/estadio.webp" fetchpriority="high">
+  <link rel="preload" as="image" href="images/flyer_nano_banana_final_oro.jpg" fetchpriority="high">
 
   <!-- Meta tags para redes -->
-  <meta property="og:title" content="DIBA FBC | Inicio, Historia y Patrocinadores" />
-  <meta property="og:description" content="Descubre la historia, servicios, equipo y patrocinadores de DIBA FBC." />
-  <meta property="og:image" content="https://diba-fbc.vercel.app/images/ESCUDO.webp?v=2" />
+  <meta property="og:title" content="DIBA FBC vs AMIGOS KIDS FC | Gran Final Oro (Cat. 2014-2015)" />
+  <meta property="og:description" content="Gran Final Oro: Sábado 21 de Noviembre, 1:40 PM en Cancha La Bombonera. ¡Vamos DIBA FBC!" />
+  <meta property="og:image" content="https://diba-fbc.vercel.app/images/flyer_nano_banana_final_oro.jpg" />
   <meta property="og:url" content="https://diba-fbc.vercel.app/" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="DIBA FBC" />
@@ -30,9 +30,9 @@
   </script>
 
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="DIBA FBC | Inicio, Historia y Patrocinadores" />
-  <meta name="twitter:description" content="Club de fútbol amateur en Barranquilla. Conoce nuestro equipo y patrocinadores." />
-  <meta name="twitter:image" content="https://diba-fbc.vercel.app/images/ESCUDO.webp?v=2" />
+  <meta name="twitter:title" content="DIBA FBC vs AMIGOS KIDS FC | Gran Final Oro (Cat. 2014-2015)" />
+  <meta name="twitter:description" content="Gran Final Oro: Sábado 21 de Noviembre, 1:40 PM en Cancha La Bombonera. ¡Fuerza y Lealtad!" />
+  <meta name="twitter:image" content="https://diba-fbc.vercel.app/images/flyer_nano_banana_final_oro.jpg" />
 
   <!-- Fonts y librerías extra -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -188,44 +188,105 @@
 
   <div id="match-banner-container"></div>
 
-  <!-- HERO PREMIUM CON IMAGEN DE ESTADIO -->
-  <section id="hero" class="relative min-h-screen flex items-center justify-center overflow-hidden bg-slate-900">
+  <!-- HERO PRINCIPAL CON FLYER OFICIAL GRAN FINAL ORO (NANO BANANA) -->
+  <section id="hero" class="relative min-h-screen flex items-center justify-center overflow-hidden bg-slate-950 py-14 lg:py-20">
     <!-- Background Image with Slow Zoom Animation -->
     <div class="absolute inset-0 z-0 pointer-events-none">
-      <img src="images/estadio.webp" class="w-full h-full object-cover opacity-40 scale-105 animate-slow-zoom" alt="Estadio DIBA FBC" />
+      <img src="images/estadio.webp" class="w-full h-full object-cover opacity-30 scale-105 animate-slow-zoom" alt="Estadio DIBA FBC" />
       <!-- Gradient Mesh Overlay -->
-      <div class="absolute inset-0 bg-gradient-to-b from-slate-950/80 via-slate-950/50 to-slate-950"></div>
+      <div class="absolute inset-0 bg-gradient-to-b from-slate-950/90 via-slate-950/75 to-slate-950"></div>
       <div id="hero-orb-blue" class="absolute -top-[20%] -left-[20%] w-[60%] h-[60%] bg-blue-600/25 rounded-full blur-[150px]"></div>
-      <div id="hero-orb-yellow" class="absolute -bottom-[20%] -right-[20%] w-[60%] h-[60%] bg-yellow-500/20 rounded-full blur-[150px]"></div>
+      <div id="hero-orb-yellow" class="absolute -bottom-[20%] -right-[20%] w-[60%] h-[60%] bg-yellow-500/25 rounded-full blur-[150px]"></div>
     </div>
 
-    <div class="container mx-auto px-6 relative z-10 text-center space-y-10">
-      <div id="hero-badge" class="inline-block px-6 py-2.5 border border-yellow-500/30 bg-yellow-500/10 rounded-full backdrop-blur-md animate__animated animate__fadeInDown">
-        <span class="text-yellow-400 text-xs font-black tracking-[0.4em] uppercase">Orgullo Barranquillero • Desde 2012</span>
-      </div>
-      
-      <h1 id="hero-title" class="text-7xl md:text-9xl font-black italic uppercase leading-none tracking-tighter font-display text-white animate__animated animate__zoomIn">
-        DIBA <span class="text-yellow-500 drop-shadow-[0_0_30px_rgba(234,179,8,0.4)]">FBC</span>
-      </h1>
-      
-      <p id="hero-desc" class="text-lg md:text-2xl text-slate-200 max-w-3xl mx-auto font-medium leading-relaxed animate__animated animate__fadeInUp animate__delay-1s">
-        Formando leyendas, forjando carácter. La academia de fútbol líder en Barranquilla donde la pasión se encuentra con la disciplina y el alto rendimiento.
-      </p>
-      
-      <div id="hero-cta" class="flex flex-wrap justify-center gap-6 pt-6 animate__animated animate__fadeInUp animate__delay-1s">
-        <a href="partidos.html" class="px-12 py-6 bg-yellow-500 hover:bg-yellow-400 text-slate-950 font-black uppercase text-xs tracking-widest rounded-2xl transition-all hover:scale-105 hover:shadow-[0_20px_40px_rgba(234,179,8,0.3)] active:scale-95">
-          Ver Agenda de Partidos
-        </a>
-        <a href="https://wa.me/573246656083" target="_blank" class="px-12 py-6 bg-white/10 hover:bg-white/20 text-white font-black uppercase text-xs tracking-widest rounded-2xl backdrop-blur-md border border-white/20 transition-all hover:scale-105 active:scale-95">
-          Unirse al Club
-        </a>
-      </div>
-    </div>
+    <div class="max-w-7xl mx-auto px-6 relative z-10 w-full">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
 
-    <!-- Scroll Indicator -->
-    <div id="hero-scroll" class="absolute bottom-10 left-1/2 -translate-x-1/2 opacity-0">
-      <div class="w-6 h-10 border-2 border-white rounded-full flex justify-center pt-2">
-        <div class="w-1 h-2 bg-white rounded-full"></div>
+        <!-- Columna Principal: Flyer Gran Final Oro Nano Banana (Protagonista) -->
+        <div class="lg:col-span-6 order-1 lg:order-2 flex justify-center">
+          <div class="relative group max-w-md w-full">
+            <!-- Halo dorado animado detrás del flyer -->
+            <div class="absolute -inset-2 bg-gradient-to-r from-yellow-400 via-amber-500 to-red-600 rounded-[2rem] blur-xl opacity-60 group-hover:opacity-90 transition duration-500"></div>
+            <div class="relative rounded-[1.75rem] overflow-hidden border-4 border-yellow-500/80 shadow-[0_25px_70px_rgba(0,0,0,0.85)] bg-slate-900">
+              <a href="images/flyer_nano_banana_final_oro.jpg" target="_blank" title="Ver flyer en pantalla completa">
+                <img
+                  src="images/flyer_nano_banana_final_oro.jpg"
+                  alt="Gran Final Oro - DIBA FBC vs Amigos Kids FC (Categoría 2014-2015)"
+                  class="w-full h-auto object-cover group-hover:scale-[1.02] transition-transform duration-500"
+                  fetchpriority="high"
+                />
+              </a>
+              <div class="bg-slate-950/95 border-t border-yellow-500/30 px-5 py-3.5 flex items-center justify-between gap-3">
+                <span class="text-yellow-400 text-xs font-black uppercase tracking-widest flex items-center gap-2">
+                  <i class="fas fa-trophy"></i> Gran Final Oro • 2014-2015
+                </span>
+                <a
+                  href="images/flyer_nano_banana_final_oro.jpg"
+                  download="DIBA_FBC_Gran_Final_Oro_2014_2015.jpg"
+                  class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-yellow-500 hover:bg-yellow-400 text-slate-950 font-black text-xs uppercase tracking-wider transition-all"
+                >
+                  <i class="fas fa-download"></i> Descargar Flyer
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Columna de Información e Invitación a la Gran Final -->
+        <div class="lg:col-span-6 order-2 lg:order-1 text-center lg:text-left space-y-7">
+          <div id="hero-badge" class="inline-flex items-center gap-2.5 px-5 py-2.5 border border-yellow-500/50 bg-yellow-500/15 rounded-full backdrop-blur-md animate__animated animate__fadeInDown">
+            <span class="relative flex h-2.5 w-2.5">
+              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-yellow-400 opacity-75"></span>
+              <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-yellow-400"></span>
+            </span>
+            <span class="text-yellow-300 text-xs font-black tracking-[0.28em] uppercase">
+              🏆 Gran Final Oro • Categoría 2014 - 2015
+            </span>
+          </div>
+
+          <h1 id="hero-title" class="text-5xl sm:text-6xl xl:text-7xl font-black italic uppercase leading-none tracking-tighter font-display text-white animate__animated animate__zoomIn">
+            DIBA <span class="text-yellow-500 drop-shadow-[0_0_30px_rgba(234,179,8,0.45)]">FBC</span>
+            <span class="block text-2xl sm:text-3xl xl:text-4xl text-amber-300 not-italic tracking-wide mt-3">
+              VS AMIGOS KIDS FC
+            </span>
+          </h1>
+
+          <p id="hero-desc" class="text-base sm:text-xl text-slate-200 max-w-2xl mx-auto lg:mx-0 font-medium leading-relaxed">
+            ¡Nuestros guerreros de la categoría <strong class="text-yellow-400 font-black">2014 - 2015</strong> disputan el título! Acompáñanos a alentar con toda la pasión de Barranquilla.
+          </p>
+
+          <!-- Tarjetas rápidas de Fecha, Hora y Cancha -->
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5 max-w-xl mx-auto lg:mx-0">
+            <div class="bg-white/5 border border-yellow-500/30 rounded-2xl p-4 backdrop-blur-md">
+              <div class="text-yellow-400 text-xs font-black uppercase tracking-widest mb-1">
+                <i class="fas fa-calendar-day mr-1.5"></i> Fecha
+              </div>
+              <div class="text-white font-black text-base uppercase">Sáb. 21 Nov</div>
+            </div>
+            <div class="bg-white/5 border border-yellow-500/30 rounded-2xl p-4 backdrop-blur-md">
+              <div class="text-yellow-400 text-xs font-black uppercase tracking-widest mb-1">
+                <i class="fas fa-clock mr-1.5"></i> Hora
+              </div>
+              <div class="text-yellow-300 font-black text-base uppercase">1:40 PM</div>
+            </div>
+            <div class="bg-white/5 border border-yellow-500/30 rounded-2xl p-4 backdrop-blur-md">
+              <div class="text-yellow-400 text-xs font-black uppercase tracking-widest mb-1">
+                <i class="fas fa-location-dot mr-1.5"></i> Lugar
+              </div>
+              <div class="text-white font-black text-base uppercase">La Bombonera</div>
+            </div>
+          </div>
+
+          <div id="hero-cta" class="flex flex-wrap justify-center lg:justify-start gap-4 pt-2 animate__animated animate__fadeInUp">
+            <a href="images/flyer_nano_banana_final_oro.jpg" download="DIBA_FBC_Gran_Final_Oro_2014_2015.jpg" class="px-8 py-4 bg-yellow-500 hover:bg-yellow-400 text-slate-950 font-black uppercase text-xs tracking-widest rounded-2xl transition-all hover:scale-105 hover:shadow-[0_20px_40px_rgba(234,179,8,0.3)] active:scale-95 inline-flex items-center gap-2.5">
+              <i class="fas fa-image text-sm"></i> Descargar Flyer Oficial
+            </a>
+            <a href="partidos.html" class="px-8 py-4 bg-white/10 hover:bg-white/20 text-white font-black uppercase text-xs tracking-widest rounded-2xl backdrop-blur-md border border-white/20 transition-all hover:scale-105 active:scale-95 inline-flex items-center gap-2.5">
+              <i class="fas fa-futbol text-yellow-400"></i> Ver Partidos
+            </a>
+          </div>
+        </div>
+
       </div>
     </div>
   </section>
